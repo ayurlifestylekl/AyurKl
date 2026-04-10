@@ -1,0 +1,19 @@
+# Root workspace
+node_modules/
+temporary screenshots/
+.DS_Store
+.env*.local
+package-lock.json
+
+# Next.js (ayurvedic/)
+ayurvedic/node_modules/
+ayurvedic/.next/
+ayurvedic/out/
+ayurvedic/build/
+ayurvedic/.env*.local
+ayurvedic/.vercel
+ayurvedic/*.tsbuildinfo
+ayurvedic/next-env.d.ts
+
+# Claude Code
+.claude/
