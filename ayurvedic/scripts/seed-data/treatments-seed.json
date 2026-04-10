@@ -1,0 +1,463 @@
+{
+  "categories": [
+    { "_id": "cat-face-care",       "title": "Face Care Therapies",            "order": 1 },
+    { "_id": "cat-massage",         "title": "Massage Therapies",              "order": 2 },
+    { "_id": "cat-stress-sleep",    "title": "Stress Relieving & Sleep",       "order": 3 },
+    { "_id": "cat-oldage",          "title": "Oldage Care Therapies",          "order": 4 },
+    { "_id": "cat-hair-care",       "title": "Hair Care Therapies",            "order": 5 },
+    { "_id": "cat-skin-care",       "title": "Skin Care Therapies",            "order": 6 },
+    { "_id": "cat-rehabilitation",  "title": "Rehabilitation Therapies",       "order": 7 },
+    { "_id": "cat-weight-mgmt",     "title": "Weight Management Therapy",      "order": 8 },
+    { "_id": "cat-joint-care",      "title": "Joint Care Therapies",           "order": 9 },
+    { "_id": "cat-eye-care",        "title": "Eye Care Therapies",             "order": 10 },
+    { "_id": "cat-nasyam-ear",      "title": "Nasyam & Ear Therapies",         "order": 11 },
+    { "_id": "cat-kids",            "title": "Kids Ayurveda Care",             "order": 12 }
+  ],
+  "treatments": [
+    {
+      "title": "Ayurveda Rejuvenating Face Massage",
+      "duration": "30 min",
+      "description": "Face massage using medicated Ayurveda tailam. Helps to reduce dryness, dark shade, rejuvenate and nourish the facial skin.",
+      "categoryRef": "cat-face-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Vyanga Care (Pigmentation)",
+      "duration": "1 Hour",
+      "description": "Targeted treatment for facial pigmentation. Requires a few sessions, practitioner consultation and herbal supplements.",
+      "categoryRef": "cat-face-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Ayurvedic Pimple Care",
+      "duration": "1 Hour",
+      "description": "Personalised acne and pimple care protocol. Requires a few sessions, practitioner consultation and herbal supplements.",
+      "categoryRef": "cat-face-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Ayurvedic Herbal Facial",
+      "duration": "1 Hour 30 min",
+      "description": "A complete Ayurveda facial including herbal facial bleach, face massage, face scrub, herbal steam cleansing and a nourishing face pack.",
+      "categoryRef": "cat-face-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Njavara Milk Facial",
+      "duration": "1 Hour 30 min",
+      "description": "A special Ayurveda facial using Njavara rice (a red variety of rice), medicated milk and herbs. Includes face scrub, massage, pack and cleansing.",
+      "categoryRef": "cat-face-care",
+      "requiresConsultation": false
+    },
+
+    {
+      "title": "Rejuvenating Face Massage",
+      "duration": "30 min",
+      "description": "Gentle face massage with Ayurvedic medicated oil to boost circulation, tighten skin, reduce pigmentation and ease dryness.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Paada-Abhyangam (Foot Massage)",
+      "duration": "30 min",
+      "description": "Ayurvedic foot massage stimulating vital marma points. Reduces fatigue, swelling and tension across the feet and ankles.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Head Massage",
+      "duration": "30 min",
+      "description": "Ayurvedic massage of scalp and neck with pressure-point stimulation. Eases tension headaches and improves sleep quality.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Leg and Foot Massage",
+      "duration": "1 Hour",
+      "description": "Foot and leg massage stimulating vital points to reduce swelling and fatigue. Includes marma point massage of leg up to the knee with kizhi therapy.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Siro-Abhyangam (Head Massage)",
+      "duration": "1 Hour",
+      "description": "Ayurvedic massage of scalp, face, neck and shoulders with pressure-point stimulation. Reduces tension headaches and improves sleep.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Neck and Shoulder Massage with Heat",
+      "duration": "1 Hour",
+      "description": "Massage on neck and shoulders with heat compression. Eases stiffness, neuropathy and pain around the neck region.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Low-Back & Leg Massage with Heat",
+      "duration": "1 Hour",
+      "description": "Massage on lower back and legs with heat compression. Reduces stiffness, neuropathy and pain around the hips and legs.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Spinal Massage with Kizhi",
+      "duration": "1 Hour",
+      "description": "Massage of spinal and back muscles from neck to lower-back, extending to the legs with heat. Good for mild muscle pain and stiffness.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Lymphatic Drainage Massage",
+      "duration": "1 Hour",
+      "description": "A manual lymphatic drainage therapy with gentle, rhythmic strokes to aid lymph circulation throughout the body.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam (Full Body Oil Massage)",
+      "duration": "1 Hour",
+      "description": "An Ayurveda full-body massage using medicated oil. Reduces muscle stiffness and improves blood circulation throughout the body.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam with Kashaya Dhaara",
+      "duration": "1 Hour 30 min",
+      "description": "A combination of Ayurveda oil massage and herbal kashayam pouring. Eases body pain, nerve compression and muscle stiffness.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam with Kizhi",
+      "duration": "1 Hour 30 min",
+      "description": "A combination of Ayurveda oil massage and herbal heat compress. Reduces body pain, nerve compression and muscle stiffness.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam with Steam Bath",
+      "duration": "1 Hour 30 min",
+      "description": "A combination of Ayurveda oil massage and herbal steam bath. Reduces fatigue, muscle stiffness and generalised body ache.",
+      "categoryRef": "cat-massage",
+      "requiresConsultation": false
+    },
+
+    {
+      "title": "Abhyangam & Sirodhaara",
+      "duration": "1 Hour 30 min",
+      "description": "Full-body oil massage followed by oil-dripping (sirodhaara) over the forehead. Excellent for stress, anxiety and insomnia.",
+      "categoryRef": "cat-stress-sleep",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Sirodhaara — Head, Neck & Foot Massage",
+      "duration": "1 Hour 30 min",
+      "description": "Massage of head, neck and feet combined with sirodhaara. Improves sleep quality and reduces tension headaches.",
+      "categoryRef": "cat-stress-sleep",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Siro-Dhaara with Tailam (Stress & Sleep)",
+      "duration": "1 Hour",
+      "description": "Sirodhaara with medicated tailam paired with head and neck massage. Improves sleep and reduces headaches.",
+      "categoryRef": "cat-stress-sleep",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Siro-Abhyanga & Paada-Abhyanga",
+      "duration": "1 Hour",
+      "description": "Head and neck massage followed by foot and leg massage — a grounding ritual for tired bodies and restless minds.",
+      "categoryRef": "cat-stress-sleep",
+      "requiresConsultation": false
+    },
+
+    {
+      "title": "Abhyangam (Full Body Oil Massage)",
+      "duration": "1 Hour",
+      "description": "Massage of head and full body with medicated oil to improve blood circulation and strengthen muscles and joints. Designed for guests above 70.",
+      "categoryRef": "cat-oldage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam with Podi-Kizhi (Heat Compress)",
+      "duration": "1 Hour 30 min",
+      "description": "Full-body oil massage with herbal heat compression to reduce stiffness of muscles and joints and improve ease of movement.",
+      "categoryRef": "cat-oldage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Njavara Kizhi — Full Body",
+      "duration": "1 Hour",
+      "description": "Ayurvedic oil application followed by milk-njavara kizhi over the full body. Strengthens joints and muscles and rejuvenates the body.",
+      "categoryRef": "cat-oldage",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam with Sirodhaara",
+      "duration": "1 Hour 30 min",
+      "description": "Ayurvedic oil massage combined with sirodhaara to reduce body pain, stiffness and improve sleep.",
+      "categoryRef": "cat-oldage",
+      "requiresConsultation": false
+    },
+
+    {
+      "title": "Ayurvedic Scalp & Hair Oil Massage",
+      "duration": "1 Hour",
+      "description": "A special oil massage for scalp, hair, face and neck with point massage and traditional hair combing.",
+      "categoryRef": "cat-hair-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Ayurveda Hair Treatment",
+      "duration": "1 Hour",
+      "description": "Scalp and hair oil massage, herbal medicine application, combing, takra dhaara (medicated buttermilk treatment) and a kashaya wash.",
+      "categoryRef": "cat-hair-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Ayurveda Scalp Treatment",
+      "duration": "1 Hour 30 min",
+      "description": "Scalp and hair oil massage, thala pothichil (herbal wrap), takra dhaara (medicated buttermilk treatment) and a kashaya wash.",
+      "categoryRef": "cat-hair-care",
+      "requiresConsultation": false
+    },
+
+    {
+      "title": "Upper Body Herbal Scrub",
+      "duration": "1 Hour",
+      "description": "Herbal oil massage and herbal powder scrub on the upper back, neck and shoulders to reduce hyperpigmentation.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam (Specific Oil Massage)",
+      "duration": "1 Hour",
+      "description": "Massage with a specially blended oil for skin conditions — particularly suited to dry, sensitive skin.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Upper Back Pigmentation Treatment",
+      "duration": "1 Hour",
+      "description": "Targeted body scrub using herbal mix powder and njavara kizhi treatment focused on the upper back and back of neck. Reduces hyperpigmentation and dark shades.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Udwarthanam (Full Body Herbal Scrub)",
+      "duration": "1 Hour",
+      "description": "Full-body exfoliation using a herbal scrub with medicated powder. Removes dead cells, refines skin texture and supports weight loss.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Ayurvedic Full-Body Skin Lightening Therapy",
+      "duration": "1 Hour",
+      "description": "Herbal oil application followed by njavara kizhi — application of red rice processed with herbs and milk. Reduces pigmentation, tightens skin and rejuvenates.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Ayurvedic Full-Body Exfoliation Therapy",
+      "duration": "1 Hour 30 min",
+      "description": "Body scrub using herbal mix powder followed by a steam bath with herbs — a complete reset for tired, dull skin.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Abhyangam with Udwarthanam",
+      "duration": "1 Hour 30 min",
+      "description": "Full body oil massage and herbal mix powder scrub — a powerful combination to enhance skin health, exfoliate dead cells and deliver a radiant, toned appearance.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Full Body Abhyangam and Njavara Kizhi",
+      "duration": "1 Hour 30 min",
+      "description": "Special oil massage with njavara kizhi treatment — application of red rice processed with herbs and milk. Reduces pigmentation, tightens skin and rejuvenates.",
+      "categoryRef": "cat-skin-care",
+      "requiresConsultation": false
+    },
+
+    {
+      "title": "Abhyangam with Kizhi (Heat Compress)",
+      "duration": "1 Hour 30 min",
+      "description": "Full-body oil massage with herbal heat compression to reduce stiffness of muscles and joints and improve ease of movement.",
+      "categoryRef": "cat-rehabilitation",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam with Kashaya Dhaara (Full Body)",
+      "duration": "1 Hour 30 min",
+      "description": "Massage of head and full body with medicated oil and pouring of medicated kashayam. Improves circulation and strengthens muscles, nerves and joints.",
+      "categoryRef": "cat-rehabilitation",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam with Sirodhaara",
+      "duration": "1 Hour 30 min",
+      "description": "Ayurvedic oil massage combined with sirodhaara to reduce body pain, stiffness, facial stiffness and nerve problems.",
+      "categoryRef": "cat-rehabilitation",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam with Njavara Kizhi (Full Body)",
+      "duration": "1 Hour 30 min",
+      "description": "Ayurvedic oil massage with application of njavara rice and milk on the full body. Strengthens joints, muscles and nerves and rejuvenates the body.",
+      "categoryRef": "cat-rehabilitation",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Udwarthanam with Kashaya Dhaara",
+      "duration": "1 Hour 30 min",
+      "description": "Powder scrub with kashayam pouring over the body — reduces muscle stiffness, improves blood circulation and supports joint mobility.",
+      "categoryRef": "cat-rehabilitation",
+      "requiresConsultation": true
+    },
+
+    {
+      "title": "Udwarthanam + Steam Bath",
+      "duration": "1 Hour 30 min",
+      "description": "Full-body herbal powder scrub paired with herbal steam bath. Helps fat burn faster when paired with diet and exercise.",
+      "categoryRef": "cat-weight-mgmt",
+      "requiresConsultation": false
+    },
+
+    {
+      "title": "Abhyangam with Kizhi — Affected Joint",
+      "duration": "1 Hour",
+      "description": "Massage of affected joints with herbal heat compression to reduce swelling and increase flexibility. Partial-body protocol.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam with Kashaya Dhaara — Affected Joint",
+      "duration": "1 Hour",
+      "description": "Massage of affected joints with medicated oil and pouring of medicated kashayam. Improves circulation, strengthens joints and reduces swelling.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam with Kashaya Dhaara — Full Body",
+      "duration": "1 Hour 30 min",
+      "description": "Head and full-body massage with medicated oil and pouring of medicated kashayam. Improves circulation, strengthens joints and reduces swelling.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam with Kizhi — Full Body",
+      "duration": "1 Hour 30 min",
+      "description": "Full-body oil massage with herbal heat compression to reduce stiffness of muscles and joints and improve ease of movement.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam with Njavara Kizhi — Affected Joint",
+      "duration": "1 Hour",
+      "description": "Ayurvedic oil massage with application of njavara rice and milk on the affected joint. Strengthens joints, muscles and nerves and rejuvenates the body.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Abhyangam-Kizhi/Kashaaya Dhaara with Herbal Bandage",
+      "duration": "1 Hour",
+      "description": "Oil massage with herbal heat compression and bandage on affected joints. Reduces stiffness and improves movement. Good for knee, shoulder and ankle.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Pichu — with Partial Abhyangam and Kizhi",
+      "duration": "1 Hour",
+      "description": "Application of medicated oil over the affected area with a cotton pad, followed by abhyangam and kizhi. Reduces swelling and stiffness and improves joint mobility.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Herbal Bandage — Affected Joints",
+      "duration": "30 min",
+      "description": "Gentle abhyangam with medicated oil and localised naadi sweda/kizhi with a herbal bandage. Eases pain from sprain, injury, degeneration and swelling.",
+      "categoryRef": "cat-joint-care",
+      "requiresConsultation": true
+    },
+
+    {
+      "title": "Netra Tarpanam",
+      "duration": "1 Hour",
+      "description": "Pooling of medicated ghee over the eye, followed by an eye wash with medicated water and gentle face and head massage. Reduces eye strain, improves vision and eases dry eyes. Recommended over a 3, 5, 7 or 10-day protocol with strict rest and dietary care.",
+      "categoryRef": "cat-eye-care",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Ayurveda Eye Care (Eye Wash, Netra Patah)",
+      "duration": "1 Hour",
+      "description": "Eye wash using herbal kashayam, face massage and netra patah (application of herbal paste on the eye). Reduces eye strain, tiredness and headaches.",
+      "categoryRef": "cat-eye-care",
+      "requiresConsultation": true
+    },
+
+    {
+      "title": "Nasyam",
+      "duration": "1 Hour",
+      "description": "A panchakarma therapy that clears kapha dosha (phlegm) from the upper respiratory tract and sinus. Also helps with brain fogginess, memory loss, neck stiffness and vata disorders like numbness and giddiness. Performed over 3, 5, 7 or 10 days under practitioner guidance.",
+      "categoryRef": "cat-nasyam-ear",
+      "requiresConsultation": true
+    },
+    {
+      "title": "Ear Treatment (Karnapooranam & Karnadhoopanam)",
+      "duration": "1 Hour",
+      "description": "Gentle massage around the ear and neck, filling each ear with warm medicated oil for 8–10 minutes, cleaning, then dhoopana (herbal fuming). Loosens wax, strengthens ear bones and nerves, relieves earache and supports mental clarity. Performed over 3, 5, 7 or 10 days.",
+      "categoryRef": "cat-nasyam-ear",
+      "requiresConsultation": true
+    },
+
+    {
+      "title": "Oil Massage — Ages 1 to 5",
+      "duration": "30 min",
+      "description": "A gentle full-body Ayurvedic oil massage designed for the youngest children.",
+      "categoryRef": "cat-kids",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Oil Massage — Ages 6 to 10",
+      "duration": "45 min",
+      "description": "A full-body Ayurvedic oil massage tailored for school-aged children.",
+      "categoryRef": "cat-kids",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Oil Massage — Ages 11 to 17",
+      "duration": "1 Hour",
+      "description": "A full-body Ayurvedic oil massage for adolescents.",
+      "categoryRef": "cat-kids",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Head or Leg Massage — Ages 11 to 17",
+      "duration": "30 min",
+      "description": "Ayurvedic oil massage focused on the head and neck, or alternatively the legs and hips.",
+      "categoryRef": "cat-kids",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Sirodhaara — Ages 11 to 17",
+      "duration": "45 min",
+      "description": "Sirodhaara paired with Ayurvedic oil massage for the head and neck.",
+      "categoryRef": "cat-kids",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Talam & Sirodhaara — Ages 12 to 17",
+      "duration": "1 Hour",
+      "description": "Head massage, herbal wrap and sirodhaara with medicated buttermilk. Cooling, supports good sleep and reduces body heat.",
+      "categoryRef": "cat-kids",
+      "requiresConsultation": false
+    },
+    {
+      "title": "Oil Massage and Sirodhaara — Ages 12 to 17",
+      "duration": "1 Hour 30 min",
+      "description": "Complete relaxation for older kids. Full-body oil massage paired with sirodhaara.",
+      "categoryRef": "cat-kids",
+      "requiresConsultation": false
+    }
+  ]
+}

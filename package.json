@@ -1,0 +1,14 @@
+{
+  "name": "ayurvedic-prototype-tools",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Workspace-level helper scripts (serve.mjs, screenshot.mjs) for one-off HTML prototype iteration. Not the Next.js app — that lives in ./ayurvedic.",
+  "scripts": {
+    "serve": "node serve.mjs",
+    "screenshot": "node screenshot.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^24.15.0"
+  }
+}
