@@ -18,6 +18,7 @@ const config: Config = {
         foreground: "#2B2B2B",
         cream:      "#FAF6EE",
         heroCream:  "#f0ede5",
+        nearBlackGreen: "#1a2e26",
       },
       boxShadow: {
         'elevated':  '0 8px 30px -10px rgba(47,93,80,0.2), 0 2px 8px rgba(47,93,80,0.06)',

@@ -124,10 +124,28 @@ export default function AboutPage() {
       />
       <AboutHero />
       <FoundersVision />
+      {/* Gold hairline: cream → white transition */}
+      <div
+        className="h-px"
+        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.2), transparent)' }}
+        aria-hidden
+      />
       <OurPhilosophy />
       <MedicalAuthority />
       <KalsDifference />
+      {/* Gold hairline: cream → white transition */}
+      <div
+        className="h-px"
+        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.2), transparent)' }}
+        aria-hidden
+      />
       <WellnessFocus />
+      {/* Gold hairline: white → cream transition */}
+      <div
+        className="h-px"
+        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.2), transparent)' }}
+        aria-hidden
+      />
       <FAQs
         items={aboutFaqs}
         eyebrow="Common Questions"

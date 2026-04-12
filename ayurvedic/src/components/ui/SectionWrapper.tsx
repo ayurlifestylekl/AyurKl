@@ -4,12 +4,21 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { fadeUp, inViewOnce } from '@/lib/motion'
 
+type PaddingVariant = 'tight' | 'standard' | 'immersive'
+
+const paddingStyles: Record<PaddingVariant, string> = {
+  tight: 'py-10 md:py-14',
+  standard: 'py-14 md:py-20',
+  immersive: 'py-0',
+}
+
 interface SectionWrapperProps {
   id?: string
   eyebrow?: string
   title?: string
   subtitle?: string
   align?: 'left' | 'center'
+  padding?: PaddingVariant
   className?: string
   innerClassName?: string
   headerActions?: React.ReactNode
@@ -29,6 +38,7 @@ export default function SectionWrapper({
   title,
   subtitle,
   align = 'center',
+  padding = 'standard',
   className = '',
   innerClassName = '',
   headerActions,
@@ -47,7 +57,7 @@ export default function SectionWrapper({
       className={`relative ${className}`}
     >
       <div
-        className={`mx-auto max-w-7xl px-6 py-20 sm:px-8 md:py-28 lg:px-12 ${innerClassName}`}
+        className={`mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 ${paddingStyles[padding]} ${innerClassName}`}
       >
         {(eyebrow || title || subtitle) && (
           <motion.div

@@ -8,8 +8,6 @@ export const EASE_OUT_PREMIUM: [number, number, number, number] = [0.22, 0.92, 0
 
 /**
  * Stagger entrance variant. Use as `variants={fadeUp(0.1)}`.
- * Honors prefers-reduced-motion via `useReducedMotionSafe()` at call site
- * (don't use motion components if you want to fully suppress).
  */
 export const fadeUp = (delay = 0): Variants => ({
   initial: { opacity: 0, y: 28, scale: 0.97 },
@@ -30,6 +28,41 @@ export const slideIn = (direction: 'left' | 'right', delay = 0): Variants => ({
     opacity: 1,
     x: 0,
     transition: { duration: 0.8, delay, ease: EASE_OUT_PREMIUM },
+  },
+})
+
+/**
+ * Cinematic clipPath reveal — content clips open from a direction.
+ * Used for hero images and therapy row images.
+ */
+export const clipReveal = (
+  direction: 'left' | 'right' | 'bottom' = 'right',
+  delay = 0
+): Variants => {
+  const clipMap = {
+    left: 'inset(0 100% 0 0)',
+    right: 'inset(0 0 0 100%)',
+    bottom: 'inset(0 0 100% 0)',
+  }
+  return {
+    initial: { clipPath: clipMap[direction], opacity: 0 },
+    animate: {
+      clipPath: 'inset(0 0 0 0)',
+      opacity: 1,
+      transition: { duration: 1.0, delay, ease: EASE_OUT_PREMIUM },
+    },
+  }
+}
+
+/**
+ * Scale-in from center — used for cards and product tiles.
+ */
+export const scaleIn = (delay = 0): Variants => ({
+  initial: { opacity: 0, scale: 0.92 },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, delay, ease: EASE_OUT_PREMIUM },
   },
 })
 

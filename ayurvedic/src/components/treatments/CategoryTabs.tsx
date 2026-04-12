@@ -17,19 +17,13 @@ interface CategoryTabsProps {
 }
 
 /**
- * Horizontal scrolling tab bar with editorial styling.
- *
- * - Shows a numbered prefix per tab ("01 · Face Care") to mirror the PDF.
- * - Sticky below the navbar so the active filter stays in reach as users scroll.
- * - Keyboard navigable with ← / → arrow keys (standard tab pattern).
- * - Active tab uses Deep Herbal Green; inactive tabs are airy primary tints.
+ * Elegant filter bar — visible borders, gold count badges,
+ * layered active state. Keyboard navigable.
  */
 export default function CategoryTabs({ tabs, activeId, onChange }: CategoryTabsProps) {
   const buttonsRef = useRef<Map<string, HTMLButtonElement>>(new Map())
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Smoothly scroll the active tab into view when it changes —
-  // matters most on mobile where the tab bar overflows horizontally.
   useEffect(() => {
     const btn = buttonsRef.current.get(activeId)
     if (!btn) return
@@ -49,18 +43,18 @@ export default function CategoryTabs({ tabs, activeId, onChange }: CategoryTabsP
   return (
     <div
       ref={containerRef}
-      className="sticky top-0 z-30 -mx-6 border-b border-primary/10 bg-[#FAF6EE]/85 px-6 py-4 backdrop-blur-md sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12"
+      className="sticky top-0 z-30 -mx-6 bg-cream/92 px-6 py-4 backdrop-blur-lg sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12"
     >
-      {/* Subtle gold underline so the bar reads as intentional */}
+      {/* Visible gold bottom border */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
+        className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-accent/25 sm:inset-x-8 lg:inset-x-12"
       />
 
       <div
         role="tablist"
         aria-label="Treatment categories"
-        className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto scroll-smooth py-1"
+        className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto scroll-smooth py-0.5"
       >
         {tabs.map((tab, idx) => {
           const isActive = tab.id === activeId
@@ -78,29 +72,20 @@ export default function CategoryTabs({ tabs, activeId, onChange }: CategoryTabsP
               onClick={() => onChange(tab.id)}
               onKeyDown={(e) => handleKey(e, idx)}
               className={[
-                'group relative inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.18em] transition-[transform,background-color,color,box-shadow] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]',
+                'group relative inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.15em] transition-[transform,background-color,color,box-shadow,ring-color] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]',
                 isActive
-                  ? 'bg-primary text-white shadow-[0_12px_30px_-14px_rgba(47,93,80,0.85)]'
-                  : 'bg-white text-primary/75 ring-1 ring-primary/15 hover:-translate-y-0.5 hover:bg-primary/5 hover:text-primary',
+                  ? 'bg-primary text-white shadow-[0_6px_20px_-6px_rgba(47,93,80,0.55),0_2px_6px_rgba(47,93,80,0.12)]'
+                  : 'bg-white text-primary/55 ring-1 ring-primary/12 hover:-translate-y-0.5 hover:text-primary hover:ring-accent/40 hover:shadow-[0_8px_24px_-12px_rgba(47,93,80,0.15)]',
               ].join(' ')}
             >
-              <span
-                className={[
-                  'font-heading text-[9.5px] font-extrabold tabular-nums',
-                  isActive ? 'text-accent' : 'text-primary/40',
-                ].join(' ')}
-              >
-                {String(idx).padStart(2, '0')}
-              </span>
-              <span aria-hidden className={isActive ? 'text-white/40' : 'text-primary/25'}>
-                ·
-              </span>
               <span>{tab.label}</span>
               <span
                 aria-hidden
                 className={[
-                  'ml-1 inline-flex min-w-[20px] items-center justify-center rounded-full px-1.5 py-0.5 text-[9px] tabular-nums',
-                  isActive ? 'bg-white/15 text-white' : 'bg-primary/10 text-primary/60',
+                  'inline-flex min-w-[20px] items-center justify-center rounded-full px-1.5 py-0.5 text-[9px] font-extrabold tabular-nums',
+                  isActive
+                    ? 'bg-accent/25 text-accent'
+                    : 'bg-primary/6 text-primary/40',
                 ].join(' ')}
               >
                 {tab.count}
@@ -113,10 +98,6 @@ export default function CategoryTabs({ tabs, activeId, onChange }: CategoryTabsP
   )
 }
 
-/**
- * Convenience builder used by the parent menu to assemble the tabs array,
- * including the synthetic "All" tab at the front.
- */
 export function buildTabs(
   categories: TreatmentCategory[],
   countByCategoryId: Record<string, number>,

@@ -1,21 +1,38 @@
 import type { Metadata } from 'next'
-import ComingSoon from '@/components/ui/ComingSoon'
+
+import ContactHero from '@/components/contact/ContactHero'
+import ContactPaths from '@/components/contact/ContactPaths'
+import ContactForm from '@/components/contact/ContactForm'
+import ContactLocation from '@/components/contact/ContactLocation'
+import FAQs from '@/components/sections/FAQs'
+import { contactFaqs } from '@/data/contactFaqs'
 
 export const metadata: Metadata = {
-  title: 'Contact Us',
+  title: 'Contact — Kerala Ayurvedic Lifestyle, Brickfields KL',
   description:
-    'Reach Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur. WhatsApp +60 11 6504 3436 or message us to book a consultation with Vaidya AKHIL HS (B.A.M.S).',
+    'Write to Vaidya AKHIL HS, B.A.M.S. Book a consultation, ask about the Ayur-Store, or visit our Brickfields clinic. Every message read personally; replies within one working day.',
   alternates: { canonical: '/contact' },
+  openGraph: {
+    title: 'Contact — Kerala Ayurvedic Lifestyle',
+    description:
+      'Begin your healing journey. Message us on WhatsApp, book a consultation, or visit our Brickfields clinic.',
+    url: 'https://keralaayurvedic.com/contact',
+    type: 'website',
+  },
 }
 
 export default function ContactPage() {
   return (
-    <ComingSoon
-      eyebrow="Get In Touch"
-      title="The Easiest Way To Reach Us Is WhatsApp."
-      subtitle="Our full contact page is on the way. For now, message us directly on WhatsApp at +60 11 6504 3436 — our team replies within the hour during clinic hours."
-      primaryHref="https://wa.me/601165043436"
-      primaryLabel="Message on WhatsApp"
-    />
+    <>
+      <ContactHero />
+      <ContactPaths />
+      <ContactForm />
+      <ContactLocation />
+      <FAQs
+        items={contactFaqs}
+        eyebrow="016  /  Before you reach out"
+        title="Answered before you ask"
+      />
+    </>
   )
 }

@@ -218,6 +218,38 @@ export type Database = {
           created_at?: string
         }
       }
+      contact_messages: {
+        Row: {
+          id: string
+          intent: 'treatment' | 'product' | 'corporate' | 'other'
+          name: string
+          phone: string
+          email: string
+          message: string
+          status: 'new' | 'contacted' | 'closed'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          intent: 'treatment' | 'product' | 'corporate' | 'other'
+          name: string
+          phone: string
+          email: string
+          message: string
+          status?: 'new' | 'contacted' | 'closed'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          intent?: 'treatment' | 'product' | 'corporate' | 'other'
+          name?: string
+          phone?: string
+          email?: string
+          message?: string
+          status?: 'new' | 'contacted' | 'closed'
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

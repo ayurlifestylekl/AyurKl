@@ -1,185 +1,175 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Calendar, MessageCircle } from 'lucide-react'
 import CTAButton from '@/components/ui/CTAButton'
-import { BotanicalMandala } from '@/components/ui/Decorations'
-import { fadeUp, inViewOnce, staggerParent } from '@/lib/motion'
+import { clipReveal, fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
+/**
+ * Commitment CTA — cinematic close mirroring homepage FinalBookingCTA.
+ * Split: atmospheric photograph left, CTA content on nearBlackGreen right.
+ * Uses "Our Commitment to You" copy from the company PDF.
+ */
 export default function CommitmentCTA() {
   return (
     <section
+      id="about-cta"
       aria-labelledby="commitment-heading"
-      className="relative overflow-hidden bg-primary"
+      className="relative overflow-hidden"
     >
-      {/* Atmospheric gradient */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse at 50% 0%, rgba(212,163,115,0.22) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(122,157,84,0.12) 0%, transparent 55%)',
-        }}
-      />
-
-      {/* Grain */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-      />
-
-      {/* Mandalas */}
-      <div className="pointer-events-none absolute -left-32 top-12 hidden h-[480px] w-[480px] md:block">
-        <BotanicalMandala opacity={0.07} />
-      </div>
-      <div className="pointer-events-none absolute -right-32 bottom-12 hidden h-[520px] w-[520px] md:block">
-        <BotanicalMandala opacity={0.06} />
-      </div>
-
-      {/* Section marker */}
-      <div className="relative mx-auto max-w-7xl px-6 pt-20 sm:px-8 lg:px-12">
-        <div className="flex items-center justify-between">
-          <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-accent/80">
-            <span className="text-white/40">007</span> &nbsp;/&nbsp; The Commitment
-          </span>
-          <span className="hidden font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 md:inline">
-            Closing
-          </span>
-        </div>
-        <div
-          aria-hidden
-          className="mt-4 h-px w-full bg-gradient-to-r from-accent/60 via-white/15 to-transparent"
-        />
-      </div>
-
-      <motion.div
-        variants={staggerParent(0.12, 0.05)}
-        initial="initial"
-        whileInView="animate"
-        viewport={inViewOnce}
-        className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 pb-24 pt-20 sm:px-8 md:pb-32 md:pt-28 lg:grid-cols-12 lg:gap-12 lg:px-12"
-      >
-        {/* ── LEFT: Headline ─────────────── */}
-        <div className="flex flex-col gap-7 lg:col-span-7">
-          <motion.span
-            variants={fadeUp(0)}
-            className="inline-flex w-fit items-center gap-3 font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent"
-          >
-            <span aria-hidden className="h-px w-8 bg-accent" />
-            Our Commitment to You
-          </motion.span>
-
-          <motion.h2
-            id="commitment-heading"
-            variants={fadeUp(0)}
-            className="font-heading text-balance text-[40px] font-extrabold leading-[0.95] tracking-[-0.025em] text-white sm:text-[56px] md:text-[72px]"
-          >
-            Fifteen years
-            <br />
-            of partnership
-            <br />
-            <span className="font-body italic font-normal text-accent">
-              in healing.
-            </span>
-          </motion.h2>
-
-          <motion.div
-            variants={fadeUp(0)}
-            className="max-w-xl space-y-4 font-body text-[16px] leading-[1.85] text-white/75 md:text-[17px]"
-          >
-            <p>
-              For over 15 years, KALS has been a trusted name in holistic
-              healing. We aren&rsquo;t just a clinic &mdash; we are your
-              partners in health.
-            </p>
-            <p>
-              Our mission has remained the same since the day we opened: to
-              help you rediscover balance and vitality through integrity,
-              compassion, and excellence.
-            </p>
-          </motion.div>
-
-          {/* CTAs */}
-          <motion.div
-            variants={fadeUp(0)}
-            className="mt-4 flex flex-col items-start gap-4 sm:flex-row sm:items-center"
-          >
-            <CTAButton
-              href="/#booking"
-              variant="primary"
-              size="lg"
-              icon={<Calendar className="h-4 w-4" />}
-            >
-              Book a Consultation
-            </CTAButton>
-            <CTAButton
-              href="https://wa.me/601165043436"
-              variant="outlineLight"
-              size="lg"
-              icon={<MessageCircle className="h-4 w-4" />}
-            >
-              WhatsApp Us
-            </CTAButton>
-          </motion.div>
-
-          {/* Trust row */}
-          <motion.div
-            variants={fadeUp(0)}
-            className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-heading text-[10px] font-semibold uppercase tracking-[0.18em] text-white/55"
-          >
-            <span>Since 2008</span>
-            <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
-            <span>Brickfields, KL</span>
-            <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
-            <span>Vaidya AKHIL HS &middot; B.A.M.S</span>
-          </motion.div>
-        </div>
-
-        {/* ── RIGHT: Pull quote card ─────────────── */}
-        <motion.aside
-          variants={fadeUp(0.1)}
-          className="relative mx-auto w-full max-w-md lg:col-span-5"
+      <div className="grid min-h-[60vh] grid-cols-1 lg:grid-cols-[3fr_2fr]">
+        {/* ── LEFT: Atmospheric photograph ────────────── */}
+        <motion.div
+          variants={clipReveal('left', 0)}
+          initial="initial"
+          whileInView="animate"
+          viewport={inViewOnce}
+          className="relative hidden min-h-[400px] lg:block"
         >
-          {/* Offset frame */}
+          <Image
+            src="/hero-tray.png"
+            alt="Ayurvedic herbs and therapeutic oils"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 60vw, 0vw"
+          />
           <div
+            className="absolute inset-0 mix-blend-multiply"
+            style={{ backgroundColor: 'rgba(47,93,80,0.55)' }}
             aria-hidden
-            className="absolute -right-3 -top-3 h-full w-full rounded-[28px] border border-accent/45"
+          />
+          <div className="grain-overlay-dark pointer-events-none absolute inset-0" aria-hidden />
+          {/* Right edge gold hairline */}
+          <div
+            className="absolute inset-y-0 right-0 w-px"
+            style={{
+              background:
+                'linear-gradient(to bottom, transparent, rgba(212,163,115,0.35), transparent)',
+            }}
+            aria-hidden
+          />
+        </motion.div>
+
+        {/* Mobile: image band */}
+        <motion.div
+          variants={clipReveal('bottom', 0)}
+          initial="initial"
+          whileInView="animate"
+          viewport={inViewOnce}
+          className="relative h-[30vh] min-h-[200px] lg:hidden"
+        >
+          <Image
+            src="/hero-tray.png"
+            alt="Ayurvedic herbs and oils"
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+          <div
+            className="absolute inset-0 mix-blend-multiply"
+            style={{ backgroundColor: 'rgba(47,93,80,0.6)' }}
+            aria-hidden
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-20"
+            style={{
+              background: 'linear-gradient(to top, #1a2e26 0%, transparent 100%)',
+            }}
+            aria-hidden
+          />
+        </motion.div>
+
+        {/* ── RIGHT: CTA content ─────────────────────── */}
+        <div className="relative flex flex-col justify-center bg-nearBlackGreen px-6 py-16 sm:px-10 lg:px-14 lg:py-20">
+          {/* Subtle radial glow */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse at 50% 50%, rgba(212,163,115,0.06) 0%, transparent 60%)',
+            }}
+            aria-hidden
           />
 
-          <div className="relative rounded-[28px] bg-white/[0.04] p-10 ring-1 ring-white/10 backdrop-blur-sm">
-            {/* Decorative oversized quote mark */}
-            <span
-              aria-hidden
-              className="absolute -left-2 -top-6 font-heading text-[140px] font-black leading-none text-accent/30"
+          <motion.div
+            variants={staggerParent(0.12, 0.05)}
+            initial="initial"
+            whileInView="animate"
+            viewport={inViewOnce}
+            className="relative z-10 max-w-md"
+          >
+            <motion.span
+              variants={fadeUp(0)}
+              className="inline-block font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent"
             >
-              &ldquo;
-            </span>
+              Our Commitment to You
+            </motion.span>
 
-            <div className="relative flex flex-col gap-7">
-              <p className="font-body text-[24px] italic leading-[1.4] text-white md:text-[28px]">
-                Experience the difference
-                <br />
-                that{' '}
-                <span className="text-accent">true Ayurveda</span>
-                <br />
-                makes.
-              </p>
+            <motion.h2
+              id="commitment-heading"
+              variants={fadeUp(0)}
+              className="mt-4 font-heading text-3xl font-extrabold leading-[1.08] text-white sm:text-4xl"
+            >
+              Your partners in{' '}
+              <span className="text-accent">health.</span>
+            </motion.h2>
 
-              <div className="flex items-center gap-3 border-t border-white/15 pt-5">
-                <span aria-hidden className="h-px w-6 bg-accent" />
-                <span className="font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
-                  KALS Promise &middot; Est. 2008
-                </span>
-              </div>
-            </div>
-          </div>
-        </motion.aside>
-      </motion.div>
+            <motion.p
+              variants={fadeUp(0)}
+              className="mt-5 font-body text-[15px] leading-[1.7] text-white/60"
+            >
+              For over 15 years, KALS has been a trusted name in holistic
+              healing. Our mission remains the same as the day we started: to
+              help you rediscover balance and vitality through integrity,
+              compassion, and excellence.
+            </motion.p>
+
+            <motion.p
+              variants={fadeUp(0)}
+              className="mt-3 font-body text-[14px] italic text-white/45"
+            >
+              Experience the difference that true Ayurveda makes.
+            </motion.p>
+
+            {/* CTAs — stacked vertically */}
+            <motion.div
+              variants={fadeUp(0)}
+              className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col"
+            >
+              <CTAButton
+                href="https://cal.com/kerala-ayurvedic"
+                variant="primary"
+                size="lg"
+                icon={<Calendar className="h-4 w-4" />}
+              >
+                Book a Consultation
+              </CTAButton>
+              <CTAButton
+                href="https://wa.me/601165043436"
+                variant="outlineLight"
+                size="lg"
+                icon={<MessageCircle className="h-4 w-4" />}
+              >
+                WhatsApp Us
+              </CTAButton>
+            </motion.div>
+
+            {/* Trust row */}
+            <motion.div
+              variants={fadeUp(0)}
+              className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10px] font-medium uppercase tracking-[0.18em] text-white/30"
+            >
+              <span>Since 2008</span>
+              <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
+              <span>Brickfields, KL</span>
+              <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
+              <span>Vaidya AKHIL HS (B.A.M.S)</span>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
     </section>
   )
 }
