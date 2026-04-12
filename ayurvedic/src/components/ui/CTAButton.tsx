@@ -11,6 +11,7 @@ interface CommonProps {
   size?: Size
   icon?: React.ReactNode
   iconRight?: React.ReactNode
+  shimmer?: boolean
   className?: string
   children: React.ReactNode
 }
@@ -58,6 +59,7 @@ export default function CTAButton(props: Props) {
     size = 'lg',
     icon,
     iconRight,
+    shimmer = false,
     className = '',
     children,
     ariaLabel,
@@ -81,16 +83,18 @@ export default function CTAButton(props: Props) {
           {iconRight}
         </span>
       )}
-      {/* Shimmer sweep — uses keyframes from globals.css */}
-      <span
-        aria-hidden
-        className="shimmer-sweep pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%)',
-          width: '60%',
-        }}
-      />
+      {/* Shimmer sweep — opt-in only, uses keyframes from globals.css */}
+      {shimmer && (
+        <span
+          aria-hidden
+          className="shimmer-sweep pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%)',
+            width: '60%',
+          }}
+        />
+      )}
     </>
   )
 

@@ -68,7 +68,7 @@ export default function BlogIndex({ posts }: BlogIndexProps) {
       />
 
       {/* ── Header ──────────────────────────────────── */}
-      <div className="relative mx-auto max-w-7xl px-6 pt-20 sm:px-8 md:pt-28 lg:px-12">
+      <div className="relative mx-auto max-w-7xl px-6 pt-10 sm:px-8 md:pt-14 lg:px-12">
         <motion.div
           variants={staggerParent(0.1, 0.05)}
           initial="initial"

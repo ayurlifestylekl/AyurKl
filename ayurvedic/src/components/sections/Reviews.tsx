@@ -1,141 +1,151 @@
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Star } from 'lucide-react'
-import SectionWrapper from '@/components/ui/SectionWrapper'
-import { reviews, type Review } from '@/data/reviews'
-import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
+import { reviews } from '@/data/reviews'
+import { EASE_OUT_PREMIUM, fadeUp, inViewOnce } from '@/lib/motion'
 
-/* ─── Star rating row ───────────────────────────────────── */
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star
-          key={i}
-          className="h-4 w-4"
-          fill={i < rating ? '#D4A373' : 'transparent'}
-          stroke={i < rating ? '#D4A373' : '#D4A373'}
-          strokeWidth={i < rating ? 0 : 1.5}
-          style={{ opacity: i < rating ? 1 : 0.25 }}
-        />
-      ))}
-    </div>
-  )
-}
-
-/* ─── Avatar initials ───────────────────────────────────── */
-function Avatar({ name }: { name: string }) {
-  const initials = name
-    .split(' ')
-    .map(w => w[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-
-  return (
-    <div
-      className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full font-heading text-[12px] font-bold tracking-wide text-white"
-      style={{
-        background: 'linear-gradient(135deg, #2F5D50 0%, #3d7a66 100%)',
-        boxShadow: '0 4px 12px rgba(47,93,80,0.3)',
-      }}
-    >
-      {initials}
-    </div>
-  )
-}
-
-/* ─── Review Card ───────────────────────────────────────── */
-function ReviewCard({ review }: { review: Review }) {
-  return (
-    <motion.div
-      variants={fadeUp()}
-      whileHover={{ y: -6, transition: { type: 'spring', stiffness: 240, damping: 22 } }}
-      className="group relative flex flex-col justify-between rounded-3xl bg-white p-7 ring-1 ring-dark/5"
-      style={{
-        boxShadow: '0 8px 30px -10px rgba(47,93,80,0.15), 0 2px 8px rgba(47,93,80,0.05)',
-        minWidth: 300,
-      }}
-    >
-      {/* Gold quote watermark */}
-      <svg
-        className="pointer-events-none absolute right-5 top-5"
-        width="36"
-        height="28"
-        viewBox="0 0 36 28"
-        fill="none"
-        aria-hidden
-        style={{ opacity: 0.06 }}
-      >
-        <path
-          d="M0 17.5C0 10 4.5 3.5 12 0L14 3.5C8 6.5 6 10.5 5.5 13.5H12V28H0V17.5ZM22 17.5C22 10 26.5 3.5 34 0L36 3.5C30 6.5 28 10.5 27.5 13.5H34V28H22V17.5Z"
-          fill="#D4A373"
-        />
-      </svg>
-
-      <div>
-        <StarRating rating={review.rating} />
-
-        {/* Quote text */}
-        <blockquote className="mt-4 font-body text-[15px] italic leading-[1.7] text-dark/75">
-          &ldquo;{review.text}&rdquo;
-        </blockquote>
-      </div>
-
-      {/* Author row */}
-      <div className="mt-6 flex items-center gap-3 border-t border-dark/5 pt-5">
-        <Avatar name={review.name} />
-        <div className="min-w-0 flex-1">
-          <p className="font-heading text-[13px] font-bold text-dark">{review.name}</p>
-          <p className="font-body text-[11px] text-dark/50">{review.location}</p>
-        </div>
-        {review.treatment && (
-          <span className="flex-shrink-0 rounded-full bg-primary/8 px-3 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.15em] text-primary">
-            {review.treatment}
-          </span>
-        )}
-      </div>
-    </motion.div>
-  )
-}
-
-/* ─── Main Section ──────────────────────────────────────── */
+/**
+ * Cinematic single-review stage on dark immersive background.
+ * Auto-rotates every 6s with crossfade. Pauses on hover.
+ */
 export default function Reviews() {
-  return (
-    <SectionWrapper
-      eyebrow="Real Experiences"
-      title="What Our Guests Say"
-      subtitle="Hear from guests who discovered lasting wellness through authentic Kerala Ayurveda in Brickfields."
-    >
-      {/* Desktop: 3-col grid */}
-      <motion.div
-        variants={staggerParent(0.1)}
-        initial="initial"
-        whileInView="animate"
-        viewport={inViewOnce}
-        className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        {reviews.map(review => (
-          <ReviewCard key={review.id} review={review} />
-        ))}
-      </motion.div>
+  const [active, setActive] = useState(0)
+  const [paused, setPaused] = useState(false)
 
-      {/* Mobile: horizontal snap carousel */}
-      <motion.div
-        variants={staggerParent(0.08)}
-        initial="initial"
-        whileInView="animate"
-        viewport={inViewOnce}
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar md:hidden"
-      >
-        {reviews.map(review => (
-          <div key={review.id} className="snap-start flex-shrink-0" style={{ width: '85vw', maxWidth: 340 }}>
-            <ReviewCard review={review} />
-          </div>
-        ))}
-      </motion.div>
-    </SectionWrapper>
+  const next = useCallback(() => {
+    setActive(prev => (prev + 1) % reviews.length)
+  }, [])
+
+  // Auto-rotation
+  useEffect(() => {
+    if (paused) return
+    const timer = setInterval(next, 6000)
+    return () => clearInterval(timer)
+  }, [paused, next])
+
+  const review = reviews[active]
+
+  return (
+    <section
+      aria-labelledby="reviews-heading"
+      className="relative overflow-hidden bg-nearBlackGreen grain-overlay-dark"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center sm:px-8 md:py-28">
+        {/* Header */}
+        <motion.div
+          variants={fadeUp(0)}
+          initial="initial"
+          whileInView="animate"
+          viewport={inViewOnce}
+          className="mb-10"
+        >
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent/70">
+            Real Experiences
+          </span>
+          <h2
+            id="reviews-heading"
+            className="mt-3 font-heading text-3xl font-extrabold leading-[1.1] text-white/90 sm:text-4xl"
+          >
+            What Our Guests Say
+          </h2>
+        </motion.div>
+
+        {/* Radial gold glow */}
+        <div
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: 600,
+            height: 400,
+            background:
+              'radial-gradient(ellipse at center, rgba(212,163,115,0.06) 0%, transparent 65%)',
+          }}
+          aria-hidden
+        />
+
+        {/* Gold opening quote */}
+        <svg
+          className="mb-6"
+          width="48"
+          height="36"
+          viewBox="0 0 36 28"
+          fill="none"
+          aria-hidden
+          style={{ opacity: 0.15 }}
+        >
+          <path
+            d="M0 17.5C0 10 4.5 3.5 12 0L14 3.5C8 6.5 6 10.5 5.5 13.5H12V28H0V17.5ZM22 17.5C22 10 26.5 3.5 34 0L36 3.5C30 6.5 28 10.5 27.5 13.5H34V28H22V17.5Z"
+            fill="#D4A373"
+          />
+        </svg>
+
+        {/* Stars */}
+        <div className="mb-6 flex items-center gap-1">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              className="h-4 w-4"
+              fill="#D4A373"
+              stroke="none"
+            />
+          ))}
+        </div>
+
+        {/* Review content — crossfade */}
+        <div className="relative min-h-[160px] w-full max-w-[720px] sm:min-h-[140px]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={review.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.5, ease: EASE_OUT_PREMIUM }}
+            >
+              {/* Quote */}
+              <blockquote className="font-body text-[18px] italic leading-[1.65] text-white/75 sm:text-[22px] md:text-[26px] md:leading-[1.55]">
+                &ldquo;{review.text}&rdquo;
+              </blockquote>
+
+              {/* Attribution */}
+              <div className="mt-6 flex flex-col items-center gap-1">
+                <p className="font-heading text-[12px] font-semibold uppercase tracking-[0.2em] text-accent">
+                  {review.name}
+                </p>
+                <p className="font-body text-[11px] text-white/35">
+                  {review.location}
+                  {review.treatment && (
+                    <span className="ml-2 text-accent/50">
+                      · {review.treatment}
+                    </span>
+                  )}
+                </p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Navigation dots */}
+        <div className="mt-10 flex items-center gap-2.5" role="tablist">
+          {reviews.map((r, i) => (
+            <button
+              key={r.id}
+              type="button"
+              role="tab"
+              aria-selected={i === active}
+              aria-label={`Review by ${r.name}`}
+              onClick={() => setActive(i)}
+              className={`h-2 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-nearBlackGreen ${
+                i === active
+                  ? 'w-6 bg-accent'
+                  : 'w-2 bg-white/20 hover:bg-white/35'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }

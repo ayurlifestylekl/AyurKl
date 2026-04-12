@@ -2,78 +2,80 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { trustItems } from '@/data/trust'
-import { fadeUp, inViewOnce, staggerParent } from '@/lib/motion'
+import { EASE_OUT_PREMIUM } from '@/lib/motion'
+
+const credentials = [
+  'Since 2008',
+  'Certified Vaidya AKHIL HS (B.A.M.S)',
+  'Authentic Kerala Formulas',
+]
 
 /**
- * Thin trust band that bleeds into the bottom of the hero.
- * Three pillars: Heritage / Certified / Authentic.
+ * Thin credential bar — floats between Hero and EmpathyBridge.
+ * Single line of text, no icons. Inspired by luxury hotel credential strips.
  */
 export default function TrustStrip() {
   return (
     <section
       aria-labelledby="trust-heading"
-      className="relative z-20 -mt-6 px-6 sm:px-8 lg:px-12"
+      className="relative z-20 -mt-4 px-6 sm:px-8 lg:px-12"
     >
       <h2 id="trust-heading" className="sr-only">
         Why Kerala Ayurvedic Lifestyle
       </h2>
 
       <motion.div
-        variants={staggerParent(0.08, 0)}
-        initial="initial"
-        whileInView="animate"
-        viewport={inViewOnce}
-        className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-primary px-6 py-8 shadow-[0_30px_70px_-30px_rgba(47,93,80,0.65)] sm:px-10 md:py-10"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.6, ease: EASE_OUT_PREMIUM }}
+        className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl bg-primary/[0.97] px-6 py-4 shadow-[0_20px_50px_-20px_rgba(47,93,80,0.5)] sm:px-10 sm:py-5"
       >
-        {/* Subtle gold gradient overlay */}
+        {/* Top gold hairline */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
+          className="absolute inset-x-6 top-0 h-px"
           style={{
             background:
-              'radial-gradient(circle at 20% 20%, rgba(212,163,115,0.18) 0%, transparent 55%), radial-gradient(circle at 80% 80%, rgba(212,163,115,0.12) 0%, transparent 60%)',
+              'linear-gradient(to right, transparent, rgba(212,163,115,0.4), transparent)',
+          }}
+        />
+        {/* Bottom gold hairline */}
+        <div
+          aria-hidden
+          className="absolute inset-x-6 bottom-0 h-px"
+          style={{
+            background:
+              'linear-gradient(to right, transparent, rgba(212,163,115,0.4), transparent)',
           }}
         />
 
-        {/* Top gold rule */}
-        <div
-          aria-hidden
-          className="absolute left-10 right-10 top-0 h-px"
-          style={{
-            background:
-              'linear-gradient(to right, transparent, rgba(212,163,115,0.5), transparent)',
-          }}
-        />
+        {/* Desktop: single horizontal line */}
+        <div className="hidden items-center justify-center gap-0 sm:flex">
+          {credentials.map((text, i) => (
+            <React.Fragment key={text}>
+              <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.25em] text-white/80">
+                {text}
+              </span>
+              {i < credentials.length - 1 && (
+                <span className="mx-5 text-[8px] text-accent/70">&#9670;</span>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
 
-        <div className="relative grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-0 md:divide-x md:divide-white/15">
-          {trustItems.map(item => {
-            const Icon = item.icon
-            return (
-              <motion.div
-                key={item.id}
-                variants={fadeUp(0)}
-                whileHover={{ y: -3 }}
-                transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-                className="group flex flex-col items-center gap-3 px-4 text-center md:px-6"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/8 ring-1 ring-accent/40 transition-all duration-300 group-hover:bg-white/15 group-hover:ring-accent/70">
-                  <Icon className="h-6 w-6 text-accent" strokeWidth={1.8} />
-                </div>
-                <h3 className="font-heading text-[13px] font-bold uppercase tracking-[0.18em] text-white">
-                  {item.title}
-                </h3>
-                <p className="max-w-[260px] font-body text-[13px] leading-relaxed text-white/70">
-                  {item.subtitle}
-                </p>
-                {/* Animated gold underline */}
-                <span
-                  aria-hidden
-                  className="mt-1 block h-px w-6 origin-center scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100"
-                />
-              </motion.div>
-            )
-          })}
+        {/* Mobile: stacked */}
+        <div className="flex flex-col items-center gap-2 sm:hidden">
+          {credentials.map((text, i) => (
+            <React.Fragment key={text}>
+              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-white/80 text-center">
+                {text}
+              </span>
+              {i < credentials.length - 1 && (
+                <span className="text-[7px] text-accent/60">&#9670;</span>
+              )}
+            </React.Fragment>
+          ))}
         </div>
       </motion.div>
     </section>

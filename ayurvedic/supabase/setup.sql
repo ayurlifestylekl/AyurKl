@@ -312,3 +312,41 @@ CREATE POLICY "storage: admin can delete"
 -- UPDATE public.users
 -- SET role = 'admin'
 -- WHERE email = 'your-admin-email@example.com';
+
+
+-- ================================================================
+-- SECTION 7: CONTACT MESSAGES (leads captured from /contact form)
+-- Anonymous visitors can INSERT. Only admins can SELECT/UPDATE.
+-- ================================================================
+
+CREATE TABLE IF NOT EXISTS public.contact_messages (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  intent      TEXT NOT NULL CHECK (intent IN ('treatment', 'product', 'corporate', 'other')),
+  name        TEXT NOT NULL,
+  phone       TEXT NOT NULL,
+  email       TEXT NOT NULL,
+  message     TEXT NOT NULL,
+  status      TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'closed')),
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS contact_messages_status_created_idx
+  ON public.contact_messages (status, created_at DESC);
+
+ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+
+-- Anyone (visitor or logged-in user) can submit a new lead.
+CREATE POLICY "contact_messages: anon can insert"
+  ON public.contact_messages FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
+-- Only admins can read the leads.
+CREATE POLICY "contact_messages: admin reads all"
+  ON public.contact_messages FOR SELECT
+  USING (public.is_admin());
+
+-- Only admins can update status (mark as contacted / closed).
+CREATE POLICY "contact_messages: admin updates status"
+  ON public.contact_messages FOR UPDATE
+  USING (public.is_admin());
