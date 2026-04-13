@@ -2,81 +2,80 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { EASE_OUT_PREMIUM } from '@/lib/motion'
+import { Award, BadgeCheck, Leaf } from 'lucide-react'
+import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
 const credentials = [
-  'Since 2008',
-  'Certified Vaidya AKHIL HS (B.A.M.S)',
-  'Authentic Kerala Formulas',
+  { text: 'Since 2008', icon: Award },
+  { text: 'Vaidya AKHIL HS (B.A.M.S)', icon: BadgeCheck },
+  { text: 'Authentic Kerala Formulas', icon: Leaf },
 ]
 
 /**
- * Thin credential bar — floats between Hero and EmpathyBridge.
- * Single line of text, no icons. Inspired by luxury hotel credential strips.
+ * Seamless credential strip — sits naturally between Hero and EmpathyBridge.
+ * Edge-to-edge, cream background, gold hairlines. No floating pill.
  */
 export default function TrustStrip() {
   return (
     <section
       aria-labelledby="trust-heading"
-      className="relative z-20 -mt-4 px-6 sm:px-8 lg:px-12"
+      className="relative bg-primary"
     >
       <h2 id="trust-heading" className="sr-only">
         Why Kerala Ayurvedic Lifestyle
       </h2>
 
+      {/* Top gold hairline */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent 5%, rgba(212,163,115,0.25) 30%, rgba(212,163,115,0.25) 70%, transparent 95%)',
+        }}
+      />
+
+      {/* Bottom gold hairline */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent 5%, rgba(212,163,115,0.25) 30%, rgba(212,163,115,0.25) 70%, transparent 95%)',
+        }}
+      />
+
       <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.6, ease: EASE_OUT_PREMIUM }}
-        className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl bg-primary/[0.97] px-6 py-4 shadow-[0_20px_50px_-20px_rgba(47,93,80,0.5)] sm:px-10 sm:py-5"
+        variants={staggerParent(0.08, 0.05)}
+        initial="initial"
+        whileInView="animate"
+        viewport={inViewOnce}
+        className="mx-auto flex max-w-5xl items-center justify-center gap-6 px-6 py-5 sm:gap-10 sm:px-8 sm:py-6 lg:px-12"
       >
-        {/* Top gold hairline */}
-        <div
-          aria-hidden
-          className="absolute inset-x-6 top-0 h-px"
-          style={{
-            background:
-              'linear-gradient(to right, transparent, rgba(212,163,115,0.4), transparent)',
-          }}
-        />
-        {/* Bottom gold hairline */}
-        <div
-          aria-hidden
-          className="absolute inset-x-6 bottom-0 h-px"
-          style={{
-            background:
-              'linear-gradient(to right, transparent, rgba(212,163,115,0.4), transparent)',
-          }}
-        />
-
-        {/* Desktop: single horizontal line */}
-        <div className="hidden items-center justify-center gap-0 sm:flex">
-          {credentials.map((text, i) => (
-            <React.Fragment key={text}>
-              <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.25em] text-white/80">
-                {text}
+        {credentials.map((cred, i) => (
+          <React.Fragment key={cred.text}>
+            <motion.div
+              variants={fadeUp(0)}
+              className="flex items-center gap-2.5 sm:gap-3"
+            >
+              <cred.icon
+                className="h-4 w-4 shrink-0 text-accent sm:h-[18px] sm:w-[18px]"
+                strokeWidth={1.8}
+              />
+              <span className="font-heading text-[9px] font-semibold uppercase tracking-[0.18em] text-white/80 sm:text-[11px] sm:tracking-[0.22em]">
+                {cred.text}
               </span>
-              {i < credentials.length - 1 && (
-                <span className="mx-5 text-[8px] text-accent/70">&#9670;</span>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
+            </motion.div>
 
-        {/* Mobile: stacked */}
-        <div className="flex flex-col items-center gap-2 sm:hidden">
-          {credentials.map((text, i) => (
-            <React.Fragment key={text}>
-              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-white/80 text-center">
-                {text}
-              </span>
-              {i < credentials.length - 1 && (
-                <span className="text-[7px] text-accent/60">&#9670;</span>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
+            {/* Gold vertical divider */}
+            {i < credentials.length - 1 && (
+              <div
+                aria-hidden
+                className="h-4 w-px shrink-0 bg-white/20 sm:h-5"
+              />
+            )}
+          </React.Fragment>
+        ))}
       </motion.div>
     </section>
   )
