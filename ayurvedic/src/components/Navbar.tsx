@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, ShoppingCart, User, Leaf, ChevronDown, Phone, Mail, Search } from 'lucide-react'
+import { Menu, X, ShoppingCart, User, Leaf, ChevronDown, Phone, Mail } from 'lucide-react'
 
 const productsDropdown = [
   { label: 'All Products',     href: '/products'                 },
@@ -148,11 +148,11 @@ export default function Navbar() {
 
           {/* ── Right: Search pill + User pill ── */}
           <div className="hidden items-center gap-2 md:flex">
-            {/* Search pill */}
-            <button className="flex items-center gap-2 rounded-full bg-[#D4A373] px-4 py-2 transition-all duration-200 hover:bg-[#c4935f]">
-              <span className="font-heading text-[13px] font-semibold text-white">Search Here</span>
-              <Search className="h-3.5 w-3.5 text-white" />
-            </button>
+            {/* Cart pill */}
+            <Link href="/cart" className="flex items-center gap-2 rounded-full bg-[#D4A373] px-4 py-2 hover:bg-[#c4935f]">
+              <span className="font-heading text-[13px] font-semibold text-white">Cart</span>
+              <ShoppingCart className="h-3.5 w-3.5 text-white" />
+            </Link>
             {/* User pill */}
             <Link
               href="/auth/login"
