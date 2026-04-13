@@ -21,7 +21,7 @@ export const categories: Category[] = [
     icon: Sparkles,
     image:
       'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=hair-care',
   },
   {
     slug: 'skin-care',
@@ -29,7 +29,7 @@ export const categories: Category[] = [
     icon: Flower2,
     image:
       'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=skin-care',
   },
   {
     slug: 'pain-relief',
@@ -37,7 +37,7 @@ export const categories: Category[] = [
     icon: Bone,
     image:
       'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=pain-relief',
   },
   {
     slug: 'immunity',
@@ -45,7 +45,7 @@ export const categories: Category[] = [
     icon: Shield,
     image:
       'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=immunity',
   },
   {
     slug: 'digestion',
@@ -53,7 +53,7 @@ export const categories: Category[] = [
     icon: Salad,
     image:
       'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=digestion',
   },
   {
     slug: 'womens-wellness',
@@ -61,7 +61,7 @@ export const categories: Category[] = [
     icon: HeartPulse,
     image:
       'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=womens-wellness',
   },
   {
     slug: 'stress-relief',
@@ -69,7 +69,7 @@ export const categories: Category[] = [
     icon: Moon,
     image:
       'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=stress-relief',
   },
   {
     slug: 'detox-cleanse',
@@ -77,6 +77,6 @@ export const categories: Category[] = [
     icon: Droplets,
     image:
       'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80',
-    href: '#',
+    href: '/products?category=detox-cleanse',
   },
 ]

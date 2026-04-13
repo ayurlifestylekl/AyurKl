@@ -13,6 +13,7 @@ const badgeColors: Record<ProductBadge, string> = {
   NEW: 'text-secondary',
   BESTSELLER: 'text-accent',
   SALE: 'text-primary',
+  COMBO: 'text-[#7A9D54]',
 }
 
 /**

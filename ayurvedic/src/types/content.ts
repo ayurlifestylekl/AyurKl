@@ -35,7 +35,7 @@ export interface PromoBanner {
   accent: PromoAccent
 }
 
-export type ProductBadge = 'NEW' | 'BESTSELLER' | 'SALE'
+export type ProductBadge = 'NEW' | 'BESTSELLER' | 'SALE' | 'COMBO'
 
 export interface FeaturedProduct {
   id: string
@@ -47,4 +47,20 @@ export interface FeaturedProduct {
   badge?: ProductBadge
   image: string
   description?: string
+}
+
+export interface Product {
+  id: string
+  name: string
+  tagline: string
+  description: string
+  category: string
+  priceRm: number
+  oldPriceRm?: number
+  badge?: ProductBadge
+  image: string
+  sku: string
+  stockQty: number
+  isBundle: boolean
+  createdAt: string
 }
