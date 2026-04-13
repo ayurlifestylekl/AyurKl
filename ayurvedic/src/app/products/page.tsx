@@ -1,22 +1,31 @@
 import type { Metadata } from 'next'
-import ComingSoon from '@/components/ui/ComingSoon'
+import { products } from '@/data/products'
+import ProductsHero from '@/components/products/ProductsHero'
+import ProductsPageClient from '@/components/products/ProductsPageClient'
 
 export const metadata: Metadata = {
-  title: 'Shop — Coming Soon',
+  title: 'The Apothecary — Authentic Kerala Ayurvedic Products',
   description:
-    'Our full apothecary of authentic Kerala Ayurvedic herbal oils, churnas and wellness kits is launching soon. Browse a preview of bestsellers on the homepage.',
+    'Shop authentic Kerala Ayurvedic herbal oils, churnas and wellness kits. Hand-blended formulas sourced from Kerala\'s finest pharmacies — Kesha Thailam, Triphala, Kumkumadi and more.',
   alternates: { canonical: '/products' },
-  robots: { index: false, follow: true },
+  robots: { index: true, follow: true },
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>
+}) {
+  const params = await searchParams
+  const initialCategory = params.category || 'all'
+
   return (
-    <ComingSoon
-      eyebrow="Apothecary"
-      title="Our Full Shop Opens Soon."
-      subtitle="Hand-blended Kerala formulas, sourced direct from the source. Our complete catalogue is coming online shortly — until then, see what our community already loves."
-      primaryHref="/#featured-products"
-      primaryLabel="See Bestsellers"
-    />
+    <>
+      <ProductsHero productCount={products.length} />
+      <ProductsPageClient
+        products={products}
+        initialCategory={initialCategory}
+      />
+    </>
   )
 }
