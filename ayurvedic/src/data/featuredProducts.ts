@@ -1,10 +1,5 @@
 import type { FeaturedProduct } from '@/types/content'
 
-/**
- * Five featured products for the asymmetric grid:
- *  - index 0 is the hero (large left tile, spans 2 rows)
- *  - indices 1-4 are secondary tiles
- */
 export const featuredProducts: FeaturedProduct[] = [
   {
     id: 'kesha-thailam',
@@ -19,15 +14,6 @@ export const featuredProducts: FeaturedProduct[] = [
       'Hand-blended in small batches with brahmi, bhringraj and amla. Calms the scalp, deepens sleep, and restores natural shine over six weeks of daily use.',
   },
   {
-    id: 'triphala-churna',
-    name: 'Triphala Churna',
-    tagline: 'Daily Digestive Cleanse',
-    category: 'Digestion',
-    priceRm: 45,
-    image:
-      'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=800&q=80',
-  },
-  {
     id: 'kumkumadi-serum',
     name: 'Kumkumadi Serum',
     tagline: 'Saffron Glow Elixir',
@@ -39,8 +25,17 @@ export const featuredProducts: FeaturedProduct[] = [
       'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=800&q=80',
   },
   {
+    id: 'triphala-churna',
+    name: 'Triphala Churna',
+    tagline: 'Daily Digestive Cleanse',
+    category: 'Digestion',
+    priceRm: 45,
+    image:
+      'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=800&q=80',
+  },
+  {
     id: 'ashwagandha-tablets',
-    name: 'Ashwagandha',
+    name: 'Ashwagandha Extract',
     tagline: 'Stress & Vitality Support',
     category: 'Stress Relief',
     priceRm: 75,
@@ -57,4 +52,33 @@ export const featuredProducts: FeaturedProduct[] = [
     image:
       'https://images.unsplash.com/photo-1519415943484-9fa1873496d4?auto=format&fit=crop&w=800&q=80',
   },
+  {
+    id: 'amla-juice',
+    name: 'Pure Amla Juice',
+    tagline: 'Vitamin C Immunity Booster',
+    category: 'Immunity',
+    priceRm: 35,
+    badge: 'BESTSELLER',
+    image:
+      'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'brahmi-powder',
+    name: 'Brahmi Powder',
+    tagline: 'Cognitive & Memory Support',
+    category: 'Stress Relief',
+    priceRm: 55,
+    image:
+      'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'shatavari-ghee',
+    name: 'Shatavari Ghee',
+    tagline: 'Hormonal Balance',
+    category: "Women's Wellness",
+    priceRm: 120,
+    badge: 'COMBO',
+    image:
+      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80',
+  }
 ]

@@ -2,7 +2,6 @@ import HeroSection from '@/components/HeroSection'
 import TrustStrip from '@/components/sections/TrustStrip'
 import EmpathyBridge from '@/components/sections/EmpathyBridge'
 import ClinicTherapies from '@/components/sections/ClinicTherapies'
-import ShopByCategory from '@/components/sections/ShopByCategory'
 import PromoBanners from '@/components/sections/PromoBanners'
 import FeaturedProducts from '@/components/sections/FeaturedProducts'
 import Reviews from '@/components/sections/Reviews'
@@ -88,7 +87,6 @@ export default function Home() {
       <TrustStrip />
       <EmpathyBridge />
       <ClinicTherapies />
-      <ShopByCategory />
       <PromoBanners />
       <FeaturedProducts />
       <Reviews />
