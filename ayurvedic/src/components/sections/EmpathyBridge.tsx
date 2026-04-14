@@ -4,7 +4,6 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { slideIn, inViewOnce, EASE_OUT_PREMIUM } from '@/lib/motion'
 
 const painPoints = ['Burnout', 'Insomnia', 'Joint Pain', 'Brain Fog']
@@ -128,7 +127,7 @@ export default function EmpathyBridge() {
           </h3>
 
           <p className="mt-8 font-body text-[16px] leading-[1.85] text-dark/70 sm:text-[17px]">
-            At Kerala Ayurvedic Lifestyle, we don't guess. We start with your{' '}
+            At Kerala Ayurvedic Lifestyle, we don&apos;t guess. We start with your{' '}
             <strong className="font-semibold text-primary">dosha</strong> — your
             unique mind-body constitution. Then Vaidya AKHIL HS builds a
             highly personalised protocol that meets your body exactly where it is.
