@@ -17,3 +17,13 @@ ayurvedic/next-env.d.ts
 
 # Claude Code
 .claude/
+
+# Raw video source files (workspace root) — never ship to git.
+# Compressed versions live in ayurvedic/public/videos/ and are tracked.
+/*.mp4
+/*.MP4
+/*.mov
+/*.MOV
+
+# Preserved originals of the compressed videos (kept locally as backup).
+ayurvedic/public/videos/.originals/
