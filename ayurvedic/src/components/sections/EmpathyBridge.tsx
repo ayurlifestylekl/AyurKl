@@ -29,7 +29,7 @@ export default function EmpathyBridge() {
         initial="initial"
         whileInView="animate"
         viewport={inViewOnce}
-        className="relative flex w-full flex-col justify-center bg-nearBlackGreen px-6 py-20 sm:px-10 lg:w-[45%] lg:px-16 lg:py-32 xl:px-20"
+        className="relative flex w-full flex-col justify-center bg-nearBlackGreen px-6 py-14 sm:px-10 lg:w-[45%] lg:px-16 lg:py-20 xl:px-20"
       >
         {/* Subtle photographic texture overlay */}
         <div
@@ -90,7 +90,7 @@ export default function EmpathyBridge() {
         initial="initial"
         whileInView="animate"
         viewport={inViewOnce}
-        className="relative flex w-full flex-col justify-center bg-cream px-6 py-20 sm:px-10 lg:w-[55%] lg:px-20 lg:py-32 xl:px-32"
+        className="relative flex w-full flex-col justify-center bg-cream px-6 py-14 sm:px-10 lg:w-[55%] lg:px-20 lg:py-20 xl:px-32"
       >
         {/* Subtle texture */}
         <div

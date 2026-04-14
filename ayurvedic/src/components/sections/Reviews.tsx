@@ -10,7 +10,7 @@ export default function Reviews() {
   return (
     <section
       aria-labelledby="reviews-heading"
-      className="relative overflow-hidden bg-[#F8F6F0] py-20 lg:py-28"
+      className="relative overflow-hidden bg-[#F8F6F0] py-14 lg:py-20"
     >
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-12">
         {/* Header */}

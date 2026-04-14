@@ -21,7 +21,7 @@ export default function ClinicTherapies() {
     <section
       id="clinic-therapies"
       aria-labelledby="therapies-heading"
-      className="relative bg-[#f8f6f0] pt-20 pb-10 lg:pt-32 lg:pb-16"
+      className="relative bg-[#f8f6f0] pt-14 pb-8 lg:pt-20 lg:pb-10"
     >
       <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20 xl:gap-32">

@@ -61,7 +61,7 @@ const testimonials: VideoTestimonial[] = [
 
 export default function VideoTestimonials() {
   return (
-    <section className="grain-overlay-dark relative overflow-hidden bg-nearBlackGreen py-20 sm:py-24 lg:py-28">
+    <section className="grain-overlay-dark relative overflow-hidden bg-nearBlackGreen py-14 sm:py-16 lg:py-20">
       {/* Atmospheric layers — herbal halo + warm gold wash */}
       <div
         aria-hidden
