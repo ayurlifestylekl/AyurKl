@@ -21,7 +21,7 @@ export default function ClinicTherapies() {
     <section
       id="clinic-therapies"
       aria-labelledby="therapies-heading"
-      className="relative bg-[#f8f6f0] py-20 lg:py-32"
+      className="relative bg-[#f8f6f0] pt-20 pb-10 lg:pt-32 lg:pb-16"
     >
       <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20 xl:gap-32">
@@ -50,7 +50,7 @@ export default function ClinicTherapies() {
             </motion.div>
 
             {/* Scroll-Spied List */}
-            <div className="flex flex-col lg:pb-[30vh]">
+            <div className="flex flex-col lg:pb-[15vh]">
               {therapies.map((therapy, i) => {
                 const isActive = activeIndex === i
                 const numberString = `0${i + 1}`
