@@ -99,10 +99,10 @@ export function BotanicalMandala({
       <circle cx="100" cy="100" r="18" stroke={stroke} strokeWidth="0.8" />
       {Array.from({ length: 12 }).map((_, i) => {
         const angle = (i * 30 * Math.PI) / 180
-        const x1 = 100 + Math.cos(angle) * 18
-        const y1 = 100 + Math.sin(angle) * 18
-        const x2 = 100 + Math.cos(angle) * 90
-        const y2 = 100 + Math.sin(angle) * 90
+        const x1 = (100 + Math.cos(angle) * 18).toFixed(4)
+        const y1 = (100 + Math.sin(angle) * 18).toFixed(4)
+        const x2 = (100 + Math.cos(angle) * 90).toFixed(4)
+        const y2 = (100 + Math.sin(angle) * 90).toFixed(4)
         return (
           <line
             key={i}
@@ -117,8 +117,8 @@ export function BotanicalMandala({
       })}
       {Array.from({ length: 8 }).map((_, i) => {
         const angle = (i * 45 * Math.PI) / 180
-        const cx = 100 + Math.cos(angle) * 54
-        const cy = 100 + Math.sin(angle) * 54
+        const cx = (100 + Math.cos(angle) * 54).toFixed(4)
+        const cy = (100 + Math.sin(angle) * 54).toFixed(4)
         return (
           <ellipse
             key={i}

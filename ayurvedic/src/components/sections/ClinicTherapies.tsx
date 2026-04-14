@@ -1,165 +1,174 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { ArrowRight, Clock, Check } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowRight, Clock } from 'lucide-react'
 import Link from 'next/link'
-import { clipReveal, fadeUp, inViewOnce } from '@/lib/motion'
+import { fadeUp, inViewOnce, EASE_OUT_PREMIUM } from '@/lib/motion'
 import { therapies } from '@/data/therapies'
 
 /**
- * Editorial alternating rows — each therapy gets a horizontal row:
- * image on one side, text on the other, alternating left-right.
+ * Scroll-Spied Sticky Reveal (Luxury Hotel Style)
+ * As the user scrolls down the page, the therapies on the left pass through
+ * the center of the viewport, automatically triggering the cross-fade of the
+ * massive sticky image on the right. Zero clicks required.
  */
 export default function ClinicTherapies() {
+  const [activeIndex, setActiveIndex] = useState(0)
+
   return (
     <section
       id="clinic-therapies"
       aria-labelledby="therapies-heading"
-      className="relative bg-cream"
+      className="relative bg-[#f8f6f0] py-20 lg:py-32"
     >
-      <div className="mx-auto max-w-7xl px-6 py-14 sm:px-8 md:py-20 lg:px-12">
-        {/* Header */}
-        <motion.div
-          variants={fadeUp(0)}
-          initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
-          className="mb-12 lg:mb-16"
-        >
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">
-            At The Clinic
-          </span>
-          <h2
-            id="therapies-heading"
-            className="mt-3 font-heading text-3xl font-extrabold leading-[1.1] text-primary sm:text-4xl"
-          >
-            Signature Therapies
-          </h2>
-          <p className="mt-3 max-w-lg font-body text-[14px] leading-relaxed text-dark/50">
-            Performed by Vaidya AKHIL HS (B.A.M.S). Same-gender therapists.
-            48-hour cancellation policy.
-          </p>
-        </motion.div>
+      <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20 xl:gap-32">
+          
+          {/* ── LEFT: Header & Scrollable Therapy List ── */}
+          <div className="flex flex-col">
+            <motion.div
+              variants={fadeUp(0)}
+              initial="initial"
+              whileInView="animate"
+              viewport={inViewOnce}
+              className="mb-12 lg:mb-32"
+            >
+              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.4em] text-accent">
+                At The Clinic
+              </span>
+              <h2
+                id="therapies-heading"
+                className="mt-4 font-heading text-[clamp(2.5rem,4vw,3.5rem)] font-extrabold leading-[1.05] tracking-tight text-primary"
+              >
+                Signature Therapies
+              </h2>
+              <p className="mt-5 max-w-md font-body text-[16px] leading-relaxed text-dark/60">
+                Performed by Vaidya AKHIL HS (B.A.M.S). All treatments are tailored to your dosha, ensuring a deeply restorative and authentic healing experience.
+              </p>
+            </motion.div>
 
-        {/* Therapy rows */}
-        <div className="flex flex-col">
-          {therapies.map((therapy, i) => {
-            const imageLeft = i % 2 === 0
+            {/* Scroll-Spied List */}
+            <div className="flex flex-col pb-[10vh] lg:pb-[30vh]">
+              {therapies.map((therapy, i) => {
+                const isActive = activeIndex === i
+                const numberString = `0${i + 1}`
 
-            return (
-              <React.Fragment key={therapy.slug}>
-                {/* Gold hairline separator (not before first) */}
-                {i > 0 && (
-                  <div
-                    className="my-10 h-px lg:my-14"
-                    style={{
-                      background:
-                        'linear-gradient(to right, transparent, rgba(212,163,115,0.25), transparent)',
-                    }}
-                    aria-hidden
-                  />
-                )}
-
-                <div
-                  className={`grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14 ${
-                    !imageLeft ? 'lg:[direction:rtl]' : ''
-                  }`}
-                >
-                  {/* Image */}
+                return (
                   <motion.div
-                    variants={clipReveal(imageLeft ? 'left' : 'right', 0)}
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={inViewOnce}
-                    className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl lg:aspect-[3/4] lg:[direction:ltr]"
+                    key={therapy.slug}
+                    // Trigger when this element enters the middle 20% of the screen
+                    onViewportEnter={() => setActiveIndex(i)}
+                    viewport={{ margin: "-40% 0px -40% 0px" }}
+                    className={`flex flex-col py-10 transition-all duration-700 lg:py-24 ${
+                      isActive ? 'lg:opacity-100 lg:translate-x-0' : 'lg:opacity-30 lg:-translate-x-4'
+                    }`}
                   >
-                    <Image
-                      src={therapy.image}
-                      alt={`${therapy.name} — ${therapy.tagline}`}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 45vw"
-                      className="object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
-                    />
-                    {/* Green tint overlay */}
-                    <div
-                      className="absolute inset-0 mix-blend-multiply"
-                      style={{ backgroundColor: 'rgba(47,93,80,0.08)' }}
-                      aria-hidden
-                    />
-                    {/* Bottom gradient */}
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background:
-                          'linear-gradient(to top, rgba(15,26,18,0.25) 0%, transparent 40%)',
-                      }}
-                      aria-hidden
-                    />
-                  </motion.div>
-
-                  {/* Text */}
-                  <motion.div
-                    variants={fadeUp(0.15)}
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={inViewOnce}
-                    className="flex flex-col lg:[direction:ltr]"
-                  >
-                    {/* Duration */}
-                    <div className="flex items-center gap-1.5 text-dark/40">
-                      <Clock className="h-3.5 w-3.5" strokeWidth={2} />
-                      <span className="font-heading text-[11px] font-medium tracking-wide">
-                        {therapy.durationMin} min
-                      </span>
+                    {/* Mobile Image (Hidden on Desktop) */}
+                    <div className="relative mb-8 aspect-[4/5] w-full overflow-hidden rounded-sm shadow-xl lg:hidden">
+                      <Image
+                        src={therapy.image}
+                        alt={therapy.name}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 0vw"
+                        className="object-cover object-center"
+                      />
+                      <div className="absolute inset-0 mix-blend-multiply" style={{ backgroundColor: 'rgba(47,93,80,0.1)' }} />
                     </div>
 
-                    {/* Name */}
-                    <h3 className="mt-3 font-heading text-2xl font-extrabold text-primary lg:text-[1.75rem]">
-                      {therapy.name}
-                    </h3>
+                    <div className="flex items-center gap-6 lg:gap-8">
+                      <span className="font-heading text-xl font-bold text-accent lg:text-2xl">
+                        {numberString}
+                      </span>
+                      <h3 className="font-heading text-3xl font-extrabold tracking-tight text-primary lg:text-[2.75rem]">
+                        {therapy.name}
+                      </h3>
+                    </div>
 
-                    {/* Tagline */}
-                    <p className="mt-1.5 font-body text-[15px] italic text-accent/80">
-                      {therapy.tagline}
-                    </p>
+                    <div className="pl-[44px] pt-4 lg:pl-[64px]">
+                      {/* Duration */}
+                      <div className="mb-4 flex items-center gap-2 text-accent">
+                        <Clock className="h-4 w-4" strokeWidth={1.5} />
+                        <span className="font-body text-[13px] italic tracking-wide text-accent/90">
+                          {therapy.durationMin} minutes
+                        </span>
+                      </div>
 
-                    {/* Bullets (2 max) */}
-                    <ul className="mt-5 flex flex-col gap-2">
-                      {therapy.bullets.slice(0, 2).map(b => (
-                        <li
-                          key={b}
-                          className="flex items-start gap-2 font-body text-[14px] text-dark/65"
+                      {/* Tagline */}
+                      <p className="mb-6 max-w-sm font-body text-[17px] leading-relaxed text-dark/70 lg:text-[18px]">
+                        {therapy.tagline}
+                      </p>
+
+                      {/* Bullets */}
+                      <ul className="mb-10 flex flex-col gap-3">
+                        {therapy.bullets.map((b) => (
+                          <li
+                            key={b}
+                            className="flex items-center gap-4 font-body text-[15px] text-dark/60 lg:text-[16px]"
+                          >
+                            <span className="h-[1px] w-6 flex-shrink-0 bg-accent/40" />
+                            {b}
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* Price & CTA */}
+                      <div className="flex items-center justify-between border-t border-primary/10 pt-8">
+                        <div className="flex items-baseline gap-1">
+                          <span className="mb-1 font-body text-[13px] font-medium tracking-widest text-primary/40 uppercase">
+                            RM
+                          </span>
+                          <span className="font-heading text-3xl font-extrabold tracking-tight text-primary lg:text-4xl">
+                            {therapy.priceRm}
+                          </span>
+                        </div>
+
+                        <Link
+                          href={`#booking?therapy=${therapy.slug}`}
+                          className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-xl transition-all duration-300 hover:scale-110 hover:bg-accent hover:shadow-[0_10px_30px_rgba(212,163,115,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                          aria-label={`Book ${therapy.name}`}
                         >
-                          <Check
-                            className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-secondary"
-                            strokeWidth={2.5}
-                          />
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Price */}
-                    <p className="mt-6 font-heading text-3xl font-extrabold tracking-tight text-primary">
-                      RM{therapy.priceRm}
-                    </p>
-
-                    {/* CTA link */}
-                    <Link
-                      href={`#booking?therapy=${therapy.slug}`}
-                      className="group mt-4 inline-flex items-center gap-2 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-                      aria-label={`Book ${therapy.name} therapy`}
-                    >
-                      Book This Therapy
-                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Link>
+                          <ArrowRight className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-0.5" />
+                        </Link>
+                      </div>
+                    </div>
                   </motion.div>
-                </div>
-              </React.Fragment>
-            )
-          })}
+                )
+              })}
+            </div>
+          </div>
+
+          {/* ── RIGHT: Sticky Cinematic Portal (Desktop Only) ── */}
+          <div className="relative hidden aspect-[4/5] w-full overflow-hidden rounded-sm shadow-2xl lg:sticky lg:top-[12vh] lg:block lg:h-[76vh] lg:max-h-[850px] lg:min-h-[600px] lg:w-full">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.2, ease: EASE_OUT_PREMIUM }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={therapies[activeIndex].image}
+                  alt={`${therapies[activeIndex].name} — ${therapies[activeIndex].tagline}`}
+                  fill
+                  sizes="(max-width: 1024px) 0vw, 55vw"
+                  className="object-cover object-center"
+                  priority
+                />
+                {/* Luxury green tint */}
+                <div
+                  className="absolute inset-0 mix-blend-multiply"
+                  style={{ backgroundColor: 'rgba(47,93,80,0.15)' }}
+                  aria-hidden
+                />
+                <div className="absolute inset-0 border border-white/10 mix-blend-overlay" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
         </div>
       </div>
     </section>
