@@ -50,7 +50,7 @@ export default function ClinicTherapies() {
             </motion.div>
 
             {/* Scroll-Spied List */}
-            <div className="flex flex-col lg:pb-[15vh]">
+            <div className="flex flex-col lg:pb-8">
               {therapies.map((therapy, i) => {
                 const isActive = activeIndex === i
                 const numberString = `0${i + 1}`
