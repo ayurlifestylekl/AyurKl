@@ -34,7 +34,7 @@ export default function FeaturedProducts() {
     <section
       id="curated-collection"
       aria-labelledby="collection-heading"
-      className="relative bg-[#f8f6f0] pb-20 pt-10 lg:pb-32 lg:pt-16"
+      className="relative bg-[#f8f6f0] pb-14 pt-8 lg:pb-20 lg:pt-10"
     >
       <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
         

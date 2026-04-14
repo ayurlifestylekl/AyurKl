@@ -43,7 +43,7 @@ export default function FAQs({
       aria-labelledby="faq-heading"
       className="relative bg-cream"
     >
-      <div className="mx-auto max-w-7xl px-6 py-14 sm:px-8 md:py-20 lg:px-12">
+      <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 md:py-16 lg:px-12">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16">
           {/* ── LEFT: Sticky sidebar ──────────────────── */}
           <motion.div
