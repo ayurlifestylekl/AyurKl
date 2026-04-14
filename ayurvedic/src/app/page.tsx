@@ -4,6 +4,7 @@ import EmpathyBridge from '@/components/sections/EmpathyBridge'
 import ClinicTherapies from '@/components/sections/ClinicTherapies'
 import PromoBanners from '@/components/sections/PromoBanners'
 import FeaturedProducts from '@/components/sections/FeaturedProducts'
+import VideoTestimonials from '@/components/sections/VideoTestimonials'
 import Reviews from '@/components/sections/Reviews'
 import FAQs from '@/components/sections/FAQs'
 import FinalBookingCTA from '@/components/sections/FinalBookingCTA'
@@ -89,6 +90,7 @@ export default function Home() {
       <ClinicTherapies />
       <PromoBanners />
       <FeaturedProducts />
+      <VideoTestimonials />
       <Reviews />
       <FAQs />
       <FinalBookingCTA />
