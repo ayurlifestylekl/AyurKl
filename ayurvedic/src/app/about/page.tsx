@@ -133,17 +133,11 @@ export default function AboutPage() {
       <OurPhilosophy />
       <MedicalAuthority />
       <KalsDifference />
-      {/* Gold hairline: cream → white transition */}
-      <div
-        className="h-px"
-        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.2), transparent)' }}
-        aria-hidden
-      />
       <WellnessFocus />
-      {/* Gold hairline: white → cream transition */}
+      {/* Gold hairline: dark atelier \u2192 cream FAQ transition */}
       <div
         className="h-px"
-        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.2), transparent)' }}
+        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.3), transparent)' }}
         aria-hidden
       />
       <FAQs
