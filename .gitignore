@@ -5,6 +5,9 @@ temporary screenshots/
 .env*.local
 package-lock.json
 
+# Local screenshot / measurement helper scripts — ad-hoc tooling, not source.
+_tmp_*.mjs
+
 # Next.js (ayurvedic/)
 ayurvedic/node_modules/
 ayurvedic/.next/
