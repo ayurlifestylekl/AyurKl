@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 
-import ContactHero from '@/components/contact/ContactHero'
-import ContactPaths from '@/components/contact/ContactPaths'
-import ContactForm from '@/components/contact/ContactForm'
-import ContactLocation from '@/components/contact/ContactLocation'
-import FAQs from '@/components/sections/FAQs'
+import EnvelopeOpening from '@/components/contact/EnvelopeOpening'
+import ConciergeRail from '@/components/contact/ConciergeRail'
+import LetterheadDesk from '@/components/contact/LetterheadDesk'
+import BrickfieldsAtlas from '@/components/contact/BrickfieldsAtlas'
+import LetterPostscript from '@/components/contact/LetterPostscript'
 import { contactFaqs } from '@/data/contactFaqs'
 
 export const metadata: Metadata = {
@@ -24,15 +24,11 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <ContactHero />
-      <ContactPaths />
-      <ContactForm />
-      <ContactLocation />
-      <FAQs
-        items={contactFaqs}
-        eyebrow="016  /  Before you reach out"
-        title="Answered before you ask"
-      />
+      <EnvelopeOpening />
+      <ConciergeRail />
+      <LetterheadDesk />
+      <BrickfieldsAtlas />
+      <LetterPostscript items={contactFaqs} />
     </>
   )
 }
