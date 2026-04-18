@@ -63,6 +63,19 @@
   100% { transform: rotate(360deg) translateX(18px) rotate(-360deg); }
 }
 
+/* Horizontal gold thread — swept across a plate photo on hover */
+@keyframes gold-thread-sweep {
+  0%   { transform: translateX(-110%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateX(110%); opacity: 0; }
+}
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .group:hover .gold-thread-sweep-on-hover {
+    animation: gold-thread-sweep 900ms cubic-bezier(0.22, 0.92, 0.38, 1.0) forwards;
+  }
+}
+
 .shimmer-sweep { animation: shimmer-sweep 3.5s ease-in-out infinite; }
 .shimmer-sweep-delayed { animation: shimmer-sweep 3.5s ease-in-out 1.8s infinite; }
 .soft-pulse    { animation: soft-pulse   2.4s ease-in-out infinite; }
