@@ -64,6 +64,11 @@ try {
   const page = await browser.newPage();
   await page.setViewport({ width, height, deviceScaleFactor: 2 });
   await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+  // Wait for scroll-triggered / mount animations to settle. Override with DELAY_MS=0.
+  const delay = process.env.DELAY_MS !== undefined ? Number(process.env.DELAY_MS) : 2500;
+  if (delay > 0) {
+    await new Promise((r) => setTimeout(r, delay));
+  }
   await page.screenshot({ path: outPath, fullPage });
   console.log(`\u2713 Saved ${outPath}`);
 } catch (err) {

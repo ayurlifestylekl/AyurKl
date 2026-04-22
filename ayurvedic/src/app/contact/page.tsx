@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
-import EnvelopeOpening from '@/components/contact/EnvelopeOpening'
-import ConciergeRail from '@/components/contact/ConciergeRail'
-import LetterheadDesk from '@/components/contact/LetterheadDesk'
-import BrickfieldsAtlas from '@/components/contact/BrickfieldsAtlas'
-import LetterPostscript from '@/components/contact/LetterPostscript'
-import { contactFaqs } from '@/data/contactFaqs'
+import Threshold from '@/components/contact/Threshold'
+import Directory from '@/components/contact/Directory'
+import CallingCard from '@/components/contact/CallingCard'
+import Letterhead from '@/components/contact/Letterhead'
+import Bureau from '@/components/contact/Bureau'
+import Footnotes from '@/components/contact/Footnotes'
 
 export const metadata: Metadata = {
   title: 'Contact — Kerala Ayurvedic Lifestyle, Brickfields KL',
@@ -15,20 +15,26 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact — Kerala Ayurvedic Lifestyle',
     description:
-      'Begin your healing journey. Message us on WhatsApp, book a consultation, or visit our Brickfields clinic.',
+      'Cross the threshold. Message, call or visit our Brickfields clinic. Every note reaches Vaidya AKHIL directly — no bots, no call-trees.',
     url: 'https://keralaayurvedic.com/contact',
     type: 'website',
   },
 }
 
+/**
+ * Vol. II — The Correspondence
+ * Six-zone Duet: dark Threshold → cream Directory + CallingCard + Letterhead
+ * → dark Bureau → cream Footnotes.
+ */
 export default function ContactPage() {
   return (
     <>
-      <EnvelopeOpening />
-      <ConciergeRail />
-      <LetterheadDesk />
-      <BrickfieldsAtlas />
-      <LetterPostscript items={contactFaqs} />
+      <Threshold />
+      <Directory />
+      <CallingCard />
+      <Letterhead />
+      <Bureau />
+      <Footnotes />
     </>
   )
 }
