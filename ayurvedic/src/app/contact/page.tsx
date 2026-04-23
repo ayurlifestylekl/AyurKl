@@ -6,6 +6,10 @@ import CallingCard from '@/components/contact/CallingCard'
 import Letterhead from '@/components/contact/Letterhead'
 import Bureau from '@/components/contact/Bureau'
 import Footnotes from '@/components/contact/Footnotes'
+import { contactFaqs as contactFaqsFallback } from '@/data/contactFaqs'
+import { fetchFaqs } from '@/sanity/fetchFaqs'
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Contact — Kerala Ayurvedic Lifestyle, Brickfields KL',
@@ -26,7 +30,9 @@ export const metadata: Metadata = {
  * Six-zone Duet: dark Threshold → cream Directory + CallingCard + Letterhead
  * → dark Bureau → cream Footnotes.
  */
-export default function ContactPage() {
+export default async function ContactPage() {
+  const contactFaqs = await fetchFaqs('contact', contactFaqsFallback)
+
   return (
     <>
       <Threshold />
@@ -34,7 +40,7 @@ export default function ContactPage() {
       <CallingCard />
       <Letterhead />
       <Bureau />
-      <Footnotes />
+      <Footnotes items={contactFaqs} />
     </>
   )
 }

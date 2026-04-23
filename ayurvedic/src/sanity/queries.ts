@@ -102,3 +102,60 @@ export const RELATED_POSTS_QUERY = groq`
     tags
   }
 `
+
+/* ──────────────────────────────────────────────────────────────────────
+ * FAQ queries
+ * ────────────────────────────────────────────────────────────────────── */
+
+/**
+ * All FAQs for a given surface (home | contact | about), ordered by the
+ * editor-defined `order` field and then alphabetically as a tiebreak.
+ * `surface` is bound as a query parameter, not string-interpolated.
+ */
+export const FAQS_BY_SURFACE_QUERY = groq`
+  *[_type == "faq" && surface == $surface] | order(
+    coalesce(order, 9999) asc,
+    question asc
+  ) {
+    _id,
+    question,
+    answer,
+    surface,
+    "categoryTitle": category->title
+  }
+`
+
+/* ──────────────────────────────────────────────────────────────────────
+ * About page singleton
+ * ────────────────────────────────────────────────────────────────────── */
+
+/**
+ * Returns the single aboutPage document (or null if not yet seeded).
+ * The page renders hard-coded fallback copy when this returns null.
+ */
+export const ABOUT_PAGE_QUERY = groq`
+  *[_type == "aboutPage"][0] {
+    heroEyebrow,
+    heroHeadlineLead,
+    heroHeadlineAccent,
+    heroSubheading,
+    heroStats[] { value, label },
+    founderEyebrow,
+    founderHeadlineLead,
+    founderHeadlineAccent,
+    founderParagraphs,
+    founderPullQuote,
+    founderName,
+    founderRole,
+    commitmentEyebrow,
+    commitmentHeadlineLead,
+    commitmentHeadlineAccent,
+    commitmentBody,
+    commitmentClosingLine,
+    commitmentPrimaryLabel,
+    commitmentPrimaryHref,
+    commitmentSecondaryLabel,
+    commitmentSecondaryHref,
+    commitmentTrustPills
+  }
+`

@@ -7,12 +7,64 @@ import { Calendar, MessageCircle } from 'lucide-react'
 import CTAButton from '@/components/ui/CTAButton'
 import { clipReveal, fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
+const defaults = {
+  eyebrow: 'Our Commitment to You',
+  headlineLead: 'Your partners in',
+  headlineAccent: 'health.',
+  body:
+    'For over 15 years, KALS has been a trusted name in holistic healing. Our mission remains the same as the day we started: to help you rediscover balance and vitality through integrity, compassion, and excellence.',
+  closingLine: 'Experience the difference that true Ayurveda makes.',
+  primaryLabel: 'Book a Consultation',
+  primaryHref: 'https://cal.com/kerala-ayurvedic',
+  secondaryLabel: 'WhatsApp Us',
+  secondaryHref: 'https://wa.me/601165043436',
+  trustPills: ['Since 2008', 'Brickfields, KL', 'Vaidya AKHIL HS (B.A.M.S)'],
+}
+
+interface CommitmentCTAProps {
+  eyebrow?: string
+  headlineLead?: string
+  headlineAccent?: string
+  body?: string
+  closingLine?: string
+  primaryLabel?: string
+  primaryHref?: string
+  secondaryLabel?: string
+  secondaryHref?: string
+  trustPills?: string[]
+}
+
 /**
  * Commitment CTA — cinematic close mirroring homepage FinalBookingCTA.
  * Split: atmospheric photograph left, CTA content on nearBlackGreen right.
- * Uses "Our Commitment to You" copy from the company PDF.
+ * Copy and CTAs are overridable via props; missing fields fall back to the
+ * hard-coded defaults above.
  */
-export default function CommitmentCTA() {
+export default function CommitmentCTA({
+  eyebrow,
+  headlineLead,
+  headlineAccent,
+  body,
+  closingLine,
+  primaryLabel,
+  primaryHref,
+  secondaryLabel,
+  secondaryHref,
+  trustPills,
+}: CommitmentCTAProps = {}) {
+  const copy = {
+    eyebrow: eyebrow || defaults.eyebrow,
+    headlineLead: headlineLead || defaults.headlineLead,
+    headlineAccent: headlineAccent || defaults.headlineAccent,
+    body: body || defaults.body,
+    closingLine: closingLine || defaults.closingLine,
+    primaryLabel: primaryLabel || defaults.primaryLabel,
+    primaryHref: primaryHref || defaults.primaryHref,
+    secondaryLabel: secondaryLabel || defaults.secondaryLabel,
+    secondaryHref: secondaryHref || defaults.secondaryHref,
+    trustPills:
+      trustPills && trustPills.length > 0 ? trustPills : defaults.trustPills,
+  }
   return (
     <section
       id="about-cta"
@@ -104,7 +156,7 @@ export default function CommitmentCTA() {
               variants={fadeUp(0)}
               className="inline-block font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent"
             >
-              Our Commitment to You
+              {copy.eyebrow}
             </motion.span>
 
             <motion.h2
@@ -112,26 +164,30 @@ export default function CommitmentCTA() {
               variants={fadeUp(0)}
               className="mt-4 font-heading text-3xl font-extrabold leading-[1.08] text-white sm:text-4xl"
             >
-              Your partners in{' '}
-              <span className="text-accent">health.</span>
+              {copy.headlineLead}
+              {copy.headlineAccent ? (
+                <>
+                  {' '}
+                  <span className="text-accent">{copy.headlineAccent}</span>
+                </>
+              ) : null}
             </motion.h2>
 
             <motion.p
               variants={fadeUp(0)}
               className="mt-5 font-body text-[15px] leading-[1.7] text-white/60"
             >
-              For over 15 years, KALS has been a trusted name in holistic
-              healing. Our mission remains the same as the day we started: to
-              help you rediscover balance and vitality through integrity,
-              compassion, and excellence.
+              {copy.body}
             </motion.p>
 
-            <motion.p
-              variants={fadeUp(0)}
-              className="mt-3 font-body text-[14px] italic text-white/45"
-            >
-              Experience the difference that true Ayurveda makes.
-            </motion.p>
+            {copy.closingLine ? (
+              <motion.p
+                variants={fadeUp(0)}
+                className="mt-3 font-body text-[14px] italic text-white/45"
+              >
+                {copy.closingLine}
+              </motion.p>
+            ) : null}
 
             {/* CTAs — stacked vertically */}
             <motion.div
@@ -139,20 +195,20 @@ export default function CommitmentCTA() {
               className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col"
             >
               <CTAButton
-                href="https://cal.com/kerala-ayurvedic"
+                href={copy.primaryHref}
                 variant="primary"
                 size="lg"
                 icon={<Calendar className="h-4 w-4" />}
               >
-                Book a Consultation
+                {copy.primaryLabel}
               </CTAButton>
               <CTAButton
-                href="https://wa.me/601165043436"
+                href={copy.secondaryHref}
                 variant="outlineLight"
                 size="lg"
                 icon={<MessageCircle className="h-4 w-4" />}
               >
-                WhatsApp Us
+                {copy.secondaryLabel}
               </CTAButton>
             </motion.div>
 
@@ -161,11 +217,14 @@ export default function CommitmentCTA() {
               variants={fadeUp(0)}
               className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10px] font-medium uppercase tracking-[0.18em] text-white/30"
             >
-              <span>Since 2008</span>
-              <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
-              <span>Brickfields, KL</span>
-              <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
-              <span>Vaidya AKHIL HS (B.A.M.S)</span>
+              {copy.trustPills.map((pill, i, arr) => (
+                <React.Fragment key={i}>
+                  <span>{pill}</span>
+                  {i < arr.length - 1 ? (
+                    <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
+                  ) : null}
+                </React.Fragment>
+              ))}
             </motion.div>
           </motion.div>
         </div>

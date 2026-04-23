@@ -8,7 +8,10 @@ import VideoTestimonials from '@/components/sections/VideoTestimonials'
 import Reviews from '@/components/sections/Reviews'
 import FAQs from '@/components/sections/FAQs'
 import FinalBookingCTA from '@/components/sections/FinalBookingCTA'
-import { faqs } from '@/data/faqs'
+import { faqs as homeFaqsFallback } from '@/data/faqs'
+import { fetchFaqs } from '@/sanity/fetchFaqs'
+
+export const revalidate = 3600
 
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
@@ -53,20 +56,22 @@ const reviewJsonLd = {
   },
 }
 
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map(faq => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: faq.answer,
-    },
-  })),
-}
+export default async function Home() {
+  const homeFaqs = await fetchFaqs('home', homeFaqsFallback)
 
-export default function Home() {
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: homeFaqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+
   return (
     <>
       <script
@@ -92,7 +97,7 @@ export default function Home() {
       <FeaturedProducts />
       <VideoTestimonials />
       <Reviews />
-      <FAQs />
+      <FAQs items={homeFaqs} />
       <FinalBookingCTA />
     </>
   )

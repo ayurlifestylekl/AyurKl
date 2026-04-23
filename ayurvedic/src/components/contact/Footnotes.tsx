@@ -5,9 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Plus } from 'lucide-react'
 
 import { EASE_OUT_PREMIUM, fadeUp, inViewOnce } from '@/lib/motion'
-import { contactFaqs } from '@/data/contactFaqs'
+import { contactFaqs as contactFaqsFallback } from '@/data/contactFaqs'
+import type { FAQ } from '@/data/faqs'
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+
+interface FootnotesProps {
+  items?: FAQ[]
+}
 
 /**
  * Zone 6 — "The Footnotes"
@@ -15,7 +20,8 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
  * frequently asked questions (right, single-open). Closes with a trimmed
  * letter-style sign-off rather than a centred banner.
  */
-export default function Footnotes() {
+export default function Footnotes({ items = contactFaqsFallback }: FootnotesProps = {}) {
+  const contactFaqs = items
   const [open, setOpen] = useState<string | null>(contactFaqs[0]?.id ?? null)
 
   return (

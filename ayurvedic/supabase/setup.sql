@@ -170,6 +170,30 @@ ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.sales_agents ENABLE ROW LEVEL SECURITY;
 
 
+-- Drop existing policies first so re-runs are idempotent.
+-- Postgres doesn't support "CREATE POLICY IF NOT EXISTS", so we drop then recreate.
+DROP POLICY IF EXISTS "users: self read"                    ON public.users;
+DROP POLICY IF EXISTS "users: self update"                  ON public.users;
+DROP POLICY IF EXISTS "users: admin full access"            ON public.users;
+DROP POLICY IF EXISTS "products: public read"               ON public.products;
+DROP POLICY IF EXISTS "products: admin full access"         ON public.products;
+DROP POLICY IF EXISTS "bundle_items: public read"           ON public.bundle_items;
+DROP POLICY IF EXISTS "bundle_items: admin full access"     ON public.bundle_items;
+DROP POLICY IF EXISTS "orders: customer reads own"          ON public.orders;
+DROP POLICY IF EXISTS "orders: customer creates own"        ON public.orders;
+DROP POLICY IF EXISTS "orders: agent reads attributed"      ON public.orders;
+DROP POLICY IF EXISTS "orders: admin full access"           ON public.orders;
+DROP POLICY IF EXISTS "order_items: customer reads own"     ON public.order_items;
+DROP POLICY IF EXISTS "order_items: customer creates own"   ON public.order_items;
+DROP POLICY IF EXISTS "order_items: admin full access"      ON public.order_items;
+DROP POLICY IF EXISTS "appointments: customer reads own"    ON public.appointments;
+DROP POLICY IF EXISTS "appointments: customer creates own"  ON public.appointments;
+DROP POLICY IF EXISTS "appointments: customer updates own"  ON public.appointments;
+DROP POLICY IF EXISTS "appointments: admin full access"     ON public.appointments;
+DROP POLICY IF EXISTS "sales_agents: agent reads own"       ON public.sales_agents;
+DROP POLICY IF EXISTS "sales_agents: admin full access"     ON public.sales_agents;
+
+
 -- ── USERS ──────────────────────────────────────────────────────
 CREATE POLICY "users: self read"
   ON public.users FOR SELECT
@@ -284,6 +308,10 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('product-images', 'product-images', true)
 ON CONFLICT (id) DO NOTHING;
 
+DROP POLICY IF EXISTS "storage: product images public read" ON storage.objects;
+DROP POLICY IF EXISTS "storage: authenticated can upload"   ON storage.objects;
+DROP POLICY IF EXISTS "storage: admin can delete"           ON storage.objects;
+
 CREATE POLICY "storage: product images public read"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'product-images');
@@ -334,6 +362,10 @@ CREATE INDEX IF NOT EXISTS contact_messages_status_created_idx
   ON public.contact_messages (status, created_at DESC);
 
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "contact_messages: anon can insert"      ON public.contact_messages;
+DROP POLICY IF EXISTS "contact_messages: admin reads all"      ON public.contact_messages;
+DROP POLICY IF EXISTS "contact_messages: admin updates status" ON public.contact_messages;
 
 -- Anyone (visitor or logged-in user) can submit a new lead.
 CREATE POLICY "contact_messages: anon can insert"

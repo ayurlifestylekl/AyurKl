@@ -25,19 +25,51 @@ const scaleReveal = {
   },
 }
 
-const stats = [
+const defaultStats = [
   { value: '17+', label: 'Years in Brickfields' },
   { value: '5,000+', label: 'Patients Healed' },
   { value: '20+', label: 'Traditional Therapies' },
 ]
+
+const defaults = {
+  eyebrow: 'About Kerala Ayurvedic Lifestyle',
+  headlineLead: 'A Sanctuary for\nAuthentic',
+  headlineAccent: 'Healing',
+  subheading:
+    'Since 2008, we have brought the timeless wisdom of Kerala Ayurveda to Brickfields — a space where tradition, care, and natural healing come together in harmony.',
+}
+
+interface AboutHeroProps {
+  eyebrow?: string
+  headlineLead?: string
+  headlineAccent?: string
+  subheading?: string
+  stats?: Array<{ value: string; label: string }>
+}
 
 /**
  * About Hero — Full-bleed cinematic immersive.
  * Background image fills entire viewport with deep overlay.
  * Centered editorial text with dramatic typography.
  * Anchored stat bar at bottom with gold hairline.
+ *
+ * Copy can be overridden by passing CMS content via props; any missing
+ * field falls back to the hard-coded value above.
  */
-export default function AboutHero() {
+export default function AboutHero({
+  eyebrow,
+  headlineLead,
+  headlineAccent,
+  subheading,
+  stats,
+}: AboutHeroProps = {}) {
+  const copy = {
+    eyebrow: eyebrow || defaults.eyebrow,
+    headlineLead: headlineLead || defaults.headlineLead,
+    headlineAccent: headlineAccent || defaults.headlineAccent,
+    subheading: subheading || defaults.subheading,
+    stats: stats && stats.length > 0 ? stats : defaultStats,
+  }
   return (
     <section
       className="relative overflow-hidden"
@@ -106,7 +138,7 @@ export default function AboutHero() {
           >
             <Leaf className="h-3 w-3 text-accent/50" />
             <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent/60">
-              About Kerala Ayurvedic Lifestyle
+              {copy.eyebrow}
             </span>
             <Leaf className="h-3 w-3 -scale-x-100 text-accent/50" />
           </motion.div>
@@ -130,10 +162,20 @@ export default function AboutHero() {
               letterSpacing: '-0.04em',
             }}
           >
-            A Sanctuary for
-            <br />
-            Authentic{' '}
-            <span className="font-body italic text-accent">Healing</span>
+            {copy.headlineLead.split('\n').map((line, idx, arr) => (
+              <React.Fragment key={idx}>
+                {line}
+                {idx < arr.length - 1 && <br />}
+              </React.Fragment>
+            ))}
+            {copy.headlineAccent ? (
+              <>
+                {' '}
+                <span className="font-body italic text-accent">
+                  {copy.headlineAccent}
+                </span>
+              </>
+            ) : null}
           </motion.h1>
 
           {/* Sub-headline — refined serif */}
@@ -141,9 +183,7 @@ export default function AboutHero() {
             {...fadeIn(0.5)}
             className="mt-6 max-w-[520px] font-body text-[16px] leading-[1.7] text-white/50 md:text-[17px]"
           >
-            Since 2008, we have brought the timeless wisdom of Kerala Ayurveda
-            to Brickfields — a space where tradition, care, and natural healing
-            come together in harmony.
+            {copy.subheading}
           </motion.p>
 
           {/* Scroll indicator */}
@@ -188,7 +228,7 @@ export default function AboutHero() {
           />
 
           <div className="mx-auto flex max-w-4xl items-center justify-center px-6 py-6 md:py-8">
-            {stats.map((s, i, arr) => (
+            {copy.stats.map((s, i, arr) => (
               <React.Fragment key={s.label}>
                 <div className="flex flex-col items-center px-5 sm:px-8 md:px-10">
                   <p className="font-heading text-[1.5rem] font-extrabold leading-none tracking-tight text-white sm:text-[1.75rem] md:text-[2rem]">

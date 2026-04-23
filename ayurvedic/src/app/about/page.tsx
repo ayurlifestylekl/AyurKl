@@ -7,7 +7,11 @@ import KalsDifference from '@/components/about/KalsDifference'
 import WellnessFocus from '@/components/about/WellnessFocus'
 import CommitmentCTA from '@/components/about/CommitmentCTA'
 import FAQs from '@/components/sections/FAQs'
-import { aboutFaqs } from '@/data/about'
+import { aboutFaqs as aboutFaqsFallback } from '@/data/about'
+import { fetchFaqs } from '@/sanity/fetchFaqs'
+import { fetchAboutPage } from '@/sanity/fetchAboutPage'
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'About Us — Authentic Kerala Ayurveda Since 2008',
@@ -109,7 +113,12 @@ const personJsonLd = {
   ],
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [aboutFaqs, about] = await Promise.all([
+    fetchFaqs('about', aboutFaqsFallback),
+    fetchAboutPage(),
+  ])
+
   return (
     <>
       <script
@@ -122,8 +131,22 @@ export default function AboutPage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <AboutHero />
-      <FoundersVision />
+      <AboutHero
+        eyebrow={about?.heroEyebrow}
+        headlineLead={about?.heroHeadlineLead}
+        headlineAccent={about?.heroHeadlineAccent}
+        subheading={about?.heroSubheading}
+        stats={about?.heroStats}
+      />
+      <FoundersVision
+        eyebrow={about?.founderEyebrow}
+        headlineLead={about?.founderHeadlineLead}
+        headlineAccent={about?.founderHeadlineAccent}
+        paragraphs={about?.founderParagraphs}
+        pullQuote={about?.founderPullQuote}
+        name={about?.founderName}
+        role={about?.founderRole}
+      />
       {/* Gold hairline: cream → white transition */}
       <div
         className="h-px"
@@ -147,7 +170,18 @@ export default function AboutPage() {
         subtitle="A few things to know before your first visit to KALS."
         id="about-faqs"
       />
-      <CommitmentCTA />
+      <CommitmentCTA
+        eyebrow={about?.commitmentEyebrow}
+        headlineLead={about?.commitmentHeadlineLead}
+        headlineAccent={about?.commitmentHeadlineAccent}
+        body={about?.commitmentBody}
+        closingLine={about?.commitmentClosingLine}
+        primaryLabel={about?.commitmentPrimaryLabel}
+        primaryHref={about?.commitmentPrimaryHref}
+        secondaryLabel={about?.commitmentSecondaryLabel}
+        secondaryHref={about?.commitmentSecondaryHref}
+        trustPills={about?.commitmentTrustPills}
+      />
     </>
   )
 }

@@ -16,11 +16,17 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production'
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-10-01'
 
-/** Server-only read token. Optional — public datasets work without it. */
-export const readToken = process.env.SANITY_API_READ_TOKEN
-
 /** Server-only write token. Required by the seed script. */
 export const writeToken = process.env.SANITY_API_WRITE_TOKEN
+
+/**
+ * Server-only read token. Falls back to the write token when no dedicated
+ * read token is configured — the sanityClient is only ever imported from
+ * server components and route handlers, so the token is never shipped to
+ * the browser.
+ */
+export const readToken =
+  process.env.SANITY_API_READ_TOKEN || process.env.SANITY_API_WRITE_TOKEN
 
 /** True only when the public project id has actually been configured. */
 export const isSanityConfigured = projectId.length > 0

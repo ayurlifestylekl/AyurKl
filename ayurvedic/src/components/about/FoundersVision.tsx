@@ -5,11 +5,55 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { clipReveal, fadeUp, inViewOnce, EASE_OUT_PREMIUM } from '@/lib/motion'
 
+const defaults = {
+  eyebrow: 'Our Story',
+  headlineLead: "Bringing Kerala's healing",
+  headlineAccent: 'home.',
+  paragraphs: [
+    'Kerala Ayurvedic Lifestyle was founded with a simple yet powerful vision — to provide genuine Kerala Ayurvedic therapies to people in Malaysia without compromise.',
+    'Inspired by witnessing the profound healing experienced by individuals who traveled to Kerala, Datto Shan envisioned creating the same experience closer to home.',
+    'By bringing skilled therapists and experienced Ayurveda practitioners directly from Kerala, we ensure that every therapy reflects the true essence of this ancient science. Our journey has always been guided by authenticity, care, and a deep respect for traditional healing methods.',
+  ],
+  pullQuote:
+    'True wellness is not just about therapies, but about restoring balance and harmony within.',
+  name: 'Datto Shan',
+  role: 'Founder',
+}
+
+interface FoundersVisionProps {
+  eyebrow?: string
+  headlineLead?: string
+  headlineAccent?: string
+  paragraphs?: string[]
+  pullQuote?: string
+  name?: string
+  role?: string
+}
+
 /**
  * Founder's story — sticky sidebar portrait + editorial text.
- * No drop-cap, no oversized quote marks, no BotanicalMandala.
+ * Copy is overridable via props; any missing field falls back to the
+ * hard-coded defaults above.
  */
-export default function FoundersVision() {
+export default function FoundersVision({
+  eyebrow,
+  headlineLead,
+  headlineAccent,
+  paragraphs,
+  pullQuote,
+  name,
+  role,
+}: FoundersVisionProps = {}) {
+  const copy = {
+    eyebrow: eyebrow || defaults.eyebrow,
+    headlineLead: headlineLead || defaults.headlineLead,
+    headlineAccent: headlineAccent || defaults.headlineAccent,
+    paragraphs:
+      paragraphs && paragraphs.length > 0 ? paragraphs : defaults.paragraphs,
+    pullQuote: pullQuote || defaults.pullQuote,
+    name: name || defaults.name,
+    role: role || defaults.role,
+  }
   return (
     <section
       aria-labelledby="founder-heading"
@@ -58,10 +102,10 @@ export default function FoundersVision() {
               className="mt-4"
             >
               <p className="font-body text-[18px] font-medium italic text-primary">
-                Datto Shan
+                {copy.name}
               </p>
               <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.25em] text-dark/40">
-                Founder
+                {copy.role}
               </p>
             </motion.div>
           </div>
@@ -99,14 +143,21 @@ export default function FoundersVision() {
               viewport={inViewOnce}
             >
               <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">
-                Our Story
+                {copy.eyebrow}
               </span>
               <h2
                 id="founder-heading"
                 className="mt-3 font-heading text-3xl font-extrabold leading-[1.08] text-primary sm:text-4xl"
               >
-                Bringing Kerala&apos;s healing{' '}
-                <span className="font-body italic text-accent">home.</span>
+                {copy.headlineLead}
+                {copy.headlineAccent ? (
+                  <>
+                    {' '}
+                    <span className="font-body italic text-accent">
+                      {copy.headlineAccent}
+                    </span>
+                  </>
+                ) : null}
               </h2>
             </motion.div>
 
@@ -117,23 +168,14 @@ export default function FoundersVision() {
               viewport={inViewOnce}
               className="mt-6 flex flex-col gap-5"
             >
-              <p className="max-w-lg font-body text-[15px] leading-[1.75] text-dark/60">
-                Kerala Ayurvedic Lifestyle was founded with a simple yet powerful
-                vision — to provide genuine Kerala Ayurvedic therapies to people in
-                Malaysia without compromise.
-              </p>
-              <p className="max-w-lg font-body text-[15px] leading-[1.75] text-dark/60">
-                Inspired by witnessing the profound healing experienced by
-                individuals who traveled to Kerala, Datto Shan envisioned creating
-                the same experience closer to home.
-              </p>
-              <p className="max-w-lg font-body text-[15px] leading-[1.75] text-dark/60">
-                By bringing skilled therapists and experienced Ayurveda
-                practitioners directly from Kerala, we ensure that every therapy
-                reflects the true essence of this ancient science. Our journey has
-                always been guided by authenticity, care, and a deep respect for
-                traditional healing methods.
-              </p>
+              {copy.paragraphs.map((para, idx) => (
+                <p
+                  key={idx}
+                  className="max-w-lg font-body text-[15px] leading-[1.75] text-dark/60"
+                >
+                  {para}
+                </p>
+              ))}
             </motion.div>
 
             {/* Pull quote — thin left border, no oversized quote marks */}
@@ -145,8 +187,7 @@ export default function FoundersVision() {
               className="mt-8 border-l-2 border-accent/50 pl-6"
             >
               <p className="max-w-md font-body text-[17px] italic leading-[1.6] text-primary/80">
-                &ldquo;True wellness is not just about therapies, but about
-                restoring balance and harmony within.&rdquo;
+                &ldquo;{copy.pullQuote}&rdquo;
               </p>
             </motion.blockquote>
           </div>
