@@ -63,4 +63,8 @@ export interface Product {
   stockQty: number
   isBundle: boolean
   createdAt: string
+  /** Optional — shown in "Prepared with" section on the detail page. */
+  ingredients?: string[]
+  /** Optional — shown as a small italic paragraph in "Dose / use". */
+  dose?: string
 }

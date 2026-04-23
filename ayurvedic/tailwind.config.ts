@@ -10,15 +10,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary:    "#2F5D50",
-        secondary:  "#7A9D54",
-        accent:     "#D4A373",
-        dark:       "#2B2B2B",
-        background: "#F9F9F9",
-        foreground: "#2B2B2B",
-        cream:      "#FAF6EE",
-        heroCream:  "#f0ede5",
+        primary:        "#2F5D50",
+        secondary:      "#7A9D54",
+        accent:         "#D4A373",
+        dark:           "#2B2B2B",
+        background:     "#F9F9F9",
+        foreground:     "#2B2B2B",
+        cream:          "#FAF6EE",
+        heroCream:      "#f0ede5",
         nearBlackGreen: "#1a2e26",
+        nocturne:       "#0E1E1A",
+        "nocturne-elev":"#112520",
       },
       boxShadow: {
         'elevated':  '0 8px 30px -10px rgba(47,93,80,0.2), 0 2px 8px rgba(47,93,80,0.06)',
@@ -29,6 +31,7 @@ const config: Config = {
       fontFamily: {
         heading: ["var(--font-montserrat)", "sans-serif"],
         body:    ["var(--font-lora)", "serif"],
+        display: ["var(--font-playfair)", "Georgia", "serif"],
       },
       typography: ({ theme }: { theme: (path: string) => string }) => ({
         // Custom `prose-journal` modifier — applied on the article body wrapper.

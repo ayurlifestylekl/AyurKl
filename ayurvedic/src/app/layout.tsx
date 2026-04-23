@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Lora } from "next/font/google";
+import { Montserrat, Lora, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -16,6 +16,14 @@ const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -89,7 +97,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${lora.variable}`}>
+    <html lang="en" className={`${montserrat.variable} ${lora.variable} ${playfair.variable}`}>
       <body className="antialiased font-body bg-background text-foreground">
         <Navbar />
         <main>{children}</main>
