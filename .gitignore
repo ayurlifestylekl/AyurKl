@@ -30,3 +30,4 @@ ayurvedic/next-env.d.ts
 
 # Preserved originals of the compressed videos (kept locally as backup).
 ayurvedic/public/videos/.originals/
+.superpowers/
