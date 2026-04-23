@@ -40,9 +40,9 @@ export default function ProductPlateCard({ product }: { product: Product }) {
           className="rounded-[2px]"
         >
           {/* bottom overlay — name + price */}
-          <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between gap-3">
+          <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-end justify-between gap-2 sm:inset-x-4 sm:bottom-4 sm:gap-3">
             <h3
-              className="font-display text-[17px] italic leading-tight"
+              className="font-display text-[14px] italic leading-tight sm:text-[17px]"
               style={{
                 color: '#F3E6CB',
                 textShadow: '0 2px 14px rgba(0,0,0,0.6)',
@@ -52,14 +52,14 @@ export default function ProductPlateCard({ product }: { product: Product }) {
             </h3>
             {outOfStock ? (
               <span
-                className="font-display text-[12px] italic"
+                className="font-display text-[11px] italic sm:text-[12px]"
                 style={{ color: 'rgba(243,230,203,0.8)' }}
               >
                 Out of stock
               </span>
             ) : (
               <span
-                className="font-heading text-[13px] font-semibold tracking-[0.03em] text-accent"
+                className="font-heading text-[12px] font-semibold tracking-[0.03em] text-accent sm:text-[13px]"
                 style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
               >
                 RM{product.priceRm}
@@ -69,14 +69,14 @@ export default function ProductPlateCard({ product }: { product: Product }) {
         </NocturneFrame>
 
         {/* below the frame — category + badge */}
-        <div className="mt-3 flex items-center gap-2 font-heading text-[10px] font-semibold uppercase tracking-[0.22em]">
-          <span className="text-dark/55">
+        <div className="mt-2 flex items-center gap-1.5 font-heading text-[9px] font-semibold uppercase tracking-[0.18em] sm:mt-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.22em]">
+          <span className="truncate text-dark/55">
             {product.category.replace('-', ' ')}
           </span>
           {product.badge && (
             <>
-              <span aria-hidden className="h-1 w-1 rounded-full bg-accent" />
-              <span className={badgeAccent[product.badge]}>
+              <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-accent" />
+              <span className={`shrink-0 ${badgeAccent[product.badge]}`}>
                 {badgeLabel[product.badge]}
               </span>
             </>
