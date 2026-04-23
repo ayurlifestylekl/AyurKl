@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { products } from '@/data/products'
-import ProductsHero from '@/components/products/ProductsHero'
+import ProductsHeroManifesto from '@/components/products/ProductsHeroManifesto'
 import ProductsPageClient from '@/components/products/ProductsPageClient'
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default async function ProductsPage({
 
   return (
     <>
-      <ProductsHero productCount={products.length} />
+      <ProductsHeroManifesto productCount={products.length} />
       <ProductsPageClient
         products={products}
         initialCategory={initialCategory}

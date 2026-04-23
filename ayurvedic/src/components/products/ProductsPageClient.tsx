@@ -1,9 +1,16 @@
 'use client'
 
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import type { Product } from '@/types/content'
-import ProductFilters, { type SortOption } from './ProductFilters'
+import { categories } from '@/data/categories'
+import ProductsSidebar, {
+  filterByPriceTier,
+  type PriceTier,
+} from './ProductsSidebar'
+import ProductsGridHeader from './ProductsGridHeader'
+import ProductsFilterDrawer from './ProductsFilterDrawer'
 import ProductGrid from './ProductGrid'
+import type { SortOption } from './SortMenu'
 
 interface ProductsPageClientProps {
   products: Product[]
@@ -11,63 +18,61 @@ interface ProductsPageClientProps {
 }
 
 export default function ProductsPageClient({
-  products,
-  initialCategory,
+  products, initialCategory,
 }: ProductsPageClientProps) {
   const [category, setCategory] = useState(initialCategory || 'all')
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState<SortOption>('newest')
+  const [priceTier, setPriceTier] = useState<PriceTier>('all')
 
-  const handleCategoryChange = useCallback(
-    (cat: string) => {
-      setCategory(cat)
-      // Sync URL without full navigation
-      const url = cat === 'all' ? '/products' : `/products?category=${cat}`
-      window.history.replaceState(null, '', url)
-    },
-    []
-  )
-
-  const handleSearchChange = useCallback((q: string) => {
-    setSearch(q)
+  const onCategoryChange = useCallback((cat: string) => {
+    setCategory(cat)
+    const url = cat === 'all' ? '/products' : `/products?category=${cat}`
+    window.history.replaceState(null, '', url)
   }, [])
 
-  const handleSortChange = useCallback((s: SortOption) => {
-    setSort(s)
-  }, [])
+  const onSearchChange = useCallback((q: string) => setSearch(q), [])
+  const onSortChange = useCallback((s: SortOption) => setSort(s), [])
+  const onPriceTierChange = useCallback((t: PriceTier) => setPriceTier(t), [])
 
-  const handleClearFilters = useCallback(() => {
+  const onClear = useCallback(() => {
     setCategory('all')
     setSearch('')
     setSort('newest')
+    setPriceTier('all')
     window.history.replaceState(null, '', '/products')
   }, [])
+
+  const hasActiveFilters =
+    category !== 'all' || search.trim().length > 0 || priceTier !== 'all'
+
+  const activeCategoryLabel = useMemo(() => {
+    if (category === 'all')    return 'All'
+    if (category === 'combos') return 'Combos'
+    if (category === 'herbal') return 'Herbal'
+    return categories.find((c) => c.slug === category)?.label ?? category
+  }, [category])
 
   const filtered = useMemo(() => {
     let result = [...products]
 
-    // Category filter
-    if (category === 'combos') {
-      result = result.filter(p => p.isBundle)
-    } else if (category === 'herbal') {
-      result = result.filter(p => !p.isBundle)
-    } else if (category !== 'all') {
-      result = result.filter(p => p.category === category)
-    }
+    if (category === 'combos')       result = result.filter((p) => p.isBundle)
+    else if (category === 'herbal')  result = result.filter((p) => !p.isBundle)
+    else if (category !== 'all')     result = result.filter((p) => p.category === category)
 
-    // Search filter
+    result = filterByPriceTier(result, priceTier)
+
     if (search.trim()) {
       const q = search.toLowerCase()
       result = result.filter(
-        p =>
+        (p) =>
           p.name.toLowerCase().includes(q) ||
           p.tagline.toLowerCase().includes(q) ||
           p.description.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q)
+          p.category.toLowerCase().includes(q),
       )
     }
 
-    // Sort
     switch (sort) {
       case 'price-asc':
         result.sort((a, b) => a.priceRm - b.priceRm)
@@ -77,46 +82,76 @@ export default function ProductsPageClient({
         break
       case 'newest':
         result.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )
         break
     }
 
     return result
-  }, [products, category, search, sort])
+  }, [products, category, priceTier, search, sort])
 
   return (
-    <>
-      <ProductFilters
-        activeCategory={category}
-        onCategoryChange={handleCategoryChange}
-        searchQuery={search}
-        onSearchChange={handleSearchChange}
-        sortBy={sort}
-        onSortChange={handleSortChange}
-        products={products}
-      />
+    <section id="products" className="relative bg-cream">
+      <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 md:py-16 lg:px-12">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_1fr] lg:gap-12">
+          {/* Sidebar — desktop only */}
+          <div className="hidden lg:sticky lg:top-[108px] lg:block lg:max-h-[calc(100vh-140px)] lg:self-start lg:overflow-y-auto lg:pr-2">
+            <ProductsSidebar
+              activeCategory={category}
+              onCategoryChange={onCategoryChange}
+              search={search}
+              onSearchChange={onSearchChange}
+              priceTier={priceTier}
+              onPriceTierChange={onPriceTierChange}
+              onClear={onClear}
+              products={products}
+              hasActiveFilters={hasActiveFilters}
+            />
+          </div>
 
-      <section className="relative bg-background">
-        {/* Subtle atmosphere */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse at 50% 0%, rgba(212,163,115,0.06) 0%, transparent 60%)',
-          }}
-        />
+          {/* Grid column */}
+          <div>
+            {/* Mobile filter trigger */}
+            <div className="mb-6 flex items-center justify-between lg:hidden">
+              <ProductsFilterDrawer triggerLabel={`Filter · ${filtered.length}`}>
+                <ProductsSidebar
+                  activeCategory={category}
+                  onCategoryChange={onCategoryChange}
+                  search={search}
+                  onSearchChange={onSearchChange}
+                  priceTier={priceTier}
+                  onPriceTierChange={onPriceTierChange}
+                  onClear={onClear}
+                  products={products}
+                  hasActiveFilters={hasActiveFilters}
+                />
+              </ProductsFilterDrawer>
+              <ProductsGridHeader
+                count={filtered.length}
+                categoryLabel={activeCategoryLabel}
+                sort={sort}
+                onSortChange={onSortChange}
+              />
+            </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-8 md:py-20 lg:px-12">
-          <ProductGrid
-            products={filtered}
-            total={products.length}
-            onClearFilters={handleClearFilters}
-          />
+            {/* Desktop grid header */}
+            <div className="hidden lg:block">
+              <ProductsGridHeader
+                count={filtered.length}
+                categoryLabel={activeCategoryLabel}
+                sort={sort}
+                onSortChange={onSortChange}
+              />
+            </div>
+
+            <ProductGrid
+              products={filtered}
+              total={products.length}
+              onClearFilters={onClear}
+            />
+          </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }

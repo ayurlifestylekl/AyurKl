@@ -2,71 +2,58 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
 import { staggerParent, inViewOnce } from '@/lib/motion'
 import type { Product } from '@/types/content'
-import ProductCard from './ProductCard'
+import ProductPlateCard from './ProductPlateCard'
+import BotanicalSprig from './atmosphere/BotanicalSprig'
 
 interface ProductGridProps {
   products: Product[]
+  /** Kept for API parity — grid header reports the count now. */
   total: number
   onClearFilters: () => void
 }
 
-export default function ProductGrid({
-  products,
-  total,
-  onClearFilters,
-}: ProductGridProps) {
+export default function ProductGrid({ products, onClearFilters }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-primary/15 px-8 py-20 text-center">
-        <Sparkles className="mb-4 h-8 w-8 text-accent/60" strokeWidth={1.6} />
-        <h3 className="font-heading text-lg font-bold text-primary/70">
-          No formulas found
+      <div className="relative flex flex-col items-center justify-center px-6 py-24 text-center">
+        <BotanicalSprig
+          color="#2F5D50"
+          opacity={0.1}
+          className="pointer-events-none absolute bottom-0 left-1/2 h-[260px] w-[180px] -translate-x-1/2"
+        />
+        <h3
+          className="relative font-display italic text-primary"
+          style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', fontWeight: 400 }}
+        >
+          No formulae match.
         </h3>
-        <p className="mt-2 max-w-sm font-body text-[14px] leading-relaxed text-dark/50">
-          Try adjusting your search or clearing the filters to explore our full
-          apothecary.
+        <p className="relative mt-4 max-w-sm font-body text-[14px] leading-[1.7] text-dark/55">
+          Try clearing a filter or searching a different term.
         </p>
         <button
           type="button"
           onClick={onClearFilters}
-          className="mt-5 rounded-full border border-accent/40 px-6 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-primary transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]"
+          className="relative mt-6 rounded-full border border-accent/50 bg-transparent px-6 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-primary transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]"
         >
-          Clear All Filters
+          Clear all filters
         </button>
       </div>
     )
   }
 
   return (
-    <div>
-      {/* Result count */}
-      <div className="mb-6 flex items-center gap-3">
-        <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.2em] text-dark/40">
-          Showing{' '}
-          <span className="text-primary/70">{products.length}</span> of{' '}
-          {total} formulas
-        </span>
-        <span
-          className="h-px flex-1 bg-gradient-to-r from-accent/30 to-transparent"
-          aria-hidden
-        />
-      </div>
-
-      {/* Grid */}
-      <motion.div
-        variants={staggerParent(0.06, 0.05)}
-        initial="initial"
-        whileInView="animate"
-        viewport={inViewOnce}
-        className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6"
-      >
-        {products.map(p => (
-          <ProductCard key={p.id} product={p} />
-        ))}
-      </motion.div>
-    </div>
+    <motion.div
+      variants={staggerParent(0.06, 0.05)}
+      initial="initial"
+      whileInView="animate"
+      viewport={inViewOnce}
+      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {products.map((p) => (
+        <ProductPlateCard key={p.id} product={p} />
+      ))}
+    </motion.div>
   )
 }
