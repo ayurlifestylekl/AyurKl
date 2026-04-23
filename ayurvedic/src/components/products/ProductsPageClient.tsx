@@ -10,7 +10,7 @@ import ProductsSidebar, {
 import ProductsGridHeader from './ProductsGridHeader'
 import ProductsFilterDrawer from './ProductsFilterDrawer'
 import ProductGrid from './ProductGrid'
-import type { SortOption } from './SortMenu'
+import SortMenu, { type SortOption } from './SortMenu'
 
 interface ProductsPageClientProps {
   products: Product[]
@@ -111,8 +111,8 @@ export default function ProductsPageClient({
 
           {/* Grid column */}
           <div>
-            {/* Mobile filter trigger */}
-            <div className="mb-6 flex items-center justify-between lg:hidden">
+            {/* Mobile top row — compact Filter + Sort side by side */}
+            <div className="mb-6 flex items-center justify-between gap-3 lg:hidden">
               <ProductsFilterDrawer triggerLabel={`Filter · ${filtered.length}`}>
                 <ProductsSidebar
                   activeCategory={category}
@@ -126,12 +126,7 @@ export default function ProductsPageClient({
                   hasActiveFilters={hasActiveFilters}
                 />
               </ProductsFilterDrawer>
-              <ProductsGridHeader
-                count={filtered.length}
-                categoryLabel={activeCategoryLabel}
-                sort={sort}
-                onSortChange={onSortChange}
-              />
+              <SortMenu value={sort} onChange={onSortChange} />
             </div>
 
             {/* Desktop grid header */}
