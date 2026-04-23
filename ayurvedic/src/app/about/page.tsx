@@ -11,7 +11,9 @@ import { aboutFaqs as aboutFaqsFallback } from '@/data/about'
 import { fetchFaqs } from '@/sanity/fetchFaqs'
 import { fetchAboutPage } from '@/sanity/fetchAboutPage'
 
-export const revalidate = 3600
+// Short window so edits to About copy / FAQs published in Sanity Studio
+// show up on the live site within ~30s.
+export const revalidate = 30
 
 export const metadata: Metadata = {
   title: 'About Us — Authentic Kerala Ayurveda Since 2008',

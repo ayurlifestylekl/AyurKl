@@ -9,7 +9,8 @@ import Footnotes from '@/components/contact/Footnotes'
 import { contactFaqs as contactFaqsFallback } from '@/data/contactFaqs'
 import { fetchFaqs } from '@/sanity/fetchFaqs'
 
-export const revalidate = 3600
+// Short window so FAQ edits published in Sanity Studio show up within ~30s.
+export const revalidate = 30
 
 export const metadata: Metadata = {
   title: 'Contact — Kerala Ayurvedic Lifestyle, Brickfields KL',

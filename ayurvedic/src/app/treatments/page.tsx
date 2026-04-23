@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
 }
 
-// Re-render every hour to pick up CMS edits without a redeploy.
-export const revalidate = 3600
+// Short window so treatment edits in Sanity Studio show up within ~30s.
+export const revalidate = 30
 
 async function loadFromSanity(): Promise<{
   categories: TreatmentCategory[]

@@ -11,7 +11,8 @@ import FinalBookingCTA from '@/components/sections/FinalBookingCTA'
 import { faqs as homeFaqsFallback } from '@/data/faqs'
 import { fetchFaqs } from '@/sanity/fetchFaqs'
 
-export const revalidate = 3600
+// Short window so FAQ edits published in Sanity Studio show up within ~30s.
+export const revalidate = 30
 
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',

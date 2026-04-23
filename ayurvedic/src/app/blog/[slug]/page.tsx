@@ -19,7 +19,9 @@ import {
 import type { Post, PostListItem } from '@/types/blog'
 
 // ── Static generation + ISR ──────────────────────────────────────────
-export const revalidate = 3600
+// Short window so edits to a post published in Sanity Studio show up
+// on the live article within ~30s.
+export const revalidate = 30
 export const dynamicParams = true
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {

@@ -20,7 +20,9 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 3600
+// Short revalidate so new posts published in Sanity Studio appear on
+// the live site within ~30s instead of up to an hour.
+export const revalidate = 30
 
 async function loadPosts(): Promise<PostListItem[]> {
   if (!isSanityConfigured) return []
