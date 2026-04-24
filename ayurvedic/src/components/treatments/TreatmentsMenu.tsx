@@ -301,7 +301,7 @@ export default function TreatmentsMenu({ categories, treatments }: TreatmentsMen
 
             {/* CTAs */}
             <motion.div variants={fadeUp(0)} className="mt-2 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-              <CTAButton href="/book" variant="primary" size="lg" icon={<Calendar className="h-4 w-4" />}>
+              <CTAButton href="/book/consultation" variant="primary" size="lg" icon={<Calendar className="h-4 w-4" />}>
                 Book Free Consultation
               </CTAButton>
               <CTAButton

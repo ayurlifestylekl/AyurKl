@@ -1,0 +1,146 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { Suspense } from 'react'
+import { ArrowLeft } from 'lucide-react'
+
+import BookingPolicyStrip from '@/components/booking/BookingPolicyStrip'
+import BookingTreatmentOrchestrator from '@/components/booking/BookingTreatmentOrchestrator'
+import { sanityClient } from '@/sanity/client'
+import { isSanityConfigured } from '@/sanity/env'
+import {
+  TREATMENTS_QUERY,
+  TREATMENT_CATEGORIES_QUERY,
+} from '@/sanity/queries'
+import type { Treatment, TreatmentCategory } from '@/types/treatments'
+
+export const metadata: Metadata = {
+  title: 'Book a Treatment — Kerala Ayurveda Therapies',
+  description:
+    'Book an authentic Kerala Ayurveda therapy session at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur. Pick from 60+ protocols — Abhyanga, Shirodhara, Panchakarma, and more.',
+  alternates: { canonical: '/book/treatment' },
+  openGraph: {
+    title: 'Book a Treatment — Kerala Ayurvedic Lifestyle',
+    description:
+      'Pick from 60+ authentic Kerala Ayurveda protocols and book with Vaidya AKHIL HS in Brickfields, Kuala Lumpur.',
+    url: 'https://keralaayurvedic.com/book/treatment',
+    type: 'website',
+  },
+}
+
+// Keep in sync with /treatments — short window so Sanity edits appear fast.
+export const revalidate = 30
+
+async function loadFromSanity(): Promise<{
+  categories: TreatmentCategory[]
+  treatments: Treatment[]
+}> {
+  if (!isSanityConfigured) {
+    return { categories: [], treatments: [] }
+  }
+
+  try {
+    const [categories, treatments] = await Promise.all([
+      sanityClient.fetch<TreatmentCategory[]>(TREATMENT_CATEGORIES_QUERY),
+      sanityClient.fetch<Treatment[]>(TREATMENTS_QUERY),
+    ])
+    return {
+      categories: categories ?? [],
+      treatments: treatments ?? [],
+    }
+  } catch (err) {
+    console.error('[book/treatment] Sanity fetch failed:', err)
+    return { categories: [], treatments: [] }
+  }
+}
+
+export default async function BookTreatmentPage() {
+  const { categories, treatments } = await loadFromSanity()
+
+  return (
+    <>
+      <BookingPolicyStrip />
+
+      <section
+        aria-labelledby="book-treatment-heading"
+        className="relative overflow-hidden bg-cream"
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse at 8% 0%, rgba(212,163,115,0.14) 0%, transparent 40%), radial-gradient(ellipse at 92% 100%, rgba(47,93,80,0.05) 0%, transparent 45%)',
+          }}
+        />
+
+        <div className="relative mx-auto flex max-w-5xl flex-col px-6 py-12 sm:px-10 sm:py-16 lg:px-12 lg:py-20">
+          <Link
+            href="/book"
+            className="group inline-flex w-fit items-center gap-2 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-primary/55 transition-colors hover:text-primary focus-visible:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+          >
+            <ArrowLeft
+              className="h-3 w-3 transition-transform duration-300 group-hover:-translate-x-0.5"
+              strokeWidth={2.2}
+            />
+            Back to booking
+          </Link>
+
+          <div className="mt-8 flex flex-col gap-5 lg:max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden
+                className="h-[2px] w-10 rounded-full bg-accent"
+              />
+              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-accent">
+                {treatments.length > 0
+                  ? `${treatments.length}+ Therapies`
+                  : 'Treatment Library'}
+              </span>
+            </div>
+            <h1
+              id="book-treatment-heading"
+              className="font-heading font-extrabold leading-[1.05] text-primary"
+              style={{
+                fontSize: 'clamp(2rem, 4.5vw, 3rem)',
+                letterSpacing: '-0.03em',
+              }}
+            >
+              Pick your{' '}
+              <span className="font-body font-normal italic text-accent">
+                therapy.
+              </span>
+            </h1>
+            <p className="max-w-2xl font-body text-[15px] leading-[1.75] text-dark/65 sm:text-[16px]">
+              Choose a treatment from our Kerala Ayurveda library and the
+              calendar will load with Vaidya Akhil&apos;s available times.
+              Treatments flagged &ldquo;consultation required&rdquo; route
+              through a free assessment first — that&apos;s by design.
+            </p>
+          </div>
+
+          <div className="mt-10 lg:mt-12">
+            <Suspense fallback={<OrchestratorFallback />}>
+              <BookingTreatmentOrchestrator
+                categories={categories}
+                treatments={treatments}
+              />
+            </Suspense>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}
+
+function OrchestratorFallback() {
+  return (
+    <div
+      aria-hidden
+      className="flex min-h-[320px] items-center justify-center rounded-2xl border border-dashed border-primary/15 bg-white/60 backdrop-blur"
+    >
+      <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/40">
+        Loading treatments…
+      </span>
+    </div>
+  )
+}

@@ -250,7 +250,7 @@ export default function TreatmentsHero({
                 />
               </button>
               <CTAButton
-                href="/book"
+                href="/book/consultation"
                 variant="outlineLight"
                 icon={<Calendar className="h-4 w-4" />}
               >

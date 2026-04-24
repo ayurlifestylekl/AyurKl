@@ -140,7 +140,7 @@ export default function Footer() {
               Experience authentic Ayurvedic healing. All bookings are with Vaidya AKHIL HS (B.A.M.S).
             </p>
             <Link
-              href="/book"
+              href="/book/consultation"
               className="inline-block rounded-full bg-accent px-6 py-2.5 font-heading text-sm font-semibold text-dark shadow transition-all hover:brightness-110"
             >
               Book Consultation

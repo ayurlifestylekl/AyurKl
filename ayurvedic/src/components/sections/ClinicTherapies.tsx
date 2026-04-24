@@ -125,7 +125,7 @@ export default function ClinicTherapies() {
                         </div>
 
                         <Link
-                          href={`#booking?therapy=${therapy.slug}`}
+                          href="/book/treatment"
                           className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-xl transition-all duration-300 hover:scale-110 hover:bg-accent hover:shadow-[0_10px_30px_rgba(212,163,115,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                           aria-label={`Book ${therapy.name}`}
                         >

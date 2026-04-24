@@ -187,7 +187,7 @@ export default async function BlogPostPage({
               </p>
               <div className="mt-3 flex flex-col items-center gap-3 sm:flex-row">
                 <Link
-                  href="/book"
+                  href="/book/consultation"
                   className="group/cta relative inline-flex min-h-[48px] items-center justify-center gap-2 overflow-hidden rounded-full bg-accent px-7 py-3.5 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-dark shadow-[0_18px_44px_-16px_rgba(212,163,115,0.85)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-14px_rgba(212,163,115,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]"
                 >
                   <Calendar className="relative z-10 h-4 w-4" strokeWidth={2.4} />

@@ -30,7 +30,7 @@ export default function TreatmentCard({
     `Hi, I'd like to inquire about the "${title}" treatment.`,
   )}`
 
-  const bookHref = `/book?treatment=${encodeURIComponent(treatment._id)}`
+  const bookHref = `/book/treatment?id=${encodeURIComponent(treatment._id)}`
 
   return (
     <motion.article

@@ -135,7 +135,7 @@ export default function EmpathyBridge() {
 
           <div className="mt-12">
             <Link
-              href="#booking"
+              href="/book"
               className="group inline-flex items-center gap-4 border-b border-primary/20 pb-1 font-heading text-[12px] font-bold uppercase tracking-[0.2em] text-primary transition-all hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
             >
               Discover Your Dosha

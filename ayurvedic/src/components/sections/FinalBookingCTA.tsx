@@ -135,7 +135,7 @@ export default function FinalBookingCTA() {
               className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col"
             >
               <CTAButton
-                href="https://cal.com/kerala-ayurvedic"
+                href="/book/consultation"
                 variant="primary"
                 size="lg"
                 icon={<Calendar className="h-4 w-4" />}

@@ -31,7 +31,7 @@ export default function TreatmentRow({
   const chapter = pad2(chapterNumber)
   const specimen = `.${pad2(specimenNumber)}`
 
-  const bookHref = `/book?treatment=${encodeURIComponent(t._id)}`
+  const bookHref = `/book/treatment?id=${encodeURIComponent(t._id)}`
   const whatsappHref = `https://wa.me/601165043436?text=${encodeURIComponent(
     `Hi, I'd like to inquire about the "${t.title}" treatment.`
   )}`

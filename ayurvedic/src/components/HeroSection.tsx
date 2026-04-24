@@ -81,7 +81,7 @@ export default function HeroSection() {
         {/* CTA Button */}
         <motion.div {...fadeUp(0.65)} className="mt-10">
           <CTAButton
-            href="https://wa.me/601165043436?text=Hi%2C%20I%20would%20like%20to%20book%20a%20consultation."
+            href="/book/consultation"
             variant="primary"
             size="lg"
             shimmer
