@@ -17,7 +17,7 @@ export default function EmpathyBridge() {
   return (
     <section
       aria-labelledby="empathy-heading"
-      className="relative flex flex-col overflow-hidden lg:flex-row"
+      className="relative flex flex-col overflow-hidden lg:min-h-[600px] lg:max-h-[760px] lg:flex-row"
     >
       <h2 id="empathy-heading" className="sr-only">
         From modern stress to ancient healing
@@ -29,7 +29,7 @@ export default function EmpathyBridge() {
         initial="initial"
         whileInView="animate"
         viewport={inViewOnce}
-        className="relative flex w-full flex-col justify-center bg-nearBlackGreen px-6 py-14 sm:px-10 lg:w-[45%] lg:px-16 lg:py-20 xl:px-20"
+        className="relative flex w-full flex-col justify-center bg-nearBlackGreen px-6 py-12 sm:px-10 lg:w-[45%] lg:px-16 lg:py-12 xl:px-20"
       >
         {/* Subtle photographic texture overlay */}
         <div
@@ -56,21 +56,21 @@ export default function EmpathyBridge() {
             Modern Life
           </span>
 
-          <h3 className="mt-6 flex flex-col gap-3">
+          <h3 className="mt-5 flex flex-col gap-3">
             <span className="font-heading text-[clamp(2rem,4vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-white drop-shadow-sm">
               Quick fixes mute the symptom.
             </span>
             <span className="font-body text-[clamp(1.75rem,3.5vw,3rem)] italic leading-[1.1] text-accent/90">
-              The same fog returns every morning.
+              The cause keeps returning.
             </span>
           </h3>
 
           {/* High-end Editorial Pain Points List */}
-          <ul className="mt-14 flex flex-col border-t border-white/10">
+          <ul className="mt-10 flex flex-col border-t border-white/10">
             {painPoints.map((p, i) => (
               <li
                 key={p}
-                className="flex items-center justify-between border-b border-white/10 py-5 transition-colors hover:bg-white/5"
+                className="flex items-center justify-between border-b border-white/10 py-3.5 transition-colors hover:bg-white/5"
               >
                 <span className="font-heading text-[11px] font-bold tracking-[0.2em] text-accent/60">
                   0{i + 1}
@@ -90,7 +90,7 @@ export default function EmpathyBridge() {
         initial="initial"
         whileInView="animate"
         viewport={inViewOnce}
-        className="relative flex w-full flex-col justify-center bg-cream px-6 py-14 sm:px-10 lg:w-[55%] lg:px-20 lg:py-20 xl:px-32"
+        className="relative flex w-full flex-col justify-center bg-cream px-6 py-12 sm:px-10 lg:w-[55%] lg:px-20 lg:py-12 xl:px-32"
       >
         {/* Subtle texture */}
         <div
@@ -117,23 +117,23 @@ export default function EmpathyBridge() {
             5,000-Year-Old Answer
           </span>
 
-          <h3 className="mt-6 flex flex-col gap-2">
-            <span className="font-heading text-[clamp(2.2rem,4vw,3.2rem)] font-extrabold leading-[1.05] tracking-tight text-primary">
-              Kerala Ayurveda treats
+          <h3 className="mt-5 flex flex-col gap-2">
+            <span className="font-heading text-[clamp(2rem,3.6vw,2.9rem)] font-medium leading-[1.1] tracking-tight text-primary">
+              &ldquo;Kerala Ayurveda Treats
             </span>
-            <span className="font-body text-[clamp(2.2rem,4vw,3.2rem)] italic leading-[1.05] text-primary">
-              the root, not the symptom.
+            <span className="font-heading text-[clamp(2rem,3.6vw,2.9rem)] font-medium leading-[1.1] tracking-tight text-primary">
+              The Root, Not The Symptom.&rdquo;
             </span>
           </h3>
 
-          <p className="mt-8 font-body text-[16px] leading-[1.85] text-dark/70 sm:text-[17px]">
+          <p className="mt-6 font-body text-[15px] leading-[1.7] text-dark/70 sm:text-[16px]">
             At Kerala Ayurvedic Lifestyle, we don&apos;t guess. We start with your{' '}
             <strong className="font-semibold text-primary">dosha</strong> — your
-            unique mind-body constitution. Then Vaidya AKHIL HS builds a
+            unique mind-body constitution. Then our certified vaidyas build a
             highly personalised protocol that meets your body exactly where it is.
           </p>
 
-          <div className="mt-12">
+          <div className="mt-8">
             <Link
               href="/book"
               className="group inline-flex items-center gap-4 border-b border-primary/20 pb-1 font-heading text-[12px] font-bold uppercase tracking-[0.2em] text-primary transition-all hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream"

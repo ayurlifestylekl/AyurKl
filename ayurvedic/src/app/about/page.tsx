@@ -8,7 +8,6 @@ import WellnessFocus from '@/components/about/WellnessFocus'
 import CommitmentCTA from '@/components/about/CommitmentCTA'
 import FAQs from '@/components/sections/FAQs'
 import { aboutFaqs as aboutFaqsFallback } from '@/data/about'
-import { fetchFaqs } from '@/sanity/fetchFaqs'
 import { fetchAboutPage } from '@/sanity/fetchAboutPage'
 
 // Short window so edits to About copy / FAQs published in Sanity Studio
@@ -18,7 +17,7 @@ export const revalidate = 30
 export const metadata: Metadata = {
   title: 'About Us — Authentic Kerala Ayurveda Since 2008',
   description:
-    'Meet the team behind Kerala Ayurvedic Lifestyle in Brickfields, KL. Founded in 2008 by Datto Shan, led by Vaidya AKHIL HS (B.A.M.S, 16+ years experience), with KKM-registered therapists from Kerala.',
+    "Meet the team behind Kerala Ayurvedic Lifestyle in Brickfields, KL. Founded in 2008 by Dato' Dr. V.Shanmughanathan, led by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) — 16+ years clinical experience — with KKM-registered therapists from Kerala.",
   alternates: { canonical: '/about' },
   openGraph: {
     type: 'website',
@@ -27,7 +26,7 @@ export const metadata: Metadata = {
     siteName: 'Kerala Ayurvedic Lifestyle',
     title: 'About Kerala Ayurvedic Lifestyle | Brickfields, KL',
     description:
-      'Authentic Kerala Ayurveda since 2008. Led by Vaidya AKHIL HS (B.A.M.S). KKM-registered. Therapists from Kerala.',
+      'Authentic Kerala Ayurveda since 2008. Led by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu). KKM-registered. Therapists from Kerala.',
     images: [
       {
         url: '/hero-tray.png',
@@ -41,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'About Kerala Ayurvedic Lifestyle | Brickfields, KL',
     description:
-      'Authentic Kerala Ayurveda since 2008. Led by Vaidya AKHIL HS (B.A.M.S, 16+ years).',
+      'Authentic Kerala Ayurveda since 2008. Led by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) — 16+ years.',
     images: ['/hero-tray.png'],
   },
 }
@@ -61,7 +60,7 @@ const aboutPageJsonLd = {
     foundingDate: '2008',
     founder: {
       '@type': 'Person',
-      name: 'Datto Shan',
+      name: "Dato' Dr. V.Shanmughanathan",
       jobTitle: 'Founder',
     },
     address: {
@@ -78,12 +77,12 @@ const aboutPageJsonLd = {
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Vaidya AKHIL HS',
-  honorificPrefix: 'Dr',
-  honorificSuffix: 'B.A.M.S',
+  name: 'Vaidya Akhil H.S.',
+  honorificPrefix: 'Vaidya',
+  honorificSuffix: 'B.A.M.S., M.D. (Ayu)',
   jobTitle: 'Ayurvedic Physician',
   description:
-    'BAMS-qualified Ayurvedic physician with over 16 years of clinical experience from Kerala. Lead Vaidya at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur.',
+    'B.A.M.S. and M.D. (Ayurveda) qualified physician with over 16 years of clinical experience from Kerala. Lead Vaidya at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur — recognised under Malaysia’s Ministry of Health (KKM) as a Traditional & Complementary Medicine (T&CM) Ayurveda Practitioner.',
   worksFor: {
     '@type': 'MedicalBusiness',
     name: 'Kerala Ayurvedic Lifestyle',
@@ -106,7 +105,13 @@ const personJsonLd = {
     },
     {
       '@type': 'EducationalOccupationalCredential',
+      credentialCategory: 'degree',
+      name: 'M.D. (Ayurveda)',
+    },
+    {
+      '@type': 'EducationalOccupationalCredential',
       credentialCategory: 'license',
+      name: 'Traditional & Complementary Medicine (T&CM) Ayurveda Practitioner',
       recognizedBy: {
         '@type': 'Organization',
         name: 'Kementerian Kesihatan Malaysia (KKM)',
@@ -116,10 +121,12 @@ const personJsonLd = {
 }
 
 export default async function AboutPage() {
-  const [aboutFaqs, about] = await Promise.all([
-    fetchFaqs('about', aboutFaqsFallback),
-    fetchAboutPage(),
-  ])
+  // About FAQs are sourced from the local fallback until Sanity is republished
+  // (the CMS singleton currently has the old "Datto Shan" / present-tense
+  // answer for the Kerala-therapists question, which conflicts with the
+  // handover narrative).
+  const about = await fetchAboutPage()
+  const aboutFaqs = aboutFaqsFallback
 
   return (
     <>
@@ -140,15 +147,13 @@ export default async function AboutPage() {
         subheading={about?.heroSubheading}
         stats={about?.heroStats}
       />
-      <FoundersVision
-        eyebrow={about?.founderEyebrow}
-        headlineLead={about?.founderHeadlineLead}
-        headlineAccent={about?.founderHeadlineAccent}
-        paragraphs={about?.founderParagraphs}
-        pullQuote={about?.founderPullQuote}
-        name={about?.founderName}
-        role={about?.founderRole}
-      />
+      {/*
+        Founder copy is intentionally driven by the component's defaults until
+        the Sanity About singleton is republished with the new copy
+        (founder name "Dato' Dr. V.Shanmughanathan", handover narrative).
+        Restore the prop bindings below once the CMS document is updated.
+      */}
+      <FoundersVision />
       {/* Gold hairline: cream → white transition */}
       <div
         className="h-px"
@@ -174,15 +179,16 @@ export default async function AboutPage() {
       />
       <CommitmentCTA
         eyebrow={about?.commitmentEyebrow}
-        headlineLead={about?.commitmentHeadlineLead}
-        headlineAccent={about?.commitmentHeadlineAccent}
+        // headlineLead/headlineAccent driven by component defaults until
+        // Sanity is republished ("Your Partner in Health.")
         body={about?.commitmentBody}
         closingLine={about?.commitmentClosingLine}
         primaryLabel={about?.commitmentPrimaryLabel}
         primaryHref={about?.commitmentPrimaryHref}
         secondaryLabel={about?.commitmentSecondaryLabel}
         secondaryHref={about?.commitmentSecondaryHref}
-        trustPills={about?.commitmentTrustPills}
+        // trustPills driven by component defaults until Sanity is republished
+        // (CMS still has the old "Vaidya AKHIL HS (B.A.M.S)" credential chip).
       />
     </>
   )

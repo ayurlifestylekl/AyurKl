@@ -6,9 +6,9 @@ import BookingPolicyStrip from '@/components/booking/BookingPolicyStrip'
 import ConsultationBooking from '@/components/booking/ConsultationBooking'
 
 export const metadata: Metadata = {
-  title: 'Book a Free Consultation — Vaidya AKHIL HS',
+  title: 'Book a Free Consultation — Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)',
   description:
-    'Book a free 30-minute Ayurveda consultation with Vaidya AKHIL HS (B.A.M.S) at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur. Dosha assessment and personalised protocol.',
+    'Book a free 30-minute Ayurveda consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur. Dosha assessment and personalised protocol.',
   alternates: { canonical: '/book/consultation' },
   openGraph: {
     title: 'Book a Free Consultation — Kerala Ayurvedic Lifestyle',

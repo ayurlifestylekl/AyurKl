@@ -1,5 +1,6 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { Leaf, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 
 const quickLinks = [
   { label: 'Treatments',    href: '/treatments' },
@@ -19,14 +20,26 @@ export default function Footer() {
   return (
     <footer className="bg-dark text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-10">
 
           {/* ── Brand Column ── */}
-          <div className="col-span-1 sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="mb-4 flex items-center gap-2">
-              <Leaf className="h-6 w-6 text-accent" />
-              <span className="font-heading text-lg font-bold">
-                Kerala <span className="text-accent">Ayurvedic</span>
+          <div className="col-span-1 sm:col-span-2 lg:col-span-3">
+            <Link
+              href="/"
+              aria-label="Kerala Ayurvedic Lifestyle — home"
+              className="mb-4 inline-flex items-center gap-3"
+            >
+              <span className="rounded-xl bg-white/95 p-1.5 ring-1 ring-white/10">
+                <Image
+                  src="/logo.png"
+                  alt="Kerala Ayurvedic Lifestyle"
+                  width={842}
+                  height={596}
+                  className="h-10 w-auto"
+                />
+              </span>
+              <span className="font-heading text-base font-bold leading-tight text-white">
+                Kerala Ayurvedic <span className="text-accent">Lifestyle</span>
               </span>
             </Link>
             <p className="font-body text-sm leading-relaxed text-white/60">
@@ -87,7 +100,7 @@ export default function Footer() {
           </div>
 
           {/* ── Quick Links ── */}
-          <div>
+          <div className="lg:col-span-2">
             <h3 className="mb-4 font-heading text-sm font-semibold uppercase tracking-widest text-white/40">
               Quick Links
             </h3>
@@ -106,38 +119,77 @@ export default function Footer() {
           </div>
 
           {/* ── Contact ── */}
-          <div>
+          <div className="lg:col-span-4">
             <h3 className="mb-4 font-heading text-sm font-semibold uppercase tracking-widest text-white/40">
               Contact
             </h3>
-            <ul className="space-y-3 font-body text-sm text-white/60">
+            <ul className="grid grid-cols-1 gap-x-6 gap-y-5 font-body text-sm text-white/60 sm:grid-cols-2">
               <li>
-                <span className="block text-white/40 text-xs uppercase tracking-wider mb-1">WhatsApp</span>
+                <span className="mb-1.5 block text-xs uppercase tracking-wider text-white/40">Location</span>
                 <a
-                  href="https://wa.me/601165043436"
-                  className="hover:text-accent transition-colors"
+                  href="https://maps.google.com/?q=Kerala+Ayurvedic+Lifestyle+No.37+Jalan+Thamby+Abdullah+1+Brickfields+Kuala+Lumpur+Malaysia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block leading-relaxed transition-colors hover:text-accent"
                 >
-                  +60 11-6504 3436
+                  Kerala Ayurvedic Lifestyle<br />
+                  No. 37, Jalan Thamby Abdullah 1<br />
+                  Brickfields, Kuala Lumpur, Malaysia
                 </a>
               </li>
+
               <li>
-                <span className="block text-white/40 text-xs uppercase tracking-wider mb-1">Location</span>
-                Brickfields, Kuala Lumpur, Malaysia
+                <span className="mb-1.5 block text-xs uppercase tracking-wider text-white/40">Call or WhatsApp</span>
+                <div className="flex flex-col gap-1">
+                  <a
+                    href="https://wa.me/601165043436"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-accent"
+                  >
+                    +60 11 6504 3436{' '}
+                    <span className="text-white/40">(WhatsApp)</span>
+                  </a>
+                  <a
+                    href="tel:+60322603436"
+                    className="transition-colors hover:text-accent"
+                  >
+                    03 2260 3436
+                  </a>
+                  <a
+                    href="tel:+60322604436"
+                    className="transition-colors hover:text-accent"
+                  >
+                    03 2260 4436
+                  </a>
+                </div>
               </li>
+
               <li>
-                <span className="block text-white/40 text-xs uppercase tracking-wider mb-1">Hours</span>
-                Mon – Sat: 9:00 AM – 7:00 PM
+                <span className="mb-1.5 block text-xs uppercase tracking-wider text-white/40">Business Hours</span>
+                <span className="block leading-relaxed">
+                  9:00 AM – 9:00 PM<br />
+                  <span className="text-[12px] italic text-white/45">Daily · Public holidays included</span>
+                </span>
+              </li>
+
+              <li>
+                <span className="mb-1.5 block text-xs uppercase tracking-wider text-white/40">Consultation Hours</span>
+                <span className="block leading-relaxed">
+                  10:00 AM – 8:00 PM<br />
+                  <span className="text-[12px] italic text-white/45">Daily · Public holidays included</span>
+                </span>
               </li>
             </ul>
           </div>
 
           {/* ── Book CTA ── */}
-          <div>
+          <div className="lg:col-span-3">
             <h3 className="mb-4 font-heading text-sm font-semibold uppercase tracking-widest text-white/40">
               Book a Session
             </h3>
             <p className="mb-5 font-body text-sm text-white/60">
-              Experience authentic Ayurvedic healing. All bookings are with Vaidya AKHIL HS (B.A.M.S).
+              Experience authentic Ayurvedic healing. All bookings are with our professional Vaidyas.
             </p>
             <Link
               href="/book/consultation"

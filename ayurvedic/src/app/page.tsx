@@ -33,7 +33,7 @@ const localBusinessJsonLd = {
   },
   founder: {
     '@type': 'Person',
-    name: 'Vaidya AKHIL HS',
+    name: 'Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)',
     jobTitle: 'B.A.M.S, Ayurvedic Physician',
   },
   priceRange: 'RM45 – RM480',

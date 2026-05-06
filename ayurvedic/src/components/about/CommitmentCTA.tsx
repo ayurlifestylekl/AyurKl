@@ -9,8 +9,8 @@ import { clipReveal, fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
 const defaults = {
   eyebrow: 'Our Commitment to You',
-  headlineLead: 'Your partners in',
-  headlineAccent: 'health.',
+  headlineLead: 'Your Partner in',
+  headlineAccent: 'Health.',
   body:
     'For over 15 years, KALS has been a trusted name in holistic healing. Our mission remains the same as the day we started: to help you rediscover balance and vitality through integrity, compassion, and excellence.',
   closingLine: 'Experience the difference that true Ayurveda makes.',
@@ -18,7 +18,7 @@ const defaults = {
   primaryHref: '/book/consultation',
   secondaryLabel: 'WhatsApp Us',
   secondaryHref: 'https://wa.me/601165043436',
-  trustPills: ['Since 2008', 'Brickfields, KL', 'Vaidya AKHIL HS (B.A.M.S)'],
+  trustPills: ['Since 2008', 'Brickfields, KL', 'Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)'],
 }
 
 interface CommitmentCTAProps {

@@ -4,7 +4,7 @@
  * them without a code deploy.
  *
  * Two event types back the booking flows:
- *   - CONSULTATION  → free 30-min intake with Vaidya Akhil HS
+ *   - CONSULTATION  → free 30-min intake with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)
  *   - TREATMENT     → treatment session (picker on /book/treatment feeds
  *                     the treatment name into the embed's custom question)
  *

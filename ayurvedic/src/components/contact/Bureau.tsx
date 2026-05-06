@@ -16,8 +16,8 @@ const heroDiamondPattern = {
 }
 
 const HOURS: Array<{ label: string; value: string; rest?: boolean }> = [
-  { label: 'Monday — Saturday', value: '09:00 — 19:00' },
-  { label: 'Sunday', value: 'Closed' },
+  { label: 'Business hours', value: '09:00 — 21:00' },
+  { label: 'Consultation hours', value: '10:00 — 20:00' },
 ]
 
 /**
@@ -32,7 +32,7 @@ export default function Bureau() {
     <section
       id="bureau"
       aria-labelledby="bureau-heading"
-      className="relative flex min-h-[100svh] items-center overflow-hidden bg-primary"
+      className="relative flex min-h-[calc(100svh-6.5rem)] items-center overflow-hidden bg-primary"
     >
       {/* L0  Gold dot grid */}
       <div
@@ -72,7 +72,7 @@ export default function Bureau() {
         <div className="absolute -bottom-[1px] -right-[1px] h-4 w-4 border-b-2 border-r-2 border-accent/80" />
       </motion.div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-14">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-10">
         {/* Masthead */}
         <motion.div
           variants={fadeUp(0)}
@@ -160,7 +160,7 @@ export default function Bureau() {
           <motion.div variants={fadeUp(0)} className="relative lg:pr-12">
             <ColumnHeader index="01" label="The Map" />
             <div
-              className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-[2px] ring-1 ring-accent/40 lg:aspect-[4/5]"
+              className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-[2px] ring-1 ring-accent/40 lg:aspect-square"
               style={{
                 boxShadow:
                   '0 30px 60px -24px rgba(0,0,0,0.55), 0 10px 30px -10px rgba(212,163,115,0.2)',
@@ -250,8 +250,9 @@ export default function Bureau() {
               />
 
               <p className="font-body text-[13px] italic leading-[1.6] text-white/55">
-                By appointment only 13:00 — 14:00 — Vaidya&rsquo;s reading hour.
-                Walk-ins welcome for the Ayur-Store any time during opening hours.
+                Open every day — Monday through Sunday, including public holidays.
+                Consultations by appointment within the consultation window;
+                Ayur-Store walk-ins welcome any time during business hours.
               </p>
 
               {/* Live clock block */}
@@ -267,22 +268,22 @@ export default function Bureau() {
           {/* ─── Column 3 · The Plaque ────────────────── */}
           <motion.div variants={fadeUp(0)} className="relative lg:pl-12">
             <ColumnHeader index="03" label="The Plaque" />
-            <div className="mt-3 flex flex-col gap-3">
+            <div className="mt-3 flex flex-col gap-2">
               {/* Plaque block */}
-              <div className="relative rounded-[2px] border border-accent/30 bg-white/[0.02] px-4 py-4 backdrop-blur-sm">
+              <div className="relative rounded-[2px] border border-accent/30 bg-white/[0.02] px-4 py-3.5 backdrop-blur-sm">
                 {/* Gold seal dot */}
                 <span
                   aria-hidden
                   className="absolute right-4 top-4 h-2 w-2 rounded-full bg-accent shadow-[0_0_0_3px_rgba(212,163,115,0.2)]"
                 />
                 <p className="font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white/85">
-                  37 Jalan Thamby Abdullah 1
+                  Kerala Ayurvedic Lifestyle
                 </p>
-                <p className="mt-2 font-body text-[15px] italic leading-[1.55] text-accent/90">
-                  Brickfields · 50470
+                <p className="mt-2 font-body text-[14px] italic leading-[1.55] text-accent/90">
+                  No. 37, Jalan Thamby Abdullah-1 · 50470
                 </p>
-                <p className="mt-1 font-body text-[14px] italic leading-[1.55] text-white/55">
-                  Kuala Lumpur, Wilayah Persekutuan
+                <p className="mt-1 font-body text-[13.5px] italic leading-[1.55] text-white/55">
+                  Brickfields, Kuala Lumpur, Malaysia
                 </p>
 
                 <span
@@ -295,24 +296,50 @@ export default function Bureau() {
                 />
 
                 <p className="mt-2 font-heading text-[9.5px] font-semibold uppercase tracking-[0.26em] text-white/45">
-                  Opposite the Buddhist Maha Vihara
+                  Close to DBKL Sports &amp; Recreation Centre
                 </p>
               </div>
 
               {/* Action buttons */}
               <div className="flex flex-col gap-2">
-                <ActionLink
-                  href="tel:+601165043436"
-                  icon={<Phone className="h-3.5 w-3.5" strokeWidth={2} />}
-                  label="Call the clinic"
-                  value="+60 11 6504 3436"
-                />
+                {/* Phone numbers — primary + 2 alternates */}
+                <div className="rounded-[2px] border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors duration-300 hover:border-accent/40">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-accent/40 bg-accent/10 text-accent">
+                      <Phone className="h-3.5 w-3.5" strokeWidth={2} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-heading text-[9px] font-bold uppercase tracking-[0.26em] text-white/55">
+                        Call the clinic
+                      </p>
+                      <a
+                        href="tel:+601165043436"
+                        className="mt-1 block font-body text-[13.5px] italic leading-[1.35] text-accent/95 transition-colors duration-200 hover:text-accent"
+                      >
+                        +60 11 6504 3436
+                      </a>
+                      <a
+                        href="tel:+60322603436"
+                        className="block font-body text-[12.5px] italic leading-[1.4] text-white/70 transition-colors duration-200 hover:text-accent"
+                      >
+                        03 2260 3436 <span className="text-white/35">· alt</span>
+                      </a>
+                      <a
+                        href="tel:+60322604436"
+                        className="block font-body text-[12.5px] italic leading-[1.4] text-white/70 transition-colors duration-200 hover:text-accent"
+                      >
+                        03 2260 4436 <span className="text-white/35">· alt</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
                 <ActionLink
                   href="https://wa.me/601165043436"
                   external
                   icon={<MessageCircle className="h-3.5 w-3.5" strokeWidth={2} />}
                   label="WhatsApp"
-                  value="Fastest channel"
+                  value="+60 11 6504 3436 · fastest"
                 />
                 <ActionLink
                   href="mailto:info@keralaayurvedic.com"

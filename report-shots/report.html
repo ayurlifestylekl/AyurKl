@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Kerala Ayurvedic Lifestyle — Website Update</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2F5D50;
+    --secondary: #7A9D54;
+    --accent: #D4A373;
+    --dark: #2B2B2B;
+    --cream: #FAF6EE;
+    --paper: #ffffff;
+    --muted: #6B6B6B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: 'Lora', Georgia, serif; color: var(--dark); background: var(--paper); line-height: 1.7; font-size: 11.5pt; }
+
+  .page { padding: 28mm 22mm; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+
+  h1, h2, h3, h4, .heading { font-family: 'Montserrat', system-ui, sans-serif; color: var(--primary); letter-spacing: -0.01em; }
+  h1 { font-size: 32pt; font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; }
+  h2 { font-size: 18pt; font-weight: 700; margin-top: 0; }
+  h3 { font-size: 13pt; font-weight: 700; }
+
+  .eyebrow { font-family: 'Montserrat', sans-serif; font-size: 9pt; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); }
+
+  .gold-rule { height: 1px; background: linear-gradient(to right, transparent, var(--accent), transparent); margin: 18pt 0; }
+  .gold-rule.short { width: 60pt; background: linear-gradient(to right, var(--accent), transparent); margin: 8pt 0; }
+
+  p { margin-bottom: 9pt; color: #3a3a3a; }
+  p.lead { font-size: 12.5pt; color: var(--muted); line-height: 1.75; }
+  strong { color: var(--primary); font-weight: 600; }
+
+  blockquote {
+    border-left: 2.5px solid var(--accent);
+    padding: 4pt 0 4pt 16pt;
+    margin: 12pt 0 12pt 4pt;
+    font-style: italic;
+    color: var(--primary);
+    font-size: 12pt;
+  }
+
+  .section { margin-bottom: 32pt; page-break-inside: avoid; }
+  .section-num {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.22em;
+    margin-bottom: 4pt;
+  }
+
+  ul.clean { list-style: none; margin: 8pt 0 12pt 0; padding: 0; }
+  ul.clean li { padding: 4pt 0 4pt 18pt; position: relative; color: #3a3a3a; }
+  ul.clean li::before { content: ''; position: absolute; left: 0; top: 14pt; width: 8pt; height: 1px; background: var(--accent); }
+
+  .shot { margin: 14pt 0 6pt 0; page-break-inside: avoid; }
+  .shot img { width: 100%; height: auto; display: block; border: 1px solid rgba(47,93,80,0.12); border-radius: 3pt; box-shadow: 0 6pt 18pt -8pt rgba(47,93,80,0.18); }
+  .shot .caption { font-family: 'Lora', serif; font-style: italic; font-size: 9.5pt; color: var(--muted); margin-top: 6pt; text-align: center; }
+
+  /* ── Cover ── */
+  .cover {
+    min-height: 270mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(180deg, #FAF6EE 0%, #f7f1e3 100%);
+    padding: 50mm 22mm 28mm 22mm;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80mm; right: -60mm;
+    width: 240mm; height: 240mm;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,163,115,0.18), transparent 65%);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -100mm; left: -60mm;
+    width: 220mm; height: 220mm;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(47,93,80,0.10), transparent 65%);
+  }
+  .cover-content { position: relative; z-index: 1; }
+  .cover .meta { display: flex; gap: 28pt; margin-top: 16pt; align-items: baseline; }
+  .cover .meta .label { font-family: 'Montserrat', sans-serif; font-size: 8pt; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 4pt; }
+  .cover .meta .value { font-family: 'Montserrat', sans-serif; font-size: 11pt; font-weight: 600; color: var(--primary); }
+  .cover h1 .accent { font-family: 'Lora', serif; font-style: italic; font-weight: 500; color: var(--accent); }
+  .cover .subtitle { font-size: 13pt; color: var(--muted); max-width: 130mm; margin-top: 18pt; line-height: 1.6; }
+  .cover .signoff { font-family: 'Montserrat', sans-serif; font-size: 9.5pt; color: var(--muted); border-top: 1px solid rgba(47,93,80,0.15); padding-top: 14pt; }
+  .cover .signoff strong { color: var(--primary); font-weight: 700; }
+
+  /* ── Phase 3 callout ── */
+  .phase3 {
+    background: linear-gradient(135deg, rgba(47,93,80,0.04), rgba(212,163,115,0.06));
+    border: 1px solid rgba(212,163,115,0.35);
+    border-left: 3px solid var(--accent);
+    padding: 18pt 20pt;
+    border-radius: 3pt;
+    margin: 18pt 0;
+  }
+  .phase3 .label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8pt;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .phase3 h3 { color: var(--primary); margin: 4pt 0 8pt 0; font-size: 14pt; }
+
+  .pending-block {
+    margin: 14pt 0;
+    padding: 12pt 16pt;
+    background: rgba(255,255,255,0.7);
+    border: 1px dashed rgba(47,93,80,0.25);
+    border-radius: 3pt;
+  }
+  .pending-block h4 {
+    font-size: 11pt;
+    color: var(--primary);
+    margin-bottom: 6pt;
+  }
+
+  .footnote { font-size: 9pt; color: var(--muted); font-style: italic; margin-top: 6pt; }
+
+  /* Print */
+  @page { size: A4; margin: 0; }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+
+<!-- ────────── COVER ────────── -->
+<section class="page cover">
+  <div class="cover-content">
+    <span class="eyebrow">Aurexis Solution × Kerala Ayurvedic Lifestyle</span>
+    <h1 style="margin-top: 14pt;">
+      Website Update<br/>
+      <span class="accent">Phase 2 Walkthrough.</span>
+    </h1>
+    <p class="subtitle">
+      A section-by-section breakdown of what's been built and what's left before launch. Most of the structure and copy is locked in. Two pieces still pending — real photography and customer reviews — make up the final phase.
+    </p>
+  </div>
+
+  <div class="cover-content">
+    <div class="meta">
+      <div>
+        <span class="label">Prepared For</span>
+        <span class="value">Kerala Ayurvedic Lifestyle</span>
+      </div>
+      <div>
+        <span class="label">Prepared By</span>
+        <span class="value">Sanjay Gunabalan · Aurexis Solution</span>
+      </div>
+      <div>
+        <span class="label">Date</span>
+        <span class="value">May 2026</span>
+      </div>
+    </div>
+    <div class="gold-rule short" style="margin-top: 28pt;"></div>
+    <p class="signoff" style="margin-top: 14pt;">
+      Site staging: <strong>localhost:3100</strong> · Domain to be wired before launch.
+    </p>
+  </div>
+</section>
+
+<!-- ────────── PAGE 2 — Overview + Sections 1–2 ────────── -->
+<section class="page">
+  <span class="eyebrow">Overview</span>
+  <h2 style="margin-top: 6pt;">Where we are</h2>
+  <div class="gold-rule short"></div>
+  <p class="lead">
+    Hi team — here's a walkthrough of everything we've shipped on the new site. The homepage, booking flow, and footer are now structurally complete and live on staging. Below is a section-by-section view of what changed, with reference shots so you can see exactly how each part reads.
+  </p>
+  <p>
+    Two things still pending and they are the final phase: <strong>real photography</strong> for the therapy cards and clinic shots, and a <strong>reviews / testimonials section</strong> using actual client feedback. Those are covered at the end of this document under <em>Phase 3</em>.
+  </p>
+
+  <div class="gold-rule"></div>
+
+  <div class="section">
+    <span class="section-num">01 — BRAND IDENTITY</span>
+    <h2>New logo and name across the site</h2>
+    <p>
+      The new <strong>Kerala Ayurvedic Lifestyle</strong> logo is now live in the navbar and footer. The brand name reads as the full <em>Kerala Ayurvedic Lifestyle</em> everywhere on the site, instead of the shortened <em>Kerala Ayurvedic</em> we had earlier. The mark holds at small sizes thanks to the lotus emblem, and the wordmark is paired with a clean Montserrat caps version next to it on desktop.
+    </p>
+    <div class="shot">
+      <img src="01-navbar.png" alt="New navbar with logo" />
+      <div class="caption">Top of the homepage — new logo and full brand name in the navbar.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── PAGE 3 — Section 2 (Hero) ────────── -->
+<section class="page">
+  <div class="section">
+    <span class="section-num">02 — HOMEPAGE HERO</span>
+    <h2>Tagline rewrite, fits in one screen</h2>
+    <p>
+      The hero now leads with a single editorial line that signals both <strong>clinical rigour</strong> and <strong>tradition</strong> in one beat:
+    </p>
+    <blockquote>
+      "Classical Kerala therapies — prescribed, prepared and performed by our certified vaidyas, with the precision of a clinic and the care of a tradition."
+    </blockquote>
+    <p>
+      The whole hero — eyebrow ("Est. 2008 · Brickfields, KL"), heading, sub-headline, "Book a Consultation" button, and the trust stats bar at the bottom (15+ Years · 5,000+ Patients · 20+ Therapies) — fits within one screen on a typical desktop. No scrolling needed before the visitor sees the call to action.
+    </p>
+    <div class="shot">
+      <img src="02-hero.png" alt="Homepage hero section" />
+      <div class="caption">Hero section — full editorial frame, locked to one viewport on desktop.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── PAGE 4 — Section 3 + 4 (Trust + Empathy) ────────── -->
+<section class="page">
+  <div class="section">
+    <span class="section-num">03 — TRUST STRIP</span>
+    <h2>Credential line updated</h2>
+    <p>
+      The thin green strip just under the hero used to read <em>"Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)"</em>. We replaced that with a <strong>"Certified Vaidyas (B.A.M.S., M.D. Ayu)"</strong> line — the credential is still front and centre, but the individual name now appears in the dedicated booking and therapy sections where it carries the most weight. The new strip reads:
+    </p>
+    <blockquote>SINCE 2008 · CERTIFIED VAIDYAS (B.A.M.S., M.D. AYU) · AUTHENTIC KERALA FORMULAS</blockquote>
+  </div>
+
+  <div class="section">
+    <span class="section-num">04 — MODERN LIFE vs KERALA AYURVEDA</span>
+    <h2>Split-screen rewrite</h2>
+    <p>
+      The dark-green / cream split section right below the trust strip stages the "problem vs solution" beat. Two changes here:
+    </p>
+    <ul class="clean">
+      <li><strong>Italic line</strong> on the dark side was rewritten from <em>"The same fog returns every morning"</em> to <strong>"The cause keeps returning"</strong> — so it speaks to all four conditions listed below (Burnout · Insomnia · Joint Pain · Brain Fog), not just brain fog.</li>
+      <li><strong>Cream-side caption</strong> is now an editorial pull-quote: <strong>"Kerala Ayurveda Treats / The Root, Not The Symptom."</strong> — Title Case, smart quotation marks, medium weight.</li>
+      <li>Body paragraph now references <em>our certified vaidyas</em> instead of the individual doctor's name, matching the trust-strip language.</li>
+    </ul>
+    <div class="shot">
+      <img src="03-trust-empathy.png" alt="Trust strip and split-screen empathy bridge" />
+      <div class="caption">Trust strip + the rewritten split-screen section beneath it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── PAGE 5 — Section 5 (Therapies) ────────── -->
+<section class="page">
+  <div class="section">
+    <span class="section-num">05 — SIGNATURE THERAPIES</span>
+    <h2>Full redesign — five-card editorial row</h2>
+    <p>
+      This was the biggest change on the homepage. The old design was a long scroll-through with a sticky image swap on the right. The new design is a <strong>five-card editorial row</strong> that fits in one screen — visitors see the entire menu at a glance.
+    </p>
+    <p>
+      The sub-headline you sent across is in place verbatim:
+    </p>
+    <blockquote>
+      "Administered under the expert guidance of <strong>Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</strong> and performed by highly experienced Ayurvedic therapists from <strong>Kerala, India</strong>. All treatments are tailored to your dosha — ensuring a deeply restorative and authentic healing experience."
+    </blockquote>
+
+    <h3 style="margin-top: 14pt;">The five therapies on the homepage</h3>
+    <ul class="clean">
+      <li><strong>Abhyanga</strong> — Warm Oil Massage · 60 min</li>
+      <li><strong>Shirodhara</strong> — Forehead Oil Stream · 45 min</li>
+      <li><strong>Pizhichil</strong> — Royal Oil Bath · 75 min</li>
+      <li><strong>Panchakarma</strong> — Five-Stage Detox · 90 min</li>
+      <li><strong>Nasya</strong> — Nasal Therapy · 30 min</li>
+    </ul>
+    <p>
+      Each card shows the index (01–05), duration overlay, image, name, tagline, and a "Discover →" link. <strong>Pricing has been removed from the homepage cards</strong> — visitors see prices only when they actually go to book. Keeps the homepage feeling like a menu, not a shop.
+    </p>
+
+    <div class="shot">
+      <img src="04-therapies.png" alt="Signature Therapies five-card editorial row" />
+      <div class="caption">Five-card editorial row — fits one screen, no scrolling required.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── PAGE 6 — Section 6 (Booking) ────────── -->
+<section class="page">
+  <div class="section">
+    <span class="section-num">06 — BOOKING PAGE (/book)</span>
+    <h2>Title Case copy, "clinic" → "Centre"</h2>
+    <p>
+      The /book page is the chooser — visitors land here from the navbar's "Book Now" button and pick between a free consultation or a direct treatment booking. Copy across the page is now in Title Case, and "Brickfields clinic" was changed to "Brickfields Centre" everywhere.
+    </p>
+
+    <h3 style="margin-top: 12pt;">Heading + sub-headline</h3>
+    <blockquote>
+      Two Ways to Meet Your Vaidya.<br/>
+      <span style="font-size: 11pt; font-style: italic; color: var(--muted);">Whether You're New to Ayurveda or Coming in for a Specific Therapy, We have a Dedicated Flow for You. Both Lead to Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) at Our Brickfields Centre.</span>
+    </blockquote>
+
+    <h3 style="margin-top: 12pt;">Free Consultation card</h3>
+    <p style="margin-bottom: 6pt;">Body and bullets reworked in Title Case, full credentials restored:</p>
+    <blockquote style="font-size: 10.5pt;">
+      Sit down with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu), Get your Dosha Assessed, and Leave with a Protocol Tailored to what your Body actually Needs. No Commitment required.<br/>
+      · Dosha Assessment (Vata, Pitta, Kapha)<br/>
+      · Personal Treatment Protocol<br/>
+      · Lifestyle &amp; Diet Guidance
+    </blockquote>
+
+    <h3 style="margin-top: 12pt;">Book a Treatment card</h3>
+    <p style="margin-bottom: 6pt;">Same Title Case treatment, badge updated to "60+ MIN · PAY AT CENTRE":</p>
+    <blockquote style="font-size: 10.5pt;">
+      Know Which Therapy You Want? Pick from our Library of 60+ Authentic Kerala Ayurveda Protocols and We'll Get You on the Calendar with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu).<br/>
+      · Abhyanga, Shirodhara, Panchakarma &amp; More<br/>
+      · Searchable Menu by Category<br/>
+      · Direct Slot Booking
+    </blockquote>
+
+    <div class="shot">
+      <img src="06-booking.png" alt="Booking chooser page" />
+      <div class="caption">/book — the chooser page with both routes side by side.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── PAGE 7 — Section 7 (Footer) ────────── -->
+<section class="page">
+  <div class="section">
+    <span class="section-num">07 — FOOTER</span>
+    <h2>Full contact block</h2>
+    <p>
+      Footer's contact column now carries everything you sent across, organised into four sub-blocks so it sits balanced against the other footer columns instead of stretching down the page.
+    </p>
+
+    <h3 style="margin-top: 12pt;">Location</h3>
+    <p style="margin-bottom: 6pt;">Clickable — opens directly in Google Maps:</p>
+    <blockquote style="font-size: 10.5pt;">
+      Kerala Ayurvedic Lifestyle<br/>
+      No. 37, Jalan Thamby Abdullah 1<br/>
+      Brickfields, Kuala Lumpur, Malaysia
+    </blockquote>
+
+    <h3 style="margin-top: 12pt;">Call or WhatsApp</h3>
+    <p style="margin-bottom: 6pt;">All three numbers are wired — WhatsApp link on the first, tap-to-dial on the two landlines:</p>
+    <ul class="clean">
+      <li><strong>+60 11 6504 3436</strong> (WhatsApp)</li>
+      <li><strong>03 2260 3436</strong></li>
+      <li><strong>03 2260 4436</strong></li>
+    </ul>
+
+    <h3 style="margin-top: 12pt;">Hours</h3>
+    <ul class="clean">
+      <li><strong>Business Hours:</strong> 9:00 AM – 9:00 PM · Daily · Public holidays included</li>
+      <li><strong>Consultation Hours:</strong> 10:00 AM – 8:00 PM · Daily · Public holidays included</li>
+    </ul>
+
+    <div class="shot">
+      <img src="05-footer.png" alt="Updated footer" />
+      <div class="caption">Footer — four-column layout with the full contact block laid out 2×2.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── PAGE 8 — Phase 3 ────────── -->
+<section class="page">
+  <span class="eyebrow">What's Next</span>
+  <h2 style="margin-top: 6pt;">Phase 3 — Final phase before launch</h2>
+  <div class="gold-rule short"></div>
+
+  <p class="lead">
+    Two things left to wire up. Both depend on content from your end. Once they're in place, the site is ready for launch.
+  </p>
+
+  <div class="phase3">
+    <span class="label">Phase 3 · Item 1</span>
+    <h3>Real photography for the therapy cards</h3>
+    <p>
+      The five Signature Therapy cards on the homepage currently use stock placeholders. For launch we need authentic shots — ideally one strong vertical / portrait image per therapy:
+    </p>
+    <ul class="clean">
+      <li>Abhyanga — full-body warm oil massage</li>
+      <li>Shirodhara — forehead oil stream</li>
+      <li>Pizhichil — royal oil bath</li>
+      <li>Panchakarma — five-stage detox</li>
+      <li>Nasya — nasal therapy</li>
+    </ul>
+    <p style="margin-top: 8pt;">
+      Optional but useful: 4–6 additional clinic interior / therapist-at-work shots for use elsewhere on the site (about page, booking page header, blog).
+    </p>
+    <div class="pending-block">
+      <h4>Photo specs we'd recommend</h4>
+      <p style="font-size: 10pt;">Portrait orientation (4:5), shot in natural light, focused on the therapy in progress (hands, oils, treatment table). Faces of staff are fine; client privacy permitting. RAW or high-res JPEG. We can bring them up to web standard from there.</p>
+    </div>
+  </div>
+
+  <div class="phase3">
+    <span class="label">Phase 3 · Item 2</span>
+    <h3>Customer reviews / testimonials section</h3>
+    <p>
+      We'll add a dedicated testimonials section to the homepage (between the therapies and the booking CTA) once you send over real client feedback. Layout-wise we're planning a clean editorial card row — quote, author, condition treated.
+    </p>
+    <div class="pending-block">
+      <h4>What we need from you</h4>
+      <ul class="clean">
+        <li>6–8 real client reviews (text)</li>
+        <li>Author name + city / country</li>
+        <li>Condition or therapy they came in for</li>
+        <li>Optional: a star rating, or a short photo / initials avatar</li>
+      </ul>
+      <p class="footnote">Voice notes or WhatsApp messages from happy clients are fine — we'll transcribe and tidy them up. Make sure you have permission to use the names publicly.</p>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <h3>What we need from you to close out</h3>
+  <ol style="padding-left: 18pt; margin: 8pt 0 12pt 0;">
+    <li style="margin-bottom: 4pt;">The five therapy photos (and any extras you have).</li>
+    <li style="margin-bottom: 4pt;">Six to eight client reviews with author names + cities.</li>
+    <li style="margin-bottom: 4pt;">A final pass on the staging site so we can lock copy / spelling before going live.</li>
+  </ol>
+
+  <p>
+    Once we have these, plug-in and launch is a matter of a couple of working days.
+  </p>
+
+  <div class="gold-rule short" style="margin-top: 32pt;"></div>
+  <p style="font-family: 'Montserrat', sans-serif; font-size: 10.5pt; color: var(--primary); margin-top: 12pt;">
+    <strong>— Sanjay Gunabalan</strong><br/>
+    <span style="color: var(--muted); font-weight: 500;">Aurexis Solution · aurexissolution@gmail.com</span>
+  </p>
+</section>
+
+</body>
+</html>

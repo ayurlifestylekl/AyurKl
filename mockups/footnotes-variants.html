@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Footnotes — Left-side redesign variants</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@500;600;700;800&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=IM+Fell+English:ital@0;1&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#2F5D50',
+          primaryDeep: '#1A2E26',
+          accent:  '#D4A373',
+          cream:   '#FAF6EE',
+          dark:    '#2B2B2B',
+        },
+        fontFamily: {
+          heading: ['Montserrat', 'system-ui', 'sans-serif'],
+          body:    ['Lora', 'Georgia', 'serif'],
+          fell:    ['"IM Fell English"', 'Georgia', 'serif'],
+          deva:    ['"Tiro Devanagari Sanskrit"', 'serif'],
+          script:  ['Caveat', 'cursive'],
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  body { background:#0c1914; }
+  .label-pill {
+    background:#1A2E26;
+    color:#D4A373;
+    border:1px solid rgba(212,163,115,0.4);
+  }
+  .grain {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.78 0 0 0 0 0.65 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .paper-texture {
+    background:
+      linear-gradient(135deg, rgba(212,163,115,0.04) 0%, transparent 50%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.84 0 0 0 0 0.7 0 0 0 0.1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"),
+      #f5ecdb;
+  }
+  .stamp-perforations {
+    --p: rgba(255,253,247,1);
+    background:
+      radial-gradient(circle 4px at 0 50%,    transparent 99%, var(--p) 100%) left   / 8px 12px repeat-y,
+      radial-gradient(circle 4px at 100% 50%, transparent 99%, var(--p) 100%) right  / 8px 12px repeat-y,
+      radial-gradient(circle 4px at 50% 0%,   transparent 99%, var(--p) 100%) top    / 12px 8px repeat-x,
+      radial-gradient(circle 4px at 50% 100%, transparent 99%, var(--p) 100%) bottom / 12px 8px repeat-x,
+      #2F5D50;
+  }
+</style>
+</head>
+<body class="font-body text-white">
+
+<header class="mx-auto max-w-[1500px] px-6 pt-10 pb-6">
+  <p class="font-heading text-[10px] uppercase tracking-[0.42em] text-accent/75">Contact / Footnotes · Left-side redesign</p>
+  <h1 class="mt-2 font-heading text-2xl font-extrabold text-white">Three editorial backdrops for the pinned note</h1>
+  <p class="mt-2 max-w-2xl font-body italic text-white/65">All three keep the existing pinned note card and update the copy to your spec. Only the BACKDROP behind the note changes. Right-side FAQ accordion stays untouched.</p>
+</header>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V1 — Envelope spread (recommended)
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 1</span>
+    <span class="font-body italic text-white/70">Envelope spread · note emerging from an opened letter</span>
+  </div>
+</section>
+
+<section id="v1" class="relative mx-auto max-w-[1500px] bg-cream py-16 text-dark scroll-mt-4 overflow-hidden">
+  <div class="grain pointer-events-none absolute inset-0 opacity-40"></div>
+
+  <div class="relative mx-auto max-w-5xl px-8">
+    <!-- Eyebrow -->
+    <div class="mx-auto flex max-w-fit items-center gap-4">
+      <span class="block h-px w-20" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+      <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">The Footnotes</span>
+      <span class="block h-px w-20" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+    </div>
+
+    <div class="mt-10 grid grid-cols-12 gap-10">
+      <!-- LEFT: envelope spread -->
+      <div class="col-span-12 md:col-span-5 lg:col-span-4">
+        <div class="relative mx-auto max-w-[360px] md:mx-0">
+          <!-- Envelope back-side -->
+          <div
+            class="paper-texture absolute -left-3 -top-2 h-[420px] w-[360px] rotate-[-2deg]"
+            style="border-radius:2px; box-shadow:0 30px 50px -20px rgba(47,93,80,0.25), inset 0 0 0 1px rgba(212,163,115,0.25);"
+          >
+            <!-- Envelope flap (triangular at top) -->
+            <svg class="absolute inset-x-0 top-0" viewBox="0 0 360 130" preserveAspectRatio="none" style="width:100%; height:130px;">
+              <polygon points="0,0 360,0 180,120" fill="rgba(212,163,115,0.06)" stroke="rgba(212,163,115,0.2)" stroke-width="1"/>
+              <line x1="0" y1="0" x2="180" y2="120" stroke="rgba(212,163,115,0.18)" stroke-width="1"/>
+              <line x1="360" y1="0" x2="180" y2="120" stroke="rgba(212,163,115,0.18)" stroke-width="1"/>
+            </svg>
+
+            <!-- Postage stamp block (top-right) -->
+            <div class="absolute right-3 top-3 rotate-[-4deg]" style="box-shadow:0 4px 8px -2px rgba(0,0,0,0.15);">
+              <div class="stamp-perforations p-1">
+                <div class="bg-primary px-2 py-2 text-cream text-center" style="width:50px; height:60px;">
+                  <p class="font-fell italic text-accent leading-none mt-1" style="font-size:18px;">N°V</p>
+                  <p class="font-heading text-[6px] uppercase tracking-[0.18em] text-accent/80 mt-1">RM 0.30</p>
+                  <p class="font-body italic text-cream/70 mt-1" style="font-size:7px;">Brickfields</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Postmark (circular dashed) -->
+            <div class="absolute right-20 top-6 h-16 w-16 rounded-full flex flex-col items-center justify-center rotate-[10deg] opacity-65" style="border:1.5px dashed rgba(47,93,80,0.5);">
+              <span class="font-heading text-[6.5px] uppercase tracking-[0.18em] text-primary/65">Brickfields</span>
+              <span class="font-body italic text-[10px] text-primary/75 mt-0.5">5 may '26</span>
+              <span class="font-heading text-[6px] uppercase tracking-[0.2em] text-primary/55 mt-0.5">KL · MY</span>
+            </div>
+
+            <!-- Vertical edition stamp (bottom-left) -->
+            <div class="absolute left-3 bottom-4 font-heading text-[8px] uppercase tracking-[0.42em] text-primary/45" style="writing-mode:vertical-rl; transform:rotate(180deg);">
+              Plate N°V · MMXXVI
+            </div>
+
+            <!-- Wax seal (bottom-right) -->
+            <div class="absolute right-4 bottom-4 h-14 w-14 rounded-full" style="background:radial-gradient(circle at 30% 30%, #e9bf90 0%, #c08a55 60%, #8d5d33 100%); box-shadow:0 6px 12px -4px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.18);">
+              <div class="absolute inset-1.5 rounded-full" style="border:1px solid rgba(26,46,38,0.3);"></div>
+              <div class="absolute inset-2 rounded-full" style="border:1px dashed rgba(26,46,38,0.18);"></div>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-primaryDeep">
+                <span class="font-deva italic" style="font-size:11px; line-height:1;">केरल</span>
+                <span class="font-heading text-[5.5px] font-bold uppercase tracking-[0.18em] mt-0.5">K · A · L</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pinned note card (foreground) -->
+          <div class="relative ml-4 mt-8 max-w-[300px] bg-white px-6 py-6 rotate-[-1.5deg]" style="box-shadow:0 12px 30px -10px rgba(47,93,80,0.25), 0 4px 12px rgba(47,93,80,0.08);">
+            <!-- Washi-tape corners -->
+            <span class="absolute -left-3 -top-2 h-3.5 w-12 rotate-[-18deg]" style="background:linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08);"></span>
+            <span class="absolute -bottom-2 -right-3 h-3.5 w-12 rotate-[-18deg]" style="background:linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08);"></span>
+            <!-- Inner hairline -->
+            <div class="absolute inset-2 border border-accent/15 pointer-events-none"></div>
+
+            <h3 class="relative font-heading font-extrabold leading-[1.05] tracking-[-0.025em] text-primary" style="font-size:1.35rem;">
+              A Few Things <span class="font-body italic font-normal text-accent">Worth Knowing.</span>
+            </h3>
+            <span class="relative my-3 block h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+
+            <blockquote class="relative">
+              <p class="font-body italic leading-[1.55] text-dark/80" style="font-size:13px;">
+                Therapies Are Strictly Same-Gender. All Bookings Carry a 48-Hour Cancellation Notice; The Advance Deposit Is Non-Refundable.
+              </p>
+            </blockquote>
+
+            <!-- Brand-led signature -->
+            <div class="relative mt-4 flex items-end gap-2">
+              <span class="font-body italic text-accent" style="font-size:18px; letter-spacing:-0.02em; line-height:1.05;">
+                — the Kerala Ayurvedic Vaidyasalai
+              </span>
+            </div>
+            <svg class="relative mt-1 h-3 w-[120px] text-accent/70" viewBox="0 0 180 14" preserveAspectRatio="none" fill="none">
+              <path d="M2 10 C 16 4, 34 12, 54 7 S 96 2, 118 9 S 156 12, 172 6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <!-- Caption below stack -->
+          <p class="mt-6 ml-4 font-heading text-[9.5px] uppercase tracking-[0.3em] text-primary/50">
+            ✦ Read before writing
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT: FAQ accordion (compressed for mockup) -->
+      <div class="col-span-12 md:col-span-7 lg:col-span-8">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="font-heading font-extrabold leading-[1.05] tracking-[-0.025em] text-primary" style="font-size:1.75rem;">
+            Questions, <span class="font-body italic font-normal text-accent">answered.</span>
+          </h2>
+          <span class="font-body text-[11px] italic text-dark/45">Tap to read</span>
+        </div>
+        <span class="mt-3 block h-px w-full" style="background:linear-gradient(to right, rgba(212,163,115,0.7) 0%, rgba(212,163,115,0.1) 100%);"></span>
+        <ul class="mt-2 flex flex-col">
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent" style="font-size:12px;">I.</span><span class="flex-1 font-heading font-semibold text-primary" style="font-size:14.5px;">Do I need an appointment for a consultation?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">II.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">How long does shipping take for Ayur-Store products?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">III.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">Are Ayurvedic treatments suitable during pregnancy?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">IV.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">What payment methods do you accept?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">V.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">Can I walk in without booking ahead?</span><span class="text-accent">+</span></div></li>
+        </ul>
+        <div class="mt-6 text-right">
+          <p class="font-body text-[13px] italic text-primary/75">Yours in wellness,</p>
+          <p class="font-body italic text-accent" style="font-size:18px; letter-spacing:-0.02em;">— Kerala Ayurvedic Lifestyle</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V2 — Stacked polaroids
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 2</span>
+    <span class="font-body italic text-white/70">Stacked polaroids · marginalia cards fanned behind the note</span>
+  </div>
+</section>
+
+<section id="v2" class="relative mx-auto max-w-[1500px] bg-cream py-16 text-dark scroll-mt-4 overflow-hidden">
+  <div class="grain pointer-events-none absolute inset-0 opacity-40"></div>
+
+  <div class="relative mx-auto max-w-5xl px-8">
+    <div class="mx-auto flex max-w-fit items-center gap-4">
+      <span class="block h-px w-20" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+      <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">The Footnotes</span>
+      <span class="block h-px w-20" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+    </div>
+
+    <div class="mt-10 grid grid-cols-12 gap-10">
+      <div class="col-span-12 md:col-span-5 lg:col-span-4">
+        <div class="relative mx-auto max-w-[360px] h-[460px] md:mx-0">
+          <!-- Background marginalia card #1 (rotated more, behind, faded) -->
+          <div class="absolute left-0 top-0 w-[210px] bg-white/85 px-4 py-4 rotate-[-8deg]" style="box-shadow:0 8px 20px -8px rgba(47,93,80,0.2);">
+            <p class="font-heading text-[8px] font-bold uppercase tracking-[0.3em] text-primary/45">Tea is served</p>
+            <p class="mt-2 font-script text-primary/75" style="font-size:18px; line-height:1.1;">Always.</p>
+          </div>
+          <!-- Background marginalia card #2 (right side, smaller) -->
+          <div class="absolute right-0 top-6 w-[180px] bg-white/90 px-4 py-3 rotate-[5deg]" style="box-shadow:0 8px 20px -8px rgba(47,93,80,0.2);">
+            <p class="font-heading text-[8px] font-bold uppercase tracking-[0.3em] text-primary/45">Walk-ins welcome</p>
+            <p class="mt-1 font-body italic text-dark/70" style="font-size:11px; line-height:1.4;">For the Ayur-Store, any time during business hours.</p>
+          </div>
+          <!-- Background marginalia card #3 (bottom-left) -->
+          <div class="absolute left-3 bottom-0 w-[200px] bg-white/85 px-4 py-3 rotate-[3deg]" style="box-shadow:0 8px 20px -8px rgba(47,93,80,0.2);">
+            <p class="font-heading text-[8px] font-bold uppercase tracking-[0.3em] text-primary/45">Hand-written</p>
+            <p class="mt-1 font-body italic text-dark/70" style="font-size:11px; line-height:1.4;">Notes after every consultation.</p>
+          </div>
+
+          <!-- The main pinned note card (centered, foreground) -->
+          <div class="absolute left-1/2 top-12 -translate-x-1/2 max-w-[300px] w-[300px] bg-white px-6 py-6 rotate-[-1.5deg]" style="box-shadow:0 18px 36px -12px rgba(47,93,80,0.3), 0 4px 12px rgba(47,93,80,0.08);">
+            <span class="absolute -left-3 -top-2 h-3.5 w-12 rotate-[-18deg]" style="background:linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08);"></span>
+            <span class="absolute -bottom-2 -right-3 h-3.5 w-12 rotate-[-18deg]" style="background:linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08);"></span>
+            <div class="absolute inset-2 border border-accent/15 pointer-events-none"></div>
+
+            <h3 class="relative font-heading font-extrabold leading-[1.05] tracking-[-0.025em] text-primary" style="font-size:1.35rem;">
+              A Few Things <span class="font-body italic font-normal text-accent">Worth Knowing.</span>
+            </h3>
+            <span class="relative my-3 block h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+            <blockquote class="relative">
+              <p class="font-body italic leading-[1.55] text-dark/80" style="font-size:13px;">
+                Therapies Are Strictly Same-Gender. All Bookings Carry a 48-Hour Cancellation Notice; The Advance Deposit Is Non-Refundable.
+              </p>
+            </blockquote>
+            <div class="relative mt-4">
+              <span class="font-body italic text-accent" style="font-size:18px; letter-spacing:-0.02em; line-height:1.05;">
+                — the Kerala Ayurvedic Vaidyasalai
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT (same accordion stub) -->
+      <div class="col-span-12 md:col-span-7 lg:col-span-8">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="font-heading font-extrabold leading-[1.05] tracking-[-0.025em] text-primary" style="font-size:1.75rem;">
+            Questions, <span class="font-body italic font-normal text-accent">answered.</span>
+          </h2>
+          <span class="font-body text-[11px] italic text-dark/45">Tap to read</span>
+        </div>
+        <span class="mt-3 block h-px w-full" style="background:linear-gradient(to right, rgba(212,163,115,0.7) 0%, rgba(212,163,115,0.1) 100%);"></span>
+        <ul class="mt-2 flex flex-col">
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent" style="font-size:12px;">I.</span><span class="flex-1 font-heading font-semibold text-primary" style="font-size:14.5px;">Do I need an appointment for a consultation?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">II.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">How long does shipping take for Ayur-Store products?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">III.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">Are Ayurvedic treatments suitable during pregnancy?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">IV.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">What payment methods do you accept?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">V.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">Can I walk in without booking ahead?</span><span class="text-accent">+</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V3 — Botanical engraving backdrop
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 3</span>
+    <span class="font-body italic text-white/70">Botanical engraving · faded apothecary illustration backdrop</span>
+  </div>
+</section>
+
+<section id="v3" class="relative mx-auto max-w-[1500px] bg-cream py-16 text-dark scroll-mt-4 overflow-hidden">
+  <div class="grain pointer-events-none absolute inset-0 opacity-40"></div>
+
+  <div class="relative mx-auto max-w-5xl px-8">
+    <div class="mx-auto flex max-w-fit items-center gap-4">
+      <span class="block h-px w-20" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+      <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">The Footnotes</span>
+      <span class="block h-px w-20" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+    </div>
+
+    <div class="mt-10 grid grid-cols-12 gap-10">
+      <div class="col-span-12 md:col-span-5 lg:col-span-4">
+        <div class="relative mx-auto max-w-[360px] h-[460px] md:mx-0">
+          <!-- Botanical engraving SVG backdrop -->
+          <svg class="absolute inset-0 w-full h-full opacity-25" viewBox="0 0 360 460" fill="none" stroke="#2F5D50" stroke-width="0.7">
+            <!-- Stem -->
+            <path d="M180 460 Q175 350 178 250 Q170 150 175 50" stroke-linecap="round"/>
+            <!-- Leaves alternating -->
+            <g>
+              <path d="M178 400 Q140 380 110 360 Q145 370 178 380" fill="rgba(122,157,84,0.06)"/>
+              <path d="M178 380 Q220 360 250 340 Q215 350 178 360"/>
+              <path d="M177 320 Q140 300 110 290 Q145 305 177 310"/>
+              <path d="M177 300 Q215 280 250 270 Q215 290 177 295"/>
+              <path d="M175 230 Q135 220 105 215 Q140 230 175 230"/>
+              <path d="M178 220 Q220 210 250 215 Q220 220 178 218"/>
+              <path d="M174 160 Q140 155 110 160 Q140 170 174 165"/>
+              <path d="M177 150 Q220 145 250 155 Q215 155 177 152"/>
+            </g>
+            <!-- Flower at top -->
+            <g transform="translate(175 50)">
+              <circle r="22" fill="rgba(212,163,115,0.08)"/>
+              <circle r="14"/>
+              <circle r="6" fill="rgba(212,163,115,0.18)"/>
+              <path d="M-22 0 L-32 0 M22 0 L32 0 M0 -22 L0 -32 M0 22 L0 32 M-15 -15 L-22 -22 M15 15 L22 22 M15 -15 L22 -22 M-15 15 L-22 22"/>
+            </g>
+            <!-- Botanical Latin text below -->
+          </svg>
+
+          <!-- Botanical caption -->
+          <div class="absolute left-2 bottom-2 max-w-[180px]">
+            <p class="font-body italic text-primary/55" style="font-size:11px;">— Ocimum tenuiflorum,</p>
+            <p class="font-heading text-[8px] uppercase tracking-[0.3em] text-primary/40">Holy basil · Tulsi</p>
+          </div>
+
+          <!-- Note card (foreground, centered) -->
+          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[300px] w-[300px] bg-white px-6 py-6 rotate-[-1.5deg]" style="box-shadow:0 18px 36px -12px rgba(47,93,80,0.3), 0 4px 12px rgba(47,93,80,0.08);">
+            <span class="absolute -left-3 -top-2 h-3.5 w-12 rotate-[-18deg]" style="background:linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08);"></span>
+            <span class="absolute -bottom-2 -right-3 h-3.5 w-12 rotate-[-18deg]" style="background:linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08);"></span>
+            <div class="absolute inset-2 border border-accent/15 pointer-events-none"></div>
+
+            <h3 class="relative font-heading font-extrabold leading-[1.05] tracking-[-0.025em] text-primary" style="font-size:1.35rem;">
+              A Few Things <span class="font-body italic font-normal text-accent">Worth Knowing.</span>
+            </h3>
+            <span class="relative my-3 block h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+            <blockquote class="relative">
+              <p class="font-body italic leading-[1.55] text-dark/80" style="font-size:13px;">
+                Therapies Are Strictly Same-Gender. All Bookings Carry a 48-Hour Cancellation Notice; The Advance Deposit Is Non-Refundable.
+              </p>
+            </blockquote>
+            <div class="relative mt-4">
+              <span class="font-body italic text-accent" style="font-size:18px; letter-spacing:-0.02em; line-height:1.05;">
+                — the Kerala Ayurvedic Vaidyasalai
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT (same accordion stub) -->
+      <div class="col-span-12 md:col-span-7 lg:col-span-8">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="font-heading font-extrabold leading-[1.05] tracking-[-0.025em] text-primary" style="font-size:1.75rem;">
+            Questions, <span class="font-body italic font-normal text-accent">answered.</span>
+          </h2>
+          <span class="font-body text-[11px] italic text-dark/45">Tap to read</span>
+        </div>
+        <span class="mt-3 block h-px w-full" style="background:linear-gradient(to right, rgba(212,163,115,0.7) 0%, rgba(212,163,115,0.1) 100%);"></span>
+        <ul class="mt-2 flex flex-col">
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent" style="font-size:12px;">I.</span><span class="flex-1 font-heading font-semibold text-primary" style="font-size:14.5px;">Do I need an appointment for a consultation?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">II.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">How long does shipping take for Ayur-Store products?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">III.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">Are Ayurvedic treatments suitable during pregnancy?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5 border-b border-accent/15"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">IV.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">What payment methods do you accept?</span><span class="text-accent">+</span></div></li>
+          <li class="py-3.5"><div class="flex gap-4"><span class="font-body italic text-accent/55" style="font-size:12px;">V.</span><span class="flex-1 font-heading font-semibold text-dark/85" style="font-size:14.5px;">Can I walk in without booking ahead?</span><span class="text-accent">+</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="mx-auto max-w-[1500px] px-6 py-10 text-center font-body italic text-white/45">
+  V1 (envelope), V2 (polaroid stack), or V3 (botanical engraving) — pick one or combine.
+</footer>
+
+</body>
+</html>

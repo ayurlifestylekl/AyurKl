@@ -19,7 +19,7 @@ const fadeUp = (delay: number) => ({
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden bg-primary pt-20">
+    <section className="relative flex h-[calc(100svh-7.5rem)] min-h-[600px] w-full flex-col items-center justify-center overflow-hidden bg-primary pt-6 sm:pt-8">
       {/* ── Background Image & Cinematic Overlay ────────── */}
       <motion.div
         initial={{ scale: 1.05 }}
@@ -44,7 +44,7 @@ export default function HeroSection() {
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8">
         
         {/* Eyebrow */}
-        <motion.div {...fadeUp(0.1)} className="mb-6 flex items-center justify-center gap-4">
+        <motion.div {...fadeUp(0.1)} className="mb-5 flex items-center justify-center gap-4">
           <span className="h-[1px] w-12 bg-accent/60" aria-hidden />
           <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-accent sm:text-[11px]">
             Est. 2008 • Brickfields, KL
@@ -63,7 +63,7 @@ export default function HeroSection() {
         </motion.h1>
 
         {/* Decorative divider */}
-        <motion.div {...fadeUp(0.4)} className="my-8 flex items-center justify-center gap-3">
+        <motion.div {...fadeUp(0.4)} className="my-6 flex items-center justify-center gap-3">
           <span className="h-[1px] w-16 bg-white/20" aria-hidden />
           <div className="h-1.5 w-1.5 rotate-45 bg-accent/80" aria-hidden />
           <span className="h-[1px] w-16 bg-white/20" aria-hidden />
@@ -74,12 +74,13 @@ export default function HeroSection() {
           {...fadeUp(0.5)}
           className="max-w-2xl font-body text-[15px] leading-[1.8] text-white/80 sm:text-[17px]"
         >
-          Traditional Panchakarma, Abhyanga & Shirodhara — practised with precision and care by{' '}
-          <strong className="font-semibold text-white">Vaidya AKHIL HS (B.A.M.S)</strong>.
+          Classical Kerala therapies —{' '}
+          <strong className="font-semibold text-white">prescribed, prepared and performed</strong>{' '}
+          by our <strong className="font-semibold text-white">certified vaidyas</strong>, with the precision of a clinic and the care of a tradition.
         </motion.p>
 
         {/* CTA Button */}
-        <motion.div {...fadeUp(0.65)} className="mt-10">
+        <motion.div {...fadeUp(0.65)} className="mt-8">
           <CTAButton
             href="/book/consultation"
             variant="primary"
@@ -98,7 +99,7 @@ export default function HeroSection() {
         {...fadeUp(0.8)}
         className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-black/20 backdrop-blur-md"
       >
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           {[
             { n: '15+', l: 'Years Experience' },
             { n: '5,000+', l: 'Patients Healed' },

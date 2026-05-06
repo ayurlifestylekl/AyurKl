@@ -137,7 +137,7 @@ export const aboutPage = defineType({
       title: 'Founder name',
       type: 'string',
       group: 'founder',
-      initialValue: 'Datto Shan',
+      initialValue: "Dato' Dr. V.Shanmughanathan",
     }),
     defineField({
       name: 'founderRole',
@@ -160,7 +160,7 @@ export const aboutPage = defineType({
       title: 'Commitment headline — lead',
       type: 'string',
       group: 'commitment',
-      description: 'E.g. "Your partners in".',
+      description: 'E.g. "Your Partner in".',
       validation: (rule) => rule.required().max(80),
     }),
     defineField({

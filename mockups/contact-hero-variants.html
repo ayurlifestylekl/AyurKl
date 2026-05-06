@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact Hero — Filler Variants</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@500;600;700;800&family=Tiro+Devanagari+Sanskrit&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#2F5D50',
+          primaryDeep: '#1A2E26',
+          accent:  '#D4A373',
+          cream:   '#F5EDE0',
+          dark:    '#2B2B2B',
+        },
+        fontFamily: {
+          heading: ['Montserrat', 'system-ui', 'sans-serif'],
+          body:    ['Lora', 'Georgia', 'serif'],
+          deva:    ['"Tiro Devanagari Sanskrit"', 'Lora', 'serif'],
+          script:  ['Caveat', 'cursive'],
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  body { background:#0c1914; }
+  .grain-overlay-dark {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.13 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+    opacity: .85;
+  }
+  .heroFrame { aspect-ratio: 16 / 9; max-height: 760px; min-height: 620px; }
+  .label-pill {
+    background: #1A2E26;
+    color: #D4A373;
+    border:1px solid rgba(212,163,115,0.4);
+  }
+  /* Reusable hero base */
+  .hero-base {
+    position:relative; overflow:hidden; background:#2F5D50;
+  }
+  .gold-dot-grid {
+    background-image:
+      radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px),
+      radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: 0 0, 14px 14px;
+  }
+  .warm-radials {
+    background:
+      radial-gradient(ellipse 900px 700px at 85% 10%, rgba(212,163,115,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 800px 650px at 10% 95%, rgba(26,46,38,0.55) 0%, transparent 55%),
+      radial-gradient(ellipse 600px 500px at 50% 50%, rgba(212,163,115,0.04) 0%, transparent 60%);
+  }
+  .gridline { background: rgba(212,163,115,0.08); }
+  /* Mandala SVG */
+  .mandala { opacity:.28; }
+</style>
+</head>
+<body class="font-body text-white">
+
+<header class="mx-auto max-w-[1500px] px-6 pt-10 pb-6">
+  <p class="font-heading text-[10px] uppercase tracking-[0.42em] text-accent/75">Contact / Threshold · Variant Comparison</p>
+  <h1 class="mt-2 font-heading text-2xl font-extrabold text-white">Hero filler — 4 editorial options</h1>
+  <p class="mt-2 max-w-2xl font-body italic text-white/65">Scroll through. Same hero, four different ways to treat the empty top-right and right-edge zones. Pick the one that earns its place.</p>
+</header>
+
+<!-- ───────────────────────────────────────────────────────────────────────────
+     Reusable hero shell macro — inlined four times for clarity
+─────────────────────────────────────────────────────────────────────────── -->
+
+<!-- ════════════ VARIANT 1 — Sanskrit invocation card (top-right) ════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 1</span>
+    <span class="font-body italic text-white/70">Sanskrit invocation card · top-right corner</span>
+  </div>
+</section>
+
+<section id="v1" class="hero-base heroFrame mx-auto max-w-[1500px] flex scroll-mt-4">
+  <div class="absolute inset-0 gold-dot-grid pointer-events-none"></div>
+  <div class="absolute inset-0 warm-radials pointer-events-none"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[25%] w-px gridline"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[75%] w-px gridline"></div>
+  <div class="absolute inset-0 grain-overlay-dark pointer-events-none"></div>
+
+  <!-- gold double frame -->
+  <div class="absolute inset-6 md:inset-8 pointer-events-none">
+    <div class="absolute inset-0 rounded-[2px] border border-accent/55"></div>
+    <div class="absolute inset-3 rounded-[2px] border border-accent/25"></div>
+    <div class="absolute -left-[1px] -top-[1px] h-4 w-4 border-l-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -right-[1px] -top-[1px] h-4 w-4 border-r-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -left-[1px] h-4 w-4 border-b-2 border-l-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -right-[1px] h-4 w-4 border-b-2 border-r-2 border-accent/80"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-10 py-10">
+    <!-- masthead row -->
+    <div class="flex items-center justify-between">
+      <span class="font-heading text-[10px] font-medium uppercase tracking-[0.42em] text-accent/75">Vol. II · The Correspondence</span>
+      <span class="flex items-center gap-2 font-heading text-[10px] font-medium uppercase tracking-[0.35em] text-white/55">
+        <span class="inline-block h-1 w-1 rotate-45 bg-accent"></span>
+        Plate N°01 · Threshold
+      </span>
+    </div>
+
+    <div class="mt-3 grid grid-cols-12 items-center gap-10">
+      <!-- plate -->
+      <div class="col-span-5">
+        <div class="relative max-w-[280px]">
+          <!-- mandala -->
+          <svg class="mandala absolute -right-12 -top-12 h-[200px] w-[200px]" viewBox="0 0 200 200">
+            <g fill="none" stroke="#D4A373" stroke-width="0.6" opacity="0.6">
+              <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="30"/>
+              <g><line x1="100" y1="10" x2="100" y2="190"/><line x1="10" y1="100" x2="190" y2="100"/><line x1="36" y1="36" x2="164" y2="164"/><line x1="36" y1="164" x2="164" y2="36"/></g>
+            </g>
+          </svg>
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[2px]" style="box-shadow:0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212,163,115,0.25);">
+            <img src="https://placehold.co/600x750/3a5a3a/d4a373?text=Apothecary+Still+Life&font=lora" class="absolute inset-0 h-full w-full object-cover"/>
+            <div class="absolute inset-0 mix-blend-multiply" style="background:rgba(47,93,80,0.22);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/20 to-transparent"></div>
+            <div class="absolute inset-2 border border-accent/60"></div>
+            <div class="absolute left-1 top-1 h-3 w-3 border-l-2 border-t-2 border-accent"></div>
+            <div class="absolute right-1 top-1 h-3 w-3 border-r-2 border-t-2 border-accent"></div>
+            <div class="absolute bottom-1 left-1 h-3 w-3 border-b-2 border-l-2 border-accent"></div>
+            <div class="absolute bottom-1 right-1 h-3 w-3 border-b-2 border-r-2 border-accent"></div>
+            <div class="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary">
+              <span class="inline-block h-1 w-1 rotate-45 bg-primary/70"></span> Plate N°01 · Threshold
+            </div>
+          </div>
+          <!-- address card -->
+          <div class="absolute -bottom-6 -right-4 w-[260px] rounded-sm bg-cream px-4 py-3 text-dark/85" style="box-shadow:0 24px 50px -18px rgba(0,0,0,0.45);">
+            <span class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.85) 20%, rgba(212,163,115,0.85) 80%, transparent);"></span>
+            <div class="flex items-start gap-3">
+              <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" style="box-shadow:0 0 0 3px rgba(212,163,115,0.2);"></span>
+              <div>
+                <p class="font-heading text-[9px] font-bold uppercase tracking-[0.24em] text-primary/55">The Clinic</p>
+                <p class="mt-1 font-body text-[13px] italic leading-[1.45]">37 Jalan Thamby Abdullah 1<br/>Brickfields · 50470 · KL</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- type column -->
+      <div class="col-span-7 relative">
+
+        <!-- ◆ V1 SPECIFIC: Sanskrit invocation card, anchored top-right -->
+        <div class="absolute -top-6 right-0 max-w-[260px] text-right">
+          <span class="block h-px w-16 ml-auto" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.9));"></span>
+          <p class="mt-3 font-deva text-[26px] leading-[1] text-accent">अतिथि देवो भव</p>
+          <p class="mt-2 font-body italic text-[13px] text-accent/85">Atithi Devo Bhava</p>
+          <p class="mt-1 font-heading text-[9px] uppercase tracking-[0.3em] text-white/45">The guest is divine</p>
+        </div>
+
+        <div class="mb-2 flex items-center gap-3">
+          <div class="h-px w-10 bg-accent/80"></div>
+          <span class="font-body italic text-accent/90 text-[1.5rem]">Begin with a</span>
+        </div>
+        <h2 class="font-heading font-extrabold leading-[0.86] text-white tracking-[-0.05em]">
+          <span class="block text-[3rem]">Cross the</span>
+          <span class="block font-body font-semibold italic text-accent text-[4.4rem] -mt-1" style="letter-spacing:-0.03em; line-height:0.84;">
+            Threshold<span class="text-accent/70">.</span>
+          </span>
+        </h2>
+        <p class="mt-4 max-w-[520px] italic text-white/80" style="font-size:15px; line-height:1.55;">
+          Write, call, or step through the door. Every message reaches the Kerala Ayurvedic Lifestyle vaidyasalai — read, considered, and answered with the same care you'd receive in person.
+        </p>
+        <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10.5px] font-medium uppercase tracking-[0.2em] text-white/55">
+          <span>Every message read personally</span>
+          <span class="h-0.5 w-0.5 rounded-full bg-accent/60"></span>
+          <span>Reply within one working day</span>
+        </div>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="rounded-full bg-accent px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-primary">Send a Note</button>
+          <button class="rounded-full border border-white/40 px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-white">WhatsApp Now</button>
+        </div>
+        <a class="mt-3 inline-flex items-center gap-2 font-heading text-[10.5px] font-medium uppercase tracking-[0.22em] text-white/45">⌖ Find the clinic →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ VARIANT 2 — Right-edge marginalia stack ════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 2</span>
+    <span class="font-body italic text-white/70">Right-edge marginalia stack · book-margin badges</span>
+  </div>
+</section>
+
+<section id="v2" class="hero-base heroFrame mx-auto max-w-[1500px] flex scroll-mt-4">
+  <div class="absolute inset-0 gold-dot-grid pointer-events-none"></div>
+  <div class="absolute inset-0 warm-radials pointer-events-none"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[25%] w-px gridline"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[75%] w-px gridline"></div>
+  <div class="absolute inset-0 grain-overlay-dark pointer-events-none"></div>
+
+  <div class="absolute inset-6 md:inset-8 pointer-events-none">
+    <div class="absolute inset-0 rounded-[2px] border border-accent/55"></div>
+    <div class="absolute inset-3 rounded-[2px] border border-accent/25"></div>
+    <div class="absolute -left-[1px] -top-[1px] h-4 w-4 border-l-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -right-[1px] -top-[1px] h-4 w-4 border-r-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -left-[1px] h-4 w-4 border-b-2 border-l-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -right-[1px] h-4 w-4 border-b-2 border-r-2 border-accent/80"></div>
+  </div>
+
+  <!-- ◆ V2 SPECIFIC: vertical marginalia stack on far right -->
+  <div class="absolute right-12 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-6">
+    <!-- wax seal -->
+    <div class="relative h-14 w-14 rounded-full" style="background:radial-gradient(circle at 30% 30%, #e9bf90 0%, #c08a55 60%, #8d5d33 100%); box-shadow:0 6px 14px -4px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.18);">
+      <div class="absolute inset-0 flex flex-col items-center justify-center font-heading text-[8px] font-bold uppercase tracking-[0.2em] text-primaryDeep">
+        <span>Est.</span><span>2018</span>
+      </div>
+      <div class="absolute inset-1 rounded-full border border-primaryDeep/30"></div>
+    </div>
+
+    <div class="h-12 w-px bg-accent/40"></div>
+
+    <!-- vertical rotated text -->
+    <div class="font-heading text-[10px] font-bold uppercase tracking-[0.5em] text-accent/85" style="writing-mode: vertical-rl;">Brickfields · Kuala Lumpur</div>
+
+    <div class="h-12 w-px bg-accent/40"></div>
+
+    <!-- plate stamp -->
+    <div class="flex flex-col items-center gap-1">
+      <span class="inline-block h-1.5 w-1.5 rotate-45 bg-accent"></span>
+      <span class="font-heading text-[9px] font-bold uppercase tracking-[0.3em] text-white/55">N°01</span>
+    </div>
+  </div>
+
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-10 py-10 pr-32">
+    <div class="flex items-center justify-between">
+      <span class="font-heading text-[10px] font-medium uppercase tracking-[0.42em] text-accent/75">Vol. II · The Correspondence</span>
+      <span class="flex items-center gap-2 font-heading text-[10px] font-medium uppercase tracking-[0.35em] text-white/55">
+        <span class="inline-block h-1 w-1 rotate-45 bg-accent"></span>
+        Plate N°01 · Threshold
+      </span>
+    </div>
+
+    <div class="mt-3 grid grid-cols-12 items-center gap-10">
+      <div class="col-span-5">
+        <div class="relative max-w-[280px]">
+          <svg class="mandala absolute -right-12 -top-12 h-[200px] w-[200px]" viewBox="0 0 200 200">
+            <g fill="none" stroke="#D4A373" stroke-width="0.6" opacity="0.6">
+              <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="30"/>
+              <g><line x1="100" y1="10" x2="100" y2="190"/><line x1="10" y1="100" x2="190" y2="100"/><line x1="36" y1="36" x2="164" y2="164"/><line x1="36" y1="164" x2="164" y2="36"/></g>
+            </g>
+          </svg>
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[2px]" style="box-shadow:0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212,163,115,0.25);">
+            <img src="https://placehold.co/600x750/3a5a3a/d4a373?text=Apothecary+Still+Life&font=lora" class="absolute inset-0 h-full w-full object-cover"/>
+            <div class="absolute inset-0 mix-blend-multiply" style="background:rgba(47,93,80,0.22);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/20 to-transparent"></div>
+            <div class="absolute inset-2 border border-accent/60"></div>
+            <div class="absolute left-1 top-1 h-3 w-3 border-l-2 border-t-2 border-accent"></div>
+            <div class="absolute right-1 top-1 h-3 w-3 border-r-2 border-t-2 border-accent"></div>
+            <div class="absolute bottom-1 left-1 h-3 w-3 border-b-2 border-l-2 border-accent"></div>
+            <div class="absolute bottom-1 right-1 h-3 w-3 border-b-2 border-r-2 border-accent"></div>
+            <div class="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary">
+              <span class="inline-block h-1 w-1 rotate-45 bg-primary/70"></span> Plate N°01 · Threshold
+            </div>
+          </div>
+          <div class="absolute -bottom-6 -right-4 w-[260px] rounded-sm bg-cream px-4 py-3 text-dark/85" style="box-shadow:0 24px 50px -18px rgba(0,0,0,0.45);">
+            <span class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.85) 20%, rgba(212,163,115,0.85) 80%, transparent);"></span>
+            <div class="flex items-start gap-3">
+              <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" style="box-shadow:0 0 0 3px rgba(212,163,115,0.2);"></span>
+              <div>
+                <p class="font-heading text-[9px] font-bold uppercase tracking-[0.24em] text-primary/55">The Clinic</p>
+                <p class="mt-1 font-body text-[13px] italic leading-[1.45]">37 Jalan Thamby Abdullah 1<br/>Brickfields · 50470 · KL</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-7">
+        <div class="mb-2 flex items-center gap-3">
+          <div class="h-px w-10 bg-accent/80"></div>
+          <span class="font-body italic text-accent/90 text-[1.5rem]">Begin with a</span>
+        </div>
+        <h2 class="font-heading font-extrabold leading-[0.86] text-white tracking-[-0.05em]">
+          <span class="block text-[3rem]">Cross the</span>
+          <span class="block font-body font-semibold italic text-accent text-[4.4rem] -mt-1" style="letter-spacing:-0.03em; line-height:0.84;">
+            Threshold<span class="text-accent/70">.</span>
+          </span>
+        </h2>
+        <p class="mt-4 max-w-[520px] italic text-white/80" style="font-size:15px; line-height:1.55;">
+          Write, call, or step through the door. Every message reaches the Kerala Ayurvedic Lifestyle vaidyasalai — read, considered, and answered with the same care you'd receive in person.
+        </p>
+        <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10.5px] font-medium uppercase tracking-[0.2em] text-white/55">
+          <span>Every message read personally</span>
+          <span class="h-0.5 w-0.5 rounded-full bg-accent/60"></span>
+          <span>Reply within one working day</span>
+        </div>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="rounded-full bg-accent px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-primary">Send a Note</button>
+          <button class="rounded-full border border-white/40 px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-white">WhatsApp Now</button>
+        </div>
+        <a class="mt-3 inline-flex items-center gap-2 font-heading text-[10.5px] font-medium uppercase tracking-[0.22em] text-white/45">⌖ Find the clinic →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ VARIANT 3 — Second layered photo plate ════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 3</span>
+    <span class="font-body italic text-white/70">Second layered photo plate · editorial polaroids</span>
+  </div>
+</section>
+
+<section id="v3" class="hero-base heroFrame mx-auto max-w-[1500px] flex scroll-mt-4">
+  <div class="absolute inset-0 gold-dot-grid pointer-events-none"></div>
+  <div class="absolute inset-0 warm-radials pointer-events-none"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[25%] w-px gridline"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[75%] w-px gridline"></div>
+  <div class="absolute inset-0 grain-overlay-dark pointer-events-none"></div>
+
+  <div class="absolute inset-6 md:inset-8 pointer-events-none">
+    <div class="absolute inset-0 rounded-[2px] border border-accent/55"></div>
+    <div class="absolute inset-3 rounded-[2px] border border-accent/25"></div>
+    <div class="absolute -left-[1px] -top-[1px] h-4 w-4 border-l-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -right-[1px] -top-[1px] h-4 w-4 border-r-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -left-[1px] h-4 w-4 border-b-2 border-l-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -right-[1px] h-4 w-4 border-b-2 border-r-2 border-accent/80"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-10 py-10">
+    <div class="flex items-center justify-between">
+      <span class="font-heading text-[10px] font-medium uppercase tracking-[0.42em] text-accent/75">Vol. II · The Correspondence</span>
+      <span class="flex items-center gap-2 font-heading text-[10px] font-medium uppercase tracking-[0.35em] text-white/55">
+        <span class="inline-block h-1 w-1 rotate-45 bg-accent"></span>
+        Plate N°01 · Threshold
+      </span>
+    </div>
+
+    <div class="mt-3 grid grid-cols-12 items-center gap-10">
+      <div class="col-span-5">
+        <div class="relative max-w-[280px]">
+          <!-- ◆ V3 SPECIFIC: secondary smaller polaroid above-right of main plate -->
+          <div class="absolute -top-12 -right-20 w-[160px] aspect-[4/5] rotate-[-4deg] z-10 overflow-hidden rounded-[2px] border-[6px] border-cream/95" style="box-shadow:0 18px 32px -12px rgba(0,0,0,0.55);">
+            <img src="https://placehold.co/240x300/2f5d50/d4a373?text=Hands+%26+Letter&font=lora" class="absolute inset-0 h-full w-full object-cover"/>
+            <div class="absolute inset-0 mix-blend-multiply" style="background:rgba(47,93,80,0.32);"></div>
+            <span class="absolute bottom-1 left-2 font-script text-[14px] text-cream">— in transit</span>
+          </div>
+
+          <svg class="mandala absolute -right-12 -top-12 h-[200px] w-[200px]" viewBox="0 0 200 200">
+            <g fill="none" stroke="#D4A373" stroke-width="0.6" opacity="0.6">
+              <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="30"/>
+              <g><line x1="100" y1="10" x2="100" y2="190"/><line x1="10" y1="100" x2="190" y2="100"/><line x1="36" y1="36" x2="164" y2="164"/><line x1="36" y1="164" x2="164" y2="36"/></g>
+            </g>
+          </svg>
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[2px]" style="box-shadow:0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212,163,115,0.25);">
+            <img src="https://placehold.co/600x750/3a5a3a/d4a373?text=Apothecary+Still+Life&font=lora" class="absolute inset-0 h-full w-full object-cover"/>
+            <div class="absolute inset-0 mix-blend-multiply" style="background:rgba(47,93,80,0.22);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/20 to-transparent"></div>
+            <div class="absolute inset-2 border border-accent/60"></div>
+            <div class="absolute left-1 top-1 h-3 w-3 border-l-2 border-t-2 border-accent"></div>
+            <div class="absolute right-1 top-1 h-3 w-3 border-r-2 border-t-2 border-accent"></div>
+            <div class="absolute bottom-1 left-1 h-3 w-3 border-b-2 border-l-2 border-accent"></div>
+            <div class="absolute bottom-1 right-1 h-3 w-3 border-b-2 border-r-2 border-accent"></div>
+            <div class="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary">
+              <span class="inline-block h-1 w-1 rotate-45 bg-primary/70"></span> Plate N°01 · Threshold
+            </div>
+          </div>
+          <div class="absolute -bottom-6 -right-4 w-[260px] rounded-sm bg-cream px-4 py-3 text-dark/85" style="box-shadow:0 24px 50px -18px rgba(0,0,0,0.45);">
+            <span class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.85) 20%, rgba(212,163,115,0.85) 80%, transparent);"></span>
+            <div class="flex items-start gap-3">
+              <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" style="box-shadow:0 0 0 3px rgba(212,163,115,0.2);"></span>
+              <div>
+                <p class="font-heading text-[9px] font-bold uppercase tracking-[0.24em] text-primary/55">The Clinic</p>
+                <p class="mt-1 font-body text-[13px] italic leading-[1.45]">37 Jalan Thamby Abdullah 1<br/>Brickfields · 50470 · KL</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-7">
+        <div class="mb-2 flex items-center gap-3">
+          <div class="h-px w-10 bg-accent/80"></div>
+          <span class="font-body italic text-accent/90 text-[1.5rem]">Begin with a</span>
+        </div>
+        <h2 class="font-heading font-extrabold leading-[0.86] text-white tracking-[-0.05em]">
+          <span class="block text-[3rem]">Cross the</span>
+          <span class="block font-body font-semibold italic text-accent text-[4.4rem] -mt-1" style="letter-spacing:-0.03em; line-height:0.84;">
+            Threshold<span class="text-accent/70">.</span>
+          </span>
+        </h2>
+        <p class="mt-4 max-w-[520px] italic text-white/80" style="font-size:15px; line-height:1.55;">
+          Write, call, or step through the door. Every message reaches the Kerala Ayurvedic Lifestyle vaidyasalai — read, considered, and answered with the same care you'd receive in person.
+        </p>
+        <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10.5px] font-medium uppercase tracking-[0.2em] text-white/55">
+          <span>Every message read personally</span>
+          <span class="h-0.5 w-0.5 rounded-full bg-accent/60"></span>
+          <span>Reply within one working day</span>
+        </div>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="rounded-full bg-accent px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-primary">Send a Note</button>
+          <button class="rounded-full border border-white/40 px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-white">WhatsApp Now</button>
+        </div>
+        <a class="mt-3 inline-flex items-center gap-2 font-heading text-[10.5px] font-medium uppercase tracking-[0.22em] text-white/45">⌖ Find the clinic →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ VARIANT 4 — Bottom signature flourish ════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 4</span>
+    <span class="font-body italic text-white/70">Bottom signature flourish · letter-style sign-off</span>
+  </div>
+</section>
+
+<section id="v4" class="hero-base heroFrame mx-auto max-w-[1500px] flex scroll-mt-4">
+  <div class="absolute inset-0 gold-dot-grid pointer-events-none"></div>
+  <div class="absolute inset-0 warm-radials pointer-events-none"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[25%] w-px gridline"></div>
+  <div class="hidden lg:block absolute inset-y-0 left-[75%] w-px gridline"></div>
+  <div class="absolute inset-0 grain-overlay-dark pointer-events-none"></div>
+
+  <div class="absolute inset-6 md:inset-8 pointer-events-none">
+    <div class="absolute inset-0 rounded-[2px] border border-accent/55"></div>
+    <div class="absolute inset-3 rounded-[2px] border border-accent/25"></div>
+    <div class="absolute -left-[1px] -top-[1px] h-4 w-4 border-l-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -right-[1px] -top-[1px] h-4 w-4 border-r-2 border-t-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -left-[1px] h-4 w-4 border-b-2 border-l-2 border-accent/80"></div>
+    <div class="absolute -bottom-[1px] -right-[1px] h-4 w-4 border-b-2 border-r-2 border-accent/80"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-10 py-10">
+    <div class="flex items-center justify-between">
+      <span class="font-heading text-[10px] font-medium uppercase tracking-[0.42em] text-accent/75">Vol. II · The Correspondence</span>
+      <span class="flex items-center gap-2 font-heading text-[10px] font-medium uppercase tracking-[0.35em] text-white/55">
+        <span class="inline-block h-1 w-1 rotate-45 bg-accent"></span>
+        Plate N°01 · Threshold
+      </span>
+    </div>
+
+    <div class="mt-3 grid grid-cols-12 items-center gap-10">
+      <div class="col-span-5">
+        <div class="relative max-w-[280px]">
+          <svg class="mandala absolute -right-12 -top-12 h-[200px] w-[200px]" viewBox="0 0 200 200">
+            <g fill="none" stroke="#D4A373" stroke-width="0.6" opacity="0.6">
+              <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="30"/>
+              <g><line x1="100" y1="10" x2="100" y2="190"/><line x1="10" y1="100" x2="190" y2="100"/><line x1="36" y1="36" x2="164" y2="164"/><line x1="36" y1="164" x2="164" y2="36"/></g>
+            </g>
+          </svg>
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[2px]" style="box-shadow:0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212,163,115,0.25);">
+            <img src="https://placehold.co/600x750/3a5a3a/d4a373?text=Apothecary+Still+Life&font=lora" class="absolute inset-0 h-full w-full object-cover"/>
+            <div class="absolute inset-0 mix-blend-multiply" style="background:rgba(47,93,80,0.22);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/20 to-transparent"></div>
+            <div class="absolute inset-2 border border-accent/60"></div>
+            <div class="absolute left-1 top-1 h-3 w-3 border-l-2 border-t-2 border-accent"></div>
+            <div class="absolute right-1 top-1 h-3 w-3 border-r-2 border-t-2 border-accent"></div>
+            <div class="absolute bottom-1 left-1 h-3 w-3 border-b-2 border-l-2 border-accent"></div>
+            <div class="absolute bottom-1 right-1 h-3 w-3 border-b-2 border-r-2 border-accent"></div>
+            <div class="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary">
+              <span class="inline-block h-1 w-1 rotate-45 bg-primary/70"></span> Plate N°01 · Threshold
+            </div>
+          </div>
+          <div class="absolute -bottom-6 -right-4 w-[260px] rounded-sm bg-cream px-4 py-3 text-dark/85" style="box-shadow:0 24px 50px -18px rgba(0,0,0,0.45);">
+            <span class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.85) 20%, rgba(212,163,115,0.85) 80%, transparent);"></span>
+            <div class="flex items-start gap-3">
+              <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" style="box-shadow:0 0 0 3px rgba(212,163,115,0.2);"></span>
+              <div>
+                <p class="font-heading text-[9px] font-bold uppercase tracking-[0.24em] text-primary/55">The Clinic</p>
+                <p class="mt-1 font-body text-[13px] italic leading-[1.45]">37 Jalan Thamby Abdullah 1<br/>Brickfields · 50470 · KL</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-7">
+        <div class="mb-2 flex items-center gap-3">
+          <div class="h-px w-10 bg-accent/80"></div>
+          <span class="font-body italic text-accent/90 text-[1.5rem]">Begin with a</span>
+        </div>
+        <h2 class="font-heading font-extrabold leading-[0.86] text-white tracking-[-0.05em]">
+          <span class="block text-[3rem]">Cross the</span>
+          <span class="block font-body font-semibold italic text-accent text-[4.4rem] -mt-1" style="letter-spacing:-0.03em; line-height:0.84;">
+            Threshold<span class="text-accent/70">.</span>
+          </span>
+        </h2>
+        <p class="mt-4 max-w-[520px] italic text-white/80" style="font-size:15px; line-height:1.55;">
+          Write, call, or step through the door. Every message reaches the Kerala Ayurvedic Lifestyle vaidyasalai — read, considered, and answered with the same care you'd receive in person.
+        </p>
+        <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10.5px] font-medium uppercase tracking-[0.2em] text-white/55">
+          <span>Every message read personally</span>
+          <span class="h-0.5 w-0.5 rounded-full bg-accent/60"></span>
+          <span>Reply within one working day</span>
+        </div>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="rounded-full bg-accent px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-primary">Send a Note</button>
+          <button class="rounded-full border border-white/40 px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-white">WhatsApp Now</button>
+        </div>
+        <a class="mt-3 inline-flex items-center gap-2 font-heading text-[10.5px] font-medium uppercase tracking-[0.22em] text-white/45">⌖ Find the clinic →</a>
+
+        <!-- ◆ V4 SPECIFIC: bottom signature flourish -->
+        <div class="mt-6 max-w-[420px]">
+          <div class="flex items-center gap-3">
+            <span class="block h-px flex-1" style="background:linear-gradient(to right, rgba(212,163,115,0.7), transparent);"></span>
+            <span class="text-accent">✦</span>
+            <span class="block h-px flex-1" style="background:linear-gradient(to left, rgba(212,163,115,0.7), transparent);"></span>
+          </div>
+          <p class="mt-3 font-script text-[28px] leading-[1] text-cream/90">with care,</p>
+          <p class="mt-1 font-body italic text-[14px] text-white/65">the Kerala Ayurvedic Lifestyle vaidyasalai</p>
+          <p class="mt-1 font-heading text-[9px] uppercase tracking-[0.3em] text-white/35">Brickfields · Kuala Lumpur · MMXVIII</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="mx-auto max-w-[1500px] px-6 py-10 text-center font-body italic text-white/45">
+  Pick the variant you want to ship — or say "combine V1 + V4" etc.
+</footer>
+
+</body>
+</html>

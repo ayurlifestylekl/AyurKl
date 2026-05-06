@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Directory — Section Redesign Variants</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@500;600;700;800&family=Caveat:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#2F5D50',
+          accent:  '#D4A373',
+          cream:   '#FAF6EE',
+          dark:    '#2B2B2B',
+        },
+        fontFamily: {
+          heading: ['Montserrat', 'system-ui', 'sans-serif'],
+          body:    ['Lora', 'Georgia', 'serif'],
+          script:  ['Caveat', 'cursive'],
+          fell:    ['"IM Fell English"', 'Georgia', 'serif'],
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  body { background:#0c1914; }
+  .grain-overlay {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.78 0 0 0 0 0.65 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity:.7;
+  }
+  .paper-texture {
+    background-image:
+      linear-gradient(135deg, rgba(212,163,115,0.03) 0%, transparent 50%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.78 0 0 0 0 0.65 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .deckle-edge {
+    /* Subtle deckle - we use box-shadow for crispness */
+    box-shadow:
+      0 0 0 1px rgba(212,163,115,0.5),
+      0 18px 36px -16px rgba(47,93,80,0.25),
+      0 4px 12px -4px rgba(47,93,80,0.12);
+  }
+  .label-pill {
+    background:#1A2E26;
+    color:#D4A373;
+    border:1px solid rgba(212,163,115,0.4);
+  }
+  .stamp-perforation {
+    /* CSS perforated edge using radial-gradient mask */
+    --perf:rgba(0,0,0,0.001);
+    -webkit-mask:
+      radial-gradient(circle 3px at 0 50%, transparent 99%, #000 100%) left / 8px 8px repeat-y,
+      radial-gradient(circle 3px at 100% 50%, transparent 99%, #000 100%) right / 8px 8px repeat-y,
+      radial-gradient(circle 3px at 50% 0, transparent 99%, #000 100%) top / 8px 8px repeat-x,
+      radial-gradient(circle 3px at 50% 100%, transparent 99%, #000 100%) bottom / 8px 8px repeat-x,
+      linear-gradient(#000,#000);
+    -webkit-mask-composite: source-over;
+  }
+  .gold-double-frame::before,
+  .gold-double-frame::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    border: 1px solid rgba(212,163,115,0.55);
+    inset: 12px;
+    border-radius: 2px;
+  }
+  .gold-double-frame::after {
+    inset: 18px;
+    border-color: rgba(212,163,115,0.25);
+  }
+  .corner-mitre {
+    width: 14px; height: 14px;
+    border-color: rgba(212,163,115,0.85);
+    border-width: 0;
+    position: absolute;
+  }
+  .gridline { background: rgba(212,163,115,0.18); }
+</style>
+</head>
+<body class="font-body text-white">
+
+<header class="mx-auto max-w-[1500px] px-6 pt-10 pb-6">
+  <p class="font-heading text-[10px] uppercase tracking-[0.42em] text-accent/75">Contact / Directory · Variant Comparison</p>
+  <h1 class="mt-2 font-heading text-2xl font-extrabold text-white">Section redesign — 4 directions</h1>
+  <p class="mt-2 max-w-2xl font-body italic text-white/65">All keep the existing copy and palette. Only the visual treatment changes. Scroll to compare.</p>
+</header>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V1 — Editorial 4-up spread (no tabs)
+     All 4 channels visible. 2x2 at lg, 4 cols at xl.
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 1</span>
+    <span class="font-body italic text-white/70">Editorial 4-up spread · all channels visible at once</span>
+  </div>
+</section>
+
+<section id="v1" class="relative mx-auto max-w-[1500px] bg-cream py-16 text-dark scroll-mt-4 overflow-hidden">
+  <div class="grain-overlay pointer-events-none absolute inset-0"></div>
+  <div class="pointer-events-none absolute inset-0" style="background:radial-gradient(ellipse 900px 700px at 12% 0%, rgba(212,163,115,0.10) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 88% 100%, rgba(122,157,84,0.06) 0%, transparent 60%);"></div>
+
+  <div class="relative mx-auto max-w-7xl px-8">
+    <!-- header -->
+    <div class="mx-auto max-w-2xl text-center">
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-24" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+        <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">The Switchboard</span>
+        <span class="h-px w-24" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+      </div>
+      <h2 class="mt-3 font-heading text-[34px] font-extrabold leading-[1.05] tracking-[-0.025em] text-primary">
+        Four ways to <span class="font-body italic font-normal text-accent">reach us.</span>
+      </h2>
+      <p class="mx-auto mt-3 max-w-[44ch] font-body text-[14px] italic leading-[1.55] text-dark/70">
+        Pick the channel that fits. Each one lands with a real person; none of them funnel into a queue.
+      </p>
+    </div>
+
+    <!-- 4-up grid -->
+    <div class="relative mt-12 rounded-[3px] bg-white/55 p-2" style="box-shadow:0 8px 30px -10px rgba(47,93,80,0.2), 0 2px 8px rgba(47,93,80,0.06);">
+      <!-- L-bracket corners -->
+      <span class="corner-mitre" style="top:0; left:0; border-top:2px solid #D4A373; border-left:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="top:0; right:0; border-top:2px solid #D4A373; border-right:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="bottom:0; left:0; border-bottom:2px solid #D4A373; border-left:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="bottom:0; right:0; border-bottom:2px solid #D4A373; border-right:2px solid #D4A373;"></span>
+
+      <div class="absolute inset-3 rounded-[2px] border border-accent/30 pointer-events-none"></div>
+
+      <div class="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-accent/20" style="--tw-divide-opacity:0.2;">
+        <!-- Cell template (×4) -->
+        <!-- I -->
+        <div class="relative p-8 group">
+          <div class="flex items-start gap-5">
+            <span class="flex flex-col items-start leading-none">
+              <span class="font-body text-[10px] italic text-accent/65">N°</span>
+              <span class="font-body italic text-accent" style="font-size:64px; letter-spacing:-0.03em; line-height:1;">I</span>
+            </span>
+            <div class="flex-1 min-w-0">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For treatment</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:24px; letter-spacing:-0.02em; line-height:1.05;">Consult<span class="text-accent">.</span></h3>
+              <span class="inline-flex mt-2 items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-heading text-[8.5px] font-semibold uppercase tracking-[0.22em] text-accent">◊ Booking</span>
+            </div>
+          </div>
+          <span class="block mt-4 h-px w-20" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Begin with a consultation. Vaidya's chamber, Monday through Saturday — by appointment only.</p>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Same-day reply · Cal.com booking</span>
+          </div>
+          <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent transition-colors hover:text-primary">
+            Begin <span aria-hidden>→</span>
+          </a>
+        </div>
+
+        <!-- II -->
+        <div class="relative p-8 group">
+          <div class="flex items-start gap-5">
+            <span class="flex flex-col items-start leading-none">
+              <span class="font-body text-[10px] italic text-accent/65">N°</span>
+              <span class="font-body italic text-accent" style="font-size:64px; letter-spacing:-0.03em; line-height:1;">II</span>
+            </span>
+            <div class="flex-1 min-w-0">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For orders</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:24px; letter-spacing:-0.02em; line-height:1.05;">Ayur-Store<span class="text-accent">.</span></h3>
+              <span class="inline-flex mt-2 items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-heading text-[8.5px] font-semibold uppercase tracking-[0.22em] text-accent">◊ Shipping</span>
+            </div>
+          </div>
+          <span class="block mt-4 h-px w-20" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Bundles, refills and single herbs — couriered anywhere in Malaysia. Tracked by WhatsApp.</p>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Klang Valley 1–2d · East Malaysia 4–7d</span>
+          </div>
+          <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent transition-colors hover:text-primary">
+            Begin <span aria-hidden>→</span>
+          </a>
+        </div>
+
+        <!-- III -->
+        <div class="relative p-8 group">
+          <div class="flex items-start gap-5">
+            <span class="flex flex-col items-start leading-none">
+              <span class="font-body text-[10px] italic text-accent/65">N°</span>
+              <span class="font-body italic text-accent" style="font-size:64px; letter-spacing:-0.03em; line-height:1;">III</span>
+            </span>
+            <div class="flex-1 min-w-0">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For notes</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:22px; letter-spacing:-0.02em; line-height:1.1;">General correspondence<span class="text-accent">.</span></h3>
+            </div>
+          </div>
+          <span class="block mt-4 h-px w-20" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Every note read personally. Write to us about anything — we're slow in all the right ways.</p>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Reply within one working day</span>
+          </div>
+          <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent transition-colors hover:text-primary">
+            Begin <span aria-hidden>→</span>
+          </a>
+        </div>
+
+        <!-- IV -->
+        <div class="relative p-8 group">
+          <div class="flex items-start gap-5">
+            <span class="flex flex-col items-start leading-none">
+              <span class="font-body text-[10px] italic text-accent/65">N°</span>
+              <span class="font-body italic text-accent" style="font-size:60px; letter-spacing:-0.03em; line-height:1;">IV</span>
+            </span>
+            <div class="flex-1 min-w-0">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">Editorial · Events · Corporate</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:22px; letter-spacing:-0.02em; line-height:1.1;">Press &amp; Partnerships<span class="text-accent">.</span></h3>
+            </div>
+          </div>
+          <span class="block mt-4 h-px w-20" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Journalists, brand collaborators and corporate wellness programs — we reply to serious enquiries.</p>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Editorial · Events · Corporate wellness</span>
+          </div>
+          <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent transition-colors hover:text-primary">
+            Begin <span aria-hidden>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V2 — Postal envelope cards (Recommended)
+     4 envelope-style cards. Strong postal/correspondence theme.
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 2</span>
+    <span class="font-body italic text-white/70">Postal envelope cards · postage stamps + postmarks</span>
+  </div>
+</section>
+
+<section id="v2" class="relative mx-auto max-w-[1500px] bg-cream py-16 text-dark scroll-mt-4 overflow-hidden">
+  <div class="grain-overlay pointer-events-none absolute inset-0"></div>
+  <div class="pointer-events-none absolute inset-0" style="background:radial-gradient(ellipse 900px 700px at 12% 0%, rgba(212,163,115,0.10) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 88% 100%, rgba(122,157,84,0.06) 0%, transparent 60%);"></div>
+
+  <div class="relative mx-auto max-w-7xl px-8">
+    <div class="mx-auto max-w-2xl text-center">
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-24" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+        <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">The Switchboard</span>
+        <span class="h-px w-24" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+      </div>
+      <h2 class="mt-3 font-heading text-[34px] font-extrabold leading-[1.05] tracking-[-0.025em] text-primary">
+        Four ways to <span class="font-body italic font-normal text-accent">reach us.</span>
+      </h2>
+      <p class="mx-auto mt-3 max-w-[44ch] font-body text-[14px] italic leading-[1.55] text-dark/70">
+        Pick the channel that fits. Each one lands with a real person; none of them funnel into a queue.
+      </p>
+    </div>
+
+    <!-- envelope row -->
+    <div class="mt-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-7">
+      <!-- envelope -->
+      <div class="relative paper-texture bg-white deckle-edge p-7 transition-transform hover:-translate-y-1 hover:rotate-[-0.5deg]" style="border-radius:2px;">
+        <!-- Postage stamp top-left -->
+        <div class="absolute -top-3 -left-3 w-[68px] h-[80px] bg-cream p-[3px] border border-accent/40 rotate-[-4deg]" style="filter:drop-shadow(0 4px 6px rgba(0,0,0,0.12)); background:repeating-linear-gradient(transparent 0, transparent 4px, rgba(212,163,115,0.18) 4px, rgba(212,163,115,0.18) 5px), #FAF6EE;">
+          <div class="h-full flex flex-col items-center justify-center bg-primary text-cream">
+            <span class="font-body text-[8px] italic text-accent/80 leading-none mt-1">N°</span>
+            <span class="font-fell italic text-accent leading-none mt-0.5" style="font-size:34px;">I</span>
+            <span class="font-heading text-[6.5px] uppercase tracking-[0.2em] text-accent/70 mt-1 mb-1">RM 0.50</span>
+          </div>
+        </div>
+
+        <!-- Postmark top-right -->
+        <div class="absolute top-4 right-4 w-[68px] h-[68px] rounded-full border-[1.5px] border-primary/45 flex flex-col items-center justify-center rotate-[8deg] opacity-75" style="border-style:dashed;">
+          <span class="font-heading text-[7px] uppercase tracking-[0.18em] text-primary/65">Brickfields</span>
+          <span class="font-body italic text-[10px] text-primary/75 mt-0.5">5 may '26</span>
+          <span class="font-heading text-[6px] uppercase tracking-[0.2em] text-primary/55 mt-0.5">KL · MY</span>
+        </div>
+
+        <div class="mt-16">
+          <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For treatment</span>
+          <h3 class="mt-1 font-body italic text-primary" style="font-size:26px; letter-spacing:-0.02em; line-height:1.05;">Consult<span class="text-accent">.</span></h3>
+          <span class="inline-flex mt-2 items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-heading text-[8.5px] font-semibold uppercase tracking-[0.22em] text-accent">◊ Booking</span>
+
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Begin with a consultation. Vaidya's chamber, Monday through Saturday — by appointment only.</p>
+
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Same-day reply · Cal.com booking</span>
+          </div>
+
+          <a class="mt-5 inline-flex w-fit items-center gap-3 rounded-[2px] border border-accent/60 bg-accent px-4 py-2 font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-white transition-colors hover:bg-primary hover:border-primary">
+            Begin <span>→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="relative paper-texture bg-white deckle-edge p-7 transition-transform hover:-translate-y-1 hover:rotate-[0.5deg]" style="border-radius:2px;">
+        <div class="absolute -top-3 -left-3 w-[68px] h-[80px] bg-cream p-[3px] border border-accent/40 rotate-[-3deg]" style="filter:drop-shadow(0 4px 6px rgba(0,0,0,0.12)); background:repeating-linear-gradient(transparent 0, transparent 4px, rgba(212,163,115,0.18) 4px, rgba(212,163,115,0.18) 5px), #FAF6EE;">
+          <div class="h-full flex flex-col items-center justify-center bg-primary text-cream">
+            <span class="font-body text-[8px] italic text-accent/80 leading-none mt-1">N°</span>
+            <span class="font-fell italic text-accent leading-none mt-0.5" style="font-size:30px;">II</span>
+            <span class="font-heading text-[6.5px] uppercase tracking-[0.2em] text-accent/70 mt-1 mb-1">RM 1.00</span>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4 w-[68px] h-[68px] rounded-full border-[1.5px] border-primary/45 flex flex-col items-center justify-center rotate-[-6deg] opacity-75" style="border-style:dashed;">
+          <span class="font-heading text-[7px] uppercase tracking-[0.18em] text-primary/65">Brickfields</span>
+          <span class="font-body italic text-[10px] text-primary/75 mt-0.5">5 may '26</span>
+          <span class="font-heading text-[6px] uppercase tracking-[0.2em] text-primary/55 mt-0.5">KL · MY</span>
+        </div>
+        <div class="mt-16">
+          <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For orders</span>
+          <h3 class="mt-1 font-body italic text-primary" style="font-size:26px; letter-spacing:-0.02em; line-height:1.05;">Ayur-Store<span class="text-accent">.</span></h3>
+          <span class="inline-flex mt-2 items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-heading text-[8.5px] font-semibold uppercase tracking-[0.22em] text-accent">◊ Shipping</span>
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Bundles, refills and single herbs — couriered anywhere in Malaysia. Tracked by WhatsApp.</p>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Klang Valley 1–2d · East Malaysia 4–7d</span>
+          </div>
+          <a class="mt-5 inline-flex w-fit items-center gap-3 rounded-[2px] border border-accent/60 bg-accent px-4 py-2 font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-white transition-colors hover:bg-primary hover:border-primary">
+            Begin <span>→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="relative paper-texture bg-white deckle-edge p-7 transition-transform hover:-translate-y-1 hover:rotate-[-0.5deg]" style="border-radius:2px;">
+        <div class="absolute -top-3 -left-3 w-[68px] h-[80px] bg-cream p-[3px] border border-accent/40 rotate-[5deg]" style="filter:drop-shadow(0 4px 6px rgba(0,0,0,0.12)); background:repeating-linear-gradient(transparent 0, transparent 4px, rgba(212,163,115,0.18) 4px, rgba(212,163,115,0.18) 5px), #FAF6EE;">
+          <div class="h-full flex flex-col items-center justify-center bg-primary text-cream">
+            <span class="font-body text-[8px] italic text-accent/80 leading-none mt-1">N°</span>
+            <span class="font-fell italic text-accent leading-none mt-0.5" style="font-size:26px;">III</span>
+            <span class="font-heading text-[6.5px] uppercase tracking-[0.2em] text-accent/70 mt-1 mb-1">RM 0.30</span>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4 w-[68px] h-[68px] rounded-full border-[1.5px] border-primary/45 flex flex-col items-center justify-center rotate-[10deg] opacity-75" style="border-style:dashed;">
+          <span class="font-heading text-[7px] uppercase tracking-[0.18em] text-primary/65">Brickfields</span>
+          <span class="font-body italic text-[10px] text-primary/75 mt-0.5">5 may '26</span>
+          <span class="font-heading text-[6px] uppercase tracking-[0.2em] text-primary/55 mt-0.5">KL · MY</span>
+        </div>
+        <div class="mt-16">
+          <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For notes</span>
+          <h3 class="mt-1 font-body italic text-primary" style="font-size:24px; letter-spacing:-0.02em; line-height:1.1;">General correspondence<span class="text-accent">.</span></h3>
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Every note read personally. Write to us about anything — we're slow in all the right ways.</p>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Reply within one working day</span>
+          </div>
+          <a class="mt-5 inline-flex w-fit items-center gap-3 rounded-[2px] border border-accent/60 bg-accent px-4 py-2 font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-white transition-colors hover:bg-primary hover:border-primary">
+            Begin <span>→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="relative paper-texture bg-white deckle-edge p-7 transition-transform hover:-translate-y-1 hover:rotate-[0.5deg]" style="border-radius:2px;">
+        <div class="absolute -top-3 -left-3 w-[68px] h-[80px] bg-cream p-[3px] border border-accent/40 rotate-[-5deg]" style="filter:drop-shadow(0 4px 6px rgba(0,0,0,0.12)); background:repeating-linear-gradient(transparent 0, transparent 4px, rgba(212,163,115,0.18) 4px, rgba(212,163,115,0.18) 5px), #FAF6EE;">
+          <div class="h-full flex flex-col items-center justify-center bg-primary text-cream">
+            <span class="font-body text-[8px] italic text-accent/80 leading-none mt-1">N°</span>
+            <span class="font-fell italic text-accent leading-none mt-0.5" style="font-size:26px;">IV</span>
+            <span class="font-heading text-[6.5px] uppercase tracking-[0.2em] text-accent/70 mt-1 mb-1">RM 1.50</span>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4 w-[68px] h-[68px] rounded-full border-[1.5px] border-primary/45 flex flex-col items-center justify-center rotate-[-4deg] opacity-75" style="border-style:dashed;">
+          <span class="font-heading text-[7px] uppercase tracking-[0.18em] text-primary/65">Brickfields</span>
+          <span class="font-body italic text-[10px] text-primary/75 mt-0.5">5 may '26</span>
+          <span class="font-heading text-[6px] uppercase tracking-[0.2em] text-primary/55 mt-0.5">KL · MY</span>
+        </div>
+        <div class="mt-16">
+          <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">Editorial · Events · Corporate</span>
+          <h3 class="mt-1 font-body italic text-primary" style="font-size:24px; letter-spacing:-0.02em; line-height:1.1;">Press &amp; Partnerships<span class="text-accent">.</span></h3>
+          <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Journalists, brand collaborators and corporate wellness programs — we reply to serious enquiries.</p>
+          <div class="mt-4 flex items-baseline gap-3">
+            <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+            <span class="font-body text-[11.5px] italic text-primary/75">Editorial · Events · Corporate wellness</span>
+          </div>
+          <a class="mt-5 inline-flex w-fit items-center gap-3 rounded-[2px] border border-accent/60 bg-accent px-4 py-2 font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-white transition-colors hover:bg-primary hover:border-primary">
+            Begin <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V3 — Two-column tabs with imagery
+     Keeps current interaction. Adds illustration to the right pane.
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 3</span>
+    <span class="font-body italic text-white/70">Two-column tabs with imagery · keeps the switchboard interaction</span>
+  </div>
+</section>
+
+<section id="v3" class="relative mx-auto max-w-[1500px] bg-cream py-16 text-dark scroll-mt-4 overflow-hidden">
+  <div class="grain-overlay pointer-events-none absolute inset-0"></div>
+  <div class="pointer-events-none absolute inset-0" style="background:radial-gradient(ellipse 900px 700px at 12% 0%, rgba(212,163,115,0.10) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 88% 100%, rgba(122,157,84,0.06) 0%, transparent 60%);"></div>
+
+  <div class="relative mx-auto max-w-7xl px-8">
+    <div class="mx-auto max-w-2xl text-center">
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-24" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+        <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">The Switchboard</span>
+        <span class="h-px w-24" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+      </div>
+      <h2 class="mt-3 font-heading text-[34px] font-extrabold leading-[1.05] tracking-[-0.025em] text-primary">
+        Four ways to <span class="font-body italic font-normal text-accent">reach us.</span>
+      </h2>
+      <p class="mx-auto mt-3 max-w-[44ch] font-body text-[14px] italic leading-[1.55] text-dark/70">
+        Pick the channel that fits. Each one lands with a real person; none of them funnel into a queue.
+      </p>
+    </div>
+
+    <!-- Console -->
+    <div class="relative mt-12 rounded-[3px] bg-white/55" style="box-shadow:0 8px 30px -10px rgba(47,93,80,0.2), 0 2px 8px rgba(47,93,80,0.06);">
+      <div class="absolute inset-2 rounded-[2px] border border-accent/30 pointer-events-none"></div>
+      <span class="corner-mitre" style="top:0; left:0; border-top:2px solid #D4A373; border-left:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="top:0; right:0; border-top:2px solid #D4A373; border-right:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="bottom:0; left:0; border-bottom:2px solid #D4A373; border-left:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="bottom:0; right:0; border-bottom:2px solid #D4A373; border-right:2px solid #D4A373;"></span>
+
+      <div class="grid grid-cols-[minmax(0,4fr)_minmax(0,8fr)] min-h-[440px]">
+        <!-- LEFT — selector with bigger numerals -->
+        <ul class="flex flex-col py-8 pl-10 pr-6 border-r border-accent/25">
+          <!-- I active -->
+          <li class="relative" style="height:96px;">
+            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-12 bg-accent"></span>
+            <span class="absolute inset-0 rounded-[2px]" style="background:linear-gradient(to right, rgba(212,163,115,0.07) 0%, rgba(212,163,115,0.02) 60%, transparent 100%);"></span>
+            <button class="relative flex h-full w-full items-center gap-5 px-4 text-left">
+              <span class="flex flex-col items-start leading-none">
+                <span class="font-body text-[10px] italic text-accent/65">N°</span>
+                <span class="font-body italic text-accent" style="font-size:42px; letter-spacing:-0.02em; line-height:1;">I</span>
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col gap-1">
+                <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.28em] text-primary/55">For treatment</span>
+                <span class="font-heading text-[18px] font-semibold tracking-[-0.01em] text-primary">Consult</span>
+              </span>
+            </button>
+            <span class="absolute bottom-0 left-4 right-3 h-px bg-accent/15"></span>
+          </li>
+          <li class="relative" style="height:96px;">
+            <button class="relative flex h-full w-full items-center gap-5 px-4 text-left">
+              <span class="flex flex-col items-start leading-none">
+                <span class="font-body text-[10px] italic text-accent/65">N°</span>
+                <span class="font-body italic" style="font-size:42px; letter-spacing:-0.02em; line-height:1; color:rgba(212,163,115,0.42);">II</span>
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col gap-1">
+                <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.28em] text-primary/55">For orders</span>
+                <span class="font-heading text-[18px] font-semibold tracking-[-0.01em]" style="color:rgba(43,43,43,0.55);">Ayur-Store</span>
+              </span>
+            </button>
+            <span class="absolute bottom-0 left-4 right-3 h-px bg-accent/15"></span>
+          </li>
+          <li class="relative" style="height:96px;">
+            <button class="relative flex h-full w-full items-center gap-5 px-4 text-left">
+              <span class="flex flex-col items-start leading-none">
+                <span class="font-body text-[10px] italic text-accent/65">N°</span>
+                <span class="font-body italic" style="font-size:42px; letter-spacing:-0.02em; line-height:1; color:rgba(212,163,115,0.42);">III</span>
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col gap-1">
+                <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.28em] text-primary/55">For notes</span>
+                <span class="font-heading text-[18px] font-semibold tracking-[-0.01em]" style="color:rgba(43,43,43,0.55);">General correspondence</span>
+              </span>
+            </button>
+            <span class="absolute bottom-0 left-4 right-3 h-px bg-accent/15"></span>
+          </li>
+          <li class="relative" style="height:96px;">
+            <button class="relative flex h-full w-full items-center gap-5 px-4 text-left">
+              <span class="flex flex-col items-start leading-none">
+                <span class="font-body text-[10px] italic text-accent/65">N°</span>
+                <span class="font-body italic" style="font-size:38px; letter-spacing:-0.02em; line-height:1; color:rgba(212,163,115,0.42);">IV</span>
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col gap-1">
+                <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.28em] text-primary/55">Editorial · Events · Corporate</span>
+                <span class="font-heading text-[18px] font-semibold tracking-[-0.01em]" style="color:rgba(43,43,43,0.55);">Press &amp; Partnerships</span>
+              </span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- RIGHT — detail + illustration -->
+        <div class="relative px-12 py-10">
+          <!-- Vintage telephone illustration anchor bottom-right -->
+          <svg class="absolute bottom-4 right-6 w-[200px] h-[200px] opacity-15" viewBox="0 0 200 200" fill="none" stroke="#2F5D50" stroke-width="1.4">
+            <ellipse cx="100" cy="170" rx="60" ry="6"/>
+            <rect x="60" y="120" width="80" height="44" rx="3"/>
+            <circle cx="80" cy="142" r="6"/><circle cx="100" cy="142" r="6"/><circle cx="120" cy="142" r="6"/>
+            <path d="M55 120 Q60 60 100 50 Q140 60 145 120"/>
+            <ellipse cx="55" cy="120" rx="14" ry="9"/>
+            <ellipse cx="145" cy="120" rx="14" ry="9"/>
+            <path d="M100 50 L100 28"/>
+            <circle cx="100" cy="22" r="6"/>
+          </svg>
+
+          <div class="relative">
+            <div class="flex items-center gap-3">
+              <span class="h-px w-10 bg-accent/60"></span>
+              <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.34em] text-accent">Channel · I</span>
+            </div>
+            <div class="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+              <h3 class="font-body font-normal italic text-primary" style="font-size:2.6rem; letter-spacing:-0.02em; line-height:1.05;">
+                Consult<span class="text-accent">.</span>
+              </h3>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-heading text-[9px] font-semibold uppercase tracking-[0.22em] text-accent">◊ Booking</span>
+            </div>
+            <span class="mt-3 block h-px w-20" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+            <p class="mt-4 max-w-[44ch] font-body text-[15px] leading-[1.7] text-dark/80">
+              Begin with a consultation. Vaidya's chamber, Monday through Saturday — by appointment only.
+            </p>
+            <div class="mt-5 flex items-baseline gap-3">
+              <span class="h-px w-12 border-t border-dotted border-primary/40"></span>
+              <span class="font-body text-[12px] italic text-primary/75">Same-day reply · Cal.com booking</span>
+            </div>
+            <div class="mt-7">
+              <a class="inline-flex w-fit items-center gap-3 rounded-[2px] border border-accent/60 bg-accent px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.28em] text-white">
+                Begin <span>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V4 — Full-bleed letterpress page
+     Big watermark Roman numerals. 4 columns with hairline dividers.
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 4</span>
+    <span class="font-body italic text-white/70">Full-bleed letterpress page · giant watermark numerals</span>
+  </div>
+</section>
+
+<section id="v4" class="relative mx-auto max-w-[1500px] bg-cream py-16 text-dark scroll-mt-4 overflow-hidden">
+  <div class="grain-overlay pointer-events-none absolute inset-0"></div>
+  <div class="paper-texture pointer-events-none absolute inset-0 opacity-60"></div>
+
+  <div class="relative mx-auto max-w-7xl px-8">
+    <!-- gold double frame -->
+    <div class="relative">
+      <div class="absolute inset-0 border border-accent/55 rounded-[2px]"></div>
+      <div class="absolute inset-3 border border-accent/30 rounded-[2px]"></div>
+      <span class="corner-mitre" style="top:-1px; left:-1px; border-top:2px solid #D4A373; border-left:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="top:-1px; right:-1px; border-top:2px solid #D4A373; border-right:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="bottom:-1px; left:-1px; border-bottom:2px solid #D4A373; border-left:2px solid #D4A373;"></span>
+      <span class="corner-mitre" style="bottom:-1px; right:-1px; border-bottom:2px solid #D4A373; border-right:2px solid #D4A373;"></span>
+
+      <div class="relative px-12 py-12">
+        <!-- masthead -->
+        <div class="text-center pb-10 border-b border-accent/30">
+          <div class="flex items-center justify-center gap-4">
+            <span class="h-px w-24" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+            <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">The Switchboard</span>
+            <span class="h-px w-24" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+          </div>
+          <h2 class="mt-3 font-heading text-[40px] font-extrabold leading-[1.0] tracking-[-0.025em] text-primary">
+            Four ways to <span class="font-body italic font-normal text-accent">reach us.</span>
+          </h2>
+          <p class="mx-auto mt-3 max-w-[44ch] font-body text-[14px] italic leading-[1.55] text-dark/70">
+            Pick the channel that fits. Each one lands with a real person; none of them funnel into a queue.
+          </p>
+        </div>
+
+        <!-- 4-col grid with watermark numerals -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mt-10 divide-y md:divide-y-0 md:divide-x divide-accent/20">
+          <!-- I -->
+          <div class="relative px-6 py-6">
+            <span class="pointer-events-none select-none absolute -top-4 left-2 font-fell italic" style="font-size:124px; line-height:1; letter-spacing:-0.05em; color:rgba(212,163,115,0.13);">I</span>
+            <div class="relative">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For treatment</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:26px; letter-spacing:-0.02em; line-height:1.05;">Consult<span class="text-accent">.</span></h3>
+              <span class="inline-flex mt-2 items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-heading text-[8.5px] font-semibold uppercase tracking-[0.22em] text-accent">◊ Booking</span>
+              <span class="block mt-4 h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+              <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Begin with a consultation. Vaidya's chamber, Monday through Saturday — by appointment only.</p>
+              <div class="mt-4 flex items-baseline gap-3">
+                <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+                <span class="font-body text-[11px] italic text-primary/75">Same-day reply · Cal.com booking</span>
+              </div>
+              <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent">Begin <span>→</span></a>
+            </div>
+          </div>
+          <!-- II -->
+          <div class="relative px-6 py-6">
+            <span class="pointer-events-none select-none absolute -top-4 left-2 font-fell italic" style="font-size:124px; line-height:1; letter-spacing:-0.05em; color:rgba(212,163,115,0.13);">II</span>
+            <div class="relative">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For orders</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:26px; letter-spacing:-0.02em; line-height:1.05;">Ayur-Store<span class="text-accent">.</span></h3>
+              <span class="inline-flex mt-2 items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-2.5 py-1 font-heading text-[8.5px] font-semibold uppercase tracking-[0.22em] text-accent">◊ Shipping</span>
+              <span class="block mt-4 h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+              <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Bundles, refills and single herbs — couriered anywhere in Malaysia. Tracked by WhatsApp.</p>
+              <div class="mt-4 flex items-baseline gap-3">
+                <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+                <span class="font-body text-[11px] italic text-primary/75">Klang Valley 1–2d · East Malaysia 4–7d</span>
+              </div>
+              <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent">Begin <span>→</span></a>
+            </div>
+          </div>
+          <!-- III -->
+          <div class="relative px-6 py-6">
+            <span class="pointer-events-none select-none absolute -top-4 left-2 font-fell italic" style="font-size:124px; line-height:1; letter-spacing:-0.05em; color:rgba(212,163,115,0.13);">III</span>
+            <div class="relative">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">For notes</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:24px; letter-spacing:-0.02em; line-height:1.1;">General correspondence<span class="text-accent">.</span></h3>
+              <span class="block mt-4 h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+              <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Every note read personally. Write to us about anything — we're slow in all the right ways.</p>
+              <div class="mt-4 flex items-baseline gap-3">
+                <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+                <span class="font-body text-[11px] italic text-primary/75">Reply within one working day</span>
+              </div>
+              <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent">Begin <span>→</span></a>
+            </div>
+          </div>
+          <!-- IV -->
+          <div class="relative px-6 py-6">
+            <span class="pointer-events-none select-none absolute -top-4 left-2 font-fell italic" style="font-size:118px; line-height:1; letter-spacing:-0.05em; color:rgba(212,163,115,0.13);">IV</span>
+            <div class="relative">
+              <span class="font-heading text-[9px] font-semibold uppercase tracking-[0.28em] text-primary/55">Editorial · Events · Corporate</span>
+              <h3 class="mt-1 font-body italic text-primary" style="font-size:24px; letter-spacing:-0.02em; line-height:1.1;">Press &amp; Partnerships<span class="text-accent">.</span></h3>
+              <span class="block mt-4 h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15));"></span>
+              <p class="mt-4 font-body text-[13px] leading-[1.65] text-dark/80">Journalists, brand collaborators and corporate wellness programs — we reply to serious enquiries.</p>
+              <div class="mt-4 flex items-baseline gap-3">
+                <span class="h-px w-10 border-t border-dotted border-primary/40"></span>
+                <span class="font-body text-[11px] italic text-primary/75">Editorial · Events · Corporate wellness</span>
+              </div>
+              <a class="mt-5 inline-flex items-center gap-2 font-heading text-[10.5px] font-bold uppercase tracking-[0.28em] text-accent">Begin <span>→</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="mx-auto max-w-[1500px] px-6 py-10 text-center font-body italic text-white/45">
+  Pick the variant — V1 · V2 · V3 · V4 — or say "combine X+Y."
+</footer>
+
+</body>
+</html>

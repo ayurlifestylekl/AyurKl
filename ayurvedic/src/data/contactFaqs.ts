@@ -10,7 +10,7 @@ export const contactFaqs: FAQ[] = [
     id: 'appointment-needed',
     question: 'Do I need an appointment for a consultation?',
     answer:
-      'Yes — all first-time consultations with Vaidya AKHIL HS are by appointment so he can dedicate proper time to your case history. Walk-ins are welcome for the Ayur-Store any time during opening hours. You can book via WhatsApp, the form on this page, or the main Treatments page.',
+      'Yes — all first-time consultations with our Vaidyas are by appointment so they can dedicate proper time to your case history. Walk-ins are welcome for the Ayur-Store any time during opening hours. You can book via WhatsApp, the form on this page, or the main Treatments page.',
   },
   {
     id: 'shipping-time',
@@ -22,7 +22,7 @@ export const contactFaqs: FAQ[] = [
     id: 'pregnancy-safety',
     question: 'Are Ayurvedic treatments suitable during pregnancy?',
     answer:
-      'Some treatments (specific oil therapies and prenatal Garbhini Paricharya) are safe and genuinely beneficial during pregnancy. Others are contraindicated. Please mention your trimester in the form or on WhatsApp — Vaidya AKHIL will personally advise what is appropriate for your stage.',
+      'Some treatments (specific oil therapies and prenatal Garbhini Paricharya) are safe and genuinely beneficial during pregnancy. Others are contraindicated. Please mention your trimester in the form or on WhatsApp — our Vaidyas will personally advise what is appropriate for your stage.',
   },
   {
     id: 'payment-methods',

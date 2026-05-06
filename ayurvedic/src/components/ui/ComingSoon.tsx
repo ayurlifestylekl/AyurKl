@@ -136,7 +136,7 @@ export default function ComingSoon({
           <span className="h-1 w-1 rounded-full bg-accent/70" />
           <span>Brickfields, KL</span>
           <span className="h-1 w-1 rounded-full bg-accent/70" />
-          <span>Vaidya AKHIL HS (B.A.M.S)</span>
+          <span>Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</span>
         </motion.div>
       </motion.div>
     </section>

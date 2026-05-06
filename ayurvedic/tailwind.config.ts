@@ -29,9 +29,11 @@ const config: Config = {
         'gold-glow': '0 18px 40px -18px rgba(212,163,115,0.85)',
       },
       fontFamily: {
-        heading: ["var(--font-montserrat)", "sans-serif"],
-        body:    ["var(--font-lora)", "serif"],
-        display: ["var(--font-playfair)", "Georgia", "serif"],
+        heading:    ["var(--font-montserrat)", "sans-serif"],
+        body:       ["var(--font-lora)", "serif"],
+        display:    ["var(--font-playfair)", "Georgia", "serif"],
+        devanagari: ["var(--font-devanagari)", "Noto Serif Devanagari", "Devanagari MT", "serif"],
+        fell:       ["var(--font-fell)", "Georgia", "serif"],
       },
       typography: ({ theme }: { theme: (path: string) => string }) => ({
         // Custom `prose-journal` modifier — applied on the article body wrapper.

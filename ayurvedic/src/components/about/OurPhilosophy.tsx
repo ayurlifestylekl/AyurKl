@@ -101,8 +101,8 @@ export default function OurPhilosophy() {
                   letterSpacing: '-0.025em',
                 }}
               >
-                Holistic wellness that treats body, mind, and spirit as a{' '}
-                <span className="font-body italic text-accent">whole.</span>
+                Holistic Wellness that Treats Body, Mind, and Spirit as a{' '}
+                <span className="font-body italic text-accent">Whole.</span>
               </h2>
 
               <p className="mt-5 max-w-sm font-body text-[15px] italic leading-[1.55] text-primary/65">
@@ -127,7 +127,7 @@ export default function OurPhilosophy() {
 
               {/* Signature */}
               <p className="mt-5 font-body text-[13px] italic text-dark/55">
-                — Vaidya AKHIL HS&nbsp;&middot;&nbsp;B.A.M.S
+                — the Kerala Ayurvedic Vaidyasalai
               </p>
             </motion.div>
           </div>

@@ -103,8 +103,8 @@ export const wellnessFocusAreas: WellnessFocusArea[] = [
     label: 'Joint & Spine Care',
     icon: Bone,
     kicker: 'Sandhi \u00b7 Joints',
-    body: 'Kati Vasti, Greeva Vasti, and medicated oil pools for stiffness and posture.',
-    techniques: ['Kati Vasti', 'Greeva Vasti', 'Pizhichil'],
+    body: 'Kati Vasti, Greeva Vasti, Janu Vasti, and Medicated Herbal Oil Therapies for Stiffness, Pain Relief, and Posture Correction.',
+    techniques: ['Kati Vasti', 'Greeva Vasti', 'Janu Vasti'],
   },
   {
     id: 'stress-relief',
@@ -169,9 +169,9 @@ export const wellnessFocusAreas: WellnessFocusArea[] = [
 export const aboutFaqs: FAQ[] = [
   {
     id: 'who-is-vaidya',
-    question: 'Who is Vaidya AKHIL HS?',
+    question: 'Who is Vaidya Akhil H.S.?',
     answer:
-      'Vaidya AKHIL HS holds a B.A.M.S (Bachelor of Ayurvedic Medicine and Surgery) degree and brings over 16 years of clinical experience from Kerala. He is registered with the National Council of Indian System of Medicine (NCISM) and recognised in Malaysia under KKM. Every consultation at KALS begins with him personally.',
+      'Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) holds a Bachelor of Ayurvedic Medicine and Surgery degree and an M.D. in Ayurveda, with over 16 years of clinical experience from Kerala. He is registered with the National Council of Indian System of Medicine (NCISM) and recognised in Malaysia under the Ministry of Health (KKM) as a Traditional & Complementary Medicine (T&CM) Ayurveda Practitioner. Every consultation at KALS begins with him personally.',
   },
   {
     id: 'what-is-kkm',
@@ -183,7 +183,7 @@ export const aboutFaqs: FAQ[] = [
     id: 'kerala-therapists',
     question: 'Are your therapists really from Kerala?',
     answer:
-      'Yes \u2014 our founder Datto Shan personally brings therapists directly from Kerala. Each holds a formal Ayurvedic therapy qualification, has more than 8 years of experience, and is registered with KKM in Malaysia.',
+      'Yes \u2014 every therapist is brought directly from Kerala. Each holds a formal Ayurvedic therapy qualification, has more than 8 years of experience, and is registered with KKM in Malaysia.',
   },
   {
     id: 'kids-elderly',

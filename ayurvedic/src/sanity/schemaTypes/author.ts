@@ -11,7 +11,7 @@ export const author = defineType({
       name: 'name',
       title: 'Name',
       type: 'string',
-      description: 'Full name as it should appear in the byline (e.g. "Dr. Akhil HS").',
+      description: 'Full name as it should appear in the byline (e.g. "Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)").',
       validation: (rule) => rule.required(),
     }),
     defineField({

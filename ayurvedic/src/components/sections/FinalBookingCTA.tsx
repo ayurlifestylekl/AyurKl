@@ -124,7 +124,7 @@ export default function FinalBookingCTA() {
               variants={fadeUp(0)}
               className="mt-5 font-body text-[15px] leading-[1.7] text-white/60"
             >
-              Book a 30-minute consultation with Vaidya AKHIL HS at our
+              Book a 30-minute consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) at our
               Brickfields clinic. We&apos;ll assess your dosha and design a
               protocol you can live with.
             </motion.p>
@@ -161,7 +161,7 @@ export default function FinalBookingCTA() {
               <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
               <span>Brickfields, KL</span>
               <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
-              <span>Vaidya AKHIL HS (B.A.M.S)</span>
+              <span>Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</span>
             </motion.div>
           </motion.div>
         </div>

@@ -218,7 +218,7 @@ export default function TreatmentsHero({
                 Each one calibrated to your body.
               </p>
               <p className="mt-3 font-body text-[13px] italic text-accent/85">
-                — Vaidya Akhil HS, B.A.M.S
+                — Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)
               </p>
             </motion.div>
 
@@ -386,7 +386,7 @@ export default function TreatmentsHero({
                 <div className="min-w-0 flex-1">
                   <p className="font-body text-[11px] italic text-dark/55">Attended by</p>
                   <p className="font-heading text-[14px] font-bold leading-tight text-primary">
-                    Vaidya Akhil HS
+                    Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)
                   </p>
                   <p className="mt-0.5 font-heading text-[9px] font-semibold uppercase tracking-[0.2em] text-accent">
                     B.A.M.S · 14 Yrs

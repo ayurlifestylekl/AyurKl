@@ -6,11 +6,13 @@ import { motion } from 'framer-motion'
 import { fadeUp, inViewOnce } from '@/lib/motion'
 
 /**
- * Zone 3 — "The Nameplate"
- * A compact dark-green band spans the page between Directory and Letterhead.
- * Mounted on the band is a landscape correspondence plaque — monogram on
- * the left, name + credentials in the centre, a trimmed italic quote on
- * the right — finished with a scripted signature flourish.
+ * Zone 3 — "The Manifesto"
+ * Compact dark-green band between Directory and Letterhead. Replaces the
+ * doctor-led calling card with a brand-led editorial pull-quote. Asymmetric
+ * layout: vertical edition stamp on the far left, main content column with
+ * display quote → 2-col body → trust-promise stat row → signature, and a
+ * marginalia column on the right with a wax seal + rotated location text.
+ * Closes with a postscript credits band styled like a magazine masthead.
  */
 export default function CallingCard() {
   return (
@@ -58,184 +60,274 @@ export default function CallingCard() {
         }}
       />
 
-      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-6 py-12 sm:px-10 sm:py-14 lg:px-12 lg:py-16">
-        {/* Eyebrow — small caps on dark */}
-        <motion.div
-          variants={fadeUp(0)}
-          initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
-          className="flex items-center justify-center gap-4"
-        >
-          <span
-            aria-hidden
-            className="h-px w-14 sm:w-20"
-            style={{
-              background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.7))',
-            }}
-          />
-          <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.42em] text-accent">
-            Correspondent of Record
-          </span>
-          <span
-            aria-hidden
-            className="h-px w-14 sm:w-20"
-            style={{
-              background: 'linear-gradient(to left, transparent, rgba(212,163,115,0.7))',
-            }}
-          />
-        </motion.div>
+      {/* Far-left vertical edition stamp */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-6 top-1/2 hidden -translate-y-1/2 flex-col items-center gap-4 font-heading text-[9px] uppercase tracking-[0.5em] text-accent/55 lg:flex"
+        style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg) translateY(50%)' }}
+      >
+        <span>Vol. II</span>
+        <span className="block h-8 w-px bg-accent/30" />
+        <span>Plate N°II</span>
+        <span className="block h-8 w-px bg-accent/30" />
+        <span>MMXXVI</span>
+      </div>
 
-        {/* The plaque */}
-        <motion.div
-          variants={fadeUp(0.08)}
-          initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
-          className="relative mt-6 w-full max-w-3xl"
-        >
-          <div className="relative rounded-[4px] bg-cream px-6 py-6 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.55)] sm:px-10 sm:py-7">
-            {/* Inner gold hairline frame */}
+      <div className="relative mx-auto w-full max-w-7xl px-6 py-10 sm:px-10 sm:py-12 lg:px-20 lg:py-14">
+        <div className="grid grid-cols-12 items-start gap-10">
+          {/* ═══════════ LEFT — main editorial column (8/12) ═══════════ */}
+          <div className="col-span-12 lg:col-span-8">
+            {/* Eyebrow with No. 02 */}
+            <motion.div
+              variants={fadeUp(0)}
+              initial="initial"
+              whileInView="animate"
+              viewport={inViewOnce}
+              className="flex items-center gap-4"
+            >
+              <span
+                aria-hidden
+                className="block h-px w-12"
+                style={{
+                  background:
+                    'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0))',
+                }}
+              />
+              <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.42em] text-accent">
+                A Note · From the practice
+              </span>
+              <span aria-hidden className="block h-1 w-1 rounded-full bg-accent/55" />
+              <span
+                className="font-fell italic text-accent/85"
+                style={{ fontSize: '14px', lineHeight: 1 }}
+              >
+                No. 02
+              </span>
+            </motion.div>
+
+            {/* Display quote */}
+            <motion.blockquote
+              variants={fadeUp(0.05)}
+              initial="initial"
+              whileInView="animate"
+              viewport={inViewOnce}
+              id="calling-card-heading"
+              className="mt-5 font-body text-white/95"
+              style={{
+                fontSize: 'clamp(1.7rem, 3.8vw, 2.9rem)',
+                lineHeight: '1.08',
+                letterSpacing: '-0.02em',
+              }}
+            >
+              <span
+                aria-hidden
+                className="mr-1 inline-block align-top font-fell text-accent/55"
+                style={{ fontSize: '1.4em', lineHeight: '0.6', transform: 'translateY(0.2em)' }}
+              >
+                &ldquo;
+              </span>
+              <span>Every consultation begins with a </span>
+              <em className="italic text-accent">meaningful</em>
+              <span> conversation.</span>
+              <span
+                className="mt-2 block text-white/55"
+                style={{ fontSize: '0.55em', letterSpacing: '-0.015em' }}
+              >
+                The dispensary opens after.
+              </span>
+            </motion.blockquote>
+
+            {/* Gold ornament divider */}
+            <motion.div
+              variants={fadeUp(0.1)}
+              initial="initial"
+              whileInView="animate"
+              viewport={inViewOnce}
+              className="mt-6 flex items-center gap-3"
+              aria-hidden
+            >
+              <span className="block h-px w-12 bg-accent/40" />
+              <span className="text-accent/80" style={{ fontSize: '13px', lineHeight: 1 }}>
+                ✦
+              </span>
+              <span className="block h-px w-12 bg-accent/40" />
+            </motion.div>
+
+            {/* Two-column body paragraphs */}
+            <motion.div
+              variants={fadeUp(0.15)}
+              initial="initial"
+              whileInView="animate"
+              viewport={inViewOnce}
+              className="mt-5 grid max-w-[640px] grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2"
+            >
+              <p
+                className="font-body italic text-cream"
+                style={{ fontSize: '13.5px', lineHeight: '1.65', color: '#FAF6EE' }}
+              >
+                We don&rsquo;t shortcut. We sit, listen, and read your pulse before we
+                open the dispensary. The Ayurveda you&rsquo;ll receive here is unhurried
+                by design — the way the Keralan masters intended it, in a city that
+                rarely allows for slowness.
+              </p>
+              <p
+                className="font-body italic text-cream"
+                style={{ fontSize: '13.5px', lineHeight: '1.65', color: '#FAF6EE' }}
+              >
+                The practice has stood on this Brickfields street since 2008. We stay
+                because our patients stay; the dispensary is kept stocked the way our
+                teachers kept theirs — by hand, in small batches, to proportions older
+                than the building itself.
+              </p>
+            </motion.div>
+
+            {/* Trust-promise stat row */}
+            <motion.div
+              variants={fadeUp(0.2)}
+              initial="initial"
+              whileInView="animate"
+              viewport={inViewOnce}
+              className="mt-7 grid max-w-[600px] grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6 lg:gap-8"
+            >
+              <div>
+                <p
+                  className="whitespace-nowrap font-body font-medium italic text-accent"
+                  style={{ fontSize: '32px', lineHeight: 1, letterSpacing: '-0.02em' }}
+                >
+                  18
+                </p>
+                <p
+                  className="mt-2 font-heading text-[9px] uppercase leading-[1.5] tracking-[0.28em]"
+                  style={{ color: 'rgba(250, 246, 238, 0.75)' }}
+                >
+                  Years on this Brickfields street
+                </p>
+              </div>
+              <div>
+                <p
+                  className="whitespace-nowrap font-body font-medium italic text-accent"
+                  style={{ fontSize: '32px', lineHeight: 1, letterSpacing: '-0.02em' }}
+                >
+                  Certified
+                </p>
+                <p
+                  className="mt-2 font-heading text-[9px] uppercase leading-[1.5] tracking-[0.28em]"
+                  style={{ color: 'rgba(250, 246, 238, 0.75)' }}
+                >
+                  Practitioner-led care · never delegated
+                </p>
+              </div>
+              <div>
+                <p
+                  className="whitespace-nowrap font-body font-medium italic text-accent"
+                  style={{ fontSize: '32px', lineHeight: 1, letterSpacing: '-0.02em' }}
+                >
+                  In-house
+                </p>
+                <p
+                  className="mt-2 font-heading text-[9px] uppercase leading-[1.5] tracking-[0.28em]"
+                  style={{ color: 'rgba(250, 246, 238, 0.75)' }}
+                >
+                  Treatment rooms · oils pressed by hand
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Signature */}
+            <motion.div
+              variants={fadeUp(0.25)}
+              initial="initial"
+              whileInView="animate"
+              viewport={inViewOnce}
+              className="mt-8 flex items-center gap-4"
+            >
+              <span
+                aria-hidden
+                className="block h-px w-16"
+                style={{
+                  background:
+                    'linear-gradient(to right, rgba(212,163,115,0.7), rgba(212,163,115,0))',
+                }}
+              />
+              <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.4em] text-accent/85">
+                — The Kerala Ayurvedic Lifestyle Practice · Est. 2008
+              </span>
+            </motion.div>
+          </div>
+
+          {/* ═══════════ RIGHT — marginalia column (4/12) ═══════════ */}
+          <motion.div
+            variants={fadeUp(0.1)}
+            initial="initial"
+            whileInView="animate"
+            viewport={inViewOnce}
+            className="hidden self-start pr-2 pt-2 lg:col-span-4 lg:flex lg:flex-col lg:items-end lg:gap-8"
+          >
+            {/* Wax seal */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-[8px] rounded-[3px] border border-accent/40"
-            />
-            {/* L-bracket corner mitres */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute left-[4px] top-[4px] h-3 w-3 border-l-2 border-t-2 border-accent"
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute right-[4px] top-[4px] h-3 w-3 border-r-2 border-t-2 border-accent"
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute bottom-[4px] left-[4px] h-3 w-3 border-b-2 border-l-2 border-accent"
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute bottom-[4px] right-[4px] h-3 w-3 border-b-2 border-r-2 border-accent"
-            />
-
-            {/* Wax-seal dot */}
-            <span
-              aria-hidden
-              className="absolute right-5 top-5 h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_0_4px_rgba(212,163,115,0.18),0_0_0_8px_rgba(212,163,115,0.06)]"
-            />
-
-            {/* Interior — 3 zones (stacks on mobile) */}
-            <div className="relative flex flex-col items-center gap-5 sm:flex-row sm:items-stretch sm:gap-7">
-              {/* Zone 1 — Monogram */}
-              <div className="flex shrink-0 items-center justify-center sm:w-[112px]">
-                <span
-                  className="font-body font-normal italic leading-none text-accent"
-                  style={{
-                    fontSize: 'clamp(4.5rem, 10vw, 6.5rem)',
-                    letterSpacing: '-0.04em',
-                  }}
-                >
-                  AH
+              className="relative h-24 w-24 rounded-full"
+              style={{
+                background:
+                  'radial-gradient(circle at 30% 30%, #e9bf90 0%, #c08a55 60%, #8d5d33 100%)',
+                boxShadow:
+                  '0 8px 18px -6px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.18)',
+              }}
+            >
+              <div
+                className="absolute inset-2 rounded-full border"
+                style={{ borderColor: 'rgba(26,46,38,0.3)' }}
+              />
+              <div
+                className="absolute inset-3 rounded-full border"
+                style={{ borderColor: 'rgba(26,46,38,0.15)', borderStyle: 'dashed' }}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#1A2E26]">
+                <span className="font-devanagari italic" style={{ fontSize: '16px', lineHeight: 1 }}>
+                  केरल
                 </span>
-              </div>
-
-              {/* Divider (vertical on desktop, horizontal on mobile) */}
-              <span
-                aria-hidden
-                className="hidden w-px self-stretch sm:block"
-                style={{
-                  background:
-                    'linear-gradient(to bottom, transparent, rgba(212,163,115,0.55), transparent)',
-                }}
-              />
-              <span
-                aria-hidden
-                className="block h-px w-16 sm:hidden"
-                style={{
-                  background:
-                    'linear-gradient(to right, transparent, rgba(212,163,115,0.7), transparent)',
-                }}
-              />
-
-              {/* Zone 2 — Name + credentials */}
-              <div className="flex flex-1 flex-col justify-center text-center sm:text-left">
-                <p
-                  id="calling-card-heading"
-                  className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.42em] text-primary/55"
-                >
-                  Vaidya
-                </p>
-                <p
-                  className="mt-1.5 font-heading font-extrabold leading-[1.02] tracking-[-0.02em] text-primary"
-                  style={{ fontSize: 'clamp(1.55rem, 2.6vw, 1.85rem)' }}
-                >
-                  Akhil HS
-                </p>
-                <p className="mt-1 font-body text-[12.5px] italic text-dark/65">
-                  B.A.M.S · 14+ years in Ayurvedic practice
-                </p>
-              </div>
-
-              {/* Divider */}
-              <span
-                aria-hidden
-                className="hidden w-px self-stretch sm:block"
-                style={{
-                  background:
-                    'linear-gradient(to bottom, transparent, rgba(212,163,115,0.55), transparent)',
-                }}
-              />
-              <span
-                aria-hidden
-                className="block h-px w-16 sm:hidden"
-                style={{
-                  background:
-                    'linear-gradient(to right, transparent, rgba(212,163,115,0.7), transparent)',
-                }}
-              />
-
-              {/* Zone 3 — Quote */}
-              <div className="relative max-w-[26ch] shrink-0 text-center sm:w-[220px] sm:text-left">
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -left-1 -top-1 font-body text-accent/70 sm:-left-2"
-                  style={{ fontSize: '28px', lineHeight: 1 }}
-                >
-                  &ldquo;
+                <span className="mt-1 font-heading text-[7px] font-bold uppercase tracking-[0.2em]">
+                  K · A · L
                 </span>
-                <blockquote className="relative pl-3 font-body italic leading-[1.5] text-primary/80 sm:pl-2">
-                  <span style={{ fontSize: '13px' }}>
-                    Every consultation begins with a long conversation.
-                  </span>
-                </blockquote>
+                <span className="font-heading text-[7px] font-bold uppercase tracking-[0.18em]">
+                  MMVIII
+                </span>
               </div>
             </div>
 
-            {/* Signature flourish — scripted underline */}
-            <div className="relative mt-5 flex items-center justify-center">
-              <svg
-                aria-hidden
-                viewBox="0 0 220 20"
-                className="h-4 w-[180px] text-accent/75"
-                preserveAspectRatio="none"
-                fill="none"
-              >
-                <path
-                  d="M2 14 C 18 6, 40 18, 62 10 S 110 2, 134 12 S 176 18, 200 8 L 214 12"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M208 8 L 218 12 L 210 16"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            {/* Vertical location label */}
+            <div
+              aria-hidden
+              className="font-heading text-[9px] uppercase tracking-[0.5em] text-accent/65"
+              style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+            >
+              Brickfields · Kuala Lumpur · Malaysia
             </div>
-          </div>
+          </motion.div>
+        </div>
+
+        {/* Bottom postscript credits band */}
+        <motion.div
+          variants={fadeUp(0.3)}
+          initial="initial"
+          whileInView="animate"
+          viewport={inViewOnce}
+          className="mt-7 flex flex-wrap items-center justify-between gap-y-3 border-t border-accent/25 pt-4 text-white/55"
+        >
+          <span className="font-heading text-[9px] uppercase tracking-[0.4em]">
+            Vol. II · The Correspondence
+          </span>
+          <span className="flex items-center gap-3 font-heading text-[9px] uppercase tracking-[0.4em]">
+            <span aria-hidden className="block h-1 w-1 rotate-45 bg-accent/65" />
+            Plate N°II · The Manifesto
+            <span aria-hidden className="block h-1 w-1 rotate-45 bg-accent/65" />
+          </span>
+          <span
+            className="font-fell italic text-accent/65"
+            style={{ fontSize: '14px' }}
+          >
+            — printed in Brickfields
+          </span>
         </motion.div>
       </div>
     </section>

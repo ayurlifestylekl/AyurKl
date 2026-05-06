@@ -4,7 +4,7 @@ export const therapies: Therapy[] = [
   {
     slug: 'abhyanga',
     name: 'Abhyanga',
-    tagline: 'Full-Body Warm Oil Massage',
+    tagline: 'Warm Oil Massage',
     durationMin: 60,
     priceRm: 180,
     image:
@@ -18,7 +18,7 @@ export const therapies: Therapy[] = [
   {
     slug: 'shirodhara',
     name: 'Shirodhara',
-    tagline: 'Forehead Oil Therapy for Mental Calm',
+    tagline: 'Forehead Oil Stream',
     durationMin: 45,
     priceRm: 220,
     image:
@@ -30,9 +30,23 @@ export const therapies: Therapy[] = [
     ],
   },
   {
+    slug: 'pizhichil',
+    name: 'Pizhichil',
+    tagline: 'Royal Oil Bath',
+    durationMin: 75,
+    priceRm: 320,
+    image:
+      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=80',
+    bullets: [
+      'Continuous warm-oil pour',
+      'Signature Kerala therapy',
+      'Deep muscular and joint relief',
+    ],
+  },
+  {
     slug: 'panchakarma',
     name: 'Panchakarma',
-    tagline: 'Five-Stage Detox Programme',
+    tagline: 'Five-Stage Detox',
     durationMin: 90,
     priceRm: 480,
     image:
@@ -41,6 +55,20 @@ export const therapies: Therapy[] = [
       'Complete cellular detoxification',
       'Custom dosha assessment',
       'Multi-day retreat option',
+    ],
+  },
+  {
+    slug: 'nasya',
+    name: 'Nasya',
+    tagline: 'Nasal Therapy',
+    durationMin: 30,
+    priceRm: 120,
+    image:
+      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80',
+    bullets: [
+      'Clears sinus congestion',
+      'Eases chronic headaches',
+      'Sharpens mental clarity',
     ],
   },
 ]

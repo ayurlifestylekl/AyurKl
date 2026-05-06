@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Lora, Playfair_Display } from "next/font/google";
+import { Montserrat, Lora, Playfair_Display, Tiro_Devanagari_Sanskrit, IM_Fell_English } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -27,6 +27,22 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const devanagari = Tiro_Devanagari_Sanskrit({
+  subsets: ["devanagari", "latin"],
+  variable: "--font-devanagari",
+  weight: ["400"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const fell = IM_Fell_English({
+  subsets: ["latin"],
+  variable: "--font-fell",
+  weight: ["400"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://keralaayurvedic.com"),
   title: {
@@ -35,7 +51,7 @@ export const metadata: Metadata = {
     template: "%s | Kerala Ayurvedic Lifestyle",
   },
   description:
-    "Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur has been offering authentic Kerala Ayurveda therapies since 2008. Book a consultation with Vaidya AKHIL HS (B.A.M.S), shop pure herbal formulas and discover Panchakarma, Abhyanga and Shirodhara treatments.",
+    "Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur has been offering authentic Kerala Ayurveda therapies since 2008. Book a consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu), shop pure herbal formulas and discover Panchakarma, Abhyanga and Shirodhara treatments.",
   keywords: [
     "Ayurveda",
     "Kerala Ayurveda",
@@ -62,7 +78,7 @@ export const metadata: Metadata = {
     title:
       "Kerala Ayurvedic Lifestyle | Authentic Ayurveda in Brickfields, KL",
     description:
-      "Authentic Kerala Ayurveda since 2008. Therapies, herbal products and consultations with Vaidya AKHIL HS (B.A.M.S) in the heart of Kuala Lumpur.",
+      "Authentic Kerala Ayurveda since 2008. Therapies, herbal products and consultations with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) in the heart of Kuala Lumpur.",
     images: [
       {
         url: "/hero-tray.png",
@@ -76,7 +92,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kerala Ayurvedic Lifestyle | Brickfields, KL",
     description:
-      "Authentic Kerala Ayurveda since 2008. Book a consultation with Vaidya AKHIL HS (B.A.M.S).",
+      "Authentic Kerala Ayurveda since 2008. Book a consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu).",
     images: ["/hero-tray.png"],
   },
   robots: {
@@ -97,7 +113,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${lora.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${montserrat.variable} ${lora.variable} ${playfair.variable} ${devanagari.variable} ${fell.variable}`}>
       <body className="antialiased font-body bg-background text-foreground">
         <Navbar />
         <main>{children}</main>

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Signature Therapies — Editorial Portrait Cards (Prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#2F5D50',
+          secondary: '#7A9D54',
+          accent: '#D4A373',
+          dark: '#2B2B2B',
+          cream: '#FAF6EE',
+          nearBlackGreen: '#1a2e26',
+        },
+        fontFamily: {
+          heading: ['Montserrat', 'system-ui', 'sans-serif'],
+          body: ['Lora', 'Georgia', 'serif'],
+        },
+        boxShadow: {
+          luxe: '0 32px 72px -24px rgba(47,93,80,0.4)',
+          gold: '0 18px 40px -18px rgba(212,163,115,0.85)',
+          card: '0 12px 32px -16px rgba(47,93,80,0.35)',
+        },
+      },
+    },
+  }
+</script>
+<style>
+  html, body { font-family: 'Lora', Georgia, serif; background:#FAF6EE; }
+  .font-heading { font-family: 'Montserrat', system-ui, sans-serif; }
+  .font-body { font-family: 'Lora', Georgia, serif; }
+  /* Smooth, transform-only transitions per design rules */
+  .therapy-card { transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .therapy-card:hover { transform: translateY(-4px); }
+  .therapy-card .card-img { transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .therapy-card:hover .card-img { transform: scale(1.045); }
+  .therapy-card .card-index {
+    transition: box-shadow 500ms cubic-bezier(0.16, 1, 0.3, 1), background-color 500ms;
+  }
+  .therapy-card:hover .card-index {
+    box-shadow: 0 0 0 1.5px rgba(212,163,115,0.85), 0 8px 22px -8px rgba(212,163,115,0.55);
+    background-color: rgba(212,163,115,0.18);
+  }
+  .therapy-card .card-price-rule {
+    transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1), background-color 500ms;
+  }
+  .therapy-card:hover .card-price-rule { width: 56px; background-color: rgba(212,163,115,0.85); }
+
+  /* Subtle film grain over hero — adds tactile depth */
+  .grain {
+    background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  /* Snap-scroll on small screens */
+  @media (max-width: 640px) {
+    .card-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+    .card-track > li { scroll-snap-align: start; min-width: 70%; }
+  }
+</style>
+</head>
+<body class="text-dark">
+
+<section class="relative bg-cream lg:h-[calc(100svh-7.5rem)] lg:min-h-[680px] lg:max-h-[820px] overflow-hidden">
+  <!-- Layered atmospheric backdrop -->
+  <div aria-hidden class="absolute inset-0 pointer-events-none"
+       style="background:
+         radial-gradient(60% 50% at 18% 8%, rgba(212,163,115,0.16) 0%, transparent 65%),
+         radial-gradient(55% 60% at 88% 92%, rgba(47,93,80,0.12) 0%, transparent 60%),
+         radial-gradient(80% 80% at 50% 50%, rgba(255,255,255,0.6) 0%, transparent 75%);"></div>
+
+  <!-- Botanical SVG ornament — left -->
+  <svg aria-hidden class="absolute -left-12 top-1/2 -translate-y-1/2 h-[420px] w-[420px] opacity-[0.05] hidden lg:block"
+       viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 20 C 60 60, 60 140, 100 180 C 140 140, 140 60, 100 20 Z" stroke="#2F5D50" stroke-width="0.5"/>
+    <path d="M100 30 C 70 65, 70 135, 100 170" stroke="#2F5D50" stroke-width="0.4"/>
+    <path d="M100 30 C 130 65, 130 135, 100 170" stroke="#2F5D50" stroke-width="0.4"/>
+    <line x1="100" y1="20" x2="100" y2="180" stroke="#2F5D50" stroke-width="0.3"/>
+    <circle cx="100" cy="100" r="40" stroke="#D4A373" stroke-width="0.4"/>
+    <circle cx="100" cy="100" r="60" stroke="#D4A373" stroke-width="0.3"/>
+    <circle cx="100" cy="100" r="80" stroke="#D4A373" stroke-width="0.2"/>
+  </svg>
+
+  <!-- Botanical SVG ornament — right (mirrored, smaller) -->
+  <svg aria-hidden class="absolute -right-16 top-1/3 h-[320px] w-[320px] opacity-[0.04] hidden lg:block"
+       viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(100 100)">
+      <g>
+        <path d="M0 -70 C 20 -45, 25 -15, 0 0 C -25 -15, -20 -45, 0 -70 Z" fill="#2F5D50"/>
+      </g>
+      <g transform="rotate(60)">
+        <path d="M0 -70 C 20 -45, 25 -15, 0 0 C -25 -15, -20 -45, 0 -70 Z" fill="#2F5D50"/>
+      </g>
+      <g transform="rotate(120)">
+        <path d="M0 -70 C 20 -45, 25 -15, 0 0 C -25 -15, -20 -45, 0 -70 Z" fill="#2F5D50"/>
+      </g>
+      <g transform="rotate(180)">
+        <path d="M0 -70 C 20 -45, 25 -15, 0 0 C -25 -15, -20 -45, 0 -70 Z" fill="#2F5D50"/>
+      </g>
+      <g transform="rotate(240)">
+        <path d="M0 -70 C 20 -45, 25 -15, 0 0 C -25 -15, -20 -45, 0 -70 Z" fill="#2F5D50"/>
+      </g>
+      <g transform="rotate(300)">
+        <path d="M0 -70 C 20 -45, 25 -15, 0 0 C -25 -15, -20 -45, 0 -70 Z" fill="#2F5D50"/>
+      </g>
+      <circle r="6" fill="#D4A373"/>
+    </g>
+  </svg>
+
+  <!-- Paper grain -->
+  <div class="grain absolute inset-0 opacity-[0.55]" aria-hidden></div>
+
+  <!-- Top gold hairline (fade in from edges) -->
+  <div aria-hidden class="absolute inset-x-0 top-0 h-px"
+       style="background: linear-gradient(to right, transparent 4%, rgba(212,163,115,0.35) 28%, rgba(212,163,115,0.55) 50%, rgba(212,163,115,0.35) 72%, transparent 96%);"></div>
+  <!-- Bottom gold hairline -->
+  <div aria-hidden class="absolute inset-x-0 bottom-0 h-px"
+       style="background: linear-gradient(to right, transparent 4%, rgba(212,163,115,0.30) 28%, rgba(212,163,115,0.50) 50%, rgba(212,163,115,0.30) 72%, transparent 96%);"></div>
+
+  <div class="relative mx-auto flex h-full w-full max-w-7xl flex-col px-6 sm:px-10 lg:px-12 py-12 lg:py-14">
+
+    <!-- ── Header ──────────────────────────────────── -->
+    <header class="mx-auto max-w-3xl text-center">
+      <div class="flex items-center justify-center gap-3">
+        <span class="h-px w-10 bg-accent/50" aria-hidden></span>
+        <span class="font-heading text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.4em] text-accent">
+          At The Clinic
+        </span>
+        <span class="h-px w-10 bg-accent/50" aria-hidden></span>
+      </div>
+
+      <h2 class="mt-5 font-heading text-[clamp(2.25rem,4vw,3.25rem)] font-extrabold leading-[1.05] tracking-tight text-primary">
+        Signature Therapies
+      </h2>
+
+      <p class="mt-5 font-body text-[15px] sm:text-[16px] leading-[1.7] text-dark/70">
+        Administered under the expert guidance of <span class="font-medium text-primary">Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</span> and performed by highly experienced Ayurvedic therapists from <span class="font-medium text-primary">Kerala, India</span>.
+      </p>
+
+      <div class="mt-4 flex items-center justify-center gap-2" aria-hidden>
+        <span class="h-1 w-1 rounded-full bg-accent/70"></span>
+      </div>
+
+      <p class="mt-3 font-body text-[14px] sm:text-[15px] italic leading-[1.65] text-primary/65">
+        All treatments are tailored to your dosha — ensuring a deeply restorative and authentic healing experience.
+      </p>
+    </header>
+
+    <!-- ── Card Row ────────────────────────────────── -->
+    <ol class="card-track mt-8 lg:mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5 lg:gap-5 xl:gap-6 max-sm:flex max-sm:overflow-x-auto max-sm:gap-4 max-sm:pb-2">
+
+      <!-- 01 Abhyanga -->
+      <li class="therapy-card group relative flex flex-col">
+        <a href="#" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream rounded-sm">
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-card">
+            <img class="card-img absolute inset-0 h-full w-full object-cover object-center"
+                 src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"
+                 alt="Abhyanga — Full-Body Warm Oil Massage" loading="lazy" />
+            <!-- Primary tint -->
+            <div class="absolute inset-0 mix-blend-multiply" style="background-color: rgba(47,93,80,0.10);"></div>
+            <!-- Bottom gradient for legibility -->
+            <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/25 to-transparent"></div>
+
+            <!-- Top metadata row: number + duration -->
+            <div class="absolute inset-x-0 top-0 flex items-center justify-between p-3 lg:p-4">
+              <span class="card-index inline-flex items-center justify-center font-heading text-[10px] sm:text-[11px] font-bold tracking-[0.18em] text-accent bg-black/25 backdrop-blur-sm px-2 py-1 rounded-sm">
+                01
+              </span>
+              <span class="font-body text-[11px] sm:text-[12px] italic text-white/90 tracking-wide">
+                60 min
+              </span>
+            </div>
+
+            <!-- Bottom name -->
+            <div class="absolute inset-x-0 bottom-0 p-4 lg:p-5">
+              <h3 class="font-heading text-[18px] sm:text-[19px] lg:text-[20px] font-extrabold tracking-tight text-white drop-shadow-sm">Abhyanga</h3>
+              <p class="mt-1 font-body text-[12px] italic text-white/70 leading-snug">Warm Oil Massage</p>
+            </div>
+          </div>
+          <!-- Discover link -->
+          <div class="mt-3 flex items-center justify-between">
+            <span class="card-price-rule h-px w-8 bg-accent/40"></span>
+            <span class="inline-flex items-center gap-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.22em] text-primary group-hover:text-accent transition-colors duration-300">
+              Discover
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </a>
+      </li>
+
+      <!-- 02 Shirodhara -->
+      <li class="therapy-card group relative flex flex-col">
+        <a href="#" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream rounded-sm">
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-card">
+            <img class="card-img absolute inset-0 h-full w-full object-cover object-center"
+                 src="https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"
+                 alt="Shirodhara — Forehead Oil Therapy for Mental Calm" loading="lazy" />
+            <div class="absolute inset-0 mix-blend-multiply" style="background-color: rgba(47,93,80,0.10);"></div>
+            <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/25 to-transparent"></div>
+
+            <div class="absolute inset-x-0 top-0 flex items-center justify-between p-3 lg:p-4">
+              <span class="card-index inline-flex items-center justify-center font-heading text-[10px] sm:text-[11px] font-bold tracking-[0.18em] text-accent bg-black/25 backdrop-blur-sm px-2 py-1 rounded-sm">
+                02
+              </span>
+              <span class="font-body text-[11px] sm:text-[12px] italic text-white/90 tracking-wide">
+                45 min
+              </span>
+            </div>
+
+            <div class="absolute inset-x-0 bottom-0 p-4 lg:p-5">
+              <h3 class="font-heading text-[18px] sm:text-[19px] lg:text-[20px] font-extrabold tracking-tight text-white drop-shadow-sm">Shirodhara</h3>
+              <p class="mt-1 font-body text-[12px] italic text-white/70 leading-snug">Forehead Oil Stream</p>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center justify-between">
+            <span class="card-price-rule h-px w-8 bg-accent/40"></span>
+            <span class="inline-flex items-center gap-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.22em] text-primary group-hover:text-accent transition-colors duration-300">
+              Discover
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </a>
+      </li>
+
+      <!-- 03 Pizhichil -->
+      <li class="therapy-card group relative flex flex-col">
+        <a href="#" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream rounded-sm">
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-card">
+            <img class="card-img absolute inset-0 h-full w-full object-cover object-center"
+                 src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=80"
+                 alt="Pizhichil — Royal Warm-Oil Bath of Kerala" loading="lazy" />
+            <div class="absolute inset-0 mix-blend-multiply" style="background-color: rgba(47,93,80,0.10);"></div>
+            <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/25 to-transparent"></div>
+
+            <div class="absolute inset-x-0 top-0 flex items-center justify-between p-3 lg:p-4">
+              <span class="card-index inline-flex items-center justify-center font-heading text-[10px] sm:text-[11px] font-bold tracking-[0.18em] text-accent bg-black/25 backdrop-blur-sm px-2 py-1 rounded-sm">
+                03
+              </span>
+              <span class="font-body text-[11px] sm:text-[12px] italic text-white/90 tracking-wide">
+                75 min
+              </span>
+            </div>
+
+            <div class="absolute inset-x-0 bottom-0 p-4 lg:p-5">
+              <h3 class="font-heading text-[18px] sm:text-[19px] lg:text-[20px] font-extrabold tracking-tight text-white drop-shadow-sm">Pizhichil</h3>
+              <p class="mt-1 font-body text-[12px] italic text-white/70 leading-snug">Royal Oil Bath</p>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center justify-between">
+            <span class="card-price-rule h-px w-8 bg-accent/40"></span>
+            <span class="inline-flex items-center gap-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.22em] text-primary group-hover:text-accent transition-colors duration-300">
+              Discover
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </a>
+      </li>
+
+      <!-- 04 Panchakarma -->
+      <li class="therapy-card group relative flex flex-col">
+        <a href="#" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream rounded-sm">
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-card">
+            <img class="card-img absolute inset-0 h-full w-full object-cover object-center"
+                 src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=80"
+                 alt="Panchakarma — Five-Stage Detox Programme" loading="lazy" />
+            <div class="absolute inset-0 mix-blend-multiply" style="background-color: rgba(47,93,80,0.10);"></div>
+            <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/25 to-transparent"></div>
+
+            <div class="absolute inset-x-0 top-0 flex items-center justify-between p-3 lg:p-4">
+              <span class="card-index inline-flex items-center justify-center font-heading text-[10px] sm:text-[11px] font-bold tracking-[0.18em] text-accent bg-black/25 backdrop-blur-sm px-2 py-1 rounded-sm">
+                04
+              </span>
+              <span class="font-body text-[11px] sm:text-[12px] italic text-white/90 tracking-wide">
+                90 min
+              </span>
+            </div>
+
+            <div class="absolute inset-x-0 bottom-0 p-4 lg:p-5">
+              <h3 class="font-heading text-[18px] sm:text-[19px] lg:text-[20px] font-extrabold tracking-tight text-white drop-shadow-sm">Panchakarma</h3>
+              <p class="mt-1 font-body text-[12px] italic text-white/70 leading-snug">Five-Stage Detox</p>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center justify-between">
+            <span class="card-price-rule h-px w-8 bg-accent/40"></span>
+            <span class="inline-flex items-center gap-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.22em] text-primary group-hover:text-accent transition-colors duration-300">
+              Discover
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </a>
+      </li>
+
+      <!-- 05 Nasya -->
+      <li class="therapy-card group relative flex flex-col">
+        <a href="#" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream rounded-sm">
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-card">
+            <img class="card-img absolute inset-0 h-full w-full object-cover object-center"
+                 src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"
+                 alt="Nasya — Therapeutic Nasal Cleansing" loading="lazy" />
+            <div class="absolute inset-0 mix-blend-multiply" style="background-color: rgba(47,93,80,0.10);"></div>
+            <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/25 to-transparent"></div>
+
+            <div class="absolute inset-x-0 top-0 flex items-center justify-between p-3 lg:p-4">
+              <span class="card-index inline-flex items-center justify-center font-heading text-[10px] sm:text-[11px] font-bold tracking-[0.18em] text-accent bg-black/25 backdrop-blur-sm px-2 py-1 rounded-sm">
+                05
+              </span>
+              <span class="font-body text-[11px] sm:text-[12px] italic text-white/90 tracking-wide">
+                30 min
+              </span>
+            </div>
+
+            <div class="absolute inset-x-0 bottom-0 p-4 lg:p-5">
+              <h3 class="font-heading text-[18px] sm:text-[19px] lg:text-[20px] font-extrabold tracking-tight text-white drop-shadow-sm">Nasya</h3>
+              <p class="mt-1 font-body text-[12px] italic text-white/70 leading-snug">Nasal Therapy</p>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center justify-between">
+            <span class="card-price-rule h-px w-8 bg-accent/40"></span>
+            <span class="inline-flex items-center gap-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.22em] text-primary group-hover:text-accent transition-colors duration-300">
+              Discover
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </a>
+      </li>
+
+    </ol>
+
+    <!-- ── Footnote / Discover-all link ──────────── -->
+    <div class="mt-6 lg:mt-8 flex items-center justify-center">
+      <a href="#" class="group inline-flex items-center gap-3 border-b border-primary/20 pb-1 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-primary transition-colors hover:border-accent hover:text-accent">
+        Explore All Therapies
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform duration-300 group-hover:translate-x-1">
+          <path d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>

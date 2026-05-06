@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CallingCard — Replacement Variants</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@500;600;700;800&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=IM+Fell+English:ital@0;1&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary:        '#2F5D50',
+          primaryDeep:    '#1A2E26',
+          accent:         '#D4A373',
+          cream:          '#FAF6EE',
+          dark:           '#2B2B2B',
+        },
+        fontFamily: {
+          heading: ['Montserrat', 'system-ui', 'sans-serif'],
+          body:    ['Lora', 'Georgia', 'serif'],
+          fell:    ['"IM Fell English"', 'Georgia', 'serif'],
+          deva:    ['"Tiro Devanagari Sanskrit"', 'serif'],
+          script:  ['Caveat', 'cursive'],
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  body { background:#0c1914; }
+  .label-pill {
+    background:#1A2E26;
+    color:#D4A373;
+    border:1px solid rgba(212,163,115,0.4);
+  }
+  .gold-grid {
+    background-image:
+      linear-gradient(rgba(212,163,115,1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,163,115,1) 1px, transparent 1px);
+    background-size: 56px 56px;
+    opacity: 0.07;
+  }
+  .warm-radial {
+    background: radial-gradient(ellipse 900px 520px at 50% 50%, rgba(212,163,115,0.14) 0%, transparent 65%);
+  }
+  .edge-rule-top, .edge-rule-bot {
+    position:absolute; inset-inline:0; height:1px;
+    background:linear-gradient(to right, transparent, rgba(212,163,115,0.5) 25%, rgba(212,163,115,0.5) 75%, transparent);
+  }
+  .grain-dark {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.13 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+  }
+</style>
+</head>
+<body class="font-body text-white">
+
+<header class="mx-auto max-w-[1500px] px-6 pt-10 pb-6">
+  <p class="font-heading text-[10px] uppercase tracking-[0.42em] text-accent/75">Contact / CallingCard · Replacement Variants</p>
+  <h1 class="mt-2 font-heading text-2xl font-extrabold text-white">"Correspondent of Record" — 4 brand-led directions</h1>
+  <p class="mt-2 max-w-2xl font-body italic text-white/65">
+    Replaces the doctor-promotion calling card. Same green-band rhythm break between Directory and Letterhead. Each variant is brand-voice-led, not person-led. Quote updated to "meaningful conversation."
+  </p>
+</header>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V1 — The Manifesto: typography-led pull-quote, no card
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 1</span>
+    <span class="font-body italic text-white/70">The Manifesto · typography-led pull-quote</span>
+  </div>
+</section>
+
+<section id="v1" class="relative mx-auto max-w-[1500px] bg-primary scroll-mt-4 overflow-hidden">
+  <div class="absolute inset-0 gold-grid pointer-events-none"></div>
+  <div class="absolute inset-0 warm-radial pointer-events-none"></div>
+  <div class="absolute inset-0 grain-dark pointer-events-none"></div>
+  <span class="edge-rule-top top-0"></span>
+  <span class="edge-rule-bot bottom-0"></span>
+
+  <!-- Far-left vertical edition stamp -->
+  <div class="hidden lg:flex absolute left-6 top-1/2 -translate-y-1/2 flex-col items-center gap-4 font-heading text-[9px] uppercase tracking-[0.5em] text-accent/55" style="writing-mode:vertical-rl; transform:rotate(180deg) translateY(50%);">
+    <span>Vol. II</span>
+    <span class="block w-px h-8 bg-accent/30"></span>
+    <span>Plate N°II</span>
+    <span class="block w-px h-8 bg-accent/30"></span>
+    <span>MMXXVI</span>
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-12 lg:px-20 py-10 lg:py-12">
+    <div class="grid grid-cols-12 gap-10 items-start">
+      <!-- LEFT col 1-8: editorial main column -->
+      <div class="col-span-12 lg:col-span-8">
+        <!-- Eyebrow with N°02 -->
+        <div class="flex items-center gap-4">
+          <span class="block h-px w-12" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0));"></span>
+          <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.42em] text-accent">A Note · From the practice</span>
+          <span aria-hidden class="block h-1 w-1 rounded-full bg-accent/55"></span>
+          <span class="font-fell italic text-accent/85" style="font-size:14px; line-height:1;">No. 02</span>
+        </div>
+
+        <!-- Big italic display quote -->
+        <blockquote class="mt-5 font-body text-cream/95" style="font-size:clamp(1.7rem, 3.8vw, 2.9rem); line-height:1.08; letter-spacing:-0.02em;">
+          <span aria-hidden class="font-fell text-accent/55 inline-block align-top mr-1" style="font-size:1.4em; line-height:0.6; transform:translateY(0.2em);">"</span>
+          <span class="font-body">Every consultation begins with a </span>
+          <em class="font-body italic text-accent">meaningful</em>
+          <span class="font-body"> conversation.</span>
+          <span class="block font-body text-cream/50 mt-2" style="font-size:0.55em; letter-spacing:-0.015em;">The dispensary opens after.</span>
+        </blockquote>
+
+        <!-- Gold ornament divider -->
+        <div class="mt-6 flex items-center gap-3">
+          <span class="block h-px w-12 bg-accent/40"></span>
+          <span aria-hidden class="text-accent/80" style="font-size:13px; line-height:1;">✦</span>
+          <span class="block h-px w-12 bg-accent/40"></span>
+        </div>
+
+        <!-- Two-column body paragraphs -->
+        <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 max-w-[640px]">
+          <p class="font-body italic text-cream/72" style="font-size:13.5px; line-height:1.65;">
+            We don't shortcut. We sit, listen, and read your pulse before we open the dispensary. The Ayurveda you'll receive here is unhurried by design — the way the Keralan masters intended it, in a city that rarely allows for slowness.
+          </p>
+          <p class="font-body italic text-cream/72" style="font-size:13.5px; line-height:1.65;">
+            The practice has stood on this Brickfields street since 2008. We stay because our patients stay; the dispensary is kept stocked the way our teachers kept theirs — by hand, in small batches, to proportions older than the building itself.
+          </p>
+        </div>
+
+        <!-- Trust promises — what the practice promises you -->
+        <div class="mt-7 grid grid-cols-3 gap-8 max-w-[600px]">
+          <div class="flex items-baseline gap-3">
+            <p class="font-body italic font-medium text-accent" style="font-size:32px; line-height:1; letter-spacing:-0.02em;">17</p>
+            <p class="font-heading text-[8.5px] uppercase tracking-[0.28em] text-cream/55 leading-[1.4]">Years on this<br>Brickfields street</p>
+          </div>
+          <div class="flex items-baseline gap-3">
+            <p class="font-body italic font-medium text-accent whitespace-nowrap" style="font-size:32px; line-height:1; letter-spacing:-0.02em;">45 min</p>
+            <p class="font-heading text-[8.5px] uppercase tracking-[0.28em] text-cream/55 leading-[1.4]">Per first<br>consultation<br>· unhurried by design</p>
+          </div>
+          <div class="flex items-baseline gap-3">
+            <p class="font-body italic font-medium text-accent" style="font-size:32px; line-height:1; letter-spacing:-0.02em;">0</p>
+            <p class="font-heading text-[8.5px] uppercase tracking-[0.28em] text-cream/55 leading-[1.4]">Bots, queues<br>or scripted replies</p>
+          </div>
+        </div>
+
+        <!-- Signature -->
+        <div class="mt-8 flex items-center gap-4">
+          <span aria-hidden class="block h-px w-16" style="background:linear-gradient(to right, rgba(212,163,115,0.7), rgba(212,163,115,0));"></span>
+          <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.4em] text-accent/85">— The Kerala Ayurvedic Lifestyle Practice · Est. 2008</span>
+        </div>
+      </div>
+
+      <!-- RIGHT col 9-12: marginalia column -->
+      <div class="hidden lg:flex lg:col-span-4 flex-col items-end gap-8 self-start pt-2 pr-2">
+        <!-- Wax seal -->
+        <div class="relative h-24 w-24 rounded-full" style="background:radial-gradient(circle at 30% 30%, #e9bf90 0%, #c08a55 60%, #8d5d33 100%); box-shadow:0 8px 18px -6px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.18);">
+          <div class="absolute inset-2 rounded-full border border-primaryDeep/30"></div>
+          <div class="absolute inset-3 rounded-full border border-primaryDeep/15" style="border-style:dashed;"></div>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span class="font-deva italic text-primaryDeep" style="font-size:16px; line-height:1;">केरल</span>
+            <span class="font-heading text-[7px] font-bold uppercase tracking-[0.2em] text-primaryDeep mt-1">K · A · L</span>
+            <span class="font-heading text-[7px] font-bold uppercase tracking-[0.18em] text-primaryDeep">MMVIII</span>
+          </div>
+        </div>
+
+        <!-- Vertical text label -->
+        <div class="font-heading text-[9px] uppercase tracking-[0.5em] text-accent/65" style="writing-mode:vertical-rl; transform:rotate(180deg);">
+          Brickfields · Kuala Lumpur · Malaysia
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom postscript credits band -->
+    <div class="mt-7 pt-4 border-t border-accent/25 flex flex-wrap items-center justify-between gap-y-3 text-cream/45">
+      <span class="font-heading text-[9px] uppercase tracking-[0.4em]">Vol. II · The Correspondence</span>
+      <span class="flex items-center gap-3 font-heading text-[9px] uppercase tracking-[0.4em]">
+        <span aria-hidden class="block h-1 w-1 rotate-45 bg-accent/65"></span>
+        Plate N°II · The Manifesto
+        <span aria-hidden class="block h-1 w-1 rotate-45 bg-accent/65"></span>
+      </span>
+      <span class="font-fell italic text-accent/65" style="font-size:14px;">— printed in Brickfields</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V2 — The Letterhead Masthead: vintage letterhead band
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 2</span>
+    <span class="font-body italic text-white/70">The Letterhead Masthead · institutional brand band</span>
+  </div>
+</section>
+
+<section id="v2" class="relative mx-auto max-w-[1500px] bg-primary scroll-mt-4 overflow-hidden">
+  <div class="absolute inset-0 gold-grid pointer-events-none"></div>
+  <div class="absolute inset-0 warm-radial pointer-events-none"></div>
+  <div class="absolute inset-0 grain-dark pointer-events-none"></div>
+  <span class="edge-rule-top top-0"></span>
+  <span class="edge-rule-bot bottom-0"></span>
+
+  <div class="relative mx-auto max-w-7xl px-12 py-20 text-center">
+    <!-- Top gold rule with center diamond -->
+    <div class="flex items-center justify-center gap-4">
+      <span class="block h-px flex-1 max-w-[260px]" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.85));"></span>
+      <span aria-hidden class="inline-block h-1.5 w-1.5 rotate-45 bg-accent"></span>
+      <span class="font-heading text-[10px] font-semibold uppercase tracking-[0.5em] text-accent">An Ayurvedic Practice</span>
+      <span aria-hidden class="inline-block h-1.5 w-1.5 rotate-45 bg-accent"></span>
+      <span class="block h-px flex-1 max-w-[260px]" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.85));"></span>
+    </div>
+
+    <!-- Wordmark -->
+    <h2 class="mt-8 font-fell italic text-cream" style="font-size:clamp(2.5rem, 5.5vw, 4.4rem); letter-spacing:-0.01em; line-height:1;">
+      <span class="block">Kerala</span>
+      <span class="block mt-1 font-fell" style="font-style:normal;">Ayurvedic Lifestyle</span>
+    </h2>
+
+    <!-- Middle micro-rule -->
+    <div class="mt-7 flex items-center justify-center gap-3">
+      <span class="block h-px w-8 bg-accent/55"></span>
+      <span class="block h-1 w-1 rounded-full bg-accent"></span>
+      <span class="block h-px w-8 bg-accent/55"></span>
+    </div>
+
+    <!-- Provenance dataline -->
+    <p class="mt-5 font-heading text-[10.5px] uppercase tracking-[0.42em] text-cream/75">
+      <span>Est. MMVIII</span>
+      <span class="mx-3 text-accent/65">·</span>
+      <span>Brickfields · Kuala Lumpur</span>
+      <span class="mx-3 text-accent/65">·</span>
+      <span>B.A.M.S Registered</span>
+    </p>
+
+    <!-- Italic tagline / quote -->
+    <p class="mt-10 mx-auto max-w-[62ch] font-body italic text-cream/85" style="font-size:clamp(1.05rem, 1.4vw, 1.3rem); line-height:1.55;">
+      Every consultation begins with a <em class="text-accent not-italic font-medium" style="font-style:italic;">meaningful</em> conversation. The dispensary opens after.
+    </p>
+
+    <!-- Bottom gold rule with center diamond -->
+    <div class="mt-12 flex items-center justify-center gap-4">
+      <span class="block h-px flex-1 max-w-[280px]" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+      <span aria-hidden class="font-fell italic text-accent/85" style="font-size:18px; line-height:1;">N°II · Vol. II</span>
+      <span class="block h-px flex-1 max-w-[280px]" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V3 — The Lineage Spread: editorial split with photo
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 3</span>
+    <span class="font-body italic text-white/70">The Lineage Spread · asymmetric photo + heritage statement</span>
+  </div>
+</section>
+
+<section id="v3" class="relative mx-auto max-w-[1500px] bg-primary scroll-mt-4 overflow-hidden">
+  <div class="absolute inset-0 gold-grid pointer-events-none" style="opacity:0.05;"></div>
+  <div class="absolute inset-0 warm-radial pointer-events-none"></div>
+  <div class="absolute inset-0 grain-dark pointer-events-none"></div>
+  <span class="edge-rule-top top-0"></span>
+  <span class="edge-rule-bot bottom-0"></span>
+
+  <div class="relative mx-auto max-w-7xl px-12 py-20">
+    <div class="grid grid-cols-12 gap-12 items-center">
+      <!-- LEFT 5/12: photo plate -->
+      <div class="col-span-12 lg:col-span-5">
+        <div class="relative aspect-[4/5] w-full max-w-[420px] mx-auto overflow-hidden rounded-[2px]" style="box-shadow:0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212,163,115,0.25);">
+          <img src="https://placehold.co/640x800/3a5a3a/d4a373?text=Hands+grinding+herbs&font=lora" class="absolute inset-0 h-full w-full object-cover"/>
+          <div class="absolute inset-0 mix-blend-multiply" style="background:rgba(47,93,80,0.28);"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/15 to-transparent"></div>
+          <!-- gold inner frame -->
+          <div class="absolute inset-2 border border-accent/55 pointer-events-none"></div>
+          <div class="absolute left-1 top-1 h-3 w-3 border-l-2 border-t-2 border-accent pointer-events-none"></div>
+          <div class="absolute right-1 top-1 h-3 w-3 border-r-2 border-t-2 border-accent pointer-events-none"></div>
+          <div class="absolute bottom-1 left-1 h-3 w-3 border-b-2 border-l-2 border-accent pointer-events-none"></div>
+          <div class="absolute bottom-1 right-1 h-3 w-3 border-b-2 border-r-2 border-accent pointer-events-none"></div>
+          <!-- Plate badge -->
+          <div class="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary">
+            <span aria-hidden class="inline-block h-1 w-1 rotate-45 bg-primary/70"></span>
+            Plate N°II · The Practice
+          </div>
+          <!-- Caption -->
+          <div class="absolute bottom-4 left-4 right-4">
+            <p class="font-body italic text-cream/95 text-[12px] leading-[1.5]">— the dispensary, photographed at first light. No filters, no styling.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT 7/12: heritage statement -->
+      <div class="col-span-12 lg:col-span-7">
+        <!-- Eyebrow -->
+        <div class="flex items-center gap-3">
+          <span class="block h-px w-12" style="background:linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0));"></span>
+          <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.42em] text-accent">A Keralan Practice in Brickfields</span>
+        </div>
+
+        <!-- Headline -->
+        <h2 class="mt-5 font-heading font-extrabold text-cream" style="font-size:clamp(1.9rem, 3.6vw, 2.8rem); line-height:1.05; letter-spacing:-0.025em;">
+          Where <em class="font-body italic font-normal text-accent">three thousand years</em><br>
+          of Ayurveda meet a city block in KL.
+        </h2>
+
+        <!-- Heritage paragraph -->
+        <p class="mt-6 max-w-[58ch] font-body italic text-cream/75" style="font-size:14.5px; line-height:1.7;">
+          Our oils are pressed to the same proportions used in the temple kitchens of Thrissur. Our pulse-reading is the same one your great-grandparents would have recognised. We've simply set it down here, on a quiet shophouse street in Brickfields — open since 2008.
+        </p>
+
+        <!-- Three small data points -->
+        <div class="mt-8 grid grid-cols-3 gap-6 max-w-[520px]">
+          <div>
+            <p class="font-fell italic text-accent" style="font-size:32px; line-height:1;">XVII</p>
+            <p class="mt-1 font-heading text-[9px] uppercase tracking-[0.32em] text-cream/55">Years of practice</p>
+          </div>
+          <div>
+            <p class="font-fell italic text-accent" style="font-size:32px; line-height:1;">III</p>
+            <p class="mt-1 font-heading text-[9px] uppercase tracking-[0.32em] text-cream/55">Treatment streams</p>
+          </div>
+          <div>
+            <p class="font-fell italic text-accent" style="font-size:32px; line-height:1;">II</p>
+            <p class="mt-1 font-heading text-[9px] uppercase tracking-[0.32em] text-cream/55">Generations · one practice</p>
+          </div>
+        </div>
+
+        <!-- Italic quote / signature -->
+        <div class="mt-10 pt-6 border-t border-accent/25 flex items-baseline gap-4">
+          <span aria-hidden class="font-fell text-accent/70" style="font-size:32px; line-height:0.7;">"</span>
+          <p class="font-body italic text-cream/85" style="font-size:15px; line-height:1.55;">
+            Every consultation begins with a <em class="text-accent" style="font-style:italic;">meaningful</em> conversation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     V4 — The Sanskrit Pillar: scholarly center-axis spread
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="mx-auto max-w-[1500px] px-6 pt-10 pb-4">
+  <div class="mb-3 flex items-center gap-3">
+    <span class="label-pill rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.3em]">Variant 4</span>
+    <span class="font-body italic text-white/70">The Sanskrit Pillar · scholarly Devanagari spread</span>
+  </div>
+</section>
+
+<section id="v4" class="relative mx-auto max-w-[1500px] bg-primary scroll-mt-4 overflow-hidden">
+  <div class="absolute inset-0 gold-grid pointer-events-none"></div>
+  <div class="absolute inset-0 warm-radial pointer-events-none"></div>
+  <div class="absolute inset-0 grain-dark pointer-events-none"></div>
+  <span class="edge-rule-top top-0"></span>
+  <span class="edge-rule-bot bottom-0"></span>
+
+  <div class="relative mx-auto max-w-7xl px-12 py-20 text-center">
+    <!-- Eyebrow -->
+    <div class="flex items-center justify-center gap-4">
+      <span class="block h-px w-20" style="background:linear-gradient(to right, transparent, rgba(212,163,115,0.7));"></span>
+      <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.42em] text-accent">From the Charaka Saṃhitā</span>
+      <span class="block h-px w-20" style="background:linear-gradient(to left, transparent, rgba(212,163,115,0.7));"></span>
+    </div>
+
+    <!-- Devanagari shloka -->
+    <p lang="sa" class="mt-10 font-deva italic text-cream/95" style="font-size:clamp(1.6rem, 3vw, 2.4rem); line-height:1.4; letter-spacing:0.005em;">
+      वैद्यो नारायणो हरिः
+    </p>
+
+    <!-- Romanization -->
+    <p class="mt-6 font-body italic text-accent" style="font-size:clamp(1.1rem, 1.6vw, 1.4rem); line-height:1.4; letter-spacing:0.04em;">
+      Vaidyo Nārāyaṇo Hariḥ
+    </p>
+
+    <!-- Translation -->
+    <p class="mt-3 max-w-[44ch] mx-auto font-body italic text-cream/65" style="font-size:14.5px; line-height:1.55;">
+      The healer is the divine — both vessel and intermediary. The verse, recited at the start of every consultation, is older than this clinic, this country, this conversation.
+    </p>
+
+    <!-- Hairline diamond -->
+    <div class="mt-10 flex items-center justify-center gap-3">
+      <span class="block h-px w-12 bg-accent/55"></span>
+      <span aria-hidden class="block h-1.5 w-1.5 rotate-45 bg-accent"></span>
+      <span class="block h-px w-12 bg-accent/55"></span>
+    </div>
+
+    <!-- Footer with provenance + quote -->
+    <div class="mt-7 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 max-w-[820px] mx-auto">
+      <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.4em] text-cream/55">Charaka Saṃhitā · circa 200 BCE</span>
+      <span aria-hidden class="hidden md:inline-block h-1 w-1 rounded-full bg-accent/55"></span>
+      <span class="font-heading text-[9.5px] font-semibold uppercase tracking-[0.4em] text-cream/55">Kerala Ayurvedic Lifestyle · Est. 2008</span>
+    </div>
+
+    <!-- Quote — small marginal note -->
+    <p class="mt-12 mx-auto max-w-[44ch] font-body italic text-cream/55" style="font-size:13px; line-height:1.6;">
+      Inscribed above our consulting room — and the reason every consultation begins with a <em class="text-accent" style="font-style:italic;">meaningful</em> conversation.
+    </p>
+  </div>
+</section>
+
+<footer class="mx-auto max-w-[1500px] px-6 py-10 text-center font-body italic text-white/45">
+  Pick the variant — V1 · V2 · V3 · V4 — or say "combine X+Y."
+</footer>
+
+</body>
+</html>

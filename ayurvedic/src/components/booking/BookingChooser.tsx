@@ -69,16 +69,16 @@ export default function BookingChooser() {
               letterSpacing: '-0.03em',
             }}
           >
-            Two ways to meet your{' '}
+            Two Ways to Meet Your{' '}
             <span className="font-body font-normal italic text-accent">
               Vaidya.
             </span>
           </h1>
 
           <p className="mt-5 max-w-xl text-center font-body text-[15px] leading-[1.75] text-dark/65 sm:text-[16px]">
-            Whether you&apos;re new to Ayurveda or coming in for a specific
-            therapy, we have a dedicated flow for you. Both lead to Vaidya
-            AKHIL HS (B.A.M.S) at our Brickfields clinic.
+            Whether You&apos;re New to Ayurveda or Coming in for a Specific
+            Therapy, We have a Dedicated Flow for You. Both Lead to Vaidya
+            Akhil H.S., B.A.M.S., M.D. (Ayu) at Our Brickfields Centre.
           </p>
 
           {/* Two cards */}
@@ -150,16 +150,16 @@ export default function BookingChooser() {
                 />
 
                 <p className="font-body text-[14px] leading-[1.7] text-white/65">
-                  Sit down with Vaidya Akhil, get your dosha assessed, and
-                  leave with a protocol tailored to what your body actually
-                  needs. No commitment required.
+                  Sit down with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu), Get
+                  your Dosha Assessed, and Leave with a Protocol Tailored to
+                  what your Body actually Needs. No Commitment required.
                 </p>
 
                 <ul className="mt-2 flex flex-col gap-2.5 font-body text-[13px] text-white/75">
                   {[
-                    'Dosha assessment (Vata, Pitta, Kapha)',
-                    'Personal treatment protocol',
-                    'Lifestyle & diet guidance',
+                    'Dosha Assessment (Vata, Pitta, Kapha)',
+                    'Personal Treatment Protocol',
+                    'Lifestyle & Diet Guidance',
                   ].map((point) => (
                     <li key={point} className="flex items-start gap-2.5">
                       <span
@@ -216,7 +216,7 @@ export default function BookingChooser() {
                       strokeWidth={2.2}
                     />
                     <span className="font-heading text-[9px] font-bold uppercase tracking-[0.18em] text-primary/80">
-                      60+ min · Pay at clinic
+                      60+ min · Pay at Centre
                     </span>
                   </span>
                   <ArrowUpRight
@@ -239,16 +239,16 @@ export default function BookingChooser() {
                 />
 
                 <p className="font-body text-[14px] leading-[1.7] text-dark/70">
-                  Know which therapy you want? Pick from our library of 60+
-                  authentic Kerala Ayurveda protocols and we&apos;ll get you
-                  on the calendar with Vaidya Akhil.
+                  Know Which Therapy You Want? Pick from our Library of 60+
+                  Authentic Kerala Ayurveda Protocols and We&apos;ll Get You
+                  on the Calendar with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu).
                 </p>
 
                 <ul className="mt-2 flex flex-col gap-2.5 font-body text-[13px] text-dark/70">
                   {[
-                    'Abhyanga, Shirodhara, Panchakarma & more',
-                    'Searchable menu by category',
-                    'Direct slot booking',
+                    'Abhyanga, Shirodhara, Panchakarma & More',
+                    'Searchable Menu by Category',
+                    'Direct Slot Booking',
                   ].map((point) => (
                     <li key={point} className="flex items-start gap-2.5">
                       <span

@@ -32,7 +32,7 @@ export default function Threshold() {
 
   return (
     <section
-      className="relative flex min-h-[100svh] overflow-hidden bg-primary"
+      className="relative flex h-[calc(100svh-6.5rem)] max-h-[calc(100svh-6.5rem)] min-h-[560px] overflow-hidden bg-primary"
       aria-labelledby="threshold-heading"
     >
       {/* L0  Gold dot grid */}
@@ -83,7 +83,7 @@ export default function Threshold() {
       </motion.div>
 
       {/* ══════════ CONTENT ══════════════════════════════ */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-6 pb-10 pt-10 sm:px-10 md:pb-12 md:pt-12 lg:pb-10 lg:pt-12">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-6 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10 md:pb-10 md:pt-10 lg:pb-8 lg:pt-8">
         {/* Masthead — Vol. II  |  Plate N°01 */}
         <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
           <motion.span
@@ -106,14 +106,14 @@ export default function Threshold() {
         </div>
 
         {/* Body — flipped grid: PLATE lg:col-start-1, TYPE lg:col-start-6 */}
-        <div className="mt-6 grid grid-cols-1 items-center gap-8 sm:mt-8 lg:mt-6 lg:grid-cols-12 lg:gap-12">
+        <div className="mt-4 grid grid-cols-1 items-center gap-6 sm:mt-5 lg:mt-3 lg:grid-cols-12 lg:gap-10">
           {/* ═══════════ PLATE (5) — left on desktop ═══════════ */}
           <div className="lg:order-1 lg:col-span-5">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.0, delay: 0.7, ease: EASE_OUT_PREMIUM }}
-              className="relative mx-auto w-full max-w-[260px] sm:max-w-[320px] lg:mx-0 lg:max-w-[380px]"
+              className="relative mx-auto w-full max-w-[220px] sm:max-w-[260px] lg:mx-0 lg:max-w-[280px]"
             >
               {/* Mandala — offset right+up (Treatments has it left+up; flipped) */}
               <motion.div
@@ -222,7 +222,7 @@ export default function Threshold() {
                     The Clinic
                   </p>
                   <p className="mt-1 font-body text-[13px] italic leading-[1.45] text-dark/85">
-                    37 Jalan Thamby Abdullah 1<br />
+                    No. 37, Jalan Thamby Abdullah-1<br />
                     Brickfields · 50470 · KL
                   </p>
                 </div>
@@ -232,6 +232,48 @@ export default function Threshold() {
 
           {/* ═══════════ TYPE (7) — right on desktop ═══════════ */}
           <div className="lg:order-2 lg:col-span-7">
+            {/* Sanskrit invocation — anchors the empty top-right zone of the
+                 type column. Devanagari script in gold, transliteration below,
+                 small-caps English translation. Right-aligned so it acts as
+                 marginalia rather than competing with the headline. */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4, ease: EASE_OUT_PREMIUM }}
+              className="mb-5 ml-auto max-w-[280px] text-right"
+            >
+              <span
+                aria-hidden
+                className="ml-auto block h-px w-16"
+                style={{
+                  background:
+                    'linear-gradient(to right, transparent, rgba(212,163,115,0.9))',
+                }}
+              />
+              <p
+                lang="sa"
+                className="mt-3 font-devanagari text-accent"
+                style={{
+                  fontSize: 'clamp(20px, 1.7vw, 26px)',
+                  lineHeight: '1.05',
+                }}
+              >
+                अतिथि देवो भव
+              </p>
+              <p
+                className="mt-2 font-body italic text-accent/85"
+                style={{ fontSize: '13px' }}
+              >
+                Atithi Devo Bhava
+              </p>
+              <p
+                className="mt-1 font-heading uppercase text-white/45"
+                style={{ fontSize: '9px', letterSpacing: '0.3em' }}
+              >
+                The guest is divine
+              </p>
+            </motion.div>
+
             {/* Eyebrow rule + small italic "The" (mirror of Treatments, trimmed) */}
             <div className="mb-2 flex items-center gap-3">
               <motion.div
@@ -245,7 +287,7 @@ export default function Threshold() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5, ease: EASE_OUT_PREMIUM }}
                 className="font-body italic text-accent/90"
-                style={{ fontSize: 'clamp(1.3rem, 2.2vw, 1.9rem)' }}
+                style={{ fontSize: 'clamp(1.2rem, 2vw, 1.7rem)' }}
               >
                 Begin with a
               </motion.span>
@@ -262,7 +304,7 @@ export default function Threshold() {
                 animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1 }}
                 transition={{ duration: 0.9, delay: 0.65, ease: EASE_OUT_PREMIUM }}
                 className="block"
-                style={{ fontSize: 'clamp(1.9rem, 5vw, 3.8rem)' }}
+                style={{ fontSize: 'clamp(1.9rem, 4.6vw, 3.4rem)' }}
               >
                 Cross the
               </motion.span>
@@ -270,14 +312,14 @@ export default function Threshold() {
                 initial={{ clipPath: 'inset(0 0 0 100%)', opacity: 0, rotate: 0.4 }}
                 animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1, rotate: -0.4 }}
                 transition={{ duration: 1.0, delay: 0.85, ease: EASE_OUT_PREMIUM }}
-                className="relative -mt-1 block font-body font-normal italic text-accent"
+                className="relative -mt-1 block font-body font-semibold italic text-accent"
                 style={{
-                  fontSize: 'clamp(2.6rem, 7.2vw, 5.4rem)',
+                  fontSize: 'clamp(2.4rem, 6.2vw, 4.6rem)',
                   letterSpacing: '-0.03em',
                   lineHeight: '0.84',
                 }}
               >
-                threshold<span className="text-accent/70">.</span>
+                Threshold<span className="text-accent/70">.</span>
                 <motion.span
                   initial={{ opacity: 0, scaleX: 0 }}
                   animate={{ opacity: 1, scaleX: 1 }}
@@ -297,12 +339,12 @@ export default function Threshold() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 1.05, ease: EASE_OUT_PREMIUM }}
-              className="mt-5 max-w-[520px] font-body italic text-white/80"
-              style={{ fontSize: '15.5px', lineHeight: '1.6' }}
+              className="mt-4 max-w-[520px] font-body italic text-white/80"
+              style={{ fontSize: '15px', lineHeight: '1.55' }}
             >
               Write, call, or step through the door. Every message reaches
-              Vaidya AKHIL directly — no bots, no call-trees, no marketing
-              lists.
+              the Kerala Ayurvedic Lifestyle vaidyasalai — read, considered,
+              and answered with the same care you&rsquo;d receive in person.
             </motion.p>
 
             {/* Trust row */}
@@ -310,7 +352,7 @@ export default function Threshold() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.25, ease: EASE_OUT_PREMIUM }}
-              className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10.5px] font-medium uppercase tracking-[0.2em] text-white/55"
+              className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10.5px] font-medium uppercase tracking-[0.2em] text-white/55"
             >
               <span>Every message read personally</span>
               <span aria-hidden className="h-0.5 w-0.5 rounded-full bg-accent/60" />
@@ -322,7 +364,7 @@ export default function Threshold() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.4, ease: EASE_OUT_PREMIUM }}
-              className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
+              className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
             >
               <CTAButton href="#letterhead" variant="primary" size="lg" shimmer>
                 Send a note
@@ -342,7 +384,7 @@ export default function Threshold() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.6, ease: EASE_OUT_PREMIUM }}
               href="#bureau"
-              className="mt-4 inline-flex items-center gap-2 font-heading text-[10.5px] font-medium uppercase tracking-[0.22em] text-white/45 transition-colors duration-300 hover:text-accent"
+              className="mt-3 inline-flex items-center gap-2 font-heading text-[10.5px] font-medium uppercase tracking-[0.22em] text-white/45 transition-colors duration-300 hover:text-accent"
             >
               <MapPin className="h-3 w-3" strokeWidth={2} />
               Find the clinic →

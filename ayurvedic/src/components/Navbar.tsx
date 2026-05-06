@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { Menu, X, ShoppingCart, User, Leaf, ChevronDown, Phone, Mail } from 'lucide-react'
+import { Menu, X, ShoppingCart, User, ChevronDown, Phone, Mail } from 'lucide-react'
 
 const productsDropdown = [
   { label: 'All Products',     href: '/products'                 },
@@ -74,16 +75,22 @@ export default function Navbar() {
           {/* ── Logo ── */}
           <Link
             href="/"
-            className="group flex shrink-0 items-center gap-2"
+            aria-label="Kerala Ayurvedic Lifestyle — home"
+            className="group flex shrink-0 items-center gap-3"
             onClick={() => setMobileOpen(false)}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1e3d32]/10 ring-1 ring-[#1e3d32]/20 transition-all duration-300 group-hover:bg-[#1e3d32]/15">
-              <Leaf className="h-5 w-5 text-[#1e3d32]" />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-[#1e3d32]">Kerala</span>
-              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-[#1e3d32]">Ayurvedic</span>
-            </div>
+            <Image
+              src="/logo.png"
+              alt="Kerala Ayurvedic Lifestyle"
+              width={842}
+              height={596}
+              priority
+              className="h-12 w-auto transition-transform duration-300 group-hover:scale-[1.03] sm:h-14"
+            />
+            <span className="hidden font-heading text-[11px] font-bold uppercase tracking-[0.22em] leading-tight text-[#1e3d32] sm:flex sm:flex-col">
+              <span>Kerala Ayurvedic</span>
+              <span className="text-[#7A9D54]">Lifestyle</span>
+            </span>
           </Link>
 
           {/* ── Desktop: Nav pill container ── */}

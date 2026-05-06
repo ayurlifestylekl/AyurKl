@@ -7,7 +7,7 @@ import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
 const credentials = [
   { text: 'Since 2008', icon: Award },
-  { text: 'Vaidya AKHIL HS (B.A.M.S)', icon: BadgeCheck },
+  { text: 'Certified Vaidyas (B.A.M.S., M.D. Ayu)', icon: BadgeCheck },
   { text: 'Authentic Kerala Formulas', icon: Leaf },
 ]
 

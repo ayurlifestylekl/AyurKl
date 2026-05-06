@@ -91,7 +91,7 @@ export default function FreeConsultationBanner() {
             <span aria-hidden className="h-1 w-1 rounded-full bg-accent/60" />
             <span>B.A.M.S Kerala</span>
             <span aria-hidden className="h-1 w-1 rounded-full bg-accent/60" />
-            <span>Vaidya AKHIL HS</span>
+            <span>Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</span>
           </motion.div>
 
           <motion.div
