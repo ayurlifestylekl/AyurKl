@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat, Lora, Playfair_Display, Tiro_Devanagari_Sanskrit, IM_Fell_English } from "next/font/google";
+import { Toaster } from "sonner";
+import { CartProvider } from "@/lib/cart/CartProvider";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppWidget from "@/components/WhatsAppWidget";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -115,10 +114,23 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${lora.variable} ${playfair.variable} ${devanagari.variable} ${fell.variable}`}>
       <body className="antialiased font-body bg-background text-foreground">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppWidget />
+        <CartProvider>
+          {children}
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              style: {
+                background: '#ffffff',
+                border: '1px solid rgba(30,61,50,0.10)',
+                color: '#1e3d32',
+                fontFamily: 'var(--font-lora)',
+                fontSize: '13px',
+                boxShadow:
+                  '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              },
+            }}
+          />
+        </CartProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { fadeUp } from '@/lib/motion'
 import type { Product, ProductBadge } from '@/types/content'
 import NocturneFrame from './atmosphere/NocturneFrame'
+import WishlistButton from '@/components/account/WishlistButton'
 
 const badgeAccent: Record<ProductBadge, string> = {
   NEW:        'text-secondary',
@@ -21,11 +22,15 @@ const badgeLabel: Record<ProductBadge, string> = {
   COMBO: 'COMBO',
 }
 
-export default function ProductPlateCard({ product }: { product: Product }) {
+export default function ProductPlateCard({ product, initialSaved = false }: { product: Product; initialSaved?: boolean }) {
   const outOfStock = product.stockQty === 0
 
   return (
-    <motion.article variants={fadeUp(0)} className="group flex flex-col">
+    <motion.article variants={fadeUp(0)} className="group relative flex flex-col">
+      {/* Wishlist heart — absolute overlay, click does not navigate */}
+      <div className="absolute right-3 top-3 z-10">
+        <WishlistButton productId={product.id} initialSaved={initialSaved} />
+      </div>
       <Link
         href={`/products/${product.id}`}
         aria-label={`${product.name} — ${product.tagline}`}

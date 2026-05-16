@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 import { ShoppingBag, Minus, Plus } from 'lucide-react'
+import { toast } from 'sonner'
+import { useCart } from '@/lib/cart/CartProvider'
 
 interface AddToBagButtonProps {
   productId: string
@@ -10,19 +12,27 @@ interface AddToBagButtonProps {
 
 /**
  * Outline gold pill that expands to a qty stepper + commit button.
- * Cart state / Billplz integration lands in Phase 2; for now clicking
- * "Add" just logs the intent so we can wire the real flow later without
- * re-shooting this UI.
+ * Adds the product to the localStorage cart via CartProvider.
  */
 export default function AddToBagButton({ productId, disabled }: AddToBagButtonProps) {
   const [expanded, setExpanded] = useState(false)
   const [qty, setQty] = useState(1)
+  const { addItems } = useCart()
 
   function handleAdd() {
     if (disabled) return
-    // eslint-disable-next-line no-console
-    console.log('[cart:add]', { productId, qty })
+    addItems([{ productId, quantity: qty }])
+    toast.success(`${qty} ${qty === 1 ? 'item' : 'items'} added to your bag`, {
+      description: 'View bag or keep browsing.',
+      action: {
+        label: 'View bag',
+        onClick: () => {
+          window.location.href = '/cart'
+        },
+      },
+    })
     setExpanded(false)
+    setQty(1)
   }
 
   if (!expanded) {

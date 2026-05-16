@@ -22,6 +22,8 @@ export const products: Product[] = [
     stockQty: 42,
     isBundle: false,
     createdAt: '2025-08-15T00:00:00Z',
+    doshas: ['vata', 'pitta'],
+    useCases: ['dry-hair', 'scalp-heat', 'sleep'],
   },
   {
     id: 'neelibhringadi-oil',
@@ -37,6 +39,8 @@ export const products: Product[] = [
     stockQty: 35,
     isBundle: false,
     createdAt: '2025-11-20T00:00:00Z',
+    doshas: ['vata', 'pitta'],
+    useCases: ['hair-thinning', 'premature-greying'],
   },
 
   /* ── Skin Care ──────────────────────────────── */
@@ -56,6 +60,8 @@ export const products: Product[] = [
     stockQty: 18,
     isBundle: false,
     createdAt: '2025-09-10T00:00:00Z',
+    doshas: ['pitta', 'vata'],
+    useCases: ['dark-spots', 'uneven-tone'],
   },
   {
     id: 'nalpamaradi-turmeric',
@@ -72,6 +78,8 @@ export const products: Product[] = [
     stockQty: 28,
     isBundle: false,
     createdAt: '2026-02-01T00:00:00Z',
+    doshas: ['pitta', 'kapha'],
+    useCases: ['blemishes', 'body-glow'],
   },
 
   /* ── Pain Relief ────────────────────────────── */
@@ -89,6 +97,8 @@ export const products: Product[] = [
     stockQty: 30,
     isBundle: false,
     createdAt: '2025-07-20T00:00:00Z',
+    doshas: ['vata', 'kapha'],
+    useCases: ['joint-pain', 'muscle-stiffness'],
   },
   {
     id: 'kottamchukkadi-thailam',
@@ -104,6 +114,8 @@ export const products: Product[] = [
     stockQty: 22,
     isBundle: false,
     createdAt: '2025-12-05T00:00:00Z',
+    doshas: ['vata', 'kapha'],
+    useCases: ['sciatica', 'sports-injury'],
   },
 
   /* ── Digestion ──────────────────────────────── */
@@ -121,6 +133,8 @@ export const products: Product[] = [
     stockQty: 55,
     isBundle: false,
     createdAt: '2025-06-01T00:00:00Z',
+    doshas: ['vata', 'pitta', 'kapha'],
+    useCases: ['daily-cleanse', 'bowel-regularity'],
   },
   {
     id: 'hingvashtak-churna',
@@ -136,6 +150,8 @@ export const products: Product[] = [
     stockQty: 40,
     isBundle: false,
     createdAt: '2025-10-15T00:00:00Z',
+    doshas: ['vata', 'kapha'],
+    useCases: ['bloating', 'low-appetite'],
   },
 
   /* ── Stress Relief ──────────────────────────── */
@@ -154,6 +170,8 @@ export const products: Product[] = [
     stockQty: 60,
     isBundle: false,
     createdAt: '2026-01-10T00:00:00Z',
+    doshas: ['vata', 'kapha'],
+    useCases: ['stress', 'sleep', 'vitality'],
   },
   {
     id: 'brahmi-ghritam',
@@ -169,6 +187,8 @@ export const products: Product[] = [
     stockQty: 25,
     isBundle: false,
     createdAt: '2025-11-01T00:00:00Z',
+    doshas: ['pitta', 'vata'],
+    useCases: ['mental-clarity', 'memory', 'focus'],
   },
 
   /* ── Immunity ───────────────────────────────── */
@@ -187,6 +207,8 @@ export const products: Product[] = [
     stockQty: 48,
     isBundle: false,
     createdAt: '2025-08-01T00:00:00Z',
+    doshas: ['vata', 'pitta'],
+    useCases: ['immunity', 'energy', 'respiratory'],
   },
 
   /* ── Women's Wellness ───────────────────────── */
@@ -204,6 +226,8 @@ export const products: Product[] = [
     stockQty: 32,
     isBundle: false,
     createdAt: '2025-12-20T00:00:00Z',
+    doshas: ['pitta', 'vata'],
+    useCases: ['hormonal-balance', 'menstrual'],
   },
 
   /* ── Detox & Cleanse ────────────────────────── */
@@ -221,6 +245,8 @@ export const products: Product[] = [
     stockQty: 38,
     isBundle: false,
     createdAt: '2026-01-25T00:00:00Z',
+    doshas: ['pitta', 'kapha'],
+    useCases: ['detox', 'skin-clarity', 'uric-acid'],
   },
 
   /* ── Bundles / Combos ───────────────────────── */
@@ -240,6 +266,8 @@ export const products: Product[] = [
     stockQty: 15,
     isBundle: true,
     createdAt: '2026-03-01T00:00:00Z',
+    doshas: ['pitta', 'kapha'],
+    useCases: ['detox', 'cleanse'],
   },
   {
     id: 'daily-wellness-combo',
@@ -257,5 +285,7 @@ export const products: Product[] = [
     stockQty: 20,
     isBundle: true,
     createdAt: '2026-03-10T00:00:00Z',
+    doshas: ['vata', 'pitta', 'kapha'],
+    useCases: ['daily-wellness', 'stress', 'immunity'],
   },
 ]

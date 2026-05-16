@@ -1,0 +1,82 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import { ArrowLeft } from 'lucide-react'
+
+interface AuthCanvasProps {
+  children: React.ReactNode
+  /** Optional override for the top-right "Back to site" label */
+  backLabel?: string
+  /** Optional override for where "Back to..." points (defaults to home) */
+  backHref?: string
+}
+
+/**
+ * Shared dark/brand-tinted shell used by /auth/login, /admin/login,
+ * and /agent/login. Provides:
+ *   • dark herbal-green canvas + layered radial gradients + grain
+ *   • logo + tagline top-left
+ *   • "Back to site" top-right
+ *   • centered content area for the form card
+ *   • quiet brand footer
+ */
+export default function AuthCanvas({
+  children,
+  backLabel = 'Back to site',
+  backHref = '/',
+}: AuthCanvasProps) {
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-[#152b22] text-white">
+      {/* Layered radial gradients for atmosphere */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            'radial-gradient(60% 50% at 80% 0%, rgba(212,163,115,0.14), transparent 60%), radial-gradient(50% 60% at 0% 100%, rgba(122,157,84,0.12), transparent 60%)',
+        }}
+      />
+      {/* Grain overlay */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' /></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6' /></svg>\")",
+        }}
+      />
+
+      <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <Image
+            src="/logo.png"
+            alt="Kerala Ayurvedic Lifestyle"
+            width={842}
+            height={596}
+            className="h-10 w-auto transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+          <span className="hidden font-heading text-[10px] font-bold uppercase tracking-[0.22em] leading-tight text-white/85 sm:flex sm:flex-col">
+            <span>Kerala Ayurvedic</span>
+            <span className="text-[#D4A373]">Lifestyle</span>
+          </span>
+        </Link>
+        <Link
+          href={backHref}
+          className="group inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4A373]"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
+          {backLabel}
+        </Link>
+      </header>
+
+      <main className="relative z-10 mx-auto flex min-h-[calc(100vh-200px)] w-full max-w-md items-center justify-center px-4 pb-16 pt-8 sm:px-6">
+        {children}
+      </main>
+
+      <footer className="relative z-10 mx-auto max-w-7xl px-4 pb-8 text-center sm:px-6 lg:px-8">
+        <p className="font-body text-[11px] text-white/35">
+          © Kerala Ayurvedic Lifestyle Sdn Bhd · Brickfields, KL · Est. 2008
+        </p>
+      </footer>
+    </div>
+  )
+}

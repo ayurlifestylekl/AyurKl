@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
+import type { Dosha } from './quiz'
 
 export interface TrustItem {
   id: string
@@ -23,6 +24,12 @@ export interface Therapy {
   priceRm: number
   image: string
   bullets: [string, string, string]
+  /** Doshas this therapy balances. Used by the quiz recommendation engine. */
+  doshas?: Dosha[]
+  /** Free-form use cases (e.g. "joint-pain", "stress", "sleep") for symptom-driven matching. */
+  useCases?: string[]
+  /** Pre-visit checklist shown on the Appointments page hero. 3–5 short bullets. */
+  preVisit?: string[]
 }
 
 export type PromoAccent = 'primary' | 'accent' | 'secondary'
@@ -67,4 +74,8 @@ export interface Product {
   ingredients?: string[]
   /** Optional — shown as a small italic paragraph in "Dose / use". */
   dose?: string
+  /** Doshas this product balances. Used by the quiz recommendation engine. */
+  doshas?: Dosha[]
+  /** Free-form use cases for symptom-driven matching. */
+  useCases?: string[]
 }

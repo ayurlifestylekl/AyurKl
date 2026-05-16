@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Menu, X, ShoppingCart, User, ChevronDown, Phone, Mail } from 'lucide-react'
+import { Menu, X, ShoppingCart, User, ChevronDown, ChevronRight, Phone, Mail, Sparkles } from 'lucide-react'
 
 const productsDropdown = [
   { label: 'All Products',     href: '/products'                 },
@@ -12,15 +12,20 @@ const productsDropdown = [
 ]
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen]         = useState(false)
-  const [dropdownOpen, setDropdownOpen]     = useState(false)
-  const [mobileProducts, setMobileProducts] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [mobileOpen, setMobileOpen]               = useState(false)
+  const [dropdownOpen, setDropdownOpen]           = useState(false)
+  const [accountDropdownOpen, setAccountDropdown] = useState(false)
+  const [mobileProducts, setMobileProducts]       = useState(false)
+  const dropdownRef        = useRef<HTMLDivElement>(null)
+  const accountDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false)
+      }
+      if (accountDropdownRef.current && !accountDropdownRef.current.contains(e.target as Node)) {
+        setAccountDropdown(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -160,14 +165,117 @@ export default function Navbar() {
               <span className="font-heading text-[13px] font-semibold text-white">Cart</span>
               <ShoppingCart className="h-3.5 w-3.5 text-white" />
             </Link>
-            {/* User pill */}
-            <Link
-              href="/auth/login"
-              aria-label="Account"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#D4A373] transition-all duration-200 hover:bg-[#c4935f]"
-            >
-              <User className="h-4 w-4 text-white" />
-            </Link>
+            {/* User pill — dropdown */}
+            <div className="relative" ref={accountDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setAccountDropdown((p) => !p)}
+                aria-label="Account menu"
+                aria-haspopup="menu"
+                aria-expanded={accountDropdownOpen}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#D4A373] transition-all duration-200 hover:bg-[#c4935f] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A373]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3ee]"
+              >
+                <User className="h-4 w-4 text-white" />
+              </button>
+
+              {accountDropdownOpen && (
+                <div className="absolute right-0 top-full mt-3 w-[336px] origin-top-right">
+                  <div
+                    className="relative overflow-hidden rounded-[28px] border border-[#D4A373]/25 bg-gradient-to-b from-[#234a3e] via-[#1d3d31] to-[#173329]"
+                    style={{
+                      boxShadow:
+                        '0 24px 60px -18px rgba(0,0,0,0.55), 0 8px 20px -10px rgba(0,0,0,0.4), inset 0 1px 0 0 rgba(255,255,255,0.07)',
+                    }}
+                  >
+                    {/* Grain overlay for depth */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
+                      style={{
+                        backgroundImage:
+                          "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' /></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6' /></svg>\")",
+                      }}
+                    />
+
+                    {/* Eyebrow rule */}
+                    <div className="relative flex items-center gap-3 px-6 pt-5 pb-3">
+                      <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#D4A373]/40" />
+                      <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.32em] text-[#D4A373]/85">
+                        Sign in as
+                      </span>
+                      <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#D4A373]/40" />
+                    </div>
+
+                    {/* Item 1 — Wellness Member */}
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setAccountDropdown(false)}
+                      className="group relative flex items-center gap-4 border-b border-white/[0.06] px-6 py-4 transition-colors duration-200 hover:bg-white/[0.035]"
+                    >
+                      <span className="absolute left-0 top-1/2 h-0 w-[3px] -translate-y-1/2 rounded-r-full bg-[#D4A373] transition-[height] duration-300 group-hover:h-9" />
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#D4A373]/30 bg-[#D4A373]/[0.06] transition-colors duration-200 group-hover:border-[#D4A373]/55 group-hover:bg-[#D4A373]/[0.14]">
+                        <User className="h-[18px] w-[18px] text-[#D4A373]" strokeWidth={1.6} />
+                      </span>
+                      <span className="flex flex-1 flex-col gap-0.5">
+                        <span
+                          className="font-heading text-[14px] font-semibold text-white"
+                          style={{ letterSpacing: '-0.005em' }}
+                        >
+                          Wellness Member
+                        </span>
+                        <span
+                          className="font-body text-[11.5px] text-white/55"
+                          style={{ lineHeight: 1.55 }}
+                        >
+                          Track orders & consultations
+                        </span>
+                      </span>
+                      <ChevronRight
+                        className="h-4 w-4 -translate-x-2 text-[#D4A373]/0 transition-[transform,color] duration-300 group-hover:translate-x-0 group-hover:text-[#D4A373]/85"
+                        strokeWidth={2}
+                      />
+                    </Link>
+
+                    {/* Item 2 — Brand Partner */}
+                    <Link
+                      href="/partners"
+                      onClick={() => setAccountDropdown(false)}
+                      className="group relative flex items-center gap-4 px-6 py-4 transition-colors duration-200 hover:bg-white/[0.035]"
+                    >
+                      <span className="absolute left-0 top-1/2 h-0 w-[3px] -translate-y-1/2 rounded-r-full bg-[#D4A373] transition-[height] duration-300 group-hover:h-9" />
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#D4A373]/30 bg-[#D4A373]/[0.06] transition-colors duration-200 group-hover:border-[#D4A373]/55 group-hover:bg-[#D4A373]/[0.14]">
+                        <Sparkles className="h-[18px] w-[18px] text-[#D4A373]" strokeWidth={1.6} />
+                      </span>
+                      <span className="flex flex-1 flex-col gap-0.5">
+                        <span
+                          className="font-heading text-[14px] font-semibold text-white"
+                          style={{ letterSpacing: '-0.005em' }}
+                        >
+                          Brand Partner
+                        </span>
+                        <span
+                          className="font-body text-[11.5px] text-white/55"
+                          style={{ lineHeight: 1.55 }}
+                        >
+                          Affiliate program for creators
+                        </span>
+                      </span>
+                      <ChevronRight
+                        className="h-4 w-4 -translate-x-2 text-[#D4A373]/0 transition-[transform,color] duration-300 group-hover:translate-x-0 group-hover:text-[#D4A373]/85"
+                        strokeWidth={2}
+                      />
+                    </Link>
+
+                    {/* Footer mark */}
+                    <div className="relative border-t border-white/[0.06] px-6 py-2.5 text-center">
+                      <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.32em] text-white/30">
+                        Kerala Ayurvedic Lifestyle
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* ── Mobile: hamburger ── */}
@@ -245,20 +353,28 @@ export default function Navbar() {
               </Link>
             </li>
 
-            {/* CTA row */}
-            <li className="mt-4 flex items-center gap-3 pb-2">
+            {/* CTA stack */}
+            <li className="mt-4 space-y-2 pb-2">
               <Link
                 href="/auth/login"
                 onClick={() => setMobileOpen(false)}
-                className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/15 py-2.5 font-heading text-sm font-semibold text-white/70 transition-all hover:border-white/30 hover:text-white"
+                className="flex items-center justify-center gap-2 rounded-full border border-white/15 py-2.5 font-heading text-sm font-semibold text-white/70 transition-all hover:border-white/30 hover:text-white"
               >
                 <User className="h-4 w-4" />
-                My Account
+                Wellness Member
+              </Link>
+              <Link
+                href="/partners"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 rounded-full border border-white/15 py-2.5 font-heading text-sm font-semibold text-white/70 transition-all hover:border-white/30 hover:text-white"
+              >
+                <Sparkles className="h-4 w-4" />
+                Brand Partner
               </Link>
               <Link
                 href="/book"
                 onClick={() => setMobileOpen(false)}
-                className="flex flex-1 items-center justify-center rounded-full bg-[#D4A373] py-2.5 font-heading text-sm font-bold uppercase tracking-wide text-[#1a1a1a] transition-all hover:bg-[#c4935f]"
+                className="flex items-center justify-center rounded-full bg-[#D4A373] py-2.5 font-heading text-sm font-bold uppercase tracking-wide text-[#1a1a1a] transition-all hover:bg-[#c4935f]"
               >
                 Book Now
               </Link>
