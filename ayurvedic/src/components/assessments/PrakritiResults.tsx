@@ -10,14 +10,16 @@ import {
   XCircle,
 } from 'lucide-react'
 import { prakritiQuiz } from '@/data/quizzes/prakriti'
-import { products } from '@/data/products'
 import { therapies } from '@/data/therapies'
 import { scorePercentages } from '@/lib/quizzes/scorer'
 import type { Dosha, QuizResultRow } from '@/types/quiz'
+import type { Product } from '@/types/content'
 
 interface PrakritiResultsProps {
   result: QuizResultRow
   completedAt: string
+  /** Recommended products, resolved upstream from Supabase + fallback. */
+  recommendedProducts: Product[]
 }
 
 const dateFormat = new Intl.DateTimeFormat('en-MY', {
@@ -38,13 +40,13 @@ const DOSHA_LABEL: Record<Dosha, string> = {
   kapha: 'Kapha',
 }
 
-export default function PrakritiResults({ result, completedAt }: PrakritiResultsProps) {
+export default function PrakritiResults({
+  result,
+  completedAt,
+  recommendedProducts,
+}: PrakritiResultsProps) {
   const archetype = prakritiQuiz.archetypes[result.archetypeKey]
   const pct = scorePercentages(result.scores, result.totalPoints)
-
-  const recommendedProducts = (archetype.recommendations.productSlugs ?? [])
-    .map((slug) => products.find((p) => p.id === slug))
-    .filter((p): p is NonNullable<typeof p> => Boolean(p))
 
   const recommendedTherapies = (archetype.recommendations.therapySlugs ?? [])
     .map((slug) => therapies.find((t) => t.slug === slug))

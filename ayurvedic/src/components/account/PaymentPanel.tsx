@@ -9,9 +9,10 @@ interface PaymentPanelProps {
 }
 
 const STATUS_LABEL: Record<PaymentStatus, { label: string; tone: string }> = {
-  paid:    { label: 'Paid',    tone: 'text-[#2F5D50] bg-[#2F5D50]/[0.08] border-[#2F5D50]/25' },
-  pending: { label: 'Pending', tone: 'text-amber-700 bg-amber-50 border-amber-200' },
-  failed:  { label: 'Failed',  tone: 'text-red-700 bg-red-50 border-red-200' },
+  paid:     { label: 'Paid',     tone: 'text-[#2F5D50] bg-[#2F5D50]/[0.08] border-[#2F5D50]/25' },
+  pending:  { label: 'Pending',  tone: 'text-amber-700 bg-amber-50 border-amber-200' },
+  failed:   { label: 'Failed',   tone: 'text-red-700 bg-red-50 border-red-200' },
+  refunded: { label: 'Refunded', tone: 'text-slate-700 bg-slate-100 border-slate-300' },
 }
 
 export default function PaymentPanel({ paymentStatus, total }: PaymentPanelProps) {

@@ -4,6 +4,8 @@ import { Compass, ArrowRight } from 'lucide-react'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { createClient } from '@/lib/supabase/server'
 import { getLatestResult } from '@/lib/quizzes/queries'
+import { getStorefrontProducts } from '@/lib/storefront/products'
+import { prakritiQuiz } from '@/data/quizzes/prakriti'
 import PrakritiResults from '@/components/assessments/PrakritiResults'
 
 export const metadata = {
@@ -44,5 +46,21 @@ export default async function PrakritiResultsPage() {
     )
   }
 
-  return <PrakritiResults result={latest.result} completedAt={latest.completedAt} />
+  // Resolve recommended products from Supabase (with hardcoded fallback inside
+  // getStorefrontProducts). Match by slug — both legacy and Supabase products
+  // use the same slug-like key, so this works during the transition.
+  const archetype = prakritiQuiz.archetypes[latest.result.archetypeKey]
+  const slugList = archetype?.recommendations.productSlugs ?? []
+  const allProducts = await getStorefrontProducts(supabase)
+  const recommendedProducts = slugList
+    .map((slug) => allProducts.find((p) => p.id === slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p))
+
+  return (
+    <PrakritiResults
+      result={latest.result}
+      completedAt={latest.completedAt}
+      recommendedProducts={recommendedProducts}
+    />
+  )
 }

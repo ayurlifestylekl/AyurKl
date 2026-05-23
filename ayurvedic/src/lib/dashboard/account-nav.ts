@@ -7,6 +7,7 @@ export const accountNav: NavItem[] = [
   { label: 'Appointments', href: '/account/appointments', icon: 'calendar' },
   { label: 'Promo Wallet', href: '/account/promos', icon: 'gift' },
   { label: 'Wishlist', href: '/account/wishlist', icon: 'heart' },
+  { label: 'My Reviews', href: '/account/reviews', icon: 'star' },
   { label: 'Messages', href: '/account/messages', icon: 'inbox' },
   { label: 'Addresses', href: '/account/addresses', icon: 'map-pin' },
   { label: 'Profile', href: '/account/profile', icon: 'user' },

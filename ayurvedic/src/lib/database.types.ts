@@ -33,6 +33,10 @@ export type Database = {
           deleted_at: string | null
           deletion_requested_at: string | null
           mfa_enrolled: boolean
+          tags: string[] | null
+          internal_notes: string | null
+          blocked_at: string | null
+          blocked_reason: string | null
         }
         Insert: {
           id: string
@@ -57,6 +61,10 @@ export type Database = {
           deleted_at?: string | null
           deletion_requested_at?: string | null
           mfa_enrolled?: boolean
+          tags?: string[] | null
+          internal_notes?: string | null
+          blocked_at?: string | null
+          blocked_reason?: string | null
         }
         Update: {
           id?: string
@@ -81,6 +89,10 @@ export type Database = {
           deleted_at?: string | null
           deletion_requested_at?: string | null
           mfa_enrolled?: boolean
+          tags?: string[] | null
+          internal_notes?: string | null
+          blocked_at?: string | null
+          blocked_reason?: string | null
         }
       }
       notifications: {
@@ -147,6 +159,30 @@ export type Database = {
           is_bundle: boolean
           image_url: string | null
           created_at: string
+          slug: string | null
+          short_description: string | null
+          ingredients: string | null
+          dosage_instructions: string | null
+          contraindications: string | null
+          certifications: string | null
+          dosha_indication: 'vata' | 'pitta' | 'kapha' | 'tridosha' | 'none'
+          sale_price_rm: number | null
+          sale_starts_at: string | null
+          sale_ends_at: string | null
+          member_price_rm: number | null
+          low_stock_threshold: number | null
+          allow_backorder: boolean
+          expiry_date: string | null
+          tags: string[] | null
+          status: 'active' | 'draft' | 'archived'
+          meta_title: string | null
+          meta_description: string | null
+          og_image_url: string | null
+          weight_grams: number | null
+          image_urls: string[] | null
+          featured: boolean
+          created_by_admin_id: string | null
+          updated_at: string
         }
         Insert: {
           id?: string
@@ -159,6 +195,30 @@ export type Database = {
           is_bundle?: boolean
           image_url?: string | null
           created_at?: string
+          slug?: string | null
+          short_description?: string | null
+          ingredients?: string | null
+          dosage_instructions?: string | null
+          contraindications?: string | null
+          certifications?: string | null
+          dosha_indication?: 'vata' | 'pitta' | 'kapha' | 'tridosha' | 'none'
+          sale_price_rm?: number | null
+          sale_starts_at?: string | null
+          sale_ends_at?: string | null
+          member_price_rm?: number | null
+          low_stock_threshold?: number | null
+          allow_backorder?: boolean
+          expiry_date?: string | null
+          tags?: string[] | null
+          status?: 'active' | 'draft' | 'archived'
+          meta_title?: string | null
+          meta_description?: string | null
+          og_image_url?: string | null
+          weight_grams?: number | null
+          image_urls?: string[] | null
+          featured?: boolean
+          created_by_admin_id?: string | null
+          updated_at?: string
         }
         Update: {
           id?: string
@@ -170,6 +230,71 @@ export type Database = {
           category?: string | null
           is_bundle?: boolean
           image_url?: string | null
+          created_at?: string
+          slug?: string | null
+          short_description?: string | null
+          ingredients?: string | null
+          dosage_instructions?: string | null
+          contraindications?: string | null
+          certifications?: string | null
+          dosha_indication?: 'vata' | 'pitta' | 'kapha' | 'tridosha' | 'none'
+          sale_price_rm?: number | null
+          sale_starts_at?: string | null
+          sale_ends_at?: string | null
+          member_price_rm?: number | null
+          low_stock_threshold?: number | null
+          allow_backorder?: boolean
+          expiry_date?: string | null
+          tags?: string[] | null
+          status?: 'active' | 'draft' | 'archived'
+          meta_title?: string | null
+          meta_description?: string | null
+          og_image_url?: string | null
+          weight_grams?: number | null
+          image_urls?: string[] | null
+          featured?: boolean
+          created_by_admin_id?: string | null
+          updated_at?: string
+        }
+      }
+      stock_movements: {
+        Row: {
+          id: string
+          product_id: string
+          movement_type: 'received' | 'sold' | 'returned' | 'write_off' | 'recount_adjust' | 'reserved' | 'unreserved'
+          quantity_delta: number
+          reason: string | null
+          reference_order_id: string | null
+          actor_id: string | null
+          cost_price_rm: number | null
+          expiry_date: string | null
+          notes: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          movement_type: 'received' | 'sold' | 'returned' | 'write_off' | 'recount_adjust' | 'reserved' | 'unreserved'
+          quantity_delta: number
+          reason?: string | null
+          reference_order_id?: string | null
+          actor_id?: string | null
+          cost_price_rm?: number | null
+          expiry_date?: string | null
+          notes?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          movement_type?: 'received' | 'sold' | 'returned' | 'write_off' | 'recount_adjust' | 'reserved' | 'unreserved'
+          quantity_delta?: number
+          reason?: string | null
+          reference_order_id?: string | null
+          actor_id?: string | null
+          cost_price_rm?: number | null
+          expiry_date?: string | null
+          notes?: string | null
           created_at?: string
         }
       }
@@ -198,8 +323,8 @@ export type Database = {
           id: string
           customer_id: string | null
           total_amount_rm: number
-          payment_status: 'pending' | 'paid' | 'failed'
-          fulfillment_status: 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
+          fulfillment_status: 'pending' | 'processing' | 'packing' | 'shipped' | 'delivered' | 'completed' | 'cancelled'
           courier_service: 'Pos Laju' | 'J&T Express' | 'DHL' | 'GDex' | 'Ninja Van' | 'Self-Pickup' | null
           tracking_number: string | null
           referral_agent_id: string | null
@@ -207,13 +332,29 @@ export type Database = {
           cancelled_at: string | null
           cancel_reason: string | null
           practitioner_note: string | null
+          channel: 'web' | 'manual' | 'walk_in' | 'phone' | 'shopee' | 'tiktok_shop' | 'lazada' | 'instagram' | 'whatsapp'
+          payment_method: 'billplz' | 'cod' | 'bank_transfer' | 'fpx' | 'cash' | 'card' | null
+          subtotal_rm: number | null
+          tax_amount_rm: number | null
+          shipping_amount_rm: number | null
+          discount_amount_rm: number | null
+          discount_code: string | null
+          billing_address_id: string | null
+          shipping_address_id: string | null
+          invoice_number: string | null
+          paid_at: string | null
+          shipped_at: string | null
+          delivered_at: string | null
+          completed_at: string | null
+          internal_notes: string | null
+          created_by_admin_id: string | null
         }
         Insert: {
           id?: string
           customer_id?: string | null
           total_amount_rm: number
-          payment_status?: 'pending' | 'paid' | 'failed'
-          fulfillment_status?: 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          payment_status?: 'pending' | 'paid' | 'failed' | 'refunded'
+          fulfillment_status?: 'pending' | 'processing' | 'packing' | 'shipped' | 'delivered' | 'completed' | 'cancelled'
           courier_service?: 'Pos Laju' | 'J&T Express' | 'DHL' | 'GDex' | 'Ninja Van' | 'Self-Pickup' | null
           tracking_number?: string | null
           referral_agent_id?: string | null
@@ -221,13 +362,29 @@ export type Database = {
           cancelled_at?: string | null
           cancel_reason?: string | null
           practitioner_note?: string | null
+          channel?: 'web' | 'manual' | 'walk_in' | 'phone' | 'shopee' | 'tiktok_shop' | 'lazada' | 'instagram' | 'whatsapp'
+          payment_method?: 'billplz' | 'cod' | 'bank_transfer' | 'fpx' | 'cash' | 'card' | null
+          subtotal_rm?: number | null
+          tax_amount_rm?: number | null
+          shipping_amount_rm?: number | null
+          discount_amount_rm?: number | null
+          discount_code?: string | null
+          billing_address_id?: string | null
+          shipping_address_id?: string | null
+          invoice_number?: string | null
+          paid_at?: string | null
+          shipped_at?: string | null
+          delivered_at?: string | null
+          completed_at?: string | null
+          internal_notes?: string | null
+          created_by_admin_id?: string | null
         }
         Update: {
           id?: string
           customer_id?: string | null
           total_amount_rm?: number
-          payment_status?: 'pending' | 'paid' | 'failed'
-          fulfillment_status?: 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          payment_status?: 'pending' | 'paid' | 'failed' | 'refunded'
+          fulfillment_status?: 'pending' | 'processing' | 'packing' | 'shipped' | 'delivered' | 'completed' | 'cancelled'
           courier_service?: 'Pos Laju' | 'J&T Express' | 'DHL' | 'GDex' | 'Ninja Van' | 'Self-Pickup' | null
           tracking_number?: string | null
           referral_agent_id?: string | null
@@ -235,6 +392,92 @@ export type Database = {
           cancelled_at?: string | null
           cancel_reason?: string | null
           practitioner_note?: string | null
+          channel?: 'web' | 'manual' | 'walk_in' | 'phone' | 'shopee' | 'tiktok_shop' | 'lazada' | 'instagram' | 'whatsapp'
+          payment_method?: 'billplz' | 'cod' | 'bank_transfer' | 'fpx' | 'cash' | 'card' | null
+          subtotal_rm?: number | null
+          tax_amount_rm?: number | null
+          shipping_amount_rm?: number | null
+          discount_amount_rm?: number | null
+          discount_code?: string | null
+          billing_address_id?: string | null
+          shipping_address_id?: string | null
+          invoice_number?: string | null
+          paid_at?: string | null
+          shipped_at?: string | null
+          delivered_at?: string | null
+          completed_at?: string | null
+          internal_notes?: string | null
+          created_by_admin_id?: string | null
+        }
+      }
+      order_events: {
+        Row: {
+          id: string
+          order_id: string
+          actor_id: string | null
+          event_type: string
+          from_status: string | null
+          to_status: string | null
+          payload: Json
+          is_customer_visible: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          actor_id?: string | null
+          event_type: string
+          from_status?: string | null
+          to_status?: string | null
+          payload?: Json
+          is_customer_visible?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          actor_id?: string | null
+          event_type?: string
+          from_status?: string | null
+          to_status?: string | null
+          payload?: Json
+          is_customer_visible?: boolean
+          created_at?: string
+        }
+      }
+      refunds: {
+        Row: {
+          id: string
+          order_id: string
+          amount_rm: number
+          reason: string
+          refund_method: 'billplz' | 'cod' | 'bank_transfer' | 'fpx' | 'cash' | 'card'
+          gateway_reference: string | null
+          notes: string | null
+          created_by_admin_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          amount_rm: number
+          reason: string
+          refund_method: 'billplz' | 'cod' | 'bank_transfer' | 'fpx' | 'cash' | 'card'
+          gateway_reference?: string | null
+          notes?: string | null
+          created_by_admin_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          amount_rm?: number
+          reason?: string
+          refund_method?: 'billplz' | 'cod' | 'bank_transfer' | 'fpx' | 'cash' | 'card'
+          gateway_reference?: string | null
+          notes?: string | null
+          created_by_admin_id?: string
+          created_at?: string
         }
       }
       addresses: {
@@ -318,12 +561,26 @@ export type Database = {
           doctor_name: string
           appointment_date_time: string
           duration_mins: number
-          status: 'scheduled' | 'completed' | 'cancelled'
+          status: 'pending' | 'scheduled' | 'confirmed' | 'checked_in' | 'in_progress' | 'completed' | 'cancelled' | 'no_show' | 'rescheduled'
           advance_payment_rm: number | null
           calcom_booking_uid: string | null
           mode: 'in-person' | 'virtual'
           meeting_link: string | null
           notes: string | null
+          rescheduled_from_id: string | null
+          checked_in_at: string | null
+          completed_at: string | null
+          cancelled_at: string | null
+          cancellation_reason: string | null
+          internal_notes: string | null
+          clinical_notes: string | null
+          room: string | null
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          pre_visit_form: any | null
+          advance_payment_status: string | null
+          created_by_admin_id: string | null
+          updated_at: string
+          gender_requirement: 'any' | 'men_only' | 'ladies_only'
         }
         Insert: {
           id?: string
@@ -332,12 +589,26 @@ export type Database = {
           doctor_name?: string
           appointment_date_time: string
           duration_mins?: number
-          status?: 'scheduled' | 'completed' | 'cancelled'
+          status?: 'pending' | 'scheduled' | 'confirmed' | 'checked_in' | 'in_progress' | 'completed' | 'cancelled' | 'no_show' | 'rescheduled'
           advance_payment_rm?: number | null
           calcom_booking_uid?: string | null
           mode?: 'in-person' | 'virtual'
           meeting_link?: string | null
           notes?: string | null
+          rescheduled_from_id?: string | null
+          checked_in_at?: string | null
+          completed_at?: string | null
+          cancelled_at?: string | null
+          cancellation_reason?: string | null
+          internal_notes?: string | null
+          clinical_notes?: string | null
+          room?: string | null
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          pre_visit_form?: any | null
+          advance_payment_status?: string | null
+          created_by_admin_id?: string | null
+          updated_at?: string
+          gender_requirement?: 'any' | 'men_only' | 'ladies_only'
         }
         Update: {
           id?: string
@@ -346,12 +617,26 @@ export type Database = {
           doctor_name?: string
           appointment_date_time?: string
           duration_mins?: number
-          status?: 'scheduled' | 'completed' | 'cancelled'
+          status?: 'pending' | 'scheduled' | 'confirmed' | 'checked_in' | 'in_progress' | 'completed' | 'cancelled' | 'no_show' | 'rescheduled'
           advance_payment_rm?: number | null
           calcom_booking_uid?: string | null
           mode?: 'in-person' | 'virtual'
           meeting_link?: string | null
           notes?: string | null
+          rescheduled_from_id?: string | null
+          checked_in_at?: string | null
+          completed_at?: string | null
+          cancelled_at?: string | null
+          cancellation_reason?: string | null
+          internal_notes?: string | null
+          clinical_notes?: string | null
+          room?: string | null
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          pre_visit_form?: any | null
+          advance_payment_status?: string | null
+          created_by_admin_id?: string | null
+          updated_at?: string
+          gender_requirement?: 'any' | 'men_only' | 'ladies_only'
         }
       }
       sales_agents: {
@@ -364,6 +649,11 @@ export type Database = {
           total_sales_generated_rm: number
           total_commission_earned_rm: number
           created_at: string
+          status: 'active' | 'suspended'
+          suspended_at: string | null
+          suspended_reason: string | null
+          internal_notes: string | null
+          updated_at: string
         }
         Insert: {
           id?: string
@@ -374,6 +664,11 @@ export type Database = {
           total_sales_generated_rm?: number
           total_commission_earned_rm?: number
           created_at?: string
+          status?: 'active' | 'suspended'
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          internal_notes?: string | null
+          updated_at?: string
         }
         Update: {
           id?: string
@@ -383,6 +678,220 @@ export type Database = {
           commission_type?: 'affiliate' | 'reseller'
           total_sales_generated_rm?: number
           total_commission_earned_rm?: number
+          created_at?: string
+          status?: 'active' | 'suspended'
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          internal_notes?: string | null
+          updated_at?: string
+        }
+      }
+      agent_commissions: {
+        Row: {
+          id: string
+          agent_id: string
+          order_id: string
+          base_amount_rm: number
+          rate_percent: number
+          commission_rm: number
+          status: 'pending' | 'paid' | 'reversed'
+          payout_id: string | null
+          reversal_reason: string | null
+          notes: string | null
+          created_at: string
+          paid_at: string | null
+          reversed_at: string | null
+        }
+        Insert: {
+          id?: string
+          agent_id: string
+          order_id: string
+          base_amount_rm: number
+          rate_percent: number
+          commission_rm: number
+          status?: 'pending' | 'paid' | 'reversed'
+          payout_id?: string | null
+          reversal_reason?: string | null
+          notes?: string | null
+          created_at?: string
+          paid_at?: string | null
+          reversed_at?: string | null
+        }
+        Update: {
+          id?: string
+          agent_id?: string
+          order_id?: string
+          base_amount_rm?: number
+          rate_percent?: number
+          commission_rm?: number
+          status?: 'pending' | 'paid' | 'reversed'
+          payout_id?: string | null
+          reversal_reason?: string | null
+          notes?: string | null
+          created_at?: string
+          paid_at?: string | null
+          reversed_at?: string | null
+        }
+      }
+      agent_payouts: {
+        Row: {
+          id: string
+          agent_id: string
+          amount_rm: number
+          commission_count: number
+          period_start: string | null
+          period_end: string | null
+          payment_method: string
+          bank_reference: string | null
+          notes: string | null
+          created_by_admin_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          agent_id: string
+          amount_rm: number
+          commission_count?: number
+          period_start?: string | null
+          period_end?: string | null
+          payment_method: string
+          bank_reference?: string | null
+          notes?: string | null
+          created_by_admin_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          agent_id?: string
+          amount_rm?: number
+          commission_count?: number
+          period_start?: string | null
+          period_end?: string | null
+          payment_method?: string
+          bank_reference?: string | null
+          notes?: string | null
+          created_by_admin_id?: string | null
+          created_at?: string
+        }
+      }
+      external_sales: {
+        Row: {
+          id: string
+          agent_id: string
+          channel: 'tiktok_shop' | 'shopee' | 'lazada' | 'instagram' | 'whatsapp' | 'other'
+          gross_amount_rm: number
+          rate_percent: number
+          commission_rm: number
+          customer_name: string | null
+          customer_contact: string | null
+          marketplace_order_ref: string | null
+          proof_url: string | null
+          notes: string | null
+          logged_by_admin_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          agent_id: string
+          channel: 'tiktok_shop' | 'shopee' | 'lazada' | 'instagram' | 'whatsapp' | 'other'
+          gross_amount_rm: number
+          rate_percent: number
+          commission_rm: number
+          customer_name?: string | null
+          customer_contact?: string | null
+          marketplace_order_ref?: string | null
+          proof_url?: string | null
+          notes?: string | null
+          logged_by_admin_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          agent_id?: string
+          channel?: 'tiktok_shop' | 'shopee' | 'lazada' | 'instagram' | 'whatsapp' | 'other'
+          gross_amount_rm?: number
+          rate_percent?: number
+          commission_rm?: number
+          customer_name?: string | null
+          customer_contact?: string | null
+          marketplace_order_ref?: string | null
+          proof_url?: string | null
+          notes?: string | null
+          logged_by_admin_id?: string | null
+          created_at?: string
+        }
+      }
+      marketplace_orders: {
+        Row: {
+          id: string
+          channel: 'tiktok_shop' | 'shopee' | 'lazada' | 'instagram' | 'whatsapp' | 'other'
+          marketplace_order_ref: string | null
+          customer_name: string
+          customer_phone: string | null
+          customer_email: string | null
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          items: any
+          subtotal_rm: number
+          shipping_rm: number
+          total_amount_rm: number
+          referral_agent_id: string | null
+          status: 'pending' | 'approved' | 'rejected'
+          notes: string | null
+          rejection_reason: string | null
+          entered_by_admin_id: string | null
+          entered_by_user_id: string | null
+          approved_by_admin_id: string | null
+          created_order_id: string | null
+          approved_at: string | null
+          rejected_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          channel: 'tiktok_shop' | 'shopee' | 'lazada' | 'instagram' | 'whatsapp' | 'other'
+          marketplace_order_ref?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          customer_email?: string | null
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          items?: any
+          subtotal_rm?: number
+          shipping_rm?: number
+          total_amount_rm: number
+          referral_agent_id?: string | null
+          status?: 'pending' | 'approved' | 'rejected'
+          notes?: string | null
+          rejection_reason?: string | null
+          entered_by_admin_id?: string | null
+          entered_by_user_id?: string | null
+          approved_by_admin_id?: string | null
+          created_order_id?: string | null
+          approved_at?: string | null
+          rejected_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          channel?: 'tiktok_shop' | 'shopee' | 'lazada' | 'instagram' | 'whatsapp' | 'other'
+          marketplace_order_ref?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          customer_email?: string | null
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          items?: any
+          subtotal_rm?: number
+          shipping_rm?: number
+          total_amount_rm?: number
+          referral_agent_id?: string | null
+          status?: 'pending' | 'approved' | 'rejected'
+          notes?: string | null
+          rejection_reason?: string | null
+          entered_by_admin_id?: string | null
+          entered_by_user_id?: string | null
+          approved_by_admin_id?: string | null
+          created_order_id?: string | null
+          approved_at?: string | null
+          rejected_at?: string | null
           created_at?: string
         }
       }
@@ -464,6 +973,8 @@ export type Database = {
           unread_by_customer: boolean
           unread_by_clinic: boolean
           created_at: string
+          internal_notes: string | null
+          assigned_to_admin_id: string | null
         }
         Insert: {
           id?: string
@@ -475,6 +986,8 @@ export type Database = {
           unread_by_customer?: boolean
           unread_by_clinic?: boolean
           created_at?: string
+          internal_notes?: string | null
+          assigned_to_admin_id?: string | null
         }
         Update: {
           id?: string
@@ -486,6 +999,8 @@ export type Database = {
           unread_by_customer?: boolean
           unread_by_clinic?: boolean
           created_at?: string
+          internal_notes?: string | null
+          assigned_to_admin_id?: string | null
         }
       }
       support_messages: {

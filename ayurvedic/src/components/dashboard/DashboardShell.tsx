@@ -26,6 +26,13 @@ import {
   Bell,
   MapPin,
   Heart,
+  Boxes,
+  Users,
+  Store,
+  Settings,
+  Star,
+  BarChart3,
+  History,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
@@ -55,6 +62,13 @@ const ICONS: Record<IconName, LucideIcon> = {
   'map-pin':         MapPin,
   'heart':           Heart,
   'bell':            Bell,
+  'boxes':           Boxes,
+  'users':           Users,
+  'store':           Store,
+  'settings':        Settings,
+  'star':            Star,
+  'bar-chart':       BarChart3,
+  'history':         History,
 }
 
 interface DashboardShellProps {

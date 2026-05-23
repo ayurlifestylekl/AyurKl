@@ -16,6 +16,13 @@ export type IconName =
   | 'map-pin'
   | 'heart'
   | 'bell'
+  | 'boxes'
+  | 'users'
+  | 'store'
+  | 'settings'
+  | 'star'
+  | 'bar-chart'
+  | 'history'
 
 export interface NavItem {
   label: string

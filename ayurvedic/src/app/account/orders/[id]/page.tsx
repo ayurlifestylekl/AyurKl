@@ -28,14 +28,17 @@ function shortId(id: string): string {
 }
 
 function titleForStatus(
-  payment: 'pending' | 'paid' | 'failed',
-  fulfillment: 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  payment: 'pending' | 'paid' | 'failed' | 'refunded',
+  fulfillment: 'pending' | 'processing' | 'packing' | 'shipped' | 'delivered' | 'completed' | 'cancelled'
 ): string {
   if (fulfillment === 'cancelled') return 'Cancelled.'
+  if (payment === 'refunded') return 'Refunded.'
   if (payment === 'failed') return 'Order cancelled.'
   if (payment === 'pending') return 'Awaiting payment.'
+  if (fulfillment === 'completed') return 'Completed.'
   if (fulfillment === 'delivered') return 'Delivered.'
   if (fulfillment === 'shipped') return 'On the way.'
+  if (fulfillment === 'packing') return 'Being packed.'
   return 'Being prepared.'
 }
 
@@ -58,6 +61,15 @@ export default async function OrderDetailPage({
   if (!order) {
     notFound()
   }
+
+  // Refunds RLS auto-scopes to this customer's orders
+  const { data: refundsRaw } = await supabase
+    .from('refunds')
+    .select('id, amount_rm, reason, refund_method, created_at')
+    .eq('order_id', params.id)
+    .order('created_at', { ascending: false })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const refunds: any[] = (refundsRaw ?? []) as any[]
 
   const title = titleForStatus(order.payment_status, order.fulfillment_status)
 
@@ -117,6 +129,41 @@ export default async function OrderDetailPage({
           />
         </div>
       </div>
+
+      {/* ── Refunds (only when present) ──────────────────────────── */}
+      {refunds.length > 0 ? (
+        <section
+          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+          style={{
+            boxShadow:
+              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          }}
+        >
+          <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32] sm:px-6">
+            Refunds
+          </header>
+          <ul className="divide-y divide-[#1e3d32]/6">
+            {refunds.map((r) => (
+              <li key={r.id} className="px-5 py-3 sm:px-6">
+                <div className="flex items-center justify-between">
+                  <span className="font-heading text-[14px] font-semibold text-[#1e3d32]">
+                    RM {Number(r.amount_rm).toFixed(2)}
+                  </span>
+                  <span className="font-body text-[11px] text-[#2B2B2B]/55">
+                    {dateFormat.format(new Date(r.created_at))}
+                  </span>
+                </div>
+                <p className="mt-1 font-body text-[12.5px] text-[#2B2B2B]/70">
+                  {r.reason}
+                </p>
+                <p className="mt-0.5 font-body text-[11px] text-[#2B2B2B]/55">
+                  Refunded via {String(r.refund_method).replace('_', ' ')}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {/* ── Actions ───────────────────────────────────────────────── */}
       <OrderActions

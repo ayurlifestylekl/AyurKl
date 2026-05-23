@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { products } from '@/data/products'
+import { createClient } from '@/lib/supabase/server'
+import { getStorefrontProducts } from '@/lib/storefront/products'
 import ProductsHeroManifesto from '@/components/products/ProductsHeroManifesto'
 import ProductsPageClient from '@/components/products/ProductsPageClient'
 
@@ -11,6 +12,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function ProductsPage({
   searchParams,
 }: {
@@ -18,6 +21,8 @@ export default async function ProductsPage({
 }) {
   const params = await searchParams
   const initialCategory = params.category || 'all'
+  const supabase = await createClient()
+  const products = await getStorefrontProducts(supabase)
 
   return (
     <>
