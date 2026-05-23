@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Minus, Plus, ShoppingCart, X } from 'lucide-react'
 import type { WholesaleCatalogItem } from '@/lib/agent/wholesale-shop/queries'
 import { useWholesaleCart } from '@/components/agent/WholesaleCartProvider'

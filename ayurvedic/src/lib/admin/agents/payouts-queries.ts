@@ -23,7 +23,7 @@ export async function listPendingPayouts(
   supabase: SB,
   options: { includeSuspended?: boolean; minTotalRm?: number } = {},
 ): Promise<PendingPayoutSummary[]> {
-  let q = supabase
+  const q = supabase
     .from('agent_commissions')
     .select(
       `agent_id, commission_rm, created_at,

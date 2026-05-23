@@ -228,7 +228,7 @@ export async function pushOneOffVoucher(
   raw: unknown,
 ): Promise<ActionResult<{ promoId: string; code: string; pushed: number }>> {
   try {
-    const me = await requireAdminSession()
+    await requireAdminSession()
     const input = OneOffSchema.parse(raw)
     const supabase = await createClient()
 

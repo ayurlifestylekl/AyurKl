@@ -125,9 +125,8 @@ export async function placeWholesaleOrder(
 
     // 4. Insert the order
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: orderRow, error: orderErr } = await (
-      supabase.from('wholesale_orders') as any
-    )
+    const orderTable = supabase.from('wholesale_orders') as any
+    const { data: orderRow, error: orderErr } = await orderTable
       .insert({
         order_number: orderNumber,
         agent_id: agent.id,
@@ -155,9 +154,8 @@ export async function placeWholesaleOrder(
       wholesale_order_id: order.id,
     }))
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: itemsErr } = await (
-      supabase.from('wholesale_order_items') as any
-    ).insert(itemsPayload)
+    const itemsTable = supabase.from('wholesale_order_items') as any
+    const { error: itemsErr } = await itemsTable.insert(itemsPayload)
     if (itemsErr) {
       // Best-effort cleanup so we don't leave an empty order
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
