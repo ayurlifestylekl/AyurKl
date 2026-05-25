@@ -184,9 +184,12 @@ function SignInPane({ nextPath }: { nextPath?: string }) {
           label="Email or phone"
           type="text"
           autoComplete="username"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
           required
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
+          value={identifier.trim()}
+          onChange={(e) => setIdentifier(e.target.value.trim())}
           placeholder="you@example.com  or  +60 12 345 6789"
         />
         <AuthInput

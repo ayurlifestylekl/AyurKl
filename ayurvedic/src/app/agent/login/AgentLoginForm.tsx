@@ -130,9 +130,12 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
               label="Partner email"
               type="email"
               autoComplete="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={email.trim()}
+              onChange={(e) => setEmail(e.target.value.trim())}
               placeholder="creator@example.com"
             />
             <PremiumInput

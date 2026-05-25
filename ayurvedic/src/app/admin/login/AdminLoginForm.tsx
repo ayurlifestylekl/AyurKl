@@ -115,9 +115,12 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
               label="Staff email"
               type="email"
               autoComplete="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={email.trim()}
+              onChange={(e) => setEmail(e.target.value.trim())}
               placeholder="admin@keralaayurvedic.com"
             />
             <TerminalInput
