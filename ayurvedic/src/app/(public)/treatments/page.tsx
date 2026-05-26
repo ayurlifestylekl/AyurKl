@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 
-import TreatmentsMenu from '@/components/treatments/TreatmentsMenu'
+import CategoryGrid from '@/components/treatments/CategoryGrid'
+import FreeConsultationBlock from '@/components/treatments/FreeConsultationBlock'
+import TreatmentsHero from '@/components/treatments/TreatmentsHero'
 import { sanityClient } from '@/sanity/client'
 import { isSanityConfigured } from '@/sanity/env'
-import { TREATMENTS_QUERY, TREATMENT_CATEGORIES_QUERY } from '@/sanity/queries'
-import type { Treatment, TreatmentCategory } from '@/types/treatments'
+import { TREATMENT_CATEGORIES_INDEX_QUERY } from '@/sanity/queries'
+import type { TreatmentCategory } from '@/types/treatments'
 
 export const metadata: Metadata = {
   title: 'Treatments — Authentic Kerala Ayurveda Therapies',
@@ -14,38 +16,41 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Treatments — Kerala Ayurvedic Lifestyle',
     description:
-      'Sixty-plus authentic Ayurveda therapies across 12 categories. Personal protocols designed by a KKM-registered Kerala Vaidya in Brickfields, KL.',
+      'Authentic Ayurveda therapies across the clinic catalogue. Personal protocols designed by a KKM-registered Kerala Vaidya in Brickfields, KL.',
     url: 'https://keralaayurvedic.com/treatments',
     type: 'website',
   },
 }
 
-// Short window so treatment edits in Sanity Studio show up within ~30s.
 export const revalidate = 30
 
-async function loadFromSanity(): Promise<{
-  categories: TreatmentCategory[]
-  treatments: Treatment[]
-}> {
-  if (!isSanityConfigured) {
-    // Sanity hasn't been wired up yet. Render an empty grid + the Free
-    // Consultation banner so the route still ships.
-    return { categories: [], treatments: [] }
-  }
-
+async function loadCategories(): Promise<TreatmentCategory[]> {
+  if (!isSanityConfigured) return []
   try {
-    const [categories, treatments] = await Promise.all([
-      sanityClient.fetch<TreatmentCategory[]>(TREATMENT_CATEGORIES_QUERY),
-      sanityClient.fetch<Treatment[]>(TREATMENTS_QUERY),
-    ])
-    return { categories: categories ?? [], treatments: treatments ?? [] }
+    const categories = await sanityClient.fetch<TreatmentCategory[]>(
+      TREATMENT_CATEGORIES_INDEX_QUERY,
+    )
+    return categories ?? []
   } catch (err) {
     console.error('[treatments] Sanity fetch failed:', err)
-    return { categories: [], treatments: [] }
+    return []
   }
 }
 
 export default async function TreatmentsPage() {
-  const { categories, treatments } = await loadFromSanity()
-  return <TreatmentsMenu categories={categories} treatments={treatments} />
+  const categories = await loadCategories()
+  const therapyCount = categories.reduce(
+    (sum, c) => sum + (c.treatmentCount ?? 0),
+    0,
+  )
+  return (
+    <>
+      <TreatmentsHero
+        therapyCount={therapyCount || undefined}
+        onBrowseTreatments={undefined}
+      />
+      <CategoryGrid categories={categories} />
+      <FreeConsultationBlock />
+    </>
+  )
 }
