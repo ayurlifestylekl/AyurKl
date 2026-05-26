@@ -10,8 +10,8 @@ import { BotanicalMandala } from '@/components/ui/Decorations'
 import { EASE_OUT_PREMIUM } from '@/lib/motion'
 
 interface TreatmentsHeroProps {
-  therapyCount: number
-  onBrowseTreatments: () => void
+  therapyCount?: number
+  onBrowseTreatments?: () => void
 }
 
 /* Gold dot grid — bumped from 0.04 → 0.07 */
