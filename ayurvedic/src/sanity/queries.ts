@@ -30,6 +30,88 @@ export const TREATMENTS_QUERY = groq`
 `
 
 /* ──────────────────────────────────────────────────────────────────────
+ * Treatments — Level 1: categories index with treatment counts
+ * ────────────────────────────────────────────────────────────────────── */
+export const TREATMENT_CATEGORIES_INDEX_QUERY = groq`
+  *[_type == "treatmentCategory" && defined(slug.current)]
+    | order(coalesce(order, 9999) asc, title asc) {
+      _id,
+      title,
+      "slug": slug.current,
+      description,
+      image,
+      order,
+      "treatmentCount": count(*[_type == "treatment" && references(^._id)])
+    }
+`
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Treatments — Level 2: category by slug + its treatments
+ * ────────────────────────────────────────────────────────────────────── */
+export const CATEGORY_BY_SLUG_QUERY = groq`
+  *[_type == "treatmentCategory" && slug.current == $slug][0] {
+    _id, title, description, image, order,
+    "slug": slug.current,
+    "treatments": *[_type == "treatment" && references(^._id) && defined(slug.current)]
+      | order(coalesce(order, 9999) asc, title asc) {
+        _id, title, duration, description, requiresConsultation, order,
+        "slug": slug.current,
+        heroImage
+      }
+  }
+`
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Treatments — Level 3: single treatment by category+treatment slug
+ * ────────────────────────────────────────────────────────────────────── */
+export const TREATMENT_BY_SLUG_QUERY = groq`
+  *[_type == "treatment" && slug.current == $treatmentSlug
+      && category->slug.current == $categorySlug][0] {
+    _id, title, duration, description, body, benefits,
+    procedureSteps, sessionsRecommended, contraindications,
+    origin, sanskritName, requiresConsultation, order,
+    "slug": slug.current,
+    heroImage, gallery,
+    category->{
+      _id, title, order,
+      "slug": slug.current
+    }
+  }
+`
+
+/**
+ * Siblings of a treatment within its category. Used by:
+ *  - the switcher (needs _id, title, slug)
+ *  - the prev/next pager (needs same)
+ *  - the related-therapies grid (needs duration + heroImage too)
+ *
+ * Includes the current treatment — caller filters it out when needed.
+ */
+export const TREATMENT_SIBLINGS_QUERY = groq`
+  *[_type == "treatment" && category._ref == $categoryId && defined(slug.current)]
+    | order(coalesce(order, 9999) asc, title asc) {
+      _id, title, order, duration,
+      "slug": slug.current,
+      "categorySlug": category->slug.current,
+      heroImage
+    }
+`
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Treatments — static params for prerendering
+ * ────────────────────────────────────────────────────────────────────── */
+export const CATEGORY_SLUGS_QUERY = groq`
+  *[_type == "treatmentCategory" && defined(slug.current)][].slug.current
+`
+
+export const TREATMENT_SLUG_PAIRS_QUERY = groq`
+  *[_type == "treatment" && defined(slug.current) && defined(category->slug.current)] {
+    "categorySlug": category->slug.current,
+    "treatmentSlug": slug.current
+  }
+`
+
+/* ──────────────────────────────────────────────────────────────────────
  * Journal (blog) queries
  * ────────────────────────────────────────────────────────────────────── */
 
