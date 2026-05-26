@@ -8,7 +8,6 @@ import type { TreatmentSibling } from '@/types/treatments'
 
 interface TherapySwitcherProps {
   categoryTitle: string
-  categorySlug: string
   siblings: TreatmentSibling[]
   currentSlug: string
 }
@@ -18,7 +17,6 @@ const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x',
 
 export default function TherapySwitcher({
   categoryTitle,
-  categorySlug,
   siblings,
   currentSlug,
 }: TherapySwitcherProps) {

@@ -157,7 +157,6 @@ export default async function TreatmentDetailPage({
       <TherapyStickyBar treatmentTitle={treatment.title} />
       <TherapySwitcher
         categoryTitle={treatment.category.title}
-        categorySlug={treatment.category.slug}
         siblings={siblings}
         currentSlug={treatment.slug}
       />
