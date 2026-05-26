@@ -27,16 +27,18 @@ const GOOGLE_ENABLED = process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED !== 'false'
  * NEXT_PUBLIC_REQUIRE_OTP env var on Vercel. This is by design: the flag
  * is dev-only, enforced at compile time, not just documented.
  *
- * In local dev, set NEXT_PUBLIC_REQUIRE_OTP=false in .env.local to skip
- * the email-OTP step (avoids Supabase free-tier email rate limits during
- * iterative testing). Also requires toggling OFF "Confirm email" in
- * Supabase Dashboard → Authentication → Providers → Email — otherwise
- * sign-up still hits the rate limit.
+ * Set NEXT_PUBLIC_REQUIRE_OTP=false to skip the email-OTP step
+ * (avoids Supabase free-tier email rate limits during demo / dev /
+ * iterative testing). When unset, defaults to ON for safety.
+ *
+ * For sign-up to also skip the email-confirmation link, you must
+ * additionally toggle OFF "Confirm email" in Supabase Dashboard →
+ * Authentication → Providers → Email.
+ *
+ * ⚠ Turn this back ON for real launch — without OTP, anyone who
+ * guesses or phishes a password gets full account access.
  */
-const OTP_REQUIRED =
-  process.env.NODE_ENV === 'production'
-    ? true
-    : process.env.NEXT_PUBLIC_REQUIRE_OTP !== 'false'
+const OTP_REQUIRED = process.env.NEXT_PUBLIC_REQUIRE_OTP !== 'false'
 
 interface LoginFormProps {
   initialTab: AuthTab
