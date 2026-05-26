@@ -77,12 +77,13 @@ export default async function CategoryPage({
       <section className="relative overflow-hidden bg-cream pb-12">
         <CategoryPageHeader
           title={category.title}
-          description={category.description}
+          description={category.description ?? null}
           order={category.order}
           treatmentCount={category.treatments.length}
         />
         <TherapyGrid
-          categorySlug={category.slug}
+          // CATEGORY_BY_SLUG_QUERY always projects slug; non-null assertion is safe here.
+          categorySlug={category.slug!}
           treatments={category.treatments}
         />
       </section>

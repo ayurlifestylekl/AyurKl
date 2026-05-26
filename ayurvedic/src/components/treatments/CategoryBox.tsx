@@ -19,6 +19,11 @@ interface CategoryBoxProps {
  * Whole card links to /treatments/<slug>.
  */
 export default function CategoryBox({ category, index }: CategoryBoxProps) {
+  // slug is optional on TreatmentCategory (legacy booking query omits it).
+  // CategoryGrid is only used from the new L1 page which always projects slug,
+  // but guard defensively so we never build a broken href.
+  if (!category.slug) return null
+
   const number = String(index + 1).padStart(2, '0')
   const count = category.treatmentCount ?? 0
   const href = `/treatments/${category.slug}`

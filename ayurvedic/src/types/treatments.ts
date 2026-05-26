@@ -15,9 +15,10 @@ export interface ProcedureStep {
 export interface TreatmentCategory {
   _id: string
   title: string
-  slug: string
-  description: string | null
-  image: SanityImageRef | null
+  /** Optional because the legacy TREATMENT_CATEGORIES_QUERY (booking flow) doesn't project this. New queries always do. */
+  slug?: string
+  description?: string | null
+  image?: SanityImageRef | null
   order: number | null
   treatmentCount?: number
 }
