@@ -5,14 +5,19 @@
  * Run: `npx tsx scripts/backfill-treatment-slugs.ts`
  * Requires `SANITY_API_WRITE_TOKEN` in env.
  */
-import 'dotenv/config'
+import { config as loadEnv } from 'dotenv'
+// Match Next.js env precedence: .env.local overrides .env.
+// Must run BEFORE we read process.env below.
+loadEnv({ path: '.env.local' })
+loadEnv()
 import { createClient } from '@sanity/client'
-import {
-  projectId,
-  dataset,
-  apiVersion,
-  writeToken,
-} from '../src/sanity/env'
+
+// Read env vars directly. We don't import from src/sanity/env because ESM
+// imports are hoisted and would evaluate before dotenv populates process.env.
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? ''
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production'
+const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-10-01'
+const writeToken = process.env.SANITY_API_WRITE_TOKEN
 
 if (!projectId || !writeToken) {
   console.error('Missing SANITY env. Set NEXT_PUBLIC_SANITY_PROJECT_ID and SANITY_API_WRITE_TOKEN.')
