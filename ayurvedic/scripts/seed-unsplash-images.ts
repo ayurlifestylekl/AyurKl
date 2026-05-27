@@ -247,7 +247,7 @@ async function main() {
     arr.push(t)
     treatmentsByCat.set(t.category.slug, arr)
   }
-  for (const [catSlug, arr] of treatmentsByCat) {
+  for (const [catSlug, arr] of Array.from(treatmentsByCat.entries())) {
     const pool = CATEGORY_POOL[catSlug]
     if (!pool || pool.length === 0) {
       console.warn(`! no pool for category ${catSlug}`)
