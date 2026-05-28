@@ -7,24 +7,32 @@ import { motion } from 'framer-motion'
 import { EASE_OUT_PREMIUM } from '@/lib/motion'
 import CTAButton from '@/components/ui/CTAButton'
 
+/* ── Palette (hero-local) ───────────────────────────────── */
+const SAFFRON      = '#E8941A'   // vivid turmeric — italic accent
+const SAFFRON_SOFT = '#F2B25A'   // eyebrow on dark
+const INK          = '#0E1E1A'   // deep base for dim
+
 /* ── Animation helpers ──────────────────────────────────── */
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 30 },
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.2, delay, ease: EASE_OUT_PREMIUM },
+    transition: { duration: 1.0, delay, ease: EASE_OUT_PREMIUM },
   },
 })
 
 export default function HeroSection() {
   return (
-    <section className="relative flex h-[calc(100svh-7.5rem)] min-h-[600px] w-full flex-col items-center justify-center overflow-hidden bg-primary pt-6 sm:pt-8">
-      {/* ── Background Image & Cinematic Overlay ────────── */}
+    <section
+      className="relative h-[calc(100svh-7.5rem)] min-h-[640px] w-full overflow-hidden"
+      style={{ backgroundColor: INK }}
+    >
+      {/* ── Background photo — dimmed evenly ──────────────── */}
       <motion.div
-        initial={{ scale: 1.05 }}
+        initial={{ scale: 1.08 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 8, ease: 'easeOut' }}
+        transition={{ duration: 10, ease: 'easeOut' }}
         className="absolute inset-0 z-0"
       >
         <Image
@@ -35,52 +43,114 @@ export default function HeroSection() {
           className="object-cover object-center"
           sizes="100vw"
         />
-        {/* Dark/Green Luxury Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/70 to-[#1a332c]/95 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Even dim — slightly darker at top/bottom for navbar + stats bar continuity */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(14,30,26,0.88) 0%, rgba(14,30,26,0.72) 35%, rgba(14,30,26,0.68) 60%, rgba(14,30,26,0.82) 100%)',
+          }}
+        />
+
+        {/* Center radial — slightly darker behind the headline area for legibility */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 65% 60% at 50% 48%, rgba(14,30,26,0.30) 0%, transparent 70%)',
+          }}
+        />
+
+        {/* Warm saffron glow corners — picks up the photo's turmeric tones */}
+        <div
+          className="absolute inset-0 mix-blend-overlay"
+          style={{
+            background:
+              'radial-gradient(ellipse 35% 50% at 6% 18%, rgba(232,148,26,0.22) 0%, transparent 65%), radial-gradient(ellipse 35% 50% at 94% 82%, rgba(232,148,26,0.22) 0%, transparent 65%)',
+          }}
+        />
       </motion.div>
 
-      {/* ── Content ─────────────────────────────────────── */}
-      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8">
-        
-        {/* Eyebrow */}
-        <motion.div {...fadeUp(0.1)} className="mb-5 flex items-center justify-center gap-4">
-          <span className="h-[1px] w-12 bg-accent/60" aria-hidden />
-          <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-accent sm:text-[11px]">
+      {/* ── Content — centered, full-width breathing ─────── */}
+      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-6 pb-28 pt-20 text-center sm:px-8 sm:pb-32 sm:pt-24 lg:px-12 lg:pt-20">
+
+        {/* Eyebrow — long lines on both sides, sits well below the navbar */}
+        <motion.div {...fadeUp(0.1)} className="mb-9 flex items-center justify-center gap-5 sm:gap-7">
+          <span
+            className="h-[1px] w-20 sm:w-32 md:w-44"
+            style={{ backgroundColor: SAFFRON_SOFT, opacity: 0.7 }}
+            aria-hidden
+          />
+          <span
+            className="font-heading text-[11px] font-bold uppercase tracking-[0.36em] sm:text-[13px] whitespace-nowrap"
+            style={{ color: SAFFRON_SOFT }}
+          >
             Est. 2008 • Brickfields, KL
           </span>
-          <span className="h-[1px] w-12 bg-accent/60" aria-hidden />
+          <span
+            className="h-[1px] w-20 sm:w-32 md:w-44"
+            style={{ backgroundColor: SAFFRON_SOFT, opacity: 0.7 }}
+            aria-hidden
+          />
         </motion.div>
 
-        {/* Main Headline */}
-        <motion.h1 {...fadeUp(0.25)} className="flex flex-col items-center justify-center">
-          <span className="font-heading text-[clamp(2.5rem,6vw,5rem)] font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-lg">
+        {/* Headline — centered, larger now that it owns the full width */}
+        <motion.h1 {...fadeUp(0.25)} className="flex flex-col items-center">
+          <span
+            className="font-heading font-extrabold text-white"
+            style={{
+              fontSize: 'clamp(2.75rem, 7.2vw, 6.5rem)',
+              lineHeight: 1.0,
+              letterSpacing: '-0.025em',
+            }}
+          >
             Authentic Kerala
           </span>
-          <span className="mt-2 font-body text-[clamp(2.5rem,6vw,4.5rem)] italic leading-none text-accent drop-shadow-md">
+          <span
+            className="mt-2 font-display italic"
+            style={{
+              color: SAFFRON,
+              fontSize: 'clamp(3.25rem, 9vw, 8rem)',
+              lineHeight: 1.0,
+              letterSpacing: '-0.02em',
+              textShadow: '0 4px 36px rgba(232,148,26,0.32)',
+            }}
+          >
             Ayurveda
           </span>
         </motion.h1>
 
-        {/* Decorative divider */}
-        <motion.div {...fadeUp(0.4)} className="my-6 flex items-center justify-center gap-3">
-          <span className="h-[1px] w-16 bg-white/20" aria-hidden />
-          <div className="h-1.5 w-1.5 rotate-45 bg-accent/80" aria-hidden />
-          <span className="h-[1px] w-16 bg-white/20" aria-hidden />
-        </motion.div>
+        {/* Saffron bar accent — centered under headline */}
+        <motion.div
+          {...fadeUp(0.4)}
+          className="mt-7 h-[2px] w-28"
+          style={{ backgroundColor: SAFFRON }}
+          aria-hidden
+        />
 
-        {/* Tagline */}
+        {/* Tagline — wider, centered */}
         <motion.p
           {...fadeUp(0.5)}
-          className="max-w-2xl font-body text-[15px] leading-[1.8] text-white/80 sm:text-[17px]"
+          className="mt-7 max-w-3xl font-body leading-[1.6]"
+          style={{
+            color: 'rgba(251,246,236,0.88)',
+            fontSize: 'clamp(1.0625rem, 1.45vw, 1.3125rem)', // 17px → 21px
+          }}
         >
           Classical Kerala therapies —{' '}
-          <strong className="font-semibold text-white">prescribed, prepared and performed</strong>{' '}
-          by our <strong className="font-semibold text-white">certified vaidyas</strong>, with the precision of a clinic and the care of a tradition.
+          <strong className="font-semibold text-white">
+            prescribed, prepared and performed
+          </strong>{' '}
+          by our <strong className="font-semibold text-white">certified vaidyas</strong>,
+          with the precision of a clinic and the care of a tradition.
         </motion.p>
 
-        {/* CTA Button */}
-        <motion.div {...fadeUp(0.65)} className="mt-8">
+        {/* CTA row */}
+        <motion.div
+          {...fadeUp(0.65)}
+          className="mt-10 flex flex-wrap items-center justify-center gap-6"
+        >
           <CTAButton
             href="/book/consultation"
             variant="primary"
@@ -91,31 +161,49 @@ export default function HeroSection() {
           >
             Book a Consultation
           </CTAButton>
+
+          {/* Secondary link */}
+          <a
+            href="/treatments"
+            className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-white/70 underline decoration-1 underline-offset-[6px] transition-colors hover:text-white"
+            style={{ textDecorationColor: 'rgba(242,178,90,0.5)' }}
+          >
+            Explore Treatments →
+          </a>
         </motion.div>
       </div>
 
       {/* ── Floating Stats Bar (Bottom) ────────────────── */}
       <motion.div
-        {...fadeUp(0.8)}
-        className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-black/20 backdrop-blur-md"
+        {...fadeUp(0.85)}
+        className="absolute bottom-0 left-0 right-0 z-10 border-t backdrop-blur-md"
+        style={{
+          backgroundColor: 'rgba(14,30,26,0.78)',
+          borderTopColor: 'rgba(232,148,26,0.22)',
+        }}
       >
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-5 sm:px-8 lg:px-12">
           {[
-            { n: '15+', l: 'Years Experience' },
-            { n: '5,000+', l: 'Patients Healed' },
-            { n: '20+', l: 'Authentic Therapies' },
+            { n: '15+',    l: 'Years Experience'    },
+            { n: '5,000+', l: 'Patients Healed'     },
+            { n: '20+',    l: 'Authentic Therapies' },
           ].map((s, i, arr) => (
             <React.Fragment key={s.l}>
-              <div className="flex flex-col items-center text-center sm:flex-row sm:gap-4 sm:text-left">
-                <span className="font-heading text-2xl font-bold text-white sm:text-3xl">
+              <div className="flex flex-col items-start text-left sm:flex-row sm:items-baseline sm:gap-4">
+                <span
+                  className="font-heading font-extrabold leading-none"
+                  style={{ color: SAFFRON, fontSize: 'clamp(1.5rem, 2.6vw, 2rem)' }}
+                >
                   {s.n}
                 </span>
-                <span className="mt-1 font-heading text-[9px] font-semibold uppercase tracking-[0.2em] text-white/60 sm:mt-0 sm:text-[10px] sm:leading-tight">
-                  {s.l.replace(' ', '\n')}
+                <span
+                  className="mt-1 font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75 sm:mt-0 sm:text-[11px]"
+                >
+                  {s.l}
                 </span>
               </div>
               {i < arr.length - 1 && (
-                <div className="hidden h-10 w-[1px] bg-white/10 sm:block" />
+                <div className="hidden h-10 w-[1px] bg-white/15 sm:block" />
               )}
             </React.Fragment>
           ))}

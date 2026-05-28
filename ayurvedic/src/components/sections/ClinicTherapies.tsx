@@ -6,233 +6,410 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
-import { therapies } from '@/data/therapies'
-import type { Therapy } from '@/types/content'
+
+/* ── Palette (section-local; matches new hero language) ── */
+const EMERALD       = '#1A3B2E'
+const EMERALD_SOFT  = 'rgba(26,59,46,0.78)'
+const SAFFRON       = '#E8941A'
+const SAFFRON_DEEP  = '#C8741A'
+const CREAM         = '#FBF6EC'
+const CREAM_WARM    = '#F4E9D2'
+
+/* ── Five signature therapy categories ─────────────────── */
+type Category = {
+  slug: string
+  name: string
+  tagline: string
+  durationMin: number
+  image: string
+  href: string
+}
+
+const categories: Category[] = [
+  {
+    slug: 'spine-joint',
+    name: 'Spine & Joint Care',
+    tagline: 'Restore Mobility & Strength',
+    durationMin: 60,
+    image:
+      'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80',
+    href: '/treatments?category=spine-joint',
+  },
+  {
+    slug: 'hair-skin',
+    name: 'Hair & Skin Care',
+    tagline: 'Glow From Within',
+    durationMin: 50,
+    image:
+      'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80',
+    href: '/treatments?category=hair-skin',
+  },
+  {
+    slug: 'post-delivery',
+    name: 'Post-Delivery Care',
+    tagline: 'For New Mothers',
+    durationMin: 75,
+    image:
+      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80',
+    href: '/treatments?category=post-delivery',
+  },
+  {
+    slug: 'de-stress',
+    name: 'De-Stress Therapy',
+    tagline: 'Quiet the Nervous System',
+    durationMin: 45,
+    image:
+      'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80',
+    href: '/treatments?category=de-stress',
+  },
+  {
+    slug: 'panchakarma',
+    name: 'Panchakarma',
+    tagline: 'Five-Stage Detox',
+    durationMin: 90,
+    image: '/Ayurvedic-wellness-flat-lay-arrangement-1024x683.png',
+    href: '/treatments?category=panchakarma',
+  },
+]
 
 /**
- * Editorial Portrait Card Row
- * Five signature therapies in a single row, fits one screen on desktop,
- * snap-scrolls horizontally on mobile. Replaces the previous scroll-spied
- * sticky reveal.
+ * Editorial bento grid — one feature card + four smaller cards.
+ * Content-driven height, asymmetric header, palette synced to hero.
  */
 export default function ClinicTherapies() {
   return (
     <section
       id="clinic-therapies"
       aria-labelledby="therapies-heading"
-      className="relative overflow-hidden bg-cream lg:h-[calc(100svh-7.5rem)] lg:min-h-[680px] lg:max-h-[820px]"
+      className="relative overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, ${CREAM} 0%, ${CREAM_WARM} 100%)`,
+      }}
     >
-      {/* Layered atmospheric backdrop */}
+      {/* Atmospheric backdrop */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(60% 50% at 18% 8%, rgba(212,163,115,0.16) 0%, transparent 65%), radial-gradient(55% 60% at 88% 92%, rgba(47,93,80,0.12) 0%, transparent 60%), radial-gradient(80% 80% at 50% 50%, rgba(255,255,255,0.6) 0%, transparent 75%)',
+            'radial-gradient(50% 45% at 10% 5%, rgba(232,148,26,0.18) 0%, transparent 65%), radial-gradient(45% 55% at 92% 90%, rgba(26,59,46,0.10) 0%, transparent 60%)',
         }}
       />
 
-      {/* Botanical SVG ornament — left */}
+      {/* Botanical lotus — right edge, subtle */}
       <svg
         aria-hidden
         viewBox="0 0 200 200"
-        className="absolute -left-12 top-1/2 hidden h-[420px] w-[420px] -translate-y-1/2 opacity-[0.05] lg:block"
-      >
-        <path
-          d="M100 20 C 60 60, 60 140, 100 180 C 140 140, 140 60, 100 20 Z"
-          stroke="#2F5D50"
-          strokeWidth="0.5"
-          fill="none"
-        />
-        <path d="M100 30 C 70 65, 70 135, 100 170" stroke="#2F5D50" strokeWidth="0.4" fill="none" />
-        <path d="M100 30 C 130 65, 130 135, 100 170" stroke="#2F5D50" strokeWidth="0.4" fill="none" />
-        <line x1="100" y1="20" x2="100" y2="180" stroke="#2F5D50" strokeWidth="0.3" />
-        <circle cx="100" cy="100" r="40" stroke="#D4A373" strokeWidth="0.4" fill="none" />
-        <circle cx="100" cy="100" r="60" stroke="#D4A373" strokeWidth="0.3" fill="none" />
-        <circle cx="100" cy="100" r="80" stroke="#D4A373" strokeWidth="0.2" fill="none" />
-      </svg>
-
-      {/* Botanical SVG ornament — right (lotus) */}
-      <svg
-        aria-hidden
-        viewBox="0 0 200 200"
-        className="absolute -right-16 top-1/3 hidden h-[320px] w-[320px] opacity-[0.04] lg:block"
+        className="absolute -right-20 top-1/3 hidden h-[300px] w-[300px] opacity-[0.05] lg:block"
       >
         <g transform="translate(100 100)">
           {[0, 60, 120, 180, 240, 300].map((rot) => (
             <g key={rot} transform={`rotate(${rot})`}>
               <path
                 d="M0 -70 C 20 -45, 25 -15, 0 0 C -25 -15, -20 -45, 0 -70 Z"
-                fill="#2F5D50"
+                fill={EMERALD}
               />
             </g>
           ))}
-          <circle r="6" fill="#D4A373" />
+          <circle r="6" fill={SAFFRON} />
         </g>
       </svg>
 
       {/* Paper grain */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.55] mix-blend-multiply"
+        className="pointer-events-none absolute inset-0 opacity-[0.5] mix-blend-multiply"
         style={{
           backgroundImage: 'radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px)',
           backgroundSize: '3px 3px',
         }}
       />
 
-      {/* Top gold hairline */}
+      {/* Top saffron hairline */}
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 4%, rgba(212,163,115,0.35) 28%, rgba(212,163,115,0.55) 50%, rgba(212,163,115,0.35) 72%, transparent 96%)',
+            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.45) 50%, transparent 96%)',
         }}
       />
-      {/* Bottom gold hairline */}
+      {/* Bottom saffron hairline */}
       <div
         aria-hidden
         className="absolute inset-x-0 bottom-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 4%, rgba(212,163,115,0.30) 28%, rgba(212,163,115,0.50) 50%, rgba(212,163,115,0.30) 72%, transparent 96%)',
+            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.40) 50%, transparent 96%)',
         }}
       />
 
-      <div className="relative mx-auto flex h-full w-full max-w-7xl flex-col px-6 py-12 sm:px-10 lg:px-12 lg:py-14">
-        {/* ── Header ── */}
+      <div className="relative mx-auto w-full max-w-7xl px-6 py-14 sm:px-10 sm:py-16 lg:px-12 lg:py-20">
+
+        {/* ── Asymmetric Header: title left / byline+CTA right ── */}
         <motion.header
           variants={fadeUp(0)}
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="mx-auto max-w-3xl text-center"
+          className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-12"
         >
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-accent/50" aria-hidden />
-            <span className="font-heading text-[10px] font-bold uppercase tracking-[0.4em] text-accent sm:text-[11px]">
-              At The Clinic
-            </span>
-            <span className="h-px w-10 bg-accent/50" aria-hidden />
+          {/* Title block */}
+          <div className="lg:col-span-5">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-px w-12"
+                style={{ backgroundColor: SAFFRON_DEEP, opacity: 0.55 }}
+                aria-hidden
+              />
+              <span
+                className="font-heading text-[11px] font-bold uppercase tracking-[0.36em] sm:text-[12px]"
+                style={{ color: SAFFRON_DEEP }}
+              >
+                At The Clinic
+              </span>
+            </div>
+
+            <h2 id="therapies-heading" className="mt-5 flex flex-col items-start">
+              <span
+                className="font-heading font-extrabold tracking-tight"
+                style={{
+                  color: EMERALD,
+                  fontSize: 'clamp(2.25rem, 4.4vw, 3.75rem)',
+                  lineHeight: 1.02,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                Signature
+              </span>
+              <span
+                className="-mt-1 font-display italic"
+                style={{
+                  color: SAFFRON,
+                  fontSize: 'clamp(2.5rem, 5.2vw, 4.25rem)',
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.015em',
+                  textShadow: '0 3px 22px rgba(232,148,26,0.25)',
+                }}
+              >
+                Therapies
+              </span>
+            </h2>
           </div>
 
-          <h2
-            id="therapies-heading"
-            className="mt-5 font-heading text-[clamp(2.25rem,4vw,3.25rem)] font-extrabold leading-[1.05] tracking-tight text-primary"
-          >
-            Signature Therapies
-          </h2>
+          {/* Byline + CTA */}
+          <div className="lg:col-span-7 lg:border-l lg:pl-12" style={{ borderColor: `${SAFFRON}33` }}>
+            <p
+              className="font-body leading-[1.7]"
+              style={{
+                color: EMERALD_SOFT,
+                fontSize: 'clamp(15px, 1.1vw, 17px)',
+              }}
+            >
+              Under the expert guidance of our{' '}
+              <span className="font-semibold" style={{ color: EMERALD }}>
+                certified Vaidyas
+              </span>{' '}
+              and performed by highly experienced therapists from{' '}
+              <span className="font-semibold" style={{ color: EMERALD }}>
+                Kerala, India
+              </span>
+              .
+            </p>
 
-          <p className="mt-5 font-body text-[15px] leading-[1.7] text-dark/70 sm:text-[16px]">
-            Administered under the expert guidance of{' '}
-            <span className="font-medium text-primary">Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</span>{' '}
-            and performed by highly experienced Ayurvedic therapists from{' '}
-            <span className="font-medium text-primary">Kerala, India</span>.
-          </p>
+            <p
+              className="mt-3 font-display italic leading-[1.55]"
+              style={{
+                color: 'rgba(26,59,46,0.62)',
+                fontSize: 'clamp(14px, 1.05vw, 16px)',
+              }}
+            >
+              All treatments are tailored to your dosha — a deeply restorative,
+              authentic healing experience.
+            </p>
 
-          <div className="mt-4 flex items-center justify-center" aria-hidden>
-            <span className="h-1 w-1 rounded-full bg-accent/70" />
+            <div className="mt-5">
+              <Link
+                href="/treatments"
+                className="group inline-flex items-center gap-3 rounded-full px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.22em] text-white transition-all duration-300 hover:-translate-y-0.5"
+                style={{
+                  backgroundColor: EMERALD,
+                  boxShadow: `0 18px 40px -18px ${EMERALD}99`,
+                }}
+              >
+                Explore All Therapies
+                <ArrowRight className="h-[14px] w-[14px] transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
-
-          <p className="mt-3 font-body text-[14px] italic leading-[1.65] text-primary/65 sm:text-[15px]">
-            All treatments are tailored to your dosha — ensuring a deeply restorative and authentic healing experience.
-          </p>
         </motion.header>
 
-        {/* ── Card Row ── */}
+        {/* ── Bento Card Grid: 1 feature + 4 smaller ── */}
         <motion.ol
           variants={staggerParent(0.08, 0.15)}
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:mt-10 lg:grid-cols-5 lg:gap-5 xl:gap-6"
+          className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:mt-12 lg:grid-cols-4 lg:auto-rows-[260px] lg:gap-5"
         >
-          {therapies.map((therapy, i) => (
-            <TherapyCard key={therapy.slug} therapy={therapy} index={i} />
+          {categories.map((cat, i) => (
+            <CategoryCard key={cat.slug} cat={cat} index={i} featured={i === 0} />
           ))}
         </motion.ol>
-
-        {/* ── Footer link ── */}
-        <motion.div
-          variants={fadeUp(0)}
-          initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
-          className="mt-6 flex items-center justify-center lg:mt-8"
-        >
-          <Link
-            href="/treatments"
-            className="group inline-flex items-center gap-3 border-b border-primary/20 pb-1 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-primary transition-colors duration-300 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
-          >
-            Explore All Therapies
-            <ArrowRight className="h-[14px] w-[14px] transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </motion.div>
       </div>
     </section>
   )
 }
 
-function TherapyCard({ therapy, index }: { therapy: Therapy; index: number }) {
+function CategoryCard({
+  cat,
+  index,
+  featured,
+}: {
+  cat: Category
+  index: number
+  featured: boolean
+}) {
   const numberLabel = `0${index + 1}`
 
   return (
-    <motion.li variants={fadeUp(0)} className="group relative flex flex-col">
+    <motion.li
+      variants={fadeUp(0)}
+      className={`group relative flex flex-col ${
+        featured ? 'sm:col-span-2 lg:col-span-2 lg:row-span-2' : ''
+      }`}
+    >
       <Link
-        href={`/book/treatment?therapy=${therapy.slug}`}
-        aria-label={`Discover ${therapy.name} — ${therapy.tagline}`}
-        className="block rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+        href={cat.href}
+        aria-label={`Discover ${cat.name} — ${cat.tagline}`}
+        className="block h-full rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+        style={{ ['--tw-ring-color' as string]: SAFFRON } as React.CSSProperties}
       >
-        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-[0_12px_32px_-16px_rgba(47,93,80,0.35)]">
+        <div
+          className={`relative w-full overflow-hidden rounded-sm ${
+            featured
+              ? 'aspect-[4/5] sm:aspect-[16/9] lg:aspect-auto lg:h-full'
+              : 'aspect-[4/5] lg:aspect-auto lg:h-full'
+          }`}
+          style={{ boxShadow: `0 14px 36px -18px ${EMERALD}66` }}
+        >
           <Image
-            src={therapy.image}
-            alt={`${therapy.name} — ${therapy.tagline}`}
+            src={cat.image}
+            alt={`${cat.name} — ${cat.tagline}`}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 18vw"
-            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.045]"
+            sizes={
+              featured
+                ? '(max-width: 1024px) 100vw, 50vw'
+                : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
+            }
+            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.04]"
           />
 
-          {/* Primary tint */}
+          {/* Emerald wash */}
           <div
             aria-hidden
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(47,93,80,0.10)' }}
+            style={{ backgroundColor: 'rgba(26,59,46,0.18)' }}
           />
+
           {/* Bottom gradient for legibility */}
           <div
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/25 to-transparent"
+            className="absolute inset-x-0 bottom-0 h-[70%]"
+            style={{
+              background:
+                'linear-gradient(to top, rgba(14,30,26,0.88) 0%, rgba(14,30,26,0.40) 50%, transparent 100%)',
+            }}
+          />
+
+          {/* Saffron glow on hover */}
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            style={{
+              background:
+                'radial-gradient(60% 50% at 50% 0%, rgba(232,148,26,0.30) 0%, transparent 70%)',
+            }}
           />
 
           {/* Top metadata: index + duration */}
           <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3 lg:p-4">
-            <span className="card-index inline-flex items-center justify-center rounded-sm bg-black/25 px-2 py-1 font-heading text-[10px] font-bold tracking-[0.18em] text-accent backdrop-blur-sm transition-shadow duration-500 ease-out group-hover:shadow-[0_0_0_1.5px_rgba(212,163,115,0.85),0_8px_22px_-8px_rgba(212,163,115,0.55)] sm:text-[11px]">
+            <span
+              className="inline-flex items-center justify-center rounded-sm px-2 py-1 font-heading text-[10px] font-bold tracking-[0.22em] backdrop-blur-sm sm:text-[11px]"
+              style={{
+                backgroundColor: 'rgba(14,30,26,0.55)',
+                color: SAFFRON,
+                border: `1px solid ${SAFFRON}55`,
+              }}
+            >
               {numberLabel}
             </span>
-            <span className="font-body text-[11px] italic tracking-wide text-white/90 sm:text-[12px]">
-              {therapy.durationMin} min
+            <span className="font-display text-[11px] italic tracking-wide text-white/95 sm:text-[12px]">
+              {cat.durationMin} min
             </span>
           </div>
 
-          {/* Bottom: name + tagline */}
-          <div className="absolute inset-x-0 bottom-0 p-4 lg:p-5">
-            <h3 className="font-heading text-[18px] font-extrabold tracking-tight text-white drop-shadow-sm sm:text-[19px] lg:text-[20px]">
-              {therapy.name}
-            </h3>
-            <p className="mt-1 font-body text-[12px] italic leading-snug text-white/70">
-              {therapy.tagline}
-            </p>
-          </div>
-        </div>
+          {/* Feature badge (only on the big card) */}
+          {featured && (
+            <div className="absolute left-3 top-12 lg:left-4 lg:top-14">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.28em] backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'rgba(232,148,26,0.18)',
+                  color: SAFFRON,
+                  border: `1px solid ${SAFFRON}66`,
+                }}
+              >
+                <span
+                  className="h-1 w-1 rounded-full"
+                  style={{ backgroundColor: SAFFRON }}
+                />
+                Most Requested
+              </span>
+            </div>
+          )}
 
-        {/* Discover link */}
-        <div className="mt-3 flex items-center justify-between">
-          <span className="h-px w-8 bg-accent/40 transition-[width,background-color] duration-500 ease-out group-hover:w-14 group-hover:bg-accent/85" />
-          <span className="inline-flex items-center gap-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.22em] text-primary transition-colors duration-300 group-hover:text-accent">
-            Discover
-            <ArrowRight className="h-[11px] w-[11px] transition-transform duration-300 group-hover:translate-x-1" />
-          </span>
+          {/* Bottom: name + tagline + corner arrow chip */}
+          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 lg:p-5">
+            <div className="min-w-0 flex-1">
+              <h3
+                className="font-heading font-extrabold tracking-tight text-white drop-shadow-sm"
+                style={{
+                  fontSize: featured ? 'clamp(20px, 2vw, 28px)' : 'clamp(15px, 1.25vw, 19px)',
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.15,
+                }}
+              >
+                {cat.name}
+              </h3>
+              <p
+                className="mt-1 font-display italic leading-snug"
+                style={{
+                  color: 'rgba(251,246,236,0.82)',
+                  fontSize: featured ? 'clamp(13px, 1.05vw, 16px)' : '12.5px',
+                }}
+              >
+                {cat.tagline}
+              </p>
+            </div>
+
+            {/* Arrow chip */}
+            <span
+              aria-hidden
+              className={`inline-flex shrink-0 items-center justify-center rounded-full border backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-0.5 ${
+                featured ? 'h-11 w-11' : 'h-9 w-9'
+              }`}
+              style={{
+                borderColor: `${SAFFRON}55`,
+                backgroundColor: 'rgba(232,148,26,0.14)',
+              }}
+            >
+              <ArrowRight
+                className={featured ? 'h-[16px] w-[16px]' : 'h-[14px] w-[14px]'}
+                style={{ color: SAFFRON }}
+              />
+            </span>
+          </div>
         </div>
       </Link>
     </motion.li>

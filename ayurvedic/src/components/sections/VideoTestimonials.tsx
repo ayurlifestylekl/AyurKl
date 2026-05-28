@@ -5,15 +5,22 @@ import { motion } from 'framer-motion'
 import { Play, Volume2, VolumeX } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
+/* ── Palette ── */
+const EMERALD       = '#1A3B2E'
+const EMERALD_DEEP  = '#0E2620'
+const SAFFRON       = '#E8941A'
+const SAFFRON_SOFT  = '#F2B25A'
+const TERRACOTTA    = '#E2632F'   // warm pop on dark — more vibrant than saffron alone
+
 type VideoTestimonial = {
   id: string
-  chapter: string        // roman numeral, e.g. 'I'
+  chapter: string
   videoSrc: string
   posterImage: string
   author: string
-  ritual: string         // editorial line, e.g. 'Shirodhara — 21 days'
+  ritual: string
   location: string
-  duration: string       // 'mm:ss' shown on the play marker
+  duration: string
 }
 
 const testimonials: VideoTestimonial[] = [
@@ -21,7 +28,7 @@ const testimonials: VideoTestimonial[] = [
     id: 'andrea',
     chapter: 'I',
     videoSrc: '/videos/andrea.mp4',
-    posterImage: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80',
+    posterImage: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=900&q=80',
     author: 'Andrea',
     ritual: 'Shirodhara — 21 days',
     location: 'Kuala Lumpur',
@@ -31,7 +38,7 @@ const testimonials: VideoTestimonial[] = [
     id: 'liliana',
     chapter: 'II',
     videoSrc: '/videos/liliana.mp4',
-    posterImage: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80',
+    posterImage: 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=600&q=80',
     author: 'Liliana',
     ritual: 'Abhyanga ritual',
     location: 'Petaling Jaya',
@@ -61,138 +68,152 @@ const testimonials: VideoTestimonial[] = [
 
 export default function VideoTestimonials() {
   return (
-    <section className="grain-overlay-dark relative overflow-hidden bg-nearBlackGreen py-14 sm:py-16 lg:py-20">
-      {/* Atmospheric layers — herbal halo + warm gold wash */}
+    <section
+      className="relative overflow-hidden py-10 sm:py-12 lg:py-14"
+      style={{
+        background: `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DEEP} 100%)`,
+      }}
+    >
+      {/* Vibrant warm corner glows on the dark base */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 80% 55% at 50% -10%, rgba(47,93,80,0.55), transparent 62%), radial-gradient(circle 42% at 92% 108%, rgba(212,163,115,0.14), transparent 62%), radial-gradient(ellipse 60% 40% at 8% 50%, rgba(47,93,80,0.18), transparent 70%)',
+            'radial-gradient(ellipse 55% 70% at -5% 10%, rgba(232,148,26,0.20), transparent 60%), radial-gradient(ellipse 50% 60% at 105% 90%, rgba(226,99,47,0.22), transparent 60%)',
+        }}
+      />
+
+      {/* Subtle grain texture */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
+          backgroundSize: '3px 3px',
+        }}
+      />
+
+      {/* Top + bottom saffron hairlines */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.50) 50%, transparent 96%)',
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.40) 50%, transparent 96%)',
         }}
       />
 
       <div className="relative mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10">
-        {/* ─────────────────────────  EDITORIAL HEADER  ───────────────────────── */}
+
+        {/* ── COMPACT INLINE HEADER ── single row on desktop */}
         <motion.header
           variants={staggerParent(0.09, 0)}
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="grid grid-cols-1 gap-y-8 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-0"
+          className="grid grid-cols-1 items-end gap-y-4 lg:grid-cols-12 lg:gap-x-8"
         >
-          {/* Left column — eyebrow + display headline */}
-          <div className="lg:col-span-7 lg:pr-6">
+          {/* Title block */}
+          <div className="lg:col-span-7">
             <motion.div variants={fadeUp(0)} className="flex items-center gap-3">
               <span
                 aria-hidden
-                className="inline-block h-px w-10 bg-accent/60"
+                className="inline-block h-px w-10"
+                style={{ backgroundColor: TERRACOTTA, opacity: 0.7 }}
               />
-              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.42em] text-accent">
-                The Guest Film <span className="mx-1 text-accent/40">·</span> Vol. I
+              <span
+                className="font-heading text-[10px] font-bold uppercase tracking-[0.4em] sm:text-[11px]"
+                style={{ color: TERRACOTTA }}
+              >
+                The Guest Film{' '}
+                <span style={{ color: `${TERRACOTTA}55` }} className="mx-1">·</span>{' '}
+                Vol. I
               </span>
             </motion.div>
 
             <motion.h2
               variants={fadeUp(0)}
-              className="mt-6 font-heading text-[clamp(2.4rem,5.2vw,4.6rem)] font-light leading-[0.98] tracking-[-0.02em] text-white/95"
+              className="mt-3 flex flex-wrap items-baseline gap-x-3"
             >
-              Quiet rituals,
-              <br />
-              <span className="font-body italic font-normal text-accent">
+              <span
+                className="font-heading font-extrabold text-white"
+                style={{
+                  fontSize: 'clamp(1.75rem, 3.6vw, 2.75rem)',
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.025em',
+                }}
+              >
+                Quiet rituals,
+              </span>
+              <span
+                className="font-display italic"
+                style={{
+                  color: SAFFRON,
+                  fontSize: 'clamp(1.9rem, 4vw, 3.1rem)',
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.015em',
+                  textShadow: '0 3px 22px rgba(232,148,26,0.32)',
+                }}
+              >
                 remembered.
               </span>
             </motion.h2>
           </div>
 
-          {/* Right column — sub copy + caption + hairline anchor */}
-          <div className="relative lg:col-span-5 lg:pl-10">
-            {/* Hairline divider — vertical on desktop, horizontal on mobile */}
-            <span
-              aria-hidden
-              className="absolute left-0 top-0 hidden h-full w-px bg-gradient-to-b from-accent/40 via-accent/15 to-transparent lg:block"
-            />
-
+          {/* Byline + dateline — high contrast on dark */}
+          <div className="lg:col-span-5 lg:border-l lg:pl-6" style={{ borderColor: `${SAFFRON}33` }}>
             <motion.p
               variants={fadeUp(0)}
-              className="font-body text-[15px] leading-[1.75] text-white/70 sm:text-[16px] lg:mt-3"
+              className="font-body leading-[1.55] text-white/90"
+              style={{ fontSize: 'clamp(13px, 0.95vw, 15px)' }}
             >
-              Four guests. Four journeys under{' '}
-              <span className="text-white/90">Vaidya Akhil&rsquo;s</span> care at our
-              Brickfields sanctuary — filmed in stillness, with nothing added.
+              Four guests. Four journeys under our{' '}
+              <span className="font-semibold text-white">certified Vaidyas</span>{' '}
+              — filmed in stillness.
             </motion.p>
 
-            <motion.div
-              variants={fadeUp(0)}
-              className="mt-7 flex items-center gap-3"
-            >
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent" />
-              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.36em] text-white/50">
-                Filmed Spring 2026 · Brickfields, KL
+            <motion.div variants={fadeUp(0)} className="mt-2.5 flex items-center gap-3">
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rotate-45"
+                style={{ backgroundColor: SAFFRON }}
+              />
+              <span
+                className="font-heading text-[10px] font-bold uppercase tracking-[0.32em]"
+                style={{ color: SAFFRON_SOFT }}
+              >
+                Spring 2026 · Brickfields, KL
               </span>
             </motion.div>
           </div>
         </motion.header>
 
-        {/* Hairline that anchors the header to the reel */}
-        <motion.div
-          variants={fadeUp(0.25)}
-          initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
-          aria-hidden
-          className="mt-14 h-px w-full bg-gradient-to-r from-transparent via-accent/30 to-transparent lg:mt-16"
-        />
-
-        {/* ─────────────────────────  FILM REEL  ───────────────────────── */}
+        {/* ── 4 EQUAL FILM CARDS — compact 4:5 aspect ── */}
         <motion.div
           variants={staggerParent(0.09, 0.15)}
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="no-scrollbar -mx-5 mt-12 flex w-[calc(100%+2.5rem)] gap-5 overflow-x-auto px-5 pb-4 snap-x snap-mandatory sm:mx-0 sm:w-full sm:gap-6 sm:px-0 lg:mt-14 lg:grid lg:grid-cols-4 xl:gap-7 lg:pb-0"
+          className="no-scrollbar -mx-5 mt-7 flex w-[calc(100%+2.5rem)] gap-4 overflow-x-auto px-5 pb-2 snap-x snap-mandatory sm:mx-0 sm:w-full sm:gap-5 sm:px-0 lg:mt-8 lg:grid lg:grid-cols-4 xl:gap-6 lg:pb-0"
         >
           {testimonials.map((item, idx) => (
             <motion.div
               key={item.id}
               variants={fadeUp(0)}
-              className="w-[268px] flex-shrink-0 snap-center sm:w-[290px] lg:w-auto"
+              className="w-[230px] flex-shrink-0 snap-center sm:w-[250px] lg:w-auto"
             >
               <VideoCard item={item} index={idx} />
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* ─────────────────────────  PROGRESS RAIL  ───────────────────────── */}
-        <motion.div
-          variants={fadeUp(0.4)}
-          initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
-          className="relative mt-14 hidden lg:block"
-        >
-          <span
-            aria-hidden
-            className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-accent/25 to-transparent"
-          />
-          <ul className="relative flex items-center justify-between">
-            {testimonials.map((item) => (
-              <li
-                key={item.id}
-                className="flex items-center gap-3 bg-nearBlackGreen px-4"
-              >
-                <span
-                  aria-hidden
-                  className="h-1 w-1 rounded-full bg-accent/70"
-                />
-                <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55">
-                  {item.chapter}
-                  <span className="mx-2 text-accent/40">·</span>
-                  {item.author}
-                </span>
-              </li>
-            ))}
-          </ul>
         </motion.div>
       </div>
     </section>
@@ -224,13 +245,19 @@ function VideoCard({ item, index }: { item: VideoTestimonial; index: number }) {
 
   return (
     <article className="group relative flex flex-col">
-      {/* ── 9:16 cinematic frame ── */}
       <div
-        className="relative aspect-[9/16] w-full cursor-pointer overflow-hidden rounded-[14px] bg-black ring-1 ring-white/10 transition-[transform,box-shadow,ring] duration-700 ease-[cubic-bezier(0.22,0.92,0.38,1)] will-change-transform hover:-translate-y-2 hover:ring-accent/35"
+        className="relative aspect-[4/5] w-full cursor-pointer overflow-hidden rounded-[14px] bg-black ring-1 ring-white/10 transition-[transform,box-shadow,ring] duration-700 ease-[cubic-bezier(0.22,0.92,0.38,1)] will-change-transform hover:-translate-y-1.5"
         onClick={togglePlay}
         style={{
           boxShadow:
-            '0 24px 60px -24px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
+            '0 22px 50px -22px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = `0 26px 60px -22px rgba(0,0,0,0.65), 0 0 0 1px ${SAFFRON}45, inset 0 1px 0 rgba(255,255,255,0.05)`
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow =
+            '0 22px 50px -22px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)'
         }}
       >
         <video
@@ -241,120 +268,115 @@ function VideoCard({ item, index }: { item: VideoTestimonial; index: number }) {
           loop
           muted={isMuted}
           preload="none"
-          className={`h-full w-full object-cover transition-[transform,opacity,filter] duration-[1800ms] ease-out ${
+          className={`h-full w-full object-cover transition-[transform,opacity] duration-[1800ms] ease-out ${
             isPlaying
               ? 'scale-100 opacity-100'
-              : 'scale-[1.04] opacity-85 group-hover:scale-[1.015] group-hover:opacity-100'
+              : 'scale-[1.04] opacity-90 group-hover:scale-[1.015] group-hover:opacity-100'
           }`}
           onEnded={() => setIsPlaying(false)}
         />
 
-        {/* Color treatment + cinematic vignette */}
+        {/* Vignette */}
         <div
           aria-hidden
-          className={`absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/10 transition-opacity duration-700 ${
-            isPlaying ? 'opacity-30' : 'opacity-90'
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            isPlaying ? 'opacity-25' : 'opacity-85'
           }`}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 110% 70% at 50% 40%, transparent 40%, rgba(0,0,0,0.55) 100%)',
-            opacity: isPlaying ? 0.25 : 0.7,
-            transition: 'opacity 700ms ease',
+              'linear-gradient(to top, rgba(14,30,26,0.92) 0%, rgba(14,30,26,0.30) 50%, rgba(14,30,26,0.10) 100%)',
           }}
         />
 
-        {/* Hover gold rim — kept ultra-subtle so it doesn't shout */}
+        {/* Hover saffron glow */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[14px] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
           style={{
-            boxShadow:
-              '0 0 0 1px rgba(212,163,115,0.28), 0 30px 60px -24px rgba(212,163,115,0.18)',
+            background:
+              'radial-gradient(60% 50% at 50% 0%, rgba(232,148,26,0.22) 0%, transparent 70%)',
           }}
         />
 
-        {/* ── Chapter badge — top-left ── */}
+        {/* Chapter badge */}
         <div
-          className={`absolute left-5 top-5 z-10 flex flex-col gap-1 transition-all duration-700 ${
-            isPlaying
-              ? 'translate-y-[-6px] opacity-0'
-              : 'translate-y-0 opacity-100'
+          className={`absolute left-4 top-4 z-10 flex flex-col gap-0.5 transition-all duration-700 ${
+            isPlaying ? 'translate-y-[-6px] opacity-0' : 'translate-y-0 opacity-100'
           }`}
         >
-          <span className="font-heading text-[9px] font-semibold uppercase tracking-[0.5em] text-accent">
+          <span
+            className="font-heading text-[9px] font-bold uppercase tracking-[0.5em]"
+            style={{ color: SAFFRON_SOFT }}
+          >
             Film
           </span>
-          <span className="font-heading text-[20px] font-light leading-none tracking-[-0.04em] text-white/95">
+          <span className="font-display text-[18px] italic font-normal leading-none tracking-[-0.04em] text-white/95">
             {String(index + 1).padStart(2, '0')}
-            <span className="mx-1 text-white/30">/</span>
-            <span className="text-white/40">04</span>
+            <span className="mx-1 text-white/35 not-italic">/</span>
+            <span className="text-white/45 not-italic">04</span>
           </span>
         </div>
 
-        {/* ── Refined play marker (centered) ── */}
+        {/* Play marker */}
         <div
-          className={`pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 transition-all duration-700 ease-out ${
-            isPlaying
-              ? 'scale-110 opacity-0'
-              : 'scale-100 opacity-100 group-hover:gap-4'
+          className={`pointer-events-none absolute inset-0 z-10 flex items-center justify-center transition-all duration-700 ease-out ${
+            isPlaying ? 'scale-110 opacity-0' : 'scale-100 opacity-100'
           }`}
         >
-          <div className="relative flex h-[58px] w-[58px] items-center justify-center rounded-full border border-accent/45 bg-black/30 backdrop-blur-md transition-all duration-500 group-hover:border-accent group-hover:bg-black/40">
-            {/* Inner concentric ring for depth */}
-            <span
-              aria-hidden
-              className="absolute inset-[5px] rounded-full border border-white/10"
-            />
+          <div
+            className="relative flex h-[50px] w-[50px] items-center justify-center rounded-full bg-black/35 backdrop-blur-md transition-all duration-500"
+            style={{ border: `1px solid ${SAFFRON}66` }}
+            onMouseEnter={(e) => {
+              ;(e.currentTarget as HTMLDivElement).style.borderColor = SAFFRON
+              ;(e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(0,0,0,0.5)'
+              ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 0 6px ${SAFFRON}1a`
+            }}
+            onMouseLeave={(e) => {
+              ;(e.currentTarget as HTMLDivElement).style.borderColor = `${SAFFRON}66`
+              ;(e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(0,0,0,0.35)'
+              ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
+            }}
+          >
             <Play
-              className="ml-[3px] h-4 w-4 fill-white/95 text-white/95 transition-transform duration-500 group-hover:scale-110"
+              className="ml-[2px] h-3.5 w-3.5 fill-white/95 text-white/95"
               strokeWidth={1}
             />
           </div>
-          <span className="font-heading text-[9px] font-semibold uppercase tracking-[0.4em] text-white/65 transition-colors duration-500 group-hover:text-accent">
-            Play film <span className="mx-1 text-white/30 group-hover:text-accent/50">·</span> {item.duration}
-          </span>
         </div>
 
-        {/* ── Bottom text stack ── */}
+        {/* Bottom text */}
         <div
-          className={`absolute inset-x-0 bottom-0 z-10 px-6 pb-7 transition-all duration-700 ease-out ${
-            isPlaying
-              ? 'translate-y-6 opacity-0'
-              : 'translate-y-0 opacity-100 group-hover:-translate-y-1'
+          className={`absolute inset-x-0 bottom-0 z-10 px-4 pb-4 transition-all duration-700 ease-out ${
+            isPlaying ? 'translate-y-6 opacity-0' : 'translate-y-0 opacity-100 group-hover:-translate-y-0.5'
           }`}
         >
-          {/* Hairline above name on hover */}
           <span
             aria-hidden
-            className="mb-3 block h-px w-6 origin-left scale-x-0 bg-accent/70 transition-transform duration-500 group-hover:scale-x-100"
+            className="mb-1.5 block h-px w-5 origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+            style={{ backgroundColor: SAFFRON }}
           />
-          <h3 className="font-heading text-[26px] font-normal leading-none tracking-[-0.01em] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+          <h3 className="font-heading text-[17px] font-extrabold leading-none tracking-[-0.015em] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
             {item.author}
           </h3>
-          <p className="mt-2 font-body text-[13px] italic leading-snug text-accent/90">
+          <p
+            className="mt-1 font-display italic leading-snug"
+            style={{ color: SAFFRON_SOFT, fontSize: '11.5px' }}
+          >
             {item.ritual}
           </p>
-          <p className="mt-2 font-heading text-[10px] font-medium uppercase tracking-[0.32em] text-white/55">
-            {item.location}
+          <p className="mt-1 font-heading text-[9px] font-bold uppercase tracking-[0.28em] text-white/55">
+            {item.location} · {item.duration}
           </p>
         </div>
 
-        {/* ── Audio toggle (only while playing) ── */}
+        {/* Audio toggle */}
         {isPlaying && (
           <button
             onClick={toggleMute}
-            className="absolute bottom-5 right-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-accent/70 hover:bg-black/65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+            className="absolute bottom-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-black/65"
             aria-label={isMuted ? 'Unmute video' : 'Mute video'}
           >
-            {isMuted ? (
-              <VolumeX className="h-3.5 w-3.5" strokeWidth={1.5} />
-            ) : (
-              <Volume2 className="h-3.5 w-3.5" strokeWidth={1.5} />
-            )}
+            {isMuted ? <VolumeX className="h-3 w-3" strokeWidth={1.5} /> : <Volume2 className="h-3 w-3" strokeWidth={1.5} />}
           </button>
         )}
       </div>

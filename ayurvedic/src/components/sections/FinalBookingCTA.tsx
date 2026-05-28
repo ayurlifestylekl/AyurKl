@@ -7,10 +7,16 @@ import { Calendar, MessageCircle } from 'lucide-react'
 import CTAButton from '@/components/ui/CTAButton'
 import { clipReveal, fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
+/* ── Palette ── */
+const EMERALD       = '#1A3B2E'
+const EMERALD_DEEP  = '#0E2620'
+const SAFFRON       = '#E8941A'
+const SAFFRON_SOFT  = '#F2B25A'
+
 /**
  * Cinematic close — split layout:
- * Left: atmospheric photograph with heavy green tint + grain
- * Right: CTA content on near-black green
+ * Left: atmospheric photograph with warm tint + grain (saffron rim)
+ * Right: emerald gradient CTA panel with saffron glow
  */
 export default function FinalBookingCTA() {
   return (
@@ -35,20 +41,29 @@ export default function FinalBookingCTA() {
             className="object-cover"
             sizes="(min-width: 1024px) 60vw, 0vw"
           />
-          {/* Heavy green tint */}
+          {/* Warm emerald tint — lighter so the photo breathes */}
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(47,93,80,0.55)' }}
+            style={{ backgroundColor: 'rgba(26,59,46,0.42)' }}
+            aria-hidden
+          />
+          {/* Saffron warm wash overlay */}
+          <div
+            className="absolute inset-0 mix-blend-overlay opacity-60"
+            style={{
+              background:
+                'radial-gradient(ellipse 60% 70% at 30% 70%, rgba(232,148,26,0.30), transparent 65%)',
+            }}
             aria-hidden
           />
           {/* Grain overlay */}
           <div className="grain-overlay-dark absolute inset-0" aria-hidden />
-          {/* Right edge gold border */}
+          {/* Right edge saffron border */}
           <div
             className="absolute inset-y-0 right-0 w-px"
             style={{
               background:
-                'linear-gradient(to bottom, transparent, rgba(212,163,115,0.35), transparent)',
+                'linear-gradient(to bottom, transparent 0%, rgba(232,148,26,0.55) 50%, transparent 100%)',
             }}
             aria-hidden
           />
@@ -71,27 +86,42 @@ export default function FinalBookingCTA() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(47,93,80,0.6)' }}
+            style={{ backgroundColor: 'rgba(26,59,46,0.5)' }}
             aria-hidden
           />
-          {/* Bottom fade */}
+          {/* Bottom fade to emerald */}
           <div
             className="absolute inset-x-0 bottom-0 h-20"
             style={{
-              background: 'linear-gradient(to top, #1a2e26 0%, transparent 100%)',
+              background: `linear-gradient(to top, ${EMERALD} 0%, transparent 100%)`,
             }}
             aria-hidden
           />
         </motion.div>
 
         {/* ── RIGHT: CTA content ─────────────────────── */}
-        <div className="relative flex flex-col justify-center bg-nearBlackGreen px-6 py-16 sm:px-10 lg:px-14 lg:py-20">
-          {/* Subtle radial glow */}
+        <div
+          className="relative flex flex-col justify-center px-6 py-16 sm:px-10 lg:px-14 lg:py-20"
+          style={{
+            background: `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DEEP} 100%)`,
+          }}
+        >
+          {/* Saffron radial glow */}
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse at 50% 50%, rgba(212,163,115,0.06) 0%, transparent 60%)',
+                'radial-gradient(ellipse 70% 60% at 15% 10%, rgba(232,148,26,0.18), transparent 60%), radial-gradient(ellipse 50% 55% at 90% 95%, rgba(232,148,26,0.10), transparent 65%)',
+            }}
+            aria-hidden
+          />
+
+          {/* Subtle grain */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay"
+            style={{
+              backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
+              backgroundSize: '3px 3px',
             }}
             aria-hidden
           />
@@ -103,33 +133,63 @@ export default function FinalBookingCTA() {
             viewport={inViewOnce}
             className="relative z-10 max-w-md"
           >
-            <motion.span
-              variants={fadeUp(0)}
-              className="inline-block font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent"
-            >
-              Begin Your Journey
-            </motion.span>
+            {/* Eyebrow with line */}
+            <motion.div variants={fadeUp(0)} className="flex items-center gap-3">
+              <span
+                aria-hidden
+                className="inline-block h-px w-10"
+                style={{ backgroundColor: SAFFRON_SOFT, opacity: 0.7 }}
+              />
+              <span
+                className="font-heading text-[11px] font-bold uppercase tracking-[0.36em]"
+                style={{ color: SAFFRON_SOFT }}
+              >
+                Begin Your Journey
+              </span>
+            </motion.div>
 
+            {/* Headline — Montserrat + Playfair italic */}
             <motion.h2
               id="booking-heading"
               variants={fadeUp(0)}
-              className="mt-4 font-heading text-3xl font-extrabold leading-[1.08] text-white sm:text-4xl"
+              className="mt-5 flex flex-col"
             >
-              Your first step toward
-              <br />
-              <span className="text-accent">lasting wellness.</span>
+              <span
+                className="font-heading font-extrabold text-white"
+                style={{
+                  fontSize: 'clamp(1.875rem, 3.4vw, 2.5rem)',
+                  lineHeight: 1.05,
+                  letterSpacing: '-0.025em',
+                }}
+              >
+                Your first step toward
+              </span>
+              <span
+                className="font-display italic"
+                style={{
+                  color: SAFFRON,
+                  fontSize: 'clamp(2.125rem, 4vw, 3rem)',
+                  lineHeight: 1.05,
+                  letterSpacing: '-0.015em',
+                  textShadow: '0 3px 22px rgba(232,148,26,0.28)',
+                }}
+              >
+                lasting wellness.
+              </span>
             </motion.h2>
 
             <motion.p
               variants={fadeUp(0)}
-              className="mt-5 font-body text-[15px] leading-[1.7] text-white/60"
+              className="mt-6 font-body leading-[1.7] text-white/95"
+              style={{ fontSize: 'clamp(15px, 1.1vw, 16px)' }}
             >
-              Book a 30-minute consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) at our
-              Brickfields clinic. We&apos;ll assess your dosha and design a
+              Book a 30-minute consultation with our{' '}
+              <span className="font-semibold text-white">certified Vaidyas</span>{' '}
+              at our Brickfields clinic. We&apos;ll assess your dosha and design a
               protocol you can live with.
             </motion.p>
 
-            {/* CTAs — stacked vertically */}
+            {/* CTAs */}
             <motion.div
               variants={fadeUp(0)}
               className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col"
@@ -152,16 +212,24 @@ export default function FinalBookingCTA() {
               </CTAButton>
             </motion.div>
 
-            {/* Trust row */}
+            {/* Trust row — no specific Vaidya name */}
             <motion.div
               variants={fadeUp(0)}
-              className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10px] font-medium uppercase tracking-[0.18em] text-white/30"
+              className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-white/45"
             >
               <span>Since 2008</span>
-              <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
+              <span
+                aria-hidden
+                className="h-1 w-1 rotate-45"
+                style={{ backgroundColor: SAFFRON, opacity: 0.7 }}
+              />
               <span>Brickfields, KL</span>
-              <span className="h-0.5 w-0.5 rounded-full bg-accent/40" />
-              <span>Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</span>
+              <span
+                aria-hidden
+                className="h-1 w-1 rotate-45"
+                style={{ backgroundColor: SAFFRON, opacity: 0.7 }}
+              />
+              <span>Certified Vaidyas</span>
             </motion.div>
           </motion.div>
         </div>

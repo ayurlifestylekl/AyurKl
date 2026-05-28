@@ -8,23 +8,30 @@ import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 import { featuredProducts } from '@/data/featuredProducts'
 import type { FeaturedProduct, ProductBadge } from '@/types/content'
 
-const badgeColors: Record<ProductBadge, string> = {
-  NEW: 'bg-secondary text-white',
-  BESTSELLER: 'bg-accent text-white',
-  SALE: 'bg-primary text-white',
-  COMBO: 'bg-[#7A9D54] text-white',
+/* ── Palette (section-local; matches hero language) ── */
+const EMERALD       = '#1A3B2E'
+const EMERALD_SOFT  = 'rgba(26,59,46,0.72)'
+const SAFFRON       = '#E8941A'
+const SAFFRON_DEEP  = '#C8741A'
+const TERRACOTTA    = '#C2410C'
+const CREAM         = '#FBF6EC'
+const CREAM_WARM    = '#F4E9D2'
+
+const badgeStyles: Record<ProductBadge, { bg: string; color: string }> = {
+  NEW:        { bg: EMERALD,                       color: '#FFFFFF' },
+  BESTSELLER: { bg: SAFFRON,                       color: '#FFFFFF' },
+  SALE:       { bg: TERRACOTTA,                    color: '#FFFFFF' },
+  COMBO:      { bg: 'rgba(26,59,46,0.85)',         color: SAFFRON   },
 }
 
 export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState<string>('All')
 
-  // Generate unique categories dynamically from products
   const categories = useMemo(() => {
     const cats = Array.from(new Set(featuredProducts.map(p => p.category)))
     return ['All', ...cats]
   }, [])
 
-  // Filter products
   const filteredProducts = useMemo(() => {
     if (activeCategory === 'All') return featuredProducts
     return featuredProducts.filter(p => p.category === activeCategory)
@@ -34,36 +41,128 @@ export default function FeaturedProducts() {
     <section
       id="curated-collection"
       aria-labelledby="collection-heading"
-      className="relative bg-[#f8f6f0] pb-14 pt-8 lg:pb-20 lg:pt-10"
+      className="relative overflow-hidden pb-16 pt-12 lg:pb-24 lg:pt-16"
+      style={{
+        background: `linear-gradient(135deg, ${CREAM} 0%, ${CREAM_WARM} 100%)`,
+      }}
     >
-      <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
-        
-        {/* ── HEADER ── */}
+      {/* Atmospheric glows */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(45% 40% at 90% 5%, rgba(232,148,26,0.16) 0%, transparent 65%), radial-gradient(40% 50% at 8% 92%, rgba(26,59,46,0.08) 0%, transparent 60%)',
+        }}
+      />
+
+      {/* Paper grain */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.5] mix-blend-multiply"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px)',
+          backgroundSize: '3px 3px',
+        }}
+      />
+
+      {/* Top saffron hairline */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.45) 50%, transparent 96%)',
+        }}
+      />
+
+      <div className="relative mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
+
+        {/* ── HEADER ── Asymmetric: title left / sub line + filter intro right */}
         <motion.div
           variants={fadeUp(0)}
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="mb-10 flex flex-col items-center text-center lg:mb-16"
+          className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-12"
         >
-          <span className="font-heading text-[10px] font-bold uppercase tracking-[0.4em] text-accent">
-            Curated Collection
-          </span>
-          <h2
-            id="collection-heading"
-            className="mt-4 font-heading text-[clamp(2.5rem,4vw,3.5rem)] font-extrabold leading-[1.05] tracking-tight text-primary"
-          >
-            Our Best Sellers
-          </h2>
+          {/* Title block */}
+          <div className="lg:col-span-6">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-px w-12"
+                style={{ backgroundColor: SAFFRON_DEEP, opacity: 0.55 }}
+                aria-hidden
+              />
+              <span
+                className="font-heading text-[11px] font-bold uppercase tracking-[0.36em] sm:text-[12px]"
+                style={{ color: SAFFRON_DEEP }}
+              >
+                Curated Collection
+              </span>
+            </div>
+
+            <h2
+              id="collection-heading"
+              className="mt-5 flex flex-col items-start"
+            >
+              <span
+                className="font-heading font-extrabold tracking-tight"
+                style={{
+                  color: EMERALD,
+                  fontSize: 'clamp(2.25rem, 4.4vw, 3.75rem)',
+                  lineHeight: 1.02,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                Our Best
+              </span>
+              <span
+                className="-mt-1 font-display italic"
+                style={{
+                  color: SAFFRON,
+                  fontSize: 'clamp(2.5rem, 5.2vw, 4.25rem)',
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.015em',
+                  textShadow: '0 3px 22px rgba(232,148,26,0.25)',
+                }}
+              >
+                Sellers
+              </span>
+            </h2>
+          </div>
+
+          {/* Right intro + tagline */}
+          <div className="lg:col-span-6 lg:border-l lg:pl-12" style={{ borderColor: `${SAFFRON}33` }}>
+            <p
+              className="font-body leading-[1.7]"
+              style={{
+                color: EMERALD_SOFT,
+                fontSize: 'clamp(15px, 1.1vw, 17px)',
+              }}
+            >
+              Hand-blended in small batches, prescribed by our Vaidyas and bottled
+              fresh at our apothecary in Brickfields.
+            </p>
+            <p
+              className="mt-3 font-display italic leading-[1.55]"
+              style={{
+                color: 'rgba(26,59,46,0.62)',
+                fontSize: 'clamp(14px, 1.05vw, 16px)',
+              }}
+            >
+              Loved by 5,000+ patients across Malaysia.
+            </p>
+          </div>
         </motion.div>
 
-        {/* ── LUXURY FILTER TABS ── */}
+        {/* ── FILTER TABS ── */}
         <motion.div
           variants={fadeUp(0.1)}
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="no-scrollbar mb-12 flex items-center justify-start gap-3 overflow-x-auto pb-4 sm:justify-center lg:mb-16 lg:pb-0"
+          className="no-scrollbar mt-10 mb-10 flex items-center gap-2.5 overflow-x-auto pb-2 lg:mt-12 lg:mb-14"
         >
           {categories.map((cat) => {
             const isActive = activeCategory === cat
@@ -71,11 +170,21 @@ export default function FeaturedProducts() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`whitespace-nowrap rounded-full px-6 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                className="whitespace-nowrap rounded-full px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.22em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                style={
                   isActive
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'border border-primary/15 text-primary/70 hover:bg-primary/5 hover:text-primary'
-                }`}
+                    ? {
+                        backgroundColor: EMERALD,
+                        color: '#FFFFFF',
+                        boxShadow: `0 14px 30px -14px ${EMERALD}99`,
+                        border: `1px solid ${EMERALD}`,
+                      }
+                    : {
+                        backgroundColor: 'transparent',
+                        color: EMERALD_SOFT,
+                        border: `1px solid ${SAFFRON}40`,
+                      }
+                }
               >
                 {cat}
               </button>
@@ -101,7 +210,7 @@ export default function FeaturedProducts() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
               >
-                <SecondaryProductCard product={p} />
+                <ProductCard product={p} />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -111,16 +220,23 @@ export default function FeaturedProducts() {
   )
 }
 
-function SecondaryProductCard({ product }: { product: FeaturedProduct }) {
-  // Generate a random-looking but consistent review count/score based on the ID length
+function ProductCard({ product }: { product: FeaturedProduct }) {
   const reviewScore = (4.5 + (product.id.length % 5) * 0.1).toFixed(1)
   const reviewCount = 120 + product.id.length * 14
+  const badge = product.badge ? badgeStyles[product.badge] : null
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] transition-shadow duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
-      
-      {/* ── IMAGE CONTAINER ── */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-cream">
+    <article
+      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-500"
+      style={{
+        boxShadow: '0 10px 38px -18px rgba(26,59,46,0.18), 0 2px 8px rgba(26,59,46,0.04)',
+      }}
+    >
+      {/* ── IMAGE ── */}
+      <div
+        className="relative aspect-[4/5] w-full overflow-hidden"
+        style={{ backgroundColor: CREAM }}
+      >
         <Image
           src={product.image}
           alt={`${product.name} — ${product.tagline}`}
@@ -128,61 +244,92 @@ function SecondaryProductCard({ product }: { product: FeaturedProduct }) {
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover object-center transition-transform duration-[2s] ease-out group-hover:scale-[1.05]"
         />
-        
-        {/* Soft luxury vignette */}
+
+        {/* Subtle emerald wash, fades on hover */}
         <div
-          className="absolute inset-0 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0"
-          style={{ backgroundColor: 'rgba(47,93,80,0.04)' }}
           aria-hidden
+          className="absolute inset-0 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0"
+          style={{ backgroundColor: 'rgba(26,59,46,0.04)' }}
         />
 
-        {/* Floating Badge */}
-        {product.badge && (
+        {/* Saffron glow appears on hover */}
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+          style={{
+            background:
+              'radial-gradient(60% 50% at 50% 100%, rgba(232,148,26,0.18) 0%, transparent 70%)',
+          }}
+        />
+
+        {/* Badge */}
+        {badge && product.badge && (
           <span
-            className={`absolute left-4 top-4 rounded-sm px-2.5 py-1 font-heading text-[8px] font-bold uppercase tracking-[0.25em] shadow-sm ${badgeColors[product.badge]}`}
+            className="absolute left-4 top-4 rounded-full px-3 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.25em] shadow-sm"
+            style={{
+              backgroundColor: badge.bg,
+              color: badge.color,
+              letterSpacing: '0.22em',
+            }}
           >
             {product.badge}
           </span>
         )}
       </div>
 
-      {/* ── INFO & ACTION ── */}
+      {/* ── INFO ── */}
       <div className="flex flex-grow flex-col justify-between p-6">
-        
+
         <div className="flex flex-col">
-          <h3 className="font-heading text-[18px] font-extrabold leading-tight text-primary transition-colors duration-300 group-hover:text-accent">
+          <h3
+            className="font-heading text-[18px] font-extrabold leading-tight transition-colors duration-300"
+            style={{ color: EMERALD, letterSpacing: '-0.005em' }}
+          >
             {product.name}
           </h3>
-          <p className="mt-1.5 font-body text-[14px] italic text-dark/60 line-clamp-1">
+          <p
+            className="mt-1.5 font-display italic line-clamp-1"
+            style={{
+              color: 'rgba(26,59,46,0.6)',
+              fontSize: '14px',
+            }}
+          >
             {product.tagline}
           </p>
 
-          {/* Elegant Star Rating */}
+          {/* Star rating — saffron */}
           <div className="mt-3 flex items-center gap-1.5">
-            <div className="flex text-accent">
+            <div className="flex" style={{ color: SAFFRON }}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star key={star} className="h-3 w-3 fill-current" />
               ))}
             </div>
-            <span className="font-body text-[11px] font-medium text-dark/50">
-              {reviewScore} | {reviewCount} reviews
+            <span className="font-body text-[11px] font-medium" style={{ color: 'rgba(26,59,46,0.5)' }}>
+              {reviewScore} · {reviewCount} reviews
             </span>
           </div>
 
           {/* Pricing */}
           <div className="mt-5 flex items-end gap-2">
             {product.oldPriceRm && (
-              <span className="mb-[2px] font-body text-[12px] text-dark/30 line-through">
+              <span
+                className="mb-[2px] font-body text-[12px] line-through"
+                style={{ color: 'rgba(26,59,46,0.3)' }}
+              >
                 RM{product.oldPriceRm}
               </span>
             )}
             <div className="flex items-baseline gap-0.5">
-              <span className="font-body text-[11px] font-medium tracking-widest text-primary/40 uppercase">
+              <span
+                className="font-body text-[11px] font-medium uppercase tracking-widest"
+                style={{ color: 'rgba(26,59,46,0.4)' }}
+              >
                 RM
               </span>
               <data
                 value={product.priceRm}
-                className="font-heading text-[1.4rem] font-extrabold tracking-tight text-primary"
+                className="font-heading text-[1.5rem] font-extrabold tracking-tight"
+                style={{ color: EMERALD }}
               >
                 {product.priceRm}
               </data>
@@ -190,16 +337,32 @@ function SecondaryProductCard({ product }: { product: FeaturedProduct }) {
           </div>
         </div>
 
-        {/* Add to Bag Button (Full Width, pinned to bottom) */}
+        {/* Add to Bag */}
         <button
           type="button"
           aria-label={`Add ${product.name} to bag`}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary/5 px-4 py-3.5 font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:shadow-[0_8px_20px_rgba(47,93,80,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 font-heading text-[10px] font-bold uppercase tracking-[0.22em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+          style={{
+            backgroundColor: 'rgba(26,59,46,0.06)',
+            color: EMERALD,
+            border: `1px solid ${EMERALD}1a`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = EMERALD
+            e.currentTarget.style.color = '#FFFFFF'
+            e.currentTarget.style.boxShadow = `0 14px 32px -16px ${EMERALD}99`
+            e.currentTarget.style.borderColor = EMERALD
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(26,59,46,0.06)'
+            e.currentTarget.style.color = EMERALD
+            e.currentTarget.style.boxShadow = 'none'
+            e.currentTarget.style.borderColor = `${EMERALD}1a`
+          }}
         >
           <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2} />
           Add to Bag
         </button>
-
       </div>
     </article>
   )
