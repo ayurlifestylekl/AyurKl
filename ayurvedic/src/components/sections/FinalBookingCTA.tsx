@@ -35,7 +35,7 @@ export default function FinalBookingCTA() {
           className="relative hidden min-h-[400px] lg:block"
         >
           <Image
-            src="/hero-tray.png"
+            src="/hero-spices.png"
             alt="Ayurvedic herbs and therapeutic oils"
             fill
             className="object-cover"
@@ -78,7 +78,7 @@ export default function FinalBookingCTA() {
           className="relative h-[30vh] min-h-[200px] lg:hidden"
         >
           <Image
-            src="/hero-tray.png"
+            src="/hero-spices.png"
             alt="Ayurvedic herbs and oils"
             fill
             className="object-cover"
