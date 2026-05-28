@@ -107,8 +107,8 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
             <Image
               src="/logo.png"
               alt="Kerala Ayurvedic Lifestyle"
-              width={842}
-              height={596}
+              width={1200}
+              height={1048}
               className="h-9 w-auto"
             />
             <span className="flex flex-col">

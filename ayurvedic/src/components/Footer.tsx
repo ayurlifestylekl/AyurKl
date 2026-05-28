@@ -33,8 +33,8 @@ export default function Footer() {
                 <Image
                   src="/logo.png"
                   alt="Kerala Ayurvedic Lifestyle"
-                  width={842}
-                  height={596}
+                  width={1200}
+                  height={1048}
                   className="h-10 w-auto"
                 />
               </span>

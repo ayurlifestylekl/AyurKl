@@ -95,8 +95,8 @@ export default function CustomerLoginSplit({ children }: { children: React.React
               <Image
                 src="/logo.png"
                 alt="Kerala Ayurvedic Lifestyle"
-                width={842}
-                height={596}
+                width={1200}
+                height={1048}
                 className="h-9 w-auto transition-transform duration-300 group-hover:scale-[1.03]"
               />
               <span className="hidden font-heading text-[10px] font-bold uppercase tracking-[0.22em] leading-tight text-white/85 sm:flex sm:flex-col">

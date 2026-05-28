@@ -87,8 +87,8 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="Kerala Ayurvedic Lifestyle"
-              width={842}
-              height={596}
+              width={1200}
+              height={1048}
               priority
               className="h-12 w-auto transition-transform duration-300 group-hover:scale-[1.03] sm:h-14"
             />
