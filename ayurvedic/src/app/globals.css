@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #F9F9F9;
-  --foreground: #2B2B2B;
+  --background: #FAF8F2; /* Soft Ivory */
+  --foreground: #1F1F1F; /* Charcoal */
 }
 
 @layer base {
