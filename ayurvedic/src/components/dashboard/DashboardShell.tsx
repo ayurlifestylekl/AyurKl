@@ -90,12 +90,12 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
   const pathname = usePathname()
 
   return (
-    <div className="relative min-h-screen bg-[#f7f3ee] text-[#2B2B2B]">
+    <div className="relative min-h-screen bg-[#F7F2E8] text-[#1F1F1F]">
       {/* ── Sidebar (desktop fixed + mobile drawer) ─────────────────── */}
       <aside
         className={[
           'fixed inset-y-0 left-0 z-40 flex w-[268px] flex-col',
-          'border-r border-[#1e3d32]/8 bg-[#152b22] text-white',
+          'border-r border-[#163F33]/8 bg-[#163F33] text-white',
           'transition-transform duration-300 ease-out',
           drawerOpen ? 'translate-x-0' : '-translate-x-full',
           'lg:translate-x-0',
@@ -115,7 +115,7 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
               <span className="font-heading text-[9.5px] font-bold uppercase tracking-[0.22em] leading-tight text-white/90">
                 Kerala Ayurvedic
               </span>
-              <span className="font-heading text-[9.5px] font-bold uppercase tracking-[0.22em] leading-tight text-[#D4A373]">
+              <span className="font-heading text-[9.5px] font-bold uppercase tracking-[0.22em] leading-tight text-[#D4AF37]">
                 {portal.label}
               </span>
             </span>
@@ -145,17 +145,17 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
                     className={[
                       'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors duration-200',
                       active
-                        ? 'bg-[#D4A373]/[0.14] text-white'
+                        ? 'bg-[#D4AF37]/[0.14] text-white'
                         : 'text-white/65 hover:bg-white/[0.04] hover:text-white',
                     ].join(' ')}
                   >
                     {active && (
-                      <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-[#D4A373]" />
+                      <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-[#D4AF37]" />
                     )}
                     <Icon
                       className={[
                         'h-4 w-4 shrink-0 transition-colors',
-                        active ? 'text-[#D4A373]' : 'text-white/55 group-hover:text-white/85',
+                        active ? 'text-[#D4AF37]' : 'text-white/55 group-hover:text-white/85',
                       ].join(' ')}
                       strokeWidth={1.8}
                     />
@@ -195,17 +195,17 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
       {/* ── Right column ───────────────────────────────────────────────── */}
       <div className="lg:pl-[268px]">
         {/* Topbar */}
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-[#1e3d32]/10 bg-[#f7f3ee]/85 px-4 backdrop-blur sm:px-6 lg:px-10">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-[#163F33]/10 bg-[#F7F2E8]/85 px-4 backdrop-blur sm:px-6 lg:px-10">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-[#1e3d32]/70 transition-colors hover:bg-[#1e3d32]/[0.06] lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-[#163F33]/70 transition-colors hover:bg-[#163F33]/[0.06] lg:hidden"
               aria-label="Open menu"
             >
               <Menu className="h-5 w-5" />
             </button>
-            <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+            <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
               {portal.shortName}
             </span>
           </div>
@@ -241,7 +241,7 @@ function UserMenu({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="group flex items-center gap-2.5 rounded-full border border-[#1e3d32]/8 bg-white px-2.5 py-1.5 transition-all hover:border-[#1e3d32]/20 hover:shadow-sm"
+        className="group flex items-center gap-2.5 rounded-full border border-[#163F33]/8 bg-white px-2.5 py-1.5 transition-all hover:border-[#163F33]/20 hover:shadow-sm"
         aria-haspopup="menu"
         aria-expanded={open}
       >
@@ -253,20 +253,20 @@ function UserMenu({
             className="h-7 w-7 rounded-full object-cover"
           />
         ) : (
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1e3d32] font-heading text-[12px] font-bold text-[#D4A373]">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#163F33] font-heading text-[12px] font-bold text-[#D4AF37]">
             {initial}
           </span>
         )}
         <span className="hidden text-left sm:block">
-          <span className="block font-heading text-[12px] font-semibold leading-tight text-[#1e3d32]">
+          <span className="block font-heading text-[12px] font-semibold leading-tight text-[#163F33]">
             {firstName}
           </span>
-          <span className="block font-body text-[10px] leading-tight text-[#1e3d32]/55">
+          <span className="block font-body text-[10px] leading-tight text-[#163F33]/55">
             {roleLabel}
           </span>
         </span>
         <ChevronDown
-          className={`h-3.5 w-3.5 text-[#1e3d32]/40 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`h-3.5 w-3.5 text-[#163F33]/40 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -278,21 +278,21 @@ function UserMenu({
             onClick={() => setOpen(false)}
             className="fixed inset-0 z-30 cursor-default"
           />
-          <div className="absolute right-0 top-full z-40 mt-2 w-64 overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white shadow-2xl shadow-black/8">
-            <div className="border-b border-[#1e3d32]/6 px-4 py-3">
-              <p className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <div className="absolute right-0 top-full z-40 mt-2 w-64 overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white shadow-2xl shadow-black/8">
+            <div className="border-b border-[#163F33]/6 px-4 py-3">
+              <p className="font-heading text-[13px] font-semibold text-[#163F33]">
                 {user.fullName || 'Welcome'}
               </p>
-              <p className="mt-0.5 truncate font-body text-[11.5px] text-[#1e3d32]/55">
+              <p className="mt-0.5 truncate font-body text-[11.5px] text-[#163F33]/55">
                 {user.email}
               </p>
             </div>
             <form action={signOut}>
               <button
                 type="submit"
-                className="flex w-full items-center gap-2.5 px-4 py-3 text-left font-heading text-[13px] font-semibold text-[#1e3d32] transition-colors hover:bg-[#1e3d32]/[0.04]"
+                className="flex w-full items-center gap-2.5 px-4 py-3 text-left font-heading text-[13px] font-semibold text-[#163F33] transition-colors hover:bg-[#163F33]/[0.04]"
               >
-                <LogOut className="h-4 w-4 text-[#1e3d32]/55" strokeWidth={1.8} />
+                <LogOut className="h-4 w-4 text-[#163F33]/55" strokeWidth={1.8} />
                 Sign out
               </button>
             </form>

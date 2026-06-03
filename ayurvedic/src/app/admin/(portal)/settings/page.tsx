@@ -12,13 +12,13 @@ export default async function AdminSettingsPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-4">
       <header>
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Configuration
         </span>
-        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
           Settings
         </h1>
-        <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+        <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
           Clinic-wide configuration — name, contact, tax, shipping, and booking rules.
           {settings.updatedAt ? (
             <>

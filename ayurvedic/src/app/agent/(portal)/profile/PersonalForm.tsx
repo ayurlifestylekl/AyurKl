@@ -34,13 +34,13 @@ export default function PersonalForm({
         e.preventDefault()
         save()
       }}
-      className="rounded-3xl border border-[#1e3d32]/10 bg-white p-5"
+      className="rounded-3xl border border-[#163F33]/10 bg-white p-5"
     >
       <header className="mb-4">
-        <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">
           Personal details
         </h2>
-        <p className="mt-0.5 text-[12px] text-[#2B2B2B]/60">
+        <p className="mt-0.5 text-[12px] text-[#1F1F1F]/60">
           Used on receipts and contact records.
         </p>
       </header>
@@ -69,7 +69,7 @@ export default function PersonalForm({
         <button
           type="submit"
           disabled={pending || !fullName.trim()}
-          className="rounded-lg bg-[#2F5D50] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+          className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
         >
           {pending ? 'Saving…' : 'Save'}
         </button>
@@ -97,7 +97,7 @@ function Field({
 }) {
   return (
     <label className={`flex flex-col gap-1 ${full ? 'sm:col-span-2' : ''}`}>
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
         {label}
       </span>
       <input
@@ -107,8 +107,8 @@ function Field({
         required={required}
         readOnly={readOnly}
         onChange={(e) => onChange(e.target.value)}
-        className={`rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none ${
-          readOnly ? 'bg-[#FAF6EE]/30 text-[#2B2B2B]/60' : 'bg-white'
+        className={`rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none ${
+          readOnly ? 'bg-[#F7F2E8]/30 text-[#1F1F1F]/60' : 'bg-white'
         }`}
       />
     </label>

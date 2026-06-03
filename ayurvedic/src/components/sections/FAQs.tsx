@@ -18,11 +18,11 @@ interface FAQsProps {
 const BG_SAGE        = '#8FAE8B'                       // Soft dusty sage
 const BG_SAGE_DEEP   = '#8FAE8B'                       // Sage gradient destination
 const TEXT_DARK      = '#163F33'                       // Emerald — high contrast on sage
-const TEXT_MUTED     = 'rgba(26,59,46,0.70)'
-const TEXT_QUIET     = 'rgba(26,59,46,0.55)'
+const TEXT_MUTED     = 'rgba(22, 63, 51,0.70)'
+const TEXT_QUIET     = 'rgba(22, 63, 51,0.55)'
 const GOLD           = '#D4AF37'                       // Matches Reviews
-const GOLD_SOFT      = 'rgba(200, 116, 26, 0.22)'      // Soft gold for borders + accents
-const SAGE_HAIRLINE  = 'rgba(26,59,46,0.14)'           // Quiet emerald hairlines
+const GOLD_SOFT      = 'rgba(212, 175, 55, 0.22)'      // Soft gold for borders + accents
+const SAGE_HAIRLINE  = 'rgba(22, 63, 51,0.14)'           // Quiet emerald hairlines
 
 export default function FAQs({
   items = defaultFaqs,
@@ -60,7 +60,7 @@ export default function FAQs({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 50% 50% at 8% 12%, rgba(200,116,26,0.12), transparent 65%), radial-gradient(ellipse 45% 50% at 95% 88%, rgba(26,59,46,0.08), transparent 65%)',
+            'radial-gradient(ellipse 50% 50% at 8% 12%, rgba(212, 175, 55,0.12), transparent 65%), radial-gradient(ellipse 45% 50% at 95% 88%, rgba(22, 63, 51,0.08), transparent 65%)',
         }}
       />
 
@@ -69,7 +69,7 @@ export default function FAQs({
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.45] mix-blend-multiply"
         style={{
-          backgroundImage: 'radial-gradient(rgba(26,59,46,0.08) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(rgba(22, 63, 51,0.08) 1px, transparent 1px)',
           backgroundSize: '3px 3px',
         }}
       />
@@ -133,7 +133,7 @@ export default function FAQs({
                 className="italic"
                 style={{
                   color: GOLD,
-                  textShadow: '0 3px 22px rgba(200,116,26,0.22)',
+                  textShadow: '0 3px 22px rgba(212, 175, 55,0.22)',
                 }}
               >
                 Book.

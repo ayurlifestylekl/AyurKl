@@ -40,7 +40,7 @@ export default function QuizHubCard({
       {emphasised && (
         <span
           aria-hidden
-          className="absolute inset-y-0 left-0 w-[3px] bg-[#D4A373]"
+          className="absolute inset-y-0 left-0 w-[3px] bg-[#D4AF37]"
         />
       )}
 
@@ -48,17 +48,17 @@ export default function QuizHubCard({
         <span
           className={`flex shrink-0 items-center justify-center rounded-2xl ${
             emphasised
-              ? 'h-12 w-12 bg-[#FAF6EE]'
-              : 'h-10 w-10 bg-[#1e3d32]/[0.06]'
+              ? 'h-12 w-12 bg-[#F7F2E8]'
+              : 'h-10 w-10 bg-[#163F33]/[0.06]'
           }`}
         >
           {status === 'locked' ? (
-            <Lock className="h-4 w-4 text-[#1e3d32]/45" strokeWidth={1.8} />
+            <Lock className="h-4 w-4 text-[#163F33]/45" strokeWidth={1.8} />
           ) : status === 'completed' ? (
-            <Check className="h-4 w-4 text-[#2F5D50]" strokeWidth={2.2} />
+            <Check className="h-4 w-4 text-[#1E5B4B]" strokeWidth={2.2} />
           ) : (
             <Icon
-              className={`${emphasised ? 'h-5 w-5' : 'h-4 w-4'} text-[#2F5D50]`}
+              className={`${emphasised ? 'h-5 w-5' : 'h-4 w-4'} text-[#1E5B4B]`}
               strokeWidth={1.6}
             />
           )}
@@ -66,7 +66,7 @@ export default function QuizHubCard({
 
         {status !== 'locked' && (
           <ArrowUpRight
-            className="h-4 w-4 text-[#1e3d32]/35 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#D4A373]"
+            className="h-4 w-4 text-[#163F33]/35 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#D4AF37]"
             strokeWidth={2}
           />
         )}
@@ -74,7 +74,7 @@ export default function QuizHubCard({
 
       <div className="mt-4 flex-1">
         <p
-          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
           style={{ letterSpacing: '0.18em' }}
         >
           <span className="italic" style={{ fontFamily: 'var(--font-playfair)' }}>
@@ -82,7 +82,7 @@ export default function QuizHubCard({
           </span>
         </p>
         <h3
-          className={`mt-1 font-heading font-bold text-[#1e3d32] ${
+          className={`mt-1 font-heading font-bold text-[#163F33] ${
             emphasised ? 'text-[22px] sm:text-[26px]' : 'text-[16px]'
           }`}
           style={{ letterSpacing: '-0.015em' }}
@@ -90,7 +90,7 @@ export default function QuizHubCard({
           {title}
         </h3>
         <p
-          className={`mt-1.5 font-body text-[#2B2B2B]/65 ${
+          className={`mt-1.5 font-body text-[#1F1F1F]/65 ${
             emphasised ? 'text-[13.5px]' : 'text-[12.5px]'
           }`}
           style={{ lineHeight: 1.55 }}
@@ -100,13 +100,13 @@ export default function QuizHubCard({
 
         {/* Status caption / result label */}
         {status === 'completed' && resultLabel && (
-          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#2F5D50]/[0.08] px-3 py-1 font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#2F5D50]">
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#1E5B4B]/[0.08] px-3 py-1 font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#1E5B4B]">
             <Check className="h-3 w-3" strokeWidth={2.4} />
             {resultLabel}
           </p>
         )}
         {status === 'locked' && caption && (
-          <p className="mt-3 font-body text-[11px] italic text-[#2B2B2B]/50">
+          <p className="mt-3 font-body text-[11px] italic text-[#1F1F1F]/50">
             {caption}
           </p>
         )}
@@ -116,8 +116,8 @@ export default function QuizHubCard({
       <div
         className={`mt-4 flex items-center justify-between border-t pt-3 font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] ${
           emphasised
-            ? 'border-[#D4A373]/25 text-[#1e3d32]/55'
-            : 'border-[#1e3d32]/6 text-[#1e3d32]/45'
+            ? 'border-[#D4AF37]/25 text-[#163F33]/55'
+            : 'border-[#163F33]/6 text-[#163F33]/45'
         }`}
       >
         <span>
@@ -132,17 +132,17 @@ export default function QuizHubCard({
     'group relative flex h-full flex-col overflow-hidden rounded-3xl border bg-white p-5 transition-all sm:p-6'
   const styleByStatus: Record<typeof status, string> = {
     active: emphasised
-      ? 'border-[#D4A373]/30 bg-[#FAF6EE]/55 hover:-translate-y-0.5 hover:border-[#D4A373]/55'
-      : 'border-[#1e3d32]/8 hover:-translate-y-0.5 hover:border-[#D4A373]/40',
+      ? 'border-[#D4AF37]/30 bg-[#F7F2E8]/55 hover:-translate-y-0.5 hover:border-[#D4AF37]/55'
+      : 'border-[#163F33]/8 hover:-translate-y-0.5 hover:border-[#D4AF37]/40',
     completed:
-      'border-[#2F5D50]/20 bg-[#2F5D50]/[0.02] hover:-translate-y-0.5 hover:border-[#2F5D50]/40',
+      'border-[#1E5B4B]/20 bg-[#1E5B4B]/[0.02] hover:-translate-y-0.5 hover:border-[#1E5B4B]/40',
     locked:
-      'border-[#1e3d32]/6 bg-[#FAF6EE]/30 opacity-75 cursor-not-allowed',
+      'border-[#163F33]/6 bg-[#F7F2E8]/30 opacity-75 cursor-not-allowed',
   }
 
   const shadow = emphasised
-    ? '0 1px 0 0 rgba(30,61,50,0.04), 0 18px 36px -20px rgba(30,61,50,0.22)'
-    : '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)'
+    ? '0 1px 0 0 rgba(22, 63, 51,0.04), 0 18px 36px -20px rgba(22, 63, 51,0.22)'
+    : '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)'
 
   if (!interactive) {
     return (

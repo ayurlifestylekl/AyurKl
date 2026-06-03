@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 700,
     letterSpacing: 2,
-    color: '#2F5D50',
+    color: '#1E5B4B',
   },
   carrier: { fontSize: 9, color: '#666', textAlign: 'right' },
   trackingNum: { fontSize: 10, color: '#444', marginTop: 2 },

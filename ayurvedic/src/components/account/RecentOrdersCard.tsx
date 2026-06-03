@@ -30,26 +30,26 @@ function shortId(id: string): string {
 export default function RecentOrdersCard({ orders }: RecentOrdersCardProps) {
   return (
     <section
-      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#1e3d32]/6 px-5 py-3 sm:px-5">
+      <div className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3 sm:px-5">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-            <Package className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+            <Package className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
-          <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
             Recent orders
           </h2>
         </div>
         {orders.length > 0 && (
           <Link
             href="/account/orders"
-            className="group inline-flex items-center gap-1 font-heading text-[11.5px] font-semibold text-[#1e3d32]/55 transition-colors hover:text-[#D4A373]"
+            className="group inline-flex items-center gap-1 font-heading text-[11.5px] font-semibold text-[#163F33]/55 transition-colors hover:text-[#D4AF37]"
           >
             View all
             <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -67,20 +67,20 @@ export default function RecentOrdersCard({ orders }: RecentOrdersCardProps) {
           ctaHref="/products"
         />
       ) : (
-        <ul className="divide-y divide-[#1e3d32]/6">
+        <ul className="divide-y divide-[#163F33]/6">
           {orders.map((order) => (
             <li key={order.id}>
               <Link
                 href={`/account/orders/${order.id}`}
-                className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-[#1e3d32]/[0.025] sm:px-6"
+                className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-[#163F33]/[0.025] sm:px-6"
               >
                 {/* Left — order info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#1e3d32]/60">
+                    <span className="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#163F33]/60">
                       #{shortId(order.id)}
                     </span>
-                    <span className="font-body text-[11px] text-[#2B2B2B]/45">
+                    <span className="font-body text-[11px] text-[#1F1F1F]/45">
                       · {dateFormat.format(new Date(order.created_at))}
                     </span>
                   </div>
@@ -89,11 +89,11 @@ export default function RecentOrdersCard({ orders }: RecentOrdersCardProps) {
                       fulfillmentStatus={order.fulfillment_status}
                       paymentStatus={order.payment_status}
                     />
-                    <span className="font-body text-[11.5px] text-[#2B2B2B]/55">
+                    <span className="font-body text-[11.5px] text-[#1F1F1F]/55">
                       {order.itemCount} {order.itemCount === 1 ? 'item' : 'items'}
                     </span>
                     {order.tracking_number && order.courier_service && (
-                      <span className="inline-flex items-center gap-1 font-body text-[11px] text-[#1e3d32]/55">
+                      <span className="inline-flex items-center gap-1 font-body text-[11px] text-[#163F33]/55">
                         <Truck className="h-3 w-3" />
                         {order.courier_service}
                       </span>
@@ -104,12 +104,12 @@ export default function RecentOrdersCard({ orders }: RecentOrdersCardProps) {
                 {/* Right — total */}
                 <div className="flex shrink-0 flex-col items-end">
                   <span
-                    className="font-heading text-[15px] font-bold text-[#1e3d32]"
+                    className="font-heading text-[15px] font-bold text-[#163F33]"
                     style={{ letterSpacing: '-0.01em' }}
                   >
                     RM {Number(order.total_amount_rm).toFixed(2)}
                   </span>
-                  <ArrowRight className="mt-1 h-3.5 w-3.5 text-[#1e3d32]/25 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-[#D4A373]" />
+                  <ArrowRight className="mt-1 h-3.5 w-3.5 text-[#163F33]/25 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]" />
                 </div>
               </Link>
             </li>

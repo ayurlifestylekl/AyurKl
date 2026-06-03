@@ -56,53 +56,53 @@ export default function RecentActivityFeed({ initial }: { initial: ActivityEvent
 
   return (
     <article
-      className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
-      <header className="flex items-center justify-between border-b border-[#1e3d32]/6 px-5 py-3.5">
+      <header className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3.5">
         <div className="flex items-center gap-2.5">
-          <Activity className="h-3.5 w-3.5 text-[#2F5D50]" />
-          <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <Activity className="h-3.5 w-3.5 text-[#1E5B4B]" />
+          <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
             Recent activity
           </h2>
         </div>
-        <span className="inline-flex items-center gap-1.5 font-heading text-[10px] font-semibold uppercase tracking-[0.16em] text-[#2F5D50]/70">
+        <span className="inline-flex items-center gap-1.5 font-heading text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1E5B4B]/70">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2F5D50] opacity-60" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2F5D50]" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1E5B4B] opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#1E5B4B]" />
           </span>
           Live
         </span>
       </header>
       {events.length === 0 ? (
-        <p className="px-5 py-8 text-center font-body text-[12.5px] italic text-[#2B2B2B]/55">
+        <p className="px-5 py-8 text-center font-body text-[12.5px] italic text-[#1F1F1F]/55">
           No recent activity.
         </p>
       ) : (
-        <ul className="divide-y divide-[#1e3d32]/6">
+        <ul className="divide-y divide-[#163F33]/6">
           {events.map((e) => {
             const Icon = ICONS[e.kind]
             return (
               <li key={e.id}>
                 <Link
                   href={e.href}
-                  className="flex items-start gap-3 px-5 py-3 transition-colors hover:bg-[#FAF6EE]/40"
+                  className="flex items-start gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                 >
-                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-                    <Icon className="h-3.5 w-3.5 text-[#2F5D50]" />
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+                    <Icon className="h-3.5 w-3.5 text-[#1E5B4B]" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]">
                       {e.title}
                     </p>
-                    <p className="truncate font-body text-[11px] text-[#2B2B2B]/65">
+                    <p className="truncate font-body text-[11px] text-[#1F1F1F]/65">
                       {e.subtitle}
                     </p>
                   </div>
-                  <span className="shrink-0 font-body text-[10.5px] text-[#1e3d32]/45">
+                  <span className="shrink-0 font-body text-[10.5px] text-[#163F33]/45">
                     {ago(e.at)}
                   </span>
                 </Link>

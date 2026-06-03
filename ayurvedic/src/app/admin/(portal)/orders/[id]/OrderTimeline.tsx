@@ -26,7 +26,7 @@ const HUMAN: Record<string, string> = {
 export default function OrderTimeline({ events }: { events: Event[] }) {
   if (events.length === 0) {
     return (
-      <p className="px-5 py-6 text-center text-[12.5px] italic text-[#2B2B2B]/55">
+      <p className="px-5 py-6 text-center text-[12.5px] italic text-[#1F1F1F]/55">
         No events yet.
       </p>
     )
@@ -37,33 +37,33 @@ export default function OrderTimeline({ events }: { events: Event[] }) {
   )
 
   return (
-    <ul className="divide-y divide-[#1e3d32]/6">
+    <ul className="divide-y divide-[#163F33]/6">
       {sorted.map((e) => (
         <li key={e.id} className="flex items-start gap-3 px-5 py-3">
-          <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#1e3d32]/40" strokeWidth={1.8} />
+          <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#163F33]/40" strokeWidth={1.8} />
           <div className="min-w-0 flex-1">
-            <p className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+            <p className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               {HUMAN[e.event_type] ?? e.event_type}
               {e.from_status && e.to_status ? (
-                <span className="ml-2 font-normal text-[#2B2B2B]/60">
+                <span className="ml-2 font-normal text-[#1F1F1F]/60">
                   {e.from_status} → {e.to_status}
                 </span>
               ) : null}
             </p>
-            <p className="mt-0.5 text-[11px] text-[#2B2B2B]/55">
+            <p className="mt-0.5 text-[11px] text-[#1F1F1F]/55">
               {new Date(e.created_at).toLocaleString('en-MY')}
               {!e.is_customer_visible ? ' · staff-only' : ''}
             </p>
             {e.payload?.note ? (
-              <p className="mt-1 text-[12px] text-[#2B2B2B]/70">{String(e.payload.note)}</p>
+              <p className="mt-1 text-[12px] text-[#1F1F1F]/70">{String(e.payload.note)}</p>
             ) : null}
             {e.payload?.amount_rm ? (
-              <p className="mt-1 text-[12px] text-[#2B2B2B]/70">
+              <p className="mt-1 text-[12px] text-[#1F1F1F]/70">
                 Amount: RM {Number(e.payload.amount_rm).toFixed(2)}
               </p>
             ) : null}
             {e.payload?.tracking_number ? (
-              <p className="mt-1 text-[12px] text-[#2B2B2B]/70">
+              <p className="mt-1 text-[12px] text-[#1F1F1F]/70">
                 {e.payload.carrier} · {e.payload.tracking_number}
               </p>
             ) : null}

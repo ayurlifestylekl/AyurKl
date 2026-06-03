@@ -73,7 +73,7 @@ export default function ResetPasswordForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4A373] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? 'Saving…' : 'Set new password'}
         </button>

@@ -17,7 +17,7 @@ export default async function ReferralQR({
       width: size,
       margin: 1,
       color: {
-        dark: '#1e3d32',
+        dark: '#163F33',
         light: '#ffffff',
       },
       errorCorrectionLevel: 'M',

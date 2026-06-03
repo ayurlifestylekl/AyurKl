@@ -14,7 +14,7 @@ interface Props {
 }
 
 const CARD_SHADOW =
-  '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)'
+  '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)'
 
 export default function InsightsRow({
   topSelling,
@@ -26,39 +26,39 @@ export default function InsightsRow({
     <section className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:gap-4">
       {/* Top selling */}
       <article
-        className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white lg:col-span-6"
+        className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white lg:col-span-6"
         style={{ boxShadow: CARD_SHADOW }}
       >
-        <header className="flex items-center gap-2.5 border-b border-[#1e3d32]/6 px-5 py-3.5">
-          <TrendingUp className="h-3.5 w-3.5 text-[#D4A373]" />
-          <h3 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <header className="flex items-center gap-2.5 border-b border-[#163F33]/6 px-5 py-3.5">
+          <TrendingUp className="h-3.5 w-3.5 text-[#D4AF37]" />
+          <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
             Top selling this week
           </h3>
         </header>
         {topSelling.length === 0 ? (
-          <p className="px-5 py-8 text-center font-body text-[12.5px] italic text-[#2B2B2B]/55">
+          <p className="px-5 py-8 text-center font-body text-[12.5px] italic text-[#1F1F1F]/55">
             No sales yet this week.
           </p>
         ) : (
-          <ol className="divide-y divide-[#1e3d32]/6">
+          <ol className="divide-y divide-[#163F33]/6">
             {topSelling.map((p, i) => (
               <li
                 key={p.productId}
                 className="flex items-center justify-between gap-3 px-5 py-3"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="font-heading text-[11px] font-bold tabular-nums text-[#1e3d32]/40">
+                  <span className="font-heading text-[11px] font-bold tabular-nums text-[#163F33]/40">
                     {i + 1}
                   </span>
-                  <p className="truncate font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+                  <p className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]">
                     {p.name}
                   </p>
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+                  <p className="font-heading text-[12.5px] font-semibold text-[#163F33]">
                     {p.unitsSold} sold
                   </p>
-                  <p className="font-body text-[10.5px] text-[#2B2B2B]/55">
+                  <p className="font-body text-[10.5px] text-[#1F1F1F]/55">
                     RM {p.revenueRm.toFixed(0)}
                   </p>
                 </div>
@@ -70,28 +70,28 @@ export default function InsightsRow({
 
       {/* Vaidya utilization */}
       <article
-        className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white p-5 lg:col-span-3"
+        className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 lg:col-span-3"
         style={{ boxShadow: CARD_SHADOW }}
       >
         <header className="flex items-center gap-2.5">
-          <Activity className="h-3.5 w-3.5 text-[#2F5D50]" />
-          <h3 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <Activity className="h-3.5 w-3.5 text-[#1E5B4B]" />
+          <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
             Vaidya utilization
           </h3>
         </header>
         <p
-          className="mt-3 font-heading text-[34px] font-bold leading-none text-[#1e3d32]"
+          className="mt-3 font-heading text-[34px] font-bold leading-none text-[#163F33]"
           style={{ letterSpacing: '-0.02em' }}
         >
           {utilization.percent}%
         </p>
-        <p className="mt-1 font-body text-[11.5px] text-[#2B2B2B]/55">
+        <p className="mt-1 font-body text-[11.5px] text-[#1F1F1F]/55">
           {(utilization.bookedMinutes / 60).toFixed(1)} of{' '}
           {(utilization.availableMinutes / 60).toFixed(0)} hours this week
         </p>
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#1e3d32]/[0.06]">
+        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#163F33]/[0.06]">
           <div
-            className="h-full rounded-full bg-[#2F5D50]"
+            className="h-full rounded-full bg-[#1E5B4B]"
             style={{ width: `${utilization.percent}%` }}
           />
         </div>
@@ -100,48 +100,48 @@ export default function InsightsRow({
       {/* Most-booked treatment + active promos stacked */}
       <div className="flex flex-col gap-3 lg:col-span-3 lg:gap-4">
         <article
-          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white p-5"
+          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5"
           style={{ boxShadow: CARD_SHADOW }}
         >
           <header className="flex items-center gap-2.5">
-            <Flame className="h-3.5 w-3.5 text-[#D4A373]" />
-            <h3 className="font-heading text-[13px] font-semibold text-[#1e3d32]">Most booked</h3>
+            <Flame className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">Most booked</h3>
           </header>
           {topTreatment ? (
             <>
-              <p className="mt-3 truncate font-heading text-[14px] font-bold text-[#1e3d32]">
+              <p className="mt-3 truncate font-heading text-[14px] font-bold text-[#163F33]">
                 {topTreatment.name}
               </p>
-              <p className="mt-1 font-body text-[11.5px] text-[#2B2B2B]/55">
+              <p className="mt-1 font-body text-[11.5px] text-[#1F1F1F]/55">
                 {topTreatment.bookings} bookings this week
               </p>
             </>
           ) : (
-            <p className="mt-3 font-body text-[12px] italic text-[#2B2B2B]/55">
+            <p className="mt-3 font-body text-[12px] italic text-[#1F1F1F]/55">
               No bookings yet
             </p>
           )}
         </article>
         <article
-          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white p-5"
+          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5"
           style={{ boxShadow: CARD_SHADOW }}
         >
           <header className="flex items-center gap-2.5">
-            <Gift className="h-3.5 w-3.5 text-[#D4A373]" />
-            <h3 className="font-heading text-[13px] font-semibold text-[#1e3d32]">Active promos</h3>
+            <Gift className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">Active promos</h3>
           </header>
           {promos.length === 0 ? (
-            <p className="mt-3 font-body text-[12px] italic text-[#2B2B2B]/55">
+            <p className="mt-3 font-body text-[12px] italic text-[#1F1F1F]/55">
               No campaigns running
             </p>
           ) : (
             <ul className="mt-3 space-y-1.5">
               {promos.map((p) => (
                 <li key={p.id} className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-[11.5px] font-semibold text-[#1e3d32]">
+                  <span className="font-mono text-[11.5px] font-semibold text-[#163F33]">
                     {p.code}
                   </span>
-                  <span className="truncate font-body text-[10.5px] text-[#2B2B2B]/55">
+                  <span className="truncate font-body text-[10.5px] text-[#1F1F1F]/55">
                     {p.title}
                   </span>
                 </li>

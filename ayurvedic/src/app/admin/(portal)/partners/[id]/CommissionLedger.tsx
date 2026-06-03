@@ -28,14 +28,14 @@ export default function CommissionLedger({
 }) {
   if (commissions.length === 0) {
     return (
-      <p className="px-5 py-6 text-center text-[12.5px] italic text-[#2B2B2B]/55">
+      <p className="px-5 py-6 text-center text-[12.5px] italic text-[#1F1F1F]/55">
         No commissions recorded yet. Commissions appear automatically when an order
         attributed to this agent is paid.
       </p>
     )
   }
   return (
-    <ul className="divide-y divide-[#1e3d32]/6">
+    <ul className="divide-y divide-[#163F33]/6">
       {commissions.map((c) => {
         const ord = Array.isArray(c.order) ? c.order[0] : c.order
         return (
@@ -45,16 +45,16 @@ export default function CommissionLedger({
           >
             <Link
               href={`/admin/orders/${c.order_id}`}
-              className="font-mono text-[11.5px] font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+              className="font-mono text-[11.5px] font-semibold text-[#163F33] hover:text-[#D4AF37]"
             >
               #{String(c.order_id).slice(-6).toUpperCase()}
             </Link>
-            <span className="flex-1 text-[12px] text-[#2B2B2B]/65">
+            <span className="flex-1 text-[12px] text-[#1F1F1F]/65">
               {new Date(c.created_at).toLocaleDateString('en-MY')}
               {ord ? ` · order RM ${Number(ord.total_amount_rm).toFixed(2)}` : ''}
             </span>
-            <span className="text-[11px] text-[#2B2B2B]/55">{c.rate_percent}%</span>
-            <span className="w-20 text-right font-semibold text-[#D4A373]">
+            <span className="text-[11px] text-[#1F1F1F]/55">{c.rate_percent}%</span>
+            <span className="w-20 text-right font-semibold text-[#D4AF37]">
               RM {Number(c.commission_rm).toFixed(2)}
             </span>
             <span

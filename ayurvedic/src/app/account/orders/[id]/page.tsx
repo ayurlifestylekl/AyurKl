@@ -78,7 +78,7 @@ export default async function OrderDetailPage({
       {/* ── Back link ─────────────────────────────────────────────── */}
       <Link
         href="/account/orders"
-        className="group inline-flex w-fit items-center gap-1.5 font-heading text-[11.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55 transition-colors hover:text-[#D4A373]"
+        className="group inline-flex w-fit items-center gap-1.5 font-heading text-[11.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55 transition-colors hover:text-[#D4AF37]"
       >
         <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
         All orders
@@ -86,16 +86,16 @@ export default async function OrderDetailPage({
 
       {/* ── Header ────────────────────────────────────────────────── */}
       <header>
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#1e3d32]/60">
+        <span className="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#163F33]/60">
           Order #{shortId(order.id)}
         </span>
         <h1
-          className="mt-1.5 font-heading text-[26px] font-bold leading-tight text-[#1e3d32] sm:text-[30px]"
+          className="mt-1.5 font-heading text-[26px] font-bold leading-tight text-[#163F33] sm:text-[30px]"
           style={{ letterSpacing: '-0.02em' }}
         >
           {title}
         </h1>
-        <p className="mt-1.5 font-body text-[12.5px] text-[#2B2B2B]/55">
+        <p className="mt-1.5 font-body text-[12.5px] text-[#1F1F1F]/55">
           Placed on {dateFormat.format(new Date(order.created_at))}
         </p>
       </header>
@@ -133,30 +133,30 @@ export default async function OrderDetailPage({
       {/* ── Refunds (only when present) ──────────────────────────── */}
       {refunds.length > 0 ? (
         <section
-          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
-          <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32] sm:px-6">
+          <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33] sm:px-6">
             Refunds
           </header>
-          <ul className="divide-y divide-[#1e3d32]/6">
+          <ul className="divide-y divide-[#163F33]/6">
             {refunds.map((r) => (
               <li key={r.id} className="px-5 py-3 sm:px-6">
                 <div className="flex items-center justify-between">
-                  <span className="font-heading text-[14px] font-semibold text-[#1e3d32]">
+                  <span className="font-heading text-[14px] font-semibold text-[#163F33]">
                     RM {Number(r.amount_rm).toFixed(2)}
                   </span>
-                  <span className="font-body text-[11px] text-[#2B2B2B]/55">
+                  <span className="font-body text-[11px] text-[#1F1F1F]/55">
                     {dateFormat.format(new Date(r.created_at))}
                   </span>
                 </div>
-                <p className="mt-1 font-body text-[12.5px] text-[#2B2B2B]/70">
+                <p className="mt-1 font-body text-[12.5px] text-[#1F1F1F]/70">
                   {r.reason}
                 </p>
-                <p className="mt-0.5 font-body text-[11px] text-[#2B2B2B]/55">
+                <p className="mt-0.5 font-body text-[11px] text-[#1F1F1F]/55">
                   Refunded via {String(r.refund_method).replace('_', ' ')}
                 </p>
               </li>

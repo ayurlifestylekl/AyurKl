@@ -32,19 +32,19 @@ export default async function ExternalSalesPage() {
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/partners"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to partners
       </Link>
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Affiliate program
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             External sales
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {total} logged sale{total === 1 ? '' : 's'} · RM {summary.totalGross.toFixed(2)}{' '}
             gross · RM {summary.totalCommission.toFixed(2)} commission
           </p>
@@ -52,8 +52,8 @@ export default async function ExternalSalesPage() {
         <LogSaleDialog agents={agents} />
       </header>
 
-      <section className="rounded-2xl border border-[#1e3d32]/10 bg-white p-4 text-[12.5px] text-[#2B2B2B]/70">
-        <p className="font-semibold text-[#1e3d32]">How this works</p>
+      <section className="rounded-2xl border border-[#163F33]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
+        <p className="font-semibold text-[#163F33]">How this works</p>
         <p className="mt-1">
           Affiliates send proof of external sales (TikTok Shop, Shopee, Instagram DM, WhatsApp,
           etc.) via WhatsApp. You key those in here. The system uses their current commission
@@ -63,13 +63,13 @@ export default async function ExternalSalesPage() {
       </section>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No external sales logged yet. Click <strong>Log external sale</strong> when an affiliate sends proof.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
           <table className="w-full text-left text-[13px]">
-            <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               <tr>
                 <th className="px-4 py-3">When</th>
                 <th className="px-4 py-3">Affiliate</th>
@@ -81,20 +81,20 @@ export default async function ExternalSalesPage() {
                 <th className="px-4 py-3">Ref</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e3d32]/6">
+            <tbody className="divide-y divide-[#163F33]/6">
               {items.map((s) => (
-                <tr key={s.id} className="hover:bg-[#FAF6EE]/30">
-                  <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/65">
+                <tr key={s.id} className="hover:bg-[#F7F2E8]/30">
+                  <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/65">
                     {new Date(s.createdAt).toLocaleDateString('en-MY')}
                   </td>
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/partners/${s.agentId}`}
-                      className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                      className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                     >
                       {s.agentName ?? '—'}
                     </Link>
-                    <div className="text-[11px] text-[#2B2B2B]/55">{s.referralCode}</div>
+                    <div className="text-[11px] text-[#1F1F1F]/55">{s.referralCode}</div>
                   </td>
                   <td className="px-4 py-3">
                     <span
@@ -104,16 +104,16 @@ export default async function ExternalSalesPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">RM {s.grossAmountRm.toFixed(2)}</td>
-                  <td className="px-4 py-3 text-right text-[12px] text-[#2B2B2B]/65">
+                  <td className="px-4 py-3 text-right text-[12px] text-[#1F1F1F]/65">
                     {s.ratePercent}%
                   </td>
-                  <td className="px-4 py-3 text-right font-semibold text-[#D4A373]">
+                  <td className="px-4 py-3 text-right font-semibold text-[#D4AF37]">
                     RM {s.commissionRm.toFixed(2)}
                   </td>
-                  <td className="px-4 py-3 text-[12px] text-[#2B2B2B]/65">
+                  <td className="px-4 py-3 text-[12px] text-[#1F1F1F]/65">
                     {s.customerName ?? '—'}
                   </td>
-                  <td className="px-4 py-3 text-[11px] text-[#2B2B2B]/55">
+                  <td className="px-4 py-3 text-[11px] text-[#1F1F1F]/55">
                     {s.marketplaceOrderRef ?? '—'}
                   </td>
                 </tr>

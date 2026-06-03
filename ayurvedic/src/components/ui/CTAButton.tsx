@@ -34,9 +34,9 @@ type Props = LinkProps | ButtonProps
 
 const variantStyles: Record<Variant, string> = {
   primary:
-    'bg-accent text-dark shadow-[0_18px_40px_-18px_rgba(212,163,115,0.85)] hover:shadow-[0_22px_50px_-16px_rgba(212,163,115,0.95)] hover:-translate-y-0.5',
+    'bg-accent text-dark shadow-[0_18px_40px_-18px_rgba(212, 175, 55,0.85)] hover:shadow-[0_22px_50px_-16px_rgba(212, 175, 55,0.95)] hover:-translate-y-0.5',
   secondary:
-    'bg-primary text-white shadow-[0_18px_40px_-18px_rgba(47,93,80,0.65)] hover:bg-[#163F33] hover:shadow-[0_22px_50px_-16px_rgba(47,93,80,0.85)] hover:-translate-y-0.5',
+    'bg-primary text-white shadow-[0_18px_40px_-18px_rgba(30, 91, 75,0.65)] hover:bg-[#163F33] hover:shadow-[0_22px_50px_-16px_rgba(30, 91, 75,0.85)] hover:-translate-y-0.5',
   outlineLight:
     'border border-white/40 bg-white/5 text-white backdrop-blur hover:bg-white/15 hover:-translate-y-0.5',
   outlineDark:

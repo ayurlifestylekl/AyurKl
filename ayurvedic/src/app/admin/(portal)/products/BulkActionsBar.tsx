@@ -30,15 +30,15 @@ export default function BulkActionsBar({ selectedIds }: { selectedIds: string[] 
   }
 
   return (
-    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4A373]/30 bg-[#FAF6EE] p-3">
-      <span className="text-[12px] font-semibold text-[#1e3d32]">
+    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8] p-3">
+      <span className="text-[12px] font-semibold text-[#163F33]">
         {selectedIds.length} selected
       </span>
       <button
         type="button"
         disabled={pending}
         onClick={() => run('activate')}
-        className="rounded-lg bg-[#2F5D50] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
+        className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
       >
         Set active
       </button>
@@ -46,7 +46,7 @@ export default function BulkActionsBar({ selectedIds }: { selectedIds: string[] 
         type="button"
         disabled={pending}
         onClick={() => run('draft')}
-        className="rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32]"
+        className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33]"
       >
         Set draft
       </button>
@@ -59,7 +59,7 @@ export default function BulkActionsBar({ selectedIds }: { selectedIds: string[] 
         Archive
       </button>
       {message ? (
-        <span className="text-[11.5px] text-[#2B2B2B]/70">{message}</span>
+        <span className="text-[11.5px] text-[#1F1F1F]/70">{message}</span>
       ) : null}
     </div>
   )

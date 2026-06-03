@@ -10,7 +10,7 @@ import type { FeaturedProduct, ProductBadge } from '@/types/content'
 
 /* ── Palette (section-local; matches hero language) ── */
 const EMERALD       = '#163F33'
-const EMERALD_SOFT  = 'rgba(26,59,46,0.72)'
+const EMERALD_SOFT  = 'rgba(22, 63, 51,0.72)'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_DEEP  = '#D4AF37'
 const TERRACOTTA    = '#D4AF37'
@@ -21,7 +21,7 @@ const badgeStyles: Record<ProductBadge, { bg: string; color: string }> = {
   NEW:        { bg: EMERALD,                       color: '#FFFFFF' },
   BESTSELLER: { bg: SAFFRON,                       color: '#FFFFFF' },
   SALE:       { bg: TERRACOTTA,                    color: '#FFFFFF' },
-  COMBO:      { bg: 'rgba(26,59,46,0.85)',         color: SAFFRON   },
+  COMBO:      { bg: 'rgba(22, 63, 51,0.85)',         color: SAFFRON   },
 }
 
 export default function FeaturedProducts() {
@@ -52,7 +52,7 @@ export default function FeaturedProducts() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(45% 40% at 90% 5%, rgba(232,148,26,0.16) 0%, transparent 65%), radial-gradient(40% 50% at 8% 92%, rgba(26,59,46,0.08) 0%, transparent 60%)',
+            'radial-gradient(45% 40% at 90% 5%, rgba(212, 175, 55,0.16) 0%, transparent 65%), radial-gradient(40% 50% at 8% 92%, rgba(22, 63, 51,0.08) 0%, transparent 60%)',
         }}
       />
 
@@ -72,7 +72,7 @@ export default function FeaturedProducts() {
         className="absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.45) 50%, transparent 96%)',
+            'linear-gradient(to right, transparent 4%, rgba(212, 175, 55,0.45) 50%, transparent 96%)',
         }}
       />
 
@@ -124,7 +124,7 @@ export default function FeaturedProducts() {
                   fontSize: 'clamp(2.5rem, 5.2vw, 4.25rem)',
                   lineHeight: 1.0,
                   letterSpacing: '-0.015em',
-                  textShadow: '0 3px 22px rgba(232,148,26,0.25)',
+                  textShadow: '0 3px 22px rgba(212, 175, 55,0.25)',
                 }}
               >
                 Sellers
@@ -147,7 +147,7 @@ export default function FeaturedProducts() {
             <p
               className="mt-3 font-display italic leading-[1.55]"
               style={{
-                color: 'rgba(26,59,46,0.62)',
+                color: 'rgba(22, 63, 51,0.62)',
                 fontSize: 'clamp(14px, 1.05vw, 16px)',
               }}
             >
@@ -229,7 +229,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
     <article
       className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-500"
       style={{
-        boxShadow: '0 10px 38px -18px rgba(26,59,46,0.18), 0 2px 8px rgba(26,59,46,0.04)',
+        boxShadow: '0 10px 38px -18px rgba(22, 63, 51,0.18), 0 2px 8px rgba(22, 63, 51,0.04)',
       }}
     >
       {/* ── IMAGE ── */}
@@ -249,7 +249,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
         <div
           aria-hidden
           className="absolute inset-0 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0"
-          style={{ backgroundColor: 'rgba(26,59,46,0.04)' }}
+          style={{ backgroundColor: 'rgba(22, 63, 51,0.04)' }}
         />
 
         {/* Saffron glow appears on hover */}
@@ -258,7 +258,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
           className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
           style={{
             background:
-              'radial-gradient(60% 50% at 50% 100%, rgba(232,148,26,0.18) 0%, transparent 70%)',
+              'radial-gradient(60% 50% at 50% 100%, rgba(212, 175, 55,0.18) 0%, transparent 70%)',
           }}
         />
 
@@ -290,7 +290,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
           <p
             className="mt-1.5 font-display italic line-clamp-1"
             style={{
-              color: 'rgba(26,59,46,0.6)',
+              color: 'rgba(22, 63, 51,0.6)',
               fontSize: '14px',
             }}
           >
@@ -304,7 +304,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
                 <Star key={star} className="h-3 w-3 fill-current" />
               ))}
             </div>
-            <span className="font-body text-[11px] font-medium" style={{ color: 'rgba(26,59,46,0.5)' }}>
+            <span className="font-body text-[11px] font-medium" style={{ color: 'rgba(22, 63, 51,0.5)' }}>
               {reviewScore} · {reviewCount} reviews
             </span>
           </div>
@@ -314,7 +314,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
             {product.oldPriceRm && (
               <span
                 className="mb-[2px] font-body text-[12px] line-through"
-                style={{ color: 'rgba(26,59,46,0.3)' }}
+                style={{ color: 'rgba(22, 63, 51,0.3)' }}
               >
                 RM{product.oldPriceRm}
               </span>
@@ -322,7 +322,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
             <div className="flex items-baseline gap-0.5">
               <span
                 className="font-body text-[11px] font-medium uppercase tracking-widest"
-                style={{ color: 'rgba(26,59,46,0.4)' }}
+                style={{ color: 'rgba(22, 63, 51,0.4)' }}
               >
                 RM
               </span>
@@ -343,7 +343,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
           aria-label={`Add ${product.name} to bag`}
           className="mt-6 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 font-heading text-[10px] font-bold uppercase tracking-[0.22em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           style={{
-            backgroundColor: 'rgba(26,59,46,0.06)',
+            backgroundColor: 'rgba(22, 63, 51,0.06)',
             color: EMERALD,
             border: `1px solid ${EMERALD}1a`,
           }}
@@ -354,7 +354,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
             e.currentTarget.style.borderColor = EMERALD
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(26,59,46,0.06)'
+            e.currentTarget.style.backgroundColor = 'rgba(22, 63, 51,0.06)'
             e.currentTarget.style.color = EMERALD
             e.currentTarget.style.boxShadow = 'none'
             e.currentTarget.style.borderColor = `${EMERALD}1a`

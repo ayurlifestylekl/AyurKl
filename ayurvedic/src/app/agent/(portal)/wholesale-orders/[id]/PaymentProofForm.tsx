@@ -39,7 +39,7 @@ export default function PaymentProofForm({
       className="mt-4 flex flex-col gap-2 rounded-2xl bg-white p-3"
     >
       <label className="flex flex-col gap-1">
-        <span className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+        <span className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           Receipt URL *
         </span>
         <input
@@ -47,11 +47,11 @@ export default function PaymentProofForm({
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Paste a Google Drive / Dropbox link to your transfer screenshot"
-          className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px]"
+          className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px]"
         />
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+        <span className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           Payment note (optional)
         </span>
         <input
@@ -59,7 +59,7 @@ export default function PaymentProofForm({
           value={note}
           onChange={(e) => setNote(e.target.value)}
           placeholder="e.g. Transferred 23 May, ref ABC123"
-          className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px]"
+          className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px]"
         />
       </label>
 
@@ -91,7 +91,7 @@ export default function PaymentProofForm({
         <button
           type="submit"
           disabled={pending || !url.trim()}
-          className="rounded-lg bg-[#2F5D50] px-4 py-1.5 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+          className="rounded-lg bg-[#1E5B4B] px-4 py-1.5 text-[12.5px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
         >
           {pending ? 'Submitting…' : existingUrl ? 'Update receipt' : 'Submit receipt'}
         </button>

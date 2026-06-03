@@ -33,7 +33,7 @@ export default async function AdminWholesaleDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <Link
         href="/admin/wholesale-orders"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to wholesale orders
       </Link>
@@ -41,7 +41,7 @@ export default async function AdminWholesaleDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               <code className="font-mono">{w.orderNumber}</code>
             </h1>
             <span
@@ -50,7 +50,7 @@ export default async function AdminWholesaleDetailPage({
               {WHOLESALE_STATUS_LABEL[w.status]}
             </span>
           </div>
-          <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             Received {new Date(w.createdAt).toLocaleString('en-MY')}
           </p>
         </div>
@@ -68,10 +68,10 @@ export default async function AdminWholesaleDetailPage({
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Items + totals */}
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4 lg:col-span-2">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">Items</h2>
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4 lg:col-span-2">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Items</h2>
           <table className="mt-3 w-full text-left text-[13px]">
-            <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               <tr>
                 <th className="py-2">Product</th>
                 <th className="py-2">SKU</th>
@@ -80,11 +80,11 @@ export default async function AdminWholesaleDetailPage({
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e3d32]/6">
+            <tbody className="divide-y divide-[#163F33]/6">
               {w.items.map((it) => (
                 <tr key={it.id}>
                   <td className="py-2">{it.productName}</td>
-                  <td className="py-2 font-mono text-[11.5px] text-[#2B2B2B]/60">
+                  <td className="py-2 font-mono text-[11.5px] text-[#1F1F1F]/60">
                     {it.productSku ?? '—'}
                   </td>
                   <td className="py-2 text-right">{it.quantity}</td>
@@ -97,22 +97,22 @@ export default async function AdminWholesaleDetailPage({
             </tbody>
             <tfoot className="text-[12.5px]">
               <tr>
-                <td colSpan={4} className="pt-3 text-right text-[#2B2B2B]/65">
+                <td colSpan={4} className="pt-3 text-right text-[#1F1F1F]/65">
                   Subtotal
                 </td>
                 <td className="pt-3 text-right">RM {w.subtotalRm.toFixed(2)}</td>
               </tr>
               <tr>
-                <td colSpan={4} className="text-right text-[#2B2B2B]/65">
+                <td colSpan={4} className="text-right text-[#1F1F1F]/65">
                   Shipping
                 </td>
                 <td className="text-right">RM {w.shippingRm.toFixed(2)}</td>
               </tr>
               <tr>
-                <td colSpan={4} className="pt-1 text-right font-semibold text-[#1e3d32]">
+                <td colSpan={4} className="pt-1 text-right font-semibold text-[#163F33]">
                   Total
                 </td>
-                <td className="pt-1 text-right font-semibold text-[#1e3d32]">
+                <td className="pt-1 text-right font-semibold text-[#163F33]">
                   RM {w.totalRm.toFixed(2)}
                 </td>
               </tr>
@@ -120,11 +120,11 @@ export default async function AdminWholesaleDetailPage({
           </table>
 
           {w.agentNotes ? (
-            <div className="mt-4 rounded-lg border border-[#1e3d32]/8 bg-[#FAF6EE]/30 p-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <div className="mt-4 rounded-lg border border-[#163F33]/8 bg-[#F7F2E8]/30 p-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 Partner note
               </p>
-              <p className="mt-1 text-[12px] italic text-[#2B2B2B]/70">{w.agentNotes}</p>
+              <p className="mt-1 text-[12px] italic text-[#1F1F1F]/70">{w.agentNotes}</p>
             </div>
           ) : null}
 
@@ -137,46 +137,46 @@ export default async function AdminWholesaleDetailPage({
 
         {/* Partner + ship-to */}
         <aside className="flex flex-col gap-4">
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">Partner</h2>
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Partner</h2>
             <p className="mt-2 text-[13px] font-semibold">{w.agentName}</p>
-            <p className="mt-0.5 text-[11.5px] text-[#2B2B2B]/65">
-              <code className="font-mono font-semibold text-[#D4A373]">
+            <p className="mt-0.5 text-[11.5px] text-[#1F1F1F]/65">
+              <code className="font-mono font-semibold text-[#D4AF37]">
                 {w.agentReferralCode}
               </code>
             </p>
             {w.agentEmail ? (
-              <p className="mt-1 text-[11.5px] text-[#2B2B2B]/65">{w.agentEmail}</p>
+              <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">{w.agentEmail}</p>
             ) : null}
             {w.agentPhone ? (
-              <p className="text-[11.5px] text-[#2B2B2B]/65">{w.agentPhone}</p>
+              <p className="text-[11.5px] text-[#1F1F1F]/65">{w.agentPhone}</p>
             ) : null}
             <Link
               href={`/admin/partners/${w.agentId}`}
-              className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4A373] hover:underline"
+              className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4AF37] hover:underline"
             >
               View partner →
             </Link>
           </article>
 
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Ship to
             </h2>
-            <p className="mt-2 whitespace-pre-line text-[12.5px] text-[#2B2B2B]/85">
+            <p className="mt-2 whitespace-pre-line text-[12.5px] text-[#1F1F1F]/85">
               {w.shippingAddress}
             </p>
-            <p className="mt-1 text-[12.5px] text-[#2B2B2B]/65">
+            <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">
               {w.shippingPostcode} {w.shippingState}
             </p>
           </article>
 
           {w.paidAt || w.shippedAt || w.deliveredAt ? (
-            <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-              <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+            <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+              <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
                 Timeline
               </h2>
-              <ul className="mt-2 space-y-1.5 text-[11.5px] text-[#2B2B2B]/70">
+              <ul className="mt-2 space-y-1.5 text-[11.5px] text-[#1F1F1F]/70">
                 <li>
                   Placed · {new Date(w.createdAt).toLocaleString('en-MY')}
                 </li>

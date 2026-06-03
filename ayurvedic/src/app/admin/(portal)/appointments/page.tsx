@@ -98,13 +98,13 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Clinic
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             Appointments
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {total} appointment{total === 1 ? '' : 's'} · {filters.segment}
             {showMocks ? ' · demo data' : ''}
           </p>
@@ -112,14 +112,14 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/treatments"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
           >
             <ExternalLink className="h-3.5 w-3.5" />
             Treatments
           </Link>
           <Link
             href="/admin/appointments/new"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2F5D50] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32]"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
           >
             <Plus className="h-3.5 w-3.5" />
             Walk-in

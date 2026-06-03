@@ -121,12 +121,12 @@ export default function RootLayout({
             toastOptions={{
               style: {
                 background: '#ffffff',
-                border: '1px solid rgba(30,61,50,0.10)',
-                color: '#1e3d32',
+                border: '1px solid rgba(22, 63, 51,0.10)',
+                color: '#163F33',
                 fontFamily: 'var(--font-lora)',
                 fontSize: '13px',
                 boxShadow:
-                  '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+                  '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
               },
             }}
           />

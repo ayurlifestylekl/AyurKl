@@ -124,7 +124,7 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
             value={String(state.booking.max_window_days)}
             onChange={(v) => setState({ ...state, booking: { ...state.booking, max_window_days: Number(v) } })}
           />
-          <label className="col-span-2 flex cursor-pointer items-center gap-2 rounded-lg border border-[#1e3d32]/10 bg-white px-3 py-2.5">
+          <label className="col-span-2 flex cursor-pointer items-center gap-2 rounded-lg border border-[#163F33]/10 bg-white px-3 py-2.5">
             <input
               type="checkbox"
               checked={state.booking.gender_policy_enabled}
@@ -138,7 +138,7 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
             />
             <span className="text-[13px]">
               Enforce gender policy
-              <span className="ml-2 text-[11.5px] text-[#2B2B2B]/55">
+              <span className="ml-2 text-[11.5px] text-[#1F1F1F]/55">
                 (men-to-men, ladies-to-ladies practitioner pairing)
               </span>
             </span>
@@ -173,7 +173,7 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
       </Card>
 
       {/* Save bar */}
-      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl border border-[#1e3d32]/10 bg-white/95 p-3 shadow-lg shadow-black/5 backdrop-blur">
+      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl border border-[#163F33]/10 bg-white/95 p-3 shadow-lg shadow-black/5 backdrop-blur">
         <div className="text-[12px]">
           {error ? <span className="text-red-700">⚠ {error}</span> : null}
           {success ? <span className="text-emerald-700">✓ Settings saved.</span> : null}
@@ -181,7 +181,7 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-[#2F5D50] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+          className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
         >
           {pending ? 'Saving…' : 'Save settings'}
         </button>
@@ -200,11 +200,11 @@ function Card({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-2xl border border-[#1e3d32]/10 bg-white p-5">
+    <section className="rounded-2xl border border-[#163F33]/10 bg-white p-5">
       <header className="mb-4">
-        <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">{title}</h2>
+        <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">{title}</h2>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] text-[#2B2B2B]/60">{subtitle}</p>
+          <p className="mt-0.5 text-[12px] text-[#1F1F1F]/60">{subtitle}</p>
         ) : null}
       </header>
       {children}
@@ -233,7 +233,7 @@ function Field({
 }) {
   return (
     <label className={`flex flex-col gap-1 ${full ? 'sm:col-span-2' : ''}`}>
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
         {label}
       </span>
       <input
@@ -241,7 +241,7 @@ function Field({
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none"
+        className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none"
       />
     </label>
   )

@@ -26,12 +26,12 @@ export default function InternalNotesPanel({
   }
 
   return (
-    <div className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
+    <div className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
           Internal notes
         </h3>
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#2B2B2B]/55">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1F1F1F]/55">
           Staff-only
         </span>
       </div>
@@ -40,7 +40,7 @@ export default function InternalNotesPanel({
         onChange={(e) => setVal(e.target.value)}
         rows={3}
         placeholder="Notes never shown to the customer."
-        className="mt-2 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+        className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
       />
       {error ? <p className="mt-2 text-[12px] text-red-600">{error}</p> : null}
       {saved ? (
@@ -50,7 +50,7 @@ export default function InternalNotesPanel({
         type="button"
         disabled={pending}
         onClick={save}
-        className="mt-2 rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] disabled:opacity-50"
+        className="mt-2 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] disabled:opacity-50"
       >
         Save
       </button>

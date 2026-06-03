@@ -11,8 +11,8 @@ import { staggerParent, fadeUp, inViewOnce } from '@/lib/motion'
  * component stands alone. */
 const heroDiamondPattern = {
   backgroundImage: `
-    radial-gradient(circle, rgba(212,163,115,0.04) 1px, transparent 1px),
-    radial-gradient(circle, rgba(212,163,115,0.04) 1px, transparent 1px)
+    radial-gradient(circle, rgba(212, 175, 55,0.04) 1px, transparent 1px),
+    radial-gradient(circle, rgba(212, 175, 55,0.04) 1px, transparent 1px)
   `,
   backgroundSize: '28px 28px',
   backgroundPosition: '0 0, 14px 14px',
@@ -42,7 +42,7 @@ export default function FreeConsultationBlock({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 5% 0%, rgba(212,163,115,0.25) 0%, transparent 45%), radial-gradient(ellipse at 95% 100%, rgba(26,46,38,0.4) 0%, transparent 50%), radial-gradient(ellipse at 50% 40%, rgba(212,163,115,0.06) 0%, transparent 35%)',
+            'radial-gradient(ellipse at 5% 0%, rgba(212, 175, 55,0.25) 0%, transparent 45%), radial-gradient(ellipse at 95% 100%, rgba(15, 44, 36,0.4) 0%, transparent 50%), radial-gradient(ellipse at 50% 40%, rgba(212, 175, 55,0.06) 0%, transparent 35%)',
         }}
         aria-hidden
       />
@@ -102,7 +102,7 @@ export default function FreeConsultationBlock({
           <motion.div
             variants={fadeUp(0)}
             className="h-px w-20"
-            style={{ background: 'linear-gradient(to right, rgba(212,163,115,0.45), transparent)' }}
+            style={{ background: 'linear-gradient(to right, rgba(212, 175, 55,0.45), transparent)' }}
             aria-hidden
           />
 
@@ -118,7 +118,7 @@ export default function FreeConsultationBlock({
 
         <motion.aside variants={fadeUp(0.1)} className="relative w-full">
           <div className="rounded-xl bg-white/[0.06] p-7 ring-1 ring-white/12 sm:p-8">
-            <div className="mb-4 h-px w-10" style={{ background: 'linear-gradient(to right, rgba(212,163,115,0.5), transparent)' }} aria-hidden />
+            <div className="mb-4 h-px w-10" style={{ background: 'linear-gradient(to right, rgba(212, 175, 55,0.5), transparent)' }} aria-hidden />
             <span className="font-heading text-[11px] font-bold uppercase tracking-[0.25em] text-accent">We treat</span>
 
             <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3.5 font-body text-[14px] leading-[1.5] text-white/75">

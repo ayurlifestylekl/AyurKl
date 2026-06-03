@@ -69,10 +69,10 @@ export default function ImageUploader({
   }
 
   return (
-    <div className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
+    <div className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">Images</h3>
-        <span className="text-[10px] text-[#2B2B2B]/55">JPEG / PNG / WebP, ≤ 4 MB</span>
+        <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Images</h3>
+        <span className="text-[10px] text-[#1F1F1F]/55">JPEG / PNG / WebP, ≤ 4 MB</span>
       </div>
 
       {urls.length > 0 ? (
@@ -85,12 +85,12 @@ export default function ImageUploader({
                 alt=""
                 className={`h-28 w-full rounded-lg border object-cover ${
                   u === primary
-                    ? 'border-[#D4A373] ring-2 ring-[#D4A373]/30'
-                    : 'border-[#1e3d32]/10'
+                    ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30'
+                    : 'border-[#163F33]/10'
                 }`}
               />
               {u === primary ? (
-                <span className="absolute left-1 top-1 rounded-full bg-[#D4A373] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
+                <span className="absolute left-1 top-1 rounded-full bg-[#D4AF37] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
                   Primary
                 </span>
               ) : null}
@@ -107,12 +107,12 @@ export default function ImageUploader({
           ))}
         </div>
       ) : (
-        <p className="mt-3 rounded-lg border border-dashed border-[#1e3d32]/15 bg-[#FAF6EE]/40 p-6 text-center text-[12px] italic text-[#2B2B2B]/55">
+        <p className="mt-3 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40 p-6 text-center text-[12px] italic text-[#1F1F1F]/55">
           No images yet.
         </p>
       )}
 
-      <label className="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60">
+      <label className="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60">
         <Upload className="h-3.5 w-3.5" />
         {pending ? 'Uploading…' : 'Upload image'}
         <input

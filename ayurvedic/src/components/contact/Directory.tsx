@@ -82,7 +82,7 @@ export default function Directory() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 12% 0%, rgba(212,163,115,0.10) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 88% 100%, rgba(122,157,84,0.06) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 12% 0%, rgba(212, 175, 55,0.10) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 88% 100%, rgba(46, 125, 90,0.06) 0%, transparent 60%)',
         }}
       />
       <div aria-hidden className="grain-overlay pointer-events-none absolute inset-0" />
@@ -101,7 +101,7 @@ export default function Directory() {
               aria-hidden
               className="h-px w-16 sm:w-24"
               style={{
-                background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.7))',
+                background: 'linear-gradient(to right, transparent, rgba(212, 175, 55,0.7))',
               }}
             />
             <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">
@@ -111,7 +111,7 @@ export default function Directory() {
               aria-hidden
               className="h-px w-16 sm:w-24"
               style={{
-                background: 'linear-gradient(to left, transparent, rgba(212,163,115,0.7))',
+                background: 'linear-gradient(to left, transparent, rgba(212, 175, 55,0.7))',
               }}
             />
           </div>
@@ -275,7 +275,7 @@ function ChannelCell({ channel }: { channel: Channel }) {
         className="mt-4 block h-px w-20"
         style={{
           background:
-            'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15))',
+            'linear-gradient(to right, rgba(212, 175, 55,0.85), rgba(212, 175, 55,0.15))',
         }}
       />
 
@@ -334,7 +334,7 @@ function BeginLink({ channel }: { channel: Channel }) {
 
 function BeginButton({ channel }: { channel: Channel }) {
   const cls =
-    'inline-flex w-fit items-center gap-3 rounded-[2px] border border-accent/60 bg-accent px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.28em] text-white shadow-[0_10px_24px_-12px_rgba(212,163,115,0.9)] transition-colors duration-300 hover:bg-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream'
+    'inline-flex w-fit items-center gap-3 rounded-[2px] border border-accent/60 bg-accent px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.28em] text-white shadow-[0_10px_24px_-12px_rgba(212, 175, 55,0.9)] transition-colors duration-300 hover:bg-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cream'
 
   if (channel.external) {
     return (

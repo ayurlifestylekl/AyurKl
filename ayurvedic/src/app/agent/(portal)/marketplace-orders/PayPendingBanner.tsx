@@ -110,19 +110,19 @@ export default function PayPendingBanner({
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-3xl bg-white shadow-2xl">
-            <header className="flex items-center justify-between border-b border-[#1e3d32]/10 px-6 py-4">
+            <header className="flex items-center justify-between border-b border-[#163F33]/10 px-6 py-4">
               <div>
-                <h2 className="font-heading text-[18px] font-bold text-[#1e3d32]">
+                <h2 className="font-heading text-[18px] font-bold text-[#163F33]">
                   Pay clinic — batch
                 </h2>
-                <p className="mt-0.5 text-[11.5px] text-[#2B2B2B]/65">
+                <p className="mt-0.5 text-[11.5px] text-[#1F1F1F]/65">
                   Select the orders this payment covers, then upload the receipt.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-[#1e3d32]/60 hover:bg-[#1e3d32]/[0.06]"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-[#163F33]/60 hover:bg-[#163F33]/[0.06]"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
@@ -131,11 +131,11 @@ export default function PayPendingBanner({
 
             <div className="flex-1 overflow-y-auto px-6 py-4">
               {/* Bank details */}
-              <section className="rounded-2xl border border-[#1e3d32]/10 bg-[#FAF6EE]/40 p-3">
-                <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+              <section className="rounded-2xl border border-[#163F33]/10 bg-[#F7F2E8]/40 p-3">
+                <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                   Transfer to
                 </p>
-                <ul className="mt-1 space-y-0.5 text-[12.5px] text-[#2B2B2B]/85">
+                <ul className="mt-1 space-y-0.5 text-[12.5px] text-[#1F1F1F]/85">
                   <li>
                     <strong>Bank:</strong> Maybank
                   </li>
@@ -154,21 +154,21 @@ export default function PayPendingBanner({
               {/* Order selection */}
               <section className="mt-4">
                 <div className="mb-2 flex items-center justify-between">
-                  <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+                  <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
                     Orders in this payment ({selected.size} of {orders.length})
                   </h3>
                   <div className="flex gap-2 text-[11px]">
                     <button
                       type="button"
                       onClick={selectAll}
-                      className="font-semibold text-[#D4A373] hover:underline"
+                      className="font-semibold text-[#D4AF37] hover:underline"
                     >
                       Select all
                     </button>
                     <button
                       type="button"
                       onClick={clearAll}
-                      className="font-semibold text-[#2B2B2B]/55 hover:underline"
+                      className="font-semibold text-[#1F1F1F]/55 hover:underline"
                     >
                       Clear
                     </button>
@@ -185,28 +185,28 @@ export default function PayPendingBanner({
                           className={`flex w-full items-center gap-3 rounded-lg border px-3 py-2 text-left transition-colors ${
                             isSel
                               ? 'border-emerald-300 bg-emerald-50/60'
-                              : 'border-[#1e3d32]/10 bg-white hover:bg-[#FAF6EE]/40'
+                              : 'border-[#163F33]/10 bg-white hover:bg-[#F7F2E8]/40'
                           }`}
                         >
                           <span
                             className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border ${
                               isSel
                                 ? 'border-emerald-500 bg-emerald-500 text-white'
-                                : 'border-[#1e3d32]/25'
+                                : 'border-[#163F33]/25'
                             }`}
                           >
                             {isSel ? <Check className="h-3.5 w-3.5" /> : null}
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block text-[12.5px] font-semibold text-[#1e3d32]">
+                            <span className="block text-[12.5px] font-semibold text-[#163F33]">
                               {o.customerName}
                             </span>
-                            <span className="block text-[11px] text-[#2B2B2B]/55">
+                            <span className="block text-[11px] text-[#1F1F1F]/55">
                               {CHANNEL_LABEL[o.channel] ?? o.channel} ·{' '}
                               {new Date(o.createdAt).toLocaleDateString('en-MY')}
                             </span>
                           </span>
-                          <span className="font-heading text-[13px] font-bold text-[#1e3d32]">
+                          <span className="font-heading text-[13px] font-bold text-[#163F33]">
                             RM {o.totalAmountRm.toFixed(2)}
                           </span>
                         </button>
@@ -219,7 +219,7 @@ export default function PayPendingBanner({
               {/* Receipt */}
               <section className="mt-4 flex flex-col gap-3">
                 <label className="flex flex-col gap-1">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                     Receipt URL *
                   </span>
                   <input
@@ -227,11 +227,11 @@ export default function PayPendingBanner({
                     value={proofUrl}
                     onChange={(e) => setProofUrl(e.target.value)}
                     placeholder="Paste a Google Drive / Dropbox / Imgur link to your transfer receipt"
-                    className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px]"
+                    className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px]"
                   />
                 </label>
                 <label className="flex flex-col gap-1">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                     Note for admin (optional)
                   </span>
                   <input
@@ -239,7 +239,7 @@ export default function PayPendingBanner({
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     placeholder="e.g. Transferred 23 May, ref ABC123"
-                    className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px]"
+                    className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px]"
                   />
                 </label>
               </section>
@@ -251,16 +251,16 @@ export default function PayPendingBanner({
               ) : null}
             </div>
 
-            <footer className="flex items-center justify-between border-t border-[#1e3d32]/10 px-6 py-4">
-              <div className="text-[12px] text-[#2B2B2B]/65">
-                Pay <strong className="text-[#1e3d32]">RM {selectedTotal.toFixed(2)}</strong>{' '}
+            <footer className="flex items-center justify-between border-t border-[#163F33]/10 px-6 py-4">
+              <div className="text-[12px] text-[#1F1F1F]/65">
+                Pay <strong className="text-[#163F33]">RM {selectedTotal.toFixed(2)}</strong>{' '}
                 for {selected.size} order{selected.size === 1 ? '' : 's'}
               </div>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="rounded-lg border border-[#1e3d32]/15 px-4 py-2 text-[12.5px] font-semibold text-[#1e3d32]"
+                  className="rounded-lg border border-[#163F33]/15 px-4 py-2 text-[12.5px] font-semibold text-[#163F33]"
                 >
                   Cancel
                 </button>

@@ -2,16 +2,16 @@ import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 
 const styles = StyleSheet.create({
   page: { padding: 32, fontSize: 11, fontFamily: 'Helvetica' },
-  h1: { fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#2F5D50' },
+  h1: { fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#1E5B4B' },
   meta: { fontSize: 10, color: '#666', marginBottom: 16 },
   addr: { marginBottom: 16, borderTop: '1pt solid #ddd', paddingTop: 8 },
-  th: { fontWeight: 700, borderBottom: '1pt solid #2F5D50', paddingBottom: 4 },
+  th: { fontWeight: 700, borderBottom: '1pt solid #1E5B4B', paddingBottom: 4 },
   row: { flexDirection: 'row', paddingVertical: 6, borderBottom: '0.5pt solid #eee' },
   c1: { width: '15%' },
   c2: { width: '55%' },
   c3: { width: '15%', textAlign: 'right' },
   c4: { width: '15%', textAlign: 'center' },
-  noteBox: { marginTop: 16, padding: 8, backgroundColor: '#FAF6EE' },
+  noteBox: { marginTop: 16, padding: 8, backgroundColor: '#F7F2E8' },
   footer: { marginTop: 24, fontSize: 9, color: '#999' },
 })
 

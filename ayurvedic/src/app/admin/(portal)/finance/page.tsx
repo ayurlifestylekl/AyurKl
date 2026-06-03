@@ -31,13 +31,13 @@ export default async function AdminFinancePage({ searchParams }: PageProps) {
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Numbers
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             Finance
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             Read-only summary for{' '}
             <strong>
               {new Date(f.rangeStart).toLocaleDateString('en-MY')} —{' '}
@@ -63,8 +63,8 @@ export default async function AdminFinancePage({ searchParams }: PageProps) {
       </section>
 
       {/* Commissions */}
-      <section className="rounded-2xl border border-[#1e3d32]/10 bg-white p-5">
-        <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">
+      <section className="rounded-2xl border border-[#163F33]/10 bg-white p-5">
+        <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">
           Affiliate commissions
         </h2>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -76,24 +76,24 @@ export default async function AdminFinancePage({ searchParams }: PageProps) {
 
       {/* Two-column: top products + channels */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <article className="rounded-2xl border border-[#1e3d32]/10 bg-white p-5">
-          <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/10 bg-white p-5">
+          <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">
             Top products by revenue
           </h2>
           {f.topProducts.length === 0 ? (
-            <p className="mt-3 text-[12px] italic text-[#2B2B2B]/55">
+            <p className="mt-3 text-[12px] italic text-[#1F1F1F]/55">
               No paid orders in this range.
             </p>
           ) : (
             <table className="mt-3 w-full text-left text-[13px]">
-              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 <tr>
                   <th className="py-2">Product</th>
                   <th className="py-2 text-right">Qty</th>
                   <th className="py-2 text-right">Revenue</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1e3d32]/6">
+              <tbody className="divide-y divide-[#163F33]/6">
                 {f.topProducts.map((p) => (
                   <tr key={p.productId}>
                     <td className="py-2">{p.name}</td>
@@ -108,24 +108,24 @@ export default async function AdminFinancePage({ searchParams }: PageProps) {
           )}
         </article>
 
-        <article className="rounded-2xl border border-[#1e3d32]/10 bg-white p-5">
-          <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/10 bg-white p-5">
+          <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">
             Revenue by channel
           </h2>
           {f.channelBreakdown.length === 0 ? (
-            <p className="mt-3 text-[12px] italic text-[#2B2B2B]/55">
+            <p className="mt-3 text-[12px] italic text-[#1F1F1F]/55">
               No paid orders in this range.
             </p>
           ) : (
             <table className="mt-3 w-full text-left text-[13px]">
-              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 <tr>
                   <th className="py-2">Channel</th>
                   <th className="py-2 text-right">Orders</th>
                   <th className="py-2 text-right">Revenue</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1e3d32]/6">
+              <tbody className="divide-y divide-[#163F33]/6">
                 {f.channelBreakdown.map((c) => (
                   <tr key={c.channel}>
                     <td className="py-2">
@@ -166,10 +166,10 @@ function Kpi({
         ? 'text-red-700'
         : accent === 'amber'
           ? 'text-amber-700'
-          : 'text-[#1e3d32]'
+          : 'text-[#163F33]'
   return (
-    <div className="rounded-2xl border border-[#1e3d32]/10 bg-white p-4">
-      <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/55">
+    <div className="rounded-2xl border border-[#163F33]/10 bg-white p-4">
+      <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/55">
         {label}
       </p>
       <p
@@ -178,7 +178,7 @@ function Kpi({
         RM {value.toFixed(2)}
       </p>
       {footnote ? (
-        <p className="mt-1 text-[11px] text-[#2B2B2B]/55">{footnote}</p>
+        <p className="mt-1 text-[11px] text-[#1F1F1F]/55">{footnote}</p>
       ) : null}
     </div>
   )

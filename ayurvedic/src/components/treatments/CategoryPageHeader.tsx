@@ -70,7 +70,7 @@ export default function CategoryPageHeader({
         className="mt-9 h-px"
         style={{
           background:
-            'linear-gradient(to right, rgba(212,163,115,0.5), rgba(212,163,115,0.1) 60%, transparent)',
+            'linear-gradient(to right, rgba(212, 175, 55,0.5), rgba(212, 175, 55,0.1) 60%, transparent)',
         }}
         aria-hidden
       />

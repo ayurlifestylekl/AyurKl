@@ -25,14 +25,14 @@ export default function AuthCanvas({
   backHref = '/',
 }: AuthCanvasProps) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#152b22] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#163F33] text-white">
       {/* Layered radial gradients for atmosphere */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            'radial-gradient(60% 50% at 80% 0%, rgba(212,163,115,0.14), transparent 60%), radial-gradient(50% 60% at 0% 100%, rgba(122,157,84,0.12), transparent 60%)',
+            'radial-gradient(60% 50% at 80% 0%, rgba(212, 175, 55,0.14), transparent 60%), radial-gradient(50% 60% at 0% 100%, rgba(46, 125, 90,0.12), transparent 60%)',
         }}
       />
       {/* Grain overlay */}
@@ -56,12 +56,12 @@ export default function AuthCanvas({
           />
           <span className="hidden font-heading text-[10px] font-bold uppercase tracking-[0.22em] leading-tight text-white/85 sm:flex sm:flex-col">
             <span>Kerala Ayurvedic</span>
-            <span className="text-[#D4A373]">Lifestyle</span>
+            <span className="text-[#D4AF37]">Lifestyle</span>
           </span>
         </Link>
         <Link
           href={backHref}
-          className="group inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4A373]"
+          className="group inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4AF37]"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
           {backLabel}

@@ -102,23 +102,23 @@ export default async function AdminDashboardPage() {
     <div className="mx-auto flex max-w-6xl flex-col gap-6 sm:gap-7">
       {/* ── HERO ────────────────────────────────────────────────────── */}
       <header>
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Command Center
         </span>
         <h1
-          className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32] sm:text-[36px]"
+          className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[36px]"
           style={{ letterSpacing: '-0.025em' }}
         >
           Good day,{' '}
           <span
-            className="italic font-normal text-[#1e3d32]/70"
+            className="italic font-normal text-[#163F33]/70"
             style={{ fontFamily: 'var(--font-playfair)' }}
           >
             {firstName}.
           </span>
         </h1>
         <p
-          className="mt-3 max-w-2xl font-body text-[14px] text-[#2B2B2B]/65"
+          className="mt-3 max-w-2xl font-body text-[14px] text-[#1F1F1F]/65"
           style={{ lineHeight: 1.65 }}
         >
           Today&apos;s snapshot. Anything below needs your attention &mdash; click through to action it.
@@ -224,22 +224,22 @@ export default async function AdminDashboardPage() {
                 viewAllHref="/admin/orders?status=processing"
                 emptyText="All caught up."
               >
-                <ul className="divide-y divide-[#1e3d32]/6">
+                <ul className="divide-y divide-[#163F33]/6">
                   {ordersAttn.map((o) => (
                     <li key={o.id}>
                       <Link
                         href={`/admin/orders/${o.id}`}
-                        className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#FAF6EE]/40"
+                        className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+                          <p className="font-heading text-[13px] font-semibold text-[#163F33]">
                             #{o.shortId} · {o.customerName ?? 'Unknown customer'}
                           </p>
-                          <p className="mt-0.5 font-body text-[11.5px] text-[#2B2B2B]/55">
+                          <p className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/55">
                             {relativeTime(o.createdAt)} · RM {o.totalRm.toFixed(2)}
                           </p>
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#1e3d32]/40" />
+                        <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#163F33]/40" />
                       </Link>
                     </li>
                   ))}
@@ -258,17 +258,17 @@ export default async function AdminDashboardPage() {
                 viewAllHref="/admin/messages?filter=unread"
                 emptyText="No new messages."
               >
-                <ul className="divide-y divide-[#1e3d32]/6">
+                <ul className="divide-y divide-[#163F33]/6">
                   {ticketsAttn.map((t) => (
                     <li key={t.id}>
                       <Link
                         href={`/admin/messages/${t.id}`}
-                        className="block px-5 py-3 transition-colors hover:bg-[#FAF6EE]/40"
+                        className="block px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                       >
-                        <p className="truncate font-heading text-[13px] font-semibold text-[#1e3d32]">
+                        <p className="truncate font-heading text-[13px] font-semibold text-[#163F33]">
                           {t.subject}
                         </p>
-                        <p className="mt-0.5 truncate font-body text-[11.5px] text-[#2B2B2B]/55">
+                        <p className="mt-0.5 truncate font-body text-[11.5px] text-[#1F1F1F]/55">
                           {t.customerName ?? 'Unknown'} · {t.topic} ·{' '}
                           {relativeTime(t.lastMessageAt)}
                         </p>
@@ -290,18 +290,18 @@ export default async function AdminDashboardPage() {
                 viewAllHref="/admin/inventory?filter=low-stock"
                 emptyText="All stock healthy."
               >
-                <ul className="divide-y divide-[#1e3d32]/6">
+                <ul className="divide-y divide-[#163F33]/6">
                   {lowStock.map((p) => (
                     <li key={p.id}>
                       <Link
                         href={`/admin/inventory/${p.id}`}
-                        className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#FAF6EE]/40"
+                        className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+                          <p className="font-heading text-[13px] font-semibold text-[#163F33]">
                             {p.name}
                           </p>
-                          <p className="mt-0.5 font-body text-[11.5px] text-[#2B2B2B]/55">
+                          <p className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/55">
                             SKU {p.sku}
                           </p>
                         </div>
@@ -331,16 +331,16 @@ export default async function AdminDashboardPage() {
         </section>
       ) : (
         <section
-          className="rounded-3xl border border-[#1e3d32]/8 bg-white p-8 text-center"
+          className="rounded-3xl border border-[#163F33]/8 bg-white p-8 text-center"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
-          <p className="font-heading text-[18px] font-semibold text-[#1e3d32]">
+          <p className="font-heading text-[18px] font-semibold text-[#163F33]">
             All caught up.
           </p>
-          <p className="mt-2 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-2 font-body text-[13px] text-[#1F1F1F]/65">
             Nothing needs your attention right now. Enjoy a quiet moment.
           </p>
         </section>
@@ -379,32 +379,32 @@ function AttentionCard({
 }: AttentionCardProps) {
   return (
     <article
-      className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
-      <header className="flex items-center justify-between gap-3 border-b border-[#1e3d32]/6 px-5 py-3.5">
+      <header className="flex items-center justify-between gap-3 border-b border-[#163F33]/6 px-5 py-3.5">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-            <Icon className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+            <Icon className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
           <div>
-            <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">{title}</h2>
-            <p className="font-body text-[10.5px] text-[#2B2B2B]/55">{subtitle}</p>
+            <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">{title}</h2>
+            <p className="font-body text-[10.5px] text-[#1F1F1F]/55">{subtitle}</p>
           </div>
         </div>
         <Link
           href={viewAllHref}
-          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#1e3d32]/55 hover:text-[#D4A373]"
+          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55 hover:text-[#D4AF37]"
         >
           View all →
         </Link>
       </header>
       <div className="flex-1">
         {children ?? (
-          <p className="px-5 py-6 text-center font-body text-[12.5px] italic text-[#2B2B2B]/55">
+          <p className="px-5 py-6 text-center font-body text-[12.5px] italic text-[#1F1F1F]/55">
             {emptyText}
           </p>
         )}

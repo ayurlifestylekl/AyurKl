@@ -36,15 +36,15 @@ export default async function AgentSubmissionsPage({ searchParams }: PageProps) 
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <Inbox className="h-4 w-4 text-[#D4A373]" />
-            <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+            <Inbox className="h-4 w-4 text-[#D4AF37]" />
+            <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
               Brand partners
             </span>
           </div>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             Agent submissions
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {total} submission{total === 1 ? '' : 's'} in this view
             {pendingCount > 0
               ? ` · ${pendingCount} pending · RM ${pendingValue.toFixed(2)} awaiting approval`
@@ -53,8 +53,8 @@ export default async function AgentSubmissionsPage({ searchParams }: PageProps) 
         </div>
       </header>
 
-      <section className="rounded-2xl border border-[#D4A373]/30 bg-[#FAF6EE]/40 p-4 text-[12.5px] text-[#2B2B2B]/70">
-        <p className="font-semibold text-[#1e3d32]">Marketplace orders from your affiliates</p>
+      <section className="rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8]/40 p-4 text-[12.5px] text-[#1F1F1F]/70">
+        <p className="font-semibold text-[#163F33]">Marketplace orders from your affiliates</p>
         <p className="mt-1">
           Brand partners submit their TikTok Shop / Shopee / Instagram / WhatsApp sales via{' '}
           <code className="font-mono">/agent/marketplace-orders/new</code>. Each submission lands
@@ -66,7 +66,7 @@ export default async function AgentSubmissionsPage({ searchParams }: PageProps) 
           Your own clinic marketplace sales (not from agents) live on a different page:{' '}
           <Link
             href="/admin/marketplace-orders"
-            className="font-semibold text-[#D4A373] hover:underline"
+            className="font-semibold text-[#D4AF37] hover:underline"
           >
             Marketplace orders →
           </Link>

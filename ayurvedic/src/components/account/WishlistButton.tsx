@@ -37,12 +37,12 @@ export default function WishlistButton({ productId, initialSaved, variant = 'ico
         disabled={isPending}
         className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-3 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] transition-all disabled:opacity-50 ${
           saved
-            ? 'border-[#D4A373] bg-[#D4A373]/[0.12] text-[#1e3d32]'
-            : 'border-[#1e3d32]/15 bg-white text-[#1e3d32] hover:bg-[#1e3d32]/[0.04]'
+            ? 'border-[#D4AF37] bg-[#D4AF37]/[0.12] text-[#163F33]'
+            : 'border-[#163F33]/15 bg-white text-[#163F33] hover:bg-[#163F33]/[0.04]'
         }`}
         aria-label={saved ? 'Remove from wishlist' : 'Add to wishlist'}
       >
-        <Heart className={`h-3.5 w-3.5 ${saved ? 'fill-[#D4A373] text-[#D4A373]' : ''}`} />
+        <Heart className={`h-3.5 w-3.5 ${saved ? 'fill-[#D4AF37] text-[#D4AF37]' : ''}`} />
         {saved ? 'Saved' : 'Save'}
       </button>
     )
@@ -55,12 +55,12 @@ export default function WishlistButton({ productId, initialSaved, variant = 'ico
       disabled={isPending}
       className={`inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all disabled:opacity-50 ${
         saved
-          ? 'border-[#D4A373] bg-white text-[#D4A373]'
-          : 'border-[#1e3d32]/12 bg-white text-[#1e3d32]/55 hover:border-[#D4A373]/40 hover:text-[#D4A373]'
+          ? 'border-[#D4AF37] bg-white text-[#D4AF37]'
+          : 'border-[#163F33]/12 bg-white text-[#163F33]/55 hover:border-[#D4AF37]/40 hover:text-[#D4AF37]'
       }`}
       aria-label={saved ? 'Remove from wishlist' : 'Add to wishlist'}
     >
-      <Heart className={`h-4 w-4 ${saved ? 'fill-[#D4A373]' : ''}`} strokeWidth={1.8} />
+      <Heart className={`h-4 w-4 ${saved ? 'fill-[#D4AF37]' : ''}`} strokeWidth={1.8} />
     </button>
   )
 }

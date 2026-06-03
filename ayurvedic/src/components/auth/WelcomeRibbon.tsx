@@ -29,13 +29,13 @@ export default function WelcomeRibbon() {
   if (dismissed) return null
 
   return (
-    <div className="mb-5 flex items-start gap-3 rounded-2xl border border-[#D4A373]/35 bg-[#D4A373]/10 px-4 py-3">
-      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center text-[#D4A373]">
+    <div className="mb-5 flex items-start gap-3 rounded-2xl border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-4 py-3">
+      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center text-[#D4AF37]">
         <Gift className="h-4 w-4" />
       </span>
       <p className="flex-1 font-body text-[12.5px] leading-relaxed text-white/80">
         <span className="font-semibold text-white">New here?</span> Get{' '}
-        <span className="font-semibold text-[#D4A373]">RM 10 off</span> your first order when you create an account.
+        <span className="font-semibold text-[#D4AF37]">RM 10 off</span> your first order when you create an account.
       </p>
       <button
         type="button"

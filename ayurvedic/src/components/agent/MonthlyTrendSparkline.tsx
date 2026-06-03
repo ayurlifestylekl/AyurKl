@@ -33,11 +33,11 @@ export default function MonthlyTrendSparkline({
         height={height}
         className="block"
       >
-        <path d={fillPath} fill="#D4A373" fillOpacity="0.15" />
+        <path d={fillPath} fill="#D4AF37" fillOpacity="0.15" />
         <path
           d={path}
           fill="none"
-          stroke="#D4A373"
+          stroke="#D4AF37"
           strokeWidth={1.8}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -48,11 +48,11 @@ export default function MonthlyTrendSparkline({
             cx={(i * xStep).toFixed(1)}
             cy={yFor(p.commissionRm).toFixed(1)}
             r={2.2}
-            fill="#D4A373"
+            fill="#D4AF37"
           />
         ))}
       </svg>
-      <div className="mt-1 flex justify-between text-[9.5px] uppercase tracking-wider text-[#2B2B2B]/45">
+      <div className="mt-1 flex justify-between text-[9.5px] uppercase tracking-wider text-[#1F1F1F]/45">
         {points.map((p) => (
           <span key={p.monthKey}>{p.label}</span>
         ))}

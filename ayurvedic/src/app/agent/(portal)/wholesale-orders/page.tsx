@@ -36,20 +36,20 @@ export default async function AgentMyWholesaleOrdersPage() {
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Your purchases
           </span>
-          <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#163F33]">
             My wholesale orders
           </h1>
-          <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+          <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
             Every order you&apos;ve placed in the wholesale shop, with current status and
             tracking when shipped.
           </p>
         </div>
         <Link
           href="/agent/wholesale-shop"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#2F5D50] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32]"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
         >
           <ShoppingCart className="h-3.5 w-3.5" />
           Place new order
@@ -57,27 +57,27 @@ export default async function AgentMyWholesaleOrdersPage() {
       </header>
 
       {orders.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-[#1e3d32]/15 p-12 text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1e3d32]/[0.06]">
-            <Package className="h-5 w-5 text-[#2F5D50]" strokeWidth={1.8} />
+        <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-[#163F33]/15 p-12 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#163F33]/[0.06]">
+            <Package className="h-5 w-5 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
-          <p className="font-heading text-[14px] font-semibold text-[#1e3d32]">
+          <p className="font-heading text-[14px] font-semibold text-[#163F33]">
             No wholesale orders yet
           </p>
-          <p className="max-w-sm font-body text-[12.5px] text-[#2B2B2B]/65">
+          <p className="max-w-sm font-body text-[12.5px] text-[#1F1F1F]/65">
             Browse the wholesale shop and stock up on products to resell.
           </p>
           <Link
             href="/agent/wholesale-shop"
-            className="mt-1 text-[12px] font-semibold text-[#D4A373] hover:underline"
+            className="mt-1 text-[12px] font-semibold text-[#D4AF37] hover:underline"
           >
             Open the wholesale shop →
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
           <table className="w-full text-left text-[13px]">
-            <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               <tr>
                 <th className="px-4 py-3">Order</th>
                 <th className="px-4 py-3">Date</th>
@@ -87,18 +87,18 @@ export default async function AgentMyWholesaleOrdersPage() {
                 <th className="px-4 py-3">Tracking</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e3d32]/6">
+            <tbody className="divide-y divide-[#163F33]/6">
               {orders.map((o) => (
-                <tr key={o.id} className="hover:bg-[#FAF6EE]/30">
+                <tr key={o.id} className="hover:bg-[#F7F2E8]/30">
                   <td className="px-4 py-3">
                     <Link
                       href={`/agent/wholesale-orders/${o.id}`}
-                      className="font-mono text-[11.5px] font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                      className="font-mono text-[11.5px] font-semibold text-[#163F33] hover:text-[#D4AF37]"
                     >
                       {o.orderNumber}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/65">
+                  <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/65">
                     {new Date(o.createdAt).toLocaleDateString('en-MY')}
                   </td>
                   <td className="px-4 py-3 text-right">{o.itemCount}</td>
@@ -112,7 +112,7 @@ export default async function AgentMyWholesaleOrdersPage() {
                       {WHOLESALE_STATUS_LABEL[o.status]}
                     </span>
                   </td>
-                  <td className="px-4 py-3 font-mono text-[11px] text-[#2B2B2B]/70">
+                  <td className="px-4 py-3 font-mono text-[11px] text-[#1F1F1F]/70">
                     {o.trackingNumber ?? '—'}
                   </td>
                 </tr>

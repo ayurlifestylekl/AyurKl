@@ -41,13 +41,13 @@ export default function ShippingForm({
         e.preventDefault()
         save()
       }}
-      className="rounded-3xl border border-[#1e3d32]/10 bg-white p-5"
+      className="rounded-3xl border border-[#163F33]/10 bg-white p-5"
     >
       <header className="mb-4">
-        <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">
           Shipping address (wholesale)
         </h2>
-        <p className="mt-0.5 text-[12px] text-[#2B2B2B]/60">
+        <p className="mt-0.5 text-[12px] text-[#1F1F1F]/60">
           Where the clinic ships your wholesale orders. Required to check out
           from the wholesale shop.
         </p>
@@ -55,7 +55,7 @@ export default function ShippingForm({
 
       <div className="grid grid-cols-1 gap-3">
         <label className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
             Address *
           </span>
           <textarea
@@ -63,13 +63,13 @@ export default function ShippingForm({
             onChange={(e) => setAddress(e.target.value)}
             rows={3}
             placeholder="No 5, Jalan Berhala, Brickfields"
-            className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none"
+            className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none"
           />
         </label>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               Postcode *
             </span>
             <input
@@ -77,17 +77,17 @@ export default function ShippingForm({
               value={postcode}
               onChange={(e) => setPostcode(e.target.value)}
               placeholder="50470"
-              className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none"
+              className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none"
             />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               State *
             </span>
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
-              className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none"
+              className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none"
             >
               <option value="">Select state…</option>
               {MY_STATES.map((s) => (
@@ -108,7 +108,7 @@ export default function ShippingForm({
         <button
           type="submit"
           disabled={pending || !address.trim() || !postcode.trim() || !state.trim()}
-          className="rounded-lg bg-[#2F5D50] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+          className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
         >
           {pending ? 'Saving…' : 'Save shipping address'}
         </button>

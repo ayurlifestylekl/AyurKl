@@ -16,12 +16,12 @@ interface InvoiceDocumentProps {
 }
 
 const colors = {
-  ink: '#1e3d32',
-  inkSoft: '#2B2B2B',
+  ink: '#163F33',
+  inkSoft: '#1F1F1F',
   muted: '#7a8a82',
   rule: '#d8ddd9',
-  gold: '#D4A373',
-  cream: '#FAF6EE',
+  gold: '#D4AF37',
+  cream: '#F7F2E8',
 }
 
 const styles = StyleSheet.create({
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   paidBadge: {
     marginTop: 6,
     fontSize: 8,
-    color: '#2F5D50',
+    color: '#1E5B4B',
     textTransform: 'uppercase',
     letterSpacing: 1.6,
     fontFamily: 'Helvetica-Bold',

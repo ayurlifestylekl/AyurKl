@@ -58,7 +58,7 @@ export default function ProductPlateCard({ product, initialSaved = false }: { pr
             {outOfStock ? (
               <span
                 className="font-display text-[11px] italic sm:text-[12px]"
-                style={{ color: 'rgba(243,230,203,0.8)' }}
+                style={{ color: 'rgba(233, 203, 166,0.8)' }}
               >
                 Out of stock
               </span>

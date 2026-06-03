@@ -157,7 +157,7 @@ export default async function AboutPage() {
       {/* Gold hairline: cream → white transition */}
       <div
         className="h-px"
-        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.2), transparent)' }}
+        style={{ background: 'linear-gradient(to right, transparent, rgba(212, 175, 55,0.2), transparent)' }}
         aria-hidden
       />
       <OurPhilosophy />
@@ -167,7 +167,7 @@ export default async function AboutPage() {
       {/* Gold hairline: dark atelier \u2192 cream FAQ transition */}
       <div
         className="h-px"
-        style={{ background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.3), transparent)' }}
+        style={{ background: 'linear-gradient(to right, transparent, rgba(212, 175, 55,0.3), transparent)' }}
         aria-hidden
       />
       <FAQs

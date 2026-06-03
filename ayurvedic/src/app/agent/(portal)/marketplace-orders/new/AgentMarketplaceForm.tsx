@@ -284,13 +284,13 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
                 </option>
               ))}
             </select>
-            <span className="hidden text-[11px] text-[#2B2B2B]/55 sm:block">
+            <span className="hidden text-[11px] text-[#1F1F1F]/55 sm:block">
               {products.length} available
             </span>
           </div>
 
           {items.length === 0 ? (
-            <div className="mt-3 rounded-xl border border-dashed border-[#1e3d32]/15 p-6 text-center text-[12.5px] italic text-[#2B2B2B]/55">
+            <div className="mt-3 rounded-xl border border-dashed border-[#163F33]/15 p-6 text-center text-[12.5px] italic text-[#1F1F1F]/55">
               No items yet — pick a product above to start.
             </div>
           ) : (
@@ -301,16 +301,16 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
                 return (
                   <li
                     key={i}
-                    className="rounded-xl border border-[#1e3d32]/8 bg-[#FAF6EE]/30 p-3"
+                    className="rounded-xl border border-[#163F33]/8 bg-[#F7F2E8]/30 p-3"
                   >
                     {/* Row 1: name + remove */}
                     <div className="flex items-start gap-3">
                       <div className="min-w-0 flex-1">
-                        <p className="font-heading text-[13.5px] font-semibold leading-snug text-[#1e3d32]">
+                        <p className="font-heading text-[13.5px] font-semibold leading-snug text-[#163F33]">
                           {p?.name ?? 'Unknown'}
                         </p>
                         {p?.sku ? (
-                          <p className="mt-0.5 font-mono text-[10.5px] text-[#2B2B2B]/55">
+                          <p className="mt-0.5 font-mono text-[10.5px] text-[#1F1F1F]/55">
                             {p.sku}
                           </p>
                         ) : null}
@@ -327,17 +327,17 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
 
                     {/* Row 2: qty / price / line total (stable grid that wraps) */}
                     <div className="mt-2.5 grid grid-cols-[auto_auto_1fr] items-center gap-x-3 gap-y-2">
-                      <label className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-[#2B2B2B]/65">
+                      <label className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-[#1F1F1F]/65">
                         Qty
                         <input
                           type="number"
                           min="1"
                           value={it.quantity}
                           onChange={(e) => setQty(i, Number(e.target.value))}
-                          className="w-14 rounded-lg border border-[#1e3d32]/15 bg-white px-2 py-1 text-right text-[13px]"
+                          className="w-14 rounded-lg border border-[#163F33]/15 bg-white px-2 py-1 text-right text-[13px]"
                         />
                       </label>
-                      <label className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-[#2B2B2B]/65">
+                      <label className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-[#1F1F1F]/65">
                         Price&nbsp;RM
                         <input
                           type="number"
@@ -345,10 +345,10 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
                           step="0.01"
                           value={it.unitPriceRm}
                           onChange={(e) => setPrice(i, Number(e.target.value))}
-                          className="w-20 rounded-lg border border-[#1e3d32]/15 bg-white px-2 py-1 text-right text-[13px]"
+                          className="w-20 rounded-lg border border-[#163F33]/15 bg-white px-2 py-1 text-right text-[13px]"
                         />
                       </label>
-                      <span className="text-right font-heading text-[14px] font-bold text-[#1e3d32]">
+                      <span className="text-right font-heading text-[14px] font-bold text-[#163F33]">
                         RM {lineTotal.toFixed(2)}
                       </span>
                     </div>
@@ -380,8 +380,8 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
 
       {/* Sticky summary */}
       <aside className="lg:sticky lg:top-20 lg:self-start">
-        <section className="flex flex-col gap-3 rounded-3xl border border-[#D4A373]/40 bg-gradient-to-br from-[#152b22] to-[#1e3d32] p-5 text-white">
-          <h2 className="font-heading text-[14px] font-semibold text-[#D4A373]">
+        <section className="flex flex-col gap-3 rounded-3xl border border-[#D4AF37]/40 bg-gradient-to-br from-[#163F33] to-[#163F33] p-5 text-white">
+          <h2 className="font-heading text-[14px] font-semibold text-[#D4AF37]">
             Order summary
           </h2>
 
@@ -421,7 +421,7 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
           </div>
           <div className="flex items-baseline justify-between border-t border-white/15 pt-3">
             <span className="font-semibold">Total</span>
-            <span className="font-heading text-[22px] font-bold text-[#D4A373]">
+            <span className="font-heading text-[22px] font-bold text-[#D4AF37]">
               RM {total.toFixed(2)}
             </span>
           </div>
@@ -435,7 +435,7 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
           <button
             type="submit"
             disabled={pending || !canSubmit}
-            className="rounded-lg bg-[#D4A373] py-2.5 text-[13px] font-bold text-[#1e3d32] hover:bg-[#c89364] disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg bg-[#D4AF37] py-2.5 text-[13px] font-bold text-[#163F33] hover:bg-[#c89364] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {pending ? 'Submitting…' : 'Submit for admin approval'}
           </button>
@@ -451,7 +451,7 @@ export default function AgentMarketplaceForm({ products }: { products: Product[]
 }
 
 const inputCls =
-  'w-full rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none'
+  'w-full rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none'
 
 function Card({
   icon: Icon,
@@ -467,18 +467,18 @@ function Card({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-2xl border border-[#1e3d32]/10 bg-white p-5">
+    <section className="rounded-2xl border border-[#163F33]/10 bg-white p-5">
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2F5D50]/8">
-            <Icon className="h-4 w-4 text-[#2F5D50]" strokeWidth={1.8} />
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1E5B4B]/8">
+            <Icon className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
           <div>
-            <h3 className="font-heading text-[14px] font-semibold text-[#1e3d32]">
+            <h3 className="font-heading text-[14px] font-semibold text-[#163F33]">
               {title}
             </h3>
             {subtitle ? (
-              <p className="mt-0.5 text-[11.5px] text-[#2B2B2B]/60">{subtitle}</p>
+              <p className="mt-0.5 text-[11.5px] text-[#1F1F1F]/60">{subtitle}</p>
             ) : null}
           </div>
         </div>
@@ -496,7 +496,7 @@ function Card({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <span className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
         {label}
       </span>
       <div className="mt-1">{children}</div>

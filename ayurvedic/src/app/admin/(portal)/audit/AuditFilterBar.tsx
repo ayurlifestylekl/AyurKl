@@ -14,7 +14,7 @@ const TABS = [
 export default function AuditFilterBar({ active }: { active: string }) {
   const router = useRouter()
   return (
-    <div className="flex flex-wrap items-center gap-1.5 rounded-2xl border border-[#1e3d32]/10 bg-white p-3">
+    <div className="flex flex-wrap items-center gap-1.5 rounded-2xl border border-[#163F33]/10 bg-white p-3">
       {TABS.map((t) => {
         const isActive = active === t.value
         return (
@@ -24,8 +24,8 @@ export default function AuditFilterBar({ active }: { active: string }) {
             onClick={() => router.push(`/admin/audit?entity=${t.value}`)}
             className={`rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors ${
               isActive
-                ? 'bg-[#2F5D50] text-white'
-                : 'border border-[#1e3d32]/15 bg-white text-[#1e3d32] hover:bg-[#FAF6EE]/60'
+                ? 'bg-[#1E5B4B] text-white'
+                : 'border border-[#163F33]/15 bg-white text-[#163F33] hover:bg-[#F7F2E8]/60'
             }`}
           >
             {t.label}

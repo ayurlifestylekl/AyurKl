@@ -42,29 +42,29 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
     <article
       className={`relative overflow-hidden rounded-3xl border bg-white transition-all ${
         isFeatured
-          ? 'border-[#D4A373]/35'
-          : 'border-[#1e3d32]/8 hover:-translate-y-0.5 hover:border-[#D4A373]/35'
+          ? 'border-[#D4AF37]/35'
+          : 'border-[#163F33]/8 hover:-translate-y-0.5 hover:border-[#D4AF37]/35'
       }`}
       style={{
         boxShadow: isFeatured
-          ? '0 1px 0 0 rgba(30,61,50,0.04), 0 18px 36px -22px rgba(212,163,115,0.5)'
-          : '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          ? '0 1px 0 0 rgba(22, 63, 51,0.04), 0 18px 36px -22px rgba(212, 175, 55,0.5)'
+          : '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       {isFeatured && (
-        <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[#D4A373]" />
+        <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[#D4AF37]" />
       )}
 
       <div className={isFeatured ? 'px-5 py-6 sm:px-8 sm:py-7' : 'px-5 py-5 sm:px-6'}>
         {/* Top — applies-to + expiry chip */}
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1e3d32]/[0.06] px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1e3d32]/65">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#163F33]/[0.06] px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65">
             {applies}
           </span>
           {expiry && (
             <span
               className={`font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] ${
-                expiresSoon ? 'text-[#9c6f3e]' : 'text-[#1e3d32]/45'
+                expiresSoon ? 'text-[#9c6f3e]' : 'text-[#163F33]/45'
               }`}
             >
               {expiry}
@@ -75,7 +75,7 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
         {/* Value + Title */}
         <div className={isFeatured ? 'mt-4' : 'mt-3'}>
           <p
-            className={`font-heading font-bold text-[#1e3d32] ${
+            className={`font-heading font-bold text-[#163F33] ${
               isFeatured ? 'text-[34px] sm:text-[40px]' : 'text-[24px]'
             }`}
             style={{ letterSpacing: '-0.025em', lineHeight: 1 }}
@@ -83,7 +83,7 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
             {value}
           </p>
           <h3
-            className={`mt-1.5 font-heading font-semibold text-[#1e3d32] ${
+            className={`mt-1.5 font-heading font-semibold text-[#163F33] ${
               isFeatured ? 'text-[15px]' : 'text-[13.5px]'
             }`}
             style={{ letterSpacing: '-0.005em' }}
@@ -94,16 +94,16 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
 
         {/* Code + Copy */}
         <div
-          className={`mt-4 flex items-center justify-between gap-3 rounded-2xl border border-dashed border-[#D4A373]/45 bg-[#FAF6EE]/55 px-4 py-3 ${
+          className={`mt-4 flex items-center justify-between gap-3 rounded-2xl border border-dashed border-[#D4AF37]/45 bg-[#F7F2E8]/55 px-4 py-3 ${
             isFeatured ? 'sm:px-5' : ''
           }`}
         >
           <div>
-            <p className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55">
+            <p className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
               Code
             </p>
             <p
-              className={`font-mono font-bold text-[#1e3d32] ${
+              className={`font-mono font-bold text-[#163F33] ${
                 isFeatured ? 'text-[18px] sm:text-[20px]' : 'text-[15px]'
               }`}
               style={{ letterSpacing: '0.04em' }}
@@ -114,7 +114,7 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
           <button
             type="button"
             onClick={handleCopy}
-            className="group inline-flex items-center gap-1.5 rounded-full bg-[#D4A373] px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98]"
+            className="group inline-flex items-center gap-1.5 rounded-full bg-[#D4AF37] px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98]"
             aria-label={`Copy promo code ${promo.code}`}
           >
             {copied ? (
@@ -133,15 +133,15 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
 
         {/* Description + How to use expander */}
         {(promo.description || promo.min_spend_rm > 0) && (
-          <div className="mt-4 border-t border-[#1e3d32]/6 pt-3">
+          <div className="mt-4 border-t border-[#163F33]/6 pt-3">
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="group inline-flex w-full items-center justify-between gap-3 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55 transition-colors hover:text-[#D4A373]"
+              className="group inline-flex w-full items-center justify-between gap-3 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55 transition-colors hover:text-[#D4AF37]"
               aria-expanded={open}
             >
               <span className="inline-flex items-center gap-1.5">
-                <Sparkles className="h-3 w-3 text-[#D4A373]" strokeWidth={2} />
+                <Sparkles className="h-3 w-3 text-[#D4AF37]" strokeWidth={2} />
                 How to use
               </span>
               <ChevronDown
@@ -155,14 +155,14 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
               <div className="mt-2 space-y-2">
                 {promo.description && (
                   <p
-                    className="font-body text-[12.5px] text-[#2B2B2B]/70"
+                    className="font-body text-[12.5px] text-[#1F1F1F]/70"
                     style={{ lineHeight: 1.6 }}
                   >
                     {promo.description}
                   </p>
                 )}
                 {promo.min_spend_rm > 0 && (
-                  <p className="font-body text-[11.5px] italic text-[#2B2B2B]/55">
+                  <p className="font-body text-[11.5px] italic text-[#1F1F1F]/55">
                     Minimum spend RM {Number(promo.min_spend_rm).toFixed(0)}.
                   </p>
                 )}

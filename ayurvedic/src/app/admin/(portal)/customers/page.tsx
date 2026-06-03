@@ -47,13 +47,13 @@ export default async function AdminCustomersPage({ searchParams }: PageProps) {
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             CRM
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             Customers
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {total} customer{total === 1 ? '' : 's'} · push vouchers, manage tags, view history
             {showMocks ? ' · demo data (no real customers yet)' : ''}
           </p>
@@ -61,13 +61,13 @@ export default async function AdminCustomersPage({ searchParams }: PageProps) {
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/customers/birthdays"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
           >
             <Cake className="h-3.5 w-3.5" /> Birthdays
           </Link>
           <Link
             href="/admin/promos"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#D4A373] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#b58a5d]"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#D4AF37] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#b58a5d]"
           >
             <Gift className="h-3.5 w-3.5" /> Vouchers
           </Link>

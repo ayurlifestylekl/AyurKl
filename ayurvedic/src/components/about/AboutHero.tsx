@@ -94,13 +94,13 @@ export default function AboutHero({
       {/* Base dark overlay */}
       <div
         className="absolute inset-0"
-        style={{ backgroundColor: 'rgba(26,46,38,0.82)' }}
+        style={{ backgroundColor: 'rgba(15, 44, 36,0.82)' }}
         aria-hidden
       />
       {/* Green tint blend */}
       <div
         className="absolute inset-0 mix-blend-multiply"
-        style={{ backgroundColor: 'rgba(47,93,80,0.45)' }}
+        style={{ backgroundColor: 'rgba(30, 91, 75,0.45)' }}
         aria-hidden
       />
       {/* Radial vignette — darker edges, subtle light in center */}
@@ -108,7 +108,7 @@ export default function AboutHero({
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(10,20,16,0.5) 100%)',
+            'radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(10, 31, 25,0.5) 100%)',
         }}
         aria-hidden
       />
@@ -117,7 +117,7 @@ export default function AboutHero({
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 55%, rgba(212,163,115,0.08) 0%, transparent 50%)',
+            'radial-gradient(ellipse at 50% 55%, rgba(212, 175, 55,0.08) 0%, transparent 50%)',
         }}
         aria-hidden
       />
@@ -222,7 +222,7 @@ export default function AboutHero({
             className="h-px"
             style={{
               background:
-                'linear-gradient(to right, transparent, rgba(212,163,115,0.3), transparent)',
+                'linear-gradient(to right, transparent, rgba(212, 175, 55,0.3), transparent)',
             }}
             aria-hidden
           />

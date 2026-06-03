@@ -22,10 +22,10 @@ export default async function AgentWholesaleShopPage() {
     return (
       <div className="mx-auto max-w-3xl">
         <div className="rounded-3xl border border-amber-200 bg-amber-50 p-8">
-          <h1 className="font-heading text-2xl font-bold text-[#1e3d32]">
+          <h1 className="font-heading text-2xl font-bold text-[#163F33]">
             Partner profile not found.
           </h1>
-          <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+          <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
             Your account isn&apos;t linked to a sales agent profile yet.
           </p>
         </div>
@@ -36,11 +36,11 @@ export default async function AgentWholesaleShopPage() {
   if (!profile.canWholesale) {
     return (
       <div className="mx-auto max-w-3xl">
-        <div className="rounded-3xl border border-[#1e3d32]/15 bg-white p-8">
-          <h1 className="font-heading text-2xl font-bold text-[#1e3d32]">
+        <div className="rounded-3xl border border-[#163F33]/15 bg-white p-8">
+          <h1 className="font-heading text-2xl font-bold text-[#163F33]">
             Wholesale not enabled
           </h1>
-          <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+          <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
             Your partner account isn&apos;t enabled for wholesale orders. Contact
             admin if you&apos;d like to start buying stock at wholesale prices.
           </p>
@@ -58,13 +58,13 @@ export default async function AgentWholesaleShopPage() {
     <WholesaleCartProvider>
       <div className="mx-auto flex max-w-6xl flex-col gap-4">
         <header>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Wholesale shop
           </span>
-          <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#163F33]">
             Stock up to resell
           </h1>
-          <p className="mt-2 max-w-2xl font-body text-[13.5px] text-[#2B2B2B]/70">
+          <p className="mt-2 max-w-2xl font-body text-[13.5px] text-[#1F1F1F]/70">
             Buy at wholesale price. After you place an order, admin confirms your
             payment, packs the stock, and ships to your address. You then resell via
             your own channels and keep the full margin.

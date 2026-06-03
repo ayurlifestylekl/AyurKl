@@ -43,7 +43,7 @@ export default function OrdersTable({ items }: { items: AdminOrderListItem[] }) 
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No orders match your filters.
       </div>
     )
@@ -55,9 +55,9 @@ export default function OrdersTable({ items }: { items: AdminOrderListItem[] }) 
     <div className="flex flex-col gap-3">
       <BulkActionsBar selectedIds={Array.from(selected)} />
 
-      <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
         <table className="w-full text-left text-[13px]">
-          <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
             <tr>
               <th className="px-4 py-3">
                 <input
@@ -75,9 +75,9 @@ export default function OrdersTable({ items }: { items: AdminOrderListItem[] }) 
               <th className="px-4 py-3">Created</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1e3d32]/6">
+          <tbody className="divide-y divide-[#163F33]/6">
             {items.map((o) => (
-              <tr key={o.id} className="hover:bg-[#FAF6EE]/30">
+              <tr key={o.id} className="hover:bg-[#F7F2E8]/30">
                 <td className="px-4 py-3">
                   <input
                     type="checkbox"
@@ -89,17 +89,17 @@ export default function OrdersTable({ items }: { items: AdminOrderListItem[] }) 
                 <td className="px-4 py-3">
                   <Link
                     href={`/admin/orders/${o.id}`}
-                    className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                    className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                   >
                     #{o.shortId}
                   </Link>
-                  <div className="text-[11px] text-[#2B2B2B]/55">
+                  <div className="text-[11px] text-[#1F1F1F]/55">
                     {o.itemCount} item{o.itemCount === 1 ? '' : 's'} · {o.channel}
                   </div>
                 </td>
                 <td className="px-4 py-3">
                   <div>{o.customerName ?? '—'}</div>
-                  <div className="text-[11px] text-[#2B2B2B]/55">{o.customerEmail ?? ''}</div>
+                  <div className="text-[11px] text-[#1F1F1F]/55">{o.customerEmail ?? ''}</div>
                 </td>
                 <td className="px-4 py-3">
                   <span
@@ -114,7 +114,7 @@ export default function OrdersTable({ items }: { items: AdminOrderListItem[] }) 
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right">RM {o.totalRm.toFixed(2)}</td>
-                <td className="px-4 py-3 text-[12px] text-[#2B2B2B]/65">
+                <td className="px-4 py-3 text-[12px] text-[#1F1F1F]/65">
                   {new Date(o.createdAt).toLocaleDateString('en-MY')}
                 </td>
               </tr>

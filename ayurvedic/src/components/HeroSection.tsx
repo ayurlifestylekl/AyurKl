@@ -49,7 +49,7 @@ export default function HeroSection() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(14,30,26,0.88) 0%, rgba(14,30,26,0.72) 35%, rgba(14,30,26,0.68) 60%, rgba(14,30,26,0.82) 100%)',
+              'linear-gradient(180deg, rgba(10, 31, 25,0.88) 0%, rgba(10, 31, 25,0.72) 35%, rgba(10, 31, 25,0.68) 60%, rgba(10, 31, 25,0.82) 100%)',
           }}
         />
 
@@ -58,7 +58,7 @@ export default function HeroSection() {
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 65% 60% at 50% 48%, rgba(14,30,26,0.30) 0%, transparent 70%)',
+              'radial-gradient(ellipse 65% 60% at 50% 48%, rgba(10, 31, 25,0.30) 0%, transparent 70%)',
           }}
         />
 
@@ -67,7 +67,7 @@ export default function HeroSection() {
           className="absolute inset-0 mix-blend-overlay"
           style={{
             background:
-              'radial-gradient(ellipse 35% 50% at 6% 18%, rgba(232,148,26,0.22) 0%, transparent 65%), radial-gradient(ellipse 35% 50% at 94% 82%, rgba(232,148,26,0.22) 0%, transparent 65%)',
+              'radial-gradient(ellipse 35% 50% at 6% 18%, rgba(212, 175, 55,0.22) 0%, transparent 65%), radial-gradient(ellipse 35% 50% at 94% 82%, rgba(212, 175, 55,0.22) 0%, transparent 65%)',
           }}
         />
       </motion.div>
@@ -114,7 +114,7 @@ export default function HeroSection() {
               fontSize: 'clamp(3.25rem, 9vw, 8rem)',
               lineHeight: 1.0,
               letterSpacing: '-0.02em',
-              textShadow: '0 4px 36px rgba(232,148,26,0.32)',
+              textShadow: '0 4px 36px rgba(212, 175, 55,0.32)',
             }}
           >
             Ayurveda
@@ -134,7 +134,7 @@ export default function HeroSection() {
           {...fadeUp(0.5)}
           className="mt-7 max-w-3xl font-body leading-[1.6]"
           style={{
-            color: 'rgba(251,246,236,0.88)',
+            color: 'rgba(247, 242, 232,0.88)',
             fontSize: 'clamp(1.0625rem, 1.45vw, 1.3125rem)', // 17px → 21px
           }}
         >
@@ -166,7 +166,7 @@ export default function HeroSection() {
           <a
             href="/treatments"
             className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-white/70 underline decoration-1 underline-offset-[6px] transition-colors hover:text-white"
-            style={{ textDecorationColor: 'rgba(242,178,90,0.5)' }}
+            style={{ textDecorationColor: 'rgba(212, 175, 55,0.5)' }}
           >
             Explore Treatments →
           </a>
@@ -178,8 +178,8 @@ export default function HeroSection() {
         {...fadeUp(0.85)}
         className="absolute bottom-0 left-0 right-0 z-10 border-t backdrop-blur-md"
         style={{
-          backgroundColor: 'rgba(14,30,26,0.78)',
-          borderTopColor: 'rgba(232,148,26,0.22)',
+          backgroundColor: 'rgba(10, 31, 25,0.78)',
+          borderTopColor: 'rgba(212, 175, 55,0.22)',
         }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-5 sm:px-8 lg:px-12">

@@ -53,28 +53,28 @@ export default async function MessagesPage({
       {/* ── HEADER ────────────────────────────────────────────────── */}
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
-            <Inbox className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={2} />
+          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+            <Inbox className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2} />
             Messages & Support
           </span>
           <h1
-            className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32] sm:text-[36px]"
+            className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[36px]"
             style={{ letterSpacing: '-0.025em' }}
           >
             Hello, {firstName}.{' '}
             <span
-              className="italic font-normal text-[#1e3d32]/70"
+              className="italic font-normal text-[#163F33]/70"
               style={{ fontFamily: 'var(--font-playfair)' }}
             >
               How can we help?
             </span>
           </h1>
-          <p className="mt-2 max-w-xl font-body text-[13px] text-[#2B2B2B]/60" style={{ lineHeight: 1.6 }}>
+          <p className="mt-2 max-w-xl font-body text-[13px] text-[#1F1F1F]/60" style={{ lineHeight: 1.6 }}>
             Write to us through the portal for treatment questions and follow-ups — Vaidya replies within 24 hours on weekdays. For anything urgent, message us on WhatsApp.
           </p>
         </div>
         {unreadCount > 0 && (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4A373]/30 bg-[#FAF6EE] px-3.5 py-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#9c6f3e]">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/30 bg-[#F7F2E8] px-3.5 py-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#9c6f3e]">
             <Sparkles className="h-3 w-3" strokeWidth={2} />
             {unreadCount} unread
           </span>
@@ -89,31 +89,31 @@ export default async function MessagesPage({
 
       {/* ── ACTIVE TICKETS ───────────────────────────────────────── */}
       <section>
-        <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+        <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
           Active conversations
           {active.length > 0 && (
-            <span className="ml-2 font-mono text-[10.5px] text-[#1e3d32]/45">
+            <span className="ml-2 font-mono text-[10.5px] text-[#163F33]/45">
               {active.length}
             </span>
           )}
         </h2>
         {active.length === 0 ? (
           <div
-            className="rounded-3xl border border-dashed border-[#1e3d32]/12 bg-white px-5 py-6 text-center"
+            className="rounded-3xl border border-dashed border-[#163F33]/12 bg-white px-5 py-6 text-center"
           >
-            <p className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+            <p className="font-heading text-[13px] font-semibold text-[#163F33]">
               No active conversations.
             </p>
-            <p className="mt-1 font-body text-[12px] text-[#2B2B2B]/55" style={{ lineHeight: 1.55 }}>
+            <p className="mt-1 font-body text-[12px] text-[#1F1F1F]/55" style={{ lineHeight: 1.55 }}>
               Tap &ldquo;Start a new conversation&rdquo; above when you have a question.
             </p>
           </div>
         ) : (
           <ul
-            className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+            className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
             style={{
               boxShadow:
-                '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+                '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
             }}
           >
             {active.map((ticket) => (
@@ -125,24 +125,24 @@ export default async function MessagesPage({
 
       {/* ── RESOLVED TICKETS ─────────────────────────────────────── */}
       <section>
-        <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+        <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
           Resolved
           {resolved.length > 0 && (
-            <span className="ml-2 font-mono text-[10.5px] text-[#1e3d32]/45">
+            <span className="ml-2 font-mono text-[10.5px] text-[#163F33]/45">
               {resolved.length}
             </span>
           )}
         </h2>
         {resolved.length === 0 ? (
-          <p className="rounded-3xl border border-dashed border-[#1e3d32]/12 bg-white px-5 py-4 text-center font-body text-[12px] italic text-[#2B2B2B]/55">
+          <p className="rounded-3xl border border-dashed border-[#163F33]/12 bg-white px-5 py-4 text-center font-body text-[12px] italic text-[#1F1F1F]/55">
             No resolved conversations yet.
           </p>
         ) : (
           <ul
-            className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+            className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
             style={{
               boxShadow:
-                '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+                '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
             }}
           >
             {resolved.map((ticket) => (

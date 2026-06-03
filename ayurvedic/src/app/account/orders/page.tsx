@@ -100,10 +100,10 @@ export default async function OrdersListPage({
       {/* Order cards */}
       {isEmptyOverall ? (
         <div
-          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
           <EmptyState
@@ -118,10 +118,10 @@ export default async function OrdersListPage({
         </div>
       ) : isEmptyInFilter ? (
         <div
-          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
           <EmptyState
@@ -141,7 +141,7 @@ export default async function OrdersListPage({
       )}
 
       {/* Support link — always visible, in-context affordance */}
-      <p className="pt-3 pb-2 text-center font-body text-[12px] text-[#2B2B2B]/55">
+      <p className="pt-3 pb-2 text-center font-body text-[12px] text-[#1F1F1F]/55">
         Need help with an order?{' '}
         <a
           href={`https://wa.me/601165043436?text=${encodeURIComponent(
@@ -149,7 +149,7 @@ export default async function OrdersListPage({
           )}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#c4935f] hover:underline"
+          className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
         >
           Contact Support
         </a>

@@ -9,7 +9,7 @@ import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
 /* ── Palette (section-local; matches new hero language) ── */
 const EMERALD       = '#163F33'
-const EMERALD_SOFT  = 'rgba(26,59,46,0.78)'
+const EMERALD_SOFT  = 'rgba(22, 63, 51,0.78)'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_DEEP  = '#D4AF37'
 const CREAM         = '#F7F2E8'
@@ -92,7 +92,7 @@ export default function ClinicTherapies() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(50% 45% at 10% 5%, rgba(232,148,26,0.18) 0%, transparent 65%), radial-gradient(45% 55% at 92% 90%, rgba(26,59,46,0.10) 0%, transparent 60%)',
+            'radial-gradient(50% 45% at 10% 5%, rgba(212, 175, 55,0.18) 0%, transparent 65%), radial-gradient(45% 55% at 92% 90%, rgba(22, 63, 51,0.10) 0%, transparent 60%)',
         }}
       />
 
@@ -131,7 +131,7 @@ export default function ClinicTherapies() {
         className="absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.45) 50%, transparent 96%)',
+            'linear-gradient(to right, transparent 4%, rgba(212, 175, 55,0.45) 50%, transparent 96%)',
         }}
       />
       {/* Bottom saffron hairline */}
@@ -140,7 +140,7 @@ export default function ClinicTherapies() {
         className="absolute inset-x-0 bottom-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.40) 50%, transparent 96%)',
+            'linear-gradient(to right, transparent 4%, rgba(212, 175, 55,0.40) 50%, transparent 96%)',
         }}
       />
 
@@ -189,7 +189,7 @@ export default function ClinicTherapies() {
                   fontSize: 'clamp(2.5rem, 5.2vw, 4.25rem)',
                   lineHeight: 1.0,
                   letterSpacing: '-0.015em',
-                  textShadow: '0 3px 22px rgba(232,148,26,0.25)',
+                  textShadow: '0 3px 22px rgba(212, 175, 55,0.25)',
                 }}
               >
                 Therapies
@@ -220,7 +220,7 @@ export default function ClinicTherapies() {
             <p
               className="mt-3 font-display italic leading-[1.55]"
               style={{
-                color: 'rgba(26,59,46,0.62)',
+                color: 'rgba(22, 63, 51,0.62)',
                 fontSize: 'clamp(14px, 1.05vw, 16px)',
               }}
             >
@@ -309,7 +309,7 @@ function CategoryCard({
           <div
             aria-hidden
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(26,59,46,0.18)' }}
+            style={{ backgroundColor: 'rgba(22, 63, 51,0.18)' }}
           />
 
           {/* Bottom gradient for legibility */}
@@ -318,7 +318,7 @@ function CategoryCard({
             className="absolute inset-x-0 bottom-0 h-[70%]"
             style={{
               background:
-                'linear-gradient(to top, rgba(14,30,26,0.88) 0%, rgba(14,30,26,0.40) 50%, transparent 100%)',
+                'linear-gradient(to top, rgba(10, 31, 25,0.88) 0%, rgba(10, 31, 25,0.40) 50%, transparent 100%)',
             }}
           />
 
@@ -328,7 +328,7 @@ function CategoryCard({
             className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
             style={{
               background:
-                'radial-gradient(60% 50% at 50% 0%, rgba(232,148,26,0.30) 0%, transparent 70%)',
+                'radial-gradient(60% 50% at 50% 0%, rgba(212, 175, 55,0.30) 0%, transparent 70%)',
             }}
           />
 
@@ -337,7 +337,7 @@ function CategoryCard({
             <span
               className="inline-flex items-center justify-center rounded-sm px-2 py-1 font-heading text-[10px] font-bold tracking-[0.22em] backdrop-blur-sm sm:text-[11px]"
               style={{
-                backgroundColor: 'rgba(14,30,26,0.55)',
+                backgroundColor: 'rgba(10, 31, 25,0.55)',
                 color: SAFFRON,
                 border: `1px solid ${SAFFRON}55`,
               }}
@@ -355,7 +355,7 @@ function CategoryCard({
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.28em] backdrop-blur-sm"
                 style={{
-                  backgroundColor: 'rgba(232,148,26,0.18)',
+                  backgroundColor: 'rgba(212, 175, 55,0.18)',
                   color: SAFFRON,
                   border: `1px solid ${SAFFRON}66`,
                 }}
@@ -385,7 +385,7 @@ function CategoryCard({
               <p
                 className="mt-1 font-display italic leading-snug"
                 style={{
-                  color: 'rgba(251,246,236,0.82)',
+                  color: 'rgba(247, 242, 232,0.82)',
                   fontSize: featured ? 'clamp(13px, 1.05vw, 16px)' : '12.5px',
                 }}
               >
@@ -401,7 +401,7 @@ function CategoryCard({
               }`}
               style={{
                 borderColor: `${SAFFRON}55`,
-                backgroundColor: 'rgba(232,148,26,0.14)',
+                backgroundColor: 'rgba(212, 175, 55,0.14)',
               }}
             >
               <ArrowRight

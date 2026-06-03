@@ -70,13 +70,13 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
         {/* Top status bar */}
         <div className="relative flex items-center justify-between border-b border-white/8 px-6 py-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/50">
           <div className="flex items-center gap-2">
-            <Terminal className="h-3 w-3 text-[#7A9D54]" />
+            <Terminal className="h-3 w-3 text-[#2E7D5A]" />
             <span>[ command center ]</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7A9D54] opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#7A9D54]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2E7D5A] opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2E7D5A]" />
             </span>
             <span>secure</span>
           </div>
@@ -103,8 +103,8 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
             </div>
           )}
 
-          <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#D4A373]/25 bg-[#D4A373]/[0.05] px-4 py-2.5">
-            <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D4A373]" />
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/[0.05] px-4 py-2.5">
+            <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D4AF37]" />
             <p className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-white/55">
               all sessions logged · device-fingerprinted
             </p>
@@ -136,7 +136,7 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
             <div className="flex items-center justify-end">
               <Link
                 href="/auth/forgot-password"
-                className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-white/45 transition-colors hover:text-[#D4A373]"
+                className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-white/45 transition-colors hover:text-[#D4AF37]"
               >
                 forgot password?
               </Link>
@@ -168,7 +168,7 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
         not staff?{' '}
         <Link
           href="/auth/login"
-          className="text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
+          className="text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
         >
           → member sign-in
         </Link>

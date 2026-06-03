@@ -39,7 +39,7 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No products match your filters. Click <strong>+ Add product</strong> to create one,
         or <strong>Import CSV</strong> to bulk-load.
       </div>
@@ -52,9 +52,9 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
     <div className="flex flex-col gap-3">
       <BulkActionsBar selectedIds={Array.from(selected)} />
 
-      <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
         <table className="w-full text-left text-[13px]">
-          <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
             <tr>
               <th className="px-4 py-3">
                 <input
@@ -74,11 +74,11 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
               <th className="px-4 py-3">Updated</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1e3d32]/6">
+          <tbody className="divide-y divide-[#163F33]/6">
             {items.map((p) => {
               const stock = stockChip(p.stockQty)
               return (
-                <tr key={p.id} className="hover:bg-[#FAF6EE]/30">
+                <tr key={p.id} className="hover:bg-[#F7F2E8]/30">
                   <td className="px-4 py-3">
                     <input
                       type="checkbox"
@@ -94,27 +94,27 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
                         <img
                           src={p.imageUrl}
                           alt=""
-                          className="h-10 w-10 rounded-lg border border-[#1e3d32]/10 object-cover"
+                          className="h-10 w-10 rounded-lg border border-[#163F33]/10 object-cover"
                         />
                       ) : (
-                        <div className="h-10 w-10 rounded-lg border border-dashed border-[#1e3d32]/15 bg-[#FAF6EE]/40" />
+                        <div className="h-10 w-10 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40" />
                       )}
                       <Link
                         href={`/admin/products/${p.id}`}
-                        className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                        className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                       >
                         {p.name}
                       </Link>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/65">{p.sku}</td>
+                  <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/65">{p.sku}</td>
                   <td className="px-4 py-3 text-right">
                     {p.salePriceRm != null ? (
                       <>
-                        <span className="text-[#D4A373] font-semibold">
+                        <span className="text-[#D4AF37] font-semibold">
                           RM {p.salePriceRm.toFixed(2)}
                         </span>
-                        <span className="ml-1 line-through text-[11px] text-[#2B2B2B]/55">
+                        <span className="ml-1 line-through text-[11px] text-[#1F1F1F]/55">
                           RM {p.priceRm.toFixed(2)}
                         </span>
                       </>
@@ -129,7 +129,7 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
                       {stock.label}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-[12px] text-[#2B2B2B]/65">
+                  <td className="px-4 py-3 text-[12px] text-[#1F1F1F]/65">
                     {p.category ?? '—'}
                   </td>
                   <td className="px-4 py-3">
@@ -141,10 +141,10 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
                   </td>
                   <td className="px-4 py-3 text-center">
                     {p.featured ? (
-                      <Star className="inline h-3.5 w-3.5 fill-[#D4A373] text-[#D4A373]" />
+                      <Star className="inline h-3.5 w-3.5 fill-[#D4AF37] text-[#D4AF37]" />
                     ) : null}
                   </td>
-                  <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/55">
+                  <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/55">
                     {new Date(p.updatedAt).toLocaleDateString('en-MY')}
                   </td>
                 </tr>

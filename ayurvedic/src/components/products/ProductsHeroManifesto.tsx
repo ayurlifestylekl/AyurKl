@@ -51,7 +51,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
       <div
         aria-hidden
         className="absolute inset-0"
-        style={{ backgroundColor: 'rgba(10,20,16,0.25)' }}
+        style={{ backgroundColor: 'rgba(10, 31, 25,0.25)' }}
       />
       {/* Radial warm gold — right-side light source */}
       <div
@@ -59,7 +59,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 72% 40%, rgba(212,163,115,0.18) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 72% 40%, rgba(212, 175, 55,0.18) 0%, transparent 60%)',
         }}
       />
       {/* Radial sage wash — bottom-left depth */}
@@ -68,7 +68,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 700px 500px at 18% 88%, rgba(122,157,84,0.14) 0%, transparent 60%)',
+            'radial-gradient(ellipse 700px 500px at 18% 88%, rgba(46, 125, 90,0.14) 0%, transparent 60%)',
         }}
       />
       {/* Film grain */}
@@ -117,7 +117,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
               className="mt-4 block h-px w-10 origin-left"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(212,163,115,0.9), rgba(212,163,115,0.2))',
+                  'linear-gradient(to right, rgba(212, 175, 55,0.9), rgba(212, 175, 55,0.2))',
               }}
             />
 
@@ -157,7 +157,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
               style={{
                 fontSize: '16px',
                 lineHeight: 1.7,
-                color: 'rgba(243,230,203,0.62)',
+                color: 'rgba(233, 203, 166,0.62)',
               }}
             >
               Every oil, churna and wellness kit in this index is prescribed
@@ -174,7 +174,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
               className="mt-8 block h-px w-16 origin-left"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(212,163,115,0.8), rgba(212,163,115,0.15))',
+                  'linear-gradient(to right, rgba(212, 175, 55,0.8), rgba(212, 175, 55,0.15))',
               }}
             />
 

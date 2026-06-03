@@ -14,7 +14,7 @@ const BG_LUXE     = '#F7F2E8' // Luxe Ivory/Cream
 const TEXT_DARK   = '#1F1F1F' // Deep Charcoal
 const TEXT_MUTED  = '#1F1F1F' // Soft Charcoal
 const GOLD        = '#D4AF37' // Elegant Gold
-const BORDER      = 'rgba(200, 116, 26, 0.15)'
+const BORDER      = 'rgba(212, 175, 55, 0.15)'
 
 // Duplicate reviews to ensure enough content to loop seamlessly
 const marqueeItems = [...reviews, ...reviews, ...reviews, ...reviews]

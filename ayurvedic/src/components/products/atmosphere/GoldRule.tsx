@@ -35,8 +35,8 @@ export default function GoldRule({
       style={{
         display: 'block',
         background: isVertical
-          ? 'linear-gradient(to bottom, rgba(212,163,115,0.9) 0%, rgba(212,163,115,0.4) 60%, rgba(212,163,115,0) 100%)'
-          : 'linear-gradient(to right, rgba(212,163,115,0.9) 0%, rgba(212,163,115,0.4) 60%, rgba(212,163,115,0) 100%)',
+          ? 'linear-gradient(to bottom, rgba(212, 175, 55,0.9) 0%, rgba(212, 175, 55,0.4) 60%, rgba(212, 175, 55,0) 100%)'
+          : 'linear-gradient(to right, rgba(212, 175, 55,0.9) 0%, rgba(212, 175, 55,0.4) 60%, rgba(212, 175, 55,0) 100%)',
         width: isVertical ? '1px' : length,
         height: isVertical ? length : '1px',
         transformOrigin: isVertical ? 'top' : 'left',

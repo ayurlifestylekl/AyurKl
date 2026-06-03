@@ -89,7 +89,7 @@ export default function CommitmentCTA({
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(47,93,80,0.55)' }}
+            style={{ backgroundColor: 'rgba(30, 91, 75,0.55)' }}
             aria-hidden
           />
           <div className="grain-overlay-dark pointer-events-none absolute inset-0" aria-hidden />
@@ -98,7 +98,7 @@ export default function CommitmentCTA({
             className="absolute inset-y-0 right-0 w-px"
             style={{
               background:
-                'linear-gradient(to bottom, transparent, rgba(212,163,115,0.35), transparent)',
+                'linear-gradient(to bottom, transparent, rgba(212, 175, 55,0.35), transparent)',
             }}
             aria-hidden
           />
@@ -121,7 +121,7 @@ export default function CommitmentCTA({
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(47,93,80,0.6)' }}
+            style={{ backgroundColor: 'rgba(30, 91, 75,0.6)' }}
             aria-hidden
           />
           <div
@@ -140,7 +140,7 @@ export default function CommitmentCTA({
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse at 50% 50%, rgba(212,163,115,0.06) 0%, transparent 60%)',
+                'radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55,0.06) 0%, transparent 60%)',
             }}
             aria-hidden
           />

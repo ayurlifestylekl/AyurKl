@@ -11,8 +11,8 @@ import { EASE_OUT_PREMIUM } from '@/lib/motion'
 
 const heroDiamondPattern = {
   backgroundImage: `
-    radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px),
-    radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px)
+    radial-gradient(circle, rgba(212, 175, 55,0.07) 1px, transparent 1px),
+    radial-gradient(circle, rgba(212, 175, 55,0.07) 1px, transparent 1px)
   `,
   backgroundSize: '28px 28px',
   backgroundPosition: '0 0, 14px 14px',
@@ -47,7 +47,7 @@ export default function Threshold() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 85% 10%, rgba(212,163,115,0.22) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 10% 95%, rgba(26,46,38,0.55) 0%, transparent 55%), radial-gradient(ellipse 600px 500px at 50% 50%, rgba(212,163,115,0.04) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 85% 10%, rgba(212, 175, 55,0.22) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 10% 95%, rgba(15, 44, 36,0.55) 0%, transparent 55%), radial-gradient(ellipse 600px 500px at 50% 50%, rgba(212, 175, 55,0.04) 0%, transparent 60%)',
         }}
         aria-hidden
       />
@@ -144,7 +144,7 @@ export default function Threshold() {
                 className="relative aspect-[4/5] w-full overflow-hidden rounded-[2px]"
                 style={{
                   boxShadow:
-                    '0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212,163,115,0.25)',
+                    '0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212, 175, 55,0.25)',
                 }}
               >
                 {/* Placeholder — warm apothecary flat-lay. Swap point for the
@@ -163,7 +163,7 @@ export default function Threshold() {
                 {/* Green harmonising tint */}
                 <div
                   className="pointer-events-none absolute inset-0 mix-blend-multiply"
-                  style={{ backgroundColor: 'rgba(47,93,80,0.22)' }}
+                  style={{ backgroundColor: 'rgba(30, 91, 75,0.22)' }}
                   aria-hidden
                 />
                 {/* Bottom gradient — darker than Treatments for cinematic weight */}
@@ -188,7 +188,7 @@ export default function Threshold() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 1.4, ease: EASE_OUT_PREMIUM }}
-                  className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary shadow-[0_10px_24px_-10px_rgba(212,163,115,0.8)]"
+                  className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary shadow-[0_10px_24px_-10px_rgba(212, 175, 55,0.8)]"
                 >
                   <span aria-hidden className="inline-block h-1 w-1 rotate-45 bg-primary/70" />
                   Plate N°01 · Threshold
@@ -209,13 +209,13 @@ export default function Threshold() {
                   className="absolute left-0 right-0 top-0 h-px"
                   style={{
                     background:
-                      'linear-gradient(to right, transparent, rgba(212,163,115,0.85) 20%, rgba(212,163,115,0.85) 80%, transparent)',
+                      'linear-gradient(to right, transparent, rgba(212, 175, 55,0.85) 20%, rgba(212, 175, 55,0.85) 80%, transparent)',
                   }}
                 />
                 {/* Gold seal dot */}
                 <span
                   aria-hidden
-                  className="relative mt-1 h-2 w-2 shrink-0 rounded-full bg-accent shadow-[0_0_0_3px_rgba(212,163,115,0.2)]"
+                  className="relative mt-1 h-2 w-2 shrink-0 rounded-full bg-accent shadow-[0_0_0_3px_rgba(212, 175, 55,0.2)]"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="font-heading text-[9px] font-bold uppercase tracking-[0.24em] text-primary/55">
@@ -247,7 +247,7 @@ export default function Threshold() {
                 className="ml-auto block h-px w-16"
                 style={{
                   background:
-                    'linear-gradient(to right, transparent, rgba(212,163,115,0.9))',
+                    'linear-gradient(to right, transparent, rgba(212, 175, 55,0.9))',
                 }}
               />
               <p
@@ -328,7 +328,7 @@ export default function Threshold() {
                   className="absolute -bottom-1 left-0 block h-px w-[42%] origin-left"
                   style={{
                     background:
-                      'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.1) 70%, transparent)',
+                      'linear-gradient(to right, rgba(212, 175, 55,0.85), rgba(212, 175, 55,0.1) 70%, transparent)',
                   }}
                 />
               </motion.span>

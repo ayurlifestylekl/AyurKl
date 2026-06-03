@@ -129,7 +129,7 @@ export default function CartContents() {
                 className="flex items-center gap-4 rounded-3xl border border-[#163F33]/8 bg-white px-4 py-3 sm:px-5"
                 style={{
                   boxShadow:
-                    '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+                    '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
                 }}
               >
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#163F33]/[0.06]">
@@ -205,7 +205,7 @@ export default function CartContents() {
             className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
             style={{
               boxShadow:
-                '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+                '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
             }}
           >
             <div className="border-b border-[#163F33]/6 px-5 py-3">

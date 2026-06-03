@@ -40,10 +40,10 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
   return (
     <div className="w-full">
       <div
-        className="relative overflow-hidden rounded-[32px] border border-[#D4A373]/40 bg-gradient-to-b from-[#3a2e1e] via-[#1e3d32] to-[#152b22]"
+        className="relative overflow-hidden rounded-[32px] border border-[#D4AF37]/40 bg-gradient-to-b from-[#3a2e1e] via-[#163F33] to-[#163F33]"
         style={{
           boxShadow:
-            '0 30px 70px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(212,163,115,0.08), inset 0 1px 0 0 rgba(255,255,255,0.08)',
+            '0 30px 70px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(212, 175, 55,0.08), inset 0 1px 0 0 rgba(255,255,255,0.08)',
         }}
       >
         {/* Spotlight radial behind the title */}
@@ -52,7 +52,7 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(55% 40% at 50% 0%, rgba(212,163,115,0.25), transparent 70%)',
+              'radial-gradient(55% 40% at 50% 0%, rgba(212, 175, 55,0.25), transparent 70%)',
           }}
         />
         {/* Subtle grain */}
@@ -67,8 +67,8 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
 
         <div className="relative p-8 sm:p-10">
           {/* Eyebrow — dark capsule with gold border, visible over the warm gradient top */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#D4A373]/60 bg-[#0a1411]/70 px-3.5 py-1.5 backdrop-blur-sm">
-            <Sparkles className="h-3 w-3 text-[#D4A373]" />
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#0a1411]/70 px-3.5 py-1.5 backdrop-blur-sm">
+            <Sparkles className="h-3 w-3 text-[#D4AF37]" />
             <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.3em] text-[#f0c98a]">
               Partner Hub
             </span>
@@ -81,7 +81,7 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
           >
             Welcome back,
             <br />
-            <em className="font-display not-italic text-[#D4A373]">Creator.</em>
+            <em className="font-display not-italic text-[#D4AF37]">Creator.</em>
           </h1>
 
           <p
@@ -102,12 +102,12 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
 
           {/* Live-stat preview tile */}
           <div
-            className="mt-6 flex items-center justify-between rounded-2xl border border-[#D4A373]/30 bg-black/20 px-5 py-3.5 backdrop-blur-sm"
-            style={{ boxShadow: 'inset 0 0 20px rgba(212,163,115,0.06)' }}
+            className="mt-6 flex items-center justify-between rounded-2xl border border-[#D4AF37]/30 bg-black/20 px-5 py-3.5 backdrop-blur-sm"
+            style={{ boxShadow: 'inset 0 0 20px rgba(212, 175, 55,0.06)' }}
           >
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D4A373]/15">
-                <TrendingUp className="h-4 w-4 text-[#D4A373]" strokeWidth={2} />
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D4AF37]/15">
+                <TrendingUp className="h-4 w-4 text-[#D4AF37]" strokeWidth={2} />
               </span>
               <div>
                 <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-white/45">
@@ -151,7 +151,7 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
             <div className="flex items-center justify-end">
               <Link
                 href="/auth/forgot-password"
-                className="font-body text-[12px] italic text-white/55 underline-offset-4 transition-colors hover:text-[#D4A373] hover:underline"
+                className="font-body text-[12px] italic text-white/55 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
               >
                 Forgot password?
               </Link>
@@ -169,8 +169,8 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
             <button
               type="submit"
               disabled={isPending}
-              className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#D4A373] via-[#e1b487] to-[#D4A373] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all duration-200 hover:from-[#c4935f] hover:to-[#c4935f] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A373]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e3d32] disabled:cursor-not-allowed disabled:opacity-70"
-              style={{ boxShadow: '0 8px 24px -8px rgba(212,163,115,0.5)' }}
+              className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#D4AF37] via-[#e1b487] to-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all duration-200 hover:from-[#D4AF37] hover:to-[#D4AF37] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#163F33] disabled:cursor-not-allowed disabled:opacity-70"
+              style={{ boxShadow: '0 8px 24px -8px rgba(212, 175, 55,0.5)' }}
             >
               <span className="relative z-10">{isPending ? 'Signing in…' : 'Enter Partner Hub'}</span>
               <ArrowRight className="relative z-10 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -187,7 +187,7 @@ export default function AgentLoginForm({ resetSuccess, nextPath }: AgentLoginFor
             href="https://wa.me/601165043436?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20the%20Brand%20Partner%20program."
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
+            className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
           >
             Apply via WhatsApp →
           </a>
@@ -221,7 +221,7 @@ function PremiumInput({
       </span>
       <input
         id={inputId}
-        className="block w-full rounded-2xl border border-white/15 bg-black/15 px-4 py-3 font-body text-[14.5px] text-white placeholder:text-white/35 transition-all duration-200 hover:border-[#D4A373]/30 focus:border-[#D4A373]/55 focus:bg-black/25 focus:outline-none focus:ring-2 focus:ring-[#D4A373]/20"
+        className="block w-full rounded-2xl border border-white/15 bg-black/15 px-4 py-3 font-body text-[14.5px] text-white placeholder:text-white/35 transition-all duration-200 hover:border-[#D4AF37]/30 focus:border-[#D4AF37]/55 focus:bg-black/25 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20"
         {...rest}
       />
     </label>

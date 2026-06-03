@@ -68,7 +68,7 @@ export default function CustomerActions({
         type="button"
         disabled={pending}
         onClick={doReset}
-        className="rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60 disabled:opacity-50"
+        className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60 disabled:opacity-50"
       >
         Send password reset
       </button>
@@ -76,7 +76,7 @@ export default function CustomerActions({
         href={`/admin/customers/${customerId}/export`}
         target="_blank"
         rel="noopener"
-        className="rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60"
+        className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
       >
         Export PDPA data
       </a>
@@ -116,27 +116,27 @@ export default function CustomerActions({
       {confirmBlock ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#1e3d32]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
               Block this customer?
             </h2>
-            <p className="mt-1 text-[11.5px] text-[#2B2B2B]/65">
+            <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">
               They won&apos;t be able to sign in. Reversible at any time.
             </p>
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               Reason *
             </label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={2}
-              className="mt-1 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
             />
             {error ? <p className="mt-2 text-[12px] text-red-600">{error}</p> : null}
             <div className="mt-3 flex gap-2">
               <button
                 type="button"
                 onClick={() => setConfirmBlock(false)}
-                className="rounded-lg border border-[#1e3d32]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>

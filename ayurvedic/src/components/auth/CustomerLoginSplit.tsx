@@ -12,7 +12,7 @@ import { FloatingLeaf, BotanicalMandala } from '@/components/ui/Decorations'
  */
 export default function CustomerLoginSplit({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#152b22] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#163F33] text-white">
       {/* ── MOBILE-ONLY: full-screen warm brand canvas ──────────────────
          Direction 2 (Lifted Form Card) on mobile only. Fills the whole
          viewport with the same atmosphere as the desktop left pane, so
@@ -23,7 +23,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           className="absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(80% 50% at 30% 12%, rgba(212,163,115,0.22), transparent 70%), radial-gradient(70% 50% at 80% 92%, rgba(122,157,84,0.18), transparent 70%)',
+              'radial-gradient(80% 50% at 30% 12%, rgba(212, 175, 55,0.22), transparent 70%), radial-gradient(70% 50% at 80% 92%, rgba(46, 125, 90,0.18), transparent 70%)',
           }}
         />
         <div
@@ -38,14 +38,14 @@ export default function CustomerLoginSplit({ children }: { children: React.React
         <BotanicalMandala
           className="absolute -right-44 -top-8 h-[320px] w-[320px]"
           opacity={0.05}
-          stroke="#D4A373"
+          stroke="#D4AF37"
         />
         {/* Single, intentionally-placed leaf in the lower third — small,
             calm, doesn't crop the edge. */}
         <FloatingLeaf
           className="absolute right-4 bottom-40 h-9 w-8 rotate-[12deg]"
-          color="#7A9D54"
-          strokeColor="#D4A373"
+          color="#2E7D5A"
+          strokeColor="#D4AF37"
           opacity={0.14}
         />
       </div>
@@ -59,7 +59,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
             className="pointer-events-none absolute inset-0 hidden lg:block"
             style={{
               backgroundImage:
-                'radial-gradient(70% 60% at 30% 20%, rgba(212,163,115,0.18), transparent 65%), radial-gradient(60% 60% at 80% 100%, rgba(122,157,84,0.16), transparent 65%)',
+                'radial-gradient(70% 60% at 30% 20%, rgba(212, 175, 55,0.18), transparent 65%), radial-gradient(60% 60% at 80% 100%, rgba(46, 125, 90,0.16), transparent 65%)',
             }}
           />
           <div
@@ -74,18 +74,18 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           <BotanicalMandala
             className="pointer-events-none absolute -right-32 top-32 hidden h-[420px] w-[420px] lg:block"
             opacity={0.08}
-            stroke="#D4A373"
+            stroke="#D4AF37"
           />
           <FloatingLeaf
             className="pointer-events-none absolute right-12 bottom-16 hidden h-24 w-20 rotate-[12deg] lg:block"
-            color="#7A9D54"
-            strokeColor="#D4A373"
+            color="#2E7D5A"
+            strokeColor="#D4AF37"
             opacity={0.18}
           />
           <FloatingLeaf
             className="pointer-events-none absolute left-8 top-44 hidden h-16 w-14 -rotate-[20deg] lg:block"
-            color="#3d6b4f"
-            strokeColor="#D4A373"
+            color="#1E5B4B"
+            strokeColor="#D4AF37"
             opacity={0.22}
           />
 
@@ -101,19 +101,19 @@ export default function CustomerLoginSplit({ children }: { children: React.React
               />
               <span className="hidden font-heading text-[10px] font-bold uppercase tracking-[0.22em] leading-tight text-white/85 sm:flex sm:flex-col">
                 <span>Kerala Ayurvedic</span>
-                <span className="text-[#D4A373]">Lifestyle</span>
+                <span className="text-[#D4AF37]">Lifestyle</span>
               </span>
             </Link>
             <Link
               href="/"
-              className="group inline-flex items-center gap-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4A373] lg:hidden"
+              className="group inline-flex items-center gap-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4AF37] lg:hidden"
             >
               <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
               Back
             </Link>
             <Link
               href="/"
-              className="group hidden items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4A373] lg:inline-flex"
+              className="group hidden items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4AF37] lg:inline-flex"
             >
               <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
               Back to site
@@ -123,9 +123,9 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           {/* Editorial content — anchored top on mobile, centered on desktop */}
           <div className="relative z-10 flex flex-col px-6 py-3 sm:px-10 sm:py-6 lg:flex-1 lg:justify-center lg:px-14 lg:py-12">
             {/* Eyebrow */}
-            <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[#D4A373]/35 bg-[#D4A373]/10 px-3 py-1 sm:mb-5">
-              <Sparkles className="h-3 w-3 text-[#D4A373]" />
-              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A373]">
+            <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-3 py-1 sm:mb-5">
+              <Sparkles className="h-3 w-3 text-[#D4AF37]" />
+              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
                 Wellness Member
               </span>
             </div>
@@ -137,7 +137,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
             >
               Where the kitchen
               <br />
-              <em className="font-display not-italic text-[#D4A373]">is the pharmacy.</em>
+              <em className="font-display not-italic text-[#D4AF37]">is the pharmacy.</em>
             </h2>
 
             {/* Mobile-only finishing flourish — small gold rule + tagline.
@@ -145,7 +145,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
                 taking real vertical space. Hidden at sm+ where signature
                 line + offer chip already do this job. */}
             <div className="mt-4 flex items-center gap-2.5 sm:hidden">
-              <span className="h-px w-10 bg-gradient-to-r from-[#D4A373]/70 to-[#D4A373]/0" />
+              <span className="h-px w-10 bg-gradient-to-r from-[#D4AF37]/70 to-[#D4AF37]/0" />
               <span className="font-body text-[10.5px] italic text-white/55">
                 Authentic Kerala Ayurveda · since 2008
               </span>
@@ -160,13 +160,13 @@ export default function CustomerLoginSplit({ children }: { children: React.React
             </p>
 
             {/* Welcome offer chip — desktop + tablet only (form-side on mobile already has the price prompt via the create-account tab) */}
-            <div className="mt-6 hidden w-fit items-center gap-2.5 rounded-full border border-[#D4A373]/30 bg-[#D4A373]/[0.08] py-2 pl-2.5 pr-4 backdrop-blur-sm sm:mt-8 sm:flex">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#D4A373]/20">
-                <Gift className="h-3 w-3 text-[#D4A373]" />
+            <div className="mt-6 hidden w-fit items-center gap-2.5 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/[0.08] py-2 pl-2.5 pr-4 backdrop-blur-sm sm:mt-8 sm:flex">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#D4AF37]/20">
+                <Gift className="h-3 w-3 text-[#D4AF37]" />
               </span>
               <span className="font-body text-[12.5px] text-white/80">
                 New here?{' '}
-                <span className="font-semibold text-[#D4A373]">RM 10 off</span> your first order.
+                <span className="font-semibold text-[#D4AF37]">RM 10 off</span> your first order.
               </span>
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
               <span>Brickfields, KL</span>
               <span className="h-px w-4 bg-white/15" />
               <span className="inline-flex items-center gap-1">
-                <Star className="h-2.5 w-2.5 fill-[#D4A373] text-[#D4A373]" />
+                <Star className="h-2.5 w-2.5 fill-[#D4AF37] text-[#D4AF37]" />
                 4.9
               </span>
               <span className="h-px w-4 bg-white/15" />
@@ -192,7 +192,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
         {/* Mobile: a "lifted" glass card floating on the warm canvas,
             with margin around all four sides.
             Desktop: full-bleed deeper-green pane (unchanged). */}
-        <section className="relative flex flex-col px-3 pb-3 sm:px-4 sm:pb-4 lg:p-0 lg:bg-[#1d3d31] lg:h-screen">
+        <section className="relative flex flex-col px-3 pb-3 sm:px-4 sm:pb-4 lg:p-0 lg:bg-[#163F33] lg:h-screen">
           {/* Desktop-only subtle top highlight */}
           <div
             aria-hidden
@@ -201,7 +201,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           <div
             className={[
               // Mobile: glass card
-              'relative flex flex-1 flex-col rounded-[28px] border border-white/12 bg-[#1d3d31]/88 backdrop-blur-xl',
+              'relative flex flex-1 flex-col rounded-[28px] border border-white/12 bg-[#163F33]/88 backdrop-blur-xl',
               'shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)]',
               // Desktop overrides: full-bleed, no card chrome
               'lg:rounded-none lg:border-0 lg:bg-transparent lg:shadow-none lg:backdrop-blur-none',

@@ -39,7 +39,7 @@ export default function WholesaleShopClient({
 
   if (catalog.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No products are currently available for wholesale. Check back later or
         ask admin to enable products in the wholesale shop.
       </div>
@@ -49,19 +49,19 @@ export default function WholesaleShopClient({
   return (
     <div className="flex flex-col gap-4">
       {/* Filter bar + cart trigger */}
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#1e3d32]/10 bg-white p-3">
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#163F33]/10 bg-white p-3">
         <input
           type="search"
           placeholder="Search product or SKU…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="min-w-[200px] flex-1 rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-1.5 text-[13px]"
+          className="min-w-[200px] flex-1 rounded-lg border border-[#163F33]/15 bg-white px-3 py-1.5 text-[13px]"
         />
         {categories.length > 0 ? (
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-1.5 text-[13px]"
+            className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-1.5 text-[13px]"
           >
             <option value="">All categories</option>
             {categories.map((c) => (
@@ -74,12 +74,12 @@ export default function WholesaleShopClient({
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="ml-auto inline-flex items-center gap-1.5 rounded-lg bg-[#2F5D50] px-3 py-1.5 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32]"
+          className="ml-auto inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
         >
           <ShoppingCart className="h-3.5 w-3.5" strokeWidth={2} />
           Cart
           {cart.totalUnits > 0 ? (
-            <span className="ml-0.5 rounded-full bg-[#D4A373] px-1.5 py-0.5 text-[10.5px] font-bold text-white">
+            <span className="ml-0.5 rounded-full bg-[#D4AF37] px-1.5 py-0.5 text-[10.5px] font-bold text-white">
               {cart.totalUnits}
             </span>
           ) : null}
@@ -88,7 +88,7 @@ export default function WholesaleShopClient({
 
       {/* Catalog grid */}
       {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No products match your filter.
         </div>
       ) : (
@@ -117,8 +117,8 @@ function ProductCard({ product: p }: { product: WholesaleCatalogItem }) {
   const outOfStock = p.stockQty <= 0 && !p.allowBackorder
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
-      <div className="relative aspect-square bg-[#FAF6EE]/40">
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+      <div className="relative aspect-square bg-[#F7F2E8]/40">
         {p.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -127,7 +127,7 @@ function ProductCard({ product: p }: { product: WholesaleCatalogItem }) {
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-[#2B2B2B]/30">
+          <div className="flex h-full items-center justify-center text-[#1F1F1F]/30">
             No image
           </div>
         )}
@@ -142,22 +142,22 @@ function ProductCard({ product: p }: { product: WholesaleCatalogItem }) {
         ) : null}
       </div>
       <div className="flex flex-1 flex-col p-3">
-        <h3 className="font-heading text-[13.5px] font-semibold text-[#1e3d32]">
+        <h3 className="font-heading text-[13.5px] font-semibold text-[#163F33]">
           {p.name}
         </h3>
         {p.sku ? (
-          <p className="mt-0.5 font-mono text-[10.5px] text-[#2B2B2B]/55">{p.sku}</p>
+          <p className="mt-0.5 font-mono text-[10.5px] text-[#1F1F1F]/55">{p.sku}</p>
         ) : null}
         {p.shortDescription ? (
-          <p className="mt-1.5 line-clamp-2 text-[11.5px] text-[#2B2B2B]/65">
+          <p className="mt-1.5 line-clamp-2 text-[11.5px] text-[#1F1F1F]/65">
             {p.shortDescription}
           </p>
         ) : null}
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="font-heading text-[16px] font-bold text-[#1e3d32]">
+          <span className="font-heading text-[16px] font-bold text-[#163F33]">
             RM {p.wholesalePriceRm.toFixed(2)}
           </span>
-          <span className="text-[11px] text-[#2B2B2B]/55 line-through">
+          <span className="text-[11px] text-[#1F1F1F]/55 line-through">
             RM {p.retailPriceRm.toFixed(2)}
           </span>
         </div>
@@ -173,17 +173,17 @@ function ProductCard({ product: p }: { product: WholesaleCatalogItem }) {
               type="button"
               disabled={outOfStock}
               onClick={() => cart.add(p.id, 1)}
-              className="w-full rounded-lg bg-[#2F5D50] py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32] disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg bg-[#1E5B4B] py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {outOfStock ? 'Out of stock' : 'Add to cart'}
             </button>
           ) : (
-            <div className="flex items-center justify-between rounded-lg border border-[#2F5D50]/30 bg-[#FAF6EE]/40 p-1">
+            <div className="flex items-center justify-between rounded-lg border border-[#1E5B4B]/30 bg-[#F7F2E8]/40 p-1">
               <button
                 type="button"
                 onClick={() => cart.setQty(p.id, qty - 1)}
                 aria-label="Decrease"
-                className="flex h-7 w-7 items-center justify-center rounded-md text-[#1e3d32] hover:bg-white"
+                className="flex h-7 w-7 items-center justify-center rounded-md text-[#163F33] hover:bg-white"
               >
                 <Minus className="h-3.5 w-3.5" />
               </button>
@@ -195,13 +195,13 @@ function ProductCard({ product: p }: { product: WholesaleCatalogItem }) {
                   const n = Math.max(0, Math.floor(Number(e.target.value) || 0))
                   cart.setQty(p.id, n)
                 }}
-                className="w-12 bg-transparent text-center text-[13px] font-semibold text-[#1e3d32] focus:outline-none"
+                className="w-12 bg-transparent text-center text-[13px] font-semibold text-[#163F33] focus:outline-none"
               />
               <button
                 type="button"
                 onClick={() => cart.add(p.id, 1)}
                 aria-label="Increase"
-                className="flex h-7 w-7 items-center justify-center rounded-md text-[#1e3d32] hover:bg-white"
+                className="flex h-7 w-7 items-center justify-center rounded-md text-[#163F33] hover:bg-white"
               >
                 <Plus className="h-3.5 w-3.5" />
               </button>
@@ -257,14 +257,14 @@ function CartDrawer({
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <header className="flex items-center justify-between border-b border-[#1e3d32]/10 px-5 py-4">
-          <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">
+        <header className="flex items-center justify-between border-b border-[#163F33]/10 px-5 py-4">
+          <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">
             Your wholesale cart
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[#1e3d32]/60 hover:bg-[#1e3d32]/[0.06]"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-[#163F33]/60 hover:bg-[#163F33]/[0.06]"
             aria-label="Close"
           >
             <X className="h-4 w-4" />
@@ -273,7 +273,7 @@ function CartDrawer({
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {enriched.length === 0 ? (
-            <p className="mt-12 text-center text-[13px] italic text-[#2B2B2B]/55">
+            <p className="mt-12 text-center text-[13px] italic text-[#1F1F1F]/55">
               Your cart is empty. Browse the shop and add products to get started.
             </p>
           ) : (
@@ -281,9 +281,9 @@ function CartDrawer({
               {enriched.map(({ line, product: p }) => (
                 <li
                   key={p.id}
-                  className="flex gap-3 rounded-2xl border border-[#1e3d32]/8 p-3"
+                  className="flex gap-3 rounded-2xl border border-[#163F33]/8 p-3"
                 >
-                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-[#FAF6EE]/40">
+                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-[#F7F2E8]/40">
                     {p.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -294,18 +294,18 @@ function CartDrawer({
                     ) : null}
                   </div>
                   <div className="flex flex-1 flex-col">
-                    <p className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+                    <p className="font-heading text-[13px] font-semibold text-[#163F33]">
                       {p.name}
                     </p>
-                    <p className="text-[11px] text-[#2B2B2B]/55">
+                    <p className="text-[11px] text-[#1F1F1F]/55">
                       RM {p.wholesalePriceRm.toFixed(2)} each
                     </p>
                     <div className="mt-2 flex items-center justify-between">
-                      <div className="flex items-center gap-1 rounded-lg border border-[#1e3d32]/15 p-0.5">
+                      <div className="flex items-center gap-1 rounded-lg border border-[#163F33]/15 p-0.5">
                         <button
                           type="button"
                           onClick={() => cart.setQty(p.id, line.quantity - 1)}
-                          className="flex h-6 w-6 items-center justify-center rounded text-[#1e3d32]"
+                          className="flex h-6 w-6 items-center justify-center rounded text-[#163F33]"
                           aria-label="Decrease"
                         >
                           <Minus className="h-3 w-3" />
@@ -316,13 +316,13 @@ function CartDrawer({
                         <button
                           type="button"
                           onClick={() => cart.add(p.id, 1)}
-                          className="flex h-6 w-6 items-center justify-center rounded text-[#1e3d32]"
+                          className="flex h-6 w-6 items-center justify-center rounded text-[#163F33]"
                           aria-label="Increase"
                         >
                           <Plus className="h-3 w-3" />
                         </button>
                       </div>
-                      <span className="font-heading text-[13px] font-bold text-[#1e3d32]">
+                      <span className="font-heading text-[13px] font-bold text-[#163F33]">
                         RM {(p.wholesalePriceRm * line.quantity).toFixed(2)}
                       </span>
                     </div>
@@ -341,20 +341,20 @@ function CartDrawer({
         </div>
 
         {enriched.length > 0 ? (
-          <footer className="border-t border-[#1e3d32]/10 px-5 py-4">
+          <footer className="border-t border-[#163F33]/10 px-5 py-4">
             <div className="flex items-baseline justify-between">
-              <span className="text-[12px] text-[#2B2B2B]/65">Subtotal</span>
-              <span className="font-heading text-[18px] font-bold text-[#1e3d32]">
+              <span className="text-[12px] text-[#1F1F1F]/65">Subtotal</span>
+              <span className="font-heading text-[18px] font-bold text-[#163F33]">
                 RM {subtotal.toFixed(2)}
               </span>
             </div>
-            <p className="mt-1 text-[10.5px] text-[#2B2B2B]/50">
+            <p className="mt-1 text-[10.5px] text-[#1F1F1F]/50">
               Shipping confirmed at checkout
             </p>
             <Link
               href="/agent/wholesale-shop/checkout"
               onClick={onClose}
-              className="mt-3 block w-full rounded-lg bg-[#2F5D50] py-2.5 text-center text-[13px] font-semibold text-white hover:bg-[#1e3d32]"
+              className="mt-3 block w-full rounded-lg bg-[#1E5B4B] py-2.5 text-center text-[13px] font-semibold text-white hover:bg-[#163F33]"
             >
               Review & checkout
             </Link>

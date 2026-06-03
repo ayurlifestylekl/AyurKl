@@ -27,7 +27,7 @@ const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(function AuthInpu
           'block w-full rounded-2xl border border-white/15 bg-white/[0.04] px-4 py-3 font-body text-[14.5px] text-white placeholder:text-white/35',
           'transition-colors duration-200',
           'hover:border-white/25',
-          'focus:outline-none focus:border-[#D4A373]/55 focus:bg-white/[0.06] focus:ring-2 focus:ring-[#D4A373]/25',
+          'focus:outline-none focus:border-[#D4AF37]/55 focus:bg-white/[0.06] focus:ring-2 focus:ring-[#D4AF37]/25',
           errorText ? 'border-red-400/60 focus:border-red-400/80 focus:ring-red-400/20' : '',
           className ?? '',
         ].join(' ')}

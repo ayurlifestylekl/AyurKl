@@ -43,7 +43,7 @@ export default function RelatedTherapies({ items }: RelatedTherapiesProps) {
                 className="absolute inset-0"
                 style={{
                   backgroundImage:
-                    'radial-gradient(circle, rgba(212,163,115,0.18) 1px, transparent 1px)',
+                    'radial-gradient(circle, rgba(212, 175, 55,0.18) 1px, transparent 1px)',
                   backgroundSize: '12px 12px',
                 }}
                 aria-hidden

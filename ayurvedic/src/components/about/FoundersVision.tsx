@@ -75,7 +75,7 @@ export default function FoundersVision({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(to right, rgba(250,246,238,0.94) 0%, rgba(250,246,238,0.75) 60%, rgba(250,246,238,0.85) 100%)',
+            'linear-gradient(to right, rgba(247, 242, 232,0.94) 0%, rgba(247, 242, 232,0.75) 60%, rgba(247, 242, 232,0.85) 100%)',
         }}
       />
       {/* Warm gold corner glow */}
@@ -84,7 +84,7 @@ export default function FoundersVision({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 60% 50% at 92% 12%, rgba(212,163,115,0.18) 0%, transparent 60%)',
+            'radial-gradient(ellipse 60% 50% at 92% 12%, rgba(212, 175, 55,0.18) 0%, transparent 60%)',
         }}
       />
       <div
@@ -98,7 +98,7 @@ export default function FoundersVision({
         className="pointer-events-none absolute left-0 right-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 0%, rgba(212,163,115,0.45) 50%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, rgba(212, 175, 55,0.45) 50%, transparent 100%)',
         }}
       />
       <div
@@ -106,7 +106,7 @@ export default function FoundersVision({
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 0%, rgba(212,163,115,0.45) 50%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, rgba(212, 175, 55,0.45) 50%, transparent 100%)',
         }}
       />
 
@@ -121,7 +121,7 @@ export default function FoundersVision({
                 initial="initial"
                 whileInView="animate"
                 viewport={inViewOnce}
-                className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-[0_24px_60px_-20px_rgba(47,93,80,0.35),0_8px_20px_rgba(47,93,80,0.1)]"
+                className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-[0_24px_60px_-20px_rgba(30, 91, 75,0.35),0_8px_20px_rgba(30, 91, 75,0.1)]"
               >
                 <Image
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80"
@@ -132,14 +132,14 @@ export default function FoundersVision({
                 />
                 <div
                   className="absolute inset-0 mix-blend-multiply"
-                  style={{ backgroundColor: 'rgba(47,93,80,0.08)' }}
+                  style={{ backgroundColor: 'rgba(30, 91, 75,0.08)' }}
                   aria-hidden
                 />
                 <div
                   className="absolute inset-0"
                   style={{
                     background:
-                      'linear-gradient(to top, rgba(26,46,38,0.4) 0%, transparent 40%)',
+                      'linear-gradient(to top, rgba(15, 44, 36,0.4) 0%, transparent 40%)',
                   }}
                   aria-hidden
                 />
@@ -150,7 +150,7 @@ export default function FoundersVision({
                   className="pointer-events-none absolute -left-3 -top-2 h-3.5 w-14 rotate-[-18deg]"
                   style={{
                     background:
-                      'linear-gradient(135deg, rgba(212,163,115,0.7) 0%, rgba(212,163,115,0.4) 60%, rgba(212,163,115,0.6) 100%)',
+                      'linear-gradient(135deg, rgba(212, 175, 55,0.7) 0%, rgba(212, 175, 55,0.4) 60%, rgba(212, 175, 55,0.6) 100%)',
                     boxShadow:
                       'inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08)',
                   }}
@@ -201,7 +201,7 @@ export default function FoundersVision({
               className="absolute -left-7 bottom-0 top-0 hidden w-px origin-center lg:block"
               style={{
                 background:
-                  'linear-gradient(to bottom, transparent, rgba(212,163,115,0.35), transparent)',
+                  'linear-gradient(to bottom, transparent, rgba(212, 175, 55,0.35), transparent)',
               }}
               aria-hidden
             />
@@ -211,7 +211,7 @@ export default function FoundersVision({
               className="mb-6 h-px lg:hidden"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(212,163,115,0.3), transparent)',
+                  'linear-gradient(to right, rgba(212, 175, 55,0.3), transparent)',
               }}
               aria-hidden
             />
@@ -229,7 +229,7 @@ export default function FoundersVision({
                   className="h-px w-8"
                   style={{
                     background:
-                      'linear-gradient(to right, rgba(212,163,115,0.7), transparent)',
+                      'linear-gradient(to right, rgba(212, 175, 55,0.7), transparent)',
                   }}
                 />
                 <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">

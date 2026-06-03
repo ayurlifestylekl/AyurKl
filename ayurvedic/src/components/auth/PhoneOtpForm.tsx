@@ -118,7 +118,7 @@ export default function PhoneOtpForm({ mode }: PhoneOtpFormProps) {
             type="button"
             onClick={requestCode}
             disabled={isPending || phone.length < 5}
-            className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4A373] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+            className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isPending ? 'Sending code…' : 'Send code'}
           </button>
@@ -130,7 +130,7 @@ export default function PhoneOtpForm({ mode }: PhoneOtpFormProps) {
           <button
             type="button"
             onClick={backToPhone}
-            className="inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4A373]"
+            className="inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-[#D4AF37]"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Change number
@@ -163,7 +163,7 @@ export default function PhoneOtpForm({ mode }: PhoneOtpFormProps) {
             type="button"
             onClick={submitCode}
             disabled={isPending || code.length !== 6}
-            className="mt-1 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4A373] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+            className="mt-1 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isPending ? 'Verifying…' : mode === 'signup' ? 'Create account' : 'Verify & sign in'}
           </button>
@@ -173,7 +173,7 @@ export default function PhoneOtpForm({ mode }: PhoneOtpFormProps) {
               type="button"
               onClick={resend}
               disabled={resendIn > 0 || isPending}
-              className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline disabled:cursor-not-allowed disabled:text-white/35 disabled:no-underline disabled:hover:text-white/35"
+              className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline disabled:cursor-not-allowed disabled:text-white/35 disabled:no-underline disabled:hover:text-white/35"
             >
               {resendIn > 0 ? `Resend in ${resendIn}s` : 'Resend code'}
             </button>

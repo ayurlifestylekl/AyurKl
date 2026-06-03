@@ -83,28 +83,28 @@ export default function BundleComposition({
   }
 
   return (
-    <div className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-      <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+    <div className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+      <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
         Bundle composition
       </h3>
-      <p className="mt-1 text-[11px] text-[#2B2B2B]/55">
+      <p className="mt-1 text-[11px] text-[#1F1F1F]/55">
         Add the products that make up this kit. Customers see the bundle as one purchasable item.
       </p>
 
       {items.length === 0 ? (
-        <p className="mt-3 rounded-lg border border-dashed border-[#1e3d32]/15 bg-[#FAF6EE]/40 p-4 text-center text-[12px] italic text-[#2B2B2B]/55">
+        <p className="mt-3 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40 p-4 text-center text-[12px] italic text-[#1F1F1F]/55">
           No components yet.
         </p>
       ) : (
-        <ul className="mt-3 divide-y divide-[#1e3d32]/6">
+        <ul className="mt-3 divide-y divide-[#163F33]/6">
           {items.map((it) => (
             <li key={it.id} className="flex items-center gap-2 py-2 text-[13px]">
               <span className="flex-1">
-                <span className="font-semibold text-[#1e3d32]">{it.childName}</span>
-                <span className="ml-2 text-[11px] text-[#2B2B2B]/55">{it.childSku}</span>
+                <span className="font-semibold text-[#163F33]">{it.childName}</span>
+                <span className="ml-2 text-[11px] text-[#1F1F1F]/55">{it.childSku}</span>
               </span>
               <span className="w-12 text-right">×{it.quantity}</span>
-              <span className="w-24 text-right text-[12px] text-[#2B2B2B]/65">
+              <span className="w-24 text-right text-[12px] text-[#1F1F1F]/65">
                 RM {(it.childPriceRm * it.quantity).toFixed(2)}
               </span>
               <button
@@ -118,7 +118,7 @@ export default function BundleComposition({
               </button>
             </li>
           ))}
-          <li className="flex items-center justify-end gap-2 pt-2 text-[12.5px] font-semibold text-[#1e3d32]">
+          <li className="flex items-center justify-end gap-2 pt-2 text-[12.5px] font-semibold text-[#163F33]">
             Components total: RM {total.toFixed(2)}
           </li>
         </ul>
@@ -128,7 +128,7 @@ export default function BundleComposition({
         <select
           value={picked}
           onChange={(e) => setPicked(e.target.value)}
-          className="flex-1 min-w-[200px] rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+          className="flex-1 min-w-[200px] rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
         >
           <option value="">Add component…</option>
           {choices.map((p) => (
@@ -142,13 +142,13 @@ export default function BundleComposition({
           min="1"
           value={qty}
           onChange={(e) => setQty(Math.max(1, Number(e.target.value)))}
-          className="w-16 rounded-lg border border-[#1e3d32]/15 px-2 py-2 text-center text-[13px]"
+          className="w-16 rounded-lg border border-[#163F33]/15 px-2 py-2 text-center text-[13px]"
         />
         <button
           type="button"
           disabled={pending || !picked}
           onClick={add}
-          className="inline-flex items-center gap-1 rounded-lg bg-[#2F5D50] px-3 py-2 text-[12px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+          className="inline-flex items-center gap-1 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
         >
           <Plus className="h-3 w-3" /> Add
         </button>

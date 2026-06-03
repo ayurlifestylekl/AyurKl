@@ -51,7 +51,7 @@ export default function CategoryBox({ category, index }: CategoryBoxProps) {
                 className="absolute inset-0 bg-primary"
                 style={{
                   backgroundImage:
-                    'radial-gradient(circle, rgba(212,163,115,0.18) 1px, transparent 1px)',
+                    'radial-gradient(circle, rgba(212, 175, 55,0.18) 1px, transparent 1px)',
                   backgroundSize: '14px 14px',
                 }}
                 aria-hidden
@@ -77,7 +77,7 @@ export default function CategoryBox({ category, index }: CategoryBoxProps) {
                 className="my-2.5 h-px"
                 style={{
                   background:
-                    'linear-gradient(to right, rgba(212,163,115,0.5), transparent)',
+                    'linear-gradient(to right, rgba(212, 175, 55,0.5), transparent)',
                 }}
                 aria-hidden
               />

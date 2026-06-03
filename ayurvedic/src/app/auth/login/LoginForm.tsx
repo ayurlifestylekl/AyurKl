@@ -99,7 +99,7 @@ export default function LoginForm({
                 window.history.pushState(null, '', '?tab=signup')
                 setTab('signup')
               }}
-              className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
+              className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
             >
               Create an account
             </button>
@@ -113,7 +113,7 @@ export default function LoginForm({
                 window.history.pushState(null, '', '?')
                 setTab('signin')
               }}
-              className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
+              className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
             >
               Sign in
             </button>
@@ -206,7 +206,7 @@ function SignInPane({ nextPath }: { nextPath?: string }) {
         <div className="flex items-center justify-end">
           <Link
             href="/auth/forgot-password"
-            className="font-body text-[11.5px] text-white/55 underline-offset-4 transition-colors hover:text-[#D4A373] hover:underline"
+            className="font-body text-[11.5px] text-white/55 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
           >
             Forgot password?
           </Link>
@@ -215,7 +215,7 @@ function SignInPane({ nextPath }: { nextPath?: string }) {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#D4A373] px-7 font-heading text-[13px] font-bold uppercase tracking-wider text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#D4AF37] px-7 font-heading text-[13px] font-bold uppercase tracking-wider text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? 'Sending code…' : 'Continue'}
         </button>
@@ -327,7 +327,7 @@ function SignUpPane({ nextPath }: { nextPath?: string }) {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#D4A373] px-7 font-heading text-[13px] font-bold uppercase tracking-wider text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#D4AF37] px-7 font-heading text-[13px] font-bold uppercase tracking-wider text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? 'Creating account…' : 'Create account'}
         </button>

@@ -91,7 +91,7 @@ export default async function AdminPartnerDetailPage({
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/partners"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to partners
       </Link>
@@ -99,7 +99,7 @@ export default async function AdminPartnerDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               {u?.full_name ?? 'Unnamed partner'}
             </h1>
             <span
@@ -112,12 +112,12 @@ export default async function AdminPartnerDetailPage({
               {a.status}
             </span>
             {useMock ? (
-              <span className="rounded-full border border-[#D4A373]/40 bg-[#FAF6EE] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
+              <span className="rounded-full border border-[#D4AF37]/40 bg-[#F7F2E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
                 Demo data
               </span>
             ) : null}
           </div>
-          <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             Joined {new Date(a.created_at).toLocaleDateString('en-MY')} ·{' '}
             <span className="capitalize">{a.commission_type}</span> · {a.commission_rate}%
             commission
@@ -129,47 +129,47 @@ export default async function AdminPartnerDetailPage({
         <div className="flex flex-col gap-4">
           {/* Performance summary */}
           <article
-            className="rounded-2xl border border-[#1e3d32]/8 bg-white p-5"
+            className="rounded-2xl border border-[#163F33]/8 bg-white p-5"
             style={{
               boxShadow:
-                '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+                '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
             }}
           >
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Performance
             </h2>
             <div className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[#2B2B2B]/55">
+                <p className="text-[10px] uppercase tracking-wider text-[#1F1F1F]/55">
                   Attributed orders
                 </p>
-                <p className="mt-1 font-heading text-[22px] font-bold text-[#1e3d32]">
+                <p className="mt-1 font-heading text-[22px] font-bold text-[#163F33]">
                   {orders.length || 0}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[#2B2B2B]/55">
+                <p className="text-[10px] uppercase tracking-wider text-[#1F1F1F]/55">
                   Sales generated
                 </p>
-                <p className="mt-1 font-heading text-[22px] font-bold text-[#1e3d32]">
+                <p className="mt-1 font-heading text-[22px] font-bold text-[#163F33]">
                   RM {Number(a.total_sales_generated_rm ?? 0).toFixed(2)}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[#2B2B2B]/55">
+                <p className="text-[10px] uppercase tracking-wider text-[#1F1F1F]/55">
                   Commission earned
                 </p>
-                <p className="mt-1 font-heading text-[22px] font-bold text-[#D4A373]">
+                <p className="mt-1 font-heading text-[22px] font-bold text-[#D4AF37]">
                   RM {Number(a.total_commission_earned_rm ?? 0).toFixed(2)}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[#2B2B2B]/55">
+                <p className="text-[10px] uppercase tracking-wider text-[#1F1F1F]/55">
                   Pending payout
                 </p>
                 <p
                   className={`mt-1 font-heading text-[22px] font-bold ${
-                    pendingTotal > 0 ? 'text-[#D4A373]' : 'text-[#2B2B2B]/40'
+                    pendingTotal > 0 ? 'text-[#D4AF37]' : 'text-[#1F1F1F]/40'
                   }`}
                 >
                   RM {pendingTotal.toFixed(2)}
@@ -177,7 +177,7 @@ export default async function AdminPartnerDetailPage({
                 {pendingTotal > 0 ? (
                   <Link
                     href="/admin/partners/payouts"
-                    className="mt-1 inline-block text-[10.5px] font-semibold text-[#D4A373] hover:text-[#1e3d32]"
+                    className="mt-1 inline-block text-[10.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
                   >
                     Pay out →
                   </Link>
@@ -187,29 +187,29 @@ export default async function AdminPartnerDetailPage({
           </article>
 
           {/* Referral link */}
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Referral
             </h2>
-            <p className="mt-2 text-[12px] text-[#2B2B2B]/65">
-              Code: <code className="font-mono font-bold text-[#1e3d32]">{a.referral_code}</code>
+            <p className="mt-2 text-[12px] text-[#1F1F1F]/65">
+              Code: <code className="font-mono font-bold text-[#163F33]">{a.referral_code}</code>
             </p>
-            <p className="mt-2 break-all font-mono text-[11px] text-[#2B2B2B]/65">
+            <p className="mt-2 break-all font-mono text-[11px] text-[#1F1F1F]/65">
               {referralLink}
             </p>
           </article>
 
           {/* Attributed orders */}
-          <article className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
-            <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+            <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
               Attributed orders ({orders.length})
             </header>
             {orders.length === 0 ? (
-              <p className="px-5 py-6 text-center text-[12.5px] italic text-[#2B2B2B]/55">
+              <p className="px-5 py-6 text-center text-[12.5px] italic text-[#1F1F1F]/55">
                 No attributed orders yet.
               </p>
             ) : (
-              <ul className="divide-y divide-[#1e3d32]/6">
+              <ul className="divide-y divide-[#163F33]/6">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {orders.map((o: any) => {
                   const cust = Array.isArray(o.customer) ? o.customer[0] : o.customer
@@ -220,16 +220,16 @@ export default async function AdminPartnerDetailPage({
                     >
                       <Link
                         href={`/admin/orders/${o.id}`}
-                        className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                        className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                       >
                         #{String(o.id).slice(-6).toUpperCase()}
                       </Link>
-                      <span className="text-[#2B2B2B]/65">{cust?.full_name ?? '—'}</span>
+                      <span className="text-[#1F1F1F]/65">{cust?.full_name ?? '—'}</span>
                       <span className="text-[12px]">{o.fulfillment_status}</span>
                       <span className="font-semibold">
                         RM {Number(o.total_amount_rm).toFixed(2)}
                       </span>
-                      <span className="text-[11px] text-[#2B2B2B]/55">
+                      <span className="text-[11px] text-[#1F1F1F]/55">
                         {new Date(o.created_at).toLocaleDateString('en-MY')}
                       </span>
                     </li>
@@ -240,15 +240,15 @@ export default async function AdminPartnerDetailPage({
           </article>
 
           {/* Commission ledger */}
-          <article className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
-            <header className="flex items-center justify-between border-b border-[#1e3d32]/6 px-5 py-3">
-              <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+            <header className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3">
+              <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
                 Commission ledger ({commissions.length})
               </h2>
               {pendingTotal > 0 ? (
                 <Link
                   href="/admin/partners/payouts"
-                  className="text-[11px] font-semibold text-[#D4A373] hover:text-[#1e3d32]"
+                  className="text-[11px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
                 >
                   Pending RM {pendingTotal.toFixed(2)} →
                 </Link>
@@ -259,32 +259,32 @@ export default async function AdminPartnerDetailPage({
           </article>
 
           {/* Payouts history */}
-          <article className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
-            <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+            <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
               Payouts history ({payouts.length})
             </header>
             {payouts.length === 0 ? (
-              <p className="px-5 py-6 text-center text-[12.5px] italic text-[#2B2B2B]/55">
+              <p className="px-5 py-6 text-center text-[12.5px] italic text-[#1F1F1F]/55">
                 No payouts recorded yet.
               </p>
             ) : (
-              <ul className="divide-y divide-[#1e3d32]/6">
+              <ul className="divide-y divide-[#163F33]/6">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(payouts as any[]).map((p) => (
                   <li
                     key={p.id}
                     className="flex items-center justify-between px-5 py-3 text-[13px]"
                   >
-                    <span className="text-[12px] text-[#2B2B2B]/65">
+                    <span className="text-[12px] text-[#1F1F1F]/65">
                       {new Date(p.created_at).toLocaleDateString('en-MY')}
                     </span>
-                    <span className="text-[11.5px] text-[#2B2B2B]/55 capitalize">
+                    <span className="text-[11.5px] text-[#1F1F1F]/55 capitalize">
                       {String(p.payment_method).replace('_', ' ')}
                     </span>
-                    <span className="text-[11px] text-[#2B2B2B]/55">
+                    <span className="text-[11px] text-[#1F1F1F]/55">
                       {p.commission_count} commissions
                     </span>
-                    <span className="font-semibold text-[#1e3d32]">
+                    <span className="font-semibold text-[#163F33]">
                       RM {Number(p.amount_rm).toFixed(2)}
                     </span>
                   </li>
@@ -297,13 +297,13 @@ export default async function AdminPartnerDetailPage({
         {/* Sidebar */}
         <div className="flex flex-col gap-4">
           {/* Contact card */}
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Contact
             </h3>
             <p className="mt-2 text-[13px] font-semibold">{u?.full_name ?? '—'}</p>
-            <p className="text-[12px] text-[#2B2B2B]/65">{u?.email ?? '—'}</p>
-            <p className="text-[12px] text-[#2B2B2B]/65">{u?.phone_number ?? '—'}</p>
+            <p className="text-[12px] text-[#1F1F1F]/65">{u?.email ?? '—'}</p>
+            <p className="text-[12px] text-[#1F1F1F]/65">{u?.phone_number ?? '—'}</p>
           </article>
 
           <PartnerControls

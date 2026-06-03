@@ -35,7 +35,7 @@ export default function PostHero({ post, readingMinutes }: PostHeroProps) {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 8% 10%, rgba(212,163,115,0.16) 0%, transparent 55%), radial-gradient(ellipse at 92% 0%, rgba(122,157,84,0.10) 0%, transparent 50%)',
+            'radial-gradient(ellipse at 8% 10%, rgba(212, 175, 55,0.16) 0%, transparent 55%), radial-gradient(ellipse at 92% 0%, rgba(46, 125, 90,0.10) 0%, transparent 50%)',
         }}
       />
       <div
@@ -140,7 +140,7 @@ export default function PostHero({ post, readingMinutes }: PostHeroProps) {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 0.92, 0.38, 1] }}
           className="relative mx-auto mt-16 max-w-[1280px] px-6 sm:mt-20 sm:px-8 lg:px-12"
         >
-          <div className="relative aspect-[16/9] overflow-hidden rounded-[28px] shadow-[0_2px_4px_rgba(47,93,80,0.06),0_40px_100px_-30px_rgba(47,93,80,0.32)] ring-1 ring-primary/10">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-[28px] shadow-[0_2px_4px_rgba(30, 91, 75,0.06),0_40px_100px_-30px_rgba(30, 91, 75,0.32)] ring-1 ring-primary/10">
             <Image
               src={post.heroImageUrl}
               alt={post.heroImageAlt ?? post.title}

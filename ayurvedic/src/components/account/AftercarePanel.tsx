@@ -21,20 +21,20 @@ export default function AftercarePanel({ lastCompleted }: AftercarePanelProps) {
   return (
     <section
       id="aftercare"
-      className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
-      <div className="flex items-center gap-2.5 border-b border-[#1e3d32]/6 px-5 py-3 sm:px-6">
-        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-          <ScrollText className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+      <div className="flex items-center gap-2.5 border-b border-[#163F33]/6 px-5 py-3 sm:px-6">
+        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+          <ScrollText className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
         </span>
-        <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
           Aftercare
         </h2>
-        <span className="ml-auto font-body text-[11.5px] text-[#2B2B2B]/50">
+        <span className="ml-auto font-body text-[11.5px] text-[#1F1F1F]/50">
           {lastCompleted.treatment_name} · {dateLabel}
         </span>
       </div>
@@ -43,12 +43,12 @@ export default function AftercarePanel({ lastCompleted }: AftercarePanelProps) {
         {hasNotes ? (
           <article>
             <p
-              className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+              className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
             >
               From your last visit with {lastCompleted.doctor_name}
             </p>
             <div
-              className="mt-3 font-body text-[14px] text-[#2B2B2B]/80 whitespace-pre-line"
+              className="mt-3 font-body text-[14px] text-[#1F1F1F]/80 whitespace-pre-line"
               style={{ lineHeight: 1.7 }}
             >
               {lastCompleted.notes}
@@ -56,15 +56,15 @@ export default function AftercarePanel({ lastCompleted }: AftercarePanelProps) {
           </article>
         ) : (
           <div className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#D4A373]/[0.12]">
-              <Sparkles className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={1.8} />
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#D4AF37]/[0.12]">
+              <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={1.8} />
             </span>
             <div>
-              <p className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+              <p className="font-heading text-[13px] font-semibold text-[#163F33]">
                 Vaidya will add personal notes after your next visit.
               </p>
               <p
-                className="mt-1 font-body text-[12.5px] text-[#2B2B2B]/60"
+                className="mt-1 font-body text-[12.5px] text-[#1F1F1F]/60"
                 style={{ lineHeight: 1.55 }}
               >
                 Your aftercare — recommended oils, daily practices, and follow-up

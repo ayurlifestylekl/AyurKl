@@ -44,7 +44,7 @@ export default function FinalBookingCTA() {
           {/* Warm emerald tint — lighter so the photo breathes */}
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(26,59,46,0.42)' }}
+            style={{ backgroundColor: 'rgba(22, 63, 51,0.42)' }}
             aria-hidden
           />
           {/* Saffron warm wash overlay */}
@@ -52,7 +52,7 @@ export default function FinalBookingCTA() {
             className="absolute inset-0 mix-blend-overlay opacity-60"
             style={{
               background:
-                'radial-gradient(ellipse 60% 70% at 30% 70%, rgba(232,148,26,0.30), transparent 65%)',
+                'radial-gradient(ellipse 60% 70% at 30% 70%, rgba(212, 175, 55,0.30), transparent 65%)',
             }}
             aria-hidden
           />
@@ -63,7 +63,7 @@ export default function FinalBookingCTA() {
             className="absolute inset-y-0 right-0 w-px"
             style={{
               background:
-                'linear-gradient(to bottom, transparent 0%, rgba(232,148,26,0.55) 50%, transparent 100%)',
+                'linear-gradient(to bottom, transparent 0%, rgba(212, 175, 55,0.55) 50%, transparent 100%)',
             }}
             aria-hidden
           />
@@ -86,7 +86,7 @@ export default function FinalBookingCTA() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(26,59,46,0.5)' }}
+            style={{ backgroundColor: 'rgba(22, 63, 51,0.5)' }}
             aria-hidden
           />
           {/* Bottom fade to emerald */}
@@ -111,7 +111,7 @@ export default function FinalBookingCTA() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse 70% 60% at 15% 10%, rgba(232,148,26,0.18), transparent 60%), radial-gradient(ellipse 50% 55% at 90% 95%, rgba(232,148,26,0.10), transparent 65%)',
+                'radial-gradient(ellipse 70% 60% at 15% 10%, rgba(212, 175, 55,0.18), transparent 60%), radial-gradient(ellipse 50% 55% at 90% 95%, rgba(212, 175, 55,0.10), transparent 65%)',
             }}
             aria-hidden
           />
@@ -171,7 +171,7 @@ export default function FinalBookingCTA() {
                   fontSize: 'clamp(2.125rem, 4vw, 3rem)',
                   lineHeight: 1.05,
                   letterSpacing: '-0.015em',
-                  textShadow: '0 3px 22px rgba(232,148,26,0.28)',
+                  textShadow: '0 3px 22px rgba(212, 175, 55,0.28)',
                 }}
               >
                 lasting wellness.

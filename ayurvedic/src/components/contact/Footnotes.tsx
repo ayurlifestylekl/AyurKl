@@ -36,7 +36,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
           backgroundImage:
-            'radial-gradient(circle, rgba(212,163,115,0.18) 1px, transparent 1px), radial-gradient(circle, rgba(212,163,115,0.18) 1px, transparent 1px)',
+            'radial-gradient(circle, rgba(212, 175, 55,0.18) 1px, transparent 1px), radial-gradient(circle, rgba(212, 175, 55,0.18) 1px, transparent 1px)',
           backgroundSize: '32px 32px',
           backgroundPosition: '0 0, 16px 16px',
         }}
@@ -48,7 +48,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 88% 0%, rgba(212,163,115,0.14) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 12% 100%, rgba(122,157,84,0.08) 0%, transparent 60%), radial-gradient(ellipse 500px 380px at 50% 50%, rgba(212,163,115,0.05) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 88% 0%, rgba(212, 175, 55,0.14) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 12% 100%, rgba(46, 125, 90,0.08) 0%, transparent 60%), radial-gradient(ellipse 500px 380px at 50% 50%, rgba(212, 175, 55,0.05) 0%, transparent 60%)',
         }}
       />
 
@@ -135,7 +135,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
             aria-hidden
             className="h-px w-14 sm:w-20"
             style={{
-              background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.7))',
+              background: 'linear-gradient(to right, transparent, rgba(212, 175, 55,0.7))',
             }}
           />
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-accent">
@@ -145,7 +145,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
             aria-hidden
             className="h-px w-14 sm:w-20"
             style={{
-              background: 'linear-gradient(to left, transparent, rgba(212,163,115,0.7))',
+              background: 'linear-gradient(to left, transparent, rgba(212, 175, 55,0.7))',
             }}
           />
         </motion.div>
@@ -193,7 +193,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
               className="mt-3 block h-px w-full"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(212,163,115,0.7) 0%, rgba(212,163,115,0.1) 100%)',
+                  'linear-gradient(to right, rgba(212, 175, 55,0.7) 0%, rgba(212, 175, 55,0.1) 100%)',
               }}
             />
 
@@ -222,8 +222,8 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
                             fontSize: '12px',
                             letterSpacing: '-0.02em',
                             color: isOpen
-                              ? 'rgb(212,163,115)'
-                              : 'rgba(212,163,115,0.55)',
+                              ? 'rgb(212, 175, 55)'
+                              : 'rgba(212, 175, 55,0.55)',
                           }}
                         >
                           {ROMAN[idx] ?? idx + 1}.
@@ -236,8 +236,8 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
                         style={{
                           fontSize: '14.5px',
                           color: isOpen
-                            ? 'rgb(47,93,80)'
-                            : 'rgba(43,43,43,0.85)',
+                            ? 'rgb(30, 91, 75)'
+                            : 'rgba(31, 31, 31,0.85)',
                         }}
                       >
                         {faq.question}
@@ -326,7 +326,7 @@ function NoteCard() {
         className="pointer-events-none absolute -left-3 -top-2 h-3.5 w-12 rotate-[-18deg]"
         style={{
           background:
-            'linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%)',
+            'linear-gradient(135deg, rgba(212, 175, 55,0.65) 0%, rgba(212, 175, 55,0.35) 60%, rgba(212, 175, 55,0.55) 100%)',
           boxShadow:
             'inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08)',
         }}
@@ -336,7 +336,7 @@ function NoteCard() {
         className="pointer-events-none absolute -bottom-2 -right-3 h-3.5 w-12 rotate-[-18deg]"
         style={{
           background:
-            'linear-gradient(135deg, rgba(212,163,115,0.65) 0%, rgba(212,163,115,0.35) 60%, rgba(212,163,115,0.55) 100%)',
+            'linear-gradient(135deg, rgba(212, 175, 55,0.65) 0%, rgba(212, 175, 55,0.35) 60%, rgba(212, 175, 55,0.55) 100%)',
           boxShadow:
             'inset 0 0 0 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08)',
         }}
@@ -361,7 +361,7 @@ function NoteCard() {
         className="relative my-3 block h-px w-16"
         style={{
           background:
-            'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15))',
+            'linear-gradient(to right, rgba(212, 175, 55,0.85), rgba(212, 175, 55,0.15))',
         }}
       />
 

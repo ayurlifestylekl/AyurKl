@@ -58,7 +58,7 @@ export default function MedicalAuthority() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse at 40% 60%, rgba(212,163,115,0.06) 0%, transparent 55%)',
+                'radial-gradient(ellipse at 40% 60%, rgba(212, 175, 55,0.06) 0%, transparent 55%)',
             }}
             aria-hidden
           />
@@ -115,7 +115,7 @@ export default function MedicalAuthority() {
                       className="h-px"
                       style={{
                         background:
-                          'linear-gradient(to right, rgba(212,163,115,0.15), transparent)',
+                          'linear-gradient(to right, rgba(212, 175, 55,0.15), transparent)',
                       }}
                       aria-hidden
                     />
@@ -141,7 +141,7 @@ export default function MedicalAuthority() {
                 className="h-px"
                 style={{
                   background:
-                    'linear-gradient(to right, rgba(212,163,115,0.15), transparent)',
+                    'linear-gradient(to right, rgba(212, 175, 55,0.15), transparent)',
                 }}
                 aria-hidden
               />
@@ -183,7 +183,7 @@ export default function MedicalAuthority() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(47,93,80,0.35)' }}
+            style={{ backgroundColor: 'rgba(30, 91, 75,0.35)' }}
             aria-hidden
           />
           <div className="grain-overlay-dark pointer-events-none absolute inset-0" aria-hidden />
@@ -192,7 +192,7 @@ export default function MedicalAuthority() {
             className="absolute inset-y-0 left-0 w-px"
             style={{
               background:
-                'linear-gradient(to bottom, transparent, rgba(212,163,115,0.3), transparent)',
+                'linear-gradient(to bottom, transparent, rgba(212, 175, 55,0.3), transparent)',
             }}
             aria-hidden
           />
@@ -215,7 +215,7 @@ export default function MedicalAuthority() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(47,93,80,0.35)' }}
+            style={{ backgroundColor: 'rgba(30, 91, 75,0.35)' }}
             aria-hidden
           />
         </motion.div>

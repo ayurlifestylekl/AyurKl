@@ -24,16 +24,16 @@ export default function AgentSubmissionsTable({
 }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No agent submissions in this view. When affiliates submit marketplace
         sales from their portal, they appear here for your approval.
       </div>
     )
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
       <table className="w-full text-left text-[13px]">
-        <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+        <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           <tr>
             <th className="px-4 py-3">Submitted</th>
             <th className="px-4 py-3">Affiliate</th>
@@ -45,27 +45,27 @@ export default function AgentSubmissionsTable({
             <th className="px-4 py-3">Status</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#1e3d32]/6">
+        <tbody className="divide-y divide-[#163F33]/6">
           {items.map((m) => (
             <tr
               key={m.id}
-              className={`hover:bg-[#FAF6EE]/30 ${
-                m.status === 'pending' ? 'bg-[#FAF6EE]/15' : ''
+              className={`hover:bg-[#F7F2E8]/30 ${
+                m.status === 'pending' ? 'bg-[#F7F2E8]/15' : ''
               }`}
             >
-              <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/65">
+              <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/65">
                 {new Date(m.createdAt).toLocaleDateString('en-MY')}
               </td>
               <td className="px-4 py-3">
                 {m.referralAgentCode ? (
                   <Link
                     href={`/admin/partners/${m.referralAgentId}`}
-                    className="font-mono text-[11.5px] font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                    className="font-mono text-[11.5px] font-semibold text-[#163F33] hover:text-[#D4AF37]"
                   >
                     {m.referralAgentCode}
                   </Link>
                 ) : (
-                  <span className="text-[#2B2B2B]/45">—</span>
+                  <span className="text-[#1F1F1F]/45">—</span>
                 )}
               </td>
               <td className="px-4 py-3">
@@ -78,15 +78,15 @@ export default function AgentSubmissionsTable({
               <td className="px-4 py-3">
                 <Link
                   href={`/admin/agent-submissions/${m.id}`}
-                  className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                  className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                 >
                   {m.customerName}
                 </Link>
-                <div className="text-[11px] text-[#2B2B2B]/55">
+                <div className="text-[11px] text-[#1F1F1F]/55">
                   {m.customerPhone ?? m.customerEmail ?? ''}
                 </div>
               </td>
-              <td className="px-4 py-3 font-mono text-[11.5px] text-[#2B2B2B]/65">
+              <td className="px-4 py-3 font-mono text-[11.5px] text-[#1F1F1F]/65">
                 {m.marketplaceOrderRef ?? '—'}
               </td>
               <td className="px-4 py-3 text-right">{m.itemCount}</td>

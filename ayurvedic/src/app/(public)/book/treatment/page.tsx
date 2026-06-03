@@ -69,7 +69,7 @@ export default async function BookTreatmentPage() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at 8% 0%, rgba(212,163,115,0.14) 0%, transparent 40%), radial-gradient(ellipse at 92% 100%, rgba(47,93,80,0.05) 0%, transparent 45%)',
+              'radial-gradient(ellipse at 8% 0%, rgba(212, 175, 55,0.14) 0%, transparent 40%), radial-gradient(ellipse at 92% 100%, rgba(30, 91, 75,0.05) 0%, transparent 45%)',
           }}
         />
 

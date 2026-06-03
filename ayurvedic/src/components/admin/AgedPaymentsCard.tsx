@@ -15,7 +15,7 @@ export default function AgedPaymentsCard({ orders }: { orders: AgedPendingOrder[
       className="overflow-hidden rounded-3xl border border-amber-200 bg-amber-50/40"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       <header className="flex items-center gap-2.5 border-b border-amber-200/70 px-5 py-3.5">

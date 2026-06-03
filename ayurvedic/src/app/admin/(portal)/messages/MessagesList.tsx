@@ -40,24 +40,24 @@ function relativeTime(iso: string): string {
 export default function MessagesList({ items }: { items: TicketListItem[] }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         Inbox zero. Nothing to reply to right now.
       </div>
     )
   }
   return (
-    <ul className="flex flex-col divide-y divide-[#1e3d32]/6 overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+    <ul className="flex flex-col divide-y divide-[#163F33]/6 overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
       {items.map((t) => (
         <li key={t.id}>
           <Link
             href={`/admin/messages/${t.id}`}
-            className="block px-5 py-3.5 transition-colors hover:bg-[#FAF6EE]/30"
+            className="block px-5 py-3.5 transition-colors hover:bg-[#F7F2E8]/30"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 {t.unreadByClinic ? (
                   <span
-                    className="inline-block h-2 w-2 rounded-full bg-[#D4A373]"
+                    className="inline-block h-2 w-2 rounded-full bg-[#D4AF37]"
                     aria-label="Unread"
                   />
                 ) : (
@@ -69,8 +69,8 @@ export default function MessagesList({ items }: { items: TicketListItem[] }) {
                 <p
                   className={`truncate text-[14px] ${
                     t.unreadByClinic
-                      ? 'font-bold text-[#1e3d32]'
-                      : 'font-semibold text-[#1e3d32]/80'
+                      ? 'font-bold text-[#163F33]'
+                      : 'font-semibold text-[#163F33]/80'
                   }`}
                 >
                   {t.subject}
@@ -80,20 +80,20 @@ export default function MessagesList({ items }: { items: TicketListItem[] }) {
                 >
                   {STATUS_LABEL[t.status] ?? t.status}
                 </span>
-                <span className="hidden shrink-0 rounded-full border border-[#1e3d32]/15 bg-[#FAF6EE]/40 px-2 py-0.5 text-[10.5px] font-semibold text-[#1e3d32]/70 md:inline-block">
+                <span className="hidden shrink-0 rounded-full border border-[#163F33]/15 bg-[#F7F2E8]/40 px-2 py-0.5 text-[10.5px] font-semibold text-[#163F33]/70 md:inline-block">
                   {TOPIC_LABEL[t.topic] ?? t.topic}
                 </span>
               </div>
-              <span className="shrink-0 text-[11.5px] text-[#2B2B2B]/55">
+              <span className="shrink-0 text-[11.5px] text-[#1F1F1F]/55">
                 {relativeTime(t.lastMessageAt)}
               </span>
             </div>
-            <p className="mt-1 text-[12.5px] text-[#2B2B2B]/65">
+            <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">
               <span className="font-semibold">{t.customerName ?? 'Unknown'}</span>
               {t.customerEmail ? <span className="ml-2">{t.customerEmail}</span> : null}
             </p>
             {t.lastMessagePreview ? (
-              <p className="mt-1 line-clamp-2 text-[12.5px] text-[#2B2B2B]/55">
+              <p className="mt-1 line-clamp-2 text-[12.5px] text-[#1F1F1F]/55">
                 {t.lastMessagePreview}
               </p>
             ) : null}

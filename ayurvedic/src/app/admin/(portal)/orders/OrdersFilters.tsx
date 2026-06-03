@@ -30,18 +30,18 @@ export default function OrdersFilters() {
   )
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#1e3d32]/10 bg-white p-3">
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#163F33]/10 bg-white p-3">
       <input
         type="search"
         placeholder="Search ID, name, email…"
         defaultValue={sp.get('q') ?? ''}
         onChange={(e) => set('q', e.target.value || null)}
-        className="min-w-[200px] flex-1 rounded-lg border border-[#1e3d32]/10 bg-white px-3 py-1.5 text-sm placeholder:text-[#2B2B2B]/40 focus:border-[#2F5D50] focus:outline-none"
+        className="min-w-[200px] flex-1 rounded-lg border border-[#163F33]/10 bg-white px-3 py-1.5 text-sm placeholder:text-[#1F1F1F]/40 focus:border-[#1E5B4B] focus:outline-none"
       />
       <select
         value={sp.get('status') ?? ''}
         onChange={(e) => set('status', e.target.value || null)}
-        className="rounded-lg border border-[#1e3d32]/10 bg-white px-3 py-1.5 text-sm"
+        className="rounded-lg border border-[#163F33]/10 bg-white px-3 py-1.5 text-sm"
       >
         <option value="">All fulfilment statuses</option>
         {STATUSES.map((s) => (
@@ -53,7 +53,7 @@ export default function OrdersFilters() {
       <select
         value={sp.get('payment') ?? ''}
         onChange={(e) => set('payment', e.target.value || null)}
-        className="rounded-lg border border-[#1e3d32]/10 bg-white px-3 py-1.5 text-sm"
+        className="rounded-lg border border-[#163F33]/10 bg-white px-3 py-1.5 text-sm"
       >
         <option value="">Any payment</option>
         {PAYMENT_STATUSES.map((s) => (

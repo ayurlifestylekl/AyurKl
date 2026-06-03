@@ -339,7 +339,7 @@ function SectionHead({ numeral, label }: { numeral: string; label: string }) {
       <span
         className="h-px flex-1"
         style={{
-          background: 'linear-gradient(to right, rgba(212,163,115,0.5), transparent)',
+          background: 'linear-gradient(to right, rgba(212, 175, 55,0.5), transparent)',
         }}
         aria-hidden
       />

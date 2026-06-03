@@ -211,11 +211,11 @@ export default function WholesaleActions({
       {/* Cancel + notes */}
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {canCancel ? (
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Cancel order
             </h3>
-            <p className="mt-1 text-[11.5px] text-[#2B2B2B]/65">
+            <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">
               Cancelling after payment will restore stock automatically.
             </p>
             <button
@@ -229,8 +229,8 @@ export default function WholesaleActions({
           </article>
         ) : null}
 
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Admin notes
           </h3>
           <textarea
@@ -238,13 +238,13 @@ export default function WholesaleActions({
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
             placeholder="Internal — not shown to partner."
-            className="mt-2 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 font-mono text-[11.5px]"
+            className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 font-mono text-[11.5px]"
           />
           <button
             type="button"
             disabled={pending}
             onClick={saveNotes}
-            className="mt-2 rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] disabled:opacity-50"
+            className="mt-2 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] disabled:opacity-50"
           >
             Save notes
           </button>
@@ -265,27 +265,27 @@ export default function WholesaleActions({
       {showCancel ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#1e3d32]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
               Cancel wholesale order?
             </h2>
-            <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+            <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
               If the order was already paid, stock will be restored automatically.
             </p>
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               Reason *
             </label>
             <textarea
               value={cancelReason}
               onChange={(e) => setCancelReason(e.target.value)}
               rows={3}
-              className="mt-1 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
               placeholder="Why is this being cancelled?"
             />
             <div className="mt-3 flex gap-2">
               <button
                 type="button"
                 onClick={() => setShowCancel(false)}
-                className="rounded-lg border border-[#1e3d32]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
               >
                 Keep order
               </button>

@@ -11,15 +11,15 @@ const STATUS_CHIP: Record<InventoryRow['status'], { label: string; tone: string 
 export default function InventoryTable({ items }: { items: InventoryRow[] }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No products match this filter.
       </div>
     )
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
       <table className="w-full text-left text-[13px]">
-        <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+        <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           <tr>
             <th className="px-4 py-3">Product</th>
             <th className="px-4 py-3">SKU</th>
@@ -30,11 +30,11 @@ export default function InventoryTable({ items }: { items: InventoryRow[] }) {
             <th className="px-4 py-3">Status</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#1e3d32]/6">
+        <tbody className="divide-y divide-[#163F33]/6">
           {items.map((r) => {
             const chip = STATUS_CHIP[r.status]
             return (
-              <tr key={r.id} className="hover:bg-[#FAF6EE]/30">
+              <tr key={r.id} className="hover:bg-[#F7F2E8]/30">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     {r.imageUrl ? (
@@ -42,21 +42,21 @@ export default function InventoryTable({ items }: { items: InventoryRow[] }) {
                       <img
                         src={r.imageUrl}
                         alt=""
-                        className="h-10 w-10 rounded-lg border border-[#1e3d32]/10 object-cover"
+                        className="h-10 w-10 rounded-lg border border-[#163F33]/10 object-cover"
                       />
                     ) : (
-                      <div className="h-10 w-10 rounded-lg border border-dashed border-[#1e3d32]/15 bg-[#FAF6EE]/40" />
+                      <div className="h-10 w-10 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40" />
                     )}
                     <Link
                       href={`/admin/inventory/${r.id}`}
-                      className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                      className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                     >
                       {r.name}
                     </Link>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/65">{r.sku}</td>
-                <td className="px-4 py-3 text-[12px] text-[#2B2B2B]/65">
+                <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/65">{r.sku}</td>
+                <td className="px-4 py-3 text-[12px] text-[#1F1F1F]/65">
                   {r.category ?? '—'}
                 </td>
                 <td
@@ -65,18 +65,18 @@ export default function InventoryTable({ items }: { items: InventoryRow[] }) {
                       ? 'text-red-600'
                       : r.status === 'low'
                         ? 'text-amber-600'
-                        : 'text-[#1e3d32]'
+                        : 'text-[#163F33]'
                   }`}
                 >
                   {r.stockQty}
                 </td>
-                <td className="px-4 py-3 text-right text-[12px] text-[#2B2B2B]/65">
+                <td className="px-4 py-3 text-right text-[12px] text-[#1F1F1F]/65">
                   {r.effectiveThreshold}
                   {r.lowStockThreshold == null ? (
-                    <span className="text-[10px] text-[#2B2B2B]/45"> (global)</span>
+                    <span className="text-[10px] text-[#1F1F1F]/45"> (global)</span>
                   ) : null}
                 </td>
-                <td className="px-4 py-3 text-[12px] text-[#2B2B2B]/65">
+                <td className="px-4 py-3 text-[12px] text-[#1F1F1F]/65">
                   {r.expiryDate
                     ? new Date(r.expiryDate).toLocaleDateString('en-MY')
                     : '—'}

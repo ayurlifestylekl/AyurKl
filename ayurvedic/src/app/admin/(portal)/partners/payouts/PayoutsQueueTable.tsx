@@ -77,7 +77,7 @@ export default function PayoutsQueueTable({
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         Nothing pending. All paid up.
       </div>
     )
@@ -86,8 +86,8 @@ export default function PayoutsQueueTable({
   return (
     <div className="flex flex-col gap-3">
       {selected.size > 0 ? (
-        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4A373]/30 bg-[#FAF6EE] p-3">
-          <span className="text-[12px] font-semibold text-[#1e3d32]">
+        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8] p-3">
+          <span className="text-[12px] font-semibold text-[#163F33]">
             {selected.size} agent{selected.size === 1 ? '' : 's'} · RM {selectedTotal.toFixed(2)}
           </span>
           <select
@@ -97,7 +97,7 @@ export default function PayoutsQueueTable({
                 e.target.value as 'bank_transfer' | 'cash' | 'fpx' | 'cheque',
               )
             }
-            className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-1.5 text-[12px]"
+            className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-1.5 text-[12px]"
           >
             <option value="bank_transfer">Bank transfer</option>
             <option value="fpx">FPX</option>
@@ -108,7 +108,7 @@ export default function PayoutsQueueTable({
             type="button"
             disabled={pending}
             onClick={bulkPay}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2F5D50] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
           >
             <Send className="h-3.5 w-3.5" />
             {pending ? 'Marking…' : 'Mark all as paid'}
@@ -116,20 +116,20 @@ export default function PayoutsQueueTable({
           <button
             type="button"
             onClick={exportCsv}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32]"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33]"
           >
             <Download className="h-3.5 w-3.5" />
             Bank-transfer CSV
           </button>
           {message ? (
-            <span className="text-[11.5px] text-[#2B2B2B]/70">{message}</span>
+            <span className="text-[11.5px] text-[#1F1F1F]/70">{message}</span>
           ) : null}
         </div>
       ) : null}
 
-      <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
         <table className="w-full text-left text-[13px]">
-          <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
             <tr>
               <th className="px-4 py-3">
                 <input
@@ -146,9 +146,9 @@ export default function PayoutsQueueTable({
               <th className="px-4 py-3">Oldest pending</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1e3d32]/6">
+          <tbody className="divide-y divide-[#163F33]/6">
             {rows.map((r) => (
-              <tr key={r.agentId} className="hover:bg-[#FAF6EE]/30">
+              <tr key={r.agentId} className="hover:bg-[#F7F2E8]/30">
                 <td className="px-4 py-3">
                   <input
                     type="checkbox"
@@ -160,25 +160,25 @@ export default function PayoutsQueueTable({
                 <td className="px-4 py-3">
                   <a
                     href={`/admin/partners/${r.agentId}`}
-                    className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                    className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                   >
                     {r.agentName ?? '—'}
                   </a>
-                  <div className="text-[11px] text-[#2B2B2B]/55">{r.agentEmail ?? ''}</div>
+                  <div className="text-[11px] text-[#1F1F1F]/55">{r.agentEmail ?? ''}</div>
                 </td>
                 <td className="px-4 py-3">
                   <code className="font-mono text-[11.5px] font-semibold">
                     {r.referralCode}
                   </code>
-                  <div className="text-[11px] text-[#2B2B2B]/55 capitalize">
+                  <div className="text-[11px] text-[#1F1F1F]/55 capitalize">
                     {r.commissionType}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-right">{r.pendingCount}</td>
-                <td className="px-4 py-3 text-right font-semibold text-[#D4A373]">
+                <td className="px-4 py-3 text-right font-semibold text-[#D4AF37]">
                   RM {r.pendingTotalRm.toFixed(2)}
                 </td>
-                <td className="px-4 py-3 text-[12px] text-[#2B2B2B]/65">
+                <td className="px-4 py-3 text-[12px] text-[#1F1F1F]/65">
                   {relativeAge(r.oldestPendingAt)}
                 </td>
               </tr>

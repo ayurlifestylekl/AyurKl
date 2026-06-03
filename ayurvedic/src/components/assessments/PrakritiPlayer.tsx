@@ -155,7 +155,7 @@ export default function PrakritiPlayer({ hasPriorResult }: PrakritiPlayerProps) 
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/account/assessments"
-          className="group inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55 transition-colors hover:text-[#D4A373]"
+          className="group inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55 transition-colors hover:text-[#D4AF37]"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
           Back to assessments
@@ -164,7 +164,7 @@ export default function PrakritiPlayer({ hasPriorResult }: PrakritiPlayerProps) 
           <button
             type="button"
             onClick={handleStartOver}
-            className="inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#2B2B2B]/45 transition-colors hover:text-red-700"
+            className="inline-flex items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1F1F1F]/45 transition-colors hover:text-red-700"
           >
             <RotateCw className="h-3 w-3" />
             Start over
@@ -175,7 +175,7 @@ export default function PrakritiPlayer({ hasPriorResult }: PrakritiPlayerProps) 
       {/* Progress bar */}
       {currentStep.kind !== 'intro' && (
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/45">
+          <div className="flex items-center justify-between font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/45">
             <span>{Math.round(progressPct)}% complete</span>
             <span>
               {Math.min(questionStepsBefore + (currentStep.kind === 'question' ? 1 : 0), TOTAL_QUESTIONS)} / {TOTAL_QUESTIONS}
@@ -186,10 +186,10 @@ export default function PrakritiPlayer({ hasPriorResult }: PrakritiPlayerProps) 
             aria-valuenow={Math.round(progressPct)}
             aria-valuemin={0}
             aria-valuemax={100}
-            className="h-1 overflow-hidden rounded-full bg-[#1e3d32]/[0.08]"
+            className="h-1 overflow-hidden rounded-full bg-[#163F33]/[0.08]"
           >
             <motion.div
-              className="h-full bg-[#D4A373]"
+              className="h-full bg-[#D4AF37]"
               animate={{ width: `${progressPct}%` }}
               transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
             />
@@ -198,10 +198,10 @@ export default function PrakritiPlayer({ hasPriorResult }: PrakritiPlayerProps) 
       )}
 
       {/* Stage */}
-      <div className="rounded-3xl border border-[#1e3d32]/8 bg-white px-5 py-7 sm:px-9 sm:py-10"
+      <div className="rounded-3xl border border-[#163F33]/8 bg-white px-5 py-7 sm:px-9 sm:py-10"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(30,61,50,0.04), 0 18px 36px -22px rgba(30,61,50,0.18)',
+            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 18px 36px -22px rgba(22, 63, 51,0.18)',
         }}
       >
         <AnimatePresence mode="wait">
@@ -240,7 +240,7 @@ export default function PrakritiPlayer({ hasPriorResult }: PrakritiPlayerProps) 
             type="button"
             onClick={handleBack}
             disabled={stepIndex === 0 || isPending}
-            className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#1e3d32]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#1e3d32] transition-all hover:border-[#1e3d32]/35 disabled:cursor-not-allowed disabled:opacity-40"
+            className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#163F33] transition-all hover:border-[#163F33]/35 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
             Back
@@ -250,7 +250,7 @@ export default function PrakritiPlayer({ hasPriorResult }: PrakritiPlayerProps) 
             type="button"
             onClick={handleNext}
             disabled={isPending}
-            className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#2F5D50] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+            className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isPending ? (
               <>
@@ -293,27 +293,27 @@ function IntroPanel({
       transition={{ duration: 0.4 }}
       className="flex flex-col items-center text-center"
     >
-      <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FAF6EE]">
-        <Compass className="h-6 w-6 text-[#D4A373]" strokeWidth={1.6} />
+      <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F7F2E8]">
+        <Compass className="h-6 w-6 text-[#D4AF37]" strokeWidth={1.6} />
       </span>
       <p
-        className="mt-5 italic text-[15px] text-[#D4A373]"
+        className="mt-5 italic text-[15px] text-[#D4AF37]"
         style={{ fontFamily: 'var(--font-playfair)' }}
       >
         Prakṛti
       </p>
       <h1
-        className="mt-1 font-heading text-[28px] font-bold leading-tight text-[#1e3d32] sm:text-[36px]"
+        className="mt-1 font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[36px]"
         style={{ letterSpacing: '-0.025em' }}
       >
         Know your nature.
       </h1>
       <div
         aria-hidden
-        className="mt-5 h-px w-16 bg-gradient-to-r from-transparent via-[#D4A373] to-transparent"
+        className="mt-5 h-px w-16 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"
       />
       <p
-        className="mt-5 max-w-lg font-body text-[14.5px] text-[#2B2B2B]/70 sm:text-[15.5px]"
+        className="mt-5 max-w-lg font-body text-[14.5px] text-[#1F1F1F]/70 sm:text-[15.5px]"
         style={{ lineHeight: 1.7 }}
       >
         Twenty-four questions across body, mind, and lifestyle. Answer how you’ve been
@@ -322,19 +322,19 @@ function IntroPanel({
       </p>
 
       <ul
-        className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-2 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+        className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-2 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
       >
         <li>24 questions</li>
-        <li className="text-[#D4A373]">·</li>
+        <li className="text-[#D4AF37]">·</li>
         <li>~ 5 minutes</li>
-        <li className="text-[#D4A373]">·</li>
+        <li className="text-[#D4AF37]">·</li>
         <li>Saved to your profile</li>
       </ul>
 
       <button
         type="button"
         onClick={onBegin}
-        className="group mt-7 inline-flex h-12 items-center gap-2 rounded-full bg-[#2F5D50] px-7 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98]"
+        className="group mt-7 inline-flex h-12 items-center gap-2 rounded-full bg-[#1E5B4B] px-7 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98]"
       >
         {hasPriorResult ? 'Take again' : 'Begin assessment'}
         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -348,7 +348,7 @@ function PlayerIntroShell({ hasPriorResult }: { hasPriorResult: boolean }) {
   // the intro layout so there's no jank.
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-8">
-      <div className="rounded-3xl border border-[#1e3d32]/8 bg-white px-5 py-7 sm:px-9 sm:py-10">
+      <div className="rounded-3xl border border-[#163F33]/8 bg-white px-5 py-7 sm:px-9 sm:py-10">
         <IntroPanel hasPriorResult={hasPriorResult} onBegin={() => {}} />
       </div>
     </div>

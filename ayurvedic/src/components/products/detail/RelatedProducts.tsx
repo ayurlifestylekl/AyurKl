@@ -14,7 +14,7 @@ export default function RelatedProducts({ products }: { products: Product[] }) {
         <span
           aria-hidden
           className="h-px flex-1"
-          style={{ background: 'linear-gradient(to right, rgba(212,163,115,0.6), rgba(212,163,115,0.1), transparent)' }}
+          style={{ background: 'linear-gradient(to right, rgba(212, 175, 55,0.6), rgba(212, 175, 55,0.1), transparent)' }}
         />
         <h2
           id="related-heading"
@@ -26,7 +26,7 @@ export default function RelatedProducts({ products }: { products: Product[] }) {
         <span
           aria-hidden
           className="h-px flex-1"
-          style={{ background: 'linear-gradient(to left, rgba(212,163,115,0.6), rgba(212,163,115,0.1), transparent)' }}
+          style={{ background: 'linear-gradient(to left, rgba(212, 175, 55,0.6), rgba(212, 175, 55,0.1), transparent)' }}
         />
       </div>
       <motion.div

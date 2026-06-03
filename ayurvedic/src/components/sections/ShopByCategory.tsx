@@ -73,7 +73,7 @@ export default function ShopByCategory() {
                 {/* Dark Vignette to make text pop */}
                 <div
                   className="absolute inset-0 mix-blend-multiply opacity-40 transition-opacity duration-500 group-hover:opacity-60"
-                  style={{ backgroundColor: 'rgba(20,30,20,0.8)' }}
+                  style={{ backgroundColor: 'rgba(10, 31, 25,0.8)' }}
                   aria-hidden
                 />
                 <div className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black/80 via-black/30 to-transparent" />

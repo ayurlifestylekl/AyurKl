@@ -242,7 +242,7 @@ export default function PromoForm({
         <button
           type="submit"
           disabled={pending || !v.code || !v.title}
-          className="rounded-lg bg-[#2F5D50] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+          className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
         >
           {pending ? 'Saving…' : mode === 'create' ? 'Create promo' : 'Save changes'}
         </button>
@@ -252,7 +252,7 @@ export default function PromoForm({
               type="button"
               onClick={toggleActive}
               disabled={pending}
-              className="rounded-lg border border-[#1e3d32]/20 bg-white px-4 py-2 text-[13px] font-semibold text-[#1e3d32] disabled:opacity-50"
+              className="rounded-lg border border-[#163F33]/20 bg-white px-4 py-2 text-[13px] font-semibold text-[#163F33] disabled:opacity-50"
             >
               {v.is_active ? 'Deactivate' : 'Activate'}
             </button>
@@ -272,12 +272,12 @@ export default function PromoForm({
 }
 
 const inputCls =
-  'w-full rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none'
+  'w-full rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <fieldset className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-      <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+    <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+      <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
         {title}
       </legend>
       <div className="mt-2 flex flex-col gap-3">{children}</div>
@@ -293,7 +293,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return (
     <label className="flex flex-col gap-1">
       {label ? (
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           {label}
         </span>
       ) : null}

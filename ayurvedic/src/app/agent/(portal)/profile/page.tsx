@@ -20,10 +20,10 @@ export default async function AgentProfilePage() {
     return (
       <div className="mx-auto max-w-3xl">
         <div className="rounded-3xl border border-amber-200 bg-amber-50 p-8">
-          <h1 className="font-heading text-2xl font-bold text-[#1e3d32]">
+          <h1 className="font-heading text-2xl font-bold text-[#163F33]">
             Partner profile not found.
           </h1>
-          <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+          <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
             Your account isn&apos;t linked to a sales agent profile yet. Contact
             admin to complete your partner setup.
           </p>
@@ -35,20 +35,20 @@ export default async function AgentProfilePage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <header>
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Account
         </span>
-        <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#1e3d32]">
+        <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#163F33]">
           Profile
         </h1>
-        <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+        <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
           Your personal details, payout method, and shipping address (if you
           buy wholesale).
         </p>
       </header>
 
       {/* Read-only partner card */}
-      <section className="rounded-3xl border border-[#1e3d32]/10 bg-white p-5">
+      <section className="rounded-3xl border border-[#163F33]/10 bg-white p-5">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <ReadOnlyField label="Referral code" value={profile.referralCode} mono />
           <ReadOnlyField
@@ -73,7 +73,7 @@ export default async function AgentProfilePage() {
             </span>
           ) : null}
         </div>
-        <p className="mt-3 text-[11.5px] italic text-[#2B2B2B]/55">
+        <p className="mt-3 text-[11.5px] italic text-[#1F1F1F]/55">
           Referral code, commission rate, and capabilities are set by admin.
           Contact them to change.
         </p>
@@ -122,10 +122,10 @@ function ReadOnlyField({
       ? 'text-red-700'
       : tone === 'green'
         ? 'text-emerald-700'
-        : 'text-[#1e3d32]'
+        : 'text-[#163F33]'
   return (
     <div>
-      <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/55">
+      <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/55">
         {label}
       </p>
       <p

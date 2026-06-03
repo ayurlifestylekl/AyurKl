@@ -56,7 +56,7 @@ export const calUiConfig = {
   theme: 'light' as const,
   styles: {
     branding: {
-      brandColor: '#D4A373',
+      brandColor: '#D4AF37',
     },
   },
   hideEventTypeDetails: false,

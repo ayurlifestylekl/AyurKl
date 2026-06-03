@@ -59,7 +59,7 @@ export default function EmpathyBridge() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 55% 70% at 15% 30%, rgba(232,148,26,0.22) 0%, transparent 65%), radial-gradient(ellipse 50% 60% at 85% 80%, rgba(232,148,26,0.12) 0%, transparent 70%)',
+              'radial-gradient(ellipse 55% 70% at 15% 30%, rgba(212, 175, 55,0.22) 0%, transparent 65%), radial-gradient(ellipse 50% 60% at 85% 80%, rgba(212, 175, 55,0.12) 0%, transparent 70%)',
           }}
         />
 
@@ -101,7 +101,7 @@ export default function EmpathyBridge() {
                 color: SAFFRON,
                 fontSize: 'clamp(1.75rem, 3.6vw, 3rem)',
                 letterSpacing: '-0.01em',
-                textShadow: '0 2px 18px rgba(232,148,26,0.25)',
+                textShadow: '0 2px 18px rgba(212, 175, 55,0.25)',
               }}
             >
               The cause keeps returning.
@@ -116,7 +116,7 @@ export default function EmpathyBridge() {
                   className="inline-flex items-center gap-2 rounded-full border px-4 py-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-white/85 transition-all duration-200 hover:text-white sm:text-[12px]"
                   style={{
                     borderColor: `${SAFFRON}40`,
-                    backgroundColor: 'rgba(232,148,26,0.06)',
+                    backgroundColor: 'rgba(212, 175, 55,0.06)',
                   }}
                 >
                   <span
@@ -165,7 +165,7 @@ export default function EmpathyBridge() {
           className="pointer-events-none absolute inset-0 mix-blend-multiply"
           style={{
             background:
-              'radial-gradient(ellipse 45% 60% at 90% 20%, rgba(232,148,26,0.10) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 15% 85%, rgba(194,65,12,0.06) 0%, transparent 70%)',
+              'radial-gradient(ellipse 45% 60% at 90% 20%, rgba(212, 175, 55,0.10) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 15% 85%, rgba(212, 175, 55,0.06) 0%, transparent 70%)',
           }}
         />
 
@@ -237,7 +237,7 @@ export default function EmpathyBridge() {
           <p
             className="mt-7 font-body leading-[1.7]"
             style={{
-              color: 'rgba(26,59,46,0.78)',
+              color: 'rgba(22, 63, 51,0.78)',
               fontSize: 'clamp(15px, 1.1vw, 17px)',
             }}
           >

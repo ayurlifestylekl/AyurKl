@@ -26,14 +26,14 @@ const HUMAN: Record<string, string> = {
 export default function StockMovementsLog({ movements }: { movements: Movement[] }) {
   if (movements.length === 0) {
     return (
-      <p className="px-5 py-6 text-center text-[12.5px] italic text-[#2B2B2B]/55">
+      <p className="px-5 py-6 text-center text-[12.5px] italic text-[#1F1F1F]/55">
         No stock movements yet.
       </p>
     )
   }
   return (
     <table className="w-full text-left text-[13px]">
-      <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
         <tr>
           <th className="px-5 py-3">When</th>
           <th className="px-5 py-3">Type</th>
@@ -42,13 +42,13 @@ export default function StockMovementsLog({ movements }: { movements: Movement[]
           <th className="px-5 py-3">By</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-[#1e3d32]/6">
+      <tbody className="divide-y divide-[#163F33]/6">
         {movements.map((m) => {
           const positive = m.quantity_delta >= 0
           const actor = Array.isArray(m.actor) ? m.actor[0] : m.actor
           return (
             <tr key={m.id}>
-              <td className="px-5 py-3 text-[12px] text-[#2B2B2B]/65">
+              <td className="px-5 py-3 text-[12px] text-[#1F1F1F]/65">
                 {new Date(m.created_at).toLocaleString('en-MY')}
               </td>
               <td className="px-5 py-3">{HUMAN[m.movement_type] ?? m.movement_type}</td>
@@ -66,20 +66,20 @@ export default function StockMovementsLog({ movements }: { movements: Movement[]
                   {Math.abs(m.quantity_delta)}
                 </span>
               </td>
-              <td className="px-5 py-3 text-[12px] text-[#2B2B2B]/70">
+              <td className="px-5 py-3 text-[12px] text-[#1F1F1F]/70">
                 {m.reason ?? m.notes ?? '—'}
                 {m.cost_price_rm != null ? (
-                  <span className="ml-2 text-[11px] text-[#2B2B2B]/55">
+                  <span className="ml-2 text-[11px] text-[#1F1F1F]/55">
                     @ RM {Number(m.cost_price_rm).toFixed(2)}
                   </span>
                 ) : null}
                 {m.expiry_date ? (
-                  <span className="ml-2 text-[11px] text-[#2B2B2B]/55">
+                  <span className="ml-2 text-[11px] text-[#1F1F1F]/55">
                     exp {m.expiry_date}
                   </span>
                 ) : null}
               </td>
-              <td className="px-5 py-3 text-[12px] text-[#2B2B2B]/65">
+              <td className="px-5 py-3 text-[12px] text-[#1F1F1F]/65">
                 {actor?.full_name ?? 'System'}
               </td>
             </tr>

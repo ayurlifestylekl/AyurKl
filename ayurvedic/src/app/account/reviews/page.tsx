@@ -28,25 +28,25 @@ export default async function MyReviewsPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-4">
       <header>
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Your voice
         </span>
-        <h1 className="mt-2 font-heading text-[26px] font-bold leading-tight text-[#1e3d32]">
+        <h1 className="mt-2 font-heading text-[26px] font-bold leading-tight text-[#163F33]">
           My reviews
         </h1>
-        <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+        <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
           Reviews you&apos;ve written. Published reviews appear on product pages.
         </p>
       </header>
 
       {reviews.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center">
-          <p className="font-body text-sm italic text-[#2B2B2B]/55">
+        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center">
+          <p className="font-body text-sm italic text-[#1F1F1F]/55">
             You haven&apos;t reviewed any products yet.
           </p>
           <Link
             href="/account/orders"
-            className="mt-3 inline-block text-[12.5px] font-semibold text-[#D4A373] hover:underline"
+            className="mt-3 inline-block text-[12.5px] font-semibold text-[#D4AF37] hover:underline"
           >
             See products you&apos;ve bought →
           </Link>
@@ -54,7 +54,7 @@ export default async function MyReviewsPage() {
       ) : (
         <ul className="flex flex-col gap-3">
           {reviews.map((r) => (
-            <li key={r.id} className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
+            <li key={r.id} className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
@@ -66,15 +66,15 @@ export default async function MyReviewsPage() {
                     </span>
                   </div>
                   {r.title ? (
-                    <h2 className="mt-2 font-heading text-[15px] font-semibold text-[#1e3d32]">
+                    <h2 className="mt-2 font-heading text-[15px] font-semibold text-[#163F33]">
                       {r.title}
                     </h2>
                   ) : null}
-                  <p className="mt-1 text-[12px] text-[#2B2B2B]/55">
+                  <p className="mt-1 text-[12px] text-[#1F1F1F]/55">
                     on{' '}
                     <Link
                       href={`/shop/${r.productId}`}
-                      className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                      className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                     >
                       {r.productName}
                     </Link>{' '}
@@ -82,7 +82,7 @@ export default async function MyReviewsPage() {
                   </p>
                 </div>
               </div>
-              <p className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[#2B2B2B]/85">
+              <p className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[#1F1F1F]/85">
                 {r.body}
               </p>
               {r.rejectionReason ? (
@@ -105,7 +105,7 @@ function Stars({ value }: { value: number }) {
         <Star
           key={n}
           className={`h-3.5 w-3.5 ${
-            n <= value ? 'fill-[#D4A373] text-[#D4A373]' : 'text-[#1e3d32]/20'
+            n <= value ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-[#163F33]/20'
           }`}
           strokeWidth={1.5}
         />

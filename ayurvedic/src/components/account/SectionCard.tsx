@@ -25,42 +25,42 @@ export default function SectionCard({
   return (
     <section
       className={`relative overflow-hidden rounded-3xl border bg-white ${
-        isSensitive ? 'border-[#D4A373]/25' : 'border-[#1e3d32]/8'
+        isSensitive ? 'border-[#D4AF37]/25' : 'border-[#163F33]/8'
       }`}
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       {isSensitive && (
-        <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[#D4A373]" />
+        <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[#D4AF37]" />
       )}
       <header
         className={`flex items-start justify-between gap-3 border-b px-5 py-4 sm:px-6 ${
-          isSensitive ? 'border-[#D4A373]/15' : 'border-[#1e3d32]/6'
+          isSensitive ? 'border-[#D4AF37]/15' : 'border-[#163F33]/6'
         }`}
       >
         <div className="flex items-center gap-3">
           <span
             className={`flex h-9 w-9 items-center justify-center rounded-xl ${
-              isSensitive ? 'bg-[#D4A373]/15' : 'bg-[#1e3d32]/[0.06]'
+              isSensitive ? 'bg-[#D4AF37]/15' : 'bg-[#163F33]/[0.06]'
             }`}
           >
             <Icon
-              className={`h-4 w-4 ${isSensitive ? 'text-[#D4A373]' : 'text-[#2F5D50]'}`}
+              className={`h-4 w-4 ${isSensitive ? 'text-[#D4AF37]' : 'text-[#1E5B4B]'}`}
               strokeWidth={1.8}
             />
           </span>
           <div>
             <h2
-              className="font-heading text-[14px] font-bold text-[#1e3d32]"
+              className="font-heading text-[14px] font-bold text-[#163F33]"
               style={{ letterSpacing: '-0.005em' }}
             >
               {title}
             </h2>
             {subtitle && (
               <p
-                className="mt-0.5 font-body text-[11.5px] text-[#2B2B2B]/55"
+                className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/55"
                 style={{ lineHeight: 1.55 }}
               >
                 {subtitle}

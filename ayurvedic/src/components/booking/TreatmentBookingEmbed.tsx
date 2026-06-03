@@ -58,7 +58,7 @@ export default function TreatmentBookingEmbed({
       className="relative overflow-hidden rounded-2xl bg-white ring-1 ring-primary/10"
       style={{
         boxShadow:
-          '0 2px 6px rgba(47,93,80,0.04), 0 30px 60px -28px rgba(47,93,80,0.22)',
+          '0 2px 6px rgba(30, 91, 75,0.04), 0 30px 60px -28px rgba(30, 91, 75,0.22)',
       }}
     >
       {/* Gold accent bar */}
@@ -67,7 +67,7 @@ export default function TreatmentBookingEmbed({
         className="absolute inset-x-0 top-0 z-10 h-[2px]"
         style={{
           background:
-            'linear-gradient(to right, rgba(212,163,115,0.4), rgba(212,163,115,0.9) 50%, rgba(212,163,115,0.4))',
+            'linear-gradient(to right, rgba(212, 175, 55,0.4), rgba(212, 175, 55,0.9) 50%, rgba(212, 175, 55,0.4))',
         }}
       />
 

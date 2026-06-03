@@ -7,20 +7,20 @@ interface TicketStatusPillProps {
 
 const STYLES: Record<TicketStatus, { bg: string; text: string }> = {
   open: {
-    bg: 'bg-[#2F5D50]/10',
-    text: 'text-[#2F5D50]',
+    bg: 'bg-[#1E5B4B]/10',
+    text: 'text-[#1E5B4B]',
   },
   'awaiting-customer': {
-    bg: 'bg-[#D4A373]/15',
+    bg: 'bg-[#D4AF37]/15',
     text: 'text-[#9c6f3e]',
   },
   resolved: {
-    bg: 'bg-[#1e3d32]/[0.08]',
-    text: 'text-[#1e3d32]/65',
+    bg: 'bg-[#163F33]/[0.08]',
+    text: 'text-[#163F33]/65',
   },
   closed: {
-    bg: 'bg-[#1e3d32]/[0.06]',
-    text: 'text-[#2B2B2B]/50',
+    bg: 'bg-[#163F33]/[0.06]',
+    text: 'text-[#1F1F1F]/50',
   },
 }
 

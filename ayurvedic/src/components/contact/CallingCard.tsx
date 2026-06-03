@@ -27,7 +27,7 @@ export default function CallingCard() {
         className="pointer-events-none absolute inset-0 opacity-[0.07]"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(212,163,115,1) 1px, transparent 1px), linear-gradient(90deg, rgba(212,163,115,1) 1px, transparent 1px)',
+            'linear-gradient(rgba(212, 175, 55,1) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55,1) 1px, transparent 1px)',
           backgroundSize: '56px 56px',
         }}
       />
@@ -38,7 +38,7 @@ export default function CallingCard() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 520px at 50% 50%, rgba(212,163,115,0.14) 0%, transparent 65%)',
+            'radial-gradient(ellipse 900px 520px at 50% 50%, rgba(212, 175, 55,0.14) 0%, transparent 65%)',
         }}
       />
 
@@ -48,7 +48,7 @@ export default function CallingCard() {
         className="pointer-events-none absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent, rgba(212,163,115,0.5) 25%, rgba(212,163,115,0.5) 75%, transparent)',
+            'linear-gradient(to right, transparent, rgba(212, 175, 55,0.5) 25%, rgba(212, 175, 55,0.5) 75%, transparent)',
         }}
       />
       <span
@@ -56,7 +56,7 @@ export default function CallingCard() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent, rgba(212,163,115,0.5) 25%, rgba(212,163,115,0.5) 75%, transparent)',
+            'linear-gradient(to right, transparent, rgba(212, 175, 55,0.5) 25%, rgba(212, 175, 55,0.5) 75%, transparent)',
         }}
       />
 
@@ -90,7 +90,7 @@ export default function CallingCard() {
                 className="block h-px w-12"
                 style={{
                   background:
-                    'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0))',
+                    'linear-gradient(to right, rgba(212, 175, 55,0.85), rgba(212, 175, 55,0))',
                 }}
               />
               <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.42em] text-accent">
@@ -198,7 +198,7 @@ export default function CallingCard() {
                 </p>
                 <p
                   className="mt-2 font-heading text-[9px] uppercase leading-[1.5] tracking-[0.28em]"
-                  style={{ color: 'rgba(250, 246, 238, 0.75)' }}
+                  style={{ color: 'rgba(247, 242, 232, 0.75)' }}
                 >
                   Years on this Brickfields street
                 </p>
@@ -212,7 +212,7 @@ export default function CallingCard() {
                 </p>
                 <p
                   className="mt-2 font-heading text-[9px] uppercase leading-[1.5] tracking-[0.28em]"
-                  style={{ color: 'rgba(250, 246, 238, 0.75)' }}
+                  style={{ color: 'rgba(247, 242, 232, 0.75)' }}
                 >
                   Practitioner-led care · never delegated
                 </p>
@@ -226,7 +226,7 @@ export default function CallingCard() {
                 </p>
                 <p
                   className="mt-2 font-heading text-[9px] uppercase leading-[1.5] tracking-[0.28em]"
-                  style={{ color: 'rgba(250, 246, 238, 0.75)' }}
+                  style={{ color: 'rgba(247, 242, 232, 0.75)' }}
                 >
                   Treatment rooms · oils pressed by hand
                 </p>
@@ -246,7 +246,7 @@ export default function CallingCard() {
                 className="block h-px w-16"
                 style={{
                   background:
-                    'linear-gradient(to right, rgba(212,163,115,0.7), rgba(212,163,115,0))',
+                    'linear-gradient(to right, rgba(212, 175, 55,0.7), rgba(212, 175, 55,0))',
                 }}
               />
               <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.4em] text-accent/85">
@@ -276,11 +276,11 @@ export default function CallingCard() {
             >
               <div
                 className="absolute inset-2 rounded-full border"
-                style={{ borderColor: 'rgba(26,46,38,0.3)' }}
+                style={{ borderColor: 'rgba(15, 44, 36,0.3)' }}
               />
               <div
                 className="absolute inset-3 rounded-full border"
-                style={{ borderColor: 'rgba(26,46,38,0.15)', borderStyle: 'dashed' }}
+                style={{ borderColor: 'rgba(15, 44, 36,0.15)', borderStyle: 'dashed' }}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-[#0F2C24]">
                 <span className="font-devanagari italic" style={{ fontSize: '16px', lineHeight: 1 }}>

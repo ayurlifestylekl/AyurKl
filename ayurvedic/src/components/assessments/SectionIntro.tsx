@@ -23,29 +23,29 @@ export default function SectionIntro({
       transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
       className="flex flex-col items-center text-center"
     >
-      <p className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/45">
+      <p className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/45">
         Part {sectionNumber} of {totalSections}
       </p>
       {section.sanskrit && (
         <p
-          className="mt-4 italic text-[15px] text-[#D4A373]"
+          className="mt-4 italic text-[15px] text-[#D4AF37]"
           style={{ fontFamily: 'var(--font-playfair)', letterSpacing: '0.01em' }}
         >
           {section.sanskrit}
         </p>
       )}
       <h2
-        className="mt-1 font-heading text-[32px] font-bold leading-tight text-[#1e3d32] sm:text-[40px]"
+        className="mt-1 font-heading text-[32px] font-bold leading-tight text-[#163F33] sm:text-[40px]"
         style={{ letterSpacing: '-0.025em' }}
       >
         {section.title}
       </h2>
       <div
         aria-hidden
-        className="mt-5 h-px w-16 bg-gradient-to-r from-transparent via-[#D4A373] to-transparent"
+        className="mt-5 h-px w-16 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"
       />
       <p
-        className="mt-5 max-w-md font-body text-[14.5px] text-[#2B2B2B]/70"
+        className="mt-5 max-w-md font-body text-[14.5px] text-[#1F1F1F]/70"
         style={{ lineHeight: 1.7 }}
       >
         {section.intro}

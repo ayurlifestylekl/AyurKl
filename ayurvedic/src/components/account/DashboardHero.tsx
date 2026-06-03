@@ -12,10 +12,10 @@ export default function DashboardHero({ firstName }: DashboardHeroProps) {
 
   return (
     <section
-      className="relative overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-[#152b22] px-6 py-5 text-white sm:px-8 sm:py-5"
+      className="relative overflow-hidden rounded-3xl border border-[#163F33]/8 bg-[#163F33] px-6 py-5 text-white sm:px-8 sm:py-5"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 20px 40px -20px rgba(30,61,50,0.25)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 20px 40px -20px rgba(22, 63, 51,0.25)',
       }}
     >
       {/* Decoration layers */}
@@ -24,26 +24,26 @@ export default function DashboardHero({ firstName }: DashboardHeroProps) {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            'radial-gradient(65% 60% at 80% 10%, rgba(212,163,115,0.16), transparent 65%), radial-gradient(55% 60% at 0% 100%, rgba(122,157,84,0.14), transparent 65%)',
+            'radial-gradient(65% 60% at 80% 10%, rgba(212, 175, 55,0.16), transparent 65%), radial-gradient(55% 60% at 0% 100%, rgba(46, 125, 90,0.14), transparent 65%)',
         }}
       />
       <BotanicalMandala
         className="pointer-events-none absolute -right-20 -top-12 hidden h-[260px] w-[260px] sm:block"
         opacity={0.07}
-        stroke="#D4A373"
+        stroke="#D4AF37"
       />
       <FloatingLeaf
         className="pointer-events-none absolute right-8 bottom-4 hidden h-12 w-10 rotate-[12deg] lg:block"
-        color="#7A9D54"
-        strokeColor="#D4A373"
+        color="#2E7D5A"
+        strokeColor="#D4AF37"
         opacity={0.18}
       />
 
       <div className="relative z-10">
         {/* Eyebrow */}
-        <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#D4A373]/30 bg-[#D4A373]/10 px-2.5 py-0.5">
-          <Sparkles className="h-2.5 w-2.5 text-[#D4A373]" />
-          <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.28em] text-[#D4A373]">
+        <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-2.5 py-0.5">
+          <Sparkles className="h-2.5 w-2.5 text-[#D4AF37]" />
+          <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
             Member Portal
           </span>
         </div>
@@ -54,7 +54,7 @@ export default function DashboardHero({ firstName }: DashboardHeroProps) {
           style={{ letterSpacing: '-0.02em' }}
         >
           {greeting},{' '}
-          <span className="text-[#D4A373]">{firstName}.</span>
+          <span className="text-[#D4AF37]">{firstName}.</span>
         </h1>
 
         {/* Wellness tip */}

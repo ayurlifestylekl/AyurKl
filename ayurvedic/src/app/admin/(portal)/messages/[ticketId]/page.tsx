@@ -80,7 +80,7 @@ export default async function AdminTicketDetailPage({
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/messages"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to inbox
       </Link>
@@ -88,7 +88,7 @@ export default async function AdminTicketDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               {t.subject}
             </h1>
             <span
@@ -97,12 +97,12 @@ export default async function AdminTicketDetailPage({
               {t.status}
             </span>
             {useMock ? (
-              <span className="rounded-full border border-[#D4A373]/40 bg-[#FAF6EE] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
+              <span className="rounded-full border border-[#D4AF37]/40 bg-[#F7F2E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
                 Demo data
               </span>
             ) : null}
           </div>
-          <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             Opened {new Date(t.created_at).toLocaleString('en-MY')} ·{' '}
             <span className="capitalize">{t.topic}</span>
           </p>
@@ -112,16 +112,16 @@ export default async function AdminTicketDetailPage({
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
         <div className="flex flex-col gap-4">
           {/* Thread */}
-          <article className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
-            <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+            <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
               Conversation ({messages.length})
             </header>
             {messages.length === 0 ? (
-              <p className="px-5 py-6 text-center text-[12.5px] italic text-[#2B2B2B]/55">
+              <p className="px-5 py-6 text-center text-[12.5px] italic text-[#1F1F1F]/55">
                 No messages yet.
               </p>
             ) : (
-              <ul className="divide-y divide-[#1e3d32]/6">
+              <ul className="divide-y divide-[#163F33]/6">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {messages.map((m: any) => {
                   const isClinic = m.sender_kind === 'clinic'
@@ -130,17 +130,17 @@ export default async function AdminTicketDetailPage({
                     <li
                       key={m.id}
                       className={`flex flex-col gap-1 px-5 py-3 ${
-                        isClinic ? 'bg-[#FAF6EE]/30' : ''
+                        isClinic ? 'bg-[#F7F2E8]/30' : ''
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span
                           className={`text-[11px] font-semibold uppercase tracking-wider ${
                             isClinic
-                              ? 'text-[#D4A373]'
+                              ? 'text-[#D4AF37]'
                               : isSystem
-                                ? 'text-[#2B2B2B]/55'
-                                : 'text-[#1e3d32]/70'
+                                ? 'text-[#1F1F1F]/55'
+                                : 'text-[#163F33]/70'
                           }`}
                         >
                           {isClinic
@@ -149,11 +149,11 @@ export default async function AdminTicketDetailPage({
                               ? 'System'
                               : cust?.full_name ?? 'Customer'}
                         </span>
-                        <span className="text-[10.5px] text-[#2B2B2B]/55">
+                        <span className="text-[10.5px] text-[#1F1F1F]/55">
                           {new Date(m.created_at).toLocaleString('en-MY')}
                         </span>
                       </div>
-                      <p className="whitespace-pre-wrap text-[13px] text-[#1e3d32]">
+                      <p className="whitespace-pre-wrap text-[13px] text-[#163F33]">
                         {m.body}
                       </p>
                     </li>
@@ -168,26 +168,26 @@ export default async function AdminTicketDetailPage({
 
         <aside className="flex flex-col gap-4">
           {/* Customer card */}
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Customer
             </h3>
             {cust ? (
               <>
                 <p className="mt-2 text-[13px] font-semibold">{cust.full_name ?? '—'}</p>
-                <p className="text-[12px] text-[#2B2B2B]/65">{cust.email}</p>
-                <p className="text-[12px] text-[#2B2B2B]/65">{cust.phone_number}</p>
+                <p className="text-[12px] text-[#1F1F1F]/65">{cust.email}</p>
+                <p className="text-[12px] text-[#1F1F1F]/65">{cust.phone_number}</p>
                 {cust.allergies || cust.medical_conditions ? (
-                  <div className="mt-3 border-t border-[#1e3d32]/6 pt-3 text-[11.5px]">
+                  <div className="mt-3 border-t border-[#163F33]/6 pt-3 text-[11.5px]">
                     {cust.allergies ? (
                       <p>
-                        <span className="text-[#2B2B2B]/55">Allergies: </span>
+                        <span className="text-[#1F1F1F]/55">Allergies: </span>
                         {cust.allergies}
                       </p>
                     ) : null}
                     {cust.medical_conditions ? (
                       <p>
-                        <span className="text-[#2B2B2B]/55">Conditions: </span>
+                        <span className="text-[#1F1F1F]/55">Conditions: </span>
                         {cust.medical_conditions}
                       </p>
                     ) : null}
@@ -195,13 +195,13 @@ export default async function AdminTicketDetailPage({
                 ) : null}
                 <Link
                   href={`/admin/customers/${t.customer_id}`}
-                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4A373] hover:text-[#1e3d32]"
+                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
                 >
                   View full profile →
                 </Link>
               </>
             ) : (
-              <p className="mt-2 text-[12px] italic text-[#2B2B2B]/55">No customer linked.</p>
+              <p className="mt-2 text-[12px] italic text-[#1F1F1F]/55">No customer linked.</p>
             )}
           </article>
 

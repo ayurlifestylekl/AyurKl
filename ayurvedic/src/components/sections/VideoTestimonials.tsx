@@ -80,7 +80,7 @@ export default function VideoTestimonials() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 55% 70% at -5% 10%, rgba(232,148,26,0.20), transparent 60%), radial-gradient(ellipse 50% 60% at 105% 90%, rgba(226,99,47,0.22), transparent 60%)',
+            'radial-gradient(ellipse 55% 70% at -5% 10%, rgba(212, 175, 55,0.20), transparent 60%), radial-gradient(ellipse 50% 60% at 105% 90%, rgba(212, 175, 55,0.22), transparent 60%)',
         }}
       />
 
@@ -100,7 +100,7 @@ export default function VideoTestimonials() {
         className="absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.50) 50%, transparent 96%)',
+            'linear-gradient(to right, transparent 4%, rgba(212, 175, 55,0.50) 50%, transparent 96%)',
         }}
       />
       <div
@@ -108,7 +108,7 @@ export default function VideoTestimonials() {
         className="absolute inset-x-0 bottom-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 4%, rgba(232,148,26,0.40) 50%, transparent 96%)',
+            'linear-gradient(to right, transparent 4%, rgba(212, 175, 55,0.40) 50%, transparent 96%)',
         }}
       />
 
@@ -161,7 +161,7 @@ export default function VideoTestimonials() {
                   fontSize: 'clamp(1.9rem, 4vw, 3.1rem)',
                   lineHeight: 1.0,
                   letterSpacing: '-0.015em',
-                  textShadow: '0 3px 22px rgba(232,148,26,0.32)',
+                  textShadow: '0 3px 22px rgba(212, 175, 55,0.32)',
                 }}
               >
                 remembered.
@@ -284,7 +284,7 @@ function VideoCard({ item, index }: { item: VideoTestimonial; index: number }) {
           }`}
           style={{
             background:
-              'linear-gradient(to top, rgba(14,30,26,0.92) 0%, rgba(14,30,26,0.30) 50%, rgba(14,30,26,0.10) 100%)',
+              'linear-gradient(to top, rgba(10, 31, 25,0.92) 0%, rgba(10, 31, 25,0.30) 50%, rgba(10, 31, 25,0.10) 100%)',
           }}
         />
 
@@ -294,7 +294,7 @@ function VideoCard({ item, index }: { item: VideoTestimonial; index: number }) {
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
           style={{
             background:
-              'radial-gradient(60% 50% at 50% 0%, rgba(232,148,26,0.22) 0%, transparent 70%)',
+              'radial-gradient(60% 50% at 50% 0%, rgba(212, 175, 55,0.22) 0%, transparent 70%)',
           }}
         />
 

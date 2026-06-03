@@ -80,13 +80,13 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Affiliate program
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             Brand Partners
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {total} partner{total === 1 ? '' : 's'} in this view · {lifetime.orders} attributed
             orders · RM {lifetime.sales.toFixed(2)} sales · RM {lifetime.commission.toFixed(2)}{' '}
             commission
@@ -96,7 +96,7 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/partners/external-sales"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
           >
             External sales
           </Link>
@@ -104,8 +104,8 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
             href="/admin/partners/payouts"
             className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-[12.5px] font-semibold ${
               pendingAgentCount > 0
-                ? 'bg-[#D4A373] text-white hover:bg-[#b58a5d]'
-                : 'border border-[#1e3d32]/20 bg-white text-[#1e3d32] hover:bg-[#FAF6EE]/60'
+                ? 'bg-[#D4AF37] text-white hover:bg-[#b58a5d]'
+                : 'border border-[#163F33]/20 bg-white text-[#163F33] hover:bg-[#F7F2E8]/60'
             }`}
           >
             <Wallet className="h-3.5 w-3.5" />
@@ -124,40 +124,40 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
       {/* Leaderboard */}
       {leaderboard.length > 0 ? (
         <section
-          className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white"
+          className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
-          <header className="flex items-center gap-2 border-b border-[#1e3d32]/6 px-5 py-3">
-            <Trophy className="h-3.5 w-3.5 text-[#D4A373]" />
-            <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <header className="flex items-center gap-2 border-b border-[#163F33]/6 px-5 py-3">
+            <Trophy className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
               Top partners — this month
             </h2>
           </header>
-          <ol className="divide-y divide-[#1e3d32]/6">
+          <ol className="divide-y divide-[#163F33]/6">
             {leaderboard.map((entry, idx) => (
               <li
                 key={entry.agentId}
                 className="flex items-center gap-3 px-5 py-3 text-[13px]"
               >
-                <span className="w-5 font-heading text-[14px] font-bold text-[#D4A373]">
+                <span className="w-5 font-heading text-[14px] font-bold text-[#D4AF37]">
                   {idx + 1}
                 </span>
                 <Link
                   href={`/admin/partners/${entry.agentId}`}
-                  className="flex-1 font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                  className="flex-1 font-semibold text-[#163F33] hover:text-[#D4AF37]"
                 >
                   {entry.agentName ?? entry.referralCode}
                 </Link>
-                <span className="text-[11px] text-[#2B2B2B]/55">
+                <span className="text-[11px] text-[#1F1F1F]/55">
                   {entry.monthOrderCount} order{entry.monthOrderCount === 1 ? '' : 's'}
                 </span>
-                <span className="w-24 text-right font-semibold text-[#D4A373]">
+                <span className="w-24 text-right font-semibold text-[#D4AF37]">
                   RM {entry.monthCommissionRm.toFixed(2)}
                 </span>
-                <span className="hidden w-32 text-right text-[11px] text-[#2B2B2B]/55 md:inline-block">
+                <span className="hidden w-32 text-right text-[11px] text-[#1F1F1F]/55 md:inline-block">
                   lifetime RM {entry.lifetimeCommissionRm.toFixed(2)}
                 </span>
               </li>

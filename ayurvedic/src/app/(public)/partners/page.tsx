@@ -48,7 +48,7 @@ export default function PartnersPage() {
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(60% 50% at 80% 0%, rgba(212,163,115,0.18), transparent 60%), radial-gradient(50% 60% at 0% 100%, rgba(122,157,84,0.18), transparent 60%)',
+              'radial-gradient(60% 50% at 80% 0%, rgba(212, 175, 55,0.18), transparent 60%), radial-gradient(50% 60% at 0% 100%, rgba(46, 125, 90,0.18), transparent 60%)',
           }}
         />
         <div
@@ -135,7 +135,7 @@ export default function PartnersPage() {
                 className="group relative overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D4AF37]/40"
                 style={{
                   boxShadow:
-                    '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+                    '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
                 }}
               >
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#163F33]/[0.06]">

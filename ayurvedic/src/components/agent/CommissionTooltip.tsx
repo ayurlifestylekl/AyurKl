@@ -9,12 +9,12 @@ export default function CommissionTooltip({ rate }: { rate: number }) {
     <span className="group relative inline-flex items-center gap-1 align-middle">
       <span className="font-semibold">{rate}% commission</span>
       <Info
-        className="h-3 w-3 cursor-help text-white/55 transition-colors group-hover:text-[#D4A373]"
+        className="h-3 w-3 cursor-help text-white/55 transition-colors group-hover:text-[#D4AF37]"
         strokeWidth={2}
       />
       <span
         role="tooltip"
-        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-64 -translate-x-1/2 rounded-xl border border-[#1e3d32]/15 bg-[#1e3d32] p-3 text-left font-body text-[11.5px] leading-relaxed text-white/90 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-64 -translate-x-1/2 rounded-xl border border-[#163F33]/15 bg-[#163F33] p-3 text-left font-body text-[11.5px] leading-relaxed text-white/90 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
       >
         You earn <strong>{rate}%</strong> on every paid order with your referral
         code. Marketplace submissions credit commission once admin approves them.

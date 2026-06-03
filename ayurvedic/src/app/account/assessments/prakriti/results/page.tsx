@@ -22,22 +22,22 @@ export default async function PrakritiResultsPage() {
   if (!latest) {
     return (
       <div className="mx-auto flex max-w-xl flex-col items-center gap-6 py-16 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FAF6EE]">
-          <Compass className="h-6 w-6 text-[#D4A373]" strokeWidth={1.6} />
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F7F2E8]">
+          <Compass className="h-6 w-6 text-[#D4AF37]" strokeWidth={1.6} />
         </span>
         <h1
-          className="font-heading text-[26px] font-bold text-[#1e3d32]"
+          className="font-heading text-[26px] font-bold text-[#163F33]"
           style={{ letterSpacing: '-0.02em' }}
         >
           No assessment on file yet.
         </h1>
-        <p className="max-w-md font-body text-[14px] text-[#2B2B2B]/65" style={{ lineHeight: 1.65 }}>
+        <p className="max-w-md font-body text-[14px] text-[#1F1F1F]/65" style={{ lineHeight: 1.65 }}>
           Take the Prakriti assessment to receive your personal profile, daily anchors,
           and recommendations from Vaidya Akhil.
         </p>
         <Link
           href="/account/assessments/prakriti"
-          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#2F5D50] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98]"
+          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98]"
         >
           Begin assessment
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

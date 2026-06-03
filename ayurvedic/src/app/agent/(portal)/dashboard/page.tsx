@@ -51,10 +51,10 @@ export default async function AgentDashboardPage() {
     return (
       <div className="mx-auto max-w-3xl">
         <div className="rounded-3xl border border-amber-200 bg-amber-50 p-8">
-          <h1 className="font-heading text-2xl font-bold text-[#1e3d32]">
+          <h1 className="font-heading text-2xl font-bold text-[#163F33]">
             Partner profile not found.
           </h1>
-          <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+          <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
             Your account isn&apos;t linked to a sales agent profile yet. Contact
             admin to complete your partner setup.
           </p>
@@ -80,16 +80,16 @@ export default async function AgentDashboardPage() {
     <div className="mx-auto flex max-w-6xl flex-col gap-5">
       {/* Header */}
       <header>
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Partner Hub
         </span>
         <h1
-          className="mt-2 font-heading text-3xl font-bold leading-tight text-[#1e3d32] sm:text-4xl"
+          className="mt-2 font-heading text-3xl font-bold leading-tight text-[#163F33] sm:text-4xl"
           style={{ letterSpacing: '-0.02em' }}
         >
           Welcome back, {firstName}.
         </h1>
-        <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+        <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
           Here&apos;s how your referrals are performing this month.
         </p>
       </header>
@@ -103,16 +103,16 @@ export default async function AgentDashboardPage() {
 
       {/* Referral hero — code + link + QR */}
       <section
-        className="overflow-hidden rounded-3xl border border-[#D4A373]/30 bg-gradient-to-br from-[#152b22] via-[#1e3d32] to-[#1e3d32] p-6 text-white shadow-lg shadow-black/10"
+        className="overflow-hidden rounded-3xl border border-[#D4AF37]/30 bg-gradient-to-br from-[#163F33] via-[#163F33] to-[#163F33] p-6 text-white shadow-lg shadow-black/10"
       >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_auto]">
           <div className="flex flex-col gap-4">
             <div>
-              <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+              <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
                 Your referral code
               </p>
               <div className="mt-1.5 flex flex-wrap items-center gap-2.5">
-                <code className="rounded-lg bg-white/10 px-3 py-1.5 font-mono text-[20px] font-bold tracking-wide text-[#D4A373]">
+                <code className="rounded-lg bg-white/10 px-3 py-1.5 font-mono text-[20px] font-bold tracking-wide text-[#D4AF37]">
                   {profile.referralCode}
                 </code>
                 <CopyButton value={profile.referralCode} label="Copy code" />
@@ -123,7 +123,7 @@ export default async function AgentDashboardPage() {
             </div>
 
             <div>
-              <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+              <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
                 Share link
               </p>
               <div className="mt-1.5 flex flex-wrap items-center gap-2">
@@ -184,14 +184,14 @@ export default async function AgentDashboardPage() {
 
       {/* Two-column: recent orders + recent submissions */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <article className="flex flex-col rounded-3xl border border-[#1e3d32]/10 bg-white">
-          <header className="flex items-center justify-between border-b border-[#1e3d32]/8 px-5 py-4">
-            <h2 className="font-heading text-[14.5px] font-semibold text-[#1e3d32]">
+        <article className="flex flex-col rounded-3xl border border-[#163F33]/10 bg-white">
+          <header className="flex items-center justify-between border-b border-[#163F33]/8 px-5 py-4">
+            <h2 className="font-heading text-[14.5px] font-semibold text-[#163F33]">
               Recent referred orders
             </h2>
             <Link
               href="/agent/orders"
-              className="text-[11.5px] font-semibold text-[#D4A373] hover:underline"
+              className="text-[11.5px] font-semibold text-[#D4AF37] hover:underline"
             >
               View all →
             </Link>
@@ -203,20 +203,20 @@ export default async function AgentDashboardPage() {
               body="Share your link with friends, followers, or your TikTok audience. Your first commission shows up here automatically."
             />
           ) : (
-            <ul className="divide-y divide-[#1e3d32]/6">
+            <ul className="divide-y divide-[#163F33]/6">
               {recentOrders.map((o) => (
                 <li key={o.id} className="flex items-center justify-between px-5 py-3">
                   <div>
-                    <p className="text-[12.5px] font-semibold text-[#1e3d32]">
+                    <p className="text-[12.5px] font-semibold text-[#163F33]">
                       {o.customerName}
                     </p>
-                    <p className="text-[11px] text-[#2B2B2B]/55">
+                    <p className="text-[11px] text-[#1F1F1F]/55">
                       {new Date(o.createdAt).toLocaleDateString('en-MY')} ·{' '}
                       {o.paymentStatus}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[12.5px] text-[#2B2B2B]/70">
+                    <p className="text-[12.5px] text-[#1F1F1F]/70">
                       RM {o.totalAmountRm.toFixed(2)}
                     </p>
                     <p className="text-[11.5px] font-semibold text-emerald-700">
@@ -229,14 +229,14 @@ export default async function AgentDashboardPage() {
           )}
         </article>
 
-        <article className="flex flex-col rounded-3xl border border-[#1e3d32]/10 bg-white">
-          <header className="flex items-center justify-between border-b border-[#1e3d32]/8 px-5 py-4">
-            <h2 className="font-heading text-[14.5px] font-semibold text-[#1e3d32]">
+        <article className="flex flex-col rounded-3xl border border-[#163F33]/10 bg-white">
+          <header className="flex items-center justify-between border-b border-[#163F33]/8 px-5 py-4">
+            <h2 className="font-heading text-[14.5px] font-semibold text-[#163F33]">
               Marketplace submissions
             </h2>
             <Link
               href="/agent/marketplace-orders/new"
-              className="inline-flex items-center gap-1 rounded-lg bg-[#2F5D50] px-2.5 py-1.5 text-[11.5px] font-semibold text-white hover:bg-[#1e3d32]"
+              className="inline-flex items-center gap-1 rounded-lg bg-[#1E5B4B] px-2.5 py-1.5 text-[11.5px] font-semibold text-white hover:bg-[#163F33]"
             >
               <Plus className="h-3 w-3" />
               Submit new
@@ -250,14 +250,14 @@ export default async function AgentDashboardPage() {
               cta={{ href: '/agent/marketplace-orders/new', label: 'Submit your first order →' }}
             />
           ) : (
-            <ul className="divide-y divide-[#1e3d32]/6">
+            <ul className="divide-y divide-[#163F33]/6">
               {recentSubs.map((s) => (
                 <li key={s.id} className="flex items-center justify-between px-5 py-3">
                   <div>
-                    <p className="text-[12.5px] font-semibold text-[#1e3d32]">
+                    <p className="text-[12.5px] font-semibold text-[#163F33]">
                       {EXTERNAL_CHANNEL_LABEL[s.channel] ?? s.channel}
                     </p>
-                    <p className="text-[11px] text-[#2B2B2B]/55">
+                    <p className="text-[11px] text-[#1F1F1F]/55">
                       {new Date(s.createdAt).toLocaleDateString('en-MY')} · RM{' '}
                       {s.totalAmountRm.toFixed(2)}
                     </p>
@@ -297,19 +297,19 @@ function Kpi({
       ? 'text-amber-700'
       : accent === 'green'
         ? 'text-emerald-700'
-        : 'text-[#1e3d32]'
+        : 'text-[#163F33]'
   return (
-    <article className="rounded-2xl border border-[#1e3d32]/10 bg-white p-4">
+    <article className="rounded-2xl border border-[#163F33]/10 bg-white p-4">
       <div className="flex items-center gap-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1e3d32]/[0.06]">
-          <Icon className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#163F33]/[0.06]">
+          <Icon className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
         </span>
-        <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/55">
+        <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/55">
           {label}
         </p>
       </div>
       <p className={`mt-2 font-heading text-[22px] font-bold ${color}`}>{value}</p>
-      {sub ? <p className="mt-0.5 text-[11px] text-[#2B2B2B]/55">{sub}</p> : null}
+      {sub ? <p className="mt-0.5 text-[11px] text-[#1F1F1F]/55">{sub}</p> : null}
       {children ? <div className="mt-2">{children}</div> : null}
     </article>
   )
@@ -328,19 +328,19 @@ function EmptyState({
 }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-8 py-10 text-center">
-      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#1e3d32]/[0.06]">
-        <Icon className="h-4 w-4 text-[#2F5D50]" strokeWidth={1.8} />
+      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#163F33]/[0.06]">
+        <Icon className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
       </span>
-      <h3 className="mt-3 font-heading text-[14px] font-semibold text-[#1e3d32]">
+      <h3 className="mt-3 font-heading text-[14px] font-semibold text-[#163F33]">
         {title}
       </h3>
-      <p className="mt-1 max-w-xs font-body text-[12px] leading-relaxed text-[#2B2B2B]/65">
+      <p className="mt-1 max-w-xs font-body text-[12px] leading-relaxed text-[#1F1F1F]/65">
         {body}
       </p>
       {cta ? (
         <Link
           href={cta.href}
-          className="mt-3 text-[11.5px] font-semibold text-[#D4A373] hover:underline"
+          className="mt-3 text-[11.5px] font-semibold text-[#D4AF37] hover:underline"
         >
           {cta.label}
         </Link>

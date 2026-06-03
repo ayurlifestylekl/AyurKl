@@ -71,19 +71,19 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <header className="flex items-end justify-between">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Fulfilment
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             Orders
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {total} total {showMocks ? '· demo data (no real orders yet)' : ''}
           </p>
         </div>
         <Link
           href="/admin/orders/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#2F5D50] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32]"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
         >
           <Plus className="h-3.5 w-3.5" />
           Manual order

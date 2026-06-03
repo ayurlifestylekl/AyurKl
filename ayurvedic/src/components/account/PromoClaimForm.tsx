@@ -31,21 +31,21 @@ export default function PromoClaimForm() {
 
   return (
     <section
-      className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
-      <div className="flex items-center gap-2.5 border-b border-[#1e3d32]/6 px-5 py-3 sm:px-6">
-        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-          <Ticket className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+      <div className="flex items-center gap-2.5 border-b border-[#163F33]/6 px-5 py-3 sm:px-6">
+        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+          <Ticket className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
         </span>
-        <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
           Got a code?
         </h2>
-        <span className="ml-auto inline-flex items-center gap-1 font-body text-[11px] italic text-[#2B2B2B]/55">
-          <Sparkles className="h-3 w-3 text-[#D4A373]" strokeWidth={2} />
+        <span className="ml-auto inline-flex items-center gap-1 font-body text-[11px] italic text-[#1F1F1F]/55">
+          <Sparkles className="h-3 w-3 text-[#D4AF37]" strokeWidth={2} />
           From Instagram, a flyer, or Vaidya
         </span>
       </div>
@@ -68,12 +68,12 @@ export default function PromoClaimForm() {
           spellCheck={false}
           maxLength={32}
           disabled={isPending}
-          className="flex-1 rounded-full border border-[#1e3d32]/15 bg-white px-5 py-2.5 font-mono text-[14px] font-semibold uppercase tracking-[0.08em] text-[#1e3d32] placeholder:font-body placeholder:text-[12.5px] placeholder:normal-case placeholder:tracking-normal placeholder:text-[#2B2B2B]/40 focus:border-[#D4A373] focus:outline-none focus:ring-2 focus:ring-[#D4A373]/30 disabled:opacity-50"
+          className="flex-1 rounded-full border border-[#163F33]/15 bg-white px-5 py-2.5 font-mono text-[14px] font-semibold uppercase tracking-[0.08em] text-[#163F33] placeholder:font-body placeholder:text-[12.5px] placeholder:normal-case placeholder:tracking-normal placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={isPending || !code.trim()}
-          className="group inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#2F5D50] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          className="group inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isPending ? (
             <>

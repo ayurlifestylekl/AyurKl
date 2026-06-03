@@ -75,8 +75,8 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
 
   return (
     <form onSubmit={submit} className="mt-4 flex flex-col gap-4">
-      <fieldset className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           Customer (walk-in)
         </legend>
         <input
@@ -84,25 +84,25 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
           placeholder="Full name"
           value={walkInName}
           onChange={(e) => setWalkInName(e.target.value)}
-          className="mt-2 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
         />
         <input
           placeholder="Phone (optional)"
           value={walkInPhone}
           onChange={(e) => setWalkInPhone(e.target.value)}
-          className="mt-2 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
         />
         <input
           type="email"
           placeholder="Email (optional)"
           value={walkInEmail}
           onChange={(e) => setWalkInEmail(e.target.value)}
-          className="mt-2 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
         />
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           Items
         </legend>
         <select
@@ -112,7 +112,7 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
               e.target.value = ''
             }
           }}
-          className="mt-2 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
         >
           <option value="">Add product…</option>
           {products.map((p) => (
@@ -122,7 +122,7 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
           ))}
         </select>
         {items.length > 0 ? (
-          <ul className="mt-2 divide-y divide-[#1e3d32]/6">
+          <ul className="mt-2 divide-y divide-[#163F33]/6">
             {items.map((it, i) => {
               const p = products.find((p) => p.id === it.productId)
               return (
@@ -133,7 +133,7 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
                     min="1"
                     value={it.quantity}
                     onChange={(e) => setQty(i, Number(e.target.value))}
-                    className="w-16 rounded border border-[#1e3d32]/15 px-2 py-1 text-right"
+                    className="w-16 rounded border border-[#163F33]/15 px-2 py-1 text-right"
                   />
                   <span className="w-24 text-right font-semibold">
                     RM {(Number(p?.price_rm ?? 0) * it.quantity).toFixed(2)}
@@ -150,20 +150,20 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
             })}
           </ul>
         ) : null}
-        <p className="mt-2 border-t border-[#1e3d32]/6 pt-2 text-right font-semibold text-[#1e3d32]">
+        <p className="mt-2 border-t border-[#163F33]/6 pt-2 text-right font-semibold text-[#163F33]">
           Total: RM {total.toFixed(2)}
         </p>
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           Channel + payment
         </legend>
         <div className="mt-2 grid grid-cols-2 gap-2">
           <select
             value={channel}
             onChange={(e) => setChannel(e.target.value as Channel)}
-            className="rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
           >
             <option value="walk_in">Walk-in</option>
             <option value="phone">Phone</option>
@@ -172,7 +172,7 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
           <select
             value={paymentMethod}
             onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-            className="rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
           >
             <option value="cash">Cash</option>
             <option value="bank_transfer">Bank transfer</option>
@@ -188,7 +188,7 @@ export default function ManualOrderForm({ products }: { products: Product[] }) {
       <button
         type="submit"
         disabled={pending || items.length === 0 || !walkInName}
-        className="rounded-lg bg-[#2F5D50] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+        className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
       >
         Create order
       </button>

@@ -8,8 +8,8 @@ import { EASE_OUT_PREMIUM, fadeUp, inViewOnce, staggerParent } from '@/lib/motio
 
 const heroDiamondPattern = {
   backgroundImage: `
-    radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px),
-    radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px)
+    radial-gradient(circle, rgba(212, 175, 55,0.07) 1px, transparent 1px),
+    radial-gradient(circle, rgba(212, 175, 55,0.07) 1px, transparent 1px)
   `,
   backgroundSize: '28px 28px',
   backgroundPosition: '0 0, 14px 14px',
@@ -47,7 +47,7 @@ export default function Bureau() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 15% 5%, rgba(212,163,115,0.18) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 92% 100%, rgba(26,46,38,0.6) 0%, transparent 55%)',
+            'radial-gradient(ellipse 900px 700px at 15% 5%, rgba(212, 175, 55,0.18) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 92% 100%, rgba(15, 44, 36,0.6) 0%, transparent 55%)',
         }}
         aria-hidden
       />
@@ -86,7 +86,7 @@ export default function Bureau() {
               aria-hidden
               className="h-px w-16 sm:w-24"
               style={{
-                background: 'linear-gradient(to right, transparent, rgba(212,163,115,0.75))',
+                background: 'linear-gradient(to right, transparent, rgba(212, 175, 55,0.75))',
               }}
             />
             <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.42em] text-accent/85">
@@ -96,7 +96,7 @@ export default function Bureau() {
               aria-hidden
               className="h-px w-16 sm:w-24"
               style={{
-                background: 'linear-gradient(to left, transparent, rgba(212,163,115,0.75))',
+                background: 'linear-gradient(to left, transparent, rgba(212, 175, 55,0.75))',
               }}
             />
           </div>
@@ -135,7 +135,7 @@ export default function Bureau() {
             className="pointer-events-none absolute left-[calc(100%/(1.1+1+1)*1.1)] top-10 hidden h-[calc(100%-80px)] w-px lg:block"
             style={{
               background:
-                'linear-gradient(to bottom, transparent, rgba(212,163,115,0.45) 12%, rgba(212,163,115,0.45) 88%, transparent)',
+                'linear-gradient(to bottom, transparent, rgba(212, 175, 55,0.45) 12%, rgba(212, 175, 55,0.45) 88%, transparent)',
             }}
           />
           <span
@@ -143,17 +143,17 @@ export default function Bureau() {
             className="pointer-events-none absolute left-[calc(100%/(1.1+1+1)*(1.1+1))] top-10 hidden h-[calc(100%-80px)] w-px lg:block"
             style={{
               background:
-                'linear-gradient(to bottom, transparent, rgba(212,163,115,0.45) 12%, rgba(212,163,115,0.45) 88%, transparent)',
+                'linear-gradient(to bottom, transparent, rgba(212, 175, 55,0.45) 12%, rgba(212, 175, 55,0.45) 88%, transparent)',
             }}
           />
           {/* Diamond midpoints */}
           <span
             aria-hidden
-            className="pointer-events-none absolute left-[calc(100%/(1.1+1+1)*1.1)] top-1/2 hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent/90 shadow-[0_0_0_4px_rgba(212,163,115,0.15)] lg:block"
+            className="pointer-events-none absolute left-[calc(100%/(1.1+1+1)*1.1)] top-1/2 hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent/90 shadow-[0_0_0_4px_rgba(212, 175, 55,0.15)] lg:block"
           />
           <span
             aria-hidden
-            className="pointer-events-none absolute left-[calc(100%/(1.1+1+1)*(1.1+1))] top-1/2 hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent/90 shadow-[0_0_0_4px_rgba(212,163,115,0.15)] lg:block"
+            className="pointer-events-none absolute left-[calc(100%/(1.1+1+1)*(1.1+1))] top-1/2 hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent/90 shadow-[0_0_0_4px_rgba(212, 175, 55,0.15)] lg:block"
           />
 
           {/* ─── Column 1 · The Map ───────────────────── */}
@@ -163,7 +163,7 @@ export default function Bureau() {
               className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-[2px] ring-1 ring-accent/40 lg:aspect-square"
               style={{
                 boxShadow:
-                  '0 30px 60px -24px rgba(0,0,0,0.55), 0 10px 30px -10px rgba(212,163,115,0.2)',
+                  '0 30px 60px -24px rgba(0,0,0,0.55), 0 10px 30px -10px rgba(212, 175, 55,0.2)',
               }}
             >
               <iframe
@@ -185,7 +185,7 @@ export default function Bureau() {
               <div className="pointer-events-none absolute bottom-1 left-1 h-3 w-3 border-b-2 border-l-2 border-accent" />
               <div className="pointer-events-none absolute bottom-1 right-1 h-3 w-3 border-b-2 border-r-2 border-accent" />
               {/* Plate badge */}
-              <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-accent/95 px-2.5 py-1 font-body text-[10px] italic text-primary shadow-[0_10px_24px_-10px_rgba(212,163,115,0.8)]">
+              <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-accent/95 px-2.5 py-1 font-body text-[10px] italic text-primary shadow-[0_10px_24px_-10px_rgba(212, 175, 55,0.8)]">
                 <span aria-hidden className="inline-block h-1 w-1 rotate-45 bg-primary/70" />
                 N°01 · Brickfields
               </span>
@@ -212,7 +212,7 @@ export default function Bureau() {
                 className="h-px w-full"
                 style={{
                   background:
-                    'linear-gradient(to right, transparent, rgba(212,163,115,0.65) 10%, rgba(212,163,115,0.65) 90%, transparent)',
+                    'linear-gradient(to right, transparent, rgba(212, 175, 55,0.65) 10%, rgba(212, 175, 55,0.65) 90%, transparent)',
                 }}
               />
 
@@ -245,7 +245,7 @@ export default function Bureau() {
                 className="h-px w-full"
                 style={{
                   background:
-                    'linear-gradient(to right, transparent, rgba(212,163,115,0.65) 10%, rgba(212,163,115,0.65) 90%, transparent)',
+                    'linear-gradient(to right, transparent, rgba(212, 175, 55,0.65) 10%, rgba(212, 175, 55,0.65) 90%, transparent)',
                 }}
               />
 
@@ -274,7 +274,7 @@ export default function Bureau() {
                 {/* Gold seal dot */}
                 <span
                   aria-hidden
-                  className="absolute right-4 top-4 h-2 w-2 rounded-full bg-accent shadow-[0_0_0_3px_rgba(212,163,115,0.2)]"
+                  className="absolute right-4 top-4 h-2 w-2 rounded-full bg-accent shadow-[0_0_0_3px_rgba(212, 175, 55,0.2)]"
                 />
                 <p className="font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white/85">
                   Kerala Ayurvedic Lifestyle
@@ -291,7 +291,7 @@ export default function Bureau() {
                   className="mt-5 block h-px w-20"
                   style={{
                     background:
-                      'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15))',
+                      'linear-gradient(to right, rgba(212, 175, 55,0.85), rgba(212, 175, 55,0.15))',
                   }}
                 />
 
@@ -368,7 +368,7 @@ function ColumnHeader({ index, label }: { index: string; label: string }) {
         aria-hidden
         className="h-px w-8"
         style={{
-          background: 'linear-gradient(to right, rgba(212,163,115,0.8), rgba(212,163,115,0.15))',
+          background: 'linear-gradient(to right, rgba(212, 175, 55,0.8), rgba(212, 175, 55,0.15))',
         }}
       />
       <span className="font-heading text-[10.5px] font-bold uppercase tracking-[0.3em] text-white/85">

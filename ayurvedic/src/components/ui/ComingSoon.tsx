@@ -64,7 +64,7 @@ export default function ComingSoon({
           width: 640,
           height: 640,
           background:
-            'radial-gradient(circle at center, rgba(212,163,115,0.22) 0%, rgba(212,163,115,0.08) 30%, transparent 65%)',
+            'radial-gradient(circle at center, rgba(212, 175, 55,0.22) 0%, rgba(212, 175, 55,0.08) 30%, transparent 65%)',
           filter: 'blur(28px)',
         }}
       />
@@ -114,7 +114,7 @@ export default function ComingSoon({
         >
           <Link
             href={primaryHref}
-            className="group relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white shadow-[0_18px_40px_-18px_rgba(47,93,80,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#163F33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            className="group relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white shadow-[0_18px_40px_-18px_rgba(30, 91, 75,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#163F33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
             <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
             {primaryLabel}

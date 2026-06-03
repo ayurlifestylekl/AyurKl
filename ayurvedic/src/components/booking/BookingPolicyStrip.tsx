@@ -29,7 +29,7 @@ export default function BookingPolicyStrip() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 80% 100% at 0% 50%, rgba(212,163,115,0.08) 0%, transparent 60%), radial-gradient(ellipse 80% 100% at 100% 50%, rgba(47,93,80,0.05) 0%, transparent 60%)',
+            'radial-gradient(ellipse 80% 100% at 0% 50%, rgba(212, 175, 55,0.08) 0%, transparent 60%), radial-gradient(ellipse 80% 100% at 100% 50%, rgba(30, 91, 75,0.05) 0%, transparent 60%)',
         }}
       />
       <div className="relative mx-auto flex max-w-6xl flex-col gap-2 px-6 py-3 sm:flex-row sm:items-center sm:justify-center sm:gap-6 sm:py-2.5 lg:px-10">

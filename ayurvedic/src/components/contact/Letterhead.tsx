@@ -18,7 +18,7 @@ const INTENTS: Array<{ value: ContactIntent; label: string }> = [
 ]
 
 const underlineClass =
-  'w-full border-0 border-b-[1.5px] border-primary/20 bg-transparent px-0 pb-2 pt-2 font-body text-[16px] text-dark placeholder:font-body placeholder:italic placeholder:text-dark/35 transition-colors duration-300 focus:border-accent focus:outline-none focus:ring-0 focus:shadow-[0_14px_30px_-14px_rgba(212,163,115,0.55)]'
+  'w-full border-0 border-b-[1.5px] border-primary/20 bg-transparent px-0 pb-2 pt-2 font-body text-[16px] text-dark placeholder:font-body placeholder:italic placeholder:text-dark/35 transition-colors duration-300 focus:border-accent focus:outline-none focus:ring-0 focus:shadow-[0_14px_30px_-14px_rgba(212, 175, 55,0.55)]'
 
 /**
  * Zone 4 — "The Letterhead"
@@ -111,7 +111,7 @@ export default function Letterhead() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 88% 12%, rgba(212,163,115,0.09) 0%, transparent 55%), radial-gradient(ellipse 700px 600px at 8% 95%, rgba(122,157,84,0.06) 0%, transparent 55%)',
+            'radial-gradient(ellipse 900px 700px at 88% 12%, rgba(212, 175, 55,0.09) 0%, transparent 55%), radial-gradient(ellipse 700px 600px at 8% 95%, rgba(46, 125, 90,0.06) 0%, transparent 55%)',
         }}
       />
       <div aria-hidden className="grain-overlay pointer-events-none absolute inset-0" />
@@ -172,7 +172,7 @@ export default function Letterhead() {
                       className="mx-auto block h-px w-full max-w-md"
                       style={{
                         background:
-                          'linear-gradient(to right, transparent, rgba(212,163,115,0.7) 15%, rgba(212,163,115,0.7) 85%, transparent)',
+                          'linear-gradient(to right, transparent, rgba(212, 175, 55,0.7) 15%, rgba(212, 175, 55,0.7) 85%, transparent)',
                       }}
                     />
                     <p
@@ -189,7 +189,7 @@ export default function Letterhead() {
                       className="mx-auto mt-3 block h-px w-full max-w-md"
                       style={{
                         background:
-                          'linear-gradient(to right, transparent, rgba(212,163,115,0.7) 15%, rgba(212,163,115,0.7) 85%, transparent)',
+                          'linear-gradient(to right, transparent, rgba(212, 175, 55,0.7) 15%, rgba(212, 175, 55,0.7) 85%, transparent)',
                       }}
                     />
                   </div>
@@ -431,7 +431,7 @@ function SuccessLetter({
           className="mx-auto block h-px w-full max-w-md"
           style={{
             background:
-              'linear-gradient(to right, transparent, rgba(212,163,115,0.7) 15%, rgba(212,163,115,0.7) 85%, transparent)',
+              'linear-gradient(to right, transparent, rgba(212, 175, 55,0.7) 15%, rgba(212, 175, 55,0.7) 85%, transparent)',
           }}
         />
         <p className="mt-3 font-heading text-[10px] font-semibold uppercase tracking-[0.4em] text-primary">
@@ -445,13 +445,13 @@ function SuccessLetter({
           className="mx-auto mt-3 block h-px w-full max-w-md"
           style={{
             background:
-              'linear-gradient(to right, transparent, rgba(212,163,115,0.7) 15%, rgba(212,163,115,0.7) 85%, transparent)',
+              'linear-gradient(to right, transparent, rgba(212, 175, 55,0.7) 15%, rgba(212, 175, 55,0.7) 85%, transparent)',
           }}
         />
       </div>
 
       {/* Wax seal motif */}
-      <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-accent/[0.1] shadow-[0_0_0_3px_rgba(212,163,115,0.2),0_0_0_6px_rgba(212,163,115,0.08)]">
+      <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-accent/[0.1] shadow-[0_0_0_3px_rgba(212, 175, 55,0.2),0_0_0_6px_rgba(212, 175, 55,0.08)]">
         <Check className="h-6 w-6 text-accent" strokeWidth={2.4} />
       </div>
 

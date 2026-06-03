@@ -35,27 +35,27 @@ export default function RecountDialog({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60"
+        className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
       >
         Recount
       </button>
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#1e3d32]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
               Recount stock
             </h2>
-            <p className="mt-1 text-[11.5px] text-[#2B2B2B]/65">
+            <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">
               Use this after a physical count. System will create an adjustment movement to
               reconcile system with physical.
             </p>
 
-            <p className="mt-3 text-[12px] text-[#2B2B2B]/65">
+            <p className="mt-3 text-[12px] text-[#1F1F1F]/65">
               System currently shows:{' '}
-              <strong className="text-[#1e3d32]">{currentSystemQty}</strong>
+              <strong className="text-[#163F33]">{currentSystemQty}</strong>
             </p>
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               Physical count *
             </label>
             <input
@@ -63,7 +63,7 @@ export default function RecountDialog({
               min="0"
               value={count}
               onChange={(e) => setCount(Math.max(0, Number(e.target.value)))}
-              className="mt-1 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
             />
             {delta !== 0 ? (
               <p
@@ -75,16 +75,16 @@ export default function RecountDialog({
                 {delta}
               </p>
             ) : (
-              <p className="mt-1 text-[11.5px] text-[#2B2B2B]/55">No adjustment needed.</p>
+              <p className="mt-1 text-[11.5px] text-[#1F1F1F]/55">No adjustment needed.</p>
             )}
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               Reason
             </label>
             <input
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
             />
 
             {error ? <p className="mt-3 text-[12px] text-red-600">{error}</p> : null}
@@ -92,7 +92,7 @@ export default function RecountDialog({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-lg border border-[#1e3d32]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>
@@ -100,7 +100,7 @@ export default function RecountDialog({
                 type="button"
                 disabled={pending || delta === 0}
                 onClick={submit}
-                className="rounded-lg bg-[#2F5D50] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
+                className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
               >
                 Apply
               </button>

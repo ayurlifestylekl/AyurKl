@@ -26,7 +26,7 @@ export default function ConsultationRequiredNotice({
       className="relative overflow-hidden rounded-2xl border border-accent/30 bg-white p-8 sm:p-10 lg:p-12"
       style={{
         boxShadow:
-          '0 2px 6px rgba(47,93,80,0.04), 0 24px 60px -24px rgba(47,93,80,0.18)',
+          '0 2px 6px rgba(30, 91, 75,0.04), 0 24px 60px -24px rgba(30, 91, 75,0.18)',
       }}
     >
       <div
@@ -34,7 +34,7 @@ export default function ConsultationRequiredNotice({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 0% 0%, rgba(212,163,115,0.14) 0%, transparent 45%), radial-gradient(ellipse at 100% 100%, rgba(47,93,80,0.06) 0%, transparent 45%)',
+            'radial-gradient(ellipse at 0% 0%, rgba(212, 175, 55,0.14) 0%, transparent 45%), radial-gradient(ellipse at 100% 100%, rgba(30, 91, 75,0.06) 0%, transparent 45%)',
         }}
       />
 
@@ -69,7 +69,7 @@ export default function ConsultationRequiredNotice({
           className="h-px w-16"
           style={{
             background:
-              'linear-gradient(to right, rgba(212,163,115,0.7), rgba(212,163,115,0.1))',
+              'linear-gradient(to right, rgba(212, 175, 55,0.7), rgba(212, 175, 55,0.1))',
           }}
         />
 
@@ -78,7 +78,7 @@ export default function ConsultationRequiredNotice({
             href="/book/consultation"
             className="group inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.18em] text-dark transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]"
             style={{
-              boxShadow: '0 12px 32px -12px rgba(212,163,115,0.8)',
+              boxShadow: '0 12px 32px -12px rgba(212, 175, 55,0.8)',
             }}
           >
             <span>Book Free Consultation</span>

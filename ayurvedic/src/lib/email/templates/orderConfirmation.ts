@@ -12,13 +12,13 @@ export function orderConfirmationEmail(input: {
   return {
     subject: `Order #${input.orderShortId} confirmed — ${total}`,
     text: `${greeting}\n\nWe've received your order #${input.orderShortId}.\n\n${itemsText}\n\nTotal: ${total}\n\nTrack it here: ${input.href}\n\nWith warmth,\nKerala Ayurvedic Lifestyle`,
-    html: `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#1e3d32">
+    html: `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#163F33">
   <h1 style="font-family:'Helvetica Neue',sans-serif;font-size:22px;font-weight:700;margin:0 0 16px">Order #${input.orderShortId} confirmed</h1>
   <p style="line-height:1.65">${greeting}</p>
   <p style="line-height:1.65">We've received your order. Here's what's on the way:</p>
   <ul style="line-height:1.7;padding-left:20px">${itemsHtml}</ul>
   <p style="margin-top:16px;font-weight:700;font-size:18px">Total: ${total}</p>
-  <p style="margin-top:24px"><a href="${input.href}" style="display:inline-block;background:#2F5D50;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Track order</a></p>
+  <p style="margin-top:24px"><a href="${input.href}" style="display:inline-block;background:#1E5B4B;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Track order</a></p>
   <p style="margin-top:32px;color:#666">With warmth,<br/>Kerala Ayurvedic Lifestyle</p>
 </div>`,
   }

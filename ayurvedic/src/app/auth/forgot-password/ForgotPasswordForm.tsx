@@ -37,15 +37,15 @@ export default function ForgotPasswordForm() {
             <button
               type="button"
               onClick={() => setSubmitted(false)}
-              className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
+              className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
             >
               Try again
             </button>
           </>
         }
       >
-        <div className="flex items-start gap-3 rounded-2xl border border-[#D4A373]/35 bg-[#D4A373]/10 px-4 py-4">
-          <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#D4A373]" />
+        <div className="flex items-start gap-3 rounded-2xl border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-4 py-4">
+          <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#D4AF37]" />
           <p className="font-body text-[13px] leading-relaxed text-white/80">
             Open the email and click the link to set a new password. The link expires in 1 hour.
           </p>
@@ -63,7 +63,7 @@ export default function ForgotPasswordForm() {
           Remembered it?{' '}
           <Link
             href="/auth/login"
-            className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
+            className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
           >
             Back to sign in
           </Link>
@@ -92,7 +92,7 @@ export default function ForgotPasswordForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4A373] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? 'Sending…' : 'Send reset link'}
         </button>

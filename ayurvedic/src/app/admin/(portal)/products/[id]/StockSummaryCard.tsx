@@ -17,19 +17,19 @@ export default function StockSummaryCard({
   const isOut = stockQty === 0
 
   return (
-    <div className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-      <div className="flex items-center gap-2 text-[#1e3d32]">
+    <div className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+      <div className="flex items-center gap-2 text-[#163F33]">
         <Boxes className="h-3.5 w-3.5" />
         <h3 className="font-heading text-[12.5px] font-semibold">Stock</h3>
       </div>
       <p
         className={`mt-2 font-heading text-[28px] font-bold ${
-          isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#1e3d32]'
+          isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#163F33]'
         }`}
       >
         {stockQty}
       </p>
-      <p className="text-[11.5px] text-[#2B2B2B]/65">
+      <p className="text-[11.5px] text-[#1F1F1F]/65">
         {isOut
           ? 'Out of stock'
           : isLow
@@ -37,13 +37,13 @@ export default function StockSummaryCard({
             : `Healthy (threshold ${threshold})`}
       </p>
       {expiryDate ? (
-        <p className="mt-2 text-[11.5px] text-[#2B2B2B]/65">
+        <p className="mt-2 text-[11.5px] text-[#1F1F1F]/65">
           Expires {new Date(expiryDate).toLocaleDateString('en-MY')}
         </p>
       ) : null}
       <Link
         href={`/admin/inventory/${productId}`}
-        className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#D4A373] hover:text-[#1e3d32]"
+        className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
       >
         View stock history
         <ArrowRight className="h-3 w-3" />

@@ -109,7 +109,7 @@ export default async function ProfilePage() {
         subtitle="Vaidya uses this to keep you safe before every prescription."
         tone="sensitive"
         badge={
-          <span className="inline-flex items-center gap-1 rounded-full border border-[#D4A373]/35 bg-[#D4A373]/[0.1] px-2 py-0.5 font-heading text-[9.5px] font-semibold uppercase tracking-[0.14em] text-[#9c6f3e]">
+          <span className="inline-flex items-center gap-1 rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/[0.1] px-2 py-0.5 font-heading text-[9.5px] font-semibold uppercase tracking-[0.14em] text-[#9c6f3e]">
             <ShieldCheck className="h-2.5 w-2.5" strokeWidth={2.2} />
             PDPA-protected
           </span>

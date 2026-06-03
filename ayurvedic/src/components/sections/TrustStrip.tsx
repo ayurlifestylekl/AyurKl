@@ -31,7 +31,7 @@ export default function TrustStrip() {
         className="absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 5%, rgba(212,163,115,0.25) 30%, rgba(212,163,115,0.25) 70%, transparent 95%)',
+            'linear-gradient(to right, transparent 5%, rgba(212, 175, 55,0.25) 30%, rgba(212, 175, 55,0.25) 70%, transparent 95%)',
         }}
       />
 
@@ -41,7 +41,7 @@ export default function TrustStrip() {
         className="absolute inset-x-0 bottom-0 h-px"
         style={{
           background:
-            'linear-gradient(to right, transparent 5%, rgba(212,163,115,0.25) 30%, rgba(212,163,115,0.25) 70%, transparent 95%)',
+            'linear-gradient(to right, transparent 5%, rgba(212, 175, 55,0.25) 30%, rgba(212, 175, 55,0.25) 70%, transparent 95%)',
         }}
       />
 

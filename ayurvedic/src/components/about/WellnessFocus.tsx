@@ -40,8 +40,8 @@ export default function WellnessFocus() {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: [
-            'radial-gradient(880px 600px at 82% 22%, rgba(212,163,115,0.16), transparent 62%)',
-            'radial-gradient(1080px 700px at 10% 94%, rgba(47,93,80,0.55), transparent 64%)',
+            'radial-gradient(880px 600px at 82% 22%, rgba(212, 175, 55,0.16), transparent 62%)',
+            'radial-gradient(1080px 700px at 10% 94%, rgba(30, 91, 75,0.55), transparent 64%)',
           ].join(', '),
         }}
       />
@@ -52,7 +52,7 @@ export default function WellnessFocus() {
         className="pointer-events-none absolute inset-0 opacity-[0.055]"
         style={{
           backgroundImage:
-            'radial-gradient(rgba(212,163,115,0.55) 1px, transparent 1px)',
+            'radial-gradient(rgba(212, 175, 55,0.55) 1px, transparent 1px)',
           backgroundSize: '26px 26px',
         }}
       />
@@ -154,7 +154,7 @@ export default function WellnessFocus() {
                           aria-hidden
                           className={`relative z-10 h-[7px] w-[7px] rounded-full transition-[background-color,border-color,box-shadow] duration-500 ${
                             isActive
-                              ? 'bg-accent shadow-[0_0_10px_rgba(212,163,115,0.8)]'
+                              ? 'bg-accent shadow-[0_0_10px_rgba(212, 175, 55,0.8)]'
                               : 'border border-accent/55 group-hover:border-accent'
                           }`}
                         />
@@ -224,7 +224,7 @@ export default function WellnessFocus() {
               className="pointer-events-none absolute inset-y-6 left-0 hidden w-px lg:block"
               style={{
                 backgroundImage:
-                  'linear-gradient(to bottom, transparent, rgba(212,163,115,0.4) 18%, rgba(212,163,115,0.15) 82%, transparent)',
+                  'linear-gradient(to bottom, transparent, rgba(212, 175, 55,0.4) 18%, rgba(212, 175, 55,0.15) 82%, transparent)',
               }}
             />
 

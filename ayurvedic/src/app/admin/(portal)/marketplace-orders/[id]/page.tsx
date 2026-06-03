@@ -34,7 +34,7 @@ export default async function MarketplaceOrderDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <Link
         href="/admin/marketplace-orders"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to marketplace orders
       </Link>
@@ -42,7 +42,7 @@ export default async function MarketplaceOrderDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               {EXTERNAL_CHANNEL_LABEL[
                 m.channel as keyof typeof EXTERNAL_CHANNEL_LABEL
               ]}{' '}
@@ -54,7 +54,7 @@ export default async function MarketplaceOrderDetailPage({
               {m.status}
             </span>
           </div>
-          <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             Received {new Date(m.created_at).toLocaleString('en-MY')}
             {m.marketplace_order_ref ? (
               <>
@@ -74,13 +74,13 @@ export default async function MarketplaceOrderDetailPage({
       />
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4 lg:col-span-2">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">Items</h2>
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4 lg:col-span-2">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Items</h2>
           {items.length === 0 ? (
-            <p className="mt-2 text-[12px] italic text-[#2B2B2B]/55">No items.</p>
+            <p className="mt-2 text-[12px] italic text-[#1F1F1F]/55">No items.</p>
           ) : (
             <table className="mt-3 w-full text-left text-[13px]">
-              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 <tr>
                   <th className="py-2">Product</th>
                   <th className="py-2">SKU</th>
@@ -89,11 +89,11 @@ export default async function MarketplaceOrderDetailPage({
                   <th className="py-2 text-right">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1e3d32]/6">
+              <tbody className="divide-y divide-[#163F33]/6">
                 {items.map((it, i) => (
                   <tr key={i}>
                     <td className="py-2">{it.product_name}</td>
-                    <td className="py-2 text-[11.5px] text-[#2B2B2B]/65">
+                    <td className="py-2 text-[11.5px] text-[#1F1F1F]/65">
                       {it.sku ?? '—'}
                     </td>
                     <td className="py-2 text-right">{it.quantity}</td>
@@ -108,7 +108,7 @@ export default async function MarketplaceOrderDetailPage({
               </tbody>
               <tfoot className="text-[12.5px]">
                 <tr>
-                  <td colSpan={4} className="pt-3 text-right text-[#2B2B2B]/65">
+                  <td colSpan={4} className="pt-3 text-right text-[#1F1F1F]/65">
                     Subtotal
                   </td>
                   <td className="pt-3 text-right">
@@ -116,7 +116,7 @@ export default async function MarketplaceOrderDetailPage({
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={4} className="text-right text-[#2B2B2B]/65">
+                  <td colSpan={4} className="text-right text-[#1F1F1F]/65">
                     Shipping
                   </td>
                   <td className="text-right">RM {Number(m.shipping_rm).toFixed(2)}</td>
@@ -124,11 +124,11 @@ export default async function MarketplaceOrderDetailPage({
                 <tr>
                   <td
                     colSpan={4}
-                    className="pt-1 text-right font-semibold text-[#1e3d32]"
+                    className="pt-1 text-right font-semibold text-[#163F33]"
                   >
                     Total
                   </td>
-                  <td className="pt-1 text-right font-semibold text-[#1e3d32]">
+                  <td className="pt-1 text-right font-semibold text-[#163F33]">
                     RM {Number(m.total_amount_rm).toFixed(2)}
                   </td>
                 </tr>
@@ -136,31 +136,31 @@ export default async function MarketplaceOrderDetailPage({
             </table>
           )}
           {m.notes ? (
-            <p className="mt-3 rounded-lg border border-[#1e3d32]/8 bg-[#FAF6EE]/30 p-3 text-[12px] italic text-[#2B2B2B]/70">
+            <p className="mt-3 rounded-lg border border-[#163F33]/8 bg-[#F7F2E8]/30 p-3 text-[12px] italic text-[#1F1F1F]/70">
               {m.notes}
             </p>
           ) : null}
         </article>
 
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">Customer</h2>
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Customer</h2>
           <p className="mt-2 text-[13px] font-semibold">{m.customer_name}</p>
           {m.customer_phone ? (
-            <p className="text-[12px] text-[#2B2B2B]/65">{m.customer_phone}</p>
+            <p className="text-[12px] text-[#1F1F1F]/65">{m.customer_phone}</p>
           ) : null}
           {m.customer_email ? (
-            <p className="text-[12px] text-[#2B2B2B]/65">{m.customer_email}</p>
+            <p className="text-[12px] text-[#1F1F1F]/65">{m.customer_email}</p>
           ) : null}
 
           {m.customer_address ? (
-            <div className="mt-3 border-t border-[#1e3d32]/6 pt-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <div className="mt-3 border-t border-[#163F33]/6 pt-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 Ship to
               </p>
-              <p className="mt-1 whitespace-pre-line text-[12.5px] text-[#2B2B2B]/85">
+              <p className="mt-1 whitespace-pre-line text-[12.5px] text-[#1F1F1F]/85">
                 {m.customer_address}
               </p>
-              <p className="mt-0.5 text-[12px] text-[#2B2B2B]/65">
+              <p className="mt-0.5 text-[12px] text-[#1F1F1F]/65">
                 {[m.customer_city, m.customer_postcode, m.customer_state]
                   .filter(Boolean)
                   .join(', ')}
@@ -169,15 +169,15 @@ export default async function MarketplaceOrderDetailPage({
           ) : null}
 
           {m.payment_proof_url ? (
-            <div className="mt-3 border-t border-[#1e3d32]/6 pt-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <div className="mt-3 border-t border-[#163F33]/6 pt-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 Proof of sale
               </p>
               <a
                 href={m.payment_proof_url}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-1 inline-block break-all text-[11.5px] font-semibold text-[#D4A373] hover:underline"
+                className="mt-1 inline-block break-all text-[11.5px] font-semibold text-[#D4AF37] hover:underline"
               >
                 {m.payment_proof_url}
               </a>
@@ -185,22 +185,22 @@ export default async function MarketplaceOrderDetailPage({
           ) : null}
 
           {agent ? (
-            <div className="mt-4 border-t border-[#1e3d32]/6 pt-4">
-              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <div className="mt-4 border-t border-[#163F33]/6 pt-4">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 Attributed to
               </h3>
               <p className="mt-1 text-[13px] font-semibold">
                 {agentUser?.full_name ?? '—'}
               </p>
-              <p className="text-[11.5px] text-[#2B2B2B]/55">
+              <p className="text-[11.5px] text-[#1F1F1F]/55">
                 <code className="font-mono">{agent.referral_code}</code>
               </p>
-              <p className="mt-2 text-[11px] italic text-[#2B2B2B]/55">
+              <p className="mt-2 text-[11px] italic text-[#1F1F1F]/55">
                 Commission will be created automatically when this order is approved.
               </p>
             </div>
           ) : (
-            <p className="mt-4 border-t border-[#1e3d32]/6 pt-4 text-[11.5px] italic text-[#2B2B2B]/55">
+            <p className="mt-4 border-t border-[#163F33]/6 pt-4 text-[11.5px] italic text-[#1F1F1F]/55">
               No agent attribution. (To add later, edit before approving — or leave as direct sale.)
             </p>
           )}

@@ -11,17 +11,17 @@ export default function RevenueLineChart({ data }: Props) {
   const isEmpty = max === 1 && data.every((p) => p.revenue === 0)
   return (
     <article
-      className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white p-5"
+      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       <header className="flex items-baseline justify-between">
-        <h3 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
           Revenue · last 30 days
         </h3>
-        <span className="font-body text-[11px] text-[#2B2B2B]/55">
+        <span className="font-body text-[11px] text-[#1F1F1F]/55">
           Peak day RM {max.toFixed(0)}
         </span>
       </header>
@@ -31,13 +31,13 @@ export default function RevenueLineChart({ data }: Props) {
         preserveAspectRatio="none"
         aria-label="Revenue over the last 30 days"
       >
-        <path d={pathD} fill="none" stroke="#D4A373" strokeWidth={1.8} />
+        <path d={pathD} fill="none" stroke="#D4AF37" strokeWidth={1.8} />
         {points.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={1.5} fill="#D4A373" />
+          <circle key={i} cx={p.x} cy={p.y} r={1.5} fill="#D4AF37" />
         ))}
       </svg>
       {isEmpty && (
-        <p className="mt-2 text-center font-body text-[11px] italic text-[#2B2B2B]/45">
+        <p className="mt-2 text-center font-body text-[11px] italic text-[#1F1F1F]/45">
           Collecting data…
         </p>
       )}

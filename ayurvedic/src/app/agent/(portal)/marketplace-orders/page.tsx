@@ -51,13 +51,13 @@ export default async function AgentMarketplaceOrdersPage() {
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Multi-channel sales
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
             Marketplace sales
           </h1>
-          <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+          <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {counts.pending_payment} awaiting payment · {counts.pending} pending review ·{' '}
             {counts.approved} approved · {counts.rejected} rejected · RM{' '}
             {approvedTotal.toFixed(2)} approved
@@ -65,7 +65,7 @@ export default async function AgentMarketplaceOrdersPage() {
         </div>
         <Link
           href="/agent/marketplace-orders/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#2F5D50] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32]"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
         >
           <Plus className="h-3.5 w-3.5" />
           Submit sale
@@ -86,8 +86,8 @@ export default async function AgentMarketplaceOrdersPage() {
         />
       ) : null}
 
-      <section className="rounded-2xl border border-[#1e3d32]/10 bg-white p-4 text-[12.5px] text-[#2B2B2B]/70">
-        <p className="font-semibold text-[#1e3d32]">How this works</p>
+      <section className="rounded-2xl border border-[#163F33]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
+        <p className="font-semibold text-[#163F33]">How this works</p>
         <ol className="mt-1 list-decimal space-y-1 pl-4">
           <li>Submit each marketplace order — it lands in <strong>Awaiting payment</strong>.</li>
           <li>
@@ -101,13 +101,13 @@ export default async function AgentMarketplaceOrdersPage() {
       </section>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No marketplace sales yet. Click <strong>Submit sale</strong> after your next order.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
           <table className="w-full text-left text-[13px]">
-            <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               <tr>
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Channel</th>
@@ -118,15 +118,15 @@ export default async function AgentMarketplaceOrdersPage() {
                 <th className="px-4 py-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e3d32]/6">
+            <tbody className="divide-y divide-[#163F33]/6">
               {items.map((m) => (
                 <tr
                   key={m.id}
-                  className={`hover:bg-[#FAF6EE]/30 ${
+                  className={`hover:bg-[#F7F2E8]/30 ${
                     m.status === 'pending_payment' ? 'bg-amber-50/40' : ''
                   }`}
                 >
-                  <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/65">
+                  <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/65">
                     {new Date(m.createdAt).toLocaleDateString('en-MY')}
                   </td>
                   <td className="px-4 py-3">
@@ -137,10 +137,10 @@ export default async function AgentMarketplaceOrdersPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="font-semibold text-[#1e3d32]">{m.customerName}</div>
-                    <div className="text-[11px] text-[#2B2B2B]/55">{m.customerPhone ?? ''}</div>
+                    <div className="font-semibold text-[#163F33]">{m.customerName}</div>
+                    <div className="text-[11px] text-[#1F1F1F]/55">{m.customerPhone ?? ''}</div>
                   </td>
-                  <td className="px-4 py-3 font-mono text-[11.5px] text-[#2B2B2B]/65">
+                  <td className="px-4 py-3 font-mono text-[11.5px] text-[#1F1F1F]/65">
                     {m.marketplaceOrderRef ?? '—'}
                   </td>
                   <td className="px-4 py-3 text-right">{m.itemCount}</td>

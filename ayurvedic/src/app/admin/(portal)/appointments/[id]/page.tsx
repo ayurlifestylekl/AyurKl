@@ -107,7 +107,7 @@ export default async function AdminAppointmentDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <Link
         href="/admin/appointments"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to appointments
       </Link>
@@ -115,7 +115,7 @@ export default async function AdminAppointmentDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               {a.treatment_name}
             </h1>
             <span
@@ -124,12 +124,12 @@ export default async function AdminAppointmentDetailPage({
               {STATUS_LABELS[a.status as AppointmentStatus]}
             </span>
             {isMock ? (
-              <span className="rounded-full border border-[#D4A373]/40 bg-[#FAF6EE] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
+              <span className="rounded-full border border-[#D4AF37]/40 bg-[#F7F2E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
                 Demo data
               </span>
             ) : null}
           </div>
-          <p className="mt-1 text-[12.5px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">
             <Calendar className="inline h-3.5 w-3.5" />{' '}
             {dt.toLocaleString('en-MY', {
               weekday: 'long',
@@ -157,16 +157,16 @@ export default async function AdminAppointmentDetailPage({
       ) : null}
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4 lg:col-span-2">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4 lg:col-span-2">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Session details
           </h2>
           <dl className="mt-3 grid grid-cols-3 gap-y-2 text-[12.5px]">
-            <dt className="col-span-1 text-[#2B2B2B]/55">Treatment</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Treatment</dt>
             <dd className="col-span-2">{a.treatment_name}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Duration</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Duration</dt>
             <dd className="col-span-2">{a.duration_mins} minutes</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Mode</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Mode</dt>
             <dd className="col-span-2">
               {a.mode === 'virtual' ? (
                 <span className="inline-flex items-center gap-1 text-violet-700">
@@ -183,36 +183,36 @@ export default async function AdminAppointmentDetailPage({
                   ) : null}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[#1e3d32]">
+                <span className="inline-flex items-center gap-1 text-[#163F33]">
                   <MapPin className="h-3.5 w-3.5" /> In-person
                   {a.room ? ` · ${a.room}` : ''}
                 </span>
               )}
             </dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Vaidya</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Vaidya</dt>
             <dd className="col-span-2">
               <Stethoscope className="mr-1 inline h-3.5 w-3.5" />
               {a.doctor_name}
             </dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Advance pmt</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Advance pmt</dt>
             <dd className="col-span-2">
               {a.advance_payment_rm != null
                 ? `RM ${Number(a.advance_payment_rm).toFixed(2)} · ${a.advance_payment_status ?? 'pending'}`
                 : '—'}
             </dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Gender rule</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Gender rule</dt>
             <dd className="col-span-2">
               <span
                 className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10.5px] font-semibold ${
                   genderReq === 'any'
                     ? 'border-slate-200 bg-slate-50 text-slate-700'
-                    : 'border-[#D4A373]/40 bg-[#FAF6EE] text-[#8a6a3d]'
+                    : 'border-[#D4AF37]/40 bg-[#F7F2E8] text-[#8a6a3d]'
                 }`}
               >
                 {GENDER_REQ_LABEL[genderReq]}
               </span>
               {custGender ? (
-                <span className="ml-2 text-[11.5px] text-[#2B2B2B]/65">
+                <span className="ml-2 text-[11.5px] text-[#1F1F1F]/65">
                   Customer:{' '}
                   <span className="capitalize">{custGender}</span>
                   {genderMismatch ? (
@@ -222,51 +222,51 @@ export default async function AdminAppointmentDetailPage({
                   ) : null}
                 </span>
               ) : (
-                <span className="ml-2 text-[11.5px] text-[#2B2B2B]/55 italic">
+                <span className="ml-2 text-[11.5px] text-[#1F1F1F]/55 italic">
                   Customer gender not on file
                 </span>
               )}
             </dd>
             {a.notes ? (
               <>
-                <dt className="col-span-1 text-[#2B2B2B]/55">Customer note</dt>
+                <dt className="col-span-1 text-[#1F1F1F]/55">Customer note</dt>
                 <dd className="col-span-2 italic">{a.notes}</dd>
               </>
             ) : null}
             {a.cancellation_reason ? (
               <>
-                <dt className="col-span-1 text-[#2B2B2B]/55">Cancel reason</dt>
+                <dt className="col-span-1 text-[#1F1F1F]/55">Cancel reason</dt>
                 <dd className="col-span-2 italic text-red-700">{a.cancellation_reason}</dd>
               </>
             ) : null}
           </dl>
         </article>
 
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">Customer</h2>
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Customer</h2>
           {cust ? (
             <>
               <p className="mt-2 text-[13px] font-semibold">{cust.full_name ?? '—'}</p>
-              <p className="text-[12px] text-[#2B2B2B]/65">{cust.email}</p>
-              <p className="text-[12px] text-[#2B2B2B]/65">{cust.phone_number}</p>
+              <p className="text-[12px] text-[#1F1F1F]/65">{cust.email}</p>
+              <p className="text-[12px] text-[#1F1F1F]/65">{cust.phone_number}</p>
               {cust.allergies || cust.current_medications || cust.medical_conditions ? (
-                <div className="mt-3 border-t border-[#1e3d32]/6 pt-3 text-[11.5px]">
-                  <p className="font-semibold text-[#1e3d32]">Health flags</p>
+                <div className="mt-3 border-t border-[#163F33]/6 pt-3 text-[11.5px]">
+                  <p className="font-semibold text-[#163F33]">Health flags</p>
                   {cust.allergies ? (
                     <p className="mt-1">
-                      <span className="text-[#2B2B2B]/55">Allergies: </span>
+                      <span className="text-[#1F1F1F]/55">Allergies: </span>
                       {cust.allergies}
                     </p>
                   ) : null}
                   {cust.current_medications ? (
                     <p>
-                      <span className="text-[#2B2B2B]/55">Meds: </span>
+                      <span className="text-[#1F1F1F]/55">Meds: </span>
                       {cust.current_medications}
                     </p>
                   ) : null}
                   {cust.medical_conditions ? (
                     <p>
-                      <span className="text-[#2B2B2B]/55">Conditions: </span>
+                      <span className="text-[#1F1F1F]/55">Conditions: </span>
                       {cust.medical_conditions}
                     </p>
                   ) : null}
@@ -275,35 +275,35 @@ export default async function AdminAppointmentDetailPage({
               {a.customer_id ? (
                 <Link
                   href={`/admin/customers/${a.customer_id}`}
-                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4A373] hover:text-[#1e3d32]"
+                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
                 >
                   View full profile →
                 </Link>
               ) : null}
             </>
           ) : (
-            <p className="mt-2 text-[12px] italic text-[#2B2B2B]/55">No customer linked.</p>
+            <p className="mt-2 text-[12px] italic text-[#1F1F1F]/55">No customer linked.</p>
           )}
         </article>
       </section>
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <InternalNotesPanel appointmentId={a.id} initial={a.internal_notes} />
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Cal.com sync
           </h3>
           {a.calcom_booking_uid ? (
             <p className="mt-2 text-[12px]">
-              <span className="text-[#2B2B2B]/55">Booking UID:</span>{' '}
+              <span className="text-[#1F1F1F]/55">Booking UID:</span>{' '}
               <code className="font-mono text-[11px]">{a.calcom_booking_uid}</code>
             </p>
           ) : (
-            <p className="mt-2 text-[12px] italic text-[#2B2B2B]/55">
+            <p className="mt-2 text-[12px] italic text-[#1F1F1F]/55">
               Created in admin — not synced from Cal.com.
             </p>
           )}
-          <p className="mt-3 text-[11px] text-[#2B2B2B]/55">
+          <p className="mt-3 text-[11px] text-[#1F1F1F]/55">
             Cal.com → our system: webhook-based (
             <a href="/api/webhooks/calcom" className="underline">
               /api/webhooks/calcom

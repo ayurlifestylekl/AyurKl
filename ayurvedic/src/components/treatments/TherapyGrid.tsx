@@ -21,7 +21,7 @@ export default function TherapyGrid({ categorySlug, treatments }: TherapyGridPro
         <div className="flex flex-col items-center justify-center text-center">
           <span
             aria-hidden
-            className="h-2 w-2 rounded-full bg-accent shadow-[0_0_0_5px_rgba(212,163,115,0.18)]"
+            className="h-2 w-2 rounded-full bg-accent shadow-[0_0_0_5px_rgba(212, 175, 55,0.18)]"
           />
           <p className="mt-6 font-body text-[20px] italic leading-[1.3] text-primary">
             Chapter in preparation.

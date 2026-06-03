@@ -69,7 +69,7 @@ export default function RegisterForm({ invite, inviteTokenRaw, nextPath }: Regis
             href="https://wa.me/601165043436?text=Hi%2C%20my%20Brand%20Partner%20invite%20link%20isn%27t%20working."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4A373] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98]"
+            className="inline-flex h-12 w-full items-center justify-center rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98]"
           >
             Message us on WhatsApp
           </a>
@@ -98,7 +98,7 @@ export default function RegisterForm({ invite, inviteTokenRaw, nextPath }: Regis
           Already have an account?{' '}
           <Link
             href={nextPath ? `/auth/login?next=${encodeURIComponent(nextPath)}` : '/auth/login'}
-            className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
+            className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#e1b487] hover:underline"
           >
             Sign in
           </Link>
@@ -107,8 +107,8 @@ export default function RegisterForm({ invite, inviteTokenRaw, nextPath }: Regis
     >
       {/* Invite badge */}
       {isInviteMode && (
-        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-[#D4A373]/35 bg-[#D4A373]/10 px-4 py-3.5">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#D4A373]" />
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-4 py-3.5">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#D4AF37]" />
           <p className="font-body text-[12.5px] leading-relaxed text-white/80">
             Your invite is tied to <span className="font-semibold text-white">{invite!.email}</span>. Commission terms are locked in from your admin — you don&apos;t need to enter them.
           </p>
@@ -202,7 +202,7 @@ export default function RegisterForm({ invite, inviteTokenRaw, nextPath }: Regis
         <button
           type="submit"
           disabled={isPending}
-          className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#D4A373] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all duration-200 hover:bg-[#c4935f] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A373]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1d3d31] disabled:cursor-not-allowed disabled:opacity-70"
+          className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all duration-200 hover:bg-[#D4AF37] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#163F33] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? 'Creating account…' : isInviteMode ? 'Accept invite' : 'Create account'}
         </button>

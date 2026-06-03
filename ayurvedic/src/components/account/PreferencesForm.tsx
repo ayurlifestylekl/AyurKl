@@ -33,7 +33,7 @@ function Toggle({ checked, onChange, label, disabled }: ToggleProps) {
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
-        checked ? 'bg-[#2F5D50]' : 'bg-[#1e3d32]/15'
+        checked ? 'bg-[#1E5B4B]' : 'bg-[#163F33]/15'
       } disabled:cursor-not-allowed disabled:opacity-50`}
     >
       <span
@@ -114,7 +114,7 @@ export default function PreferencesForm({ initial }: PreferencesFormProps) {
         />
       </ul>
 
-      <p className="font-body text-[11px] italic text-[#2B2B2B]/55">
+      <p className="font-body text-[11px] italic text-[#1F1F1F]/55">
         You can change any of these at any time. Appointment reminders are
         recommended — they cut no-shows by half.
       </p>
@@ -123,7 +123,7 @@ export default function PreferencesForm({ initial }: PreferencesFormProps) {
         <button
           type="submit"
           disabled={isPending || !isDirty}
-          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#2F5D50] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isPending ? 'Saving…' : 'Save preferences'}
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -154,29 +154,29 @@ function PreferenceRow({
 }: PreferenceRowProps) {
   return (
     <li
-      className={`flex items-start gap-4 rounded-2xl border border-[#1e3d32]/8 px-4 py-3.5 transition-colors hover:border-[#D4A373]/30 ${
-        marketing ? 'bg-[#FAF6EE]/30' : 'bg-white'
+      className={`flex items-start gap-4 rounded-2xl border border-[#163F33]/8 px-4 py-3.5 transition-colors hover:border-[#D4AF37]/30 ${
+        marketing ? 'bg-[#F7F2E8]/30' : 'bg-white'
       }`}
     >
       <span
         className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${
-          marketing ? 'bg-[#D4A373]/15' : 'bg-[#1e3d32]/[0.06]'
+          marketing ? 'bg-[#D4AF37]/15' : 'bg-[#163F33]/[0.06]'
         }`}
       >
         <Icon
-          className={`h-3.5 w-3.5 ${marketing ? 'text-[#D4A373]' : 'text-[#2F5D50]'}`}
+          className={`h-3.5 w-3.5 ${marketing ? 'text-[#D4AF37]' : 'text-[#1E5B4B]'}`}
           strokeWidth={1.8}
         />
       </span>
       <div className="flex-1 min-w-0">
         <p
-          className="font-heading text-[13px] font-semibold text-[#1e3d32]"
+          className="font-heading text-[13px] font-semibold text-[#163F33]"
           style={{ letterSpacing: '-0.005em' }}
         >
           {label}
         </p>
         <p
-          className="mt-0.5 font-body text-[11.5px] text-[#2B2B2B]/65"
+          className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/65"
           style={{ lineHeight: 1.55 }}
         >
           {description}

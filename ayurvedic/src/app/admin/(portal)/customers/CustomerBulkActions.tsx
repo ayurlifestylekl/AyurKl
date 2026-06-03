@@ -13,14 +13,14 @@ export default function CustomerBulkActions({
   if (selectedIds.length === 0) return null
 
   return (
-    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4A373]/30 bg-[#FAF6EE] p-3">
-      <span className="text-[12px] font-semibold text-[#1e3d32]">
+    <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8] p-3">
+      <span className="text-[12px] font-semibold text-[#163F33]">
         {selectedIds.length} selected
       </span>
       <button
         type="button"
         onClick={() => setPushOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-[#D4A373] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b58a5d]"
+        className="inline-flex items-center gap-1.5 rounded-lg bg-[#D4AF37] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b58a5d]"
       >
         <Gift className="h-3.5 w-3.5" /> Push voucher
       </button>

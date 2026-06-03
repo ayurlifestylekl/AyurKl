@@ -30,7 +30,7 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at 10% 0%, rgba(212,163,115,0.22) 0%, transparent 55%), radial-gradient(ellipse at 95% 100%, rgba(122,157,84,0.16) 0%, transparent 55%)',
+              'radial-gradient(ellipse at 10% 0%, rgba(212, 175, 55,0.22) 0%, transparent 55%), radial-gradient(ellipse at 95% 100%, rgba(46, 125, 90,0.16) 0%, transparent 55%)',
           }}
         />
 

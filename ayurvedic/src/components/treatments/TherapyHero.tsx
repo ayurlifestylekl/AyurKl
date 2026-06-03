@@ -37,7 +37,7 @@ export default function TherapyHero({
             className="absolute inset-0 flex items-center justify-center bg-primary"
             style={{
               backgroundImage:
-                'radial-gradient(circle, rgba(212,163,115,0.12) 1px, transparent 1px)',
+                'radial-gradient(circle, rgba(212, 175, 55,0.12) 1px, transparent 1px)',
               backgroundSize: '20px 20px',
             }}
           >

@@ -28,19 +28,19 @@ export default function DeleteAccountDialog({ onClose }: DeleteAccountDialogProp
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="w-full max-w-lg rounded-3xl border border-red-200 bg-white p-6">
         <h3 className="font-heading text-[18px] font-bold text-red-700">Delete your account?</h3>
-        <p className="mt-3 font-body text-[13.5px] text-[#2B2B2B]/80" style={{ lineHeight: 1.65 }}>
+        <p className="mt-3 font-body text-[13.5px] text-[#1F1F1F]/80" style={{ lineHeight: 1.65 }}>
           This will anonymize your personal details, sign you out, and queue your account
           for full deletion. Order records are retained (anonymized) for accounting and
           regulatory reasons. This cannot be undone.
         </p>
-        <p className="mt-4 font-body text-[12.5px] text-[#2B2B2B]/65">
+        <p className="mt-4 font-body text-[12.5px] text-[#1F1F1F]/65">
           Type <strong className="font-heading">DELETE MY ACCOUNT</strong> to confirm:
         </p>
         <input
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           disabled={isPending}
-          className="mt-2 w-full rounded-2xl border border-[#1e3d32]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#1e3d32] focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:opacity-50"
+          className="mt-2 w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#163F33] focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:opacity-50"
           autoFocus
         />
         <div className="mt-4 flex justify-end gap-2">
@@ -48,7 +48,7 @@ export default function DeleteAccountDialog({ onClose }: DeleteAccountDialogProp
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="rounded-full border border-[#1e3d32]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#1e3d32] disabled:opacity-50"
+            className="rounded-full border border-[#163F33]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#163F33] disabled:opacity-50"
           >
             Cancel
           </button>

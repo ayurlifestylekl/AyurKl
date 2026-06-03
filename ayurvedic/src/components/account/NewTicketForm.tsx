@@ -72,17 +72,17 @@ export default function NewTicketForm({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="group inline-flex h-12 w-full items-center justify-between gap-3 rounded-3xl border border-dashed border-[#1e3d32]/15 bg-white px-5 transition-all hover:border-[#D4A373]/45 hover:bg-[#FAF6EE]/35 sm:px-6"
+        className="group inline-flex h-12 w-full items-center justify-between gap-3 rounded-3xl border border-dashed border-[#163F33]/15 bg-white px-5 transition-all hover:border-[#D4AF37]/45 hover:bg-[#F7F2E8]/35 sm:px-6"
       >
         <span className="inline-flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#D4A373]/15">
-            <Plus className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={2.2} />
+          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#D4AF37]/15">
+            <Plus className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2.2} />
           </span>
-          <span className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <span className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Start a new conversation
           </span>
         </span>
-        <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#1e3d32]/55 group-hover:text-[#D4A373]">
+        <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55 group-hover:text-[#D4AF37]">
           New message
         </span>
       </button>
@@ -91,17 +91,17 @@ export default function NewTicketForm({
 
   return (
     <section
-      className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 18px 36px -22px rgba(30,61,50,0.22)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 18px 36px -22px rgba(22, 63, 51,0.22)',
       }}
     >
-      <div className="flex items-center gap-2.5 border-b border-[#1e3d32]/6 px-5 py-3 sm:px-6">
-        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#D4A373]/15">
-          <Sparkles className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={1.8} />
+      <div className="flex items-center gap-2.5 border-b border-[#163F33]/6 px-5 py-3 sm:px-6">
+        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#D4AF37]/15">
+          <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={1.8} />
         </span>
-        <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
           New message
         </h2>
         <button
@@ -110,7 +110,7 @@ export default function NewTicketForm({
             reset()
             setOpen(false)
           }}
-          className="ml-auto inline-flex items-center gap-1 font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#1e3d32]/55 transition-colors hover:text-red-700"
+          className="ml-auto inline-flex items-center gap-1 font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55 transition-colors hover:text-red-700"
         >
           <X className="h-3 w-3" />
           Cancel
@@ -120,7 +120,7 @@ export default function NewTicketForm({
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-5 py-5 sm:px-6">
         {/* Topic */}
         <div>
-          <label htmlFor="new-ticket-topic" className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55">
+          <label htmlFor="new-ticket-topic" className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
             Topic
           </label>
           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -133,8 +133,8 @@ export default function NewTicketForm({
                   onClick={() => setTopic(opt.value)}
                   className={`inline-flex shrink-0 items-center rounded-full border px-3 py-1.5 font-heading text-[11.5px] font-semibold transition-all ${
                     isActive
-                      ? 'border-[#D4A373] bg-[#D4A373] text-[#1a1a1a]'
-                      : 'border-[#1e3d32]/12 bg-white text-[#1e3d32]/65 hover:border-[#D4A373]/40 hover:text-[#1e3d32]'
+                      ? 'border-[#D4AF37] bg-[#D4AF37] text-[#1F1F1F]'
+                      : 'border-[#163F33]/12 bg-white text-[#163F33]/65 hover:border-[#D4AF37]/40 hover:text-[#163F33]'
                   }`}
                 >
                   {opt.label}
@@ -149,7 +149,7 @@ export default function NewTicketForm({
         <div>
           <label
             htmlFor="new-ticket-subject"
-            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
           >
             Subject
           </label>
@@ -162,7 +162,7 @@ export default function NewTicketForm({
             placeholder="A short line about your question"
             maxLength={120}
             disabled={isPending}
-            className="mt-2 w-full rounded-2xl border border-[#1e3d32]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#1e3d32] placeholder:text-[#2B2B2B]/40 focus:border-[#D4A373] focus:outline-none focus:ring-2 focus:ring-[#D4A373]/30 disabled:opacity-50"
+            className="mt-2 w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           />
         </div>
 
@@ -170,7 +170,7 @@ export default function NewTicketForm({
         <div>
           <label
             htmlFor="new-ticket-body"
-            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
           >
             Message
           </label>
@@ -183,22 +183,22 @@ export default function NewTicketForm({
             maxLength={2000}
             rows={6}
             disabled={isPending}
-            className="mt-2 w-full resize-y rounded-2xl border border-[#1e3d32]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#1e3d32] placeholder:text-[#2B2B2B]/40 focus:border-[#D4A373] focus:outline-none focus:ring-2 focus:ring-[#D4A373]/30 disabled:opacity-50"
+            className="mt-2 w-full resize-y rounded-2xl border border-[#163F33]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
             style={{ lineHeight: 1.6 }}
           />
-          <p className="mt-1 text-right font-body text-[10.5px] text-[#2B2B2B]/45">
+          <p className="mt-1 text-right font-body text-[10.5px] text-[#1F1F1F]/45">
             {body.length} / 2000
           </p>
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <p className="font-body text-[11px] italic text-[#2B2B2B]/55">
+          <p className="font-body text-[11px] italic text-[#1F1F1F]/55">
             Vaidya replies within 24 hours on weekdays.
           </p>
           <button
             type="submit"
             disabled={isPending}
-            className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#2F5D50] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? 'Sending…' : 'Send'}
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

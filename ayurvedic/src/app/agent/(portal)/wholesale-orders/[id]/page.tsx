@@ -41,7 +41,7 @@ export default async function AgentWholesaleOrderDetailPage({
     <div className="mx-auto flex max-w-4xl flex-col gap-4">
       <Link
         href="/agent/wholesale-orders"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to my wholesale orders
       </Link>
@@ -49,7 +49,7 @@ export default async function AgentWholesaleOrderDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               <code className="font-mono">{order.orderNumber}</code>
             </h1>
             <span
@@ -58,7 +58,7 @@ export default async function AgentWholesaleOrderDetailPage({
               {WHOLESALE_STATUS_LABEL[order.status]}
             </span>
           </div>
-          <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             Placed {new Date(order.createdAt).toLocaleString('en-MY')}
           </p>
         </div>
@@ -100,10 +100,10 @@ export default async function AgentWholesaleOrderDetailPage({
 
       {/* Items + totals + ship-to */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_280px]">
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">Items</h2>
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Items</h2>
           <table className="mt-3 w-full text-left text-[13px]">
-            <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               <tr>
                 <th className="py-2">Product</th>
                 <th className="py-2 text-right">Qty</th>
@@ -111,13 +111,13 @@ export default async function AgentWholesaleOrderDetailPage({
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e3d32]/6">
+            <tbody className="divide-y divide-[#163F33]/6">
               {order.items.map((it) => (
                 <tr key={it.id}>
                   <td className="py-2">
                     {it.productName}
                     {it.productSku ? (
-                      <span className="ml-2 font-mono text-[10.5px] text-[#2B2B2B]/55">
+                      <span className="ml-2 font-mono text-[10.5px] text-[#1F1F1F]/55">
                         {it.productSku}
                       </span>
                     ) : null}
@@ -132,22 +132,22 @@ export default async function AgentWholesaleOrderDetailPage({
             </tbody>
             <tfoot className="text-[12.5px]">
               <tr>
-                <td colSpan={3} className="pt-3 text-right text-[#2B2B2B]/65">
+                <td colSpan={3} className="pt-3 text-right text-[#1F1F1F]/65">
                   Subtotal
                 </td>
                 <td className="pt-3 text-right">RM {order.subtotalRm.toFixed(2)}</td>
               </tr>
               <tr>
-                <td colSpan={3} className="text-right text-[#2B2B2B]/65">
+                <td colSpan={3} className="text-right text-[#1F1F1F]/65">
                   Shipping
                 </td>
                 <td className="text-right">RM {order.shippingRm.toFixed(2)}</td>
               </tr>
               <tr>
-                <td colSpan={3} className="pt-1 text-right font-semibold text-[#1e3d32]">
+                <td colSpan={3} className="pt-1 text-right font-semibold text-[#163F33]">
                   Total
                 </td>
-                <td className="pt-1 text-right font-semibold text-[#1e3d32]">
+                <td className="pt-1 text-right font-semibold text-[#163F33]">
                   RM {order.totalRm.toFixed(2)}
                 </td>
               </tr>
@@ -155,11 +155,11 @@ export default async function AgentWholesaleOrderDetailPage({
           </table>
 
           {order.agentNotes ? (
-            <div className="mt-4 rounded-lg border border-[#1e3d32]/8 bg-[#FAF6EE]/30 p-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <div className="mt-4 rounded-lg border border-[#163F33]/8 bg-[#F7F2E8]/30 p-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 Your note
               </p>
-              <p className="mt-1 whitespace-pre-line text-[12px] italic text-[#2B2B2B]/70">
+              <p className="mt-1 whitespace-pre-line text-[12px] italic text-[#1F1F1F]/70">
                 {order.agentNotes}
               </p>
             </div>
@@ -167,23 +167,23 @@ export default async function AgentWholesaleOrderDetailPage({
         </article>
 
         <aside className="flex flex-col gap-4">
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Ship to
             </h2>
-            <p className="mt-2 whitespace-pre-line text-[12.5px] text-[#2B2B2B]/85">
+            <p className="mt-2 whitespace-pre-line text-[12.5px] text-[#1F1F1F]/85">
               {order.shippingAddress}
             </p>
-            <p className="mt-1 text-[12.5px] text-[#2B2B2B]/65">
+            <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">
               {order.shippingPostcode} {order.shippingState}
             </p>
           </article>
 
-          <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
               Timeline
             </h2>
-            <ul className="mt-2 space-y-1.5 text-[11.5px] text-[#2B2B2B]/70">
+            <ul className="mt-2 space-y-1.5 text-[11.5px] text-[#1F1F1F]/70">
               <li>Placed · {new Date(order.createdAt).toLocaleString('en-MY')}</li>
               {order.paidAt ? (
                 <li>Payment confirmed · {new Date(order.paidAt).toLocaleString('en-MY')}</li>
@@ -233,10 +233,10 @@ function PaymentInstructions({
       </p>
 
       <div className="mt-3 rounded-2xl bg-white p-3">
-        <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+        <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           Payment details
         </p>
-        <ul className="mt-1.5 space-y-0.5 text-[12px] text-[#2B2B2B]/85">
+        <ul className="mt-1.5 space-y-0.5 text-[12px] text-[#1F1F1F]/85">
           <li>
             <strong>Bank:</strong> Maybank
           </li>
@@ -249,7 +249,7 @@ function PaymentInstructions({
           <li>
             <strong>TNG eWallet:</strong> +60 12-345 6789
           </li>
-          <li className="mt-1 italic text-[#2B2B2B]/60">
+          <li className="mt-1 italic text-[#1F1F1F]/60">
             Reference: <strong>{orderNumber}</strong>
           </li>
         </ul>

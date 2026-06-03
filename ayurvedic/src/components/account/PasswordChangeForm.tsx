@@ -62,7 +62,7 @@ export default function PasswordChangeForm() {
       <div>
         <label
           htmlFor="pw-current"
-          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
         >
           Current password
         </label>
@@ -74,13 +74,13 @@ export default function PasswordChangeForm() {
             onChange={(e) => setCurrent(e.target.value)}
             autoComplete="current-password"
             disabled={isPending}
-            className="w-full rounded-2xl border border-[#1e3d32]/15 bg-white px-4 py-2.5 pr-11 font-body text-[13.5px] text-[#1e3d32] focus:border-[#D4A373] focus:outline-none focus:ring-2 focus:ring-[#D4A373]/30 disabled:opacity-50"
+            className="w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 pr-11 font-body text-[13.5px] text-[#163F33] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => setShowCurrent((v) => !v)}
             tabIndex={-1}
-            className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-[#1e3d32]/55 transition-colors hover:bg-[#1e3d32]/[0.06]"
+            className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-[#163F33]/55 transition-colors hover:bg-[#163F33]/[0.06]"
             aria-label={showCurrent ? 'Hide password' : 'Show password'}
           >
             {showCurrent ? (
@@ -96,7 +96,7 @@ export default function PasswordChangeForm() {
       <div>
         <label
           htmlFor="pw-new"
-          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
         >
           New password
         </label>
@@ -109,13 +109,13 @@ export default function PasswordChangeForm() {
             autoComplete="new-password"
             disabled={isPending}
             placeholder="At least 8 characters with a letter and a number"
-            className="w-full rounded-2xl border border-[#1e3d32]/15 bg-white px-4 py-2.5 pr-11 font-body text-[13.5px] text-[#1e3d32] placeholder:text-[#2B2B2B]/40 focus:border-[#D4A373] focus:outline-none focus:ring-2 focus:ring-[#D4A373]/30 disabled:opacity-50"
+            className="w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 pr-11 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => setShowNext((v) => !v)}
             tabIndex={-1}
-            className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-[#1e3d32]/55 transition-colors hover:bg-[#1e3d32]/[0.06]"
+            className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-[#163F33]/55 transition-colors hover:bg-[#163F33]/[0.06]"
             aria-label={showNext ? 'Hide password' : 'Show password'}
           >
             {showNext ? (
@@ -135,16 +135,16 @@ export default function PasswordChangeForm() {
                   className={`flex-1 rounded-full transition-colors ${
                     i < strength.score
                       ? strength.score >= 3
-                        ? 'bg-[#2F5D50]'
+                        ? 'bg-[#1E5B4B]'
                         : strength.score === 2
-                          ? 'bg-[#D4A373]'
+                          ? 'bg-[#D4AF37]'
                           : 'bg-red-400'
-                      : 'bg-[#1e3d32]/[0.08]'
+                      : 'bg-[#163F33]/[0.08]'
                   }`}
                 />
               ))}
             </div>
-            <p className="font-body text-[10.5px] italic text-[#2B2B2B]/55">
+            <p className="font-body text-[10.5px] italic text-[#1F1F1F]/55">
               {strength.label}
             </p>
           </div>
@@ -155,7 +155,7 @@ export default function PasswordChangeForm() {
       <div>
         <label
           htmlFor="pw-confirm"
-          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55"
+          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
         >
           Confirm new password
         </label>
@@ -166,10 +166,10 @@ export default function PasswordChangeForm() {
           onChange={(e) => setConfirm(e.target.value)}
           autoComplete="new-password"
           disabled={isPending}
-          className={`mt-2 w-full rounded-2xl border bg-white px-4 py-2.5 font-body text-[13.5px] text-[#1e3d32] focus:outline-none focus:ring-2 disabled:opacity-50 ${
+          className={`mt-2 w-full rounded-2xl border bg-white px-4 py-2.5 font-body text-[13.5px] text-[#163F33] focus:outline-none focus:ring-2 disabled:opacity-50 ${
             mismatch
               ? 'border-red-300 focus:border-red-400 focus:ring-red-200'
-              : 'border-[#1e3d32]/15 focus:border-[#D4A373] focus:ring-[#D4A373]/30'
+              : 'border-[#163F33]/15 focus:border-[#D4AF37] focus:ring-[#D4AF37]/30'
           }`}
         />
         {mismatch && (
@@ -188,7 +188,7 @@ export default function PasswordChangeForm() {
             next.length < 8 ||
             next !== confirm
           }
-          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#2F5D50] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isPending ? 'Saving…' : 'Change password'}
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

@@ -43,13 +43,13 @@ export default function PayoutForm({
         e.preventDefault()
         save()
       }}
-      className="rounded-3xl border border-[#1e3d32]/10 bg-white p-5"
+      className="rounded-3xl border border-[#163F33]/10 bg-white p-5"
     >
       <header className="mb-4">
-        <h2 className="font-heading text-[15px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[15px] font-semibold text-[#163F33]">
           Payout method
         </h2>
-        <p className="mt-0.5 text-[12px] text-[#2B2B2B]/60">
+        <p className="mt-0.5 text-[12px] text-[#1F1F1F]/60">
           Where commission earnings should land. Admin pays out monthly.
         </p>
       </header>
@@ -108,7 +108,7 @@ export default function PayoutForm({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-[#2F5D50] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#1e3d32] disabled:opacity-50"
+          className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
         >
           {pending ? 'Saving…' : 'Save payout method'}
         </button>
@@ -132,8 +132,8 @@ function MethodTab({
       onClick={onClick}
       className={`rounded-lg px-3 py-1.5 text-[12px] font-semibold transition-colors ${
         active
-          ? 'bg-[#2F5D50] text-white'
-          : 'border border-[#1e3d32]/15 bg-white text-[#1e3d32] hover:bg-[#FAF6EE]/60'
+          ? 'bg-[#1E5B4B] text-white'
+          : 'border border-[#163F33]/15 bg-white text-[#163F33] hover:bg-[#F7F2E8]/60'
       }`}
     >
       {label}
@@ -156,7 +156,7 @@ function Field({
 }) {
   return (
     <label className={`flex flex-col gap-1 ${full ? 'sm:col-span-2' : ''}`}>
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
         {label}
       </span>
       <input
@@ -164,7 +164,7 @@ function Field({
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px] focus:border-[#2F5D50] focus:outline-none"
+        className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px] focus:border-[#1E5B4B] focus:outline-none"
       />
     </label>
   )

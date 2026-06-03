@@ -60,8 +60,8 @@ export default function OrderFilterTabs({ active, counts }: OrderFilterTabsProps
             className={[
               'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-heading text-[11.5px] font-semibold transition-all duration-200',
               isActive
-                ? 'border-[#D4A373] bg-[#D4A373] text-[#1a1a1a]'
-                : 'border-[#1e3d32]/12 bg-white text-[#1e3d32]/65 hover:border-[#D4A373]/40 hover:text-[#1e3d32]',
+                ? 'border-[#D4AF37] bg-[#D4AF37] text-[#1F1F1F]'
+                : 'border-[#163F33]/12 bg-white text-[#163F33]/65 hover:border-[#D4AF37]/40 hover:text-[#163F33]',
             ].join(' ')}
           >
             <span>{tab.label}</span>
@@ -69,8 +69,8 @@ export default function OrderFilterTabs({ active, counts }: OrderFilterTabsProps
               className={[
                 'rounded-full px-1.5 py-px font-mono text-[9.5px] font-semibold',
                 isActive
-                  ? 'bg-black/15 text-[#1a1a1a]'
-                  : 'bg-[#1e3d32]/[0.06] text-[#1e3d32]/50',
+                  ? 'bg-black/15 text-[#1F1F1F]'
+                  : 'bg-[#163F33]/[0.06] text-[#163F33]/50',
               ].join(' ')}
             >
               {count}

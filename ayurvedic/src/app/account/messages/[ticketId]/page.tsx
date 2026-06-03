@@ -47,7 +47,7 @@ export default async function TicketThreadPage({
       {/* Back link */}
       <Link
         href="/account/messages"
-        className="group inline-flex w-fit items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55 transition-colors hover:text-[#D4A373]"
+        className="group inline-flex w-fit items-center gap-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55 transition-colors hover:text-[#D4AF37]"
       >
         <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
         All conversations
@@ -58,18 +58,18 @@ export default async function TicketThreadPage({
         <div className="flex flex-wrap items-center gap-2">
           <TicketTopicChip topic={ticket.topic} />
           <TicketStatusPill status={ticket.status} />
-          <span className="font-body text-[11px] italic text-[#2B2B2B]/55">
+          <span className="font-body text-[11px] italic text-[#1F1F1F]/55">
             Started {longDate.format(new Date(ticket.created_at))}
           </span>
         </div>
         <h1
-          className="mt-2 font-heading text-[24px] font-bold leading-tight text-[#1e3d32] sm:text-[28px]"
+          className="mt-2 font-heading text-[24px] font-bold leading-tight text-[#163F33] sm:text-[28px]"
           style={{ letterSpacing: '-0.02em' }}
         >
           {ticket.subject}
         </h1>
         {(ticket.topic === 'billing' || ticket.topic === 'order') && (
-          <p className="mt-2 font-body text-[11.5px] italic text-[#2B2B2B]/55">
+          <p className="mt-2 font-body text-[11.5px] italic text-[#1F1F1F]/55">
             48 hours&apos; notice required to cancel. Advance payments are
             non-refundable per our practice policy.
           </p>
@@ -78,15 +78,15 @@ export default async function TicketThreadPage({
 
       {/* Message thread */}
       <section
-        className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+        className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
         }}
       >
         <ul className="flex flex-col gap-4 px-5 py-6 sm:px-7 sm:py-7">
           {messages.length === 0 ? (
-            <li className="text-center font-body text-[12px] italic text-[#2B2B2B]/55">
+            <li className="text-center font-body text-[12px] italic text-[#1F1F1F]/55">
               No messages yet.
             </li>
           ) : (
@@ -105,7 +105,7 @@ export default async function TicketThreadPage({
       <TicketReplyForm ticket={ticket} />
 
       {isClosed && (
-        <p className="text-center font-body text-[12px] italic text-[#2B2B2B]/55">
+        <p className="text-center font-body text-[12px] italic text-[#1F1F1F]/55">
           This conversation is closed. Start a new one from the inbox for new
           questions.
         </p>

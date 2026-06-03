@@ -27,7 +27,7 @@ export default function BookingChooser() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at 10% 0%, rgba(212,163,115,0.16) 0%, transparent 40%), radial-gradient(ellipse at 90% 100%, rgba(47,93,80,0.05) 0%, transparent 45%), radial-gradient(ellipse at 50% 50%, rgba(212,163,115,0.04) 0%, transparent 40%)',
+              'radial-gradient(ellipse at 10% 0%, rgba(212, 175, 55,0.16) 0%, transparent 40%), radial-gradient(ellipse at 90% 100%, rgba(30, 91, 75,0.05) 0%, transparent 45%), radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55,0.04) 0%, transparent 40%)',
           }}
         />
         {/* Diamond dot pattern */}
@@ -36,8 +36,8 @@ export default function BookingChooser() {
           className="pointer-events-none absolute inset-0 opacity-70"
           style={{
             backgroundImage: `
-              radial-gradient(circle, rgba(47,93,80,0.025) 1px, transparent 1px),
-              radial-gradient(circle, rgba(47,93,80,0.025) 1px, transparent 1px)
+              radial-gradient(circle, rgba(30, 91, 75,0.025) 1px, transparent 1px),
+              radial-gradient(circle, rgba(30, 91, 75,0.025) 1px, transparent 1px)
             `,
             backgroundSize: '32px 32px',
             backgroundPosition: '0 0, 16px 16px',
@@ -89,7 +89,7 @@ export default function BookingChooser() {
               className="group relative flex flex-col overflow-hidden rounded-2xl bg-primary p-8 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-cream sm:p-10"
               style={{
                 boxShadow:
-                  '0 10px 30px -12px rgba(47,93,80,0.35), 0 30px 60px -28px rgba(47,93,80,0.35)',
+                  '0 10px 30px -12px rgba(30, 91, 75,0.35), 0 30px 60px -28px rgba(30, 91, 75,0.35)',
               }}
             >
               {/* Warm atmosphere */}
@@ -98,7 +98,7 @@ export default function BookingChooser() {
                 className="pointer-events-none absolute inset-0 opacity-80 transition-opacity duration-500 group-hover:opacity-100"
                 style={{
                   background:
-                    'radial-gradient(ellipse at 100% 0%, rgba(212,163,115,0.24) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(26,46,38,0.5) 0%, transparent 55%)',
+                    'radial-gradient(ellipse at 100% 0%, rgba(212, 175, 55,0.24) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(15, 44, 36,0.5) 0%, transparent 55%)',
                 }}
               />
               {/* Gold corner accents */}
@@ -145,7 +145,7 @@ export default function BookingChooser() {
                   className="h-px w-12 transition-all duration-500 group-hover:w-24"
                   style={{
                     background:
-                      'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15))',
+                      'linear-gradient(to right, rgba(212, 175, 55,0.85), rgba(212, 175, 55,0.15))',
                   }}
                 />
 
@@ -186,7 +186,7 @@ export default function BookingChooser() {
               className="group relative flex flex-col overflow-hidden rounded-2xl bg-white p-8 ring-1 ring-primary/10 transition-[transform,box-shadow,ring-color] duration-500 ease-out hover:-translate-y-1.5 hover:ring-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-cream sm:p-10"
               style={{
                 boxShadow:
-                  '0 2px 6px rgba(47,93,80,0.04), 0 30px 60px -28px rgba(47,93,80,0.22)',
+                  '0 2px 6px rgba(30, 91, 75,0.04), 0 30px 60px -28px rgba(30, 91, 75,0.22)',
               }}
             >
               {/* Gold accent bar */}
@@ -195,7 +195,7 @@ export default function BookingChooser() {
                 className="absolute inset-x-0 top-0 h-[2px] opacity-70 transition-opacity duration-500 group-hover:opacity-100"
                 style={{
                   background:
-                    'linear-gradient(to right, rgba(212,163,115,0.4), rgba(212,163,115,0.9) 50%, rgba(212,163,115,0.4))',
+                    'linear-gradient(to right, rgba(212, 175, 55,0.4), rgba(212, 175, 55,0.9) 50%, rgba(212, 175, 55,0.4))',
                 }}
               />
               {/* Warm atmosphere */}
@@ -204,7 +204,7 @@ export default function BookingChooser() {
                 className="pointer-events-none absolute inset-0"
                 style={{
                   background:
-                    'radial-gradient(ellipse at 100% 0%, rgba(212,163,115,0.09) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(47,93,80,0.04) 0%, transparent 55%)',
+                    'radial-gradient(ellipse at 100% 0%, rgba(212, 175, 55,0.09) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(30, 91, 75,0.04) 0%, transparent 55%)',
                 }}
               />
 
@@ -234,7 +234,7 @@ export default function BookingChooser() {
                   className="h-px w-12 transition-all duration-500 group-hover:w-24"
                   style={{
                     background:
-                      'linear-gradient(to right, rgba(212,163,115,0.85), rgba(212,163,115,0.15))',
+                      'linear-gradient(to right, rgba(212, 175, 55,0.85), rgba(212, 175, 55,0.15))',
                   }}
                 />
 
@@ -277,7 +277,7 @@ export default function BookingChooser() {
               className="h-px w-10"
               style={{
                 background:
-                  'linear-gradient(to right, transparent, rgba(212,163,115,0.55), transparent)',
+                  'linear-gradient(to right, transparent, rgba(212, 175, 55,0.55), transparent)',
               }}
             />
             <p className="font-body text-[13px] italic text-dark/55">

@@ -15,22 +15,22 @@ export default function TodayConsultationsCard({
 }) {
   return (
     <article
-      className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
-      <header className="flex items-center justify-between border-b border-[#1e3d32]/6 px-5 py-3.5">
+      <header className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3.5">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#D4A373]/12">
-            <CalendarDays className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={1.8} />
+          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#D4AF37]/12">
+            <CalendarDays className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={1.8} />
           </span>
           <div>
-            <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+            <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
               Today&apos;s consultations
             </h2>
-            <p className="font-body text-[10.5px] text-[#2B2B2B]/55">
+            <p className="font-body text-[10.5px] text-[#1F1F1F]/55">
               {consultations.length === 0
                 ? 'Nothing booked'
                 : `${consultations.length} scheduled`}
@@ -39,38 +39,38 @@ export default function TodayConsultationsCard({
         </div>
         <Link
           href="/admin/appointments?filter=today"
-          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#1e3d32]/55 hover:text-[#D4A373]"
+          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55 hover:text-[#D4AF37]"
         >
           View all →
         </Link>
       </header>
       {consultations.length === 0 ? (
-        <p className="px-5 py-8 text-center font-body text-[13px] italic text-[#2B2B2B]/55">
+        <p className="px-5 py-8 text-center font-body text-[13px] italic text-[#1F1F1F]/55">
           Calendar is clear today.
         </p>
       ) : (
-        <ul className="divide-y divide-[#1e3d32]/6">
+        <ul className="divide-y divide-[#163F33]/6">
           {consultations.map((c) => (
             <li key={c.id}>
               <Link
                 href={`/admin/appointments/${c.id}`}
-                className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#FAF6EE]/40"
+                className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="font-mono text-[12px] font-semibold tabular-nums text-[#1e3d32]">
+                  <span className="font-mono text-[12px] font-semibold tabular-nums text-[#163F33]">
                     {TIME_FMT.format(new Date(c.startsAt))}
                   </span>
-                  <span className="h-4 w-px bg-[#1e3d32]/10" />
+                  <span className="h-4 w-px bg-[#163F33]/10" />
                   <div className="min-w-0">
-                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]">
                       {c.treatmentName}
                     </p>
-                    <p className="truncate font-body text-[11px] text-[#2B2B2B]/55">
+                    <p className="truncate font-body text-[11px] text-[#1F1F1F]/55">
                       {c.customerName ?? 'Walk-in'}
                     </p>
                   </div>
                 </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#1e3d32]/[0.06] px-2 py-0.5 font-heading text-[10px] font-semibold text-[#1e3d32]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#163F33]/[0.06] px-2 py-0.5 font-heading text-[10px] font-semibold text-[#163F33]">
                   {c.mode === 'virtual' ? (
                     <Video className="h-2.5 w-2.5" />
                   ) : (

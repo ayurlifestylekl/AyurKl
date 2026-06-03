@@ -45,13 +45,13 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <header>
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Activity ledger
         </span>
-        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32]">
+        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
           Audit log
         </h1>
-        <p className="mt-1 font-body text-[13px] text-[#2B2B2B]/65">
+        <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
           Unified timeline of order events, stock movements, commissions, payouts,
           and review moderations. Read-only.
         </p>
@@ -60,7 +60,7 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
       <AuditFilterBar active={entity} />
 
       {entries.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No events in this view.
         </div>
       ) : (
@@ -71,7 +71,7 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
             return (
               <li
                 key={`${e.entity}-${e.id}`}
-                className="flex items-start gap-3 rounded-2xl border border-[#1e3d32]/8 bg-white p-3.5"
+                className="flex items-start gap-3 rounded-2xl border border-[#163F33]/8 bg-white p-3.5"
               >
                 <span
                   className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${bg}`}
@@ -80,20 +80,20 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
                 </span>
                 <div className="flex-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+                    <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
                       {e.title}
                     </h3>
-                    <time className="text-[11px] text-[#2B2B2B]/55">
+                    <time className="text-[11px] text-[#1F1F1F]/55">
                       {new Date(e.createdAt).toLocaleString('en-MY')}
                     </time>
                   </div>
-                  <p className="mt-0.5 text-[12.5px] text-[#2B2B2B]/75">{e.detail}</p>
+                  <p className="mt-0.5 text-[12.5px] text-[#1F1F1F]/75">{e.detail}</p>
                   {e.actorName || e.href ? (
-                    <p className="mt-1 text-[11px] text-[#2B2B2B]/55">
+                    <p className="mt-1 text-[11px] text-[#1F1F1F]/55">
                       {e.actorName ? <>by <strong>{e.actorName}</strong></> : null}
                       {e.actorName && e.href ? ' · ' : null}
                       {e.href ? (
-                        <Link href={e.href} className="font-semibold text-[#D4A373] hover:underline">
+                        <Link href={e.href} className="font-semibold text-[#D4AF37] hover:underline">
                           Open →
                         </Link>
                       ) : null}

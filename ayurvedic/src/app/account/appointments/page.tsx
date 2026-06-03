@@ -110,17 +110,17 @@ export default async function AppointmentsPage({
       {/* ── HEADER ────────────────────────────────────────────────── */}
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
-            <Calendar className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={2} />
+          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+            <Calendar className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2} />
             Bookings & care
           </span>
           <h1
-            className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32] sm:text-[36px]"
+            className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[36px]"
             style={{ letterSpacing: '-0.025em' }}
           >
             Hello, {firstName}.{' '}
             <span
-              className="italic font-normal text-[#1e3d32]/70"
+              className="italic font-normal text-[#163F33]/70"
               style={{ fontFamily: 'var(--font-playfair)' }}
             >
               Your visits.
@@ -128,7 +128,7 @@ export default async function AppointmentsPage({
           </h1>
         </div>
         {nextCountdown && (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4A373]/30 bg-[#FAF6EE] px-3.5 py-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#9c6f3e]">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/30 bg-[#F7F2E8] px-3.5 py-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#9c6f3e]">
             <Sparkles className="h-3 w-3" strokeWidth={2} />
             Next visit {nextCountdown.toLowerCase()}
           </span>
@@ -151,10 +151,10 @@ export default async function AppointmentsPage({
       {/* ── APPOINTMENT LIST / EMPTY STATES ──────────────────────── */}
       {isEmptyOverall ? (
         <div
-          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
           <EmptyState
@@ -169,10 +169,10 @@ export default async function AppointmentsPage({
         </div>
       ) : isEmptyInFilter ? (
         <div
-          className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
           <EmptyState
@@ -196,10 +196,10 @@ export default async function AppointmentsPage({
 
       {/* ── POLICY + SUPPORT ─────────────────────────────────────── */}
       <div className="flex flex-col gap-2 pt-1 text-center">
-        <p className="font-body text-[11px] italic text-[#2B2B2B]/55">
+        <p className="font-body text-[11px] italic text-[#1F1F1F]/55">
           48 hours&apos; notice required to cancel. Advance payments are non-refundable per our practice policy.
         </p>
-        <p className="font-body text-[12px] text-[#2B2B2B]/55">
+        <p className="font-body text-[12px] text-[#1F1F1F]/55">
           Need to change a booking urgently?{' '}
           <a
             href={`https://wa.me/601165043436?text=${encodeURIComponent(
@@ -207,25 +207,25 @@ export default async function AppointmentsPage({
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-[#D4A373] underline-offset-4 transition-colors hover:text-[#c4935f] hover:underline"
+            className="font-semibold text-[#D4AF37] underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
           >
             Message Vaidya on WhatsApp
           </a>
         </p>
         {/* Quick links to book again */}
         {!isEmptyOverall && (
-          <p className="font-body text-[11.5px] text-[#2B2B2B]/45">
+          <p className="font-body text-[11.5px] text-[#1F1F1F]/45">
             Or{' '}
             <Link
               href="/book/consultation"
-              className="font-semibold text-[#1e3d32]/70 underline-offset-4 transition-colors hover:text-[#D4A373] hover:underline"
+              className="font-semibold text-[#163F33]/70 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
             >
               book a new consultation
             </Link>
             {' · '}
             <Link
               href="/book/treatment"
-              className="font-semibold text-[#1e3d32]/70 underline-offset-4 transition-colors hover:text-[#D4A373] hover:underline"
+              className="font-semibold text-[#163F33]/70 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
             >
               book a treatment
             </Link>

@@ -26,15 +26,15 @@ export default async function WholesaleCheckoutPage() {
       <div className="mx-auto flex max-w-4xl flex-col gap-4">
         <Link
           href="/agent/wholesale-shop"
-          className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+          className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
         >
           ← Back to wholesale shop
         </Link>
         <header>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Review & place
           </span>
-          <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#163F33]">
             Checkout
           </h1>
         </header>

@@ -101,7 +101,7 @@ export default function StatusDialog({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg bg-[#2F5D50] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#1e3d32]"
+        className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#163F33]"
       >
         Change status
       </button>
@@ -110,10 +110,10 @@ export default function StatusDialog({
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
             {mode === 'menu' ? (
               <>
-                <h2 className="font-heading text-[16px] font-semibold text-[#1e3d32]">
+                <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
                   Change status
                 </h2>
-                <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+                <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
                   From <strong>{STATUS_LABELS[currentStatus]}</strong> to:
                 </p>
                 <div className="mt-3 flex flex-col gap-2">
@@ -123,10 +123,10 @@ export default function StatusDialog({
                       type="button"
                       disabled={pending}
                       onClick={() => move(s)}
-                      className={`rounded-lg border px-3 py-2 text-left text-[13px] hover:bg-[#FAF6EE]/60 disabled:opacity-50 ${
+                      className={`rounded-lg border px-3 py-2 text-left text-[13px] hover:bg-[#F7F2E8]/60 disabled:opacity-50 ${
                         s === 'cancelled' || s === 'no_show'
                           ? 'border-red-200 text-red-700'
-                          : 'border-[#1e3d32]/15 text-[#1e3d32]'
+                          : 'border-[#163F33]/15 text-[#163F33]'
                       }`}
                     >
                       {STATUS_LABELS[s]}
@@ -136,23 +136,23 @@ export default function StatusDialog({
               </>
             ) : mode === 'cancel' ? (
               <>
-                <h2 className="font-heading text-[16px] font-semibold text-[#1e3d32]">
+                <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
                   Cancel appointment
                 </h2>
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                   Reason *
                 </label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   rows={3}
-                  className="mt-1 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
                 />
                 <div className="mt-3 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setMode('menu')}
-                    className="rounded-lg border border-[#1e3d32]/15 px-3 py-1.5 text-[12px]"
+                    className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
                   >
                     Back
                   </button>
@@ -168,35 +168,35 @@ export default function StatusDialog({
               </>
             ) : mode === 'reschedule' ? (
               <>
-                <h2 className="font-heading text-[16px] font-semibold text-[#1e3d32]">
+                <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
                   Reschedule
                 </h2>
-                <p className="mt-1 text-[11.5px] italic text-[#2B2B2B]/55">
+                <p className="mt-1 text-[11.5px] italic text-[#1F1F1F]/55">
                   Remember to also update Cal.com manually — we don&apos;t push to Cal.com yet.
                 </p>
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                   New date & time *
                 </label>
                 <input
                   type="datetime-local"
                   value={newDateTime}
                   onChange={(e) => setNewDateTime(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
                 />
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                   Reason *
                 </label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   rows={2}
-                  className="mt-1 w-full rounded-lg border border-[#1e3d32]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
                 />
                 <div className="mt-3 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setMode('menu')}
-                    className="rounded-lg border border-[#1e3d32]/15 px-3 py-1.5 text-[12px]"
+                    className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
                   >
                     Back
                   </button>
@@ -204,7 +204,7 @@ export default function StatusDialog({
                     type="button"
                     disabled={pending || reason.trim().length < 3 || !newDateTime}
                     onClick={doReschedule}
-                    className="rounded-lg bg-[#2F5D50] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
+                    className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
                   >
                     Reschedule
                   </button>
@@ -212,17 +212,17 @@ export default function StatusDialog({
               </>
             ) : mode === 'noshow' ? (
               <>
-                <h2 className="font-heading text-[16px] font-semibold text-[#1e3d32]">
+                <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
                   Mark no-show?
                 </h2>
-                <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+                <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
                   Customer didn&apos;t arrive. This is final — advance payment is typically forfeited.
                 </p>
                 <div className="mt-3 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setMode('menu')}
-                    className="rounded-lg border border-[#1e3d32]/15 px-3 py-1.5 text-[12px]"
+                    className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
                   >
                     Back
                   </button>
@@ -242,7 +242,7 @@ export default function StatusDialog({
             <button
               type="button"
               onClick={close}
-              className="mt-4 text-[12px] text-[#2B2B2B]/55"
+              className="mt-4 text-[12px] text-[#1F1F1F]/55"
             >
               Close
             </button>

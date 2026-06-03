@@ -153,7 +153,7 @@ export default function TreatmentPicker({
         className="group relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl bg-white px-5 py-4 text-left ring-1 ring-primary/15 transition-[ring-color,box-shadow] duration-300 hover:ring-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream sm:px-6 sm:py-5"
         style={{
           boxShadow:
-            '0 2px 6px rgba(47,93,80,0.04), 0 20px 40px -20px rgba(47,93,80,0.18)',
+            '0 2px 6px rgba(30, 91, 75,0.04), 0 20px 40px -20px rgba(30, 91, 75,0.18)',
         }}
       >
         {/* Gold accent bar */}
@@ -162,7 +162,7 @@ export default function TreatmentPicker({
           className="absolute inset-x-0 top-0 h-[2px] opacity-70 transition-opacity duration-500 group-hover:opacity-100"
           style={{
             background:
-              'linear-gradient(to right, rgba(212,163,115,0.4), rgba(212,163,115,0.9) 50%, rgba(212,163,115,0.4))',
+              'linear-gradient(to right, rgba(212, 175, 55,0.4), rgba(212, 175, 55,0.9) 50%, rgba(212, 175, 55,0.4))',
           }}
         />
         <div className="flex min-w-0 flex-col gap-1">
@@ -223,7 +223,7 @@ export default function TreatmentPicker({
             className="fixed inset-x-4 bottom-4 top-24 z-50 flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-primary/10 sm:absolute sm:inset-auto sm:left-0 sm:right-0 sm:top-[calc(100%+8px)] sm:max-h-[520px]"
             style={{
               boxShadow:
-                '0 10px 30px -10px rgba(47,93,80,0.3), 0 40px 80px -30px rgba(47,93,80,0.35)',
+                '0 10px 30px -10px rgba(30, 91, 75,0.3), 0 40px 80px -30px rgba(30, 91, 75,0.35)',
             }}
           >
             {/* Search */}

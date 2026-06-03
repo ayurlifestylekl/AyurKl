@@ -43,7 +43,7 @@ export default function TherapyCard({
                 className="absolute inset-0 bg-primary"
                 style={{
                   backgroundImage:
-                    'radial-gradient(circle, rgba(212,163,115,0.18) 1px, transparent 1px)',
+                    'radial-gradient(circle, rgba(212, 175, 55,0.18) 1px, transparent 1px)',
                   backgroundSize: '12px 12px',
                 }}
                 aria-hidden
@@ -75,7 +75,7 @@ export default function TherapyCard({
               className="mt-3 h-px"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(212,163,115,0.5), transparent)',
+                  'linear-gradient(to right, rgba(212, 175, 55,0.5), transparent)',
               }}
               aria-hidden
             />

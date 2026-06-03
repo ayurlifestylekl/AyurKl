@@ -51,7 +51,7 @@ export default function ReferredFilters({
   )
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-[#1e3d32]/10 bg-white p-3">
+    <div className="flex flex-col gap-3 rounded-2xl border border-[#163F33]/10 bg-white p-3">
       <div className="flex flex-wrap items-center gap-1.5">
         {RANGES.map((r) => {
           const isActive = activeRange === r.value
@@ -62,8 +62,8 @@ export default function ReferredFilters({
               onClick={() => set('range', r.value)}
               className={`rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors ${
                 isActive
-                  ? 'bg-[#2F5D50] text-white'
-                  : 'border border-[#1e3d32]/15 bg-white text-[#1e3d32] hover:bg-[#FAF6EE]/60'
+                  ? 'bg-[#1E5B4B] text-white'
+                  : 'border border-[#163F33]/15 bg-white text-[#163F33] hover:bg-[#F7F2E8]/60'
               }`}
             >
               {r.label}
@@ -72,7 +72,7 @@ export default function ReferredFilters({
         })}
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/55">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/55">
           Commission:
         </span>
         {STATUSES.map((s) => {
@@ -84,8 +84,8 @@ export default function ReferredFilters({
               onClick={() => set('status', s.value === 'all' ? null : s.value)}
               className={`rounded-full px-2.5 py-1 text-[11.5px] font-semibold transition-colors ${
                 isActive
-                  ? 'bg-[#1e3d32] text-white'
-                  : 'border border-[#1e3d32]/15 bg-white text-[#1e3d32] hover:bg-[#FAF6EE]/60'
+                  ? 'bg-[#163F33] text-white'
+                  : 'border border-[#163F33]/15 bg-white text-[#163F33] hover:bg-[#F7F2E8]/60'
               }`}
             >
               {s.label}
@@ -95,7 +95,7 @@ export default function ReferredFilters({
         <select
           value={activeChannel}
           onChange={(e) => set('channel', e.target.value || null)}
-          className="ml-auto rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-1.5 text-[12.5px]"
+          className="ml-auto rounded-lg border border-[#163F33]/15 bg-white px-3 py-1.5 text-[12.5px]"
         >
           {CHANNELS.map((c) => (
             <option key={c.value} value={c.value}>

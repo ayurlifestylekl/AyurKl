@@ -79,13 +79,13 @@ export default async function AgentReferredSalesPage({ searchParams }: PageProps
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <header>
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Affiliate channel
         </span>
-        <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#1e3d32]">
+        <h1 className="mt-2 font-heading text-3xl font-bold leading-tight text-[#163F33]">
           Referred sales
         </h1>
-        <p className="mt-2 font-body text-[13.5px] text-[#2B2B2B]/70">
+        <p className="mt-2 font-body text-[13.5px] text-[#1F1F1F]/70">
           Every order attributed to your code. Commission updates as admin marks
           orders paid and pays you out.
         </p>
@@ -108,28 +108,28 @@ export default async function AgentReferredSalesPage({ searchParams }: PageProps
       </section>
 
       {orders.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-[#1e3d32]/15 p-12 text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1e3d32]/[0.06]">
-            <ShoppingBag className="h-5 w-5 text-[#2F5D50]" strokeWidth={1.8} />
+        <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-[#163F33]/15 p-12 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#163F33]/[0.06]">
+            <ShoppingBag className="h-5 w-5 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
-          <p className="font-heading text-[14px] font-semibold text-[#1e3d32]">
+          <p className="font-heading text-[14px] font-semibold text-[#163F33]">
             No referred sales in this view
           </p>
-          <p className="max-w-sm font-body text-[12.5px] text-[#2B2B2B]/65">
+          <p className="max-w-sm font-body text-[12.5px] text-[#1F1F1F]/65">
             Share your link or submit a marketplace order to start earning. Try a
             wider date range to see older sales.
           </p>
           <Link
             href="/agent/dashboard"
-            className="mt-1 text-[12px] font-semibold text-[#D4A373] hover:underline"
+            className="mt-1 text-[12px] font-semibold text-[#D4AF37] hover:underline"
           >
             Copy your share link →
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
           <table className="w-full text-left text-[13px]">
-            <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
               <tr>
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Customer</th>
@@ -139,20 +139,20 @@ export default async function AgentReferredSalesPage({ searchParams }: PageProps
                 <th className="px-4 py-3 text-right">Commission</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1e3d32]/6">
+            <tbody className="divide-y divide-[#163F33]/6">
               {orders.map((o) => {
                 const isReversed = o.commissionStatus === 'reversed'
                 return (
                   <tr
                     key={o.orderId}
-                    className={`hover:bg-[#FAF6EE]/30 ${
+                    className={`hover:bg-[#F7F2E8]/30 ${
                       isReversed ? 'opacity-60' : ''
                     }`}
                   >
-                    <td className="px-4 py-3 text-[11.5px] text-[#2B2B2B]/70">
+                    <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/70">
                       {new Date(o.createdAt).toLocaleDateString('en-MY')}
                     </td>
-                    <td className="px-4 py-3 text-[12.5px] font-semibold text-[#1e3d32]">
+                    <td className="px-4 py-3 text-[12.5px] font-semibold text-[#163F33]">
                       {o.customerName}
                     </td>
                     <td className="px-4 py-3">
@@ -163,11 +163,11 @@ export default async function AgentReferredSalesPage({ searchParams }: PageProps
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="text-[12px] font-semibold text-[#1e3d32]">
+                      <div className="text-[12px] font-semibold text-[#163F33]">
                         {o.itemsCount}
                       </div>
                       {o.firstItemName ? (
-                        <div className="text-[11px] text-[#2B2B2B]/55">
+                        <div className="text-[11px] text-[#1F1F1F]/55">
                           {o.firstItemName}
                           {o.itemsCount > 1 ? ` + ${o.itemsCount - 1} more` : ''}
                         </div>
@@ -189,7 +189,7 @@ export default async function AgentReferredSalesPage({ searchParams }: PageProps
                           {o.commissionStatus}
                         </span>
                       ) : o.paymentStatus !== 'paid' ? (
-                        <span className="mt-1 block text-[10.5px] italic text-[#2B2B2B]/55">
+                        <span className="mt-1 block text-[10.5px] italic text-[#1F1F1F]/55">
                           accrues when paid
                         </span>
                       ) : null}
@@ -215,13 +215,13 @@ function Summary({
   accent?: 'neutral' | 'green'
 }) {
   return (
-    <div className="rounded-2xl border border-[#1e3d32]/10 bg-white p-4">
-      <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#1e3d32]/55">
+    <div className="rounded-2xl border border-[#163F33]/10 bg-white p-4">
+      <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/55">
         {label}
       </p>
       <p
         className={`mt-1 font-heading text-[20px] font-bold ${
-          accent === 'green' ? 'text-emerald-700' : 'text-[#1e3d32]'
+          accent === 'green' ? 'text-emerald-700' : 'text-[#163F33]'
         }`}
       >
         {value}

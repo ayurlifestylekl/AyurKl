@@ -37,7 +37,7 @@ export default function AppleButton({
       type="button"
       onClick={handleClick}
       disabled={isPending}
-      className="group relative inline-flex h-12 w-full items-center justify-center gap-3 rounded-full border border-white/20 bg-white/[0.04] px-5 font-heading text-[14px] font-semibold text-white transition-colors duration-200 hover:border-white/35 hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A373]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1d3d31] disabled:cursor-not-allowed disabled:opacity-60"
+      className="group relative inline-flex h-12 w-full items-center justify-center gap-3 rounded-full border border-white/20 bg-white/[0.04] px-5 font-heading text-[14px] font-semibold text-white transition-colors duration-200 hover:border-white/35 hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#163F33] disabled:cursor-not-allowed disabled:opacity-60"
     >
       <AppleSvg className="h-5 w-5 shrink-0" />
       <span>{isPending ? 'Opening Apple…' : label}</span>

@@ -32,7 +32,7 @@ export const portableTextComponents: PortableTextComponents = {
 
       return (
         <figure className="not-prose my-12 md:-mx-12 lg:-mx-24">
-          <div className="relative overflow-hidden rounded-[20px] shadow-[0_2px_4px_rgba(47,93,80,0.06),0_28px_72px_-24px_rgba(47,93,80,0.28)] ring-1 ring-primary/10">
+          <div className="relative overflow-hidden rounded-[20px] shadow-[0_2px_4px_rgba(30, 91, 75,0.06),0_28px_72px_-24px_rgba(30, 91, 75,0.28)] ring-1 ring-primary/10">
             <Image
               src={url}
               alt={alt}

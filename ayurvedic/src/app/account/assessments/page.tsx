@@ -80,30 +80,30 @@ export default async function AssessmentsHubPage() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 sm:gap-8">
       {/* ── HERO ──────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white px-6 py-8 sm:px-10 sm:py-12">
+      <header className="relative overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white px-6 py-8 sm:px-10 sm:py-12">
         <div
           aria-hidden
-          className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#FAF6EE] to-transparent"
+          className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#F7F2E8] to-transparent"
         />
         <div className="relative">
-          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
-            <Compass className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={2} />
+          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+            <Compass className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2} />
             Assessments
           </span>
           <h1
-            className="mt-3 font-heading text-[32px] font-bold leading-tight text-[#1e3d32] sm:text-[44px]"
+            className="mt-3 font-heading text-[32px] font-bold leading-tight text-[#163F33] sm:text-[44px]"
             style={{ letterSpacing: '-0.025em' }}
           >
             Hello, {firstName}.<br className="hidden sm:block" />
             <span
-              className="italic font-normal text-[#1e3d32]/70"
+              className="italic font-normal text-[#163F33]/70"
               style={{ fontFamily: 'var(--font-playfair)' }}
             >
               Know your nature.
             </span>
           </h1>
           <p
-            className="mt-4 max-w-xl font-body text-[14px] text-[#2B2B2B]/65 sm:text-[15px]"
+            className="mt-4 max-w-xl font-body text-[14px] text-[#1F1F1F]/65 sm:text-[15px]"
             style={{ lineHeight: 1.65 }}
           >
             Ayurveda begins with knowing yourself — your constitution, your tendencies, your
@@ -116,11 +116,11 @@ export default async function AssessmentsHubPage() {
       {/* ── PRAKRITI — FLAGSHIP ───────────────────────────────────── */}
       <section>
         <div className="mb-3 flex items-baseline justify-between">
-          <h2 className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+          <h2 className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
             Begin here
           </h2>
           {latest && (
-            <p className="font-body text-[11px] italic text-[#2B2B2B]/50">
+            <p className="font-body text-[11px] italic text-[#1F1F1F]/50">
               Last taken{' '}
               {new Intl.DateTimeFormat('en-MY', {
                 day: 'numeric',
@@ -147,10 +147,10 @@ export default async function AssessmentsHubPage() {
       {/* ── DEEPER DIVES — LOCKED ─────────────────────────────────── */}
       <section>
         <div className="mb-3">
-          <h2 className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+          <h2 className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
             Deeper dives
           </h2>
-          <p className="mt-1 font-body text-[12.5px] text-[#2B2B2B]/55">
+          <p className="mt-1 font-body text-[12.5px] text-[#1F1F1F]/55">
             Coming soon. Each unlocks targeted recommendations once Vaidya Akhil reviews
             your Prakriti.
           </p>

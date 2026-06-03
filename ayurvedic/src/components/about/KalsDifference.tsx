@@ -32,8 +32,8 @@ export default function KalsDifference() {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: [
-            'radial-gradient(720px 520px at 10% 18%, rgba(122,157,84,0.085), transparent 62%)',
-            'radial-gradient(820px 600px at 92% 88%, rgba(212,163,115,0.07), transparent 66%)',
+            'radial-gradient(720px 520px at 10% 18%, rgba(46, 125, 90,0.085), transparent 62%)',
+            'radial-gradient(820px 600px at 92% 88%, rgba(212, 175, 55,0.07), transparent 66%)',
           ].join(', '),
         }}
       />
@@ -149,7 +149,7 @@ export default function KalsDifference() {
               className="h-px"
               style={{
                 backgroundImage:
-                  'linear-gradient(to right, transparent, rgba(212,163,115,0.55) 14%, rgba(212,163,115,0.7) 50%, rgba(212,163,115,0.55) 86%, transparent)',
+                  'linear-gradient(to right, transparent, rgba(212, 175, 55,0.55) 14%, rgba(212, 175, 55,0.7) 50%, rgba(212, 175, 55,0.55) 86%, transparent)',
               }}
             />
             <div className="mt-[4px] h-px">
@@ -157,7 +157,7 @@ export default function KalsDifference() {
                 className="h-full"
                 style={{
                   backgroundImage:
-                    'linear-gradient(to right, transparent, rgba(212,163,115,0.3) 30%, rgba(212,163,115,0.35) 70%, transparent)',
+                    'linear-gradient(to right, transparent, rgba(212, 175, 55,0.3) 30%, rgba(212, 175, 55,0.35) 70%, transparent)',
                 }}
               />
             </div>
@@ -208,13 +208,13 @@ export default function KalsDifference() {
                     className="pointer-events-none absolute right-0 top-4 bottom-4 hidden w-px origin-top md:block"
                     style={{
                       backgroundImage:
-                        'linear-gradient(to bottom, transparent, rgba(212,163,115,0.55) 22%, rgba(212,163,115,0.55) 78%, transparent)',
+                        'linear-gradient(to bottom, transparent, rgba(212, 175, 55,0.55) 22%, rgba(212, 175, 55,0.55) 78%, transparent)',
                     }}
                   >
                     {/* Midpoint diamond ornament */}
                     <span
                       aria-hidden
-                      className="absolute left-1/2 top-1/2 h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent/55 transition-[background-color,box-shadow] duration-500 group-hover:bg-accent group-hover:shadow-[0_0_8px_rgba(212,163,115,0.7)]"
+                      className="absolute left-1/2 top-1/2 h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent/55 transition-[background-color,box-shadow] duration-500 group-hover:bg-accent group-hover:shadow-[0_0_8px_rgba(212, 175, 55,0.7)]"
                     />
                   </motion.span>
                 )}
@@ -226,7 +226,7 @@ export default function KalsDifference() {
                     className="absolute left-0 right-0 top-0 h-px md:hidden"
                     style={{
                       backgroundImage:
-                        'linear-gradient(to right, rgba(212,163,115,0.35), rgba(212,163,115,0.15) 70%, transparent)',
+                        'linear-gradient(to right, rgba(212, 175, 55,0.35), rgba(212, 175, 55,0.15) 70%, transparent)',
                     }}
                   />
                 )}
@@ -343,7 +343,7 @@ export default function KalsDifference() {
             className="h-px flex-1"
             style={{
               backgroundImage:
-                'linear-gradient(to right, transparent, rgba(212,163,115,0.55) 18%, rgba(212,163,115,0.7) 62%, rgba(212,163,115,0.55) 80%, transparent)',
+                'linear-gradient(to right, transparent, rgba(212, 175, 55,0.55) 18%, rgba(212, 175, 55,0.7) 62%, rgba(212, 175, 55,0.55) 80%, transparent)',
             }}
           />
           <svg
@@ -365,7 +365,7 @@ export default function KalsDifference() {
             className="h-px flex-[2]"
             style={{
               backgroundImage:
-                'linear-gradient(to left, transparent, rgba(212,163,115,0.55) 20%, rgba(212,163,115,0.35) 70%, transparent)',
+                'linear-gradient(to left, transparent, rgba(212, 175, 55,0.55) 20%, rgba(212, 175, 55,0.35) 70%, transparent)',
             }}
           />
         </motion.div>

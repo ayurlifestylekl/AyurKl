@@ -26,12 +26,12 @@ export default function PractitionerNotePanel({
   }
 
   return (
-    <div className="rounded-2xl border border-[#D4A373]/30 bg-[#FAF6EE]/60 p-4">
+    <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8]/60 p-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
           Practitioner note
         </h3>
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#D4A373]">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#D4AF37]">
           Visible to customer
         </span>
       </div>
@@ -40,7 +40,7 @@ export default function PractitionerNotePanel({
         onChange={(e) => setVal(e.target.value)}
         rows={3}
         placeholder="A short note from the Vaidya for the customer…"
-        className="mt-2 w-full rounded-lg border border-[#1e3d32]/15 bg-white px-3 py-2 text-[13px]"
+        className="mt-2 w-full rounded-lg border border-[#163F33]/15 bg-white px-3 py-2 text-[13px]"
       />
       {error ? <p className="mt-2 text-[12px] text-red-600">{error}</p> : null}
       {saved ? (
@@ -50,7 +50,7 @@ export default function PractitionerNotePanel({
         type="button"
         disabled={pending}
         onClick={save}
-        className="mt-2 rounded-lg bg-[#D4A373] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b58a5d] disabled:opacity-50"
+        className="mt-2 rounded-lg bg-[#D4AF37] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b58a5d] disabled:opacity-50"
       >
         Save note
       </button>

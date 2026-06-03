@@ -7,7 +7,7 @@ export default function DataExportButton() {
     <a
       href="/api/account/export"
       download
-      className="inline-flex h-11 items-center gap-2 rounded-full border border-[#1e3d32]/15 bg-white px-5 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#1e3d32] transition-all hover:bg-[#1e3d32]/[0.04]"
+      className="inline-flex h-11 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-5 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#163F33] transition-all hover:bg-[#163F33]/[0.04]"
     >
       <Download className="h-3.5 w-3.5" />
       Download my data

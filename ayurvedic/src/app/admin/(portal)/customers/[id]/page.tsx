@@ -99,7 +99,7 @@ export default async function AdminCustomerDetailPage({
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/customers"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to customers
       </Link>
@@ -107,7 +107,7 @@ export default async function AdminCustomerDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               {c.full_name ?? 'Unnamed customer'}
             </h1>
             {c.blocked_at ? (
@@ -116,12 +116,12 @@ export default async function AdminCustomerDetailPage({
               </span>
             ) : null}
             {wantMock ? (
-              <span className="rounded-full border border-[#D4A373]/40 bg-[#FAF6EE] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
+              <span className="rounded-full border border-[#D4AF37]/40 bg-[#F7F2E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
                 Demo data
               </span>
             ) : null}
           </div>
-          <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             Member since {new Date(c.created_at).toLocaleDateString('en-MY')} ·{' '}
             {paidOrders.length} paid order{paidOrders.length === 1 ? '' : 's'} ·
             LTV RM {ltv.toFixed(2)} · AOV RM {aov.toFixed(2)}
@@ -144,26 +144,26 @@ export default async function AdminCustomerDetailPage({
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Identity + wellness */}
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Identity
           </h2>
           <dl className="mt-3 grid grid-cols-3 gap-y-2 text-[12.5px]">
-            <dt className="col-span-1 text-[#2B2B2B]/55">Email</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Email</dt>
             <dd className="col-span-2 break-all">{c.email ?? '—'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Phone</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Phone</dt>
             <dd className="col-span-2">{c.phone_number ?? '—'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">DOB</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">DOB</dt>
             <dd className="col-span-2">
               {c.date_of_birth
                 ? new Date(c.date_of_birth).toLocaleDateString('en-MY')
                 : '—'}
             </dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Gender</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Gender</dt>
             <dd className="col-span-2 capitalize">{c.gender ?? '—'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Language</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Language</dt>
             <dd className="col-span-2 uppercase">{c.language ?? 'EN'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Dosha</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Dosha</dt>
             <dd className="col-span-2 capitalize">{quiz?.prakriti_primary ?? '—'}</dd>
           </dl>
           {c.tags?.length ? (
@@ -171,7 +171,7 @@ export default async function AdminCustomerDetailPage({
               {c.tags.map((t: string) => (
                 <span
                   key={t}
-                  className="rounded-full border border-[#1e3d32]/15 bg-[#FAF6EE]/40 px-2 py-0.5 text-[10.5px]"
+                  className="rounded-full border border-[#163F33]/15 bg-[#F7F2E8]/40 px-2 py-0.5 text-[10.5px]"
                 >
                   {t}
                 </span>
@@ -181,46 +181,46 @@ export default async function AdminCustomerDetailPage({
         </article>
 
         {/* Wellness snapshot */}
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Wellness snapshot
           </h2>
           <dl className="mt-3 grid grid-cols-3 gap-y-2 text-[12.5px]">
-            <dt className="col-span-1 text-[#2B2B2B]/55">Height</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Height</dt>
             <dd className="col-span-2">{c.height_cm ? `${c.height_cm} cm` : '—'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Weight</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Weight</dt>
             <dd className="col-span-2">{c.weight_kg ? `${c.weight_kg} kg` : '—'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Allergies</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Allergies</dt>
             <dd className="col-span-2">{c.allergies ?? '—'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Medications</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Medications</dt>
             <dd className="col-span-2">{c.current_medications ?? '—'}</dd>
-            <dt className="col-span-1 text-[#2B2B2B]/55">Conditions</dt>
+            <dt className="col-span-1 text-[#1F1F1F]/55">Conditions</dt>
             <dd className="col-span-2">{c.medical_conditions ?? '—'}</dd>
           </dl>
         </article>
 
         {/* Addresses */}
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Addresses ({addresses.length})
           </h2>
           {addresses.length === 0 ? (
-            <p className="mt-2 text-[11.5px] italic text-[#2B2B2B]/55">No saved addresses.</p>
+            <p className="mt-2 text-[11.5px] italic text-[#1F1F1F]/55">No saved addresses.</p>
           ) : (
             <ul className="mt-2 flex flex-col gap-2 text-[12px]">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {addresses.map((a: any) => (
                 <li
                   key={a.id}
-                  className="rounded-lg border border-[#1e3d32]/8 bg-[#FAF6EE]/20 p-2"
+                  className="rounded-lg border border-[#163F33]/8 bg-[#F7F2E8]/20 p-2"
                 >
                   <p className="font-semibold">
                     {a.label} {a.is_default ? '· default' : ''}
                   </p>
-                  <p className="text-[#2B2B2B]/65">
+                  <p className="text-[#1F1F1F]/65">
                     {a.recipient} · {a.phone}
                   </p>
-                  <p className="text-[#2B2B2B]/65">
+                  <p className="text-[#1F1F1F]/65">
                     {a.line1}, {a.city} {a.postcode}
                   </p>
                 </li>
@@ -232,30 +232,30 @@ export default async function AdminCustomerDetailPage({
 
       {/* Orders + appointments + tickets + vouchers */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Order history ({orders.length})
           </h2>
           {orders.length === 0 ? (
-            <p className="mt-2 text-[11.5px] italic text-[#2B2B2B]/55">No orders yet.</p>
+            <p className="mt-2 text-[11.5px] italic text-[#1F1F1F]/55">No orders yet.</p>
           ) : (
-            <ul className="mt-2 divide-y divide-[#1e3d32]/6 text-[12.5px]">
+            <ul className="mt-2 divide-y divide-[#163F33]/6 text-[12.5px]">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {orders.slice(0, 8).map((o: any) => (
                 <li key={o.id} className="flex items-center justify-between py-2">
                   <Link
                     href={`/admin/orders/${o.id}`}
-                    className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                    className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                   >
                     #{String(o.id).slice(-6).toUpperCase()}
                   </Link>
-                  <span className="text-[#2B2B2B]/65">
+                  <span className="text-[#1F1F1F]/65">
                     RM {Number(o.total_amount_rm).toFixed(2)}
                   </span>
-                  <span className="text-[11px] text-[#2B2B2B]/55">
+                  <span className="text-[11px] text-[#1F1F1F]/55">
                     {o.fulfillment_status}
                   </span>
-                  <span className="text-[11px] text-[#2B2B2B]/55">
+                  <span className="text-[11px] text-[#1F1F1F]/55">
                     {new Date(o.created_at).toLocaleDateString('en-MY')}
                   </span>
                 </li>
@@ -264,30 +264,30 @@ export default async function AdminCustomerDetailPage({
           )}
         </article>
 
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Vouchers in wallet ({vouchers.length})
           </h2>
           {vouchers.length === 0 ? (
-            <p className="mt-2 text-[11.5px] italic text-[#2B2B2B]/55">
+            <p className="mt-2 text-[11.5px] italic text-[#1F1F1F]/55">
               No vouchers granted yet. Use &quot;Push voucher&quot; above to send one.
             </p>
           ) : (
-            <ul className="mt-2 divide-y divide-[#1e3d32]/6 text-[12.5px]">
+            <ul className="mt-2 divide-y divide-[#163F33]/6 text-[12.5px]">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {vouchers.slice(0, 8).map((v: any) => {
                 const p = Array.isArray(v.promo) ? v.promo[0] : v.promo
                 return (
                   <li key={v.id} className="flex items-center justify-between py-2">
                     <div>
-                      <p className="font-semibold text-[#1e3d32]">
+                      <p className="font-semibold text-[#163F33]">
                         {p?.title ?? 'Voucher'}
                       </p>
-                      <p className="text-[11px] text-[#2B2B2B]/55">
+                      <p className="text-[11px] text-[#1F1F1F]/55">
                         {p?.code} · {v.source} · {v.status}
                       </p>
                     </div>
-                    <span className="text-[11px] text-[#2B2B2B]/55">
+                    <span className="text-[11px] text-[#1F1F1F]/55">
                       {new Date(v.granted_at).toLocaleDateString('en-MY')}
                     </span>
                   </li>
@@ -297,21 +297,21 @@ export default async function AdminCustomerDetailPage({
           )}
         </article>
 
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Appointments ({appointments.length})
           </h2>
           {appointments.length === 0 ? (
-            <p className="mt-2 text-[11.5px] italic text-[#2B2B2B]/55">No appointments.</p>
+            <p className="mt-2 text-[11.5px] italic text-[#1F1F1F]/55">No appointments.</p>
           ) : (
-            <ul className="mt-2 divide-y divide-[#1e3d32]/6 text-[12.5px]">
+            <ul className="mt-2 divide-y divide-[#163F33]/6 text-[12.5px]">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {appointments.slice(0, 8).map((a: any) => (
                 <li key={a.id} className="flex items-center justify-between py-2">
                   <span>
                     {new Date(a.appointment_date_time).toLocaleString('en-MY')}
                   </span>
-                  <span className="text-[11px] text-[#2B2B2B]/55 capitalize">
+                  <span className="text-[11px] text-[#1F1F1F]/55 capitalize">
                     {a.status}
                   </span>
                 </li>
@@ -320,19 +320,19 @@ export default async function AdminCustomerDetailPage({
           )}
         </article>
 
-        <article className="rounded-2xl border border-[#1e3d32]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
             Support tickets ({tickets.length})
           </h2>
           {tickets.length === 0 ? (
-            <p className="mt-2 text-[11.5px] italic text-[#2B2B2B]/55">No tickets.</p>
+            <p className="mt-2 text-[11.5px] italic text-[#1F1F1F]/55">No tickets.</p>
           ) : (
-            <ul className="mt-2 divide-y divide-[#1e3d32]/6 text-[12.5px]">
+            <ul className="mt-2 divide-y divide-[#163F33]/6 text-[12.5px]">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {tickets.slice(0, 8).map((t: any) => (
                 <li key={t.id} className="flex items-center justify-between py-2">
                   <span className="truncate">{t.subject}</span>
-                  <span className="text-[11px] text-[#2B2B2B]/55 capitalize">
+                  <span className="text-[11px] text-[#1F1F1F]/55 capitalize">
                     {t.status}
                   </span>
                 </li>

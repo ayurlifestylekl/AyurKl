@@ -60,7 +60,7 @@ function TabButton({
       className={[
         'flex h-10 items-center justify-center rounded-full font-heading text-[12.5px] font-semibold tracking-[-0.005em] transition-all duration-200',
         active
-          ? 'bg-[#D4A373] text-[#1a1a1a] shadow-sm'
+          ? 'bg-[#D4AF37] text-[#1F1F1F] shadow-sm'
           : 'text-white/55 hover:text-white/85',
       ].join(' ')}
     >

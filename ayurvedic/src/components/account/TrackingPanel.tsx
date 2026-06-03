@@ -25,21 +25,21 @@ export default function TrackingPanel({
 
   return (
     <section
-      className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
-      <div className="flex items-center gap-2.5 border-b border-[#1e3d32]/6 px-5 py-3 sm:px-6">
-        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
+      <div className="flex items-center gap-2.5 border-b border-[#163F33]/6 px-5 py-3 sm:px-6">
+        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
           {isSelfPickup ? (
-            <MapPin className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+            <MapPin className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
           ) : (
-            <Truck className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+            <Truck className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
           )}
         </span>
-        <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
           {isSelfPickup ? 'Pickup details' : 'Shipping & tracking'}
         </h2>
       </div>
@@ -47,13 +47,13 @@ export default function TrackingPanel({
       <div className="px-5 py-4 sm:px-6">
         {isSelfPickup ? (
           <div className="space-y-1.5">
-            <p className="font-heading text-[12px] font-semibold text-[#1e3d32]/55 uppercase tracking-[0.18em]">
+            <p className="font-heading text-[12px] font-semibold text-[#163F33]/55 uppercase tracking-[0.18em]">
               Self-pickup at clinic
             </p>
-            <p className="font-body text-[13.5px] text-[#1e3d32]">
+            <p className="font-body text-[13.5px] text-[#163F33]">
               Kerala Ayurvedic Lifestyle, Brickfields, KL
             </p>
-            <p className="font-body text-[12px] italic text-[#2B2B2B]/55">
+            <p className="font-body text-[12px] italic text-[#1F1F1F]/55">
               Bring this order number when you collect — we&apos;ll have it ready.
             </p>
           </div>
@@ -61,11 +61,11 @@ export default function TrackingPanel({
           <div className="space-y-3">
             {/* Courier row */}
             <div className="flex items-center justify-between gap-3">
-              <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+              <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
                 Courier
               </span>
               <span
-                className="font-heading text-[13.5px] font-semibold text-[#1e3d32]"
+                className="font-heading text-[13.5px] font-semibold text-[#163F33]"
                 style={{ letterSpacing: '-0.005em' }}
               >
                 {courier}
@@ -74,12 +74,12 @@ export default function TrackingPanel({
 
             {/* Tracking number row */}
             {trackingNumber && (
-              <div className="flex items-center justify-between gap-3 border-t border-[#1e3d32]/6 pt-3">
-                <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+              <div className="flex items-center justify-between gap-3 border-t border-[#163F33]/6 pt-3">
+                <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
                   Tracking number
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[13px] font-semibold text-[#1e3d32]">
+                  <span className="font-mono text-[13px] font-semibold text-[#163F33]">
                     {trackingNumber}
                   </span>
                   <CopyButton value={trackingNumber} variant="chip" />
@@ -89,7 +89,7 @@ export default function TrackingPanel({
 
             {/* Status hint */}
             {!isShipped && (
-              <p className="border-t border-[#1e3d32]/6 pt-3 font-body text-[12px] italic text-[#2B2B2B]/55">
+              <p className="border-t border-[#163F33]/6 pt-3 font-body text-[12px] italic text-[#1F1F1F]/55">
                 Your order is being prepared. We&apos;ll update the tracking number as soon as it ships.
               </p>
             )}
@@ -100,7 +100,7 @@ export default function TrackingPanel({
                 href={trackingUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group mt-1 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#D4A373] px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98]"
+                className="group mt-1 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#D4AF37] px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98]"
               >
                 Track on {courier}
                 <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />

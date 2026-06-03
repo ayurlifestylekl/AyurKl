@@ -22,7 +22,7 @@ export default function AuthCard({
   return (
     <div className="w-full">
       <div
-        className="relative overflow-hidden rounded-[28px] border border-[#D4A373]/22 bg-gradient-to-b from-[#234a3e]/95 via-[#1d3d31]/95 to-[#173329]/95 p-8 backdrop-blur-xl sm:p-10"
+        className="relative overflow-hidden rounded-[28px] border border-[#D4AF37]/22 bg-gradient-to-b from-[#163F33]/95 via-[#163F33]/95 to-[#163F33]/95 p-8 backdrop-blur-xl sm:p-10"
         style={{
           boxShadow:
             '0 24px 60px -18px rgba(0,0,0,0.45), 0 8px 20px -10px rgba(0,0,0,0.35), inset 0 1px 0 0 rgba(255,255,255,0.06)',
@@ -40,9 +40,9 @@ export default function AuthCard({
 
         <div className="relative">
           {eyebrow && (
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#D4A373]/30 bg-[#D4A373]/10 px-3 py-1">
-              <Sparkles className="h-3 w-3 text-[#D4A373]" />
-              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-3 py-1">
+              <Sparkles className="h-3 w-3 text-[#D4AF37]" />
+              <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
                 {eyebrow}
               </span>
             </div>

@@ -82,7 +82,7 @@ export default function NocturneFrame({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 75% 20%, rgba(212,163,115,0.38) 0%, transparent 55%)',
+            'radial-gradient(ellipse at 75% 20%, rgba(212, 175, 55,0.38) 0%, transparent 55%)',
           mixBlendMode: 'screen',
         }}
       />
@@ -92,7 +92,7 @@ export default function NocturneFrame({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 20% 85%, rgba(122,157,84,0.22) 0%, transparent 55%)',
+            'radial-gradient(ellipse at 20% 85%, rgba(46, 125, 90,0.22) 0%, transparent 55%)',
           mixBlendMode: 'screen',
         }}
       />

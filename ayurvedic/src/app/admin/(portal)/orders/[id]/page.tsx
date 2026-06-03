@@ -57,21 +57,21 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
         <div>
           <Link
             href="/admin/orders"
-            className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+            className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
           >
             ← Back to orders
           </Link>
           <div className="mt-1 flex items-center gap-3">
-            <h1 className="font-heading text-[24px] font-bold text-[#1e3d32]">
+            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
               Order #{shortId}
             </h1>
             {isMock ? (
-              <span className="rounded-full border border-[#D4A373]/40 bg-[#FAF6EE] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
+              <span className="rounded-full border border-[#D4AF37]/40 bg-[#F7F2E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
                 Demo data
               </span>
             ) : null}
           </div>
-          <p className="text-[12px] text-[#2B2B2B]/65">
+          <p className="text-[12px] text-[#1F1F1F]/65">
             {new Date(o.created_at).toLocaleString('en-MY')} · channel: {o.channel}
             {o.invoice_number ? ` · Invoice ${o.invoice_number}` : ''}
           </p>
@@ -101,7 +101,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
             href={`/admin/orders/${o.id}/invoice`}
             target="_blank"
             rel="noopener"
-            className="rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60"
+            className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
           >
             Invoice
           </a>
@@ -109,7 +109,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
             href={`/admin/orders/${o.id}/packing-slip`}
             target="_blank"
             rel="noopener"
-            className="rounded-lg border border-[#1e3d32]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#1e3d32] hover:bg-[#FAF6EE]/60"
+            className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
           >
             Packing slip
           </a>
@@ -117,7 +117,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
             href={`/admin/orders/${o.id}/label`}
             target="_blank"
             rel="noopener"
-            className="rounded-lg bg-[#2F5D50] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#1e3d32]"
+            className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#163F33]"
           >
             Print label
           </a>
@@ -133,42 +133,42 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <article
-          className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white lg:col-span-2"
-          style={{ boxShadow: '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)' }}
+          className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white lg:col-span-2"
+          style={{ boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)' }}
         >
-          <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
             Items
           </header>
           <OrderItemsTable items={o.order_items ?? []} />
         </article>
 
         <article
-          className="rounded-2xl border border-[#1e3d32]/8 bg-white p-5"
-          style={{ boxShadow: '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)' }}
+          className="rounded-2xl border border-[#163F33]/8 bg-white p-5"
+          style={{ boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)' }}
         >
-          <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">Customer</h2>
+          <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">Customer</h2>
           <p className="mt-2 text-[13px]">{cust?.full_name ?? '—'}</p>
-          <p className="text-[12px] text-[#2B2B2B]/65">{cust?.email}</p>
-          <p className="text-[12px] text-[#2B2B2B]/65">{cust?.phone_number}</p>
+          <p className="text-[12px] text-[#1F1F1F]/65">{cust?.email}</p>
+          <p className="text-[12px] text-[#1F1F1F]/65">{cust?.phone_number}</p>
           {cust?.id ? (
-            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#1e3d32]/6 pt-3">
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#163F33]/6 pt-3">
               <Link
                 href={`/admin/customers/${cust.id}`}
-                className="text-[11.5px] font-semibold text-[#1e3d32]/70 hover:text-[#D4A373]"
+                className="text-[11.5px] font-semibold text-[#163F33]/70 hover:text-[#D4AF37]"
               >
                 View profile →
               </Link>
               <Link
                 href={`/admin/customers/${cust.id}#push-voucher`}
-                className="inline-flex items-center gap-1 rounded-full bg-[#D4A373]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#8a6a3d] hover:bg-[#D4A373]/25"
+                className="inline-flex items-center gap-1 rounded-full bg-[#D4AF37]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#8a6a3d] hover:bg-[#D4AF37]/25"
               >
                 🎁 Push voucher
               </Link>
             </div>
           ) : null}
           {ship ? (
-            <div className="mt-4 border-t border-[#1e3d32]/6 pt-4">
-              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <div className="mt-4 border-t border-[#163F33]/6 pt-4">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 Ship to
               </h3>
               <p className="mt-1 text-[12.5px]">{ship.line1}</p>
@@ -179,13 +179,13 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
               <p className="text-[12.5px]">{ship.country}</p>
             </div>
           ) : (
-            <p className="mt-4 border-t border-[#1e3d32]/6 pt-4 text-[11.5px] italic text-[#2B2B2B]/55">
+            <p className="mt-4 border-t border-[#163F33]/6 pt-4 text-[11.5px] italic text-[#1F1F1F]/55">
               No shipping address on file.
             </p>
           )}
           {o.tracking_number ? (
-            <div className="mt-4 border-t border-[#1e3d32]/6 pt-4">
-              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+            <div className="mt-4 border-t border-[#163F33]/6 pt-4">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
                 Tracking
               </h3>
               <p className="mt-1 text-[12.5px]">
@@ -203,23 +203,23 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
 
       {refunds.length > 0 ? (
         <article
-          className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white"
-          style={{ boxShadow: '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)' }}
+          className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white"
+          style={{ boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)' }}
         >
-          <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
             Refunds
           </header>
-          <ul className="divide-y divide-[#1e3d32]/6">
+          <ul className="divide-y divide-[#163F33]/6">
             {refunds.map((r) => (
               <li key={r.id} className="px-5 py-3 text-[13px]">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-[#1e3d32]">RM {Number(r.amount_rm).toFixed(2)}</span>
-                  <span className="text-[11px] text-[#2B2B2B]/55">
+                  <span className="font-semibold text-[#163F33]">RM {Number(r.amount_rm).toFixed(2)}</span>
+                  <span className="text-[11px] text-[#1F1F1F]/55">
                     {new Date(r.created_at).toLocaleString('en-MY')}
                   </span>
                 </div>
-                <p className="mt-1 text-[12px] text-[#2B2B2B]/70">{r.reason}</p>
-                <p className="mt-0.5 text-[11px] text-[#2B2B2B]/55">
+                <p className="mt-1 text-[12px] text-[#1F1F1F]/70">{r.reason}</p>
+                <p className="mt-0.5 text-[11px] text-[#1F1F1F]/55">
                   via {r.refund_method}{r.gateway_reference ? ` · ref ${r.gateway_reference}` : ''}
                 </p>
               </li>
@@ -229,10 +229,10 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
       ) : null}
 
       <article
-        className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white"
-        style={{ boxShadow: '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)' }}
+        className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white"
+        style={{ boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)' }}
       >
-        <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
           Timeline
         </header>
         <OrderTimeline events={o.events ?? []} />

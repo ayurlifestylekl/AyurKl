@@ -36,26 +36,26 @@ export default async function AdminInventoryDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-5">
       <Link
         href="/admin/inventory"
-        className="text-[11px] uppercase tracking-wider text-[#1e3d32]/55 hover:text-[#D4A373]"
+        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
       >
         ← Back to inventory
       </Link>
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Stock & Movements
           </span>
-          <h1 className="mt-2 font-heading text-[24px] font-bold text-[#1e3d32]">
+          <h1 className="mt-2 font-heading text-[24px] font-bold text-[#163F33]">
             {p.name}
           </h1>
-          <p className="mt-1 text-[12px] text-[#2B2B2B]/65">
+          <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             SKU {p.sku} · stock threshold {threshold}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <div
             className={`flex flex-col items-end ${
-              isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#1e3d32]'
+              isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#163F33]'
             }`}
           >
             <span className="font-heading text-[36px] font-bold leading-none">
@@ -76,13 +76,13 @@ export default async function AdminInventoryDetailPage({
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <article
-          className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white lg:col-span-2"
+          className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white lg:col-span-2"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
-          <header className="border-b border-[#1e3d32]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
             Movement history
           </header>
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

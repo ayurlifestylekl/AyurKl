@@ -41,11 +41,11 @@ export default function CancelOrderButton({ orderId, orderShortId }: CancelOrder
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
-          <div className="w-full max-w-md rounded-3xl border border-[#1e3d32]/8 bg-white p-6">
-            <h3 className="font-heading text-[16px] font-bold text-[#1e3d32]">
+          <div className="w-full max-w-md rounded-3xl border border-[#163F33]/8 bg-white p-6">
+            <h3 className="font-heading text-[16px] font-bold text-[#163F33]">
               Cancel order #{orderShortId}?
             </h3>
-            <p className="mt-2 font-body text-[13px] text-[#2B2B2B]/70">
+            <p className="mt-2 font-body text-[13px] text-[#1F1F1F]/70">
               Tell us briefly why — this helps us improve. Cancelling is final.
             </p>
             <textarea
@@ -53,7 +53,7 @@ export default function CancelOrderButton({ orderId, orderShortId }: CancelOrder
               onChange={(e) => setReason(e.target.value)}
               rows={3}
               placeholder="e.g. ordered by mistake, changed my mind"
-              className="mt-3 w-full resize-y rounded-2xl border border-[#1e3d32]/15 bg-white px-4 py-3 font-body text-[13.5px] focus:border-[#D4A373] focus:outline-none focus:ring-2 focus:ring-[#D4A373]/30"
+              className="mt-3 w-full resize-y rounded-2xl border border-[#163F33]/15 bg-white px-4 py-3 font-body text-[13.5px] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30"
               disabled={isPending}
             />
             <div className="mt-4 flex justify-end gap-2">
@@ -61,7 +61,7 @@ export default function CancelOrderButton({ orderId, orderShortId }: CancelOrder
                 type="button"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
-                className="rounded-full border border-[#1e3d32]/15 px-4 py-2 font-heading text-[12px] font-semibold text-[#1e3d32]"
+                className="rounded-full border border-[#163F33]/15 px-4 py-2 font-heading text-[12px] font-semibold text-[#163F33]"
               >
                 Keep order
               </button>

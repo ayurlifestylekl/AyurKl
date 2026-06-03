@@ -14,17 +14,17 @@ export default function UpcomingAppointmentsCard({
 }: UpcomingAppointmentsCardProps) {
   return (
     <section
-      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
-      <div className="flex items-center gap-2.5 border-b border-[#1e3d32]/6 px-5 py-3 sm:px-5">
-        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-          <Calendar className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+      <div className="flex items-center gap-2.5 border-b border-[#163F33]/6 px-5 py-3 sm:px-5">
+        <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+          <Calendar className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
         </span>
-        <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+        <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
           Upcoming consultations
         </h2>
       </div>
@@ -38,7 +38,7 @@ export default function UpcomingAppointmentsCard({
           ctaHref="/book/consultation"
         />
       ) : (
-        <ul className="divide-y divide-[#1e3d32]/6">
+        <ul className="divide-y divide-[#163F33]/6">
           {appointments.map((apt) => (
             <li key={apt.id}>
               <AppointmentRow appointment={apt} />

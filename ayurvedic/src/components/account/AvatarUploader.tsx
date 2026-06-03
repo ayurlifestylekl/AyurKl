@@ -67,7 +67,7 @@ export default function AvatarUploader({ userId, fullName, initialUrl }: AvatarU
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={isPending}
-          className="inline-flex items-center gap-2 rounded-full bg-[#2F5D50] px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#264a40] active:scale-[0.98] disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-full bg-[#1E5B4B] px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98] disabled:opacity-50"
         >
           <Camera className="h-3.5 w-3.5" />
           {url ? 'Change photo' : 'Upload photo'}
@@ -83,7 +83,7 @@ export default function AvatarUploader({ userId, fullName, initialUrl }: AvatarU
             Remove
           </button>
         )}
-        <p className="font-body text-[10.5px] text-[#2B2B2B]/55">PNG, JPEG or WebP. Max 2 MB.</p>
+        <p className="font-body text-[10.5px] text-[#1F1F1F]/55">PNG, JPEG or WebP. Max 2 MB.</p>
       </div>
     </div>
   )

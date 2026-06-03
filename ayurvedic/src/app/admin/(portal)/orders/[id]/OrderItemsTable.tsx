@@ -12,7 +12,7 @@ export default function OrderItemsTable({ items }: { items: Item[] }) {
   )
   return (
     <table className="w-full text-left text-[13px]">
-      <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+      <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
         <tr>
           <th className="px-5 py-3">Item</th>
           <th className="px-5 py-3">SKU</th>
@@ -21,11 +21,11 @@ export default function OrderItemsTable({ items }: { items: Item[] }) {
           <th className="px-5 py-3 text-right">Total</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-[#1e3d32]/6">
+      <tbody className="divide-y divide-[#163F33]/6">
         {items.map((it) => (
           <tr key={it.id}>
             <td className="px-5 py-3">{it.product?.name ?? '—'}</td>
-            <td className="px-5 py-3 text-[11px] text-[#2B2B2B]/65">
+            <td className="px-5 py-3 text-[11px] text-[#1F1F1F]/65">
               {it.product?.sku ?? '—'}
             </td>
             <td className="px-5 py-3 text-right">{it.quantity}</td>
@@ -37,11 +37,11 @@ export default function OrderItemsTable({ items }: { items: Item[] }) {
             </td>
           </tr>
         ))}
-        <tr className="bg-[#FAF6EE]/40">
-          <td colSpan={4} className="px-5 py-3 text-right font-semibold text-[#1e3d32]">
+        <tr className="bg-[#F7F2E8]/40">
+          <td colSpan={4} className="px-5 py-3 text-right font-semibold text-[#163F33]">
             Items total
           </td>
-          <td className="px-5 py-3 text-right font-semibold text-[#1e3d32]">
+          <td className="px-5 py-3 text-right font-semibold text-[#163F33]">
             RM {total.toFixed(2)}
           </td>
         </tr>

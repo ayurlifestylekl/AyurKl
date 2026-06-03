@@ -6,18 +6,18 @@ interface PromoStatusPillProps {
 
 const STYLES: Record<EffectiveStatus, { bg: string; text: string; label: string }> = {
   active: {
-    bg: 'bg-[#2F5D50]/10',
-    text: 'text-[#2F5D50]',
+    bg: 'bg-[#1E5B4B]/10',
+    text: 'text-[#1E5B4B]',
     label: 'Active',
   },
   used: {
-    bg: 'bg-[#1e3d32]/[0.08]',
-    text: 'text-[#1e3d32]/65',
+    bg: 'bg-[#163F33]/[0.08]',
+    text: 'text-[#163F33]/65',
     label: 'Used',
   },
   expired: {
-    bg: 'bg-[#1e3d32]/[0.06]',
-    text: 'text-[#2B2B2B]/50',
+    bg: 'bg-[#163F33]/[0.06]',
+    text: 'text-[#1F1F1F]/50',
     label: 'Expired',
   },
   revoked: {

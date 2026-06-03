@@ -12,8 +12,8 @@ interface CategoryGridProps {
 
 const diamondPattern = {
   backgroundImage: `
-    radial-gradient(circle, rgba(47,93,80,0.028) 1px, transparent 1px),
-    radial-gradient(circle, rgba(47,93,80,0.028) 1px, transparent 1px)
+    radial-gradient(circle, rgba(30, 91, 75,0.028) 1px, transparent 1px),
+    radial-gradient(circle, rgba(30, 91, 75,0.028) 1px, transparent 1px)
   `,
   backgroundSize: '32px 32px',
   backgroundPosition: '0 0, 16px 16px',
@@ -43,7 +43,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
             className="mt-4 h-px w-20"
             style={{
               background:
-                'linear-gradient(to right, rgba(212,163,115,0.6), transparent)',
+                'linear-gradient(to right, rgba(212, 175, 55,0.6), transparent)',
             }}
             aria-hidden
           />
@@ -53,7 +53,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
           <div className="flex min-h-[280px] flex-col items-center justify-center px-8 py-20 text-center">
             <span
               aria-hidden
-              className="h-2 w-2 rounded-full bg-accent shadow-[0_0_0_5px_rgba(212,163,115,0.18)]"
+              className="h-2 w-2 rounded-full bg-accent shadow-[0_0_0_5px_rgba(212, 175, 55,0.18)]"
             />
             <p className="mt-6 font-body text-[20px] italic leading-[1.3] text-primary">
               Catalogue in preparation.

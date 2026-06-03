@@ -26,12 +26,12 @@ export default function AppointmentRow({ appointment }: AppointmentRowProps) {
   return (
     <div className="flex items-start gap-4 px-5 py-4 sm:px-6">
       {/* Date block — magazine-style */}
-      <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-[#D4A373]/12">
-        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.18em] text-[#D4A373]">
+      <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-[#D4AF37]/12">
+        <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.18em] text-[#D4AF37]">
           {month}
         </span>
         <span
-          className="font-heading text-[20px] font-bold leading-none text-[#1e3d32]"
+          className="font-heading text-[20px] font-bold leading-none text-[#163F33]"
           style={{ letterSpacing: '-0.02em' }}
         >
           {day}
@@ -41,21 +41,21 @@ export default function AppointmentRow({ appointment }: AppointmentRowProps) {
       {/* Content */}
       <div className="flex-1 min-w-0">
         <h3
-          className="font-heading text-[14.5px] font-semibold text-[#1e3d32]"
+          className="font-heading text-[14.5px] font-semibold text-[#163F33]"
           style={{ letterSpacing: '-0.005em' }}
         >
           {appointment.treatment_name}
         </h3>
-        <p className="mt-0.5 font-body text-[11.5px] italic text-[#2B2B2B]/55">
+        <p className="mt-0.5 font-body text-[11.5px] italic text-[#1F1F1F]/55">
           with {appointment.doctor_name}
         </p>
-        <div className="mt-2 flex flex-wrap items-center gap-3 font-body text-[11.5px] text-[#1e3d32]/60">
+        <div className="mt-2 flex flex-wrap items-center gap-3 font-body text-[11.5px] text-[#163F33]/60">
           <span className="inline-flex items-center gap-1">
             <Clock className="h-3 w-3" />
             {time} · {duration} min
           </span>
           {appointment.mode === 'virtual' ? (
-            <span className="inline-flex items-center gap-1 text-[#2F5D50]/85">
+            <span className="inline-flex items-center gap-1 text-[#1E5B4B]/85">
               <Video className="h-3 w-3" strokeWidth={2} />
               Virtual
             </span>
@@ -66,14 +66,14 @@ export default function AppointmentRow({ appointment }: AppointmentRowProps) {
             </span>
           )}
           {advance != null && Number(advance) > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#7A9D54]/25 bg-[#7A9D54]/8 px-2 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.08em] text-[#3d6b4f]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#2E7D5A]/25 bg-[#2E7D5A]/8 px-2 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.08em] text-[#1E5B4B]">
               Advance · RM {Number(advance).toFixed(0)}
             </span>
           )}
         </div>
       </div>
 
-      <Calendar className="mt-1 h-3.5 w-3.5 shrink-0 text-[#1e3d32]/25" strokeWidth={1.8} />
+      <Calendar className="mt-1 h-3.5 w-3.5 shrink-0 text-[#163F33]/25" strokeWidth={1.8} />
     </div>
   )
 }

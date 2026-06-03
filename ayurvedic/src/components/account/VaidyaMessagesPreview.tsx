@@ -26,23 +26,23 @@ export default async function VaidyaMessagesPreview() {
   return (
     <Link
       href={href}
-      className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4A373]/35 sm:p-6"
+      className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35 sm:p-6"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-            <Inbox className="h-4 w-4 text-[#2F5D50]" strokeWidth={1.8} />
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+            <Inbox className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
           <div>
-            <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55">
+            <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
               Messages & support
             </p>
             <p
-              className="font-heading text-[14px] font-bold text-[#1e3d32]"
+              className="font-heading text-[14px] font-bold text-[#163F33]"
               style={{ letterSpacing: '-0.005em' }}
             >
               {latest ? 'A note from the clinic' : 'Messages from the clinic'}
@@ -50,30 +50,30 @@ export default async function VaidyaMessagesPreview() {
           </div>
         </div>
         <ArrowUpRight
-          className="h-4 w-4 text-[#1e3d32]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4A373]"
+          className="h-4 w-4 text-[#163F33]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
           strokeWidth={2}
         />
       </div>
 
       {latest ? (
-        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-[#D4A373]/25 bg-[#FAF6EE]/55 p-3.5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#D4A373]/15">
-            <MessageCircle className="h-4 w-4 text-[#D4A373]" strokeWidth={1.8} />
+        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-[#D4AF37]/25 bg-[#F7F2E8]/55 p-3.5">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#D4AF37]/15">
+            <MessageCircle className="h-4 w-4 text-[#D4AF37]" strokeWidth={1.8} />
           </span>
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline justify-between gap-2">
               <p
-                className="truncate font-heading text-[12.5px] font-semibold text-[#1e3d32]"
+                className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]"
                 style={{ letterSpacing: '-0.005em' }}
               >
                 {CLINIC_LONG_NAME}
               </p>
-              <span className="shrink-0 font-body text-[10px] text-[#2B2B2B]/45">
+              <span className="shrink-0 font-body text-[10px] text-[#1F1F1F]/45">
                 {relativeTime(latest.message.created_at)}
               </span>
             </div>
             <p
-              className="mt-1 font-body text-[12px] italic text-[#2B2B2B]/65"
+              className="mt-1 font-body text-[12px] italic text-[#1F1F1F]/65"
               style={{ lineHeight: 1.55 }}
             >
               {previewBody(latest.message.body, 160)}
@@ -82,7 +82,7 @@ export default async function VaidyaMessagesPreview() {
         </div>
       ) : (
         <p
-          className="mt-4 font-body text-[12px] text-[#2B2B2B]/65"
+          className="mt-4 font-body text-[12px] text-[#1F1F1F]/65"
           style={{ lineHeight: 1.55 }}
         >
           When the clinic replies, you&apos;ll see it here. Tap to open your inbox.

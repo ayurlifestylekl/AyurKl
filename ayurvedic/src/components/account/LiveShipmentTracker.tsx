@@ -72,29 +72,29 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
 
     return (
       <section
-        className="relative overflow-hidden rounded-3xl border border-[#D4A373]/25 bg-[#FAF6EE]/55 px-4 py-3 sm:px-5"
+        className="relative overflow-hidden rounded-3xl border border-[#D4AF37]/25 bg-[#F7F2E8]/55 px-4 py-3 sm:px-5"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
         }}
       >
         <span
           aria-hidden
-          className="absolute inset-y-0 left-0 w-[3px] bg-[#D4A373]"
+          className="absolute inset-y-0 left-0 w-[3px] bg-[#D4AF37]"
         />
         <div className="flex flex-wrap items-center justify-between gap-3 pl-2">
           <div className="flex items-center gap-3 min-w-0">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white">
-              <Truck className="h-4 w-4 text-[#2F5D50]" strokeWidth={1.8} />
+              <Truck className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
             </span>
             <div className="min-w-0">
               <p
-                className="font-heading text-[13px] font-semibold text-[#1e3d32]"
+                className="font-heading text-[13px] font-semibold text-[#163F33]"
                 style={{ letterSpacing: '-0.005em' }}
               >
                 1 package in transit
               </p>
-              <p className="truncate font-body text-[11.5px] text-[#2B2B2B]/60">
+              <p className="truncate font-body text-[11.5px] text-[#1F1F1F]/60">
                 #{shortId(order.id)} · {sub}
               </p>
             </div>
@@ -105,7 +105,7 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
               href={trackUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-[#D4A373] px-5 font-heading text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98]"
+              className="group inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-[#D4AF37] px-5 font-heading text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98]"
             >
               Track my order
               <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -115,7 +115,7 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
               href={whatsappFallbackUrl(shortId(order.id))}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-[#1e3d32]/15 bg-white px-5 font-heading text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#1e3d32] transition-all hover:border-[#1e3d32]/35 active:scale-[0.98]"
+              className="group inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-5 font-heading text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#163F33] transition-all hover:border-[#163F33]/35 active:scale-[0.98]"
             >
               <MessageCircle className="h-3.5 w-3.5" />
               WhatsApp us
@@ -137,29 +137,29 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden rounded-3xl border border-[#D4A373]/25 bg-[#FAF6EE]/55 px-4 py-3 sm:px-5"
+      className="relative overflow-hidden rounded-3xl border border-[#D4AF37]/25 bg-[#F7F2E8]/55 px-4 py-3 sm:px-5"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       <span
         aria-hidden
-        className="absolute inset-y-0 left-0 w-[3px] bg-[#D4A373]"
+        className="absolute inset-y-0 left-0 w-[3px] bg-[#D4AF37]"
       />
       <div className="flex flex-wrap items-center justify-between gap-3 pl-2">
         <div className="flex items-center gap-3 min-w-0">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white">
-            <Truck className="h-4 w-4 text-[#2F5D50]" strokeWidth={1.8} />
+            <Truck className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
           <div className="min-w-0">
             <p
-              className="font-heading text-[13px] font-semibold text-[#1e3d32]"
+              className="font-heading text-[13px] font-semibold text-[#163F33]"
               style={{ letterSpacing: '-0.005em' }}
             >
               {resolved.length} packages in transit
             </p>
-            <p className="font-body text-[11.5px] text-[#2B2B2B]/60">
+            <p className="font-body text-[11.5px] text-[#1F1F1F]/60">
               {courierSub}
               {allUnmapped ? ' · tracking pending' : ''}
             </p>
@@ -171,7 +171,7 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
           onClick={() => setOpen((v) => !v)}
           aria-haspopup="menu"
           aria-expanded={open}
-          className="group inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-[#D4A373] px-5 font-heading text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a] transition-all hover:bg-[#c4935f] active:scale-[0.98]"
+          className="group inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-[#D4AF37] px-5 font-heading text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#1F1F1F] transition-all hover:bg-[#D4AF37] active:scale-[0.98]"
         >
           Track my order
           <ChevronDown
@@ -184,15 +184,15 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
       {open && (
         <div
           role="menu"
-          className="absolute right-3 z-30 mt-2 w-[min(360px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white"
+          className="absolute right-3 z-30 mt-2 w-[min(360px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white"
           style={{
             top: '100%',
             boxShadow:
-              '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
           }}
         >
-          <div className="border-b border-[#1e3d32]/6 px-4 py-2">
-            <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55">
+          <div className="border-b border-[#163F33]/6 px-4 py-2">
+            <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
               Pick a shipment
             </p>
           </div>
@@ -200,7 +200,7 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
             {resolved.map(({ order, trackUrl }, idx) => {
               const sid = shortId(order.id)
               const isLast = idx === resolved.length - 1
-              const borderCls = isLast ? '' : 'border-b border-[#1e3d32]/6'
+              const borderCls = isLast ? '' : 'border-b border-[#163F33]/6'
 
               if (trackUrl) {
                 return (
@@ -211,20 +211,20 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setOpen(false)}
-                      className={`group flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-[#FAF6EE]/55 ${borderCls}`}
+                      className={`group flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-[#F7F2E8]/55 ${borderCls}`}
                     >
                       <div className="min-w-0">
-                        <p className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+                        <p className="font-heading text-[12.5px] font-semibold text-[#163F33]">
                           #{sid} · {order.courier_service}
                         </p>
                         {order.tracking_number && (
-                          <p className="truncate font-mono text-[11px] text-[#2B2B2B]/55">
+                          <p className="truncate font-mono text-[11px] text-[#1F1F1F]/55">
                             {order.tracking_number}
                           </p>
                         )}
                       </div>
                       <ExternalLink
-                        className="h-3.5 w-3.5 shrink-0 text-[#1e3d32]/45 transition-colors group-hover:text-[#D4A373]"
+                        className="h-3.5 w-3.5 shrink-0 text-[#163F33]/45 transition-colors group-hover:text-[#D4AF37]"
                         strokeWidth={2}
                       />
                     </a>
@@ -240,18 +240,18 @@ export default function LiveShipmentTracker({ shipments }: LiveShipmentTrackerPr
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setOpen(false)}
-                    className={`group flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-[#FAF6EE]/55 ${borderCls}`}
+                    className={`group flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-[#F7F2E8]/55 ${borderCls}`}
                   >
                     <div className="min-w-0">
-                      <p className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">
+                      <p className="font-heading text-[12.5px] font-semibold text-[#163F33]">
                         #{sid}
                       </p>
-                      <p className="truncate font-body text-[11px] italic text-[#2B2B2B]/55">
+                      <p className="truncate font-body text-[11px] italic text-[#1F1F1F]/55">
                         Tracking unavailable · WhatsApp us
                       </p>
                     </div>
                     <MessageCircle
-                      className="h-3.5 w-3.5 shrink-0 text-[#1e3d32]/45 transition-colors group-hover:text-[#D4A373]"
+                      className="h-3.5 w-3.5 shrink-0 text-[#163F33]/45 transition-colors group-hover:text-[#D4AF37]"
                       strokeWidth={2}
                     />
                   </a>

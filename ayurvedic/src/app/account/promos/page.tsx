@@ -40,17 +40,17 @@ export default async function PromosPage() {
     <div className="mx-auto flex max-w-5xl flex-col gap-6 sm:gap-7">
       {/* ── HEADER ────────────────────────────────────────────────── */}
       <header>
-        <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
-          <Gift className="h-3.5 w-3.5 text-[#D4A373]" strokeWidth={2} />
+        <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+          <Gift className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2} />
           Promo Wallet
         </span>
         <h1
-          className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#1e3d32] sm:text-[36px]"
+          className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[36px]"
           style={{ letterSpacing: '-0.025em' }}
         >
           Hello, {firstName}.{' '}
           <span
-            className="italic font-normal text-[#1e3d32]/70"
+            className="italic font-normal text-[#163F33]/70"
             style={{ fontFamily: 'var(--font-playfair)' }}
           >
             Your vouchers.
@@ -64,7 +64,7 @@ export default async function PromosPage() {
       {/* ── FEATURED VOUCHER (the soonest-expiring active) ──────── */}
       {featured && (
         <section>
-          <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+          <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
             Featured
           </h2>
           <PromoCard item={featured} variant="featured" />
@@ -77,7 +77,7 @@ export default async function PromosPage() {
       {/* ── OTHER ACTIVE VOUCHERS ────────────────────────────────── */}
       {others.length > 0 && (
         <section>
-          <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+          <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
             Also in your wallet
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -91,10 +91,10 @@ export default async function PromosPage() {
       {/* ── EARN MORE — LOCKED ROADMAP ───────────────────────────── */}
       <section>
         <div className="mb-3">
-          <h2 className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+          <h2 className="font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
             Earn more
           </h2>
-          <p className="mt-1 font-body text-[12.5px] text-[#2B2B2B]/55">
+          <p className="mt-1 font-body text-[12.5px] text-[#1F1F1F]/55">
             Rewards we&apos;re building. They&apos;ll land here automatically.
           </p>
         </div>
@@ -119,7 +119,7 @@ export default async function PromosPage() {
 
       {/* ── REDEMPTION HISTORY ──────────────────────────────────── */}
       <section>
-        <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#1e3d32]/55">
+        <h2 className="mb-3 font-heading text-[12px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
           History
         </h2>
         <PromoHistoryList used={used} expired={expired} />
@@ -127,36 +127,36 @@ export default async function PromosPage() {
 
       {/* ── HOW IT WORKS ─────────────────────────────────────────── */}
       <section
-        className="rounded-3xl border border-[#1e3d32]/8 bg-white px-5 py-5 sm:px-6"
+        className="rounded-3xl border border-[#163F33]/8 bg-white px-5 py-5 sm:px-6"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
         }}
       >
         <div className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#1e3d32]/[0.06]">
-            <Sparkles className="h-3.5 w-3.5 text-[#2F5D50]" strokeWidth={1.8} />
+          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
+            <Sparkles className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
           </span>
-          <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">
+          <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
             How it works
           </h2>
         </div>
         <ul className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
           <li className="flex gap-2">
-            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#D4A373]" />
-            <span className="font-body text-[12.5px] text-[#2B2B2B]/70" style={{ lineHeight: 1.55 }}>
+            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#D4AF37]" />
+            <span className="font-body text-[12.5px] text-[#1F1F1F]/70" style={{ lineHeight: 1.55 }}>
               One promo per order — vouchers don&apos;t stack.
             </span>
           </li>
           <li className="flex gap-2">
-            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#D4A373]" />
-            <span className="font-body text-[12.5px] text-[#2B2B2B]/70" style={{ lineHeight: 1.55 }}>
+            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#D4AF37]" />
+            <span className="font-body text-[12.5px] text-[#1F1F1F]/70" style={{ lineHeight: 1.55 }}>
               Vouchers expire on the date shown — no extensions.
             </span>
           </li>
           <li className="flex gap-2">
-            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#D4A373]" />
-            <span className="font-body text-[12.5px] text-[#2B2B2B]/70" style={{ lineHeight: 1.55 }}>
+            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#D4AF37]" />
+            <span className="font-body text-[12.5px] text-[#1F1F1F]/70" style={{ lineHeight: 1.55 }}>
               Minimum spend applies before tax and shipping.
             </span>
           </li>
@@ -167,7 +167,7 @@ export default async function PromosPage() {
       <div className="flex items-center justify-center pt-1">
         <Link
           href="/products"
-          className="group inline-flex items-center gap-1.5 font-heading text-[11.5px] font-semibold uppercase tracking-[0.16em] text-[#1e3d32]/55 transition-colors hover:text-[#D4A373]"
+          className="group inline-flex items-center gap-1.5 font-heading text-[11.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55 transition-colors hover:text-[#D4AF37]"
         >
           Browse products to redeem
           <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />

@@ -61,7 +61,7 @@ function PickerPlaceholder({ hasCatalog }: { hasCatalog: boolean }) {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 0%, rgba(212,163,115,0.09) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(47,93,80,0.04) 0%, transparent 55%)',
+            'radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55,0.09) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(30, 91, 75,0.04) 0%, transparent 55%)',
         }}
       />
       <span className="relative inline-flex items-center gap-2 rounded-full border border-accent/30 bg-white px-3 py-1.5">

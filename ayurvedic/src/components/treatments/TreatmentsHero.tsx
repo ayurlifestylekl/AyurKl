@@ -17,8 +17,8 @@ interface TreatmentsHeroProps {
 /* Gold dot grid — bumped from 0.04 → 0.07 */
 const heroDiamondPattern = {
   backgroundImage: `
-    radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px),
-    radial-gradient(circle, rgba(212,163,115,0.07) 1px, transparent 1px)
+    radial-gradient(circle, rgba(212, 175, 55,0.07) 1px, transparent 1px),
+    radial-gradient(circle, rgba(212, 175, 55,0.07) 1px, transparent 1px)
   `,
   backgroundSize: '28px 28px',
   backgroundPosition: '0 0, 14px 14px',
@@ -69,7 +69,7 @@ export default function TreatmentsHero({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 85% 10%, rgba(212,163,115,0.22) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 10% 95%, rgba(26,46,38,0.55) 0%, transparent 55%), radial-gradient(ellipse 600px 500px at 50% 50%, rgba(212,163,115,0.04) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 85% 10%, rgba(212, 175, 55,0.22) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 10% 95%, rgba(15, 44, 36,0.55) 0%, transparent 55%), radial-gradient(ellipse 600px 500px at 50% 50%, rgba(212, 175, 55,0.04) 0%, transparent 60%)',
         }}
         aria-hidden
       />
@@ -197,7 +197,7 @@ export default function TreatmentsHero({
                   className="absolute -bottom-1 left-0 block h-px w-[38%] origin-left"
                   style={{
                     background:
-                      'linear-gradient(to right, rgba(212,163,115,0.8), rgba(212,163,115,0.1) 70%, transparent)',
+                      'linear-gradient(to right, rgba(212, 175, 55,0.8), rgba(212, 175, 55,0.1) 70%, transparent)',
                   }}
                 />
               </motion.span>
@@ -232,7 +232,7 @@ export default function TreatmentsHero({
               <button
                 type="button"
                 onClick={onBrowseTreatments}
-                className="group relative inline-flex min-h-[44px] items-center gap-2 overflow-hidden rounded-full bg-accent px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-dark shadow-gold-glow transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-16px_rgba(212,163,115,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary active:scale-[0.97]"
+                className="group relative inline-flex min-h-[44px] items-center gap-2 overflow-hidden rounded-full bg-accent px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-dark shadow-gold-glow transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-16px_rgba(212, 175, 55,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary active:scale-[0.97]"
               >
                 <span className="relative z-10">Browse Treatments</span>
                 <ArrowDown
@@ -313,7 +313,7 @@ export default function TreatmentsHero({
                 className="relative aspect-[4/5] w-full overflow-hidden rounded-[2px]"
                 style={{
                   boxShadow:
-                    '0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212,163,115,0.25)',
+                    '0 40px 80px -30px rgba(0,0,0,0.55), 0 18px 40px -20px rgba(212, 175, 55,0.25)',
                 }}
               >
                 <Image
@@ -327,7 +327,7 @@ export default function TreatmentsHero({
                 {/* Green tint to harmonise */}
                 <div
                   className="pointer-events-none absolute inset-0 mix-blend-multiply"
-                  style={{ backgroundColor: 'rgba(47,93,80,0.22)' }}
+                  style={{ backgroundColor: 'rgba(30, 91, 75,0.22)' }}
                   aria-hidden
                 />
                 {/* Bottom gradient for legibility */}
@@ -352,7 +352,7 @@ export default function TreatmentsHero({
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 1.4, ease: EASE_OUT_PREMIUM }}
-                  className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary shadow-[0_10px_24px_-10px_rgba(212,163,115,0.8)]"
+                  className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-accent/95 px-3 py-1 font-body text-[11px] italic text-primary shadow-[0_10px_24px_-10px_rgba(212, 175, 55,0.8)]"
                 >
                   <span className="inline-block h-1 w-1 rotate-45 bg-primary/70" />
                   Plate N°01
@@ -375,13 +375,13 @@ export default function TreatmentsHero({
                   className="absolute left-0 right-0 top-0 h-px"
                   style={{
                     background:
-                      'linear-gradient(to right, transparent, rgba(212,163,115,0.85) 20%, rgba(212,163,115,0.85) 80%, transparent)',
+                      'linear-gradient(to right, transparent, rgba(212, 175, 55,0.85) 20%, rgba(212, 175, 55,0.85) 80%, transparent)',
                   }}
                 />
                 {/* Gold seal dot */}
                 <span
                   aria-hidden
-                  className="relative h-2 w-2 shrink-0 rounded-full bg-accent shadow-[0_0_0_3px_rgba(212,163,115,0.2)]"
+                  className="relative h-2 w-2 shrink-0 rounded-full bg-accent shadow-[0_0_0_3px_rgba(212, 175, 55,0.2)]"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="font-body text-[11px] italic text-dark/55">Attended by</p>
@@ -409,7 +409,7 @@ export default function TreatmentsHero({
             className="mb-5 h-px w-full lg:mb-4"
             style={{
               background:
-                'linear-gradient(to right, transparent, rgba(212,163,115,0.45) 15%, rgba(212,163,115,0.45) 85%, transparent)',
+                'linear-gradient(to right, transparent, rgba(212, 175, 55,0.45) 15%, rgba(212, 175, 55,0.45) 85%, transparent)',
             }}
           />
           <ul

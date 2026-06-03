@@ -22,15 +22,15 @@ export default function AppointmentsTable({
 }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#1e3d32]/15 p-12 text-center font-body text-sm italic text-[#2B2B2B]/55">
+      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No appointments match this filter.
       </div>
     )
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#1e3d32]/8 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
       <table className="w-full text-left text-[13px]">
-        <thead className="bg-[#FAF6EE]/40 text-[11px] font-semibold uppercase tracking-wider text-[#1e3d32]/70">
+        <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
           <tr>
             <th className="px-4 py-3">When</th>
             <th className="px-4 py-3">Customer</th>
@@ -41,22 +41,22 @@ export default function AppointmentsTable({
             <th className="px-4 py-3 text-right">Adv. pmt</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#1e3d32]/6">
+        <tbody className="divide-y divide-[#163F33]/6">
           {items.map((a) => {
             const dt = new Date(a.appointmentDateTime)
             return (
-              <tr key={a.id} className="hover:bg-[#FAF6EE]/30">
+              <tr key={a.id} className="hover:bg-[#F7F2E8]/30">
                 <td className="px-4 py-3 align-top">
                   <Link
                     href={`/admin/appointments/${a.id}`}
-                    className="font-semibold text-[#1e3d32] hover:text-[#D4A373]"
+                    className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                   >
                     {dt.toLocaleDateString('en-MY', {
                       day: 'numeric',
                       month: 'short',
                     })}
                   </Link>
-                  <div className="text-[11px] text-[#2B2B2B]/55">
+                  <div className="text-[11px] text-[#1F1F1F]/55">
                     {dt.toLocaleTimeString('en-MY', {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -66,7 +66,7 @@ export default function AppointmentsTable({
                 </td>
                 <td className="px-4 py-3">
                   <div className="font-semibold">{a.customerName ?? '—'}</div>
-                  <div className="text-[11px] text-[#2B2B2B]/55">
+                  <div className="text-[11px] text-[#1F1F1F]/55">
                     {a.customerPhone ?? a.customerEmail ?? ''}
                   </div>
                 </td>
@@ -77,12 +77,12 @@ export default function AppointmentsTable({
                       <Video className="h-3 w-3" /> Virtual
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-[#1e3d32]">
+                    <span className="inline-flex items-center gap-1 text-[#163F33]">
                       <MapPin className="h-3 w-3" /> {a.room ?? 'In-person'}
                     </span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-[12px] text-[#2B2B2B]/65">{a.doctorName}</td>
+                <td className="px-4 py-3 text-[12px] text-[#1F1F1F]/65">{a.doctorName}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10.5px] font-semibold ${STATUS_CLASS[a.status] ?? ''}`}
@@ -96,7 +96,7 @@ export default function AppointmentsTable({
                       RM {a.advancePaymentRm.toFixed(2)}
                     </span>
                   ) : (
-                    <span className="text-[11px] text-[#2B2B2B]/45">—</span>
+                    <span className="text-[11px] text-[#1F1F1F]/45">—</span>
                   )}
                 </td>
               </tr>

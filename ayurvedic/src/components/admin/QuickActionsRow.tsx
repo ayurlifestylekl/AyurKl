@@ -36,13 +36,13 @@ function ActionTile({
 }) {
   const body = (
     <div
-      className="flex items-center gap-3 rounded-3xl border border-[#1e3d32]/8 bg-white px-4 py-3.5 transition-all hover:border-[#D4A373]/40 hover:bg-[#FAF6EE]/40"
-      style={{ boxShadow: '0 1px 0 0 rgba(30,61,50,0.04)' }}
+      className="flex items-center gap-3 rounded-3xl border border-[#163F33]/8 bg-white px-4 py-3.5 transition-all hover:border-[#D4AF37]/40 hover:bg-[#F7F2E8]/40"
+      style={{ boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.04)' }}
     >
-      <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#2F5D50]/10">
-        <Icon className="h-4 w-4 text-[#2F5D50]" strokeWidth={1.8} />
+      <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#1E5B4B]/10">
+        <Icon className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
       </span>
-      <span className="font-heading text-[12.5px] font-semibold text-[#1e3d32]">{label}</span>
+      <span className="font-heading text-[12.5px] font-semibold text-[#163F33]">{label}</span>
     </div>
   )
   return href ? (

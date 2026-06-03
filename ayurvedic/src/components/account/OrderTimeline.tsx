@@ -39,20 +39,20 @@ function deriveSteps(
 }
 
 const STEP_DOT: Record<StepState, string> = {
-  done:    'bg-[#2F5D50] text-white',
-  current: 'bg-[#D4A373] text-[#1a1a1a] ring-4 ring-[#D4A373]/20',
-  future:  'bg-[#1e3d32]/[0.08] text-[#1e3d32]/35',
+  done:    'bg-[#1E5B4B] text-white',
+  current: 'bg-[#D4AF37] text-[#1F1F1F] ring-4 ring-[#D4AF37]/20',
+  future:  'bg-[#163F33]/[0.08] text-[#163F33]/35',
 }
 
 const STEP_LABEL: Record<StepState, string> = {
-  done:    'text-[#1e3d32]',
-  current: 'text-[#1e3d32]',
-  future:  'text-[#1e3d32]/35',
+  done:    'text-[#163F33]',
+  current: 'text-[#163F33]',
+  future:  'text-[#163F33]/35',
 }
 
 const CONNECTOR: Record<'done' | 'next', string> = {
-  done: 'bg-[#2F5D50]',
-  next: 'bg-[#1e3d32]/[0.10]',
+  done: 'bg-[#1E5B4B]',
+  next: 'bg-[#163F33]/[0.10]',
 }
 
 export default function OrderTimeline({
@@ -82,10 +82,10 @@ export default function OrderTimeline({
 
   return (
     <section
-      className="rounded-3xl border border-[#1e3d32]/8 bg-white p-5 sm:p-6"
+      className="rounded-3xl border border-[#163F33]/8 bg-white p-5 sm:p-6"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
+          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
       }}
     >
       {/* Desktop / tablet — horizontal */}
@@ -129,7 +129,7 @@ export default function OrderTimeline({
                 >
                   {step.state === 'done' ? <Check className="h-3 w-3" strokeWidth={2.5} /> : i + 1}
                 </span>
-                {!isLast && <span className="h-5 w-px bg-[#1e3d32]/[0.10]" />}
+                {!isLast && <span className="h-5 w-px bg-[#163F33]/[0.10]" />}
               </div>
               <span
                 className={`pt-1 font-heading text-[12px] font-semibold ${STEP_LABEL[step.state]}`}
