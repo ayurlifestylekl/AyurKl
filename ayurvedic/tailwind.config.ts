@@ -10,17 +10,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary:        "#2F5D50",
-        secondary:      "#7A9D54",
-        accent:         "#D4A373",
-        dark:           "#2B2B2B",
-        background:     "#F9F9F9",
-        foreground:     "#2B2B2B",
-        cream:          "#FAF6EE",
-        heroCream:      "#f0ede5",
-        nearBlackGreen: "#1a2e26",
-        nocturne:       "#0E1E1A",
-        "nocturne-elev":"#112520",
+        // ── Kerala Ayurvedic Lifestyle brand palette ──
+        primary:        "#1E5B4B", // Deep Forest Green
+        secondary:      "#2E7D5A", // Emerald Green
+        tertiary:       "#8FAE8B", // Sage Green
+        accent:         "#D4AF37", // Accent Gold (name kept to avoid mass class rename)
+        gold:           "#D4AF37", // alias for new usage
+        clay:           "#E9CBA6", // Warm Clay
+        dark:           "#1F1F1F", // Charcoal (name kept)
+        charcoal:       "#1F1F1F", // alias for new usage
+        background:     "#FAF8F2", // Soft Ivory
+        foreground:     "#1F1F1F",
+        ivory:          "#FAF8F2", // alias for new usage
+        cream:          "#F7F2E8", // Natural Cream
+        // ── tuned orphan tokens (names kept, hex harmonized) ──
+        heroCream:      "#F7F2E8",
+        nearBlackGreen: "#0F2C24",
+        nocturne:       "#0A1F19",
+        "nocturne-elev":"#0F2C24",
+        // ── forest ramp for layered dark sections ──
+        "forest-700":   "#163F33",
+        "forest-800":   "#0F2C24",
+        "forest-900":   "#0A1F19",
       },
       boxShadow: {
         'elevated':  '0 8px 30px -10px rgba(47,93,80,0.2), 0 2px 8px rgba(47,93,80,0.06)',
