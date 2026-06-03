@@ -7,6 +7,7 @@ import { ShoppingBag, Star } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 import { featuredProducts } from '@/data/featuredProducts'
 import type { FeaturedProduct, ProductBadge } from '@/types/content'
+import { LotusMark } from '@/components/ui/Ornament'
 
 /* ── Palette (section-local; matches hero language) ── */
 const EMERALD       = '#163F33'
@@ -75,6 +76,14 @@ export default function FeaturedProducts() {
             'linear-gradient(to right, transparent 4%, rgba(212, 175, 55,0.45) 50%, transparent 96%)',
         }}
       />
+      {/* Centered lotus medallion on the top hairline */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full p-2.5"
+        style={{ backgroundColor: CREAM, border: '1px solid rgba(212, 175, 55,0.5)' }}
+      >
+        <LotusMark className="h-5 w-5" />
+      </div>
 
       <div className="relative mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
 
@@ -227,9 +236,9 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
 
   return (
     <article
-      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-500"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#D4AF37]/20 bg-[#FCFAF4] transition-all duration-500 hover:-translate-y-1.5 hover:border-[#D4AF37]/45"
       style={{
-        boxShadow: '0 10px 38px -18px rgba(22, 63, 51,0.18), 0 2px 8px rgba(22, 63, 51,0.04)',
+        boxShadow: '0 10px 38px -18px rgba(22, 63, 51,0.20), 0 2px 8px rgba(22, 63, 51,0.05)',
       }}
     >
       {/* ── IMAGE ── */}

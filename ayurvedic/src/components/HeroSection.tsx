@@ -62,18 +62,46 @@ export default function HeroSection() {
           }}
         />
 
-        {/* Warm saffron glow corners — picks up the photo's turmeric tones */}
+        {/* Warm saffron glow — richer, directional luxe light */}
         <div
           className="absolute inset-0 mix-blend-overlay"
           style={{
             background:
-              'radial-gradient(ellipse 35% 50% at 6% 18%, rgba(212, 175, 55,0.22) 0%, transparent 65%), radial-gradient(ellipse 35% 50% at 94% 82%, rgba(212, 175, 55,0.22) 0%, transparent 65%)',
+              'radial-gradient(ellipse 45% 55% at 8% 14%, rgba(212, 175, 55,0.36) 0%, transparent 64%), radial-gradient(ellipse 50% 60% at 92% 86%, rgba(212, 175, 55,0.32) 0%, transparent 66%), radial-gradient(ellipse 70% 45% at 50% -5%, rgba(212, 175, 55,0.20) 0%, transparent 60%)',
           }}
         />
       </motion.div>
 
+      {/* ── Luxe gold frame inset (editorial) ───────────────── */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-5 z-[5] hidden sm:block sm:inset-7 lg:inset-9"
+      >
+        <div className="absolute inset-0" style={{ border: '1px solid rgba(212, 175, 55,0.32)' }} />
+        {/* brighter corner accents */}
+        <span className="absolute left-0 top-0 h-6 w-6 border-l-2 border-t-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
+        <span className="absolute right-0 top-0 h-6 w-6 border-r-2 border-t-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
+        <span className="absolute bottom-0 left-0 h-6 w-6 border-b-2 border-l-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
+        <span className="absolute bottom-0 right-0 h-6 w-6 border-b-2 border-r-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
+      </div>
+
       {/* ── Content — centered, full-width breathing ─────── */}
       <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-6 pb-28 pt-20 text-center sm:px-8 sm:pb-32 sm:pt-24 lg:px-12 lg:pt-20">
+
+        {/* Lotus crest */}
+        <motion.div {...fadeUp(0.05)} className="mb-5" aria-hidden>
+          <svg
+            viewBox="0 0 48 48"
+            className="h-11 w-11"
+            style={{ filter: 'drop-shadow(0 3px 14px rgba(212, 175, 55,0.45))' }}
+          >
+            <g transform="translate(24 27)" fill="none" stroke={SAFFRON} strokeWidth="1.4" strokeLinejoin="round">
+              <path d="M0 -15 C 5 -8, 5 -2, 0 2 C -5 -2, -5 -8, 0 -15 Z" />
+              <path d="M0 -11 C 10 -9, 14 -2, 12 5 C 6 3, 1 -3, 0 -11 Z" />
+              <path d="M0 -11 C -10 -9, -14 -2, -12 5 C -6 3, -1 -3, 0 -11 Z" />
+            </g>
+          </svg>
+        </motion.div>
 
         {/* Eyebrow — long lines on both sides, sits well below the navbar */}
         <motion.div {...fadeUp(0.1)} className="mb-9 flex items-center justify-center gap-5 sm:gap-7">
@@ -121,13 +149,26 @@ export default function HeroSection() {
           </span>
         </motion.h1>
 
-        {/* Saffron bar accent — centered under headline */}
+        {/* Ornamental gold flourish — centered under headline */}
         <motion.div
           {...fadeUp(0.4)}
-          className="mt-7 h-[2px] w-28"
-          style={{ backgroundColor: SAFFRON }}
+          className="mt-7 flex items-center justify-center gap-3"
           aria-hidden
-        />
+        >
+          <span
+            className="h-px w-16 sm:w-24"
+            style={{ background: `linear-gradient(to right, transparent, ${SAFFRON})` }}
+          />
+          <svg viewBox="0 0 24 26" className="h-5 w-5" fill="none" stroke={SAFFRON} strokeWidth="1.3" strokeLinejoin="round">
+            <path d="M12 2 C 14.5 7, 14.5 11, 12 14 C 9.5 11, 9.5 7, 12 2 Z" />
+            <path d="M12 14 C 18 11.5, 21.5 14, 20.5 19 C 16 17.5, 13 16, 12 14 Z" />
+            <path d="M12 14 C 6 11.5, 2.5 14, 3.5 19 C 8 17.5, 11 16, 12 14 Z" />
+          </svg>
+          <span
+            className="h-px w-16 sm:w-24"
+            style={{ background: `linear-gradient(to left, transparent, ${SAFFRON})` }}
+          />
+        </motion.div>
 
         {/* Tagline — wider, centered */}
         <motion.p

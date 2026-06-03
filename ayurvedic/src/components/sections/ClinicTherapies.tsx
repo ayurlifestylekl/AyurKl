@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
+import { LotusMark } from '@/components/ui/Ornament'
 
 /* ── Palette (section-local; matches new hero language) ── */
 const EMERALD       = '#163F33'
@@ -134,6 +135,14 @@ export default function ClinicTherapies() {
             'linear-gradient(to right, transparent 4%, rgba(212, 175, 55,0.45) 50%, transparent 96%)',
         }}
       />
+      {/* Centered lotus medallion on the top hairline */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full p-2.5"
+        style={{ backgroundColor: CREAM, border: '1px solid rgba(212, 175, 55,0.5)' }}
+      >
+        <LotusMark className="h-5 w-5" />
+      </div>
       {/* Bottom saffron hairline */}
       <div
         aria-hidden
@@ -291,7 +300,7 @@ function CategoryCard({
               ? 'aspect-[4/5] sm:aspect-[16/9] lg:aspect-auto lg:h-full'
               : 'aspect-[4/5] lg:aspect-auto lg:h-full'
           }`}
-          style={{ boxShadow: `0 14px 36px -18px ${EMERALD}66` }}
+          style={{ boxShadow: `0 14px 36px -18px ${EMERALD}66, inset 0 0 0 1px rgba(212, 175, 55,0.45)` }}
         >
           <Image
             src={cat.image}
