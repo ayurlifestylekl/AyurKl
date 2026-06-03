@@ -198,7 +198,7 @@ export default function HeroSection() {
             size="lg"
             shimmer
             icon={<Calendar className="h-4 w-4" />}
-            className="px-8 py-2.5 text-[12px]"
+            className="px-7 py-2 text-[11px]"
           >
             Book a Consultation
           </CTAButton>
