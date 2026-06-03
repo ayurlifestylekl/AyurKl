@@ -11,12 +11,10 @@ import { LotusMark } from '@/components/ui/Ornament'
 
 /* ── Palette (section-local; matches hero language) ── */
 const EMERALD       = '#163F33'
-const EMERALD_SOFT  = 'rgba(22, 63, 51,0.72)'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_DEEP  = '#D4AF37'
 const TERRACOTTA    = '#D4AF37'
 const CREAM         = '#F7F2E8'
-const CREAM_WARM    = '#E9CBA6'
 
 const badgeStyles: Record<ProductBadge, { bg: string; color: string }> = {
   NEW:        { bg: EMERALD,                       color: '#FFFFFF' },
@@ -44,7 +42,7 @@ export default function FeaturedProducts() {
       aria-labelledby="collection-heading"
       className="relative overflow-hidden pb-16 pt-12 lg:pb-24 lg:pt-16"
       style={{
-        background: `linear-gradient(135deg, ${CREAM} 0%, ${CREAM_WARM} 100%)`,
+        background: 'linear-gradient(160deg, #163F33 0%, #0F2C24 55%, #0A1F19 100%)',
       }}
     >
       {/* Atmospheric glows */}
@@ -118,7 +116,7 @@ export default function FeaturedProducts() {
               <span
                 className="font-heading font-extrabold tracking-tight"
                 style={{
-                  color: EMERALD,
+                  color: '#F7F2E8',
                   fontSize: 'clamp(2.25rem, 4.4vw, 3.75rem)',
                   lineHeight: 1.02,
                   letterSpacing: '-0.02em',
@@ -146,7 +144,7 @@ export default function FeaturedProducts() {
             <p
               className="font-body leading-[1.7]"
               style={{
-                color: EMERALD_SOFT,
+                color: 'rgba(247, 242, 232,0.82)',
                 fontSize: 'clamp(15px, 1.1vw, 17px)',
               }}
             >
@@ -156,7 +154,7 @@ export default function FeaturedProducts() {
             <p
               className="mt-3 font-display italic leading-[1.55]"
               style={{
-                color: 'rgba(22, 63, 51,0.62)',
+                color: 'rgba(247, 242, 232,0.6)',
                 fontSize: 'clamp(14px, 1.05vw, 16px)',
               }}
             >
@@ -183,15 +181,15 @@ export default function FeaturedProducts() {
                 style={
                   isActive
                     ? {
-                        backgroundColor: EMERALD,
-                        color: '#FFFFFF',
-                        boxShadow: `0 14px 30px -14px ${EMERALD}99`,
-                        border: `1px solid ${EMERALD}`,
+                        backgroundColor: SAFFRON,
+                        color: '#1F1F1F',
+                        boxShadow: `0 14px 30px -14px ${SAFFRON}cc`,
+                        border: `1px solid ${SAFFRON}`,
                       }
                     : {
-                        backgroundColor: 'transparent',
-                        color: EMERALD_SOFT,
-                        border: `1px solid ${SAFFRON}40`,
+                        backgroundColor: 'rgba(247, 242, 232,0.06)',
+                        color: 'rgba(247, 242, 232,0.85)',
+                        border: `1px solid ${SAFFRON}55`,
                       }
                 }
               >
