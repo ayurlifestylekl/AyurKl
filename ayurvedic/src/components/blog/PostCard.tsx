@@ -52,7 +52,7 @@ export default function PostCard({
       <motion.article
         variants={fadeUp(0)}
         layout
-        className="group relative grid grid-cols-1 overflow-hidden rounded-[28px] bg-gradient-to-br from-white via-white to-[#FAF6EE] ring-1 ring-accent/25 shadow-floating transition-[transform,box-shadow] duration-700 ease-out hover:-translate-y-1.5 hover:shadow-luxe lg:grid-cols-12"
+        className="group relative grid grid-cols-1 overflow-hidden rounded-[28px] bg-gradient-to-br from-white via-white to-[#F7F2E8] ring-1 ring-accent/25 shadow-floating transition-[transform,box-shadow] duration-700 ease-out hover:-translate-y-1.5 hover:shadow-luxe lg:grid-cols-12"
       >
         {/* Frame-in-frame letterpress margin */}
         <div
@@ -197,7 +197,7 @@ export default function PostCard({
       <motion.article
         variants={fadeUp(0)}
         layout
-        className="group relative flex h-full flex-col overflow-hidden rounded-[18px] bg-gradient-to-br from-white via-white to-[#FAF6EE] ring-1 ring-primary/10 shadow-elevated transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-floating hover:ring-accent/25"
+        className="group relative flex h-full flex-col overflow-hidden rounded-[18px] bg-gradient-to-br from-white via-white to-[#F7F2E8] ring-1 ring-primary/10 shadow-elevated transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-floating hover:ring-accent/25"
       >
         <Link
           href={`/blog/${post.slug}`}
@@ -252,7 +252,7 @@ export default function PostCard({
     <motion.article
       variants={fadeUp(0)}
       layout
-      className="group relative flex h-full flex-col rounded-[22px] bg-gradient-to-br from-white via-white to-[#FAF6EE] ring-1 ring-primary/10 shadow-elevated transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:shadow-floating hover:ring-accent/30"
+      className="group relative flex h-full flex-col rounded-[22px] bg-gradient-to-br from-white via-white to-[#F7F2E8] ring-1 ring-primary/10 shadow-elevated transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:shadow-floating hover:ring-accent/30"
     >
       {/* Image block — relative container lets the floating disc escape below */}
       <div className="relative">
@@ -291,7 +291,7 @@ export default function PostCard({
         <Link
           href={`/blog/${post.slug}`}
           aria-label={`Read article: ${post.title}`}
-          className="absolute -bottom-5 right-6 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-accent/50 bg-[#FAF6EE] text-primary shadow-elevated transition-[transform,background-color,border-color,color,box-shadow] duration-500 ease-out group-hover:rotate-45 group-hover:border-accent group-hover:bg-accent group-hover:text-dark group-hover:shadow-gold-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className="absolute -bottom-5 right-6 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-accent/50 bg-[#F7F2E8] text-primary shadow-elevated transition-[transform,background-color,border-color,color,box-shadow] duration-500 ease-out group-hover:rotate-45 group-hover:border-accent group-hover:bg-accent group-hover:text-dark group-hover:shadow-gold-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         >
           <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
         </Link>

@@ -18,7 +18,7 @@ interface BotanicalSprigProps {
  * corner watermark on editorial sections. Animates in once per scroll.
  */
 export default function BotanicalSprig({
-  color = '#D4A373',
+  color = '#D4AF37',
   opacity = 0.18,
   className,
   style,

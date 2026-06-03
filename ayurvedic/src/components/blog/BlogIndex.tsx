@@ -31,7 +31,7 @@ export default function BlogIndex({ posts }: BlogIndexProps) {
   return (
     <section
       aria-labelledby="journal-heading"
-      className="relative overflow-hidden bg-[#FAF6EE]"
+      className="relative overflow-hidden bg-[#F7F2E8]"
     >
       {/* Atmospheric layers */}
       <div

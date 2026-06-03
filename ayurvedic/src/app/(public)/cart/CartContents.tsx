@@ -60,7 +60,7 @@ export default function CartContents() {
 
   if (!hydrated) {
     return (
-      <div className="mx-auto max-w-3xl px-5 py-24 text-center font-body text-sm text-[#2B2B2B]/55">
+      <div className="mx-auto max-w-3xl px-5 py-24 text-center font-body text-sm text-[#1F1F1F]/55">
         Loading your bag…
       </div>
     )
@@ -69,29 +69,29 @@ export default function CartContents() {
   if (lines.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-5 pb-24 pt-16 text-center sm:pt-24">
-        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1e3d32]/[0.06]">
-          <ShoppingBag className="h-6 w-6 text-[#2F5D50]" strokeWidth={1.5} />
+        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#163F33]/[0.06]">
+          <ShoppingBag className="h-6 w-6 text-[#1E5B4B]" strokeWidth={1.5} />
         </span>
         <h1
-          className="mt-5 font-heading text-[28px] font-bold text-[#1e3d32] sm:text-[32px]"
+          className="mt-5 font-heading text-[28px] font-bold text-[#163F33] sm:text-[32px]"
           style={{ letterSpacing: '-0.02em' }}
         >
           Your bag is empty.
         </h1>
-        <p className="mx-auto mt-2 max-w-md font-body text-[14px] text-[#2B2B2B]/65" style={{ lineHeight: 1.6 }}>
+        <p className="mx-auto mt-2 max-w-md font-body text-[14px] text-[#1F1F1F]/65" style={{ lineHeight: 1.6 }}>
           Find a formula for your dosha, or pick up where your practitioner left off.
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/products"
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-[#2F5D50] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-[#264a40]"
+            className="inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-[#163F33]"
           >
             Shop products
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
           <Link
             href="/account/assessments"
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-[#1e3d32]/15 bg-white px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#1e3d32] transition-colors hover:border-[#1e3d32]/35"
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#163F33] transition-colors hover:border-[#163F33]/35"
           >
             My assessments
           </Link>
@@ -103,16 +103,16 @@ export default function CartContents() {
   return (
     <div className="mx-auto max-w-4xl px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
       <header className="mb-6">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#1e3d32]/60">
+        <span className="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#163F33]/60">
           Your bag
         </span>
         <h1
-          className="mt-1 font-heading text-[28px] font-bold text-[#1e3d32] sm:text-[34px]"
+          className="mt-1 font-heading text-[28px] font-bold text-[#163F33] sm:text-[34px]"
           style={{ letterSpacing: '-0.02em' }}
         >
           {lines.length} {lines.length === 1 ? 'item' : 'items'} saved
         </h1>
-        <p className="mt-1 font-body text-[12.5px] text-[#2B2B2B]/55">
+        <p className="mt-1 font-body text-[12.5px] text-[#1F1F1F]/55">
           Cart is saved on this device until you check out.
         </p>
       </header>
@@ -126,13 +126,13 @@ export default function CartContents() {
             return (
               <li
                 key={line.productId}
-                className="flex items-center gap-4 rounded-3xl border border-[#1e3d32]/8 bg-white px-4 py-3 sm:px-5"
+                className="flex items-center gap-4 rounded-3xl border border-[#163F33]/8 bg-white px-4 py-3 sm:px-5"
                 style={{
                   boxShadow:
                     '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
                 }}
               >
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#1e3d32]/[0.06]">
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#163F33]/[0.06]">
                   {p?.image_url ? (
                     <Image
                       src={p.image_url}
@@ -143,37 +143,37 @@ export default function CartContents() {
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <Leaf className="h-5 w-5 text-[#2F5D50]/40" strokeWidth={1.6} />
+                      <Leaf className="h-5 w-5 text-[#1E5B4B]/40" strokeWidth={1.6} />
                     </div>
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="truncate font-heading text-[14px] font-semibold text-[#1e3d32]">
+                  <p className="truncate font-heading text-[14px] font-semibold text-[#163F33]">
                     {p?.name ?? (loading ? 'Loading…' : 'Unavailable product')}
                   </p>
-                  <p className="font-body text-[12px] text-[#2B2B2B]/55">
+                  <p className="font-body text-[12px] text-[#1F1F1F]/55">
                     {p ? `RM ${Number(p.price_rm).toFixed(2)} each` : '—'}
                   </p>
 
                   {/* Qty stepper */}
-                  <div className="mt-2 inline-flex items-stretch gap-1 rounded-full border border-[#1e3d32]/12 bg-white p-0.5">
+                  <div className="mt-2 inline-flex items-stretch gap-1 rounded-full border border-[#163F33]/12 bg-white p-0.5">
                     <button
                       type="button"
                       aria-label="Decrease quantity"
                       onClick={() => setQuantity(line.productId, Math.max(1, line.quantity - 1))}
-                      className="flex h-7 w-7 items-center justify-center rounded-full text-[#1e3d32] transition-colors hover:bg-[#1e3d32]/[0.06]"
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-[#163F33] transition-colors hover:bg-[#163F33]/[0.06]"
                     >
                       <Minus className="h-3 w-3" strokeWidth={2} />
                     </button>
-                    <span className="flex min-w-[2ch] items-center justify-center font-heading text-[12px] font-bold text-[#1e3d32]">
+                    <span className="flex min-w-[2ch] items-center justify-center font-heading text-[12px] font-bold text-[#163F33]">
                       {line.quantity}
                     </span>
                     <button
                       type="button"
                       aria-label="Increase quantity"
                       onClick={() => setQuantity(line.productId, line.quantity + 1)}
-                      className="flex h-7 w-7 items-center justify-center rounded-full text-[#1e3d32] transition-colors hover:bg-[#1e3d32]/[0.06]"
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-[#163F33] transition-colors hover:bg-[#163F33]/[0.06]"
                     >
                       <Plus className="h-3 w-3" strokeWidth={2} />
                     </button>
@@ -181,13 +181,13 @@ export default function CartContents() {
                 </div>
 
                 <div className="flex shrink-0 flex-col items-end justify-between self-stretch gap-2 py-1">
-                  <span className="font-heading text-[15px] font-bold text-[#1e3d32]">
+                  <span className="font-heading text-[15px] font-bold text-[#163F33]">
                     RM {lineTotal.toFixed(2)}
                   </span>
                   <button
                     type="button"
                     onClick={() => removeItem(line.productId)}
-                    className="inline-flex items-center gap-1 font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[#2B2B2B]/45 transition-colors hover:text-red-700"
+                    className="inline-flex items-center gap-1 font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[#1F1F1F]/45 transition-colors hover:text-red-700"
                     aria-label="Remove item"
                   >
                     <Trash2 className="h-3 w-3" strokeWidth={2} />
@@ -202,41 +202,41 @@ export default function CartContents() {
         {/* Summary */}
         <aside className="lg:col-span-4">
           <div
-            className="overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white"
+            className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
             style={{
               boxShadow:
                 '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
             }}
           >
-            <div className="border-b border-[#1e3d32]/6 px-5 py-3">
-              <h2 className="font-heading text-[13px] font-semibold text-[#1e3d32]">Summary</h2>
+            <div className="border-b border-[#163F33]/6 px-5 py-3">
+              <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">Summary</h2>
             </div>
             <div className="px-5 py-4">
-              <div className="flex items-center justify-between border-b border-[#1e3d32]/6 pb-3">
-                <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#1e3d32]/55">
+              <div className="flex items-center justify-between border-b border-[#163F33]/6 pb-3">
+                <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
                   Subtotal
                 </span>
-                <span className="font-heading text-[16px] font-bold text-[#1e3d32]">
+                <span className="font-heading text-[16px] font-bold text-[#163F33]">
                   RM {subtotal.toFixed(2)}
                 </span>
               </div>
-              <p className="mt-3 font-body text-[11.5px] italic text-[#2B2B2B]/55" style={{ lineHeight: 1.55 }}>
+              <p className="mt-3 font-body text-[11.5px] italic text-[#1F1F1F]/55" style={{ lineHeight: 1.55 }}>
                 Shipping calculated at checkout. Cart saved on this device.
               </p>
               <button
                 type="button"
                 disabled
-                className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#1e3d32]/15 px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#1e3d32]/60"
+                className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#163F33]/15 px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#163F33]/60"
               >
                 Checkout — coming with Billplz
               </button>
-              <p className="mt-2 text-center font-body text-[11px] text-[#2B2B2B]/45">
+              <p className="mt-2 text-center font-body text-[11px] text-[#1F1F1F]/45">
                 For now,{' '}
                 <a
                   href="https://wa.me/601165043436?text=Hi%2C%20I%27d%20like%20to%20place%20an%20order%20from%20my%20cart."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-[#D4A373] underline-offset-4 hover:underline"
+                  className="font-semibold text-[#D4AF37] underline-offset-4 hover:underline"
                 >
                   WhatsApp us
                 </a>{' '}

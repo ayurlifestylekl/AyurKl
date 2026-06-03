@@ -17,7 +17,7 @@ export default function ShopByCategory() {
     <section
       id="shop-by-category"
       aria-labelledby="category-heading"
-      className="relative bg-[#f8f6f0] py-12 lg:py-20"
+      className="relative bg-[#F7F2E8] py-12 lg:py-20"
     >
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         {/* Header - Tightened margins */}

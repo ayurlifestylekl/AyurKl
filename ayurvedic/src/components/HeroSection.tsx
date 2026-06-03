@@ -8,9 +8,9 @@ import { EASE_OUT_PREMIUM } from '@/lib/motion'
 import CTAButton from '@/components/ui/CTAButton'
 
 /* ── Palette (hero-local) ───────────────────────────────── */
-const SAFFRON      = '#E8941A'   // vivid turmeric — italic accent
-const SAFFRON_SOFT = '#F2B25A'   // eyebrow on dark
-const INK          = '#0E1E1A'   // deep base for dim
+const SAFFRON      = '#D4AF37'   // vivid turmeric — italic accent
+const SAFFRON_SOFT = '#D4AF37'   // eyebrow on dark
+const INK          = '#0A1F19'   // deep base for dim
 
 /* ── Animation helpers ──────────────────────────────────── */
 const fadeUp = (delay: number) => ({

@@ -58,7 +58,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         className="pointer-events-none absolute -left-12 -bottom-12 h-[420px] w-[420px] opacity-[0.09]"
         viewBox="0 0 420 420"
         fill="none"
-        stroke="#2F5D50"
+        stroke="#1E5B4B"
         strokeWidth="0.6"
       >
         <g strokeLinecap="round">
@@ -89,7 +89,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         className="pointer-events-none absolute -right-16 -top-16 h-[320px] w-[320px] opacity-[0.07]"
         viewBox="0 0 320 320"
         fill="none"
-        stroke="#2F5D50"
+        stroke="#1E5B4B"
         strokeWidth="0.6"
       >
         <g strokeLinecap="round" transform="rotate(180 160 160)">

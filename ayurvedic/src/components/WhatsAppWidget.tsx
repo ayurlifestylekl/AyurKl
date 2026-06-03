@@ -12,7 +12,7 @@ export default function WhatsAppWidget() {
       className="group fixed bottom-6 right-6 z-50 flex items-center gap-2"
     >
       {/* Tooltip */}
-      <span className="pointer-events-none hidden max-w-[0] overflow-hidden whitespace-nowrap rounded-full bg-[#2B2B2B] px-3 py-1.5 text-sm text-white opacity-0 transition-all duration-300 group-hover:max-w-xs group-hover:opacity-100 sm:block">
+      <span className="pointer-events-none hidden max-w-[0] overflow-hidden whitespace-nowrap rounded-full bg-[#1F1F1F] px-3 py-1.5 text-sm text-white opacity-0 transition-all duration-300 group-hover:max-w-xs group-hover:opacity-100 sm:block">
         Chat with us
       </span>
 

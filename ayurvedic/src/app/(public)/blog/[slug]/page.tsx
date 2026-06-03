@@ -142,7 +142,7 @@ export default async function BlogPostPage({
       <PostHero post={post} readingMinutes={readingMinutes} />
 
       {/* Body */}
-      <div className="relative bg-[#FAF6EE]">
+      <div className="relative bg-[#F7F2E8]">
         <PostBody body={post.body ?? []} />
 
         {/* Author bio */}

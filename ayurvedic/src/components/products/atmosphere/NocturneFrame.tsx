@@ -71,7 +71,7 @@ export default function NocturneFrame({
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: '#0E1E1A',
+          background: '#0A1F19',
           mixBlendMode: 'multiply',
           opacity: darkOpacity,
         }}

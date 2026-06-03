@@ -41,7 +41,7 @@ export default function PartnersPage() {
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#152b22] text-white">
+      <section className="relative overflow-hidden bg-[#163F33] text-white">
         {/* Layered gradients + grain */}
         <div
           aria-hidden
@@ -62,9 +62,9 @@ export default function PartnersPage() {
 
         <div className="relative mx-auto max-w-5xl px-4 py-24 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
           {/* Eyebrow */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#D4A373]/30 bg-[#D4A373]/10 px-4 py-1.5">
-            <Sparkles className="h-3.5 w-3.5 text-[#D4A373]" />
-            <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D4A373]">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-4 py-1.5">
+            <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
               Brand Partner Program
             </span>
           </div>
@@ -75,7 +75,7 @@ export default function PartnersPage() {
           >
             Share the medicine.
             <br />
-            <span className="text-[#D4A373]">Earn for the story.</span>
+            <span className="text-[#D4AF37]">Earn for the story.</span>
           </h1>
 
           <p
@@ -93,7 +93,7 @@ export default function PartnersPage() {
               href="https://wa.me/601165043436?text=Hi%20Kerala%20Ayurvedic%20Lifestyle%2C%20I%27m%20interested%20in%20the%20Brand%20Partner%20program."
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#D4A373] px-7 py-3.5 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all duration-200 hover:bg-[#c4935f] active:scale-[0.98]"
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#D4AF37] px-7 py-3.5 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all duration-200 hover:bg-[#D4AF37] active:scale-[0.98]"
             >
               <MessageCircle className="h-4 w-4" />
               Apply via WhatsApp
@@ -114,14 +114,14 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Three pillars ──────────────────────────────────────────────── */}
-      <section className="bg-[#f7f3ee]">
+      <section className="bg-[#F7F2E8]">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
           <div className="mx-auto mb-14 max-w-2xl text-center">
-            <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7A9D54]">
+            <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#2E7D5A]">
               Why partner with us
             </span>
             <h2
-              className="mt-3 font-heading text-3xl font-bold tracking-tight text-[#1e3d32] sm:text-4xl"
+              className="mt-3 font-heading text-3xl font-bold tracking-tight text-[#163F33] sm:text-4xl"
               style={{ letterSpacing: '-0.02em' }}
             >
               Built for creators who care about what they recommend.
@@ -132,23 +132,23 @@ export default function PartnersPage() {
             {PILLARS.map(({ icon: Icon, title, body }) => (
               <article
                 key={title}
-                className="group relative overflow-hidden rounded-3xl border border-[#1e3d32]/8 bg-white p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D4A373]/40"
+                className="group relative overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D4AF37]/40"
                 style={{
                   boxShadow:
                     '0 1px 0 0 rgba(30,61,50,0.04), 0 12px 30px -16px rgba(30,61,50,0.18)',
                 }}
               >
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1e3d32]/[0.06]">
-                  <Icon className="h-5 w-5 text-[#2F5D50]" strokeWidth={1.8} />
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#163F33]/[0.06]">
+                  <Icon className="h-5 w-5 text-[#1E5B4B]" strokeWidth={1.8} />
                 </div>
                 <h3
-                  className="font-heading text-lg font-semibold text-[#1e3d32]"
+                  className="font-heading text-lg font-semibold text-[#163F33]"
                   style={{ letterSpacing: '-0.01em' }}
                 >
                   {title}
                 </h3>
                 <p
-                  className="mt-2 font-body text-[14px] text-[#2B2B2B]/70"
+                  className="mt-2 font-body text-[14px] text-[#1F1F1F]/70"
                   style={{ lineHeight: 1.7 }}
                 >
                   {body}
@@ -160,7 +160,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Footer band ────────────────────────────────────────────────── */}
-      <section className="bg-[#1e3d32]">
+      <section className="bg-[#163F33]">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 py-16 text-center sm:px-6 lg:px-8">
           <h3
             className="font-heading text-2xl font-bold text-white sm:text-3xl"
@@ -179,7 +179,7 @@ export default function PartnersPage() {
             href="https://wa.me/601165043436?text=Hi%20Kerala%20Ayurvedic%20Lifestyle%2C%20I%27d%20like%20to%20learn%20more%20about%20the%20Brand%20Partner%20program."
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 rounded-full bg-[#D4A373] px-7 py-3.5 font-heading text-sm font-bold uppercase tracking-wider text-[#1a1a1a] transition-all duration-200 hover:bg-[#c4935f] active:scale-[0.98]"
+            className="group inline-flex items-center gap-2 rounded-full bg-[#D4AF37] px-7 py-3.5 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all duration-200 hover:bg-[#D4AF37] active:scale-[0.98]"
           >
             <MessageCircle className="h-4 w-4" />
             Start a Conversation

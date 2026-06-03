@@ -34,7 +34,7 @@ export default function ComingSoon({
   return (
     <section
       aria-labelledby="coming-soon-heading"
-      className="relative flex min-h-[calc(100vh-200px)] items-center overflow-hidden bg-[#FAF6EE]"
+      className="relative flex min-h-[calc(100vh-200px)] items-center overflow-hidden bg-[#F7F2E8]"
     >
       {/* Decorative mandalas */}
       <div className="pointer-events-none absolute -left-24 -top-24 hidden h-[420px] w-[420px] md:block">
@@ -114,7 +114,7 @@ export default function ComingSoon({
         >
           <Link
             href={primaryHref}
-            className="group relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white shadow-[0_18px_40px_-18px_rgba(47,93,80,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#264d42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            className="group relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white shadow-[0_18px_40px_-18px_rgba(47,93,80,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#163F33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
             <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
             {primaryLabel}

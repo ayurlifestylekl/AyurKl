@@ -261,7 +261,7 @@ export default function BookingChooser() {
                 </ul>
 
                 <div className="mt-auto pt-6">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors duration-300 group-hover:bg-[#264d42]">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors duration-300 group-hover:bg-[#163F33]">
                     <Calendar className="h-4 w-4" strokeWidth={2.2} />
                     Pick a Treatment
                   </span>

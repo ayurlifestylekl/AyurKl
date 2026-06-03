@@ -27,7 +27,7 @@ interface KeralaSigilProps {
  */
 export default function KeralaSigil({
   size = 36,
-  color = '#D4A373',
+  color = '#D4AF37',
   strokeWidth = 1.1,
   duration = 1.2,
   className,

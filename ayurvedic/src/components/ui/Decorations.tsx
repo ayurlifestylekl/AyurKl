@@ -8,8 +8,8 @@ import React from 'react'
 export function FloatingLeaf({
   className,
   style,
-  color = '#3d6b4f',
-  strokeColor = '#2F5D50',
+  color = '#1E5B4B',
+  strokeColor = '#1E5B4B',
   opacity = 0.7,
 }: {
   className?: string
@@ -76,7 +76,7 @@ export function FloatingLeaf({
  */
 export function BotanicalMandala({
   opacity = 0.12,
-  stroke = '#D4A373',
+  stroke = '#D4AF37',
   className,
 }: {
   opacity?: number

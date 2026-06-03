@@ -28,7 +28,7 @@ interface PostHeroProps {
  */
 export default function PostHero({ post, readingMinutes }: PostHeroProps) {
   return (
-    <header className="relative overflow-hidden bg-[#FAF6EE]">
+    <header className="relative overflow-hidden bg-[#F7F2E8]">
       {/* ── Atmospheric backdrop ───────────────────────── */}
       <div
         aria-hidden

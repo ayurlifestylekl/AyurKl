@@ -10,10 +10,10 @@ import {
 } from '@/lib/motion'
 
 // Elegant, premium palette
-const BG_LUXE     = '#FAF6EE' // Luxe Ivory/Cream
-const TEXT_DARK   = '#1C1917' // Deep Charcoal
-const TEXT_MUTED  = '#44403C' // Soft Charcoal
-const GOLD        = '#C8741A' // Elegant Gold
+const BG_LUXE     = '#F7F2E8' // Luxe Ivory/Cream
+const TEXT_DARK   = '#1F1F1F' // Deep Charcoal
+const TEXT_MUTED  = '#1F1F1F' // Soft Charcoal
+const GOLD        = '#D4AF37' // Elegant Gold
 const BORDER      = 'rgba(200, 116, 26, 0.15)'
 
 // Duplicate reviews to ensure enough content to loop seamlessly
@@ -80,7 +80,7 @@ export default function Reviews() {
             href="https://www.google.com/search?q=Kerala+Ayurvedic+Lifestyle+Brickfields+KL+reviews"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 border-b border-transparent pb-1 font-heading text-[10px] font-bold uppercase tracking-[0.2em] transition-colors hover:border-[#1C1917]"
+            className="group inline-flex items-center gap-2 border-b border-transparent pb-1 font-heading text-[10px] font-bold uppercase tracking-[0.2em] transition-colors hover:border-[#1F1F1F]"
             style={{ color: TEXT_DARK }}
           >
             Read all on Google Reviews
@@ -90,8 +90,8 @@ export default function Reviews() {
         {/* Marquee Section */}
         <div className="relative mt-12 w-full overflow-hidden sm:mt-16">
           {/* Fading Edges for Marquee */}
-          <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-16 bg-gradient-to-r from-[#FAF6EE] to-transparent sm:w-32" />
-          <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-16 bg-gradient-to-l from-[#FAF6EE] to-transparent sm:w-32" />
+          <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-16 bg-gradient-to-r from-[#F7F2E8] to-transparent sm:w-32" />
+          <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-16 bg-gradient-to-l from-[#F7F2E8] to-transparent sm:w-32" />
 
           <motion.div
             className="flex w-max gap-8 sm:gap-12"

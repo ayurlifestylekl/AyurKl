@@ -301,7 +301,7 @@ export default function TreatmentsHero({
                   }
                   className="h-full w-full"
                 >
-                  <BotanicalMandala opacity={0.28} stroke="#D4A373" />
+                  <BotanicalMandala opacity={0.28} stroke="#D4AF37" />
                 </motion.div>
               </motion.div>
 

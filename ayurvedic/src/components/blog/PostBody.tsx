@@ -24,7 +24,7 @@ export default function PostBody({ body }: PostBodyProps) {
         .post-body > p:first-of-type::first-letter {
           font-family: var(--font-montserrat), sans-serif;
           font-weight: 800;
-          color: #D4A373;
+          color: #D4AF37;
           float: left;
           font-size: 5.4em;
           line-height: 0.85;

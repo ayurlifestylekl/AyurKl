@@ -163,7 +163,7 @@ export default function CallingCard() {
             >
               <p
                 className="font-body italic text-cream"
-                style={{ fontSize: '13.5px', lineHeight: '1.65', color: '#FAF6EE' }}
+                style={{ fontSize: '13.5px', lineHeight: '1.65', color: '#F7F2E8' }}
               >
                 We don&rsquo;t shortcut. We sit, listen, and read your pulse before we
                 open the dispensary. The Ayurveda you&rsquo;ll receive here is unhurried
@@ -172,7 +172,7 @@ export default function CallingCard() {
               </p>
               <p
                 className="font-body italic text-cream"
-                style={{ fontSize: '13.5px', lineHeight: '1.65', color: '#FAF6EE' }}
+                style={{ fontSize: '13.5px', lineHeight: '1.65', color: '#F7F2E8' }}
               >
                 The practice has stood on this Brickfields street since 2008. We stay
                 because our patients stay; the dispensary is kept stocked the way our
@@ -269,7 +269,7 @@ export default function CallingCard() {
               className="relative h-24 w-24 rounded-full"
               style={{
                 background:
-                  'radial-gradient(circle at 30% 30%, #e9bf90 0%, #c08a55 60%, #8d5d33 100%)',
+                  'radial-gradient(circle at 30% 30%, #E9CBA6 0%, #D4AF37 60%, #D4AF37 100%)',
                 boxShadow:
                   '0 8px 18px -6px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.18)',
               }}
@@ -282,7 +282,7 @@ export default function CallingCard() {
                 className="absolute inset-3 rounded-full border"
                 style={{ borderColor: 'rgba(26,46,38,0.15)', borderStyle: 'dashed' }}
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#1A2E26]">
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#0F2C24]">
                 <span className="font-devanagari italic" style={{ fontSize: '16px', lineHeight: 1 }}>
                   केरल
                 </span>

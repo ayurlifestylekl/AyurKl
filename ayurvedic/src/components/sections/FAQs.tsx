@@ -15,12 +15,12 @@ interface FAQsProps {
 }
 
 /* ── Soft sage palette — premium Ayurvedic, distinct from cream + dark sections ── */
-const BG_SAGE        = '#D8DEC8'                       // Soft dusty sage
-const BG_SAGE_DEEP   = '#C5CFB6'                       // Sage gradient destination
-const TEXT_DARK      = '#1A3B2E'                       // Emerald — high contrast on sage
+const BG_SAGE        = '#8FAE8B'                       // Soft dusty sage
+const BG_SAGE_DEEP   = '#8FAE8B'                       // Sage gradient destination
+const TEXT_DARK      = '#163F33'                       // Emerald — high contrast on sage
 const TEXT_MUTED     = 'rgba(26,59,46,0.70)'
 const TEXT_QUIET     = 'rgba(26,59,46,0.55)'
-const GOLD           = '#C8741A'                       // Matches Reviews
+const GOLD           = '#D4AF37'                       // Matches Reviews
 const GOLD_SOFT      = 'rgba(200, 116, 26, 0.22)'      // Soft gold for borders + accents
 const SAGE_HAIRLINE  = 'rgba(26,59,46,0.14)'           // Quiet emerald hairlines
 
@@ -176,7 +176,7 @@ export default function FAQs({
                 className="group inline-flex items-center gap-2.5 rounded-full px-6 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.22em] transition-all duration-300 hover:-translate-y-0.5"
                 style={{
                   backgroundColor: TEXT_DARK,
-                  color: '#FBF6EC',
+                  color: '#F7F2E8',
                   boxShadow: `0 14px 30px -14px ${TEXT_DARK}aa`,
                 }}
               >
@@ -270,7 +270,7 @@ export default function FAQs({
                             style={{
                               backgroundColor: isOpen ? GOLD : 'transparent',
                               border: `1px solid ${isOpen ? GOLD : GOLD_SOFT}`,
-                              color: isOpen ? '#FBF6EC' : GOLD,
+                              color: isOpen ? '#F7F2E8' : GOLD,
                             }}
                           >
                             <Plus className="h-4 w-4" strokeWidth={1.5} />

@@ -127,7 +127,7 @@ export default function CommitmentCTA({
           <div
             className="absolute inset-x-0 bottom-0 h-20"
             style={{
-              background: 'linear-gradient(to top, #1a2e26 0%, transparent 100%)',
+              background: 'linear-gradient(to top, #0F2C24 0%, transparent 100%)',
             }}
             aria-hidden
           />

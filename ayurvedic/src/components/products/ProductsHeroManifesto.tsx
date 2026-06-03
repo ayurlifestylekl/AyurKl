@@ -44,7 +44,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 30% 25%, #1E3830 0%, #0A1914 75%)',
+            'radial-gradient(ellipse at 30% 25%, #163F33 0%, #0A1F19 75%)',
         }}
       />
       {/* Dark tint to unify the layers */}
@@ -134,7 +134,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
                 className="block"
                 style={{
                   fontSize: 'clamp(2.4rem, 4.5vw, 4rem)',
-                  color: '#F3E6CB',
+                  color: '#E9CBA6',
                 }}
               >
                 Prescribed.

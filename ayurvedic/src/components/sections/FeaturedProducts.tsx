@@ -9,13 +9,13 @@ import { featuredProducts } from '@/data/featuredProducts'
 import type { FeaturedProduct, ProductBadge } from '@/types/content'
 
 /* ── Palette (section-local; matches hero language) ── */
-const EMERALD       = '#1A3B2E'
+const EMERALD       = '#163F33'
 const EMERALD_SOFT  = 'rgba(26,59,46,0.72)'
-const SAFFRON       = '#E8941A'
-const SAFFRON_DEEP  = '#C8741A'
-const TERRACOTTA    = '#C2410C'
-const CREAM         = '#FBF6EC'
-const CREAM_WARM    = '#F4E9D2'
+const SAFFRON       = '#D4AF37'
+const SAFFRON_DEEP  = '#D4AF37'
+const TERRACOTTA    = '#D4AF37'
+const CREAM         = '#F7F2E8'
+const CREAM_WARM    = '#E9CBA6'
 
 const badgeStyles: Record<ProductBadge, { bg: string; color: string }> = {
   NEW:        { bg: EMERALD,                       color: '#FFFFFF' },

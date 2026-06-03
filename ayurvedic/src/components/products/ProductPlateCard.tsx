@@ -49,7 +49,7 @@ export default function ProductPlateCard({ product, initialSaved = false }: { pr
             <h3
               className="font-display text-[14px] italic leading-tight sm:text-[17px]"
               style={{
-                color: '#F3E6CB',
+                color: '#E9CBA6',
                 textShadow: '0 2px 14px rgba(0,0,0,0.6)',
               }}
             >

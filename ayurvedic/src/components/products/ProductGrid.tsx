@@ -19,7 +19,7 @@ export default function ProductGrid({ products, onClearFilters }: ProductGridPro
     return (
       <div className="relative flex flex-col items-center justify-center px-6 py-24 text-center">
         <BotanicalSprig
-          color="#2F5D50"
+          color="#1E5B4B"
           opacity={0.1}
           className="pointer-events-none absolute bottom-0 left-1/2 h-[260px] w-[180px] -translate-x-1/2"
         />

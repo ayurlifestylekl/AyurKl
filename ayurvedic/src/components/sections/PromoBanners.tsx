@@ -10,7 +10,7 @@ import { EASE_OUT_PREMIUM } from '@/lib/motion'
  */
 export default function PromoBanners() {
   return (
-    <section aria-label="Promotional offers" className="bg-[#f8f6f0]">
+    <section aria-label="Promotional offers" className="bg-[#F7F2E8]">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

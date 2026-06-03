@@ -7,13 +7,13 @@ import Link from 'next/link'
 import { slideIn, inViewOnce, EASE_OUT_PREMIUM } from '@/lib/motion'
 
 /* ── Palette (section-local; mirrors the hero so the homepage reads as one piece) ── */
-const EMERALD      = '#1A3B2E'   // dark base, matches hero ink
-const EMERALD_DEEP = '#142E24'   // slight gradient depth
-const SAFFRON      = '#E8941A'   // vivid turmeric accent
-const SAFFRON_SOFT = '#F2B25A'   // eyebrow on dark
-const SAFFRON_DEEP = '#C8741A'   // eyebrow on cream
-const CREAM        = '#FBF6EC'   // matches hero cream
-const CREAM_WARM   = '#F4E9D2'   // gradient destination
+const EMERALD      = '#163F33'   // dark base, matches hero ink
+const EMERALD_DEEP = '#0F2C24'   // slight gradient depth
+const SAFFRON      = '#D4AF37'   // vivid turmeric accent
+const SAFFRON_SOFT = '#D4AF37'   // eyebrow on dark
+const SAFFRON_DEEP = '#D4AF37'   // eyebrow on cream
+const CREAM        = '#F7F2E8'   // matches hero cream
+const CREAM_WARM   = '#E9CBA6'   // gradient destination
 
 const painPoints = ['Burnout', 'Insomnia', 'Joint Pain', 'Brain Fog']
 
