@@ -46,21 +46,21 @@ export default function HeroSection() {
           sizes="100vw"
         />
 
-        {/* Burgundy tint — light through the middle so the photo shows; dark only at top (navbar) + bottom (stats bar) */}
+        {/* Neutral warm-dark tint — keeps the photo's natural colours (no red cast); only fades to burgundy at the very bottom to meet the stats bar */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(53,7,16,0.62) 0%, rgba(74,12,24,0.26) 30%, rgba(74,12,24,0.28) 58%, rgba(53,7,16,0.82) 100%)',
+              'linear-gradient(180deg, rgba(28,19,13,0.58) 0%, rgba(28,19,13,0.15) 26%, rgba(28,19,13,0.20) 55%, rgba(45,12,16,0.46) 84%, rgba(53,7,16,0.86) 100%)',
           }}
         />
 
-        {/* Soft scrim behind the headline only — keeps text legible without flattening the whole photo */}
+        {/* Soft neutral scrim behind the headline only — legibility without tinting the whole photo */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 56% 50% at 50% 47%, rgba(53,7,16,0.42) 0%, transparent 66%)',
+              'radial-gradient(ellipse 58% 52% at 50% 46%, rgba(20,14,10,0.40) 0%, transparent 66%)',
           }}
         />
 
@@ -69,7 +69,7 @@ export default function HeroSection() {
           className="absolute inset-0 mix-blend-overlay"
           style={{
             background:
-              'radial-gradient(ellipse 45% 55% at 8% 14%, rgba(212, 175, 55,0.40) 0%, transparent 64%), radial-gradient(ellipse 50% 60% at 92% 86%, rgba(212, 175, 55,0.36) 0%, transparent 66%), radial-gradient(ellipse 70% 45% at 50% -5%, rgba(212, 175, 55,0.24) 0%, transparent 60%)',
+              'radial-gradient(ellipse 45% 55% at 8% 14%, rgba(212, 175, 55,0.26) 0%, transparent 64%), radial-gradient(ellipse 50% 60% at 92% 86%, rgba(212, 175, 55,0.22) 0%, transparent 66%), radial-gradient(ellipse 70% 45% at 50% -5%, rgba(212, 175, 55,0.16) 0%, transparent 60%)',
           }}
         />
 
@@ -90,7 +90,7 @@ export default function HeroSection() {
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 82% 82% at 50% 45%, transparent 54%, rgba(30,5,12,0.55) 100%)',
+              'radial-gradient(ellipse 82% 82% at 50% 45%, transparent 56%, rgba(16,11,8,0.50) 100%)',
           }}
         />
       </motion.div>
