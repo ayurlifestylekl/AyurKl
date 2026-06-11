@@ -81,21 +81,17 @@ export default function Navbar() {
           <Link
             href="/"
             aria-label="Kerala Ayurvedic Lifestyle — home"
-            className="group flex shrink-0 items-center gap-3"
+            className="group -ml-1 flex shrink-0 items-center gap-3 sm:-ml-3"
             onClick={() => setMobileOpen(false)}
           >
             <Image
-              src="/logo.png"
+              src="/kerala-logo.jpg"
               alt="Kerala Ayurvedic Lifestyle"
-              width={1200}
-              height={1048}
+              width={1024}
+              height={900}
               priority
-              className="h-12 w-auto transition-transform duration-300 group-hover:scale-[1.03] sm:h-14"
+              className="h-10 w-auto rounded-md transition-transform duration-300 group-hover:scale-[1.03] sm:h-11"
             />
-            <span className="hidden font-heading text-[11px] font-bold uppercase tracking-[0.22em] leading-tight text-[#4A0C18] sm:flex sm:flex-col">
-              <span>Kerala Ayurvedic</span>
-              <span className="text-[#B0801E]">Lifestyle</span>
-            </span>
           </Link>
 
           {/* ── Desktop: Nav pill container ── */}
