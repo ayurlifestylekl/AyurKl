@@ -12,7 +12,7 @@ const config: Config = {
       colors: {
         // ── Kerala Ayurvedic Lifestyle brand palette — Burgundy + Emerald blend ──
         primary:        "#6E1023", // Royal Burgundy (was Deep Forest Green)
-        secondary:      "#0E3A2C", // Jewel Emerald (secondary band)
+        secondary:      "#2B1D14", // Jewel Emerald (secondary band)
         tertiary:       "#C98A93", // Dusty Rose (was Sage Green)
         accent:         "#D4AF37", // Accent Gold (name kept to avoid mass class rename)
         gold:           "#D4AF37", // alias for new usage
@@ -35,9 +35,9 @@ const config: Config = {
         nocturne:       "#350710",
         "nocturne-elev":"#4A0C18",
         // ── emerald ramp for the isolated apothecary band ──
-        "forest-700":   "#0E3A2C",
-        "forest-800":   "#0A2C22",
-        "forest-900":   "#071F18",
+        "forest-700":   "#2B1D14",
+        "forest-800":   "#1C120B",
+        "forest-900":   "#140C07",
       },
       boxShadow: {
         'elevated':  '0 8px 30px -10px rgba(74,12,24,0.2), 0 2px 8px rgba(74,12,24,0.06)',

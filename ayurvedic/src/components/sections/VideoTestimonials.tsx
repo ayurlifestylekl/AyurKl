@@ -6,8 +6,8 @@ import { Play, Volume2, VolumeX } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
 /* ── Palette ── */
-const EMERALD       = '#0E3A2C'
-const EMERALD_DEEP  = '#0A2C22'
+const EMERALD       = '#2B1D14'
+const EMERALD_DEEP  = '#1C120B'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_SOFT  = '#D4AF37'
 const TERRACOTTA    = '#D4AF37'   // warm pop on dark — more vibrant than saffron alone
@@ -284,7 +284,7 @@ function VideoCard({ item, index }: { item: VideoTestimonial; index: number }) {
           }`}
           style={{
             background:
-              'linear-gradient(to top, rgba(7, 42, 31,0.92) 0%, rgba(7, 42, 31,0.30) 50%, rgba(7, 42, 31,0.10) 100%)',
+              'linear-gradient(to top, rgba(20,12,7,0.92) 0%, rgba(20,12,7,0.30) 50%, rgba(20,12,7,0.10) 100%)',
           }}
         />
 
