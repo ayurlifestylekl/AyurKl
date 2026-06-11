@@ -8,8 +8,8 @@ import CTAButton from '@/components/ui/CTAButton'
 import { clipReveal, fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
 /* ── Palette ── */
-const EMERALD       = '#163F33'
-const EMERALD_DEEP  = '#0F2C24'
+const EMERALD       = '#6E1023'
+const EMERALD_DEEP  = '#4A0C18'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_SOFT  = '#D4AF37'
 
@@ -44,7 +44,7 @@ export default function FinalBookingCTA() {
           {/* Warm emerald tint — lighter so the photo breathes */}
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(22, 63, 51,0.42)' }}
+            style={{ backgroundColor: 'rgba(110,16,35,0.42)' }}
             aria-hidden
           />
           {/* Saffron warm wash overlay */}
@@ -86,7 +86,7 @@ export default function FinalBookingCTA() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(22, 63, 51,0.5)' }}
+            style={{ backgroundColor: 'rgba(110,16,35,0.5)' }}
             aria-hidden
           />
           {/* Bottom fade to emerald */}

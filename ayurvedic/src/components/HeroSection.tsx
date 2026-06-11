@@ -7,10 +7,12 @@ import { motion } from 'framer-motion'
 import { EASE_OUT_PREMIUM } from '@/lib/motion'
 import CTAButton from '@/components/ui/CTAButton'
 
-/* ── Palette (hero-local) ───────────────────────────────── */
-const SAFFRON      = '#D4AF37'   // vivid turmeric — italic accent
-const SAFFRON_SOFT = '#D4AF37'   // eyebrow on dark
-const INK          = '#0A1F19'   // deep base for dim
+/* ── Palette (hero-local) — Amber Wash ──────────────────── */
+const SAFFRON      = '#D4AF37'   // primary gold — accents/frame
+const SAFFRON_SOFT = '#D4AF37'   // eyebrow on warm base
+const SCRIPT_GOLD  = '#E5B53A'   // warmer gold — italic "Ayurveda"
+const INK          = '#4A0C18'   // espresso-oxblood warm base (was forest green)
+// Oxblood ground (#4A1C10) is applied inline with alpha on the stats bar / overlays
 
 /* ── Animation helpers ──────────────────────────────────── */
 const fadeUp = (delay: number) => ({
@@ -44,21 +46,21 @@ export default function HeroSection() {
           sizes="100vw"
         />
 
-        {/* Even dim — slightly darker at top/bottom for navbar + stats bar continuity */}
+        {/* Burgundy tint — light through the middle so the photo shows; dark only at top (navbar) + bottom (stats bar) */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(10, 31, 25,0.88) 0%, rgba(10, 31, 25,0.72) 35%, rgba(10, 31, 25,0.68) 60%, rgba(10, 31, 25,0.82) 100%)',
+              'linear-gradient(180deg, rgba(53,7,16,0.62) 0%, rgba(74,12,24,0.26) 30%, rgba(74,12,24,0.28) 58%, rgba(53,7,16,0.82) 100%)',
           }}
         />
 
-        {/* Center radial — slightly darker behind the headline area for legibility */}
+        {/* Soft scrim behind the headline only — keeps text legible without flattening the whole photo */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 65% 60% at 50% 48%, rgba(10, 31, 25,0.30) 0%, transparent 70%)',
+              'radial-gradient(ellipse 56% 50% at 50% 47%, rgba(53,7,16,0.42) 0%, transparent 66%)',
           }}
         />
 
@@ -67,26 +69,34 @@ export default function HeroSection() {
           className="absolute inset-0 mix-blend-overlay"
           style={{
             background:
-              'radial-gradient(ellipse 45% 55% at 8% 14%, rgba(212, 175, 55,0.36) 0%, transparent 64%), radial-gradient(ellipse 50% 60% at 92% 86%, rgba(212, 175, 55,0.32) 0%, transparent 66%), radial-gradient(ellipse 70% 45% at 50% -5%, rgba(212, 175, 55,0.20) 0%, transparent 60%)',
+              'radial-gradient(ellipse 45% 55% at 8% 14%, rgba(212, 175, 55,0.40) 0%, transparent 64%), radial-gradient(ellipse 50% 60% at 92% 86%, rgba(212, 175, 55,0.36) 0%, transparent 66%), radial-gradient(ellipse 70% 45% at 50% -5%, rgba(212, 175, 55,0.24) 0%, transparent 60%)',
+          }}
+        />
+
+        {/* Gold-foil mandala texture — heritage cue, behind the headline (low opacity, never reduces legibility) */}
+        <div
+          aria-hidden
+          className="absolute inset-0 mix-blend-overlay"
+          style={{
+            opacity: 0.16,
+            background:
+              'repeating-radial-gradient(circle at 50% 42%, rgba(255,225,150,0.22) 0 2px, transparent 2px 26px), repeating-radial-gradient(circle at 50% 42%, rgba(255,225,150,0.15) 0 1px, transparent 1px 52px)',
+          }}
+        />
+
+        {/* Warm vignette — focuses the headline, lifts text contrast on the busy photo */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 82% 82% at 50% 45%, transparent 54%, rgba(30,5,12,0.55) 100%)',
           }}
         />
       </motion.div>
 
-      {/* ── Luxe gold frame inset (editorial) ───────────────── */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-5 z-[5] hidden sm:block sm:inset-7 lg:inset-9"
-      >
-        <div className="absolute inset-0" style={{ border: '1px solid rgba(212, 175, 55,0.32)' }} />
-        {/* brighter corner accents */}
-        <span className="absolute left-0 top-0 h-6 w-6 border-l-2 border-t-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
-        <span className="absolute right-0 top-0 h-6 w-6 border-r-2 border-t-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
-        <span className="absolute bottom-0 left-0 h-6 w-6 border-b-2 border-l-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
-        <span className="absolute bottom-0 right-0 h-6 w-6 border-b-2 border-r-2" style={{ borderColor: 'rgba(212, 175, 55,0.85)' }} />
-      </div>
-
-      {/* ── Content — centered, full-width breathing ─────── */}
-      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-6 pb-28 pt-20 text-center sm:px-8 sm:pb-32 sm:pt-24 lg:px-12 lg:pt-20">
+      {/* ── Content — centered, lifted clear of the stats bar ─────── */}
+      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-6 pb-40 pt-20 text-center sm:px-8 sm:pb-48 sm:pt-24 lg:px-12 lg:pt-20">
 
         {/* Lotus crest */}
         <motion.div {...fadeUp(0.05)} className="mb-5" aria-hidden>
@@ -131,6 +141,7 @@ export default function HeroSection() {
               fontSize: 'clamp(2.75rem, 7.2vw, 6.5rem)',
               lineHeight: 1.0,
               letterSpacing: '-0.025em',
+              textShadow: '0 2px 28px rgba(30,5,12,0.6), 0 1px 2px rgba(30,5,12,0.45)',
             }}
           >
             Authentic Kerala
@@ -138,11 +149,11 @@ export default function HeroSection() {
           <span
             className="mt-2 font-display italic"
             style={{
-              color: SAFFRON,
+              color: SCRIPT_GOLD,
               fontSize: 'clamp(3.25rem, 9vw, 8rem)',
               lineHeight: 1.0,
               letterSpacing: '-0.02em',
-              textShadow: '0 4px 36px rgba(212, 175, 55,0.32)',
+              textShadow: '0 4px 36px rgba(180,120,30,0.42)',
             }}
           >
             Ayurveda
@@ -219,7 +230,7 @@ export default function HeroSection() {
         {...fadeUp(0.85)}
         className="absolute bottom-0 left-0 right-0 z-10 border-t backdrop-blur-md"
         style={{
-          backgroundColor: 'rgba(10, 31, 25,0.78)',
+          backgroundColor: 'rgba(53,7,16,0.82)',
           borderTopColor: 'rgba(212, 175, 55,0.22)',
         }}
       >

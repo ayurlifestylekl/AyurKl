@@ -9,8 +9,8 @@ import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 import { LotusMark } from '@/components/ui/Ornament'
 
 /* ── Palette (section-local; matches new hero language) ── */
-const EMERALD       = '#163F33'
-const EMERALD_SOFT  = 'rgba(22, 63, 51,0.78)'
+const EMERALD       = '#6E1023'
+const EMERALD_SOFT  = 'rgba(110, 16, 35,0.78)'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_DEEP  = '#D4AF37'
 const CREAM         = '#F7F2E8'
@@ -93,7 +93,7 @@ export default function ClinicTherapies() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(50% 45% at 10% 5%, rgba(212, 175, 55,0.18) 0%, transparent 65%), radial-gradient(45% 55% at 92% 90%, rgba(22, 63, 51,0.10) 0%, transparent 60%)',
+            'radial-gradient(50% 45% at 10% 5%, rgba(212, 175, 55,0.18) 0%, transparent 65%), radial-gradient(45% 55% at 92% 90%, rgba(110, 16, 35,0.10) 0%, transparent 60%)',
         }}
       />
 
@@ -229,7 +229,7 @@ export default function ClinicTherapies() {
             <p
               className="mt-3 font-display italic leading-[1.55]"
               style={{
-                color: 'rgba(22, 63, 51,0.62)',
+                color: 'rgba(110, 16, 35,0.62)',
                 fontSize: 'clamp(14px, 1.05vw, 16px)',
               }}
             >
@@ -318,7 +318,7 @@ function CategoryCard({
           <div
             aria-hidden
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(22, 63, 51,0.18)' }}
+            style={{ backgroundColor: 'rgba(110, 16, 35,0.18)' }}
           />
 
           {/* Bottom gradient for legibility */}
@@ -327,7 +327,7 @@ function CategoryCard({
             className="absolute inset-x-0 bottom-0 h-[70%]"
             style={{
               background:
-                'linear-gradient(to top, rgba(10, 31, 25,0.88) 0%, rgba(10, 31, 25,0.40) 50%, transparent 100%)',
+                'linear-gradient(to top, rgba(53, 7, 16,0.88) 0%, rgba(53, 7, 16,0.40) 50%, transparent 100%)',
             }}
           />
 
@@ -346,7 +346,7 @@ function CategoryCard({
             <span
               className="inline-flex items-center justify-center rounded-sm px-2 py-1 font-heading text-[10px] font-bold tracking-[0.22em] backdrop-blur-sm sm:text-[11px]"
               style={{
-                backgroundColor: 'rgba(10, 31, 25,0.55)',
+                backgroundColor: 'rgba(53, 7, 16,0.55)',
                 color: SAFFRON,
                 border: `1px solid ${SAFFRON}55`,
               }}

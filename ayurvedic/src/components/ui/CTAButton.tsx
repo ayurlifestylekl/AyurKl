@@ -33,12 +33,14 @@ interface ButtonProps extends CommonProps {
 type Props = LinkProps | ButtonProps
 
 const variantStyles: Record<Variant, string> = {
+  // Shiny metallic gold — champagne highlight → antique gold, with an inset top sheen
   primary:
-    'bg-accent text-dark shadow-[0_18px_40px_-18px_rgba(212, 175, 55,0.85)] hover:shadow-[0_22px_50px_-16px_rgba(212, 175, 55,0.95)] hover:-translate-y-0.5',
+    'bg-[linear-gradient(135deg,#F6DD8E_0%,#E7C457_30%,#D4AF37_52%,#B8860B_100%)] text-[#3A1208] shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_18px_40px_-18px_rgba(212,175,55,0.9)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_22px_50px_-16px_rgba(212,175,55,1)] hover:-translate-y-0.5',
+  // Burgundy with gold wording
   secondary:
-    'bg-primary text-white shadow-[0_18px_40px_-18px_rgba(30, 91, 75,0.65)] hover:bg-[#163F33] hover:shadow-[0_22px_50px_-16px_rgba(30, 91, 75,0.85)] hover:-translate-y-0.5',
+    'bg-primary text-gold shadow-[0_18px_40px_-18px_rgba(74,12,24,0.65)] hover:bg-[#4A0C18] hover:shadow-[0_22px_50px_-16px_rgba(74,12,24,0.85)] hover:-translate-y-0.5',
   outlineLight:
-    'border border-white/40 bg-white/5 text-white backdrop-blur hover:bg-white/15 hover:-translate-y-0.5',
+    'border border-gold/50 bg-white/5 text-gold backdrop-blur hover:bg-white/15 hover:-translate-y-0.5',
   outlineDark:
     'border border-primary/30 bg-white/40 text-primary backdrop-blur hover:border-primary hover:bg-white/80 hover:-translate-y-0.5',
 }

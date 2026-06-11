@@ -10,10 +10,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // ── Kerala Ayurvedic Lifestyle brand palette ──
-        primary:        "#1E5B4B", // Deep Forest Green
-        secondary:      "#2E7D5A", // Emerald Green
-        tertiary:       "#8FAE8B", // Sage Green
+        // ── Kerala Ayurvedic Lifestyle brand palette — Burgundy + Emerald blend ──
+        primary:        "#6E1023", // Royal Burgundy (was Deep Forest Green)
+        secondary:      "#0E3A2C", // Jewel Emerald (secondary band)
+        tertiary:       "#C98A93", // Dusty Rose (was Sage Green)
         accent:         "#D4AF37", // Accent Gold (name kept to avoid mass class rename)
         gold:           "#D4AF37", // alias for new usage
         clay:           "#E9CBA6", // Warm Clay
@@ -23,20 +23,26 @@ const config: Config = {
         foreground:     "#1F1F1F",
         ivory:          "#FAF8F2", // alias for new usage
         cream:          "#F7F2E8", // Natural Cream
-        // ── tuned orphan tokens (names kept, hex harmonized) ──
+        // ── blend tokens ──
+        wine:           "#6E1023", // burgundy mid
+        "wine-deep":    "#4A0C18", // burgundy deep
+        "wine-900":     "#350710", // burgundy deepest
+        blush:          "#F3E2CE", // non-white card (light/burgundy zones)
+        "sage-card":    "#EDF2E6", // non-white card (emerald zone)
+        // ── tuned orphan tokens (names kept, hex harmonized to burgundy) ──
         heroCream:      "#F7F2E8",
-        nearBlackGreen: "#0F2C24",
-        nocturne:       "#0A1F19",
-        "nocturne-elev":"#0F2C24",
-        // ── forest ramp for layered dark sections ──
-        "forest-700":   "#163F33",
-        "forest-800":   "#0F2C24",
-        "forest-900":   "#0A1F19",
+        nearBlackGreen: "#4A0C18",
+        nocturne:       "#350710",
+        "nocturne-elev":"#4A0C18",
+        // ── emerald ramp for the isolated apothecary band ──
+        "forest-700":   "#0E3A2C",
+        "forest-800":   "#0A2C22",
+        "forest-900":   "#071F18",
       },
       boxShadow: {
-        'elevated':  '0 8px 30px -10px rgba(30, 91, 75,0.2), 0 2px 8px rgba(30, 91, 75,0.06)',
-        'floating':  '0 24px 60px -20px rgba(30, 91, 75,0.35), 0 8px 20px rgba(30, 91, 75,0.1)',
-        'luxe':      '0 32px 72px -24px rgba(30, 91, 75,0.4), 0 12px 28px rgba(30, 91, 75,0.12), inset 0 1px 0 rgba(255,255,255,0.08)',
+        'elevated':  '0 8px 30px -10px rgba(74,12,24,0.2), 0 2px 8px rgba(74,12,24,0.06)',
+        'floating':  '0 24px 60px -20px rgba(74,12,24,0.35), 0 8px 20px rgba(74,12,24,0.1)',
+        'luxe':      '0 32px 72px -24px rgba(74,12,24,0.4), 0 12px 28px rgba(74,12,24,0.12), inset 0 1px 0 rgba(255,255,255,0.08)',
         'gold-glow': '0 18px 40px -18px rgba(212, 175, 55,0.85)',
       },
       fontFamily: {

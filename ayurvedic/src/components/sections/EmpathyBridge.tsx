@@ -7,8 +7,8 @@ import Link from 'next/link'
 import { slideIn, inViewOnce, EASE_OUT_PREMIUM } from '@/lib/motion'
 
 /* ── Palette (section-local; mirrors the hero so the homepage reads as one piece) ── */
-const EMERALD      = '#163F33'   // dark base, matches hero ink
-const EMERALD_DEEP = '#0F2C24'   // slight gradient depth
+const EMERALD      = '#6E1023'   // dark base, matches hero ink
+const EMERALD_DEEP = '#4A0C18'   // slight gradient depth
 const SAFFRON      = '#D4AF37'   // vivid turmeric accent
 const SAFFRON_SOFT = '#D4AF37'   // eyebrow on dark
 const SAFFRON_DEEP = '#D4AF37'   // eyebrow on cream
@@ -237,7 +237,7 @@ export default function EmpathyBridge() {
           <p
             className="mt-7 font-body leading-[1.7]"
             style={{
-              color: 'rgba(22, 63, 51,0.78)',
+              color: 'rgba(110,16,35,0.78)',
               fontSize: 'clamp(15px, 1.1vw, 17px)',
             }}
           >

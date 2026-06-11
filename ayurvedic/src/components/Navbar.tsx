@@ -38,7 +38,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 w-full">
 
       {/* ── Top Info Bar ── */}
-      <div className="bg-[#163F33] border-b border-[#D4AF37]/20">
+      <div className="bg-[#4A0C18] border-b border-[#D4AF37]/20">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
 
           {/* Left: contact */}
@@ -92,15 +92,15 @@ export default function Navbar() {
               priority
               className="h-12 w-auto transition-transform duration-300 group-hover:scale-[1.03] sm:h-14"
             />
-            <span className="hidden font-heading text-[11px] font-bold uppercase tracking-[0.22em] leading-tight text-[#163F33] sm:flex sm:flex-col">
+            <span className="hidden font-heading text-[11px] font-bold uppercase tracking-[0.22em] leading-tight text-[#4A0C18] sm:flex sm:flex-col">
               <span>Kerala Ayurvedic</span>
-              <span className="text-[#2E7D5A]">Lifestyle</span>
+              <span className="text-[#B0801E]">Lifestyle</span>
             </span>
           </Link>
 
           {/* ── Desktop: Nav pill container ── */}
           <div className="hidden flex-1 items-center justify-center md:flex">
-            <div className="flex items-center gap-0.5 rounded-full bg-[#163F33] px-2 py-1.5 shadow-lg shadow-[#163F33]/20">
+            <div className="flex items-center gap-0.5 rounded-full bg-[#4A0C18] px-2 py-1.5 shadow-lg shadow-[#4A0C18]/20">
 
               {/* Home */}
               <Link href="/" className={linkCls}>Home</Link>
@@ -123,7 +123,7 @@ export default function Navbar() {
 
                 {dropdownOpen && (
                   <div className="absolute left-1/2 top-full mt-2 w-52 -translate-x-1/2">
-                    <div className="overflow-hidden rounded-2xl border border-[#D4AF37]/20 bg-[#163F33] shadow-2xl shadow-black/40">
+                    <div className="overflow-hidden rounded-2xl border border-[#D4AF37]/20 bg-[#4A0C18] shadow-2xl shadow-black/40">
                       {productsDropdown.map((item) => (
                         <Link
                           key={item.href}
@@ -151,7 +151,7 @@ export default function Navbar() {
               {/* ── Book Now pill (inside the nav container) ── */}
               <Link
                 href="/book"
-                className="ml-1 rounded-full bg-[#D4AF37] px-5 py-2 font-heading text-[13px] font-bold uppercase tracking-wider text-[#1F1F1F] transition-all duration-200 hover:bg-[#D4AF37] active:scale-95 whitespace-nowrap"
+                className="ml-1 rounded-full bg-[linear-gradient(135deg,#F6DD8E_0%,#E7C457_30%,#D4AF37_52%,#B8860B_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] px-5 py-2 font-heading text-[13px] font-bold uppercase tracking-wider text-[#3A1208] transition-all duration-200 hover:-translate-y-px active:scale-95 whitespace-nowrap"
               >
                 Book Now
               </Link>
@@ -161,9 +161,9 @@ export default function Navbar() {
           {/* ── Right: Search pill + User pill ── */}
           <div className="hidden items-center gap-2 md:flex">
             {/* Cart pill */}
-            <Link href="/cart" className="flex items-center gap-2 rounded-full bg-[#D4AF37] px-4 py-2 hover:bg-[#D4AF37]">
-              <span className="font-heading text-[13px] font-semibold text-white">Cart</span>
-              <ShoppingCart className="h-3.5 w-3.5 text-white" />
+            <Link href="/cart" className="flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#F6DD8E_0%,#E7C457_30%,#D4AF37_52%,#B8860B_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] px-4 py-2 transition-transform duration-200 hover:-translate-y-px">
+              <span className="font-heading text-[13px] font-semibold text-[#3A1208]">Cart</span>
+              <ShoppingCart className="h-3.5 w-3.5 text-[#3A1208]" />
             </Link>
             {/* User pill — dropdown */}
             <div className="relative" ref={accountDropdownRef}>
@@ -173,15 +173,15 @@ export default function Navbar() {
                 aria-label="Account menu"
                 aria-haspopup="menu"
                 aria-expanded={accountDropdownOpen}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#D4AF37] transition-all duration-200 hover:bg-[#D4AF37] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F2E8]"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#F6DD8E_0%,#E7C457_30%,#D4AF37_52%,#B8860B_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] transition-all duration-200 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F2E8]"
               >
-                <User className="h-4 w-4 text-white" />
+                <User className="h-4 w-4 text-[#3A1208]" />
               </button>
 
               {accountDropdownOpen && (
                 <div className="absolute right-0 top-full mt-3 w-[336px] origin-top-right">
                   <div
-                    className="relative overflow-hidden rounded-[28px] border border-[#D4AF37]/25 bg-gradient-to-b from-[#163F33] via-[#163F33] to-[#163F33]"
+                    className="relative overflow-hidden rounded-[28px] border border-[#D4AF37]/25 bg-gradient-to-b from-[#4A0C18] via-[#4A0C18] to-[#4A0C18]"
                     style={{
                       boxShadow:
                         '0 24px 60px -18px rgba(0,0,0,0.55), 0 8px 20px -10px rgba(0,0,0,0.4), inset 0 1px 0 0 rgba(255,255,255,0.07)',
@@ -280,13 +280,13 @@ export default function Navbar() {
 
           {/* ── Mobile: hamburger ── */}
           <div className="flex items-center gap-2 md:hidden">
-            <Link href="/cart" aria-label="Cart" className="flex h-9 w-9 items-center justify-center rounded-full bg-[#163F33]/10 text-[#163F33] hover:bg-[#163F33]/20">
+            <Link href="/cart" aria-label="Cart" className="flex h-9 w-9 items-center justify-center rounded-full bg-[#4A0C18]/10 text-[#4A0C18] hover:bg-[#4A0C18]/20">
               <ShoppingCart className="h-4.5 w-4.5" />
             </Link>
             <button
               onClick={() => setMobileOpen((p) => !p)}
               aria-label="Toggle menu"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#163F33] text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#4A0C18] text-white"
             >
               {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -296,7 +296,7 @@ export default function Navbar() {
 
       {/* ── Mobile Drawer ── */}
       {mobileOpen && (
-        <div className="bg-[#163F33] md:hidden">
+        <div className="bg-[#4A0C18] md:hidden">
           <ul className="flex flex-col px-4 py-3">
 
             <li className="border-b border-white/8">
