@@ -10,7 +10,7 @@ import type { FeaturedProduct, ProductBadge } from '@/types/content'
 import { LotusMark } from '@/components/ui/Ornament'
 
 /* ── Palette (section-local; matches hero language) ── */
-const EMERALD       = '#2B1D14'
+const EMERALD       = '#54211F'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_DEEP  = '#D4AF37'
 const TERRACOTTA    = '#D4AF37'
@@ -21,7 +21,7 @@ const badgeStyles: Record<ProductBadge, { bg: string; color: string }> = {
   NEW:        { bg: EMERALD,                       color: '#FFFFFF' },
   BESTSELLER: { bg: SAFFRON,                       color: '#FFFFFF' },
   SALE:       { bg: TERRACOTTA,                    color: '#FFFFFF' },
-  COMBO:      { bg: 'rgba(43,29,20,0.85)',         color: SAFFRON   },
+  COMBO:      { bg: 'rgba(84,33,31,0.85)',         color: SAFFRON   },
 }
 
 export default function FeaturedProducts() {
@@ -43,7 +43,7 @@ export default function FeaturedProducts() {
       aria-labelledby="collection-heading"
       className="relative overflow-hidden pb-16 pt-12 lg:pb-24 lg:pt-16"
       style={{
-        background: 'linear-gradient(160deg, #2B1D14 0%, #1C120B 55%, #140C07 100%)',
+        background: 'linear-gradient(160deg, #54211F 0%, #3E1716 55%, #2A0F0F 100%)',
       }}
     >
       {/* Atmospheric glows */}
@@ -52,7 +52,7 @@ export default function FeaturedProducts() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(45% 40% at 90% 5%, rgba(212, 175, 55,0.16) 0%, transparent 65%), radial-gradient(40% 50% at 8% 92%, rgba(43,29,20,0.08) 0%, transparent 60%)',
+            'radial-gradient(45% 40% at 90% 5%, rgba(212, 175, 55,0.16) 0%, transparent 65%), radial-gradient(40% 50% at 8% 92%, rgba(84,33,31,0.08) 0%, transparent 60%)',
         }}
       />
 
@@ -257,7 +257,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
         <div
           aria-hidden
           className="absolute inset-0 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0"
-          style={{ backgroundColor: 'rgba(43,29,20,0.04)' }}
+          style={{ backgroundColor: 'rgba(84,33,31,0.04)' }}
         />
 
         {/* Saffron glow appears on hover */}

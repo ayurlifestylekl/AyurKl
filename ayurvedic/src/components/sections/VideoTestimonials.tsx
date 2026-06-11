@@ -6,8 +6,8 @@ import { Play, Volume2, VolumeX } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 
 /* ── Palette ── */
-const EMERALD       = '#2B1D14'
-const EMERALD_DEEP  = '#1C120B'
+const EMERALD       = '#54211F'
+const EMERALD_DEEP  = '#3E1716'
 const SAFFRON       = '#D4AF37'
 const SAFFRON_SOFT  = '#D4AF37'
 const TERRACOTTA    = '#D4AF37'   // warm pop on dark — more vibrant than saffron alone

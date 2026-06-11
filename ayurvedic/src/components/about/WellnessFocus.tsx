@@ -32,7 +32,7 @@ export default function WellnessFocus() {
   return (
     <section
       aria-labelledby="wellness-heading"
-      className="relative overflow-hidden bg-nearBlackGreen text-cream"
+      className="relative overflow-hidden bg-[#54211F] text-cream"
     >
       {/* Gold radial + green haze */}
       <div
