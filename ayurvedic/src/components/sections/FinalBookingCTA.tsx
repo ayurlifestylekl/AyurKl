@@ -185,7 +185,7 @@ export default function FinalBookingCTA() {
             >
               Book a 30-minute consultation with our{' '}
               <span className="font-semibold text-white">certified Vaidyas</span>{' '}
-              at our Brickfields clinic. We&apos;ll assess your dosha and design a
+              at our Brickfields Centre. We&apos;ll assess your dosha and design a
               protocol you can live with.
             </motion.p>
 

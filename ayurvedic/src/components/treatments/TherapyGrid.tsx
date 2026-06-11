@@ -27,7 +27,7 @@ export default function TherapyGrid({ categorySlug, treatments }: TherapyGridPro
             Chapter in preparation.
           </p>
           <p className="mt-3 font-heading text-[10.5px] font-semibold uppercase tracking-[0.24em] text-dark/40">
-            Awaiting therapy entries from the clinic
+            Awaiting therapy entries from the Centre
           </p>
         </div>
       </div>

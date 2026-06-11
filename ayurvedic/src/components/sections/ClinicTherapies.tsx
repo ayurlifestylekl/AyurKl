@@ -175,7 +175,7 @@ export default function ClinicTherapies() {
                 className="font-heading text-[11px] font-bold uppercase tracking-[0.36em] sm:text-[12px]"
                 style={{ color: SAFFRON_DEEP }}
               >
-                At The Clinic
+                At The Centre
               </span>
             </div>
 

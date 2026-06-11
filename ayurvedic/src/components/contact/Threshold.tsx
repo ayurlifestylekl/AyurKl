@@ -219,7 +219,7 @@ export default function Threshold() {
                 />
                 <div className="min-w-0 flex-1">
                   <p className="font-heading text-[9px] font-bold uppercase tracking-[0.24em] text-primary/55">
-                    The Clinic
+                    The Centre
                   </p>
                   <p className="mt-1 font-body text-[13px] italic leading-[1.45] text-dark/85">
                     No. 37, Jalan Thamby Abdullah-1<br />
@@ -387,7 +387,7 @@ export default function Threshold() {
               className="mt-3 inline-flex items-center gap-2 font-heading text-[10.5px] font-medium uppercase tracking-[0.22em] text-white/45 transition-colors duration-300 hover:text-accent"
             >
               <MapPin className="h-3 w-3" strokeWidth={2} />
-              Find the clinic →
+              Find the Centre →
             </motion.a>
           </div>
         </div>

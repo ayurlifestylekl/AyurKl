@@ -472,7 +472,7 @@ function SuccessLetter({
 
       <p className="max-w-[56ch] font-body text-[15.5px] leading-[1.75] text-dark/75">
         Your note is with me now. If the matter is urgent, WhatsApp is the
-        fastest line — we answer within the hour during clinic hours.
+        fastest line — we answer within the hour during Centre hours.
       </p>
 
       <div className="mt-2 flex flex-col gap-1">

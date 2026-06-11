@@ -59,7 +59,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
               Catalogue in preparation.
             </p>
             <p className="mt-3 font-heading text-[10.5px] font-semibold uppercase tracking-[0.24em] text-dark/40">
-              Awaiting category entries from the clinic
+              Awaiting category entries from the Centre
             </p>
           </div>
         ) : (

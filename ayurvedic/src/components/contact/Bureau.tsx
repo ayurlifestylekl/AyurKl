@@ -116,7 +116,7 @@ export default function Bureau() {
             style={{ fontSize: '14px' }}
           >
             A quiet shop-lot in the Little India quarter — between the temple
-            incense and the curry houses. Step through the teak door; the clinic
+            incense and the curry houses. Step through the teak door; the Centre
             is on the ground floor.
           </p>
         </motion.div>
@@ -310,7 +310,7 @@ export default function Bureau() {
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="font-heading text-[9px] font-bold uppercase tracking-[0.26em] text-white/55">
-                        Call the clinic
+                        Call the Centre
                       </p>
                       <a
                         href="tel:+601165043436"
