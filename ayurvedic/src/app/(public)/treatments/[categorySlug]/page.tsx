@@ -7,6 +7,7 @@ import TherapyGrid from '@/components/treatments/TherapyGrid'
 import { sanityClient } from '@/sanity/client'
 import { isSanityConfigured } from '@/sanity/env'
 import { CATEGORY_BY_SLUG_QUERY, CATEGORY_SLUGS_QUERY } from '@/sanity/queries'
+import { sortByDuration } from '@/lib/treatment-order'
 import type { TreatmentCategory, TreatmentSummary } from '@/types/treatments'
 
 export const revalidate = 30
@@ -84,7 +85,7 @@ export default async function CategoryPage({
         <TherapyGrid
           // CATEGORY_BY_SLUG_QUERY always projects slug; non-null assertion is safe here.
           categorySlug={category.slug!}
-          treatments={category.treatments}
+          treatments={sortByDuration(category.treatments)}
         />
       </section>
       <FreeConsultationBlock />
