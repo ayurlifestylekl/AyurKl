@@ -19,7 +19,7 @@ export default function CallingCard() {
     <section
       id="calling-card"
       aria-labelledby="calling-card-heading"
-      className="relative overflow-hidden bg-primary"
+      className="relative overflow-hidden bg-[#6E3420]"
     >
       {/* Faint gold grid texture */}
       <div
