@@ -19,7 +19,7 @@ export default function TrustStrip() {
   return (
     <section
       aria-labelledby="trust-heading"
-      className="relative bg-primary"
+      className="relative bg-[#2B1D14]"
     >
       <h2 id="trust-heading" className="sr-only">
         Why Kerala Ayurvedic Lifestyle

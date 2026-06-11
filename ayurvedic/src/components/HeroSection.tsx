@@ -51,7 +51,7 @@ export default function HeroSection() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(28,19,13,0.58) 0%, rgba(28,19,13,0.15) 26%, rgba(28,19,13,0.20) 55%, rgba(45,12,16,0.46) 84%, rgba(53,7,16,0.86) 100%)',
+              'linear-gradient(180deg, rgba(28,19,13,0.58) 0%, rgba(28,19,13,0.15) 26%, rgba(28,19,13,0.20) 55%, rgba(80,14,28,0.46) 84%, rgba(110,16,35,0.82) 100%)',
           }}
         />
 
@@ -230,7 +230,7 @@ export default function HeroSection() {
         {...fadeUp(0.85)}
         className="absolute bottom-0 left-0 right-0 z-10 border-t backdrop-blur-md"
         style={{
-          backgroundColor: 'rgba(53,7,16,0.82)',
+          backgroundColor: 'rgba(110,16,35,0.88)',
           borderTopColor: 'rgba(212, 175, 55,0.22)',
         }}
       >
