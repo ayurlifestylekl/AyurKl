@@ -82,7 +82,7 @@ export default function AboutHero({
       >
         <Image
           src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1800&q=80"
-          alt="Interior of Kerala Ayurvedic Lifestyle clinic in Brickfields"
+          alt="Interior of Kerala Ayurvedic Lifestyle Centre in Brickfields"
           fill
           priority
           className="object-cover"

@@ -195,7 +195,7 @@ export default function HeroSection() {
             prescribed, prepared and performed
           </strong>{' '}
           by our <strong className="font-semibold text-white">certified vaidyas</strong>,
-          with the precision of a clinic and the care of a tradition.
+          with the precision of a Centre and the care of a tradition.
         </motion.p>
 
         {/* CTA row */}

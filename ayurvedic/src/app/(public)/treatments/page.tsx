@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Treatments — Kerala Ayurvedic Lifestyle',
     description:
-      'Authentic Ayurveda therapies across the clinic catalogue. Personal protocols designed by a KKM-registered Kerala Vaidya in Brickfields, KL.',
+      'Authentic Ayurveda therapies across the Centre catalogue. Personal protocols designed by a KKM-registered Kerala Vaidya in Brickfields, KL.',
     url: 'https://keralaayurvedic.com/treatments',
     type: 'website',
   },

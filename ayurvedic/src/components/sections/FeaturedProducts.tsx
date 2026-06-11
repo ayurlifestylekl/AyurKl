@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Star } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
@@ -240,53 +239,28 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
         boxShadow: '0 10px 38px -18px rgba(53,7,16,0.30), 0 2px 8px rgba(53,7,16,0.08)',
       }}
     >
-      {/* ── IMAGE ── */}
-      <div
-        className="relative aspect-[4/5] w-full overflow-hidden"
-        style={{ backgroundColor: CREAM }}
-      >
-        <Image
-          src={product.image}
-          alt={`${product.name} — ${product.tagline}`}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover object-center transition-transform duration-[2s] ease-out group-hover:scale-[1.05]"
-        />
-
-        {/* Subtle emerald wash, fades on hover */}
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0"
-          style={{ backgroundColor: 'rgba(110,52,32,0.04)' }}
-        />
-
-        {/* Saffron glow appears on hover */}
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-          style={{
-            background:
-              'radial-gradient(60% 50% at 50% 100%, rgba(212, 175, 55,0.18) 0%, transparent 70%)',
-          }}
-        />
-
-        {/* Badge */}
-        {badge && product.badge && (
+      {/* ── Text-forward header (no image) ── */}
+      <div className="flex items-center justify-between border-b px-6 pb-4 pt-6" style={{ borderColor: 'rgba(212,175,55,0.25)' }}>
+        {badge && product.badge ? (
           <span
-            className="absolute left-4 top-4 rounded-full px-3 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.25em] shadow-sm"
-            style={{
-              backgroundColor: badge.bg,
-              color: badge.color,
-              letterSpacing: '0.22em',
-            }}
+            className="rounded-full px-3 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.22em]"
+            style={{ backgroundColor: badge.bg, color: badge.color }}
           >
             {product.badge}
           </span>
+        ) : (
+          <span
+            className="font-heading text-[10px] font-bold uppercase tracking-[0.24em]"
+            style={{ color: 'rgba(110,16,35,0.5)' }}
+          >
+            {product.category}
+          </span>
         )}
+        <LotusMark className="h-5 w-5" />
       </div>
 
       {/* ── INFO ── */}
-      <div className="flex flex-grow flex-col justify-between p-6">
+      <div className="flex flex-grow flex-col justify-between px-6 pb-6 pt-5">
 
         <div className="flex flex-col">
           <h3

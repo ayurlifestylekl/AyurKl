@@ -152,7 +152,7 @@ export default function Threshold() {
                     `src` below and keep the same aspect ratio. */}
                 <Image
                   src="/Ayurvedic-wellness-flat-lay-arrangement-1024x683.png"
-                  alt="Warm Ayurvedic still life at the threshold of the Kerala Ayurvedic Lifestyle clinic — brass vessels, herbs and sprigs arranged on a teak surface"
+                  alt="Warm Ayurvedic still life at the threshold of the Kerala Ayurvedic Lifestyle Centre — brass vessels, herbs and sprigs arranged on a teak surface"
                   fill
                   priority
                   sizes="(max-width: 1024px) 85vw, 420px"

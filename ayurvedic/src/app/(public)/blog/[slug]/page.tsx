@@ -182,7 +182,7 @@ export default async function BlogPostPage({
               </h3>
               <p className="max-w-xl font-body text-[16px] leading-[1.75] text-dark/70">
                 Book a free consultation with {post.author.name} at our Brickfields
-                clinic — we&rsquo;ll design a treatment plan tailored to your dosha
+                Centre — we&rsquo;ll design a treatment plan tailored to your dosha
                 and lifestyle.
               </p>
               <div className="mt-3 flex flex-col items-center gap-3 sm:flex-row">

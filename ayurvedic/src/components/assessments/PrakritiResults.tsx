@@ -350,7 +350,7 @@ export default function PrakritiResults({
               Therapies that balance you
             </h2>
             <p className="mt-1 font-body text-[12.5px] text-[#1F1F1F]/55">
-              Clinic-only treatments matched to your constitution.
+              Centre-only treatments matched to your constitution.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

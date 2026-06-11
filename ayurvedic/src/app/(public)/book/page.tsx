@@ -5,7 +5,7 @@ import BookingChooser from '@/components/booking/BookingChooser'
 export const metadata: Metadata = {
   title: 'Book with Kerala Ayurvedic Lifestyle',
   description:
-    "Choose between a free 30-minute consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) or book a specific Kerala Ayurveda treatment at our Brickfields, Kuala Lumpur clinic.",
+    "Choose between a free 30-minute consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) or book a specific Kerala Ayurveda treatment at our Brickfields, Kuala Lumpur Centre.",
   alternates: { canonical: '/book' },
   openGraph: {
     title: 'Book with Kerala Ayurvedic Lifestyle',
