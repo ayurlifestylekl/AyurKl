@@ -69,7 +69,7 @@ export default function TreatmentsHero({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 85% 10%, rgba(212, 175, 55,0.22) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 10% 95%, rgba(15, 44, 36,0.55) 0%, transparent 55%), radial-gradient(ellipse 600px 500px at 50% 50%, rgba(212, 175, 55,0.04) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 85% 10%, rgba(212, 175, 55,0.22) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 10% 95%, rgba(74,12,24,0.55) 0%, transparent 55%), radial-gradient(ellipse 600px 500px at 50% 50%, rgba(212, 175, 55,0.04) 0%, transparent 60%)',
         }}
         aria-hidden
       />
@@ -327,7 +327,7 @@ export default function TreatmentsHero({
                 {/* Green tint to harmonise */}
                 <div
                   className="pointer-events-none absolute inset-0 mix-blend-multiply"
-                  style={{ backgroundColor: 'rgba(30, 91, 75,0.22)' }}
+                  style={{ backgroundColor: 'rgba(110,16,35,0.22)' }}
                   aria-hidden
                 />
                 {/* Bottom gradient for legibility */}

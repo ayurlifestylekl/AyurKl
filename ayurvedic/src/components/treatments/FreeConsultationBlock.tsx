@@ -42,7 +42,7 @@ export default function FreeConsultationBlock({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at 5% 0%, rgba(212, 175, 55,0.25) 0%, transparent 45%), radial-gradient(ellipse at 95% 100%, rgba(15, 44, 36,0.4) 0%, transparent 50%), radial-gradient(ellipse at 50% 40%, rgba(212, 175, 55,0.06) 0%, transparent 35%)',
+            'radial-gradient(ellipse at 5% 0%, rgba(212, 175, 55,0.25) 0%, transparent 45%), radial-gradient(ellipse at 95% 100%, rgba(74,12,24,0.4) 0%, transparent 50%), radial-gradient(ellipse at 50% 40%, rgba(212, 175, 55,0.06) 0%, transparent 35%)',
         }}
         aria-hidden
       />

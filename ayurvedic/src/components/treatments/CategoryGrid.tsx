@@ -12,8 +12,8 @@ interface CategoryGridProps {
 
 const diamondPattern = {
   backgroundImage: `
-    radial-gradient(circle, rgba(30, 91, 75,0.028) 1px, transparent 1px),
-    radial-gradient(circle, rgba(30, 91, 75,0.028) 1px, transparent 1px)
+    radial-gradient(circle, rgba(110,16,35,0.028) 1px, transparent 1px),
+    radial-gradient(circle, rgba(110,16,35,0.028) 1px, transparent 1px)
   `,
   backgroundSize: '32px 32px',
   backgroundPosition: '0 0, 16px 16px',

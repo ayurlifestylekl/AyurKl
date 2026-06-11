@@ -41,7 +41,7 @@ export default function WellnessFocus() {
         style={{
           backgroundImage: [
             'radial-gradient(880px 600px at 82% 22%, rgba(212, 175, 55,0.16), transparent 62%)',
-            'radial-gradient(1080px 700px at 10% 94%, rgba(30, 91, 75,0.55), transparent 64%)',
+            'radial-gradient(1080px 700px at 10% 94%, rgba(110, 16, 35,0.55), transparent 64%)',
           ].join(', '),
         }}
       />

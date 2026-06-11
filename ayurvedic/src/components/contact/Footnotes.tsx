@@ -48,7 +48,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 88% 0%, rgba(212, 175, 55,0.14) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 12% 100%, rgba(46, 125, 90,0.08) 0%, transparent 60%), radial-gradient(ellipse 500px 380px at 50% 50%, rgba(212, 175, 55,0.05) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 88% 0%, rgba(212, 175, 55,0.14) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 12% 100%, rgba(110, 16, 35,0.08) 0%, transparent 60%), radial-gradient(ellipse 500px 380px at 50% 50%, rgba(212, 175, 55,0.05) 0%, transparent 60%)',
         }}
       />
 
@@ -58,7 +58,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         className="pointer-events-none absolute -left-12 -bottom-12 h-[420px] w-[420px] opacity-[0.09]"
         viewBox="0 0 420 420"
         fill="none"
-        stroke="#1E5B4B"
+        stroke="#6E1023"
         strokeWidth="0.6"
       >
         <g strokeLinecap="round">
@@ -89,7 +89,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         className="pointer-events-none absolute -right-16 -top-16 h-[320px] w-[320px] opacity-[0.07]"
         viewBox="0 0 320 320"
         fill="none"
-        stroke="#1E5B4B"
+        stroke="#6E1023"
         strokeWidth="0.6"
       >
         <g strokeLinecap="round" transform="rotate(180 160 160)">
@@ -236,7 +236,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
                         style={{
                           fontSize: '14.5px',
                           color: isOpen
-                            ? 'rgb(30, 91, 75)'
+                            ? 'rgb(110, 16, 35)'
                             : 'rgba(31, 31, 31,0.85)',
                         }}
                       >

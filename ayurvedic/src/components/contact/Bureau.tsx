@@ -47,7 +47,7 @@ export default function Bureau() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 15% 5%, rgba(212, 175, 55,0.18) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 92% 100%, rgba(15, 44, 36,0.6) 0%, transparent 55%)',
+            'radial-gradient(ellipse 900px 700px at 15% 5%, rgba(212, 175, 55,0.18) 0%, transparent 55%), radial-gradient(ellipse 800px 650px at 92% 100%, rgba(74, 12, 24,0.6) 0%, transparent 55%)',
         }}
         aria-hidden
       />

@@ -121,7 +121,7 @@ export default function FoundersVision({
                 initial="initial"
                 whileInView="animate"
                 viewport={inViewOnce}
-                className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-[0_24px_60px_-20px_rgba(30, 91, 75,0.35),0_8px_20px_rgba(30, 91, 75,0.1)]"
+                className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-[0_24px_60px_-20px_rgba(110, 16, 35,0.35),0_8px_20px_rgba(110, 16, 35,0.1)]"
               >
                 <Image
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80"
@@ -132,14 +132,14 @@ export default function FoundersVision({
                 />
                 <div
                   className="absolute inset-0 mix-blend-multiply"
-                  style={{ backgroundColor: 'rgba(30, 91, 75,0.08)' }}
+                  style={{ backgroundColor: 'rgba(110, 16, 35,0.08)' }}
                   aria-hidden
                 />
                 <div
                   className="absolute inset-0"
                   style={{
                     background:
-                      'linear-gradient(to top, rgba(15, 44, 36,0.4) 0%, transparent 40%)',
+                      'linear-gradient(to top, rgba(74, 12, 24,0.4) 0%, transparent 40%)',
                   }}
                   aria-hidden
                 />

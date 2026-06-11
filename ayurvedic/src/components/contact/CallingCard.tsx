@@ -276,13 +276,13 @@ export default function CallingCard() {
             >
               <div
                 className="absolute inset-2 rounded-full border"
-                style={{ borderColor: 'rgba(15, 44, 36,0.3)' }}
+                style={{ borderColor: 'rgba(74, 12, 24,0.3)' }}
               />
               <div
                 className="absolute inset-3 rounded-full border"
-                style={{ borderColor: 'rgba(15, 44, 36,0.15)', borderStyle: 'dashed' }}
+                style={{ borderColor: 'rgba(74, 12, 24,0.15)', borderStyle: 'dashed' }}
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#0F2C24]">
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#4A0C18]">
                 <span className="font-devanagari italic" style={{ fontSize: '16px', lineHeight: 1 }}>
                   केरल
                 </span>

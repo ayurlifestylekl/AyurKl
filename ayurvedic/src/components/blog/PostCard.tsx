@@ -98,7 +98,7 @@ export default function PostCard({
           {/* Hover vignette */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_80px_rgba(30, 91, 75,0.4)] transition-opacity duration-700 ease-out group-hover:opacity-100"
+            className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_80px_rgba(110,16,35,0.4)] transition-opacity duration-700 ease-out group-hover:opacity-100"
           />
 
           {/* Editorial volume marker (replaces flat "Featured" pill) */}

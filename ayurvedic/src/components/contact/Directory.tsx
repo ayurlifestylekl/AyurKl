@@ -82,7 +82,7 @@ export default function Directory() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 900px 700px at 12% 0%, rgba(212, 175, 55,0.10) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 88% 100%, rgba(46, 125, 90,0.06) 0%, transparent 60%)',
+            'radial-gradient(ellipse 900px 700px at 12% 0%, rgba(212, 175, 55,0.10) 0%, transparent 55%), radial-gradient(ellipse 700px 500px at 88% 100%, rgba(110, 16, 35,0.06) 0%, transparent 60%)',
         }}
       />
       <div aria-hidden className="grain-overlay pointer-events-none absolute inset-0" />

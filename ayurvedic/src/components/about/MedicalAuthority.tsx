@@ -183,7 +183,7 @@ export default function MedicalAuthority() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(30, 91, 75,0.35)' }}
+            style={{ backgroundColor: 'rgba(110, 16, 35,0.35)' }}
             aria-hidden
           />
           <div className="grain-overlay-dark pointer-events-none absolute inset-0" aria-hidden />
@@ -215,7 +215,7 @@ export default function MedicalAuthority() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(30, 91, 75,0.35)' }}
+            style={{ backgroundColor: 'rgba(110, 16, 35,0.35)' }}
             aria-hidden
           />
         </motion.div>

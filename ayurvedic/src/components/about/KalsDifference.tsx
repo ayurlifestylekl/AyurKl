@@ -32,7 +32,7 @@ export default function KalsDifference() {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: [
-            'radial-gradient(720px 520px at 10% 18%, rgba(46, 125, 90,0.085), transparent 62%)',
+            'radial-gradient(720px 520px at 10% 18%, rgba(110, 16, 35,0.085), transparent 62%)',
             'radial-gradient(820px 600px at 92% 88%, rgba(212, 175, 55,0.07), transparent 66%)',
           ].join(', '),
         }}

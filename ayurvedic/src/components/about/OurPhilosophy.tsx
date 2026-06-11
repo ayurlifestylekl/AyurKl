@@ -29,7 +29,7 @@ export default function OurPhilosophy() {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: [
-            'radial-gradient(600px 500px at 8% 10%, rgba(46, 125, 90,0.09), transparent 60%)',
+            'radial-gradient(600px 500px at 8% 10%, rgba(110, 16, 35,0.09), transparent 60%)',
             'radial-gradient(700px 600px at 92% 92%, rgba(212, 175, 55,0.06), transparent 65%)',
           ].join(', '),
         }}
