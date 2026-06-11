@@ -48,7 +48,7 @@ export default function MedicalAuthority() {
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="relative flex flex-col justify-center bg-[#54211F] px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-11"
+          className="relative flex flex-col justify-center bg-[#6E3420] px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-11"
         >
           {/* Grain */}
           <div className="grain-overlay-dark pointer-events-none absolute inset-0" aria-hidden />

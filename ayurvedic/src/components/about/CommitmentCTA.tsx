@@ -134,7 +134,7 @@ export default function CommitmentCTA({
         </motion.div>
 
         {/* ── RIGHT: CTA content ─────────────────────── */}
-        <div className="relative flex flex-col justify-center bg-[#54211F] px-6 py-16 sm:px-10 lg:px-14 lg:py-20">
+        <div className="relative flex flex-col justify-center bg-[#6E3420] px-6 py-16 sm:px-10 lg:px-14 lg:py-20">
           {/* Subtle radial glow */}
           <div
             className="pointer-events-none absolute inset-0"
