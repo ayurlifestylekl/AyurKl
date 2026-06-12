@@ -161,11 +161,11 @@ export default function ClinicTherapies() {
           initial="initial"
           whileInView="animate"
           viewport={inViewOnce}
-          className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-12"
+          className="flex flex-col items-center text-center"
         >
           {/* Title block */}
-          <div className="lg:col-span-5">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center gap-3">
               <span
                 className="h-px w-12"
                 style={{ backgroundColor: SAFFRON_DEEP, opacity: 0.55 }}
@@ -177,9 +177,14 @@ export default function ClinicTherapies() {
               >
                 At The Centre
               </span>
+              <span
+                className="h-px w-12"
+                style={{ backgroundColor: SAFFRON_DEEP, opacity: 0.55 }}
+                aria-hidden
+              />
             </div>
 
-            <h2 id="therapies-heading" className="mt-5 flex flex-col items-start">
+            <h2 id="therapies-heading" className="mt-5 flex flex-col items-center">
               <span
                 className="font-heading font-extrabold tracking-tight"
                 style={{
@@ -207,7 +212,7 @@ export default function ClinicTherapies() {
           </div>
 
           {/* Byline + CTA */}
-          <div className="lg:col-span-7 lg:border-l lg:pl-12" style={{ borderColor: `${SAFFRON}33` }}>
+          <div className="mt-6 max-w-2xl">
             <p
               className="font-body leading-[1.7]"
               style={{
