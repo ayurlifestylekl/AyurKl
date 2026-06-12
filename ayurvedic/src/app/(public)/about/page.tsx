@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import AboutHero from '@/components/about/AboutHero'
 import FoundersVision from '@/components/about/FoundersVision'
 import OurPhilosophy from '@/components/about/OurPhilosophy'
-import MedicalAuthority from '@/components/about/MedicalAuthority'
+import TeamOrgChart from '@/components/about/TeamOrgChart'
 import KalsDifference from '@/components/about/KalsDifference'
 import WellnessFocus from '@/components/about/WellnessFocus'
 import CommitmentCTA from '@/components/about/CommitmentCTA'
@@ -161,7 +161,7 @@ export default async function AboutPage() {
         aria-hidden
       />
       <OurPhilosophy />
-      <MedicalAuthority />
+      <TeamOrgChart />
       <KalsDifference />
       <WellnessFocus />
       {/* Gold hairline: dark atelier \u2192 cream FAQ transition */}
