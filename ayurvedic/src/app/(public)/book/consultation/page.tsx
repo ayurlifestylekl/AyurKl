@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: 'Book a Free Consultation — Kerala Ayurvedic Lifestyle',
     description:
       'Complimentary 30-minute consultation with a KKM-registered Kerala Vaidya in Brickfields, Kuala Lumpur.',
-    url: 'https://keralaayurvedic.com/book/consultation',
+    url: 'https://keralaayurvediclifestyle.com.my/book/consultation',
     type: 'website',
   },
 }

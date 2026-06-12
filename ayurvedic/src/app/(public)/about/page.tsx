@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_MY',
-    url: 'https://keralaayurvedic.com/about',
+    url: 'https://keralaayurvediclifestyle.com.my/about',
     siteName: 'Kerala Ayurvedic Lifestyle',
     title: 'About Kerala Ayurvedic Lifestyle | Brickfields, KL',
     description:
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 const aboutPageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
-  url: 'https://keralaayurvedic.com/about',
+  url: 'https://keralaayurvediclifestyle.com.my/about',
   name: 'About Kerala Ayurvedic Lifestyle',
   description:
     'The story, philosophy and team behind Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur.',
@@ -56,7 +56,7 @@ const aboutPageJsonLd = {
     '@type': 'Organization',
     name: 'Kerala Ayurvedic Lifestyle',
     legalName: 'Ayurvedic Lifestyle (KL) Sdn Bhd',
-    url: 'https://keralaayurvedic.com',
+    url: 'https://keralaayurvediclifestyle.com.my',
     foundingDate: '2008',
     founder: {
       '@type': 'Person',

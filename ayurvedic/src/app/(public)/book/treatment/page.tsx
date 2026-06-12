@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: 'Book a Treatment — Kerala Ayurvedic Lifestyle',
     description:
       'Pick from 60+ authentic Kerala Ayurveda protocols and book with our Vaidyas in Brickfields, Kuala Lumpur.',
-    url: 'https://keralaayurvedic.com/book/treatment',
+    url: 'https://keralaayurvediclifestyle.com.my/book/treatment',
     type: 'website',
   },
 }

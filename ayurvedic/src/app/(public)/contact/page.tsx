@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: 'Contact — Kerala Ayurvedic Lifestyle',
     description:
       'Cross the threshold. Message, call or visit our Brickfields Centre. Every note reaches our Vaidyas directly — no bots, no call-trees.',
-    url: 'https://keralaayurvedic.com/contact',
+    url: 'https://keralaayurvediclifestyle.com.my/contact',
     type: 'website',
   },
 }

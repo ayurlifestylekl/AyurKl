@@ -43,7 +43,7 @@ const fell = IM_Fell_English({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://keralaayurvedic.com"),
+  metadataBase: new URL("https://keralaayurvediclifestyle.com.my"),
   title: {
     default:
       "Kerala Ayurvedic Lifestyle | Authentic Ayurveda in Brickfields, KL",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_MY",
-    url: "https://keralaayurvedic.com",
+    url: "https://keralaayurvediclifestyle.com.my",
     siteName: "Kerala Ayurvedic Lifestyle",
     title:
       "Kerala Ayurvedic Lifestyle | Authentic Ayurveda in Brickfields, KL",

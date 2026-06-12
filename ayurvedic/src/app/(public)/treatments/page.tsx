@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Treatments — Kerala Ayurvedic Lifestyle',
     description:
       'Authentic Ayurveda therapies across the Centre catalogue. Personal protocols designed by a KKM-registered Kerala Vaidya in Brickfields, KL.',
-    url: 'https://keralaayurvedic.com/treatments',
+    url: 'https://keralaayurvediclifestyle.com.my/treatments',
     type: 'website',
   },
 }

@@ -95,7 +95,7 @@ export async function generateMetadata({
       title: `${treatment.title} — Kerala Ayurvedic Lifestyle`,
       description: treatment.description ?? undefined,
       type: 'article',
-      url: `https://keralaayurvedic.com/treatments/${treatment.category.slug}/${treatment.slug}`,
+      url: `https://keralaayurvediclifestyle.com.my/treatments/${treatment.category.slug}/${treatment.slug}`,
       images: ogImage ? [ogImage] : undefined,
     },
   }
@@ -142,9 +142,9 @@ export default async function TreatmentDetailPage({
     provider: {
       '@type': 'MedicalBusiness',
       name: 'Kerala Ayurvedic Lifestyle',
-      url: 'https://keralaayurvedic.com',
+      url: 'https://keralaayurvediclifestyle.com.my',
     },
-    url: `https://keralaayurvedic.com/treatments/${treatment.category.slug}/${treatment.slug}`,
+    url: `https://keralaayurvediclifestyle.com.my/treatments/${treatment.category.slug}/${treatment.slug}`,
   }
 
   return (

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: 'Brand Partner Program — Kerala Ayurvedic Lifestyle',
     description:
       'Join a curated circle of wellness storytellers. Share authentic Kerala Ayurveda. Earn meaningful commission. Apply by WhatsApp.',
-    url: 'https://keralaayurvedic.com/partners',
+    url: 'https://keralaayurvediclifestyle.com.my/partners',
     type: 'website',
   },
 }

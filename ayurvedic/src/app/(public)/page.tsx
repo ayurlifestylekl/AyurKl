@@ -21,7 +21,7 @@ const localBusinessJsonLd = {
   legalName: 'Ayurvedic Lifestyle (KL) Sdn Bhd',
   description:
     'Authentic Kerala Ayurveda Centre and apothecary in Brickfields, Kuala Lumpur. Serving Malaysia since 2008.',
-  url: 'https://keralaayurvedic.com',
+  url: 'https://keralaayurvediclifestyle.com.my',
   telephone: '+60-11-6504-3436',
   email: 'info@keralaayurvedic.com',
   foundingDate: '2008',

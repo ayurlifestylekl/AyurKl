@@ -92,7 +92,7 @@ export async function POST(req: Request) {
         treatmentName,
         whenLocal: new Date(p.startTime).toLocaleString('en-MY', { dateStyle: 'full', timeStyle: 'short' }),
         doctorName: p.organizer?.name ?? 'Vaidya Akhil HS',
-        href: 'https://keralaayurvedic.my/account/appointments',
+        href: 'https://keralaayurvediclifestyle.com.my/account/appointments',
       })
       await sendEmail({ to: user.email, category: 'transactional', ...t, userId: user.id })
     }

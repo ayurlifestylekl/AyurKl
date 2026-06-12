@@ -60,7 +60,7 @@ export async function generateMetadata({
       title: `${category.title} — Kerala Ayurvedic Lifestyle`,
       description: category.description ?? undefined,
       type: 'website',
-      url: `https://keralaayurvedic.com/treatments/${category.slug}`,
+      url: `https://keralaayurvediclifestyle.com.my/treatments/${category.slug}`,
     },
   }
 }

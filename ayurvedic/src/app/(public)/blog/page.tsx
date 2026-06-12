@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: 'The Journal — Kerala Ayurvedic Lifestyle',
     description:
       'Authentic Ayurveda writing from a practising Kerala Vaidya. Read stories, rituals and seasonal protocols.',
-    url: 'https://keralaayurvedic.com/blog',
+    url: 'https://keralaayurvediclifestyle.com.my/blog',
     type: 'website',
   },
 }

@@ -7,7 +7,7 @@ import {
   TREATMENT_SLUG_PAIRS_QUERY,
 } from '@/sanity/queries'
 
-const BASE = 'https://keralaayurvedic.com'
+const BASE = 'https://keralaayurvediclifestyle.com.my'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
