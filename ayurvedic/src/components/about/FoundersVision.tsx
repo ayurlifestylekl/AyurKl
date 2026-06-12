@@ -124,11 +124,11 @@ export default function FoundersVision({
                 className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-[0_24px_60px_-20px_rgba(110, 16, 35,0.35),0_8px_20px_rgba(110, 16, 35,0.1)]"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80"
+                  src="/dato-shan.jpg"
                   alt={`${copy.name} — Founder, Kerala Ayurvedic Lifestyle`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 35vw"
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
                 <div
                   className="absolute inset-0 mix-blend-multiply"
