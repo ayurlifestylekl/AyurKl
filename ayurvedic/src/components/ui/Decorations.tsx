@@ -8,8 +8,8 @@ import React from 'react'
 export function FloatingLeaf({
   className,
   style,
-  color = '#1E5B4B',
-  strokeColor = '#1E5B4B',
+  color = '#6E1023',
+  strokeColor = '#6E1023',
   opacity = 0.7,
 }: {
   className?: string

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 import { featuredProducts } from '@/data/featuredProducts'
 import type { FeaturedProduct, ProductBadge } from '@/types/content'
@@ -291,38 +291,21 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
             </span>
           </div>
 
-          {/* Pricing */}
-          <div className="mt-5 flex items-end gap-2">
-            {product.oldPriceRm && (
-              <span
-                className="mb-[2px] font-body text-[12px] line-through"
-                style={{ color: 'rgba(110,16,35,0.35)' }}
-              >
-                RM{product.oldPriceRm}
-              </span>
-            )}
-            <div className="flex items-baseline gap-0.5">
-              <span
-                className="font-body text-[11px] font-medium uppercase tracking-widest"
-                style={{ color: 'rgba(110,16,35,0.45)' }}
-              >
-                RM
-              </span>
-              <data
-                value={product.priceRm}
-                className="font-heading text-[1.5rem] font-extrabold tracking-tight"
-                style={{ color: CARD_INK }}
-              >
-                {product.priceRm}
-              </data>
-            </div>
+          {/* Pricing — Coming Soon */}
+          <div className="mt-5">
+            <span
+              className="inline-block rounded-full px-3.5 py-1.5 font-heading text-[11px] font-bold uppercase tracking-[0.18em]"
+              style={{ backgroundColor: 'rgba(110,16,35,0.07)', color: CARD_INK, border: `1px solid ${CARD_INK}24` }}
+            >
+              Coming Soon
+            </span>
           </div>
         </div>
 
         {/* Add to Bag */}
         <button
           type="button"
-          aria-label={`Add ${product.name} to bag`}
+          aria-label={`Notify me when ${product.name} is available`}
           className="mt-6 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 font-heading text-[10px] font-bold uppercase tracking-[0.22em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           style={{
             backgroundColor: 'rgba(110,16,35,0.07)',
@@ -342,8 +325,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
             e.currentTarget.style.borderColor = `${CARD_INK}24`
           }}
         >
-          <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2} />
-          Add to Bag
+          Notify Me
         </button>
       </div>
     </article>

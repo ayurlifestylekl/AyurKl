@@ -1,36 +1,22 @@
 import type { Metadata } from 'next'
-import { createClient } from '@/lib/supabase/server'
-import { getStorefrontProducts } from '@/lib/storefront/products'
-import ProductsHeroManifesto from '@/components/products/ProductsHeroManifesto'
-import ProductsPageClient from '@/components/products/ProductsPageClient'
+import ComingSoon from '@/components/ui/ComingSoon'
 
 export const metadata: Metadata = {
-  title: 'The Apothecary — Authentic Kerala Ayurvedic Products',
+  title: 'The Apothecary — Coming Soon | Kerala Ayurvedic Lifestyle',
   description:
-    'Shop authentic Kerala Ayurvedic herbal oils, churnas and wellness kits. Hand-blended formulas sourced from Kerala\'s finest pharmacies — Kesha Thailam, Triphala, Kumkumadi and more.',
+    'Our authentic Kerala Ayurvedic apothecary is coming soon — hand-blended herbal oils, churnas and wellness kits, sourced from Kerala.',
   alternates: { canonical: '/products' },
   robots: { index: true, follow: true },
 }
 
-export const dynamic = 'force-dynamic'
-
-export default async function ProductsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string }>
-}) {
-  const params = await searchParams
-  const initialCategory = params.category || 'all'
-  const supabase = await createClient()
-  const products = await getStorefrontProducts(supabase)
-
+export default function ProductsPage() {
   return (
-    <>
-      <ProductsHeroManifesto productCount={products.length} />
-      <ProductsPageClient
-        products={products}
-        initialCategory={initialCategory}
-      />
-    </>
+    <ComingSoon
+      eyebrow="The Apothecary"
+      title="Coming Soon"
+      subtitle="Our hand-blended Kerala Ayurvedic formulas — herbal oils, churnas and wellness kits — are being prepared with the same care as everything we do. In the meantime, book a consultation to begin your journey."
+      primaryHref="/book/consultation"
+      primaryLabel="Book a Consultation"
+    />
   )
 }

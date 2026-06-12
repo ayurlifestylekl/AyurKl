@@ -114,7 +114,7 @@ export default function ComingSoon({
         >
           <Link
             href={primaryHref}
-            className="group relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white shadow-[0_18px_40px_-18px_rgba(30, 91, 75,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#163F33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            className="group relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white shadow-[0_18px_40px_-18px_rgba(74,12,24,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#4A0C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
             <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
             {primaryLabel}
@@ -136,7 +136,7 @@ export default function ComingSoon({
           <span className="h-1 w-1 rounded-full bg-accent/70" />
           <span>Brickfields, KL</span>
           <span className="h-1 w-1 rounded-full bg-accent/70" />
-          <span>Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)</span>
+          <span>our Vaidyas</span>
         </motion.div>
       </motion.div>
     </section>
