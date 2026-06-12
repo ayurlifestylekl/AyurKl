@@ -48,9 +48,9 @@ export default function Navbar() {
               +60 12-345 6789
             </a>
             <span className="h-3 w-px bg-white/10" />
-            <a href="mailto:info@keralaayurvedic.com" className="flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-[#D4AF37]">
+            <a href="mailto:info@keralaayurvediclifestyle.com.my" className="flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-[#D4AF37]">
               <Mail className="h-3 w-3 text-[#D4AF37]" />
-              info@keralaayurvedic.com
+              info@keralaayurvediclifestyle.com.my
             </a>
           </div>
           <p className="text-xs text-white/40 md:hidden">Kerala Ayurvedic Lifestyle</p>

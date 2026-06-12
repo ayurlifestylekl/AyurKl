@@ -55,7 +55,7 @@ const CHANNELS: Channel[] = [
     description:
       'Journalists, brand collaborators and corporate wellness programs — we reply to serious enquiries.',
     meta: 'Editorial · Events · Corporate wellness',
-    href: 'mailto:info@keralaayurvedic.com?subject=Press%20or%20Partnership%20Enquiry',
+    href: 'mailto:info@keralaayurvediclifestyle.com.my?subject=Press%20or%20Partnership%20Enquiry',
     external: true,
   },
 ]

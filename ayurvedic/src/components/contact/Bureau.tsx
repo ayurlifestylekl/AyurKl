@@ -342,10 +342,10 @@ export default function Bureau() {
                   value="+60 11 6504 3436 · fastest"
                 />
                 <ActionLink
-                  href="mailto:info@keralaayurvedic.com"
+                  href="mailto:info@keralaayurvediclifestyle.com.my"
                   icon={<Mail className="h-3.5 w-3.5" strokeWidth={2} />}
                   label="Email"
-                  value="info@keralaayurvedic.com"
+                  value="info@keralaayurvediclifestyle.com.my"
                 />
               </div>
             </div>

@@ -90,7 +90,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="mailto:info@keralaayurvedic.com"
+                href="mailto:info@keralaayurvediclifestyle.com.my"
                 aria-label="Email"
                 className="text-white/50 transition-colors hover:text-accent"
               >

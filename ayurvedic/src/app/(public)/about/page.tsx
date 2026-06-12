@@ -70,7 +70,7 @@ const aboutPageJsonLd = {
       addressCountry: 'MY',
     },
     telephone: '+60-11-6504-3436',
-    email: 'info@keralaayurvedic.com',
+    email: 'info@keralaayurvediclifestyle.com.my',
   },
 }
 
