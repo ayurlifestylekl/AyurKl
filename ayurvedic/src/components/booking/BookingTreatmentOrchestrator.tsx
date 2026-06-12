@@ -77,7 +77,7 @@ function PickerPlaceholder({ hasCatalog }: { hasCatalog: boolean }) {
       </h2>
       <p className="relative max-w-md font-body text-[14px] leading-[1.7] text-dark/60 sm:text-[15px]">
         {hasCatalog
-          ? "Search by name, condition, or category. We'll load the calendar for Vaidya Akhil the moment you choose."
+          ? "Search by name, condition, or category. We'll load the calendar for our Vaidyas the moment you choose."
           : 'While we finish wiring up the treatment index, message us on WhatsApp and our team will get you on the calendar.'}
       </p>
     </div>

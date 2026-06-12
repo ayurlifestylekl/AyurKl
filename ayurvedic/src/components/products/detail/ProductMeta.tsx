@@ -137,7 +137,7 @@ export default function ProductMeta({ product, categoryLabel }: ProductMetaProps
           &ldquo;This is prescribed from classical Kerala texts. Best used consistently
           for six weeks before judging its effect.&rdquo;
         </p>
-        <p className="mt-3 font-display italic text-[18px] text-accent">— Akhil</p>
+        <p className="mt-3 font-display italic text-[18px] text-accent">— our Vaidyas</p>
         <p className="font-heading text-[9px] font-bold uppercase tracking-[0.25em] text-primary/50">
           B.A.M.S
         </p>

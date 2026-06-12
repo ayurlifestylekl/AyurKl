@@ -11,7 +11,7 @@ export const trustItems: TrustItem[] = [
   {
     id: 'certified',
     title: 'Certified Vaidya',
-    subtitle: 'Every treatment supervised by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu), trained in Kerala with 16+ years clinical experience.',
+    subtitle: 'Every treatment supervised by our Vaidyas, trained in Kerala with 16+ years clinical experience.',
     icon: BadgeCheck,
   },
   {

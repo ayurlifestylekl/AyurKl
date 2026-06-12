@@ -15,12 +15,12 @@ export const revalidate = 30
 export const metadata: Metadata = {
   title: 'Contact — Kerala Ayurvedic Lifestyle, Brickfields KL',
   description:
-    'Write to Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu). Book a consultation, ask about the Ayur-Store, or visit our Brickfields Centre. Every message read personally; replies within one working day.',
+    'Write to our Vaidyas. Book a consultation, ask about the Ayur-Store, or visit our Brickfields Centre. Every message read personally; replies within one working day.',
   alternates: { canonical: '/contact' },
   openGraph: {
     title: 'Contact — Kerala Ayurvedic Lifestyle',
     description:
-      'Cross the threshold. Message, call or visit our Brickfields Centre. Every note reaches Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) directly — no bots, no call-trees.',
+      'Cross the threshold. Message, call or visit our Brickfields Centre. Every note reaches our Vaidyas directly — no bots, no call-trees.',
     url: 'https://keralaayurvedic.com/contact',
     type: 'website',
   },

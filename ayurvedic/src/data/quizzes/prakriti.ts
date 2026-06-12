@@ -936,7 +936,7 @@ export const prakritiQuiz: PrakritiQuizDefinition = {
   title: 'Prakriti Assessment',
   sanskrit: 'Prakṛti — your nature',
   tagline:
-    'Discover your Ayurvedic constitution. 24 questions, around 5 minutes — and a personal profile from Vaidya Akhil to keep.',
+    'Discover your Ayurvedic constitution. 24 questions, around 5 minutes — and a personal profile from our Vaidyas to keep.',
   estimatedMinutes: 5,
   sections,
   archetypes,

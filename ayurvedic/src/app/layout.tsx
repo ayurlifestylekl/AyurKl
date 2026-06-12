@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     template: "%s | Kerala Ayurvedic Lifestyle",
   },
   description:
-    "Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur has been offering authentic Kerala Ayurveda therapies since 2008. Book a consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu), shop pure herbal formulas and discover Panchakarma, Abhyanga and Shirodhara treatments.",
+    "Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur has been offering authentic Kerala Ayurveda therapies since 2008. Book a consultation with our Vaidyas, shop pure herbal formulas and discover Panchakarma, Abhyanga and Shirodhara treatments.",
   keywords: [
     "Ayurveda",
     "Kerala Ayurveda",
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     title:
       "Kerala Ayurvedic Lifestyle | Authentic Ayurveda in Brickfields, KL",
     description:
-      "Authentic Kerala Ayurveda since 2008. Therapies, herbal products and consultations with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) in the heart of Kuala Lumpur.",
+      "Authentic Kerala Ayurveda since 2008. Therapies, herbal products and consultations with our Vaidyas in the heart of Kuala Lumpur.",
     images: [
       {
         url: "/hero-tray.png",
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kerala Ayurvedic Lifestyle | Brickfields, KL",
     description:
-      "Authentic Kerala Ayurveda since 2008. Book a consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu).",
+      "Authentic Kerala Ayurveda since 2008. Book a consultation with our Vaidyas.",
     images: ["/hero-tray.png"],
   },
   robots: {

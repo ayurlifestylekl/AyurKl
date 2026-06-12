@@ -483,7 +483,7 @@ function SuccessLetter({
           className="font-body italic text-accent"
           style={{ fontSize: '28px', letterSpacing: '-0.02em' }}
         >
-          — Akhil
+          — our Vaidyas
         </span>
       </div>
 

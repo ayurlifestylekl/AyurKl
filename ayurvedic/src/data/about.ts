@@ -169,9 +169,9 @@ export const wellnessFocusAreas: WellnessFocusArea[] = [
 export const aboutFaqs: FAQ[] = [
   {
     id: 'who-is-vaidya',
-    question: 'Who is Vaidya Akhil H.S.?',
+    question: 'Who are your Vaidyas?',
     answer:
-      'Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) holds a Bachelor of Ayurvedic Medicine and Surgery degree and an M.D. in Ayurveda, with over 16 years of clinical experience from Kerala. He is registered with the National Council of Indian System of Medicine (NCISM) and recognised in Malaysia under the Ministry of Health (KKM) as a Traditional & Complementary Medicine (T&CM) Ayurveda Practitioner. Every consultation at KALS begins with him personally.',
+      'Our Vaidyas hold a Bachelor of Ayurvedic Medicine and Surgery (B.A.M.S.) degree and an M.D. in Ayurveda, with years of clinical experience from Kerala. They are registered with the National Council of Indian System of Medicine (NCISM) and recognised in Malaysia under the Ministry of Health (KKM) as Traditional & Complementary Medicine (T&CM) Ayurveda Practitioners. Every consultation at KALS begins with one of them personally.',
   },
   {
     id: 'what-is-kkm',

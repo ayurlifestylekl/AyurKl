@@ -5,7 +5,7 @@ import BookingPolicyStrip from './BookingPolicyStrip'
 
 /**
  * Landing page at /book. Two routes branch from here:
- *   - Free 30-min consultation with Vaidya Akhil (default / most visitors)
+ *   - Free 30-min consultation with our Vaidyas (default / most visitors)
  *   - Book a specific treatment (for returning / informed customers)
  *
  * Deliberately a chooser — the navbar "Book Now" button and every
@@ -78,7 +78,7 @@ export default function BookingChooser() {
           <p className="mt-5 max-w-xl text-center font-body text-[15px] leading-[1.75] text-dark/65 sm:text-[16px]">
             Whether You&apos;re New to Ayurveda or Coming in for a Specific
             Therapy, We have a Dedicated Flow for You. Both Lead to Vaidya
-            Akhil H.S., B.A.M.S., M.D. (Ayu) at Our Brickfields Centre.
+            our Vaidyas H.S., B.A.M.S., M.D. (Ayu) at Our Brickfields Centre.
           </p>
 
           {/* Two cards */}
@@ -150,7 +150,7 @@ export default function BookingChooser() {
                 />
 
                 <p className="font-body text-[14px] leading-[1.7] text-white/65">
-                  Sit down with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu), Get
+                  Sit down with our Vaidyas, Get
                   your Dosha Assessed, and Leave with a Protocol Tailored to
                   what your Body actually Needs. No Commitment required.
                 </p>
@@ -241,7 +241,7 @@ export default function BookingChooser() {
                 <p className="font-body text-[14px] leading-[1.7] text-dark/70">
                   Know Which Therapy You Want? Pick from our Library of 60+
                   Authentic Kerala Ayurveda Protocols and We&apos;ll Get You
-                  on the Calendar with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu).
+                  on the Calendar with our Vaidyas.
                 </p>
 
                 <ul className="mt-2 flex flex-col gap-2.5 font-body text-[13px] text-dark/70">

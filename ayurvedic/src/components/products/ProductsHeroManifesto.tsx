@@ -183,7 +183,7 @@ export default function ProductsHeroManifesto({ productCount }: ProductsHeroMani
               {...fadeIn(1.0)}
               className="mt-3 font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent/70"
             >
-              — Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) · Kerala
+              — our Vaidyas · Kerala
             </motion.p>
 
             {/* Meta caption */}

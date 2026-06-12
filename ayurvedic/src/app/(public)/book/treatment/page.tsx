@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Book a Treatment — Kerala Ayurvedic Lifestyle',
     description:
-      'Pick from 60+ authentic Kerala Ayurveda protocols and book with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) in Brickfields, Kuala Lumpur.',
+      'Pick from 60+ authentic Kerala Ayurveda protocols and book with our Vaidyas in Brickfields, Kuala Lumpur.',
     url: 'https://keralaayurvedic.com/book/treatment',
     type: 'website',
   },
@@ -112,7 +112,7 @@ export default async function BookTreatmentPage() {
             </h1>
             <p className="max-w-2xl font-body text-[15px] leading-[1.75] text-dark/65 sm:text-[16px]">
               Choose a treatment from our Kerala Ayurveda library and the
-              calendar will load with Vaidya Akhil&apos;s available times.
+              calendar will load with our Vaidyas&apos; available times.
               Treatments flagged &ldquo;consultation required&rdquo; route
               through a free assessment first — that&apos;s by design.
             </p>

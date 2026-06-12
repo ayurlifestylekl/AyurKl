@@ -17,7 +17,7 @@ export const revalidate = 30
 export const metadata: Metadata = {
   title: 'About Us — Authentic Kerala Ayurveda Since 2008',
   description:
-    "Meet the team behind Kerala Ayurvedic Lifestyle in Brickfields, KL. Founded in 2008 by Dato' Dr. V.Shanmughanathan, led by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) — 16+ years clinical experience — with KKM-registered therapists from Kerala.",
+    "Meet the team behind Kerala Ayurvedic Lifestyle in Brickfields, KL. Founded in 2008 by Dato' Dr. V.Shanmughanathan, led by our Vaidyas — 16+ years clinical experience — with KKM-registered therapists from Kerala.",
   alternates: { canonical: '/about' },
   openGraph: {
     type: 'website',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: 'Kerala Ayurvedic Lifestyle',
     title: 'About Kerala Ayurvedic Lifestyle | Brickfields, KL',
     description:
-      'Authentic Kerala Ayurveda since 2008. Led by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu). KKM-registered. Therapists from Kerala.',
+      'Authentic Kerala Ayurveda since 2008. Led by our Vaidyas. KKM-registered. Therapists from Kerala.',
     images: [
       {
         url: '/hero-tray.png',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'About Kerala Ayurvedic Lifestyle | Brickfields, KL',
     description:
-      'Authentic Kerala Ayurveda since 2008. Led by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) — 16+ years.',
+      'Authentic Kerala Ayurveda since 2008. Led by our Vaidyas — 16+ years.',
     images: ['/hero-tray.png'],
   },
 }
@@ -77,7 +77,7 @@ const aboutPageJsonLd = {
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Vaidya Akhil H.S.',
+  name: 'our Vaidyas',
   honorificPrefix: 'Vaidya',
   honorificSuffix: 'B.A.M.S., M.D. (Ayu)',
   jobTitle: 'Ayurvedic Physician',

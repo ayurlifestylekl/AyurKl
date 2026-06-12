@@ -205,7 +205,7 @@ export default function WellnessFocus() {
               </ul>
 
               <p className="mt-6 border-t border-cream/10 pt-4 font-body text-[12.5px] italic text-cream/45">
-                &mdash; Personalised after a consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu).
+                &mdash; Personalised after a consultation with our Vaidyas.
               </p>
             </motion.nav>
           </motion.div>

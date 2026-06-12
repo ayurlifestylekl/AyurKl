@@ -35,7 +35,7 @@ import type {
 export const revalidate = 30
 export const dynamicParams = true
 
-const PRACTITIONER = 'Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)'
+const PRACTITIONER = 'our Vaidyas'
 
 async function loadDetail(
   categorySlug: string,

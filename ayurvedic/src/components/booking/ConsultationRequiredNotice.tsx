@@ -10,7 +10,7 @@ interface ConsultationRequiredNoticeProps {
 /**
  * Replaces the treatment embed when the selected treatment has
  * `requiresConsultation: true`. We do not let visitors book the therapy
- * directly — Vaidya Akhil needs to assess first. The CTA routes to the
+ * directly — our Vaidyas need to assess first. The CTA routes to the
  * free consultation flow, with a WhatsApp fallback.
  */
 export default function ConsultationRequiredNotice({
@@ -59,7 +59,7 @@ export default function ConsultationRequiredNotice({
           <p className="max-w-xl font-body text-[15px] leading-[1.7] text-dark/70">
             This protocol is designed around your dosha and any medication,
             pregnancy, or chronic condition you&apos;re managing — so Vaidya
-            Akhil wants to meet you first before scheduling the therapy. The
+            our Vaidyas want to meet you first before scheduling the therapy. The
             consultation is free and takes 30 minutes.
           </p>
         </div>

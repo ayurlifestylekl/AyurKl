@@ -33,7 +33,7 @@ const PILLARS = [
     icon: HeartHandshake,
     title: 'Authentic product, easy to recommend',
     body:
-      'Every formulation is overseen by Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu). No greenwashing, no copy-paste claims — just classical Kerala Ayurveda.',
+      'Every formulation is overseen by our Vaidyas. No greenwashing, no copy-paste claims — just classical Kerala Ayurveda.',
   },
 ]
 

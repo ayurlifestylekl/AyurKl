@@ -15,7 +15,7 @@ export const faqs: FAQ[] = [
     id: 'do-i-need-consultation',
     question: 'Do I need a consultation before booking a therapy?',
     answer:
-      'Yes — we ask every first-time guest to start with a 30-minute consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu). He assesses your dosha, listens to your history and prescribes the right therapy, oil blend and duration. This is what separates a real Ayurvedic protocol from a generic spa treatment.',
+      'Yes — we ask every first-time guest to start with a 30-minute consultation with our Vaidyas. He assesses your dosha, listens to your history and prescribes the right therapy, oil blend and duration. This is what separates a real Ayurvedic protocol from a generic spa treatment.',
   },
   {
     id: 'same-gender-policy',

@@ -11,7 +11,7 @@ export const therapies: Therapy[] = [
       'https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=900&q=80',
     bullets: [
       'Full pulse + tongue diagnosis (Nadi Pareeksha)',
-      'Personalised dosha plan from Vaidya Akhil',
+      'Personalised dosha plan from our Vaidyas',
       'Take-home routine + product script',
     ],
     doshas: ['vata', 'pitta', 'kapha'],

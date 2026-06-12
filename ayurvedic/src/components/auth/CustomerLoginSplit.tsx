@@ -156,7 +156,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
               className="mt-4 hidden font-body italic text-white/55 sm:block sm:text-[14px]"
               style={{ fontSize: 13, lineHeight: 1.65 }}
             >
-              — Vaidya Akhil H.S. · <span className="not-italic">B.A.M.S., M.D. (Ayu)</span>
+              — our Vaidyas · <span className="not-italic">B.A.M.S., M.D. (Ayu)</span>
             </p>
 
             {/* Welcome offer chip — desktop + tablet only (form-side on mobile already has the price prompt via the create-account tab) */}

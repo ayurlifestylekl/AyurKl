@@ -89,7 +89,7 @@ export default function FreeConsultationBlock({
           </motion.p>
 
           <motion.div variants={fadeUp(0)} className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            {['KKM-Registered', 'B.A.M.S Kerala', 'Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)'].map((cred, i, arr) => (
+            {['KKM-Registered', 'B.A.M.S Kerala', 'our Vaidyas'].map((cred, i, arr) => (
               <React.Fragment key={cred}>
                 <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
                   {cred}

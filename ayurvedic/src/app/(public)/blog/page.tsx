@@ -9,7 +9,7 @@ import type { PostListItem } from '@/types/blog'
 export const metadata: Metadata = {
   title: 'The Journal — Notes from a Kerala Vaidya',
   description:
-    'Stories, daily rituals, seasonal protocols and field notes from Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu) at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur.',
+    'Stories, daily rituals, seasonal protocols and field notes from our Vaidyas at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur.',
   alternates: { canonical: '/blog' },
   openGraph: {
     title: 'The Journal — Kerala Ayurvedic Lifestyle',

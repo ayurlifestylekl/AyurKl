@@ -18,7 +18,7 @@ const defaults = {
   primaryHref: '/book/consultation',
   secondaryLabel: 'WhatsApp Us',
   secondaryHref: 'https://wa.me/601165043436',
-  trustPills: ['Since 2008', 'Brickfields, KL', 'Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu)'],
+  trustPills: ['Since 2008', 'Brickfields, KL', 'our Vaidyas'],
 }
 
 interface CommitmentCTAProps {

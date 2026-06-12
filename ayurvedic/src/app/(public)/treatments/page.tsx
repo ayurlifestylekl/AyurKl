@@ -11,7 +11,7 @@ import type { TreatmentCategory } from '@/types/treatments'
 export const metadata: Metadata = {
   title: 'Treatments — Authentic Kerala Ayurveda Therapies',
   description:
-    'Browse the full library of authentic Kerala Ayurveda therapies offered at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur — face care, massage, stress relief, joint care, rehabilitation, kids, and more. Free consultation with Vaidya Akhil H.S., B.A.M.S., M.D. (Ayu).',
+    'Browse the full library of authentic Kerala Ayurveda therapies offered at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur — face care, massage, stress relief, joint care, rehabilitation, kids, and more. Free consultation with our Vaidyas.',
   alternates: { canonical: '/treatments' },
   openGraph: {
     title: 'Treatments — Kerala Ayurvedic Lifestyle',
