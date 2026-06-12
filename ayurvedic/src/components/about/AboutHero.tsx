@@ -81,11 +81,11 @@ export default function AboutHero({
         className="absolute inset-0"
       >
         <Image
-          src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1800&q=80"
-          alt="Interior of Kerala Ayurvedic Lifestyle Centre in Brickfields"
+          src="/centre-exterior.jpg"
+          alt="Kerala Ayurvedic Lifestyle centre in Brickfields, Kuala Lumpur"
           fill
           priority
-          className="object-cover"
+          className="object-cover object-center"
           sizes="100vw"
         />
       </motion.div>
