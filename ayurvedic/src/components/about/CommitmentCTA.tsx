@@ -76,12 +76,11 @@ export default function CommitmentCTA({
         <motion.div
           variants={clipReveal('left', 0)}
           initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
+          animate="animate"
           className="relative hidden min-h-[400px] lg:block"
         >
           <Image
-            src="/hero-tray.png"
+            src="/cta-ayurveda.jpg"
             alt="Ayurvedic herbs and therapeutic oils"
             fill
             className="object-cover"
@@ -89,7 +88,7 @@ export default function CommitmentCTA({
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(110, 16, 35,0.55)' }}
+            style={{ backgroundColor: 'rgba(110, 16, 35,0.28)' }}
             aria-hidden
           />
           <div className="grain-overlay-dark pointer-events-none absolute inset-0" aria-hidden />
@@ -108,12 +107,11 @@ export default function CommitmentCTA({
         <motion.div
           variants={clipReveal('bottom', 0)}
           initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
+          animate="animate"
           className="relative h-[30vh] min-h-[200px] lg:hidden"
         >
           <Image
-            src="/hero-tray.png"
+            src="/cta-ayurveda.jpg"
             alt="Ayurvedic herbs and oils"
             fill
             className="object-cover"
@@ -121,7 +119,7 @@ export default function CommitmentCTA({
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(110, 16, 35,0.6)' }}
+            style={{ backgroundColor: 'rgba(110, 16, 35,0.32)' }}
             aria-hidden
           />
           <div

@@ -30,12 +30,11 @@ export default function FinalBookingCTA() {
         <motion.div
           variants={clipReveal('left', 0)}
           initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
+          animate="animate"
           className="relative hidden min-h-[400px] lg:block"
         >
           <Image
-            src="/hero-spices.png"
+            src="/cta-herbs.webp"
             alt="Ayurvedic herbs and therapeutic oils"
             fill
             className="object-cover"
@@ -44,7 +43,7 @@ export default function FinalBookingCTA() {
           {/* Warm emerald tint — lighter so the photo breathes */}
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(110,16,35,0.42)' }}
+            style={{ backgroundColor: 'rgba(110,16,35,0.24)' }}
             aria-hidden
           />
           {/* Saffron warm wash overlay */}
@@ -73,12 +72,11 @@ export default function FinalBookingCTA() {
         <motion.div
           variants={clipReveal('bottom', 0)}
           initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
+          animate="animate"
           className="relative h-[30vh] min-h-[200px] lg:hidden"
         >
           <Image
-            src="/hero-spices.png"
+            src="/cta-herbs.webp"
             alt="Ayurvedic herbs and oils"
             fill
             className="object-cover"
@@ -86,7 +84,7 @@ export default function FinalBookingCTA() {
           />
           <div
             className="absolute inset-0 mix-blend-multiply"
-            style={{ backgroundColor: 'rgba(110,16,35,0.5)' }}
+            style={{ backgroundColor: 'rgba(110,16,35,0.26)' }}
             aria-hidden
           />
           {/* Bottom fade to emerald */}
