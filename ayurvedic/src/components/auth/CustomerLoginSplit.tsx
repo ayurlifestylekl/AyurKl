@@ -93,16 +93,12 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           <header className="relative z-10 flex items-center justify-between px-6 py-3 sm:px-10 sm:py-5">
             <Link href="/" className="group flex items-center gap-2.5">
               <Image
-                src="/logo.png"
+                src="/kerala-logo.jpg"
                 alt="Kerala Ayurvedic Lifestyle"
-                width={1200}
-                height={1048}
-                className="h-9 w-auto transition-transform duration-300 group-hover:scale-[1.03]"
+                width={1024}
+                height={881}
+                className="h-9 w-auto rounded-md transition-transform duration-300 group-hover:scale-[1.03]"
               />
-              <span className="hidden font-heading text-[10px] font-bold uppercase tracking-[0.22em] leading-tight text-white/85 sm:flex sm:flex-col">
-                <span>Kerala Ayurvedic</span>
-                <span className="text-[#D4AF37]">Lifestyle</span>
-              </span>
             </Link>
             <Link
               href="/"

@@ -29,18 +29,13 @@ export default function Footer() {
               aria-label="Kerala Ayurvedic Lifestyle — home"
               className="mb-4 inline-flex items-center gap-3"
             >
-              <span className="rounded-xl bg-white/95 p-1.5 ring-1 ring-white/10">
-                <Image
-                  src="/logo.png"
-                  alt="Kerala Ayurvedic Lifestyle"
-                  width={1200}
-                  height={1048}
-                  className="h-10 w-auto"
-                />
-              </span>
-              <span className="font-heading text-base font-bold leading-tight text-white">
-                Kerala Ayurvedic <span className="text-accent">Lifestyle</span>
-              </span>
+              <Image
+                src="/kerala-logo.jpg"
+                alt="Kerala Ayurvedic Lifestyle"
+                width={1024}
+                height={881}
+                className="h-14 w-auto rounded-lg"
+              />
             </Link>
             <p className="font-body text-sm leading-relaxed text-white/60">
               Authentic Kerala Ayurveda therapies in Brickfields, Kuala Lumpur — delivering holistic healing since 2008.
