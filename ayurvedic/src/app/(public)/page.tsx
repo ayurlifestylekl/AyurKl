@@ -42,7 +42,10 @@ const localBusinessJsonLd = {
     name: 'Malaysia',
   },
   paymentAccepted: 'Cash, Credit Card, Online Banking, Billplz',
-  sameAs: [],
+  sameAs: [
+    'https://www.facebook.com/KeralaAyurvedicLifestyle',
+    'https://www.instagram.com/keralaayurvediclifestyle/',
+  ],
 }
 
 const reviewJsonLd = {

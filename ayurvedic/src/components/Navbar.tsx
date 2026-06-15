@@ -59,10 +59,10 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <span className="hidden text-xs text-white/35 sm:block">Follow Us:</span>
             <div className="flex items-center gap-2">
-              <a href="#" aria-label="Facebook" className="flex h-6 w-6 items-center justify-center text-white/45 transition-colors hover:text-[#D4AF37]">
+              <a href="https://www.facebook.com/KeralaAyurvedicLifestyle" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="flex h-6 w-6 items-center justify-center text-white/45 transition-colors hover:text-[#D4AF37]">
                 <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
               </a>
-              <a href="#" aria-label="Instagram" className="flex h-6 w-6 items-center justify-center text-white/45 transition-colors hover:text-[#D4AF37]">
+              <a href="https://www.instagram.com/keralaayurvediclifestyle/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-6 w-6 items-center justify-center text-white/45 transition-colors hover:text-[#D4AF37]">
                 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
               </a>
               <a href="#" aria-label="YouTube" className="flex h-6 w-6 items-center justify-center text-white/45 transition-colors hover:text-[#D4AF37]">

@@ -62,7 +62,7 @@ export default function Footer() {
               </a>
               {/* Instagram */}
               <a
-                href="https://www.instagram.com/keralaayurvedic/?hl=en"
+                href="https://www.instagram.com/keralaayurvediclifestyle/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
