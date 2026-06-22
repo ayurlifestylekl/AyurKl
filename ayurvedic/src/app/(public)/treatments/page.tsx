@@ -3,9 +3,8 @@ import type { Metadata } from 'next'
 import CategoryGrid from '@/components/treatments/CategoryGrid'
 import FreeConsultationBlock from '@/components/treatments/FreeConsultationBlock'
 import TreatmentsHero from '@/components/treatments/TreatmentsHero'
-import { sanityClient } from '@/sanity/client'
-import { isSanityConfigured } from '@/sanity/env'
-import { TREATMENT_CATEGORIES_INDEX_QUERY } from '@/sanity/queries'
+import { createClient } from '@/lib/supabase/server'
+import { getTreatmentCategoriesIndex } from '@/lib/storefront/treatments'
 import type { TreatmentCategory } from '@/types/treatments'
 
 export const metadata: Metadata = {
@@ -25,14 +24,11 @@ export const metadata: Metadata = {
 export const revalidate = 30
 
 async function loadCategories(): Promise<TreatmentCategory[]> {
-  if (!isSanityConfigured) return []
   try {
-    const categories = await sanityClient.fetch<TreatmentCategory[]>(
-      TREATMENT_CATEGORIES_INDEX_QUERY,
-    )
-    return categories ?? []
+    const supabase = await createClient()
+    return await getTreatmentCategoriesIndex(supabase)
   } catch (err) {
-    console.error('[treatments] Sanity fetch failed:', err)
+    console.error('[treatments] catalogue fetch failed:', err)
     return []
   }
 }

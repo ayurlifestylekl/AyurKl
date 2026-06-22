@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 
 import { urlForImage } from '@/sanity/image'
 import { fadeUp } from '@/lib/motion'
+import { formatPrice } from '@/lib/treatments/price'
 import type { TreatmentSummary } from '@/types/treatments'
 
 interface TherapyCardProps {
@@ -81,7 +82,11 @@ export default function TherapyCard({
             />
 
             <div className="mt-2 flex items-center justify-between font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-dark/55">
-              <span>{treatment.duration ?? 'See practitioner'}</span>
+              <span className="flex items-center gap-2">
+                <span>{treatment.duration ?? 'See practitioner'}</span>
+                <span className="text-accent">·</span>
+                <span className="text-accent">{formatPrice(treatment)}</span>
+              </span>
               <span className="text-primary transition-transform duration-300 group-hover:translate-x-0.5">
                 Read →
               </span>

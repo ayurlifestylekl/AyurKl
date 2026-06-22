@@ -4,9 +4,8 @@ import { notFound } from 'next/navigation'
 import CategoryPageHeader from '@/components/treatments/CategoryPageHeader'
 import FreeConsultationBlock from '@/components/treatments/FreeConsultationBlock'
 import TherapyGrid from '@/components/treatments/TherapyGrid'
-import { sanityClient } from '@/sanity/client'
-import { isSanityConfigured } from '@/sanity/env'
-import { CATEGORY_BY_SLUG_QUERY, CATEGORY_SLUGS_QUERY } from '@/sanity/queries'
+import { createClient } from '@/lib/supabase/server'
+import { getCategoryWithTreatments } from '@/lib/storefront/treatments'
 import { sortByDuration } from '@/lib/treatment-order'
 import type { TreatmentCategory, TreatmentSummary } from '@/types/treatments'
 
@@ -18,26 +17,19 @@ interface CategoryPageData extends TreatmentCategory {
 }
 
 async function loadCategory(slug: string): Promise<CategoryPageData | null> {
-  if (!isSanityConfigured) return null
   try {
-    return await sanityClient.fetch<CategoryPageData | null>(
-      CATEGORY_BY_SLUG_QUERY,
-      { slug },
-    )
+    const supabase = await createClient()
+    return await getCategoryWithTreatments(supabase, slug)
   } catch (err) {
-    console.error(`[treatments/${slug}] Sanity fetch failed:`, err)
+    console.error(`[treatments/${slug}] catalogue fetch failed:`, err)
     return null
   }
 }
 
 export async function generateStaticParams(): Promise<Array<{ categorySlug: string }>> {
-  if (!isSanityConfigured) return []
-  try {
-    const slugs = await sanityClient.fetch<string[]>(CATEGORY_SLUGS_QUERY)
-    return (slugs ?? []).map((slug) => ({ categorySlug: slug }))
-  } catch {
-    return []
-  }
+  // Categories are rendered on-demand (dynamicParams = true); skip build-time
+  // enumeration to avoid a DB round-trip during the build.
+  return []
 }
 
 export async function generateMetadata({

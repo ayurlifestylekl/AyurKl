@@ -23,6 +23,10 @@ export const TREATMENTS_QUERY = groq`
     duration,
     description,
     requiresConsultation,
+    price,
+    priceLabel,
+    bookingType,
+    bookingLeadTimeHours,
     "categoryId":    category->_id,
     "categoryTitle": category->title,
     "categoryOrder": category->order
@@ -55,6 +59,7 @@ export const CATEGORY_BY_SLUG_QUERY = groq`
     "treatments": *[_type == "treatment" && references(^._id) && defined(slug.current)]
       | order(coalesce(order, 9999) asc, title asc) {
         _id, title, duration, description, requiresConsultation, order,
+        price, priceLabel, bookingType, bookingLeadTimeHours,
         "slug": slug.current,
         heroImage
       }
@@ -70,6 +75,7 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     _id, title, duration, description, body, benefits,
     procedureSteps, sessionsRecommended, contraindications,
     origin, sanskritName, requiresConsultation, order,
+    price, priceLabel, bookingType, bookingLeadTimeHours,
     "slug": slug.current,
     heroImage, gallery,
     category->{
@@ -90,7 +96,7 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
 export const TREATMENT_SIBLINGS_QUERY = groq`
   *[_type == "treatment" && category._ref == $categoryId && defined(slug.current)]
     | order(coalesce(order, 9999) asc, title asc) {
-      _id, title, order, duration,
+      _id, title, order, duration, price, priceLabel, bookingType,
       "slug": slug.current,
       "categorySlug": category->slug.current,
       heroImage

@@ -18,14 +18,12 @@ import TherapyProcedure from '@/components/treatments/TherapyProcedure'
 import TherapyStickyBar from '@/components/treatments/TherapyStickyBar'
 import TherapySwitcher from '@/components/treatments/TherapySwitcher'
 import { portableTextComponents } from '@/components/blog/PortableTextComponents'
-import { sanityClient } from '@/sanity/client'
 import { urlForImage } from '@/sanity/image'
-import { isSanityConfigured } from '@/sanity/env'
+import { createClient } from '@/lib/supabase/server'
 import {
-  TREATMENT_BY_SLUG_QUERY,
-  TREATMENT_SIBLINGS_QUERY,
-  TREATMENT_SLUG_PAIRS_QUERY,
-} from '@/sanity/queries'
+  getTreatmentBySlug,
+  getTreatmentSiblings,
+} from '@/lib/storefront/treatments'
 import { findPrevNext } from '@/lib/treatments/pager'
 import type {
   TreatmentDetail,
@@ -41,18 +39,12 @@ async function loadDetail(
   categorySlug: string,
   treatmentSlug: string,
 ): Promise<{ treatment: TreatmentDetail | null; siblings: TreatmentSibling[] }> {
-  if (!isSanityConfigured) return { treatment: null, siblings: [] }
   try {
-    const treatment = await sanityClient.fetch<TreatmentDetail | null>(
-      TREATMENT_BY_SLUG_QUERY,
-      { categorySlug, treatmentSlug },
-    )
+    const supabase = await createClient()
+    const treatment = await getTreatmentBySlug(supabase, categorySlug, treatmentSlug)
     if (!treatment) return { treatment: null, siblings: [] }
-    const siblings = await sanityClient.fetch<TreatmentSibling[]>(
-      TREATMENT_SIBLINGS_QUERY,
-      { categoryId: treatment.category._id },
-    )
-    return { treatment, siblings: siblings ?? [] }
+    const siblings = await getTreatmentSiblings(supabase, treatment.category._id)
+    return { treatment, siblings }
   } catch (err) {
     console.error(`[treatments/${categorySlug}/${treatmentSlug}] fetch failed:`, err)
     return { treatment: null, siblings: [] }
@@ -62,15 +54,8 @@ async function loadDetail(
 export async function generateStaticParams(): Promise<
   Array<{ categorySlug: string; treatmentSlug: string }>
 > {
-  if (!isSanityConfigured) return []
-  try {
-    const pairs = await sanityClient.fetch<
-      Array<{ categorySlug: string; treatmentSlug: string }>
-    >(TREATMENT_SLUG_PAIRS_QUERY)
-    return pairs ?? []
-  } catch {
-    return []
-  }
+  // Rendered on-demand (dynamicParams = true); skip build-time enumeration.
+  return []
 }
 
 export async function generateMetadata({
@@ -315,6 +300,12 @@ export default async function TreatmentDetailPage({
             duration={treatment.duration}
             sessionsRecommended={treatment.sessionsRecommended}
             whatsappHref={whatsappHref}
+            pricing={{
+              price: treatment.price,
+              priceLabel: treatment.priceLabel,
+              bookingType: treatment.bookingType,
+              bookingLeadTimeHours: treatment.bookingLeadTimeHours,
+            }}
           />
         </div>
       </section>

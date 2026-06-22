@@ -5,12 +5,11 @@ import { ArrowLeft } from 'lucide-react'
 
 import BookingPolicyStrip from '@/components/booking/BookingPolicyStrip'
 import BookingTreatmentOrchestrator from '@/components/booking/BookingTreatmentOrchestrator'
-import { sanityClient } from '@/sanity/client'
-import { isSanityConfigured } from '@/sanity/env'
+import { createClient } from '@/lib/supabase/server'
 import {
-  TREATMENTS_QUERY,
-  TREATMENT_CATEGORIES_QUERY,
-} from '@/sanity/queries'
+  getTreatmentCategoriesIndex,
+  getTreatmentsFlat,
+} from '@/lib/storefront/treatments'
 import type { Treatment, TreatmentCategory } from '@/types/treatments'
 
 export const metadata: Metadata = {
@@ -27,34 +26,28 @@ export const metadata: Metadata = {
   },
 }
 
-// Keep in sync with /treatments — short window so Sanity edits appear fast.
+// Keep in sync with /treatments — short window so catalogue edits appear fast.
 export const revalidate = 30
 
-async function loadFromSanity(): Promise<{
+async function loadCatalogue(): Promise<{
   categories: TreatmentCategory[]
   treatments: Treatment[]
 }> {
-  if (!isSanityConfigured) {
-    return { categories: [], treatments: [] }
-  }
-
   try {
+    const supabase = await createClient()
     const [categories, treatments] = await Promise.all([
-      sanityClient.fetch<TreatmentCategory[]>(TREATMENT_CATEGORIES_QUERY),
-      sanityClient.fetch<Treatment[]>(TREATMENTS_QUERY),
+      getTreatmentCategoriesIndex(supabase),
+      getTreatmentsFlat(supabase),
     ])
-    return {
-      categories: categories ?? [],
-      treatments: treatments ?? [],
-    }
+    return { categories, treatments }
   } catch (err) {
-    console.error('[book/treatment] Sanity fetch failed:', err)
+    console.error('[book/treatment] catalogue fetch failed:', err)
     return { categories: [], treatments: [] }
   }
 }
 
 export default async function BookTreatmentPage() {
-  const { categories, treatments } = await loadFromSanity()
+  const { categories, treatments } = await loadCatalogue()
 
   return (
     <>

@@ -12,6 +12,19 @@ export interface ProcedureStep {
   description: string
 }
 
+export type BookingType = 'direct' | 'consultation' | 'enquiry'
+
+/** Pricing/booking fields shared across summary and detail projections. */
+export interface TreatmentPricing {
+  /** Numeric price in RM, or null for consultation/enquiry-only therapies. */
+  price?: number | null
+  /** Display override shown instead of the numeric price. */
+  priceLabel?: string | null
+  bookingType?: BookingType | null
+  /** Minimum advance notice in hours (24, 48, …). */
+  bookingLeadTimeHours?: number | null
+}
+
 export interface TreatmentCategory {
   _id: string
   title: string
@@ -19,11 +32,13 @@ export interface TreatmentCategory {
   slug?: string
   description?: string | null
   image?: SanityImageRef | null
+  /** Plain image URL (Supabase catalogue). Preferred over `image` when present. */
+  imageUrl?: string | null
   order: number | null
   treatmentCount?: number
 }
 
-export interface TreatmentSummary {
+export interface TreatmentSummary extends TreatmentPricing {
   _id: string
   title: string
   slug: string
@@ -34,7 +49,7 @@ export interface TreatmentSummary {
   order: number | null
 }
 
-export interface TreatmentDetail {
+export interface TreatmentDetail extends TreatmentPricing {
   _id: string
   title: string
   slug: string
@@ -59,7 +74,7 @@ export interface TreatmentDetail {
   }
 }
 
-export interface TreatmentSibling {
+export interface TreatmentSibling extends TreatmentPricing {
   _id: string
   title: string
   slug: string
@@ -74,7 +89,7 @@ export interface TreatmentSibling {
  * the legacy TreatmentsMenu. Once Task 31 deletes the menu, this
  * type and the legacy query can be removed.
  */
-export interface Treatment {
+export interface Treatment extends TreatmentPricing {
   _id: string
   title: string
   duration: string | null
