@@ -5,7 +5,7 @@ export const APPOINTMENT_COLUMNS =
   `id, booking_kind, status, payment_status, treatment_name, treatment_id,
    patient_name, patient_phone, patient_gender, gender_requirement,
    requested_datetime, requested_datetime_alt, appointment_date_time,
-   assigned_therapist_name, assigned_therapist_gender, payable_amount_rm,
+   assigned_therapist_code, assigned_therapist_name, assigned_therapist_gender, duration_mins, payable_amount_rm,
    room, is_guest, customer_id, parent_consultation_id, treatment_unlocked, updated_at`
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,8 +29,10 @@ export function mapAppointmentRow(r: any): StaffAppointment {
     requestedDatetime: r.requested_datetime ?? null,
     requestedDatetimeAlt: r.requested_datetime_alt ?? null,
     appointmentDatetime: r.appointment_date_time ?? null,
+    assignedTherapistCode: r.assigned_therapist_code ?? null,
     assignedTherapistName: r.assigned_therapist_name ?? null,
     assignedTherapistGender: (r.assigned_therapist_gender ?? null) as Gender | null,
+    durationMins: r.duration_mins ?? null,
     payableAmountRm: r.payable_amount_rm != null ? Number(r.payable_amount_rm) : null,
     room: r.room ?? null,
     isGuest: r.is_guest ?? false,

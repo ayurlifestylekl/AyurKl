@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 vi.mock('server-only', () => ({}))
 vi.mock('@/lib/email/client', () => ({
-  resend: () => ({ emails: { send: vi.fn(async () => ({})) } }),
+  sendMail: vi.fn(async () => {}),
   EMAIL_FROM: 'test@example.com',
 }))
 

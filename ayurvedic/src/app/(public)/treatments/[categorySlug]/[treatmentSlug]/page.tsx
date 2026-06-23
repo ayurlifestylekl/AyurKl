@@ -148,6 +148,7 @@ export default async function TreatmentDetailPage({
 
       <TherapyHero
         image={treatment.heroImage}
+        imageUrl={treatment.heroImageUrl}
         categoryTitle={treatment.category.title}
         treatmentOrder={treatment.category.order}
         treatmentTitle={treatment.title}

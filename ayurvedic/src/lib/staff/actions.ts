@@ -1,11 +1,13 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import type { BookingStatus, Gender } from '@/types/booking'
+import type { BookingStatus } from '@/types/booking'
 import { canTransition } from '@/lib/booking/status'
 import { therapistMatchesRequirement } from '@/lib/booking/policy'
 import { createBookingToken } from '@/lib/booking/token'
-import { notifyApproved, BOOKING_SITE_URL } from '@/lib/booking/notify'
+import { notifyApproved, notifyCancelled, BOOKING_SITE_URL } from '@/lib/booking/notify'
+import { findClash, freeAtLabel, type Slot } from '@/lib/booking/scheduling'
+import { therapistByCode } from './therapists'
 import { requireStaff } from './guard'
 
 type Ok = { ok: true }
@@ -17,22 +19,40 @@ type Err = { error: string }
  */
 export async function approveAndAssign(
   id: string,
-  p: { therapistName: string; therapistGender: Gender; confirmedAt: string; room?: string },
+  p: { therapistCode: string; confirmedAt: string; room?: string },
 ): Promise<Ok | Err> {
   const { userId, db } = await requireStaff()
-  if (!p.therapistName?.trim()) return { error: 'Enter the therapist name.' }
   if (!p.confirmedAt) return { error: 'Set the confirmed date & time.' }
+
+  const therapist = therapistByCode(p.therapistCode)
+  if (!therapist) return { error: 'Select a therapist.' }
 
   const { data: appt } = await db
     .from('appointments')
-    .select('status, booking_kind, gender_requirement, patient_email, patient_name, treatment_name, payable_amount_rm')
+    .select('status, booking_kind, gender_requirement, duration_mins, patient_email, patient_name, treatment_name, payable_amount_rm')
     .eq('id', id)
     .maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
 
-  if (!therapistMatchesRequirement(p.therapistGender, appt.gender_requirement)) {
+  if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement)) {
     const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
     return { error: `Same-gender policy: this patient must be assigned a ${need} therapist.` }
+  }
+
+  // Double-booking check: is this therapist free for the session + 30-min buffer?
+  const durationMins = appt.duration_mins ?? 60
+  const { data: others } = await db
+    .from('appointments')
+    .select('appointment_date_time, duration_mins')
+    .eq('assigned_therapist_code', therapist.code)
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+    .neq('id', id)
+  const busy: Slot[] = (others ?? [])
+    .filter((o) => o.appointment_date_time)
+    .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
+  const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
+  if (clash) {
+    return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
   }
 
   const to: BookingStatus = appt.booking_kind === 'consultation' ? 'confirmed' : 'awaiting_payment'
@@ -43,9 +63,11 @@ export async function approveAndAssign(
   const { error } = await db
     .from('appointments')
     .update({
-      assigned_therapist_name: p.therapistName.trim(),
-      assigned_therapist_gender: p.therapistGender,
+      assigned_therapist_code: therapist.code,
+      assigned_therapist_name: therapist.name,
+      assigned_therapist_gender: therapist.gender,
       appointment_date_time: p.confirmedAt,
+      duration_mins: durationMins,
       room: p.room?.trim() || null,
       approved_by: userId,
       approved_at: new Date().toISOString(),
@@ -70,6 +92,8 @@ export async function approveAndAssign(
 
   revalidatePath('/console')
   revalidatePath(`/console/${id}`)
+  revalidatePath('/doctor')
+  revalidatePath(`/doctor/${id}`)
   return { ok: true }
 }
 
@@ -90,6 +114,58 @@ export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err
   revalidatePath('/console')
   revalidatePath('/doctor')
   revalidatePath(`/console/${id}`)
+  return { ok: true }
+}
+
+/**
+ * Reject a request: declines it but keeps the record (status → cancelled with a
+ * reason). The customer is notified. Use this for requests you won't fulfil.
+ */
+export async function rejectBooking(id: string, reason?: string): Promise<Ok | Err> {
+  const { db } = await requireStaff()
+  const { data: appt } = await db
+    .from('appointments')
+    .select('status, patient_email, patient_name, treatment_name')
+    .eq('id', id)
+    .maybeSingle()
+  if (!appt) return { error: 'Appointment not found.' }
+  if (['cancelled', 'completed', 'no_show'].includes(appt.status as string)) {
+    return { error: `Cannot reject a ${appt.status} booking.` }
+  }
+
+  const { error } = await db
+    .from('appointments')
+    .update({
+      status: 'cancelled',
+      cancelled_at: new Date().toISOString(),
+      cancellation_reason: reason?.trim() || 'Declined by clinic',
+    })
+    .eq('id', id)
+  if (error) return { error: error.message }
+
+  await notifyCancelled({
+    to: appt.patient_email,
+    name: appt.patient_name,
+    treatmentName: appt.treatment_name,
+    refundable: false,
+  })
+
+  revalidatePath('/console')
+  revalidatePath('/doctor')
+  revalidatePath(`/console/${id}`)
+  return { ok: true }
+}
+
+/**
+ * Permanently delete an appointment record. Destructive — for spam / test /
+ * duplicate entries. Admin or front desk only.
+ */
+export async function deleteBooking(id: string): Promise<Ok | Err> {
+  const { db } = await requireStaff(['admin', 'front_desk'])
+  const { error } = await db.from('appointments').delete().eq('id', id)
+  if (error) return { error: error.message }
+  revalidatePath('/console')
+  revalidatePath('/doctor')
   return { ok: true }
 }
 

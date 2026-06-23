@@ -39,6 +39,7 @@ export default function AppointmentsTable({
             <th className="px-4 py-3">Vaidya</th>
             <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3 text-right">Adv. pmt</th>
+            <th className="px-4 py-3 text-right">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-[#163F33]/6">
@@ -97,6 +98,23 @@ export default function AppointmentsTable({
                     </span>
                   ) : (
                     <span className="text-[11px] text-[#1F1F1F]/45">—</span>
+                  )}
+                </td>
+                <td className="px-4 py-3 text-right">
+                  {['pending', 'scheduled', 'awaiting_payment'].includes(a.status) ? (
+                    <Link
+                      href={`/console/${a.id}`}
+                      className="font-heading text-[11px] font-bold uppercase tracking-[0.1em] text-[#D4AF37] hover:text-[#163F33]"
+                    >
+                      Approve →
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/admin/appointments/${a.id}`}
+                      className="text-[11px] font-semibold text-[#163F33]/60 hover:text-[#163F33]"
+                    >
+                      View
+                    </Link>
                   )}
                 </td>
               </tr>

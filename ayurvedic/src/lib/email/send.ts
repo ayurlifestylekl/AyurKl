@@ -1,5 +1,5 @@
 import 'server-only'
-import { resend, EMAIL_FROM } from './client'
+import { sendMail } from './client'
 import { createClient as adminClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/database.types'
 
@@ -45,8 +45,7 @@ export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean;
   }
 
   try {
-    await resend().emails.send({
-      from: EMAIL_FROM,
+    await sendMail({
       to: input.to,
       subject: input.subject,
       html: input.html,

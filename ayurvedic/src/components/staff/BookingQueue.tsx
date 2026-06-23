@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { StaffAppointment } from '@/types/booking'
 import StatusBadge from './StatusBadge'
+import { customerWaLink } from '@/lib/booking/contact'
 
 function fmt(dt: string | null) {
   return dt ? new Date(dt).toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short' }) : '—'
@@ -37,7 +38,14 @@ export default function BookingQueue({
             <tr key={a.id} className="hover:bg-cream/60">
               <td className="px-4 py-3">
                 <div className="font-semibold text-primary">{a.patientName ?? '—'}</div>
-                <div className="text-[12px] text-dark/55">{a.patientPhone ?? ''}{a.isGuest ? ' · guest' : ''}</div>
+                <div className="flex items-center gap-2 text-[12px] text-dark/55">
+                  <span>{a.patientPhone ?? ''}{a.isGuest ? ' · guest' : ''}</span>
+                  {customerWaLink(a.patientPhone) && (
+                    <a href={customerWaLink(a.patientPhone) as string} target="_blank" rel="noopener noreferrer" className="font-semibold text-green-600 hover:text-green-700">
+                      WhatsApp
+                    </a>
+                  )}
+                </div>
               </td>
               <td className="px-4 py-3">
                 <div className="text-dark/85">{a.treatmentName ?? '—'}</div>

@@ -7,6 +7,7 @@ import { genderRequirementValue, canCancel } from './policy'
 import { createBookingToken } from './token'
 import { canAccessBooking } from './access'
 import { notifyRequestReceived, notifyCancelled } from './notify'
+import { parseDurationMins } from './duration'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -47,12 +48,12 @@ export async function createBookingRequest(
   // A standalone consultation has no treatment attached.
   let t: {
     id: string; title: string; price_rm: number | null
-    booking_type: string | null; category_id: string | null
+    booking_type: string | null; category_id: string | null; duration: string | null
   } | null = null
   if (input.treatmentId) {
     const { data, error: tErr } = await sb
       .from('treatments')
-      .select('id, title, price_rm, booking_type, category_id')
+      .select('id, title, price_rm, booking_type, category_id, duration')
       .eq('id', input.treatmentId)
       .maybeSingle()
     if (tErr) return { error: tErr.message }
@@ -73,6 +74,8 @@ export async function createBookingRequest(
 
   const payable = isTreatment ? (t?.price_rm ?? null) : null
   const treatmentName = t?.title ?? (isTreatment ? 'Treatment' : 'Free Consultation')
+  // Length the therapist is occupied (used for double-booking checks). Consultations ≈ 30 min.
+  const durationMins = t ? parseDurationMins(t.duration) : 30
 
   const { data, error } = await sb
     .from('appointments')
@@ -83,6 +86,7 @@ export async function createBookingRequest(
       treatment_id: t?.id ?? null,
       treatment_category_id: t?.category_id ?? null,
       treatment_name: treatmentName,
+      duration_mins: durationMins,
       status: 'pending',
       requested_datetime: input.preferredAt,
       requested_datetime_alt: input.preferredAtAlt ?? null,

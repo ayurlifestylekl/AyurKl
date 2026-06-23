@@ -31,7 +31,15 @@ export default function TherapyCard({
         <div className="grid h-full grid-cols-[130px_1fr] sm:grid-cols-[150px_1fr]">
           {/* Image with corner accents */}
           <div className="relative overflow-hidden">
-            {treatment.heroImage ? (
+            {treatment.heroImageUrl ? (
+              <Image
+                src={treatment.heroImageUrl}
+                alt={`${treatment.title} image`}
+                fill
+                sizes="(max-width: 640px) 130px, 150px"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : treatment.heroImage ? (
               <Image
                 src={urlForImage(treatment.heroImage).width(320).height(500).fit('crop').url()}
                 alt={treatment.heroImage.alt ?? `${treatment.title} image`}

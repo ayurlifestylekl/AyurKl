@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import {
   listAppointments,
+  countPendingRequests,
   type AppointmentFilters,
   type AppointmentListItem,
 } from '@/lib/admin/appointments/queries'
@@ -32,7 +33,9 @@ function filterMocks(
   todayEnd.setDate(todayEnd.getDate() + 1)
 
   let arr = items
-  if (filters.segment === 'today') {
+  if (filters.segment === 'requests') {
+    arr = arr.filter((a) => ['pending', 'scheduled', 'awaiting_payment'].includes(a.status))
+  } else if (filters.segment === 'today') {
     arr = arr.filter((a) => {
       const t = new Date(a.appointmentDateTime).getTime()
       return t >= todayStart.getTime() && t < todayEnd.getTime()
@@ -61,7 +64,7 @@ function filterMocks(
     )
   }
   // sort
-  if (filters.segment === 'today' || filters.segment === 'upcoming') {
+  if (filters.segment === 'today' || filters.segment === 'upcoming' || filters.segment === 'requests') {
     arr = [...arr].sort(
       (a, b) =>
         new Date(a.appointmentDateTime).getTime() -
@@ -83,11 +86,14 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
   const me = await getCurrentUser()
   const filters: AppointmentFilters = {
     segment:
-      (searchParams.segment as AppointmentFilters['segment']) ?? 'today',
+      (searchParams.segment as AppointmentFilters['segment']) ?? 'requests',
     search: searchParams.q,
     limit: 100,
   }
-  const real = await listAppointments(supabase, filters)
+  const [real, requestCount] = await Promise.all([
+    listAppointments(supabase, filters),
+    countPendingRequests(supabase),
+  ])
 
   const isDemoAdmin = me?.email === DEMO_ADMIN_EMAIL
   const showMocks = isDemoAdmin && real.items.length === 0
@@ -134,7 +140,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
         </div>
       </header>
 
-      <AppointmentsFilters />
+      <AppointmentsFilters requestCount={requestCount} />
       <AppointmentsTable items={items} />
     </div>
   )

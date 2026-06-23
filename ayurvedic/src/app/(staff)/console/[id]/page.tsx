@@ -37,7 +37,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
               <Row label="Preferred" value={fmt(a.requestedDatetime)} />
               {a.requestedDatetimeAlt && <Row label="Alternate" value={fmt(a.requestedDatetimeAlt)} />}
               <Row label="Confirmed" value={a.appointmentDatetime && a.status !== 'pending' ? fmt(a.appointmentDatetime) : 'Not set'} />
-              <Row label="Therapist" value={a.assignedTherapistName ? `${a.assignedTherapistName} (${a.assignedTherapistGender})` : '—'} />
+              <Row label="Therapist" value={a.assignedTherapistName ? `${a.assignedTherapistName} · ${a.assignedTherapistCode} (${a.assignedTherapistGender})` : '—'} />
               <Row label="Room" value={a.room} />
               <Row label="Price" value={a.payableAmountRm != null ? `RM${a.payableAmountRm}` : 'Free'} />
               <Row label="Payment" value={a.paymentStatus} />
@@ -53,6 +53,8 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
             bookingKind={a.bookingKind}
             genderRequirement={a.genderRequirement}
             requestedAt={a.requestedDatetime}
+            backHref="/console"
+            canDelete
           />
         </div>
       </div>

@@ -3,7 +3,8 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
-import { approveAndAssign, setStatus } from '@/lib/staff/actions'
+import { approveAndAssign, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
+import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
 
 interface Props {
   id: string
@@ -12,6 +13,10 @@ interface Props {
   /** Required therapist gender derived from the gender policy (or null = any). */
   genderRequirement: Gender | null
   requestedAt: string | null
+  /** Where to send the user after a delete (the list this came from). */
+  backHref?: string
+  /** Whether to show the destructive Delete button (front desk / admin only). */
+  canDelete?: boolean
 }
 
 function toLocalInput(iso: string | null): string {
@@ -20,10 +25,11 @@ function toLocalInput(iso: string | null): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-export default function AppointmentActions({ id, status, bookingKind, genderRequirement, requestedAt }: Props) {
+export default function AppointmentActions({
+  id, status, bookingKind, genderRequirement, requestedAt, backHref = '/console', canDelete = false,
+}: Props) {
   const router = useRouter()
-  const [therapistName, setTherapistName] = useState('')
-  const [therapistGender, setTherapistGender] = useState<Gender | ''>(genderRequirement ?? '')
+  const [therapistCode, setTherapistCode] = useState('')
   const [confirmedAt, setConfirmedAt] = useState(toLocalInput(requestedAt))
   const [room, setRoom] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -38,7 +44,25 @@ export default function AppointmentActions({ id, status, bookingKind, genderRequ
     })
   }
 
+  const onReject = () => {
+    if (!confirm('Reject this request? The customer will be notified it was declined.')) return
+    run(() => rejectBooking(id))
+  }
+
+  const onDelete = () => {
+    if (!confirm('Permanently delete this booking? This cannot be undone.')) return
+    setError(null)
+    start(async () => {
+      const res = await deleteBooking(id)
+      if ('error' in res) setError(res.error)
+      else router.push(backHref)
+    })
+  }
+
   const needsApproval = status === 'pending' || status === 'scheduled'
+  const isRequestPhase = status === 'pending' || status === 'scheduled' || status === 'awaiting_payment'
+  const canReject = isRequestPhase
+  const showDangerZone = canReject || canDelete
 
   return (
     <div className="rounded-xl border border-accent/30 bg-white p-5">
@@ -51,14 +75,12 @@ export default function AppointmentActions({ id, status, bookingKind, genderRequ
               Same-gender policy: assign a <strong>{genderRequirement}</strong> therapist.
             </p>
           )}
-          <Field label="Therapist name">
-            <input value={therapistName} onChange={(e) => setTherapistName(e.target.value)} className={inp} placeholder="Therapist's name" />
-          </Field>
-          <Field label="Therapist gender">
-            <select value={therapistGender} onChange={(e) => setTherapistGender(e.target.value as Gender)} className={inp}>
-              <option value="">Select…</option>
-              <option value="female">Female</option>
-              <option value="male">Male</option>
+          <Field label="Assign therapist">
+            <select value={therapistCode} onChange={(e) => setTherapistCode(e.target.value)} className={inp}>
+              <option value="">Select therapist…</option>
+              {therapistsForGender(genderRequirement).map((t) => (
+                <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
+              ))}
             </select>
           </Field>
           <Field label="Confirmed date & time">
@@ -72,8 +94,7 @@ export default function AppointmentActions({ id, status, bookingKind, genderRequ
             onClick={() =>
               run(() =>
                 approveAndAssign(id, {
-                  therapistName,
-                  therapistGender: (therapistGender || 'female') as Gender,
+                  therapistCode,
                   confirmedAt: new Date(confirmedAt).toISOString(),
                   room,
                 }),
@@ -97,6 +118,17 @@ export default function AppointmentActions({ id, status, bookingKind, genderRequ
           {status === 'in_progress' && <Btn onClick={() => run(() => setStatus(id, 'completed'))} disabled={pending}>Complete</Btn>}
           {status !== 'in_progress' && <Btn danger onClick={() => run(() => setStatus(id, 'no_show'))} disabled={pending}>No-show</Btn>}
           <Btn danger onClick={() => run(() => setStatus(id, 'cancelled'))} disabled={pending}>Cancel</Btn>
+        </div>
+      )}
+
+      {showDangerZone && (
+        <div className="mt-4 flex flex-wrap gap-2 border-t border-accent/15 pt-4">
+          {canReject && (
+            <Btn danger onClick={onReject} disabled={pending}>Reject request</Btn>
+          )}
+          {canDelete && (
+            <Btn danger onClick={onDelete} disabled={pending}>Delete</Btn>
+          )}
         </div>
       )}
 

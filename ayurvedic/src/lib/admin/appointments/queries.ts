@@ -27,12 +27,15 @@ export interface AppointmentListItem {
 }
 
 export interface AppointmentFilters {
-  segment?: 'all' | 'today' | 'upcoming' | 'past' | 'cancelled' | 'no_show'
+  segment?: 'requests' | 'all' | 'today' | 'upcoming' | 'past' | 'cancelled' | 'no_show'
   search?: string
   status?: AppointmentStatus
   limit?: number
   offset?: number
 }
+
+/** Statuses that count as an actionable incoming request (awaiting approval/payment). */
+const REQUEST_STATUSES = ['pending', 'scheduled', 'awaiting_payment'] as const
 
 export async function listAppointments(
   supabase: SB,
@@ -52,7 +55,10 @@ export async function listAppointments(
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
   const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toISOString()
 
-  if (filters.segment === 'today') {
+  if (filters.segment === 'requests') {
+    q = q.in('status', REQUEST_STATUSES as unknown as string[])
+    q = q.order('appointment_date_time', { ascending: true })
+  } else if (filters.segment === 'today') {
     q = q.gte('appointment_date_time', todayStart).lt('appointment_date_time', todayEnd)
     q = q.order('appointment_date_time', { ascending: true })
   } else if (filters.segment === 'upcoming') {
@@ -142,6 +148,15 @@ export async function getAppointmentById(supabase: SB, id: string) {
     return null
   }
   return data
+}
+
+/** Count of requests awaiting approval — drives the Requests segment badge. */
+export async function countPendingRequests(supabase: SB): Promise<number> {
+  const { count } = await supabase
+    .from('appointments')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'pending')
+  return count ?? 0
 }
 
 export async function countTodayAppointments(supabase: SB): Promise<number> {

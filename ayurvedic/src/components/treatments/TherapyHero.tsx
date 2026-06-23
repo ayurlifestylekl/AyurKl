@@ -5,6 +5,8 @@ import type { SanityImageRef } from '@/types/treatments'
 
 interface TherapyHeroProps {
   image: SanityImageRef | null
+  /** Plain image URL (Supabase). Preferred over `image` when present. */
+  imageUrl?: string | null
   categoryTitle: string
   treatmentOrder: number | null
   treatmentTitle: string
@@ -12,6 +14,7 @@ interface TherapyHeroProps {
 
 export default function TherapyHero({
   image,
+  imageUrl,
   categoryTitle,
   treatmentOrder,
   treatmentTitle,
@@ -23,7 +26,16 @@ export default function TherapyHero({
   return (
     <div className="relative w-full overflow-hidden bg-primary">
       <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]">
-        {image ? (
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={`${treatmentTitle} hero image`}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        ) : image ? (
           <Image
             src={urlForImage(image).width(2400).fit('crop').url()}
             alt={image.alt ?? `${treatmentTitle} hero image`}

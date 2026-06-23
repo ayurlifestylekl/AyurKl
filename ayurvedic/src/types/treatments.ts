@@ -45,6 +45,8 @@ export interface TreatmentSummary extends TreatmentPricing {
   duration: string | null
   description: string | null
   heroImage: SanityImageRef | null
+  /** Plain image URL (Supabase catalogue). Preferred over `heroImage` when present. */
+  heroImageUrl?: string | null
   requiresConsultation: boolean
   order: number | null
 }
@@ -64,6 +66,8 @@ export interface TreatmentDetail extends TreatmentPricing {
   sanskritName: string | null
   requiresConsultation: boolean
   heroImage: SanityImageRef | null
+  /** Plain image URL (Supabase catalogue). Preferred over `heroImage` when present. */
+  heroImageUrl?: string | null
   gallery: SanityImageRef[] | null
   order: number | null
   category: {
@@ -82,6 +86,8 @@ export interface TreatmentSibling extends TreatmentPricing {
   order: number | null
   duration: string | null
   heroImage: SanityImageRef | null
+  /** Plain image URL (Supabase catalogue). Preferred over `heroImage` when present. */
+  heroImageUrl?: string | null
 }
 
 /**

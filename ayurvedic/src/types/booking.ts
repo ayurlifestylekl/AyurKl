@@ -67,8 +67,10 @@ export interface StaffAppointment {
   requestedDatetime: string | null
   requestedDatetimeAlt: string | null
   appointmentDatetime: string | null
+  assignedTherapistCode: string | null
   assignedTherapistName: string | null
   assignedTherapistGender: Gender | null
+  durationMins: number | null
   payableAmountRm: number | null
   room: string | null
   isGuest: boolean

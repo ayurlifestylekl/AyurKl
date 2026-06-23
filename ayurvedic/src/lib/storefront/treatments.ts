@@ -62,7 +62,8 @@ function rowToSummary(r: any): TreatmentSummary {
     slug: r.slug,
     duration: r.duration ?? null,
     description: r.description ?? null,
-    heroImage: null, // images managed via hero_image_url; wired when uploads land
+    heroImage: null,
+    heroImageUrl: r.hero_image_url ?? null,
     requiresConsultation: r.requires_consultation ?? false,
     order: r.sort_order ?? null,
     ...pricing(r),
@@ -79,6 +80,7 @@ function rowToSibling(r: any, categorySlug: string): TreatmentSibling {
     order: r.sort_order ?? null,
     duration: r.duration ?? null,
     heroImage: null,
+    heroImageUrl: r.hero_image_url ?? null,
     ...pricing(r),
   }
 }
@@ -190,6 +192,7 @@ export async function getTreatmentBySlug(
     sanskritName: r.sanskrit_name ?? null,
     requiresConsultation: r.requires_consultation ?? false,
     heroImage: null,
+    heroImageUrl: r.hero_image_url ?? null,
     gallery: null,
     order: r.sort_order ?? null,
     ...pricing(r),

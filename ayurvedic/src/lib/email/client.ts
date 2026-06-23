@@ -1,16 +1,42 @@
 import 'server-only'
-import { Resend } from 'resend'
+import nodemailer, { type Transporter } from 'nodemailer'
 
-let cached: Resend | null = null
-export function resend(): Resend {
+/**
+ * Provider-agnostic SMTP mailer. Works with any SMTP provider (Brevo, Mailjet,
+ * Amazon SES, Gmail, your domain host) — just set the SMTP_* env vars. Swapping
+ * providers never requires a code change.
+ *
+ *   SMTP_HOST   e.g. smtp-relay.brevo.com
+ *   SMTP_PORT   587 (STARTTLS, default) or 465 (SSL)
+ *   SMTP_USER   provider login / API username
+ *   SMTP_PASS   provider SMTP key / password
+ *   SMTP_SECURE 'true' only for port 465
+ *   EMAIL_FROM  "Kerala Ayurvedic Lifestyle <noreply@keralaayurvediclifestyle.com.my>"
+ */
+
+export const EMAIL_FROM =
+  process.env.EMAIL_FROM || 'Kerala Ayurvedic Lifestyle <noreply@keralaayurvediclifestyle.com.my>'
+
+let cached: Transporter | null = null
+
+function transport(): Transporter {
   if (cached) return cached
-  const key = process.env.RESEND_API_KEY
-  if (!key || key.startsWith('your-')) {
-    throw new Error('RESEND_API_KEY is not configured.')
+  const host = process.env.SMTP_HOST
+  const user = process.env.SMTP_USER
+  const pass = process.env.SMTP_PASS
+  if (!host || !user || !pass) {
+    throw new Error('SMTP is not configured (set SMTP_HOST / SMTP_USER / SMTP_PASS).')
   }
-  cached = new Resend(key)
+  cached = nodemailer.createTransport({
+    host,
+    port: Number(process.env.SMTP_PORT ?? 587),
+    secure: process.env.SMTP_SECURE === 'true', // false = STARTTLS (587), true = SSL (465)
+    auth: { user, pass },
+  })
   return cached
 }
 
-export const EMAIL_FROM = 'Kerala Ayurvedic Lifestyle <noreply@onboarding.resend.dev>'
-// TODO: swap to verified production sender once the domain is configured in Resend.
+/** Send one email through the configured SMTP provider. */
+export async function sendMail(opts: { to: string; subject: string; html: string; text: string }): Promise<void> {
+  await transport().sendMail({ from: EMAIL_FROM, ...opts })
+}
