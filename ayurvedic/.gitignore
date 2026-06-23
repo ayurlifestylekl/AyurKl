@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Client handover docs — contain staff passwords, never push
+docs/BOOKING_GUIDE_FOR_CLINIC.md
+docs/booking-guide.html
+docs/Kerala-Ayurvedic-Booking-Guide.pdf
