@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache'
 import type { BookingStatus, Gender } from '@/types/booking'
 import { canTransition } from '@/lib/booking/status'
 import { therapistMatchesRequirement } from '@/lib/booking/policy'
+import { createBookingToken } from '@/lib/booking/token'
+import { notifyApproved, BOOKING_SITE_URL } from '@/lib/booking/notify'
 import { requireStaff } from './guard'
 
 type Ok = { ok: true }
@@ -23,7 +25,7 @@ export async function approveAndAssign(
 
   const { data: appt } = await db
     .from('appointments')
-    .select('status, booking_kind, gender_requirement')
+    .select('status, booking_kind, gender_requirement, patient_email, patient_name, treatment_name, payable_amount_rm')
     .eq('id', id)
     .maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
@@ -51,6 +53,20 @@ export async function approveAndAssign(
     })
     .eq('id', id)
   if (error) return { error: error.message }
+
+  const payUrl =
+    to === 'awaiting_payment'
+      ? `${BOOKING_SITE_URL}/book/request/${id}?t=${createBookingToken(id)}`
+      : null
+  await notifyApproved({
+    to: appt.patient_email,
+    name: appt.patient_name,
+    treatmentName: appt.treatment_name,
+    kind: appt.booking_kind,
+    whenISO: p.confirmedAt,
+    amountRm: appt.payable_amount_rm != null ? Number(appt.payable_amount_rm) : null,
+    payUrl,
+  })
 
   revalidatePath('/console')
   revalidatePath(`/console/${id}`)

@@ -3,6 +3,7 @@ import { createClient as createSb } from '@supabase/supabase-js'
 import { getPaymentProvider } from '@/lib/payments'
 import { canTransition } from './status'
 import { canAccessBooking } from './access'
+import { notifyConfirmed } from './notify'
 import type { BookingStatus } from '@/types/booking'
 
 function admin() {
@@ -64,7 +65,7 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status')
+    .select('id, status, patient_email, patient_name, treatment_name, appointment_date_time')
     .eq('payment_bill_id', billId)
     .maybeSingle()
   if (!a) return { error: 'Bill not found.' }
@@ -77,5 +78,11 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
     .update({ payment_status: 'paid', paid_at: new Date().toISOString(), status: 'confirmed' })
     .eq('id', a.id)
   if (error) return { error: error.message }
+  await notifyConfirmed({
+    to: a.patient_email,
+    name: a.patient_name,
+    treatmentName: a.treatment_name,
+    whenISO: a.appointment_date_time,
+  })
   return { appointmentId: a.id }
 }

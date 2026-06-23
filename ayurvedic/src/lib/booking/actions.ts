@@ -6,6 +6,7 @@ import type { BookingRequestInput } from '@/types/booking'
 import { genderRequirementValue, canCancel } from './policy'
 import { createBookingToken } from './token'
 import { canAccessBooking } from './access'
+import { notifyRequestReceived, notifyCancelled } from './notify'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -103,6 +104,13 @@ export async function createBookingRequest(
 
   if (error) return { error: error.message }
   const id = data.id as string
+  await notifyRequestReceived({
+    to: input.patientEmail,
+    name: input.patientName,
+    treatmentName,
+    kind: input.bookingKind,
+    whenISO: input.preferredAt,
+  })
   return { id, token: createBookingToken(id) }
 }
 
@@ -117,7 +125,7 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, appointment_date_time, payment_status, customer_id')
+    .select('id, status, appointment_date_time, payment_status, customer_id, patient_email, patient_name, treatment_name')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
@@ -148,5 +156,6 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
     })
     .eq('id', id)
   if (error) return { error: error.message }
+  await notifyCancelled({ to: a.patient_email, name: a.patient_name, treatmentName: a.treatment_name, refundable })
   return { ok: true, refundable }
 }

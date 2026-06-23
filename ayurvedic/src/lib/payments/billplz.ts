@@ -1,31 +1,83 @@
+import { createHmac, timingSafeEqual } from 'crypto'
 import type { CallbackResult, CreateBillArgs, CreateBillResult, PaymentProvider } from './provider'
 
 /**
- * Real Billplz (FPX) provider — DAY 2.
+ * Billplz (FPX) provider.
  *
- * To finish: the client supplies BILLPLZ_API_KEY, BILLPLZ_COLLECTION_ID,
- * BILLPLZ_WEBHOOK_SECRET (already named in the env), then implement:
+ * To go live (day 2): set in the environment
+ *   BILLPLZ_API_KEY          — secret API key
+ *   BILLPLZ_COLLECTION_ID    — the collection bills are created under
+ *   BILLPLZ_WEBHOOK_SECRET   — the collection's "X Signature" key
+ *   PAYMENTS_PROVIDER=billplz — flips getPaymentProvider() to this
+ *   BILLPLZ_API_BASE         — optional; defaults to production. Use
+ *                              https://www.billplz-sandbox.com for testing.
  *
- *   createBill: POST https://www.billplz.com/api/v3/bills
- *     auth: Basic base64(`${API_KEY}:`)
- *     body: collection_id, email, name, amount (sen = RM*100), description,
- *           callback_url, redirect_url, reference_1 = appointmentId
- *     → returns { id, url }  ⇒ { billId: id, url }
- *
- *   verifyCallback: read x-signature (or form body), verify HMAC-SHA256 with
- *     BILLPLZ_WEBHOOK_SECRET over the sorted form fields, then
- *     → { billId: body.id, paid: body.paid === 'true' }
- *
- * Until then these throw so we never silently "confirm" an unpaid booking.
+ * Docs: https://www.billplz.com/api — v3 Bills + X Signature verification.
  */
+
+const API_BASE = process.env.BILLPLZ_API_BASE || 'https://www.billplz.com'
+
+function authHeader(): string {
+  // Basic auth: base64(`${API_KEY}:`) — key as username, blank password.
+  return 'Basic ' + Buffer.from(`${process.env.BILLPLZ_API_KEY}:`).toString('base64')
+}
+
 export const billplzProvider: PaymentProvider = {
   name: 'billplz',
 
-  async createBill(_args: CreateBillArgs): Promise<CreateBillResult> {
-    throw new Error('Billplz createBill not wired yet — see src/lib/payments/billplz.ts (day 2).')
+  async createBill(args: CreateBillArgs): Promise<CreateBillResult> {
+    const body = new URLSearchParams({
+      collection_id: process.env.BILLPLZ_COLLECTION_ID ?? '',
+      email: args.email || 'no-reply@keralaayurvediclifestyle.com.my',
+      name: args.name || 'Guest',
+      amount: String(Math.round(args.amountRm * 100)), // sen
+      callback_url: args.callbackUrl,
+      redirect_url: args.redirectUrl,
+      description: args.description.slice(0, 200),
+      reference_1_label: 'Appointment',
+      reference_1: args.appointmentId,
+    })
+    if (args.phone) body.set('mobile', args.phone)
+
+    const res = await fetch(`${API_BASE}/api/v3/bills`, {
+      method: 'POST',
+      headers: { Authorization: authHeader(), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body,
+    })
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      throw new Error(`Billplz createBill failed (${res.status}): ${text}`)
+    }
+    const json = (await res.json()) as { id: string; url: string }
+    return { billId: json.id, url: json.url }
   },
 
-  async verifyCallback(_req: Request): Promise<CallbackResult> {
-    throw new Error('Billplz verifyCallback not wired yet — see src/lib/payments/billplz.ts (day 2).')
+  async verifyCallback(req: Request): Promise<CallbackResult> {
+    // Server-to-server callback is an x-www-form-urlencoded POST.
+    const form = await req.formData()
+    const params: Record<string, string> = {}
+    form.forEach((v, k) => {
+      params[k] = typeof v === 'string' ? v : ''
+    })
+
+    const signature = params['x_signature'] ?? ''
+    delete params['x_signature']
+
+    // X Signature source: `key`+`value` for each param, sorted by key, joined by '|'.
+    const source = Object.keys(params)
+      .sort()
+      .map((k) => `${k}${params[k]}`)
+      .join('|')
+    const expected = createHmac('sha256', process.env.BILLPLZ_WEBHOOK_SECRET ?? '')
+      .update(source)
+      .digest('hex')
+
+    const a = Buffer.from(expected)
+    const b = Buffer.from(signature)
+    const valid = a.length === b.length && timingSafeEqual(a, b)
+    if (!valid) {
+      return { billId: params['id'] ?? '', paid: false }
+    }
+    return { billId: params['id'] ?? '', paid: params['paid'] === 'true' }
   },
 }
