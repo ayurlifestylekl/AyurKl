@@ -3,7 +3,7 @@
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createClient as createSb } from '@supabase/supabase-js'
 import type { BookingRequestInput } from '@/types/booking'
-import { genderRequirementValue } from './policy'
+import { genderRequirementValue, canCancel } from './policy'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -101,4 +101,46 @@ export async function createBookingRequest(
 
   if (error) return { error: error.message }
   return { id: data.id as string }
+}
+
+export type CancelResult = { ok: true; refundable: boolean } | { error: string }
+
+/**
+ * Customer-initiated cancellation. Enforces the 12-hour rule: cancellations
+ * within 12h of the appointment are non-refundable. Refunds (when eligible)
+ * are processed manually for now.
+ */
+export async function cancelBooking(id: string): Promise<CancelResult> {
+  const sb = admin()
+  const { data: a } = await sb
+    .from('appointments')
+    .select('id, status, appointment_date_time, payment_status')
+    .eq('id', id)
+    .maybeSingle()
+  if (!a) return { error: 'Booking not found.' }
+  if (['cancelled', 'completed', 'no_show'].includes(a.status)) {
+    return { error: 'This booking can no longer be cancelled.' }
+  }
+
+  const within12h = a.appointment_date_time
+    ? !canCancel(a.appointment_date_time, new Date())
+    : false
+  const wasPaid = a.payment_status === 'paid'
+  const refundable = wasPaid && !within12h
+
+  const { error } = await sb
+    .from('appointments')
+    .update({
+      status: 'cancelled',
+      cancelled_at: new Date().toISOString(),
+      cancellation_reason: 'Cancelled by customer',
+      internal_notes: wasPaid
+        ? refundable
+          ? 'Customer cancelled >12h before — refund eligible.'
+          : 'Customer cancelled within 12h — non-refundable.'
+        : null,
+    })
+    .eq('id', id)
+  if (error) return { error: error.message }
+  return { ok: true, refundable }
 }

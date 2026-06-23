@@ -6,6 +6,7 @@ import { CheckCircle2, Clock, CreditCard, CalendarCheck, XCircle } from 'lucide-
 import { getBookingForPayment } from '@/lib/storefront/booking'
 import { STATUS_LABEL } from '@/lib/booking/status'
 import { whatsappRescheduleLink } from '@/lib/booking/policy'
+import CancelBookingButton from '@/components/booking/CancelBookingButton'
 
 export const metadata: Metadata = {
   title: 'Your booking request — Kerala Ayurvedic Lifestyle',
@@ -106,6 +107,12 @@ export default async function BookingRequestPage({ params }: { params: { id: str
               </div>
             )}
           </div>
+
+          {['pending', 'awaiting_payment', 'confirmed'].includes(b.status) && (
+            <div className="mt-4 border-t border-accent/15 pt-4">
+              <CancelBookingButton id={b.id} />
+            </div>
+          )}
         </div>
       </div>
     </section>
