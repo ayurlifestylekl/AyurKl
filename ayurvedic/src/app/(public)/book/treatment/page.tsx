@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react'
 import BookingPolicyStrip from '@/components/booking/BookingPolicyStrip'
 import BookingTreatmentOrchestrator from '@/components/booking/BookingTreatmentOrchestrator'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import {
   getTreatmentCategoriesIndex,
   getTreatmentsFlat,
@@ -48,6 +49,8 @@ async function loadCatalogue(): Promise<{
 
 export default async function BookTreatmentPage() {
   const { categories, treatments } = await loadCatalogue()
+  const user = await getCurrentUser()
+  const account = user ? { email: user.email, signedIn: true } : null
 
   return (
     <>
@@ -116,6 +119,7 @@ export default async function BookTreatmentPage() {
               <BookingTreatmentOrchestrator
                 categories={categories}
                 treatments={treatments}
+                account={account}
               />
             </Suspense>
           </div>

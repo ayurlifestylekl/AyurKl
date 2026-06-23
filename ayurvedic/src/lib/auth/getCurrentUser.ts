@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/database.types'
 
-export type UserRole = 'admin' | 'customer' | 'sales_agent'
+export type UserRole = 'admin' | 'customer' | 'sales_agent' | 'doctor' | 'front_desk'
 
 export type CurrentUser = {
   authId: string
@@ -57,6 +57,10 @@ export function homeForRole(role: UserRole): string {
       return '/admin/dashboard'
     case 'sales_agent':
       return '/agent/dashboard'
+    case 'doctor':
+      return '/doctor'
+    case 'front_desk':
+      return '/console'
     case 'customer':
     default:
       return '/account/dashboard'

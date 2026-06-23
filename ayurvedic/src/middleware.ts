@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-type UserRole = 'admin' | 'customer' | 'sales_agent'
+type UserRole = 'admin' | 'customer' | 'sales_agent' | 'doctor' | 'front_desk'
 
 function homeForRole(role: UserRole | null | undefined): string {
   switch (role) {
@@ -9,6 +9,10 @@ function homeForRole(role: UserRole | null | undefined): string {
       return '/admin/dashboard'
     case 'sales_agent':
       return '/agent/dashboard'
+    case 'doctor':
+      return '/doctor'
+    case 'front_desk':
+      return '/console'
     case 'customer':
     default:
       return '/account/dashboard'
@@ -51,9 +55,15 @@ export async function middleware(request: NextRequest) {
   // Only the dashboard parts (under the (portal) route group) are role-gated.
   const isAdminLogin = pathname === '/admin/login'
   const isAgentLogin = pathname === '/agent/login'
+  const isStaffLogin = pathname === '/staff/login'
+  const isDoctorLogin = pathname === '/doctor/login'
   const isAdminRoute = pathname.startsWith('/admin') && !isAdminLogin
   const isAgentRoute = pathname.startsWith('/agent') && !isAgentLogin
-  const isProtectedRoute = isAccountRoute || isAdminRoute || isAgentRoute
+  // Front-desk + admin share the /console workspace; doctors get /doctor.
+  const isConsoleRoute = pathname.startsWith('/console')
+  const isDoctorRoute = pathname.startsWith('/doctor') && !isDoctorLogin
+  const isProtectedRoute =
+    isAccountRoute || isAdminRoute || isAgentRoute || isConsoleRoute || isDoctorRoute
 
   // Auth pages that signed-in users should be bounced away from.
   // We DO NOT bounce away from /auth/callback (mid-OAuth handshake) or
@@ -63,7 +73,9 @@ export async function middleware(request: NextRequest) {
     pathname === '/auth/register' ||
     pathname === '/auth/forgot-password' ||
     isAdminLogin ||
-    isAgentLogin
+    isAgentLogin ||
+    isStaffLogin ||
+    isDoctorLogin
 
   // ── Not signed in → send to the portal-specific login page ──────────────
   if (isProtectedRoute && !user) {
@@ -72,6 +84,10 @@ export async function middleware(request: NextRequest) {
       ? '/admin/login'
       : isAgentRoute
       ? '/agent/login'
+      : isDoctorRoute
+      ? '/doctor/login'
+      : isConsoleRoute
+      ? '/staff/login'
       : '/auth/login'
     loginUrl.search = ''
     loginUrl.searchParams.set('next', pathname)
@@ -102,7 +118,18 @@ export async function middleware(request: NextRequest) {
     const wrongRoleForAdmin = isAdminRoute && role !== 'admin'
     const wrongRoleForAgent = isAgentRoute && role !== 'sales_agent'
     const wrongRoleForAccount = isAccountRoute && role !== 'customer'
-    if (wrongRoleForAdmin || wrongRoleForAgent || wrongRoleForAccount) {
+    // /console = admin + front desk; /doctor = doctor + admin.
+    const wrongRoleForConsole =
+      isConsoleRoute && role !== 'admin' && role !== 'front_desk'
+    const wrongRoleForDoctor =
+      isDoctorRoute && role !== 'admin' && role !== 'doctor'
+    if (
+      wrongRoleForAdmin ||
+      wrongRoleForAgent ||
+      wrongRoleForAccount ||
+      wrongRoleForConsole ||
+      wrongRoleForDoctor
+    ) {
       const home = request.nextUrl.clone()
       home.pathname = homeForRole(role)
       home.search = ''

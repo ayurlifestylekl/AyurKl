@@ -33,7 +33,8 @@ export interface HealthIntake {
 
 /** What the customer submits to request a booking or consultation. */
 export interface BookingRequestInput {
-  treatmentId: string
+  /** Required for treatment bookings; optional for a standalone consultation. */
+  treatmentId?: string | null
   bookingKind: BookingKind
   /** Customer's preferred slot (ISO datetime). Staff confirm the real time. */
   preferredAt: string

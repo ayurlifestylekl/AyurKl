@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
 import BookingPolicyStrip from '@/components/booking/BookingPolicyStrip'
-import ConsultationBooking from '@/components/booking/ConsultationBooking'
+import BookingRequestForm from '@/components/booking/BookingRequestForm'
+import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 
 export const metadata: Metadata = {
   title: 'Book a Free Consultation — our Vaidyas',
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ConsultationPage() {
+export default async function ConsultationPage() {
+  const user = await getCurrentUser()
+  const account = user ? { email: user.email, signedIn: true } : null
   return (
     <>
       <BookingPolicyStrip />
@@ -80,8 +83,8 @@ export default function ConsultationPage() {
             </p>
           </div>
 
-          <div className="mt-10 lg:mt-12">
-            <ConsultationBooking />
+          <div className="mt-10 lg:mt-12 max-w-2xl">
+            <BookingRequestForm bookingKind="consultation" account={account} />
           </div>
         </div>
       </section>
