@@ -21,7 +21,8 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 30
+// Reads auth cookies (Supabase server client) → must render on demand, not ISR.
+export const dynamic = 'force-dynamic'
 
 async function loadCategories(): Promise<TreatmentCategory[]> {
   try {

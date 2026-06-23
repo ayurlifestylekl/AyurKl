@@ -9,8 +9,9 @@ import { getCategoryWithTreatments } from '@/lib/storefront/treatments'
 import { sortByDuration } from '@/lib/treatment-order'
 import type { TreatmentCategory, TreatmentSummary } from '@/types/treatments'
 
-export const revalidate = 30
-export const dynamicParams = true
+// Server-rendered on demand: these pages read auth cookies (Supabase server
+// client), which is incompatible with static/ISR rendering and 500s in prod.
+export const dynamic = 'force-dynamic'
 
 interface CategoryPageData extends TreatmentCategory {
   treatments: TreatmentSummary[]

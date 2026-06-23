@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   },
 }
 
-// Keep in sync with /treatments — short window so catalogue edits appear fast.
-export const revalidate = 30
+// Reads auth cookies (Supabase server client) → render on demand, not ISR.
+export const dynamic = 'force-dynamic'
 
 async function loadCatalogue(): Promise<{
   categories: TreatmentCategory[]

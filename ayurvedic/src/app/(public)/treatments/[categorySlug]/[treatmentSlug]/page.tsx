@@ -30,8 +30,9 @@ import type {
   TreatmentSibling,
 } from '@/types/treatments'
 
-export const revalidate = 30
-export const dynamicParams = true
+// Server-rendered on demand: reads auth cookies (Supabase server client),
+// which is incompatible with static/ISR rendering and 500s in production.
+export const dynamic = 'force-dynamic'
 
 const PRACTITIONER = 'our Vaidyas'
 
