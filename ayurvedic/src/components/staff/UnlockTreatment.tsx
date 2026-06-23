@@ -11,10 +11,12 @@ import { unlockTreatment } from '@/lib/staff/actions'
  */
 export default function UnlockTreatment({
   consultationId,
+  treatmentId,
   unlocked,
   outcome,
 }: {
   consultationId: string
+  treatmentId: string | null
   unlocked: boolean
   outcome: string | null
 }) {
@@ -23,7 +25,10 @@ export default function UnlockTreatment({
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
-  const bookingLink = `/book/treatment?from=${consultationId}`
+  // Pre-select the consulted treatment when known, so the customer doesn't re-pick.
+  const bookingLink = treatmentId
+    ? `/book/treatment?from=${consultationId}&id=${treatmentId}`
+    : `/book/treatment?from=${consultationId}`
 
   const run = () => {
     setError(null)

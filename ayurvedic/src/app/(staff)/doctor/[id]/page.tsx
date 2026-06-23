@@ -37,7 +37,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
         <PatientHealthPanel p={a} />
         <div className="space-y-4">
           {a.bookingKind === 'consultation' && (
-            <UnlockTreatment consultationId={a.id} unlocked={a.treatmentUnlocked} outcome={a.consultationOutcome ?? null} />
+            <UnlockTreatment consultationId={a.id} treatmentId={a.treatmentId} unlocked={a.treatmentUnlocked} outcome={a.consultationOutcome ?? null} />
           )}
           <ClinicalNotes id={a.id} initial={a.clinicalNotes} />
         </div>
