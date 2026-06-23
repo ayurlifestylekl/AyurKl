@@ -30,6 +30,12 @@ export default async function ConsolePage({ searchParams }: { searchParams: { ta
           <h1 className="font-heading text-[22px] font-extrabold text-primary">Bookings console</h1>
           <p className="font-body text-[13px] text-dark/55">Review requests, approve & assign therapists.</p>
         </div>
+        <Link
+          href="/console/new"
+          className="rounded-xl bg-accent px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-white hover:bg-accent/90"
+        >
+          + New booking
+        </Link>
       </div>
 
       <nav className="mb-5 flex flex-wrap gap-2">
