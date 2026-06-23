@@ -91,4 +91,5 @@ export interface DoctorPatientView extends StaffAppointment {
     weightKg: number | null
   } | null
   clinicalNotes: string | null
+  consultationOutcome: string | null
 }
