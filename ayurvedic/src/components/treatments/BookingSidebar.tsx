@@ -5,6 +5,7 @@ import type { TreatmentPricing } from '@/types/treatments'
 import { formatPrice, leadTimeLabel } from '@/lib/treatments/price'
 
 interface BookingSidebarProps {
+  treatmentId: string
   treatmentTitle: string
   duration: string | null
   sessionsRecommended: string | null
@@ -26,6 +27,7 @@ const ASSURANCES = [
 ]
 
 export default function BookingSidebar({
+  treatmentId,
   treatmentTitle,
   duration,
   sessionsRecommended,
@@ -65,7 +67,7 @@ export default function BookingSidebar({
           )}
 
           <Link
-            href={isEnquiry ? whatsappHref : '/book/consultation'}
+            href={isEnquiry ? whatsappHref : `/book/treatment?id=${treatmentId}`}
             className="mt-4 block rounded bg-accent px-4 py-3 text-center font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
             {isEnquiry ? 'Enquire to Book' : needsConsult ? 'Book Consultation' : 'Book Treatment'}

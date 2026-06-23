@@ -1,11 +1,13 @@
 import Link from 'next/link'
 
 interface TherapyMidCTAProps {
+  treatmentId: string
   treatmentTitle: string
   whatsappHref: string
 }
 
 export default function TherapyMidCTA({
+  treatmentId,
   treatmentTitle,
   whatsappHref,
 }: TherapyMidCTAProps) {
@@ -21,7 +23,7 @@ export default function TherapyMidCTA({
       </h3>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Link
-          href="/book/consultation"
+          href={`/book/treatment?id=${treatmentId}`}
           className="rounded bg-accent px-5 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
         >
           Book this treatment
