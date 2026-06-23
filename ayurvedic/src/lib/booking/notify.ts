@@ -1,10 +1,11 @@
 import 'server-only'
 import { sendEmail } from '@/lib/email/send'
+import { fmtMY } from '@/lib/datetime'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
 
 function when(iso: string | null | undefined): string {
-  return iso ? new Date(iso).toLocaleString('en-MY', { dateStyle: 'full', timeStyle: 'short' }) : '—'
+  return fmtMY(iso, { dateStyle: 'full', timeStyle: 'short' })
 }
 
 function shell(heading: string, lines: string[], cta?: { label: string; url: string }): { html: string; text: string } {

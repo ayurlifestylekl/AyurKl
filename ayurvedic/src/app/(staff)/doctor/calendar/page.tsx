@@ -4,11 +4,12 @@ import { getDoctorPatients } from '@/lib/staff/appointments'
 import StatusBadge from '@/components/staff/StatusBadge'
 import AutoRefresh from '@/components/staff/AutoRefresh'
 import type { StaffAppointment } from '@/types/booking'
+import { fmtMY, mytDayKey } from '@/lib/datetime'
 
 export const dynamic = 'force-dynamic'
 
 function timeOf(iso: string | null) {
-  return iso ? new Date(iso).toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' }) : '—'
+  return fmtMY(iso, { hour: '2-digit', minute: '2-digit' })
 }
 
 export default async function DoctorCalendarPage() {
@@ -20,12 +21,12 @@ export default async function DoctorCalendarPage() {
   const withDate = patients.filter((p) => p.appointmentDatetime)
   const groups = new Map<string, StaffAppointment[]>()
   for (const p of withDate) {
-    const key = new Date(p.appointmentDatetime as string).toDateString()
+    const key = mytDayKey(p.appointmentDatetime as string) // Malaysia calendar day
     if (!groups.has(key)) groups.set(key, [])
     groups.get(key)!.push(p)
   }
   const days = Array.from(groups.keys())
-  const todayStr = new Date().toDateString()
+  const todayStr = mytDayKey(new Date())
 
   return (
     <div>
@@ -41,7 +42,7 @@ export default async function DoctorCalendarPage() {
         days.map((d) => (
           <section key={d} className="mb-7">
             <h2 className="mb-2 flex items-center gap-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-accent">
-              {new Date(d).toLocaleDateString('en-MY', { weekday: 'long', day: 'numeric', month: 'long' })}
+              {fmtMY(`${d}T12:00:00+08:00`, { weekday: 'long', day: 'numeric', month: 'long' })}
               {d === todayStr && (
                 <span className="rounded-full bg-accent px-2 py-0.5 text-[9px] tracking-[0.12em] text-white">Today</span>
               )}

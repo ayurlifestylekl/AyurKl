@@ -3,6 +3,7 @@ import { requireStaff } from '@/lib/staff/guard'
 import { getDoctorPatients, getConsultationsToClear } from '@/lib/staff/appointments'
 import BookingQueue from '@/components/staff/BookingQueue'
 import AutoRefresh from '@/components/staff/AutoRefresh'
+import { mytDayKey } from '@/lib/datetime'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,9 +11,9 @@ export default async function DoctorSchedulePage() {
   const { db } = await requireStaff(['admin', 'doctor'])
   const [patients, toClear] = await Promise.all([getDoctorPatients(db), getConsultationsToClear(db)])
 
-  const todayStr = new Date().toDateString()
-  const today = patients.filter((p) => p.appointmentDatetime && new Date(p.appointmentDatetime).toDateString() === todayStr)
-  const upcoming = patients.filter((p) => !p.appointmentDatetime || new Date(p.appointmentDatetime).toDateString() !== todayStr)
+  const todayStr = mytDayKey(new Date())
+  const today = patients.filter((p) => p.appointmentDatetime && mytDayKey(p.appointmentDatetime) === todayStr)
+  const upcoming = patients.filter((p) => !p.appointmentDatetime || mytDayKey(p.appointmentDatetime) !== todayStr)
 
   return (
     <div>

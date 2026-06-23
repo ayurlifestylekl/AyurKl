@@ -13,7 +13,7 @@ import AutoRefresh from '@/components/staff/AutoRefresh'
 export const dynamic = 'force-dynamic'
 
 function timeOf(iso: string | null) {
-  return iso ? new Date(iso).toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' }) : '—'
+  return iso ? new Date(iso).toLocaleTimeString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' }) : '—'
 }
 
 export default async function DoctorOverviewPage() {
@@ -31,7 +31,7 @@ export default async function DoctorOverviewPage() {
       <AutoRefresh />
       <h1 className="font-heading text-[22px] font-extrabold text-primary">Overview</h1>
       <p className="mb-5 font-body text-[13px] text-dark/55">
-        {new Date().toLocaleDateString('en-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+        {new Date().toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
       </p>
 
       <div className="mb-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

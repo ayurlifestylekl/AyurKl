@@ -25,7 +25,7 @@ const TABS: { key: string; label: string; status?: BookingStatus | BookingStatus
 ]
 
 function timeOf(iso: string | null) {
-  return iso ? new Date(iso).toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' }) : '—'
+  return iso ? new Date(iso).toLocaleTimeString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' }) : '—'
 }
 
 export default async function ConsolePage({

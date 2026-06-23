@@ -1,7 +1,7 @@
 import type { TherapistStatus } from '@/lib/staff/appointments'
 
 function timeOf(iso: string | null) {
-  return iso ? new Date(iso).toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' }) : '—'
+  return iso ? new Date(iso).toLocaleTimeString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' }) : '—'
 }
 
 export default function TherapistBoard({ board }: { board: TherapistStatus[] }) {

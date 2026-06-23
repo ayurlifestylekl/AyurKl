@@ -53,12 +53,14 @@ export default function AppointmentsTable({
                     className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
                   >
                     {dt.toLocaleDateString('en-MY', {
+                      timeZone: 'Asia/Kuala_Lumpur',
                       day: 'numeric',
                       month: 'short',
                     })}
                   </Link>
                   <div className="text-[11px] text-[#1F1F1F]/55">
                     {dt.toLocaleTimeString('en-MY', {
+                      timeZone: 'Asia/Kuala_Lumpur',
                       hour: '2-digit',
                       minute: '2-digit',
                     })}{' '}

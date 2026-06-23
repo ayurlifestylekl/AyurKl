@@ -5,7 +5,7 @@ import { getPatientDirectory } from '@/lib/staff/appointments'
 export const dynamic = 'force-dynamic'
 
 function fmtDate(iso: string | null) {
-  return iso ? new Date(iso).toLocaleDateString('en-MY', { dateStyle: 'medium' }) : '—'
+  return iso ? new Date(iso).toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium' }) : '—'
 }
 
 export default async function DoctorPatientsPage({ searchParams }: { searchParams: { q?: string } }) {

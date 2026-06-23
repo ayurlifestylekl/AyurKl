@@ -5,7 +5,7 @@ import CheckInButtons from './CheckInButtons'
 import { customerWaLink, customerTelLink } from '@/lib/booking/contact'
 
 function timeOf(iso: string | null) {
-  return iso ? new Date(iso).toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' }) : '—'
+  return iso ? new Date(iso).toLocaleTimeString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' }) : '—'
 }
 
 export default function TodayBoard({ appointments }: { appointments: StaffAppointment[] }) {

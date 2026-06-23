@@ -132,6 +132,7 @@ export default async function AdminAppointmentDetailPage({
           <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">
             <Calendar className="inline h-3.5 w-3.5" />{' '}
             {dt.toLocaleString('en-MY', {
+              timeZone: 'Asia/Kuala_Lumpur',
               weekday: 'long',
               day: 'numeric',
               month: 'long',

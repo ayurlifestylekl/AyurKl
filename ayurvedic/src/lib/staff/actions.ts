@@ -76,9 +76,10 @@ export async function approveAndAssign(
     .eq('id', id)
   if (error) return { error: error.message }
 
+  // Link straight to the payment route (one click → Billplz), not the status page.
   const payUrl =
     to === 'awaiting_payment'
-      ? `${BOOKING_SITE_URL}/book/request/${id}?t=${createBookingToken(id)}`
+      ? `${BOOKING_SITE_URL}/book/request/${id}/pay?t=${createBookingToken(id)}`
       : null
   await notifyApproved({
     to: appt.patient_email,

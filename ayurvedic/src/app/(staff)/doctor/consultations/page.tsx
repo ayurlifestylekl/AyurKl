@@ -7,7 +7,7 @@ import AutoRefresh from '@/components/staff/AutoRefresh'
 export const dynamic = 'force-dynamic'
 
 function fmt(iso: string | null) {
-  return iso ? new Date(iso).toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short' }) : '—'
+  return iso ? new Date(iso).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium', timeStyle: 'short' }) : '—'
 }
 
 export default async function DoctorConsultationsPage() {

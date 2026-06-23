@@ -4,7 +4,7 @@ import StatusBadge from './StatusBadge'
 import { customerWaLink } from '@/lib/booking/contact'
 
 function fmt(dt: string | null) {
-  return dt ? new Date(dt).toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short' }) : '—'
+  return dt ? new Date(dt).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium', timeStyle: 'short' }) : '—'
 }
 
 export default function BookingQueue({

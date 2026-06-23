@@ -9,7 +9,7 @@ import AppointmentActions from '@/components/staff/AppointmentActions'
 export const dynamic = 'force-dynamic'
 
 function fmt(dt: string | null) {
-  return dt ? new Date(dt).toLocaleString('en-MY', { dateStyle: 'full', timeStyle: 'short' }) : '—'
+  return dt ? new Date(dt).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'full', timeStyle: 'short' }) : '—'
 }
 
 export default async function ConsoleDetailPage({ params }: { params: { id: string } }) {

@@ -7,6 +7,7 @@ import { getBookingForPayment } from '@/lib/storefront/booking'
 import { STATUS_LABEL } from '@/lib/booking/status'
 import { whatsappRescheduleLink } from '@/lib/booking/policy'
 import { canAccessBooking } from '@/lib/booking/access'
+import { fmtMY } from '@/lib/datetime'
 import CancelBookingButton from '@/components/booking/CancelBookingButton'
 
 export const metadata: Metadata = {
@@ -31,7 +32,7 @@ export default async function BookingRequestPage({
 
   const isConfirmed = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)
   const when = b.appointmentDatetime ?? b.requestedDatetime
-  const whenText = when ? new Date(when).toLocaleString('en-MY', { dateStyle: 'full', timeStyle: 'short' }) : '—'
+  const whenText = fmtMY(when, { dateStyle: 'full', timeStyle: 'short' })
   const amount = b.payableAmountRm != null ? `RM${b.payableAmountRm}` : null
 
   return (
@@ -63,7 +64,7 @@ export default async function BookingRequestPage({
                 done={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)}
                 icon={CreditCard}
                 label="Payment"
-                sub={b.status === 'awaiting_payment' ? 'Pay to secure your slot.' : amount ? `${amount} paid` : ''}
+                sub={b.status === 'awaiting_payment' ? 'Pay to secure your slot.' : isConfirmed && amount ? `${amount} paid` : amount ? `${amount} due after approval` : ''}
               />
             )}
             <Step
@@ -77,8 +78,8 @@ export default async function BookingRequestPage({
 
           {/* Details */}
           <dl className="mt-7 grid grid-cols-2 gap-y-2 border-t border-accent/15 pt-5 font-body text-[13.5px]">
-            <Row label="Preferred time" value={b.requestedDatetime ? new Date(b.requestedDatetime).toLocaleString('en-MY') : '—'} />
-            {isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={new Date(b.appointmentDatetime).toLocaleString('en-MY')} />}
+            <Row label="Preferred time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />
+            {isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
             <Row label="Patient" value={b.patientName ?? '—'} />
             <Row label="Status" value={STATUS_LABEL[b.status]} />
             {amount && <Row label="Price" value={amount} />}

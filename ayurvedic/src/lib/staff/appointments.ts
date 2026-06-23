@@ -3,6 +3,7 @@ import type { BookingKind, BookingStatus, DoctorPatientView, HealthIntake, Staff
 import { APPOINTMENT_COLUMNS, mapAppointmentRow } from '@/lib/booking/map'
 import { THERAPISTS, type Therapist } from './therapists'
 import { THERAPIST_BUFFER_MINS } from '@/lib/booking/scheduling'
+import { mytTodayRange } from '@/lib/datetime'
 import type { ServiceDb } from './guard'
 
 /** Statuses that count as a real, booked patient for the doctor view. */
@@ -114,17 +115,14 @@ const ACTIVE_TODAY_STATUSES: BookingStatus[] = ['confirmed', 'checked_in', 'in_p
 
 /** Today's booked appointments, ordered by time — the front-desk day board. */
 export async function getTodayAppointments(db: ServiceDb): Promise<StaffAppointment[]> {
-  const start = new Date()
-  start.setHours(0, 0, 0, 0)
-  const end = new Date(start)
-  end.setDate(end.getDate() + 1)
+  const { startISO, endISO } = mytTodayRange() // "today" in Malaysia, not server (UTC)
 
   const { data, error } = await db
     .from('appointments')
     .select(APPOINTMENT_COLUMNS)
     .in('status', ACTIVE_TODAY_STATUSES)
-    .gte('appointment_date_time', start.toISOString())
-    .lt('appointment_date_time', end.toISOString())
+    .gte('appointment_date_time', startISO)
+    .lt('appointment_date_time', endISO)
     .order('appointment_date_time', { ascending: true })
   if (error) {
     console.error('[staff/appointments] today:', error.message)
