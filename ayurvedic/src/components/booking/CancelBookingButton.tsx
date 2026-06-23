@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { cancelBooking } from '@/lib/booking/actions'
 
-export default function CancelBookingButton({ id }: { id: string }) {
+export default function CancelBookingButton({ id, token }: { id: string; token?: string }) {
   const router = useRouter()
   const [confirming, setConfirming] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -13,7 +13,7 @@ export default function CancelBookingButton({ id }: { id: string }) {
   const doCancel = () => {
     setError(null)
     start(async () => {
-      const res = await cancelBooking(id)
+      const res = await cancelBooking(id, token)
       if ('error' in res) setError(res.error)
       else router.refresh()
     })

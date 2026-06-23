@@ -4,9 +4,11 @@ import { startPaymentForAppointment } from '@/lib/booking/payment'
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const res = await startPaymentForAppointment(params.id)
+  const token = req.nextUrl.searchParams.get('t')
+  const res = await startPaymentForAppointment(params.id, token)
   if ('error' in res) {
-    return NextResponse.redirect(new URL(`/book/request/${params.id}?payerror=1`, req.url))
+    const t = token ? `?t=${token}&payerror=1` : '?payerror=1'
+    return NextResponse.redirect(new URL(`/book/request/${params.id}${t}`, req.url))
   }
   return NextResponse.redirect(res.url)
 }

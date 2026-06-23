@@ -4,6 +4,8 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createClient as createSb } from '@supabase/supabase-js'
 import type { BookingRequestInput } from '@/types/booking'
 import { genderRequirementValue, canCancel } from './policy'
+import { createBookingToken } from './token'
+import { canAccessBooking } from './access'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -14,7 +16,7 @@ function admin() {
   )
 }
 
-export type CreateBookingResult = { id: string } | { error: string }
+export type CreateBookingResult = { id: string; token: string } | { error: string }
 
 /**
  * Create a booking or consultation request. Writes an appointment in
@@ -100,7 +102,8 @@ export async function createBookingRequest(
     .single()
 
   if (error) return { error: error.message }
-  return { id: data.id as string }
+  const id = data.id as string
+  return { id, token: createBookingToken(id) }
 }
 
 export type CancelResult = { ok: true; refundable: boolean } | { error: string }
@@ -110,14 +113,17 @@ export type CancelResult = { ok: true; refundable: boolean } | { error: string }
  * within 12h of the appointment are non-refundable. Refunds (when eligible)
  * are processed manually for now.
  */
-export async function cancelBooking(id: string): Promise<CancelResult> {
+export async function cancelBooking(id: string, token?: string | null): Promise<CancelResult> {
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, appointment_date_time, payment_status')
+    .select('id, status, appointment_date_time, payment_status, customer_id')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
+  if (!(await canAccessBooking(id, a.customer_id ?? null, token))) {
+    return { error: 'Not authorised to cancel this booking.' }
+  }
   if (['cancelled', 'completed', 'no_show'].includes(a.status)) {
     return { error: 'This booking can no longer be cancelled.' }
   }

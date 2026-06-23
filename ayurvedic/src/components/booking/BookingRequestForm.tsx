@@ -84,7 +84,7 @@ export default function BookingRequestForm({
         parentConsultationId: parentConsultationId ?? null,
       })
       if ('error' in res) setError(res.error)
-      else router.push(`/book/request/${res.id}`)
+      else router.push(`/book/request/${res.id}?t=${res.token}`)
     })
   }
 

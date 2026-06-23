@@ -72,6 +72,7 @@ export interface StaffAppointment {
   payableAmountRm: number | null
   room: string | null
   isGuest: boolean
+  customerId: string | null
   parentConsultationId: string | null
   treatmentUnlocked: boolean
   createdAt: string | null

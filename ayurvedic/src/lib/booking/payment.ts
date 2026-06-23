@@ -2,6 +2,7 @@ import 'server-only'
 import { createClient as createSb } from '@supabase/supabase-js'
 import { getPaymentProvider } from '@/lib/payments'
 import { canTransition } from './status'
+import { canAccessBooking } from './access'
 import type { BookingStatus } from '@/types/booking'
 
 function admin() {
@@ -22,14 +23,18 @@ function siteUrl(): string {
  */
 export async function startPaymentForAppointment(
   id: string,
+  token?: string | null,
 ): Promise<{ url: string } | { error: string }> {
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, payable_amount_rm, patient_name, patient_email, patient_phone, treatment_name')
+    .select('id, status, payable_amount_rm, patient_name, patient_email, patient_phone, treatment_name, customer_id')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
+  if (!(await canAccessBooking(id, a.customer_id ?? null, token))) {
+    return { error: 'Not authorised.' }
+  }
   if (a.status !== 'awaiting_payment') return { error: 'This booking is not awaiting payment.' }
   if (a.payable_amount_rm == null) return { error: 'No amount is payable for this booking.' }
 
@@ -43,7 +48,7 @@ export async function startPaymentForAppointment(
     phone: a.patient_phone ?? '',
     description: `${a.treatment_name ?? 'Treatment'} booking`,
     callbackUrl: `${base}/api/payments/callback`,
-    redirectUrl: `${base}/book/request/${a.id}`,
+    redirectUrl: `${base}/book/request/${a.id}${token ? `?t=${token}` : ''}`,
   })
 
   await sb

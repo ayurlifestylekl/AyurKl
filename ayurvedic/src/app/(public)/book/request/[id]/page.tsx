@@ -6,6 +6,7 @@ import { CheckCircle2, Clock, CreditCard, CalendarCheck, XCircle } from 'lucide-
 import { getBookingForPayment } from '@/lib/storefront/booking'
 import { STATUS_LABEL } from '@/lib/booking/status'
 import { whatsappRescheduleLink } from '@/lib/booking/policy'
+import { canAccessBooking } from '@/lib/booking/access'
 import CancelBookingButton from '@/components/booking/CancelBookingButton'
 
 export const metadata: Metadata = {
@@ -15,9 +16,18 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic'
 
-export default async function BookingRequestPage({ params }: { params: { id: string } }) {
+export default async function BookingRequestPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string }
+  searchParams: { t?: string }
+}) {
   const b = await getBookingForPayment(params.id)
   if (!b) notFound()
+  const token = searchParams.t
+  if (!(await canAccessBooking(b.id, b.customerId, token))) notFound()
+  const tokenQuery = token ? `?t=${token}` : ''
 
   const isConfirmed = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)
   const when = b.appointmentDatetime ?? b.requestedDatetime
@@ -84,7 +94,7 @@ export default async function BookingRequestPage({ params }: { params: { id: str
             )}
             {b.status === 'awaiting_payment' && (
               <Link
-                href={`/book/request/${b.id}/pay`}
+                href={`/book/request/${b.id}/pay${tokenQuery}`}
                 className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
               >
                 Pay {amount} to confirm
@@ -110,7 +120,7 @@ export default async function BookingRequestPage({ params }: { params: { id: str
 
           {['pending', 'awaiting_payment', 'confirmed'].includes(b.status) && (
             <div className="mt-4 border-t border-accent/15 pt-4">
-              <CancelBookingButton id={b.id} />
+              <CancelBookingButton id={b.id} token={token} />
             </div>
           )}
         </div>
