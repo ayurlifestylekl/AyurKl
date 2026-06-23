@@ -20,8 +20,12 @@ Built on the existing Supabase `appointments` table. No Cal.com.
 Set a user's role in Supabase: `update public.users set role='doctor' where email='…';`
 (roles: `admin`, `front_desk`, `doctor`, `customer`, `sales_agent`).
 
-**Test accounts** (delete before go-live): `doctor@klal.test` / `Doctor#2026`,
-`frontdesk@klal.test` / `Frontdesk#2026`.
+**Staff accounts** (password-only login, no OTP):
+- Doctor — `kals.admin1@keralaayurvediclifestyle.com.my`
+- Front desk — `frontdesk@keralaayurvediclifestyle.com.my`
+- Admin — `admin@keralaayurvediclifestyle.com`
+
+Passwords are shared privately, not stored in the repo.
 
 ---
 
