@@ -40,6 +40,9 @@ const fell = IM_Fell_English({
   weight: ["400"],
   style: ["normal", "italic"],
   display: "swap",
+  // This decorative font has no Next.js fallback-metric data; disabling the
+  // automatic adjustment silences the "Failed to find font override" warning.
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
