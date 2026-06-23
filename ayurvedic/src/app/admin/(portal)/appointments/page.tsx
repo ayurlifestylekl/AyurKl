@@ -111,6 +111,13 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
+            href="/console"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#D4AF37]/20"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            Bookings Console
+          </Link>
+          <Link
             href="/admin/treatments"
             className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
           >
