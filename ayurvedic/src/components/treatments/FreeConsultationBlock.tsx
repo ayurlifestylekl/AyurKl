@@ -80,7 +80,7 @@ export default function FreeConsultationBlock({
           >
             A free consultation
             <br />
-            with a <span className="font-body italic text-accent">Kerala Vaidya.</span>
+            with our <span className="font-body italic text-accent">Kerala Ayurveda Vaidya.</span>
           </motion.h2>
 
           <motion.p variants={fadeUp(0)} className="max-w-md font-body text-[16px] leading-[1.75] text-white/50">
@@ -122,7 +122,7 @@ export default function FreeConsultationBlock({
             <span className="font-heading text-[11px] font-bold uppercase tracking-[0.25em] text-accent">We treat</span>
 
             <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3.5 font-body text-[14px] leading-[1.5] text-white/75">
-              {['Chronic back pain', 'Joint stiffness', 'Sciatica', 'Skin conditions', 'Eczema & psoriasis', 'Gastric issues', 'Stress & anxiety', 'Sleep disorders', 'Migraine & headache', 'Hair fall'].map(item => (
+              {['Chronic back pain', 'Joint stiffness', 'Low back pain', 'Skin conditions', 'Gastric issues', 'Stress & anxiety', 'Sleep disorders', 'Hair fall'].map(item => (
                 <li key={item} className="flex items-start gap-2.5">
                   <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent/70" aria-hidden />
                   <span>{item}</span>

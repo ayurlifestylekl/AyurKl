@@ -43,9 +43,9 @@ export default function Navbar() {
 
           {/* Left: contact */}
           <div className="hidden items-center gap-5 md:flex">
-            <a href="tel:+60123456789" className="flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-[#D4AF37]">
+            <a href="tel:+60322603436" className="flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-[#D4AF37]">
               <Phone className="h-3 w-3 text-[#D4AF37]" />
-              +60 12-345 6789
+              +60 3-2260 3436
             </a>
             <span className="h-3 w-px bg-white/10" />
             <a href="mailto:info@keralaayurvediclifestyle.com.my" className="flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-[#D4AF37]">

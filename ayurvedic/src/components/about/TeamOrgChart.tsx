@@ -20,7 +20,8 @@ function Node({
   tone = 'plain',
 }: {
   role: string
-  name: string
+  /** Optional. When omitted, the role is shown on its own as the card label. */
+  name?: string
   tone?: 'founder' | 'plain'
 }) {
   const founder = tone === 'founder'
@@ -32,18 +33,29 @@ function Node({
         border: `1px solid ${founder ? GOLD : 'rgba(212,175,55,0.45)'}`,
       }}
     >
-      <span
-        className="font-heading text-[9px] font-bold uppercase tracking-[0.22em]"
-        style={{ color: founder ? '#E8C766' : '#B0801E' }}
-      >
-        {role}
-      </span>
-      <span
-        className="font-display text-[15px] font-semibold leading-tight sm:text-base"
-        style={{ color: founder ? '#FBEFD9' : BURGUNDY }}
-      >
-        {name}
-      </span>
+      {name ? (
+        <>
+          <span
+            className="font-heading text-[9px] font-bold uppercase tracking-[0.22em]"
+            style={{ color: founder ? '#E8C766' : '#B0801E' }}
+          >
+            {role}
+          </span>
+          <span
+            className="font-display text-[15px] font-semibold leading-tight sm:text-base"
+            style={{ color: founder ? '#FBEFD9' : BURGUNDY }}
+          >
+            {name}
+          </span>
+        </>
+      ) : (
+        <span
+          className="font-display text-[15px] font-semibold leading-tight sm:text-base"
+          style={{ color: founder ? '#FBEFD9' : BURGUNDY }}
+        >
+          {role}
+        </span>
+      )}
     </div>
   )
 }
@@ -133,10 +145,10 @@ export default function TeamOrgChart() {
           <motion.div variants={fadeUp(0)} className="flex flex-col items-stretch gap-3 lg:mt-0 lg:flex-row lg:items-start lg:justify-center lg:gap-16">
             {[
               { role: 'Administration', name: 'Admin' },
-              { role: 'Lead Vaidya', name: 'Dr 1' },
-              { role: 'Consulting Vaidya', name: 'Dr 2' },
+              { role: 'Lead Vaidya' },
+              { role: 'Consulting Vaidya' },
             ].map((n) => (
-              <div key={n.name} className="flex flex-col items-center">
+              <div key={n.role} className="flex flex-col items-center">
                 <VConn className="hidden lg:block" />
                 <Node role={n.role} name={n.name} />
               </div>
@@ -171,7 +183,7 @@ export default function TeamOrgChart() {
             className="mt-5 font-heading text-[10px] font-semibold uppercase tracking-[0.26em]"
             style={{ color: '#9A6A2A' }}
           >
-            8 Keralan-trained Therapists
+            Trained Kerala Ayurveda Therapists
           </motion.p>
         </motion.div>
       </div>
