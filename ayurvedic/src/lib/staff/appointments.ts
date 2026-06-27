@@ -3,7 +3,8 @@ import type { BookingKind, BookingStatus, DoctorPatientView, HealthIntake, Staff
 import { APPOINTMENT_COLUMNS, mapAppointmentRow } from '@/lib/booking/map'
 import { THERAPISTS, type Therapist } from './therapists'
 import { THERAPIST_BUFFER_MINS } from '@/lib/booking/scheduling'
-import { mytTodayRange } from '@/lib/datetime'
+import { mytTodayRange, mytTimeOfDay } from '@/lib/datetime'
+import { fetchBlocksOnOrAfter, blockedIntervalsForDate } from '@/lib/booking/blocks'
 import type { ServiceDb } from './guard'
 
 /** Statuses that count as a real, booked patient for the doctor view. */
@@ -175,6 +176,75 @@ export async function getTherapistBoard(db: ServiceDb): Promise<TherapistStatus[
       remainingToday: remaining,
     }
   })
+}
+
+/* ── Visual day schedule (calendar grid) ───────────────────────────── */
+
+export interface GridAppt {
+  id: string
+  therapistCode: string | null
+  startMin: number // minutes from midnight, Malaysia time
+  durationMins: number
+  patientName: string | null
+  treatmentName: string | null
+  status: BookingStatus
+  room: string | null
+}
+export interface GridBlock {
+  therapistCode: string | null
+  startMin: number
+  endMin: number
+  reason: string | null
+}
+export interface DaySchedule {
+  appts: GridAppt[] // assigned to a therapist
+  unassigned: GridAppt[] // confirmed but no therapist yet (waiting list)
+  blocks: GridBlock[]
+}
+
+const hhmmToMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5))
+
+/** All appointments + blocks for a Malaysia day, shaped for the calendar grid. */
+export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<DaySchedule> {
+  const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
+  const start = new Date(dayStartMs).toISOString()
+  const end = new Date(dayStartMs + 86_400_000).toISOString()
+
+  const { data, error } = await db
+    .from('appointments')
+    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status')
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'])
+    .gte('appointment_date_time', start)
+    .lt('appointment_date_time', end)
+    .order('appointment_date_time', { ascending: true })
+  if (error) console.error('[staff/appointments] daySchedule:', error.message)
+
+  const all = (data ?? []).map(mapAppointmentRow)
+  const toGrid = (a: StaffAppointment): GridAppt => ({
+    id: a.id,
+    therapistCode: a.assignedTherapistCode,
+    startMin: a.appointmentDatetime ? hhmmToMin(mytTimeOfDay(a.appointmentDatetime)) : 0,
+    durationMins: a.durationMins ?? 60,
+    patientName: a.patientName,
+    treatmentName: a.treatmentName,
+    status: a.status,
+    room: a.room,
+  })
+  const grid = all.map(toGrid)
+
+  const blocksRaw = await fetchBlocksOnOrAfter(db, dateYMD)
+  const blocks: GridBlock[] = blockedIntervalsForDate(blocksRaw, dateYMD).map((iv) => ({
+    therapistCode: iv.therapistCode,
+    startMin: Math.max(0, Math.round((iv.startMs - dayStartMs) / 60_000)),
+    endMin: Math.min(1440, Math.round((iv.endMs - dayStartMs) / 60_000)),
+    reason: iv.reason,
+  }))
+
+  return {
+    appts: grid.filter((g) => g.therapistCode),
+    unassigned: grid.filter((g) => !g.therapistCode),
+    blocks,
+  }
 }
 
 /** Consultations still awaiting the doctor's clearance before treatment. */

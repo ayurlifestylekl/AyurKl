@@ -7,19 +7,19 @@ import AutoRefresh from '@/components/staff/AutoRefresh'
 
 export const dynamic = 'force-dynamic'
 
-export default async function DoctorCalendarPage({ searchParams }: { searchParams: { date?: string } }) {
-  const { db } = await requireStaff(['admin', 'doctor'])
+export default async function ConsoleSchedulePage({ searchParams }: { searchParams: { date?: string } }) {
+  const { db } = await requireStaff(['admin', 'front_desk'])
   const date = searchParams.date && /^\d{4}-\d{2}-\d{2}$/.test(searchParams.date) ? searchParams.date : mytDayKey(new Date())
   const day = await getDaySchedule(db, date)
 
   return (
     <div>
       <AutoRefresh />
-      <h1 className="font-heading text-[22px] font-extrabold text-primary">Calendar</h1>
-      <p className="mb-4 font-body text-[13px] text-dark/55">The day by therapist. Tap an appointment to open the patient.</p>
+      <h1 className="font-heading text-[22px] font-extrabold text-primary">Schedule</h1>
+      <p className="mb-4 font-body text-[13px] text-dark/55">Day view by therapist. Tap an appointment to open it.</p>
       <ScheduleGrid
-        basePath="/doctor/calendar"
-        detailBase="/doctor"
+        basePath="/console/schedule"
+        detailBase="/console"
         date={date}
         therapists={THERAPISTS}
         appts={day.appts}
