@@ -7,6 +7,8 @@ import { therapistMatchesRequirement } from '@/lib/booking/policy'
 import { createBookingToken } from '@/lib/booking/token'
 import { notifyApproved, notifyCancelled, BOOKING_SITE_URL } from '@/lib/booking/notify'
 import { findClash, freeAtLabel, type Slot } from '@/lib/booking/scheduling'
+import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from '@/lib/booking/blocks'
+import { mytDayKey } from '@/lib/datetime'
 import { therapistByCode } from './therapists'
 import { requireStaff } from './guard'
 
@@ -53,6 +55,13 @@ export async function approveAndAssign(
   const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
   if (clash) {
     return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
+  }
+
+  // Leave / blocked windows: don't allow assigning a therapist who's off.
+  const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(p.confirmedAt))
+  const intervals = blockedIntervalsForDate(blocks, mytDayKey(p.confirmedAt))
+  if (isBlocked(intervals, therapist.code, p.confirmedAt, durationMins)) {
+    return { error: `${therapist.name} (${therapist.code}) is on leave / blocked at that time — pick another therapist or time.` }
   }
 
   const to: BookingStatus = appt.booking_kind === 'consultation' ? 'confirmed' : 'awaiting_payment'
@@ -193,5 +202,46 @@ export async function unlockTreatment(consultationId: string, note: string): Pro
     .eq('id', consultationId)
   if (error) return { error: error.message }
   revalidatePath(`/doctor/${consultationId}`)
+  return { ok: true }
+}
+
+/* ── Schedule blocks (staff leave / closures / manual blocks) ───────── */
+
+export interface BlockInput {
+  therapistCode: string | null // null = all therapists / centre closed
+  startAt: string
+  endAt: string
+  allDay: boolean
+  recurrence: 'none' | 'weekly' | 'monthly'
+  untilDate: string | null
+  reason: string
+}
+
+export async function createBlock(input: BlockInput): Promise<Ok | Err> {
+  const { userId, db } = await requireStaff(['admin', 'front_desk'])
+  if (!input.startAt || !input.endAt) return { error: 'Start and end times are required.' }
+  if (new Date(input.endAt).getTime() <= new Date(input.startAt).getTime()) {
+    return { error: 'End must be after start.' }
+  }
+  const { error } = await db.from('schedule_blocks').insert({
+    therapist_code: input.therapistCode || null,
+    start_at: input.startAt,
+    end_at: input.endAt,
+    all_day: input.allDay,
+    recurrence: input.recurrence,
+    until_date: input.untilDate || null,
+    reason: input.reason?.trim() || null,
+    created_by: userId,
+  })
+  if (error) return { error: error.message }
+  revalidatePath('/console/blocks')
+  return { ok: true }
+}
+
+export async function deleteBlock(id: string): Promise<Ok | Err> {
+  const { db } = await requireStaff(['admin', 'front_desk'])
+  const { error } = await db.from('schedule_blocks').delete().eq('id', id)
+  if (error) return { error: error.message }
+  revalidatePath('/console/blocks')
   return { ok: true }
 }

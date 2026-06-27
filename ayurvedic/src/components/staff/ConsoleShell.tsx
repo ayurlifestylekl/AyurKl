@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
-  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, Inbox, CreditCard, CheckCircle2, Users, LayoutList,
+  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, Inbox, CreditCard, CheckCircle2, Users, LayoutList, CalendarOff,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
@@ -60,6 +60,26 @@ function NavLinks({ pendingCount, onNavigate }: { pendingCount: number; onNaviga
           </li>
         )
       })}
+      {/* Availability & leave — a real sub-route, not a tab */}
+      {(() => {
+        const active = pathname.startsWith('/console/blocks')
+        return (
+          <li>
+            <Link
+              href="/console/blocks"
+              onClick={onNavigate}
+              className={[
+                'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors duration-200',
+                active ? 'bg-gold/[0.16] text-white' : 'text-white/65 hover:bg-white/[0.05] hover:text-white',
+              ].join(' ')}
+            >
+              {active && <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-gold" />}
+              <CalendarOff className={['h-4 w-4 shrink-0 transition-colors', active ? 'text-gold' : 'text-white/55 group-hover:text-white/85'].join(' ')} strokeWidth={1.8} />
+              <span className="flex-1 font-heading text-[13px] font-semibold">Availability</span>
+            </Link>
+          </li>
+        )
+      })()}
     </ul>
   )
 }

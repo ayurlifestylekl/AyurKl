@@ -16,6 +16,17 @@ export function fmtMY(
   return d.toLocaleString('en-MY', { timeZone: MY_TZ, ...opts })
 }
 
+/** Malaysia time-of-day ("HH:MM", 24-hour) for an instant. */
+export function mytTimeOfDay(value: string | number | Date): string {
+  const d = value instanceof Date ? value : new Date(value)
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: MY_TZ,
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).format(d)
+}
+
 /** Malaysia calendar-day key ("YYYY-MM-DD") for grouping appointments by day. */
 export function mytDayKey(value: string | number | Date): string {
   const d = value instanceof Date ? value : new Date(value)

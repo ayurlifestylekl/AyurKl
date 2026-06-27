@@ -10,6 +10,7 @@ import { notifyRequestReceived, notifyCancelled } from './notify'
 import { parseDurationMins } from './duration'
 import { slotsForDuration, slotIso } from './slots'
 import { findClash, type Slot } from './scheduling'
+import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from './blocks'
 import { therapistsForGender } from '@/lib/staff/therapists'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
@@ -214,12 +215,20 @@ export async function getAvailableSlots(
     busyByCode.set(a.assigned_therapist_code, arr)
   }
 
+  // Leave / blocked windows remove therapists from availability.
+  const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
+  const intervals = blockedIntervalsForDate(blocks, dateYMD)
+
   const now = Date.now()
   return slotsForDuration(durationMins).map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
       new Date(iso).getTime() > now &&
-      therapists.some((t) => findClash({ startISO: iso, durationMins }, busyByCode.get(t.code) ?? []) === null)
+      therapists.some(
+        (t) =>
+          findClash({ startISO: iso, durationMins }, busyByCode.get(t.code) ?? []) === null &&
+          !isBlocked(intervals, t.code, iso, durationMins),
+      )
     return { time, iso, available }
   })
 }
