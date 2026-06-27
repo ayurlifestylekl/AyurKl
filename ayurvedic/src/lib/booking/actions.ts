@@ -2,12 +2,15 @@
 
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createClient as createSb } from '@supabase/supabase-js'
-import type { BookingRequestInput } from '@/types/booking'
+import type { BookingRequestInput, Gender } from '@/types/booking'
 import { genderRequirementValue, canCancel } from './policy'
 import { createBookingToken } from './token'
 import { canAccessBooking } from './access'
 import { notifyRequestReceived, notifyCancelled } from './notify'
 import { parseDurationMins } from './duration'
+import { slotsForDuration, slotIso } from './slots'
+import { findClash, type Slot } from './scheduling'
+import { therapistsForGender } from '@/lib/staff/therapists'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -162,4 +165,61 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
   if (error) return { error: error.message }
   await notifyCancelled({ to: a.patient_email, name: a.patient_name, treatmentName: a.treatment_name, refundable })
   return { ok: true, refundable }
+}
+
+export type SlotInfo = { time: string; iso: string; available: boolean }
+
+/**
+ * Available 30-min booking slots for a date, treatment and guest gender.
+ * A slot is available when at least one same-gender therapist is free for the
+ * therapy length + 30-min buffer (based on already-assigned appointments).
+ * Therapist identity is never returned — only whether a time is bookable.
+ */
+export async function getAvailableSlots(
+  dateYMD: string,
+  treatmentId: string | null,
+  gender: Gender,
+): Promise<SlotInfo[]> {
+  if (gender !== 'male' && gender !== 'female') return []
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateYMD)) return []
+  const sb = admin()
+
+  let durationMins = 30
+  if (treatmentId) {
+    const { data: t } = await sb.from('treatments').select('duration').eq('id', treatmentId).maybeSingle()
+    durationMins = t ? parseDurationMins(t.duration) : 60
+  }
+
+  const therapists = therapistsForGender(gender)
+  if (therapists.length === 0) return []
+  const codes = therapists.map((t) => t.code)
+
+  const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
+  const dayStart = new Date(dayStartMs).toISOString()
+  const dayEnd = new Date(dayStartMs + 86_400_000).toISOString()
+
+  const { data: appts } = await sb
+    .from('appointments')
+    .select('appointment_date_time, duration_mins, assigned_therapist_code')
+    .in('assigned_therapist_code', codes)
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+    .gte('appointment_date_time', dayStart)
+    .lt('appointment_date_time', dayEnd)
+
+  const busyByCode = new Map<string, Slot[]>()
+  for (const a of appts ?? []) {
+    if (!a.assigned_therapist_code || !a.appointment_date_time) continue
+    const arr = busyByCode.get(a.assigned_therapist_code) ?? []
+    arr.push({ startISO: a.appointment_date_time, durationMins: a.duration_mins ?? 60 })
+    busyByCode.set(a.assigned_therapist_code, arr)
+  }
+
+  const now = Date.now()
+  return slotsForDuration(durationMins).map((time) => {
+    const iso = slotIso(dateYMD, time)
+    const available =
+      new Date(iso).getTime() > now &&
+      therapists.some((t) => findClash({ startISO: iso, durationMins }, busyByCode.get(t.code) ?? []) === null)
+    return { time, iso, available }
+  })
 }

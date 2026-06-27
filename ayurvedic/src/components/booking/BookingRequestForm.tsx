@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
@@ -9,6 +9,7 @@ import type { BookingKind, Gender, HealthIntake } from '@/types/booking'
 import { createBookingRequest } from '@/lib/booking/actions'
 import HealthIntakeFields from './HealthIntakeFields'
 import PolicyDisclaimers from './PolicyDisclaimers'
+import SlotPicker from './SlotPicker'
 
 interface BookingRequestFormProps {
   bookingKind: BookingKind
@@ -22,12 +23,6 @@ interface BookingRequestFormProps {
   } | null
   account?: { email: string | null; signedIn: boolean } | null
   parentConsultationId?: string | null
-}
-
-/** Format a Date as a `datetime-local` value in the browser's local zone. */
-function toLocalInput(d: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
 export default function BookingRequestForm({
@@ -50,11 +45,6 @@ export default function BookingRequestForm({
   const [accepted, setAccepted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-
-  const minLocal = useMemo(() => {
-    const lead = treatment?.bookingLeadTimeHours ?? 0
-    return toLocalInput(new Date(Date.now() + lead * 60 * 60 * 1000))
-  }, [treatment?.bookingLeadTimeHours])
 
   const priceText =
     bookingKind === 'consultation'
@@ -143,12 +133,24 @@ export default function BookingRequestForm({
             <option value="male">Male</option>
           </select>
         </Field>
-        <Field label="Preferred date & time" required>
-          <input type="datetime-local" min={minLocal} value={preferredAt} onChange={(e) => setPreferredAt(e.target.value)} required className={inputCls} />
-        </Field>
-        <Field label="Alternate time (optional)">
-          <input type="datetime-local" min={minLocal} value={preferredAtAlt} onChange={(e) => setPreferredAtAlt(e.target.value)} className={inputCls} />
-        </Field>
+      </div>
+
+      <div className="grid gap-3">
+        <SlotPicker
+          treatmentId={treatment?.id ?? null}
+          gender={gender}
+          value={preferredAt}
+          onChange={setPreferredAt}
+          label="Preferred date & time"
+          required
+        />
+        <SlotPicker
+          treatmentId={treatment?.id ?? null}
+          gender={gender}
+          value={preferredAtAlt}
+          onChange={setPreferredAtAlt}
+          label="Alternate date & time (optional)"
+        />
       </div>
 
       <HealthIntakeFields value={health} onChange={setHealth} gender={gender} />
