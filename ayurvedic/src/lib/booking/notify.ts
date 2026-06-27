@@ -61,6 +61,21 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null }
   await sendEmail({ to: p.to, category: 'transactional', subject: 'Appointment confirmed — Kerala Ayurvedic Lifestyle', html, text })
 }
 
+export async function notifyPaymentReminder(p: NotifyBase & { payUrl: string; expiresISO: string | null }) {
+  if (!p.to) return
+  const { html, text } = shell(
+    'Reminder — complete your payment',
+    [
+      `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is approved but not yet paid.`,
+      p.expiresISO
+        ? `Please pay by <strong>${when(p.expiresISO)}</strong> to keep your slot — after that it will be released for others.`
+        : 'Please complete payment soon to keep your slot.',
+    ],
+    { label: 'Pay now', url: p.payUrl },
+  )
+  await sendEmail({ to: p.to, category: 'transactional', subject: 'Reminder: complete your payment — Kerala Ayurvedic Lifestyle', html, text })
+}
+
 export async function notifyCancelled(p: NotifyBase & { refundable: boolean; reason?: string }) {
   if (!p.to) return
   const lines = [

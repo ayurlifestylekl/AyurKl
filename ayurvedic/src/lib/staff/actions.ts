@@ -85,6 +85,13 @@ export async function approveAndAssign(
     .eq('id', id)
   if (error) return { error: error.message }
 
+  // Treatments get a 15-hour window to pay before the slot is auto-released.
+  // Best-effort: harmless no-op until the payment_expiry migration is applied.
+  if (to === 'awaiting_payment') {
+    const expiresAt = new Date(Date.now() + 15 * 3600_000).toISOString()
+    await db.from('appointments').update({ payment_expires_at: expiresAt, payment_reminded: false }).eq('id', id)
+  }
+
   // Link straight to the payment route (one click → Billplz), not the status page.
   const payUrl =
     to === 'awaiting_payment'

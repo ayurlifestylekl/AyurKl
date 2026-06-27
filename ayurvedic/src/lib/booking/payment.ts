@@ -37,6 +37,11 @@ export async function startPaymentForAppointment(
     return { error: 'Not authorised.' }
   }
   if (a.status !== 'awaiting_payment') return { error: 'This booking is not awaiting payment.' }
+  // Best-effort expiry check (separate query so a missing column can't break pay).
+  const { data: exp } = await sb.from('appointments').select('payment_expires_at').eq('id', id).maybeSingle()
+  if (exp?.payment_expires_at && new Date(exp.payment_expires_at).getTime() < Date.now()) {
+    return { error: 'This payment link has expired and the slot was released. Please book again.' }
+  }
   if (a.payable_amount_rm == null) return { error: 'No amount is payable for this booking.' }
 
   const provider = getPaymentProvider()
