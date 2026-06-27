@@ -4,13 +4,13 @@ import type { DoctorPatientView } from '@/types/booking'
 export default function PatientHealthPanel({ p }: { p: DoctorPatientView }) {
   const intake = p.healthIntake ?? {}
   const acct = p.accountHealth
-  const hasIntake = !!(intake.conditions || intake.allergies || intake.medications || intake.pregnant || intake.notes)
+  const hasIntake = !!(intake.conditions || intake.allergies || intake.medications || intake.pregnant || intake.onPeriod || intake.notes)
   const hasAcct = !!(acct && (acct.allergies || acct.medications || acct.conditions || acct.heightCm || acct.weightKg))
 
   return (
     <div className="space-y-4">
       <div className="rounded-xl border border-accent/30 bg-white p-5">
-        <h3 className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-accent">Patient</h3>
+        <h3 className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-accent">Guest</h3>
         <div className="space-y-1.5">
           <Row label="Name" value={p.patientName} />
           <Row label="Contact" value={p.patientPhone} />
@@ -48,6 +48,7 @@ export default function PatientHealthPanel({ p }: { p: DoctorPatientView }) {
               <Row label="Allergies" value={intake.allergies ?? null} />
               <Row label="Medications" value={intake.medications ?? null} />
               {intake.pregnant && <Row label="Pregnancy" value="Pregnant / may be pregnant" />}
+              {intake.onPeriod && <Row label="Menstruation" value={intake.onPeriod === 'yes' ? 'On period' : 'Not on period'} />}
               <Row label="Notes" value={intake.notes ?? null} />
             </div>
           ) : (

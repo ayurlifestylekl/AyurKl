@@ -43,6 +43,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
             bookingKind={a.bookingKind}
             genderRequirement={a.genderRequirement}
             requestedAt={a.requestedDatetime}
+            requestedAtAlt={a.requestedDatetimeAlt}
             backHref="/doctor"
             canDelete={role === 'admin'}
           />

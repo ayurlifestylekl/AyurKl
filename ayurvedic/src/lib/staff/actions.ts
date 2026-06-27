@@ -134,12 +134,13 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
     return { error: `Cannot reject a ${appt.status} booking.` }
   }
 
+  const finalReason = reason?.trim() || 'Declined by clinic'
   const { error } = await db
     .from('appointments')
     .update({
       status: 'cancelled',
       cancelled_at: new Date().toISOString(),
-      cancellation_reason: reason?.trim() || 'Declined by clinic',
+      cancellation_reason: finalReason,
     })
     .eq('id', id)
   if (error) return { error: error.message }
@@ -149,6 +150,7 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
     name: appt.patient_name,
     treatmentName: appt.treatment_name,
     refundable: false,
+    reason: finalReason,
   })
 
   revalidatePath('/console')

@@ -73,14 +73,14 @@ export default async function BookingRequestPage({
               label="Confirmed"
               sub={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) ? whenText : 'Final confirmation.'}
             />
-            {b.status === 'cancelled' && <Step done icon={XCircle} label="Cancelled" sub="This booking was cancelled." tone="danger" />}
+            {b.status === 'cancelled' && <Step done icon={XCircle} label="Cancelled" sub={b.cancellationReason || 'This booking was cancelled.'} tone="danger" />}
           </ol>
 
           {/* Details */}
           <dl className="mt-7 grid grid-cols-2 gap-y-2 border-t border-accent/15 pt-5 font-body text-[13.5px]">
             <Row label="Preferred time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />
             {isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
-            <Row label="Patient" value={b.patientName ?? '—'} />
+            <Row label="Guest" value={b.patientName ?? '—'} />
             <Row label="Status" value={STATUS_LABEL[b.status]} />
             {amount && <Row label="Price" value={amount} />}
             {b.assignedTherapistName && <Row label="Therapist" value={b.assignedTherapistName} />}
@@ -115,6 +115,19 @@ export default async function BookingRequestPage({
                 <p className="text-center font-body text-[11.5px] italic text-dark/55">
                   Cancellations within 12 hours of your appointment are non-refundable.
                 </p>
+              </div>
+            )}
+            {b.status === 'cancelled' && (
+              <div className="space-y-3">
+                <p className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 font-body text-[13.5px] text-red-800">
+                  This booking was cancelled.{b.cancellationReason ? ` Reason: ${b.cancellationReason}` : ''}
+                </p>
+                <Link
+                  href="/book"
+                  className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
+                >
+                  Book again
+                </Link>
               </div>
             )}
           </div>

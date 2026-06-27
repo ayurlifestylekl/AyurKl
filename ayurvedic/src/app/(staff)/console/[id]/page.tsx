@@ -53,6 +53,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
             bookingKind={a.bookingKind}
             genderRequirement={a.genderRequirement}
             requestedAt={a.requestedDatetime}
+            requestedAtAlt={a.requestedDatetimeAlt}
             backHref="/console"
             canDelete
           />

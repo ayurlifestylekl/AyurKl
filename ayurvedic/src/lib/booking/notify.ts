@@ -61,12 +61,22 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null }
   await sendEmail({ to: p.to, category: 'transactional', subject: 'Appointment confirmed — Kerala Ayurvedic Lifestyle', html, text })
 }
 
-export async function notifyCancelled(p: NotifyBase & { refundable: boolean }) {
+export async function notifyCancelled(p: NotifyBase & { refundable: boolean; reason?: string }) {
   if (!p.to) return
-  const { html, text } = shell('Your appointment was cancelled', [
+  const lines = [
     `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been cancelled.`,
-    p.refundable ? 'As this was cancelled in good time, any payment is eligible for a refund — our team will be in touch.' : 'As this was cancelled within 12 hours of the appointment, it is non-refundable per our policy.',
-  ])
+  ]
+  if (p.reason) {
+    lines.push(`Reason: <strong>${p.reason}</strong>`)
+    lines.push('You’re welcome to choose another time and book again on our website.')
+  } else {
+    lines.push(
+      p.refundable
+        ? 'As this was cancelled in good time, any payment is eligible for a refund — our team will be in touch.'
+        : 'As this was cancelled within 12 hours of the appointment, it is non-refundable per our policy.',
+    )
+  }
+  const { html, text } = shell('Your appointment was cancelled', lines, { label: 'Book again', url: `${SITE}/book` })
   await sendEmail({ to: p.to, category: 'transactional', subject: 'Appointment cancelled — Kerala Ayurvedic Lifestyle', html, text })
 }
 

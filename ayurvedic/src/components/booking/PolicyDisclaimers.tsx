@@ -1,6 +1,6 @@
 'use client'
 
-import { Users, Clock, MessageCircle } from 'lucide-react'
+import { Users, Clock, MessageCircle, Timer } from 'lucide-react'
 
 interface PolicyDisclaimersProps {
   accepted: boolean
@@ -22,6 +22,11 @@ const POLICIES = [
     icon: MessageCircle,
     title: 'Rescheduling',
     body: 'To change your appointment time, message us on WhatsApp at least 12–24 hours beforehand.',
+  },
+  {
+    icon: Timer,
+    title: 'Please arrive 15 minutes early',
+    body: 'Kindly arrive 15 minutes before your scheduled appointment at the centre. Late arrivals will result in a shortened therapy session so we remain on schedule for all guests.',
   },
 ]
 

@@ -28,6 +28,8 @@ export interface HealthIntake {
   allergies?: string
   medications?: string
   pregnant?: boolean
+  /** Female guests only — 'yes' on period, 'no' not on period. */
+  onPeriod?: 'yes' | 'no'
   notes?: string
 }
 
@@ -77,6 +79,7 @@ export interface StaffAppointment {
   customerId: string | null
   parentConsultationId: string | null
   treatmentUnlocked: boolean
+  cancellationReason: string | null
   createdAt: string | null
 }
 

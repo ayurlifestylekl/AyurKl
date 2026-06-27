@@ -47,17 +47,46 @@ export default function HealthIntakeFields({ value, onChange, gender }: HealthIn
           />
         </Field>
         {gender === 'female' && (
-          <label className="flex cursor-pointer items-center gap-2.5">
-            <input
-              type="checkbox"
-              checked={value.pregnant ?? false}
-              onChange={(e) => set({ pregnant: e.target.checked })}
-              className="h-4 w-4 accent-[#1e5b4b]"
-            />
-            <span className="font-body text-[13px] text-dark/80">
-              I am pregnant or may be pregnant
-            </span>
-          </label>
+          <>
+            <label className="flex cursor-pointer items-center gap-2.5">
+              <input
+                type="checkbox"
+                checked={value.pregnant ?? false}
+                onChange={(e) => set({ pregnant: e.target.checked })}
+                className="h-4 w-4 accent-[#1e5b4b]"
+              />
+              <span className="font-body text-[13px] text-dark/80">
+                I am pregnant or may be pregnant
+              </span>
+            </label>
+            <div>
+              <span className="mb-1 block font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">
+                Menstruation
+              </span>
+              <div className="flex flex-wrap gap-4">
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="radio"
+                    name="onPeriod"
+                    checked={value.onPeriod === 'yes'}
+                    onChange={() => set({ onPeriod: 'yes' })}
+                    className="h-4 w-4 accent-[#1e5b4b]"
+                  />
+                  <span className="font-body text-[13px] text-dark/80">I am on my period</span>
+                </label>
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="radio"
+                    name="onPeriod"
+                    checked={value.onPeriod === 'no'}
+                    onChange={() => set({ onPeriod: 'no' })}
+                    className="h-4 w-4 accent-[#1e5b4b]"
+                  />
+                  <span className="font-body text-[13px] text-dark/80">I am not on my period</span>
+                </label>
+              </div>
+            </div>
+          </>
         )}
         <Field label="Anything else we should know">
           <textarea

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
 import { approveAndAssign, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
 import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
+import { fmtMY } from '@/lib/datetime'
 
 interface Props {
   id: string
@@ -12,26 +13,31 @@ interface Props {
   bookingKind: BookingKind
   /** Required therapist gender derived from the gender policy (or null = any). */
   genderRequirement: Gender | null
+  /** The guest's preferred time (read-only — staff confirm this or the alternate). */
   requestedAt: string | null
+  /** The guest's alternate time, if they gave one. */
+  requestedAtAlt?: string | null
   /** Where to send the user after a delete (the list this came from). */
   backHref?: string
   /** Whether to show the destructive Delete button (front desk / admin only). */
   canDelete?: boolean
 }
 
-function toLocalInput(iso: string | null): string {
-  const d = iso ? new Date(iso) : new Date()
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-}
-
 export default function AppointmentActions({
-  id, status, bookingKind, genderRequirement, requestedAt, backHref = '/console', canDelete = false,
+  id, status, bookingKind, genderRequirement, requestedAt, requestedAtAlt = null,
+  backHref = '/console', canDelete = false,
 }: Props) {
   const router = useRouter()
   const [therapistCode, setTherapistCode] = useState('')
-  const [confirmedAt, setConfirmedAt] = useState(toLocalInput(requestedAt))
+  // Guest can only be confirmed at a time THEY offered — not a free-typed time.
+  const timeOptions = [
+    { key: 'preferred', label: 'Preferred', iso: requestedAt },
+    { key: 'alt', label: 'Alternate', iso: requestedAtAlt },
+  ].filter((o): o is { key: string; label: string; iso: string } => !!o.iso)
+  const [chosenTime, setChosenTime] = useState(timeOptions[0]?.iso ?? '')
   const [room, setRoom] = useState('')
+  const [rejecting, setRejecting] = useState(false)
+  const [rejectReason, setRejectReason] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
@@ -44,9 +50,13 @@ export default function AppointmentActions({
     })
   }
 
-  const onReject = () => {
-    if (!confirm('Reject this request? The customer will be notified it was declined.')) return
-    run(() => rejectBooking(id))
+  const onApprove = () => {
+    if (!chosenTime) { setError('Select the confirmed time.'); return }
+    run(() => approveAndAssign(id, { therapistCode, confirmedAt: chosenTime, room }))
+  }
+
+  const onConfirmReject = () => {
+    run(() => rejectBooking(id, rejectReason))
   }
 
   const onDelete = () => {
@@ -83,25 +93,35 @@ export default function AppointmentActions({
               ))}
             </select>
           </Field>
-          <Field label="Confirmed date & time">
-            <input type="datetime-local" value={confirmedAt} onChange={(e) => setConfirmedAt(e.target.value)} className={inp} />
+
+          <Field label="Confirm a time the guest requested">
+            {timeOptions.length === 0 ? (
+              <p className="font-body text-[12.5px] italic text-dark/55">No time provided.</p>
+            ) : (
+              <div className="space-y-1.5">
+                {timeOptions.map((o) => (
+                  <label key={o.key} className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-accent/20 px-3 py-2">
+                    <input
+                      type="radio"
+                      name="confirmTime"
+                      checked={chosenTime === o.iso}
+                      onChange={() => setChosenTime(o.iso)}
+                      className="h-4 w-4 flex-none accent-[#1e5b4b]"
+                    />
+                    <span className="font-body text-[13px] text-dark/80">
+                      <strong className="font-heading text-[10px] uppercase tracking-[0.12em] text-dark/55">{o.label}:</strong>{' '}
+                      {fmtMY(o.iso, { dateStyle: 'medium', timeStyle: 'short' })}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            )}
           </Field>
+
           <Field label="Room (optional)">
             <input value={room} onChange={(e) => setRoom(e.target.value)} className={inp} placeholder="e.g. Room 2" />
           </Field>
-          <button
-            disabled={pending}
-            onClick={() =>
-              run(() =>
-                approveAndAssign(id, {
-                  therapistCode,
-                  confirmedAt: new Date(confirmedAt).toISOString(),
-                  room,
-                }),
-              )
-            }
-            className={btnPrimary}
-          >
+          <button disabled={pending} onClick={onApprove} className={btnPrimary}>
             {pending ? 'Saving…' : bookingKind === 'consultation' ? 'Approve & confirm consultation' : 'Approve & assign'}
           </button>
         </div>
@@ -121,14 +141,29 @@ export default function AppointmentActions({
         </div>
       )}
 
-      {showDangerZone && (
+      {/* Reject with a reason the guest will see, so they can re-book. */}
+      {rejecting && (
+        <div className="mt-4 space-y-2 rounded-lg border border-red-200 bg-red-50 p-3">
+          <Field label="Reason for rejection (shown to the guest)">
+            <textarea
+              rows={2}
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              placeholder="e.g. No therapist available at that time — please pick another slot."
+              className={inp}
+            />
+          </Field>
+          <div className="flex gap-2">
+            <Btn danger onClick={onConfirmReject} disabled={pending}>{pending ? 'Rejecting…' : 'Confirm rejection'}</Btn>
+            <Btn onClick={() => setRejecting(false)} disabled={pending}>Back</Btn>
+          </div>
+        </div>
+      )}
+
+      {showDangerZone && !rejecting && (
         <div className="mt-4 flex flex-wrap gap-2 border-t border-accent/15 pt-4">
-          {canReject && (
-            <Btn danger onClick={onReject} disabled={pending}>Reject request</Btn>
-          )}
-          {canDelete && (
-            <Btn danger onClick={onDelete} disabled={pending}>Delete</Btn>
-          )}
+          {canReject && <Btn danger onClick={() => setRejecting(true)} disabled={pending}>Reject request</Btn>}
+          {canDelete && <Btn danger onClick={onDelete} disabled={pending}>Delete</Btn>}
         </div>
       )}
 

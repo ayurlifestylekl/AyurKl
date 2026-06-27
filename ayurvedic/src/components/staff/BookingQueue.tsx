@@ -24,7 +24,7 @@ export default function BookingQueue({
       <table className="w-full text-left text-[13px]">
         <thead className="border-b border-accent/20 font-heading text-[10px] uppercase tracking-[0.12em] text-dark/45">
           <tr>
-            <th className="px-4 py-3">Patient</th>
+            <th className="px-4 py-3">Guest</th>
             <th className="px-4 py-3">Treatment</th>
             <th className="px-4 py-3">Requested</th>
             <th className="px-4 py-3">Gender</th>
