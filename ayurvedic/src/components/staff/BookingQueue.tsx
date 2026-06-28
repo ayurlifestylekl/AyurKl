@@ -37,7 +37,10 @@ export default function BookingQueue({
           {appointments.map((a) => (
             <tr key={a.id} className="hover:bg-cream/60">
               <td className="px-4 py-3">
-                <div className="font-semibold text-primary">{a.patientName ?? '—'}</div>
+                <div className="font-semibold text-primary">
+                  {a.patientName ?? '—'}
+                  {a.groupId && <span className="ml-2 rounded bg-accent/15 px-1.5 py-0.5 align-middle text-[9px] font-bold uppercase tracking-wide text-accent">Group</span>}
+                </div>
                 <div className="flex items-center gap-2 text-[12px] text-dark/55">
                   <span>{a.patientPhone ?? ''}{a.isGuest ? ' · guest' : ''}</span>
                   {customerWaLink(a.patientPhone) && (

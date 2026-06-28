@@ -44,15 +44,30 @@ export async function startPaymentForAppointment(
   }
   if (a.payable_amount_rm == null) return { error: 'No amount is payable for this booking.' }
 
+  // Group bookings: one combined bill across all guests (best-effort group lookup).
+  let amountRm = Number(a.payable_amount_rm)
+  let description = `${a.treatment_name ?? 'Treatment'} booking`
+  const { data: g } = await sb.from('appointments').select('group_id').eq('id', id).maybeSingle()
+  const groupId: string | null = g?.group_id ?? null
+  if (groupId) {
+    const { data: members } = await sb.from('appointments').select('status, payable_amount_rm').eq('group_id', groupId)
+    const list = members ?? []
+    if (list.some((m) => m.status !== 'awaiting_payment')) {
+      return { error: 'All guests must be approved by the clinic before payment.' }
+    }
+    amountRm = list.reduce((sum, m) => sum + Number(m.payable_amount_rm ?? 0), 0)
+    description = `${a.treatment_name ?? 'Treatment'} — group of ${list.length}`
+  }
+
   const provider = getPaymentProvider()
   const base = siteUrl()
   const { billId, url } = await provider.createBill({
     appointmentId: a.id,
-    amountRm: Number(a.payable_amount_rm),
+    amountRm,
     name: a.patient_name ?? 'Guest',
     email: a.patient_email ?? '',
     phone: a.patient_phone ?? '',
-    description: `${a.treatment_name ?? 'Treatment'} booking`,
+    description,
     callbackUrl: `${base}/api/payments/callback`,
     redirectUrl: `${base}/book/request/${a.id}${token ? `?t=${token}` : ''}`,
   })
@@ -78,9 +93,29 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
   if (!canTransition(a.status as BookingStatus, 'confirmed')) {
     return { error: `Cannot confirm from ${a.status}.` }
   }
+  const paidAt = new Date().toISOString()
+
+  // Group booking: one payment confirms every guest (best-effort group lookup).
+  const { data: g } = await sb.from('appointments').select('group_id').eq('id', a.id).maybeSingle()
+  if (g?.group_id) {
+    const { error: gErr } = await sb
+      .from('appointments')
+      .update({ payment_status: 'paid', paid_at: paidAt, status: 'confirmed' })
+      .eq('group_id', g.group_id)
+      .eq('status', 'awaiting_payment')
+    if (gErr) return { error: gErr.message }
+    await notifyConfirmed({
+      to: a.patient_email,
+      name: a.patient_name,
+      treatmentName: a.treatment_name,
+      whenISO: a.appointment_date_time,
+    })
+    return { appointmentId: a.id }
+  }
+
   const { error } = await sb
     .from('appointments')
-    .update({ payment_status: 'paid', paid_at: new Date().toISOString(), status: 'confirmed' })
+    .update({ payment_status: 'paid', paid_at: paidAt, status: 'confirmed' })
     .eq('id', a.id)
   if (error) return { error: error.message }
   await notifyConfirmed({

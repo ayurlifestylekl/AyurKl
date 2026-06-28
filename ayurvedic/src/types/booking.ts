@@ -80,6 +80,7 @@ export interface StaffAppointment {
   parentConsultationId: string | null
   treatmentUnlocked: boolean
   cancellationReason: string | null
+  groupId: string | null
   createdAt: string | null
 }
 

@@ -2,13 +2,15 @@
 
 import { useEffect, useState, useTransition } from 'react'
 import type { Gender } from '@/types/booking'
-import { getAvailableSlots, type SlotInfo } from '@/lib/booking/actions'
+import { getAvailableSlots, getAvailableSlotsForParty, type SlotInfo } from '@/lib/booking/actions'
 import { minBookableDate } from '@/lib/booking/slots'
 import { fmtMY } from '@/lib/datetime'
 
 interface SlotPickerProps {
   treatmentId: string | null
   gender: Gender | ''
+  /** For group bookings — therapists needed per gender at the same time. */
+  party?: { male: number; female: number }
   /** Selected slot as a UTC ISO string ('' = none). */
   value: string
   onChange: (iso: string) => void
@@ -16,21 +18,26 @@ interface SlotPickerProps {
   required?: boolean
 }
 
-export default function SlotPicker({ treatmentId, gender, value, onChange, label, required }: SlotPickerProps) {
+export default function SlotPicker({ treatmentId, gender, party, value, onChange, label, required }: SlotPickerProps) {
   const [date, setDate] = useState('')
   const [slots, setSlots] = useState<SlotInfo[]>([])
   const [loading, start] = useTransition()
   const minDate = minBookableDate()
 
+  const male = party?.male ?? 0
+  const female = party?.female ?? 0
+  const partyTotal = male + female
+  const ready = party ? partyTotal > 0 : !!gender
+
   useEffect(() => {
-    if (!date || !gender) {
+    if (!date || !ready) {
       setSlots([])
       return
     }
     start(async () => {
-      setSlots(await getAvailableSlots(date, treatmentId, gender as Gender))
+      setSlots(party ? await getAvailableSlotsForParty(date, treatmentId, male, female) : await getAvailableSlots(date, treatmentId, gender as Gender))
     })
-  }, [date, gender, treatmentId])
+  }, [date, gender, treatmentId, party, male, female, ready])
 
   return (
     <div className="rounded-xl border border-accent/25 bg-white/60 p-4">
@@ -38,8 +45,10 @@ export default function SlotPicker({ treatmentId, gender, value, onChange, label
         {label} {required && <span className="text-accent">*</span>}
       </span>
 
-      {!gender ? (
-        <p className="font-body text-[12.5px] italic text-dark/55">Select a gender above to see available times.</p>
+      {!ready ? (
+        <p className="font-body text-[12.5px] italic text-dark/55">
+          {party ? 'Add your guests above to see available times.' : 'Select a gender above to see available times.'}
+        </p>
       ) : (
         <>
           <input

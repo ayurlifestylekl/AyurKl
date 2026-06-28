@@ -34,6 +34,20 @@ export async function getBookingForPayment(id: string): Promise<StaffAppointment
   return data ? mapAppointmentRow(data) : null
 }
 
+/** All guests in a group booking (service role). Returns [] for non-groups. */
+export async function getGroupMembers(groupId: string): Promise<StaffAppointment[]> {
+  const { data, error } = await admin()
+    .from('appointments')
+    .select(APPOINTMENT_COLUMNS)
+    .eq('group_id', groupId)
+    .order('updated_at', { ascending: true })
+  if (error) {
+    console.error('[storefront/booking] getGroupMembers:', error.message)
+    return []
+  }
+  return (data ?? []).map(mapAppointmentRow)
+}
+
 /** A signed-in customer's own bookings (RLS-scoped client). */
 export async function getMyBookings(sb: SB, userId: string): Promise<StaffAppointment[]> {
   const { data, error } = await sb

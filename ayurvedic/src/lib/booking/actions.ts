@@ -2,7 +2,7 @@
 
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createClient as createSb } from '@supabase/supabase-js'
-import type { BookingRequestInput, Gender } from '@/types/booking'
+import type { BookingRequestInput, Gender, HealthIntake } from '@/types/booking'
 import { genderRequirementValue, canCancel } from './policy'
 import { createBookingToken } from './token'
 import { canAccessBooking } from './access'
@@ -171,18 +171,19 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
 export type SlotInfo = { time: string; iso: string; available: boolean }
 
 /**
- * Available 30-min booking slots for a date, treatment and guest gender.
- * A slot is available when at least one same-gender therapist is free for the
- * therapy length + 30-min buffer (based on already-assigned appointments).
- * Therapist identity is never returned — only whether a time is bookable.
+ * Core slot availability for a party needing `need.male` male + `need.female`
+ * female therapists at the same time (single bookings need one of these = 1).
+ * A slot is available when enough free same-gender therapists exist for the
+ * therapy length + 30-min buffer, respecting bookings and leave/blocks.
+ * Therapist identity is never returned.
  */
-export async function getAvailableSlots(
+async function computeSlots(
   dateYMD: string,
   treatmentId: string | null,
-  gender: Gender,
+  need: { male: number; female: number },
 ): Promise<SlotInfo[]> {
-  if (gender !== 'male' && gender !== 'female') return []
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateYMD)) return []
+  if (need.male + need.female === 0) return []
   const sb = admin()
 
   let durationMins = 30
@@ -191,21 +192,24 @@ export async function getAvailableSlots(
     durationMins = t ? parseDurationMins(t.duration) : 60
   }
 
-  const therapists = therapistsForGender(gender)
-  if (therapists.length === 0) return []
-  const codes = therapists.map((t) => t.code)
+  const male = need.male > 0 ? therapistsForGender('male') : []
+  const female = need.female > 0 ? therapistsForGender('female') : []
+  const allSlots = slotsForDuration(durationMins)
 
+  // Can the roster ever satisfy this party? If not, nothing is bookable.
+  if (need.male > male.length || need.female > female.length) {
+    return allSlots.map((time) => ({ time, iso: slotIso(dateYMD, time), available: false }))
+  }
+
+  const codes = [...male, ...female].map((t) => t.code)
   const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
-  const dayStart = new Date(dayStartMs).toISOString()
-  const dayEnd = new Date(dayStartMs + 86_400_000).toISOString()
-
   const { data: appts } = await sb
     .from('appointments')
     .select('appointment_date_time, duration_mins, assigned_therapist_code')
     .in('assigned_therapist_code', codes)
     .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
-    .gte('appointment_date_time', dayStart)
-    .lt('appointment_date_time', dayEnd)
+    .gte('appointment_date_time', new Date(dayStartMs).toISOString())
+    .lt('appointment_date_time', new Date(dayStartMs + 86_400_000).toISOString())
 
   const busyByCode = new Map<string, Slot[]>()
   for (const a of appts ?? []) {
@@ -215,20 +219,128 @@ export async function getAvailableSlots(
     busyByCode.set(a.assigned_therapist_code, arr)
   }
 
-  // Leave / blocked windows remove therapists from availability.
   const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
   const intervals = blockedIntervalsForDate(blocks, dateYMD)
-
   const now = Date.now()
-  return slotsForDuration(durationMins).map((time) => {
+
+  const freeCount = (list: typeof male, iso: string) =>
+    list.filter(
+      (t) =>
+        findClash({ startISO: iso, durationMins }, busyByCode.get(t.code) ?? []) === null &&
+        !isBlocked(intervals, t.code, iso, durationMins),
+    ).length
+
+  return allSlots.map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
       new Date(iso).getTime() > now &&
-      therapists.some(
-        (t) =>
-          findClash({ startISO: iso, durationMins }, busyByCode.get(t.code) ?? []) === null &&
-          !isBlocked(intervals, t.code, iso, durationMins),
-      )
+      freeCount(male, iso) >= need.male &&
+      freeCount(female, iso) >= need.female
     return { time, iso, available }
   })
+}
+
+/** Slots for a single guest of the given gender. */
+export async function getAvailableSlots(dateYMD: string, treatmentId: string | null, gender: Gender): Promise<SlotInfo[]> {
+  if (gender !== 'male' && gender !== 'female') return []
+  return computeSlots(dateYMD, treatmentId, { male: gender === 'male' ? 1 : 0, female: gender === 'female' ? 1 : 0 })
+}
+
+/** Slots for a group needing `male` male + `female` female therapists together. */
+export async function getAvailableSlotsForParty(
+  dateYMD: string,
+  treatmentId: string | null,
+  male: number,
+  female: number,
+): Promise<SlotInfo[]> {
+  return computeSlots(dateYMD, treatmentId, { male: Math.max(0, male | 0), female: Math.max(0, female | 0) })
+}
+
+export interface GroupGuest { name: string; gender: Gender; age?: number | null }
+
+/**
+ * Create a group / multi-guest booking — one appointment per guest, linked by a
+ * shared group_id. Each guest is later assigned its own same-gender therapist;
+ * payment is combined across the group. Treatments only (groups are payable).
+ */
+export async function createGroupBooking(input: {
+  treatmentId: string
+  preferredAt: string
+  preferredAtAlt?: string | null
+  patientPhone: string
+  patientEmail?: string | null
+  isGuest: boolean
+  healthIntake?: HealthIntake | null
+  acceptedPolicies: boolean
+  guests: GroupGuest[]
+}): Promise<CreateBookingResult> {
+  if (!input.acceptedPolicies) return { error: 'Please accept the booking policies to continue.' }
+  if (!input.patientPhone?.trim()) return { error: 'Please enter a contact number.' }
+  if (!input.preferredAt) return { error: 'Please choose a preferred date and time.' }
+  if (!input.treatmentId) return { error: 'Please choose a treatment.' }
+
+  const guests = (input.guests ?? []).filter(
+    (g) => g.name?.trim() && (g.gender === 'male' || g.gender === 'female'),
+  )
+  if (guests.length < 2) return { error: 'Add at least two guests (with name and gender) for a group booking.' }
+  if (guests.length > 6) return { error: 'Up to 6 guests per group booking.' }
+
+  const sb = admin()
+  const { data: t, error: tErr } = await sb
+    .from('treatments')
+    .select('id, title, price_rm, booking_type, category_id, duration')
+    .eq('id', input.treatmentId)
+    .maybeSingle()
+  if (tErr) return { error: tErr.message }
+  if (!t) return { error: 'Treatment not found.' }
+  if (t.booking_type === 'enquiry') return { error: 'This therapy is enquiry-only — please WhatsApp us to arrange it.' }
+
+  let userId: string | null = null
+  if (!input.isGuest) {
+    const ssr = await createServerClient()
+    const { data: auth } = await ssr.auth.getUser()
+    userId = auth.user?.id ?? null
+  }
+
+  const price = t.price_rm ?? null
+  const durationMins = parseDurationMins(t.duration)
+  const groupId = crypto.randomUUID()
+
+  const rows = guests.map((g) => ({
+    customer_id: userId,
+    is_guest: input.isGuest || !userId,
+    booking_kind: 'treatment',
+    treatment_id: t.id,
+    treatment_category_id: t.category_id ?? null,
+    treatment_name: t.title,
+    duration_mins: durationMins,
+    status: 'pending',
+    requested_datetime: input.preferredAt,
+    requested_datetime_alt: input.preferredAtAlt ?? null,
+    appointment_date_time: input.preferredAt,
+    patient_name: g.name.trim(),
+    patient_phone: input.patientPhone.trim(),
+    patient_email: input.patientEmail?.trim() || null,
+    patient_gender: g.gender,
+    gender_requirement: genderRequirementValue(g.gender),
+    guest_age: g.age ?? null,
+    group_id: groupId,
+    pre_visit_form: input.healthIntake ?? {},
+    payable_amount_rm: price,
+    payment_status: 'unpaid',
+  }))
+
+  const { data, error } = await sb.from('appointments').insert(rows).select('id')
+  if (error) return { error: error.message }
+  if (!data || data.length === 0) return { error: 'Could not create the booking.' }
+
+  const leadId = data[0].id as string
+  await notifyRequestReceived({
+    to: input.patientEmail,
+    name: guests[0].name,
+    treatmentName: `${t.title} (group of ${guests.length})`,
+    kind: 'treatment',
+    whenISO: input.preferredAt,
+  })
+  return { id: leadId, token: createBookingToken(leadId) }
 }

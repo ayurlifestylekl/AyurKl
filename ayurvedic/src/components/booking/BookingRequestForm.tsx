@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 
 import type { BookingKind, Gender, HealthIntake } from '@/types/booking'
-import { createBookingRequest } from '@/lib/booking/actions'
+import { createBookingRequest, createGroupBooking, type GroupGuest } from '@/lib/booking/actions'
 import HealthIntakeFields from './HealthIntakeFields'
 import PolicyDisclaimers from './PolicyDisclaimers'
 import SlotPicker from './SlotPicker'
@@ -25,6 +25,10 @@ interface BookingRequestFormProps {
   parentConsultationId?: string | null
 }
 
+type GuestRow = { name: string; gender: Gender | ''; age: string }
+const MAX_GUESTS = 6
+const emptyGuest = (): GuestRow => ({ name: '', gender: '', age: '' })
+
 export default function BookingRequestForm({
   bookingKind,
   treatment,
@@ -33,11 +37,14 @@ export default function BookingRequestForm({
 }: BookingRequestFormProps) {
   const router = useRouter()
   const signedIn = account?.signedIn ?? false
+  const canGroup = bookingKind === 'treatment'
 
+  const [partySize, setPartySize] = useState(1)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState(account?.email ?? '')
   const [gender, setGender] = useState<Gender | ''>('')
+  const [guests, setGuests] = useState<GuestRow[]>([emptyGuest(), emptyGuest()])
   const [preferredAt, setPreferredAt] = useState('')
   const [preferredAtAlt, setPreferredAtAlt] = useState('')
   const [bookAsGuest, setBookAsGuest] = useState(!signedIn)
@@ -46,33 +53,78 @@ export default function BookingRequestForm({
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
+  const isGroup = canGroup && partySize > 1
+
+  const resizeParty = (n: number) => {
+    setPartySize(n)
+    setPreferredAt('')
+    setPreferredAtAlt('')
+    if (n > 1) {
+      setGuests((prev) => {
+        const next = [...prev]
+        while (next.length < n) next.push(emptyGuest())
+        return next.slice(0, n)
+      })
+    }
+  }
+
+  const party = isGroup
+    ? {
+        male: guests.filter((g) => g.gender === 'male').length,
+        female: guests.filter((g) => g.gender === 'female').length,
+      }
+    : undefined
+
+  const unitPrice = typeof treatment?.price === 'number' ? treatment.price : null
   const priceText =
     bookingKind === 'consultation'
       ? 'Free'
-      : treatment?.priceLabel || (typeof treatment?.price === 'number' ? `RM${treatment.price}` : 'On consultation')
+      : isGroup && unitPrice != null
+        ? `RM${unitPrice} × ${partySize} = RM${unitPrice * partySize}`
+        : treatment?.priceLabel || (unitPrice != null ? `RM${unitPrice}` : 'On consultation')
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    if (!gender) return setError('Please select a gender for therapist matching.')
     if (!preferredAt) return setError('Please choose a preferred date and time.')
     if (!accepted) return setError('Please accept the booking policies to continue.')
 
     startTransition(async () => {
-      const res = await createBookingRequest({
-        treatmentId: treatment?.id ?? null,
-        bookingKind,
-        preferredAt: new Date(preferredAt).toISOString(),
-        preferredAtAlt: preferredAtAlt ? new Date(preferredAtAlt).toISOString() : null,
-        patientName: name,
-        patientPhone: phone,
-        patientEmail: email,
-        patientGender: gender,
-        isGuest: bookAsGuest || !signedIn,
-        healthIntake: health,
-        acceptedPolicies: accepted,
-        parentConsultationId: parentConsultationId ?? null,
-      })
+      let res
+      if (isGroup) {
+        const cleaned = guests.slice(0, partySize)
+        if (cleaned.some((g) => !g.name.trim() || (g.gender !== 'male' && g.gender !== 'female'))) {
+          setError('Please enter a name and gender for every guest.')
+          return
+        }
+        res = await createGroupBooking({
+          treatmentId: treatment?.id ?? '',
+          preferredAt: new Date(preferredAt).toISOString(),
+          preferredAtAlt: preferredAtAlt ? new Date(preferredAtAlt).toISOString() : null,
+          patientPhone: phone,
+          patientEmail: email,
+          isGuest: bookAsGuest || !signedIn,
+          healthIntake: health,
+          acceptedPolicies: accepted,
+          guests: cleaned.map<GroupGuest>((g) => ({ name: g.name, gender: g.gender as Gender, age: g.age ? Number(g.age) : null })),
+        })
+      } else {
+        if (!gender) return setError('Please select a gender for therapist matching.')
+        res = await createBookingRequest({
+          treatmentId: treatment?.id ?? null,
+          bookingKind,
+          preferredAt: new Date(preferredAt).toISOString(),
+          preferredAtAlt: preferredAtAlt ? new Date(preferredAtAlt).toISOString() : null,
+          patientName: name,
+          patientPhone: phone,
+          patientEmail: email,
+          patientGender: gender,
+          isGuest: bookAsGuest || !signedIn,
+          healthIntake: health,
+          acceptedPolicies: accepted,
+          parentConsultationId: parentConsultationId ?? null,
+        })
+      }
       if ('error' in res) setError(res.error)
       else router.push(`/book/request/${res.id}?t=${res.token}`)
     })
@@ -89,9 +141,7 @@ export default function BookingRequestForm({
           <div className="font-heading text-[17px] font-extrabold text-primary">
             {treatment?.title ?? 'Free Ayurveda Consultation'}
           </div>
-          {treatment?.duration && (
-            <div className="font-body text-[12.5px] text-dark/55">{treatment.duration}</div>
-          )}
+          {treatment?.duration && <div className="font-body text-[12.5px] text-dark/55">{treatment.duration}</div>}
         </div>
         <div className="text-right">
           <div className="font-heading text-[9px] uppercase tracking-[0.18em] text-dark/45">Price</div>
@@ -108,58 +158,95 @@ export default function BookingRequestForm({
       ) : (
         <p className="font-body text-[12.5px] text-dark/60">
           Booking as a guest.{' '}
-          <Link href="/auth/login?next=/book" className="font-semibold text-accent underline-offset-2 hover:underline">
-            Sign in
-          </Link>{' '}
+          <Link href="/auth/login?next=/book" className="font-semibold text-accent underline-offset-2 hover:underline">Sign in</Link>{' '}
           to track your appointments.
         </p>
       )}
 
-      {/* Patient details */}
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Field label="Full name" required>
-          <input value={name} onChange={(e) => setName(e.target.value)} required className={inputCls} placeholder="Your name" />
+      {/* Party size (treatments only) */}
+      {canGroup && (
+        <Field label="How many guests?">
+          <select value={partySize} onChange={(e) => resizeParty(Number(e.target.value))} className={inputCls}>
+            {Array.from({ length: MAX_GUESTS }, (_, i) => i + 1).map((n) => (
+              <option key={n} value={n}>{n === 1 ? '1 guest (just me)' : `${n} guests`}</option>
+            ))}
+          </select>
         </Field>
+      )}
+
+      {/* Contact */}
+      <div className="grid gap-3 sm:grid-cols-2">
         <Field label="Contact number" required>
           <input value={phone} onChange={(e) => setPhone(e.target.value)} required className={inputCls} placeholder="01X-XXXXXXX" inputMode="tel" />
         </Field>
         <Field label="Email">
           <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className={inputCls} placeholder="you@email.com" />
         </Field>
-        <Field label="Gender (for therapist matching)" required>
-          <select value={gender} onChange={(e) => setGender(e.target.value as Gender)} required className={inputCls}>
-            <option value="">Select…</option>
-            <option value="female">Female</option>
-            <option value="male">Male</option>
-          </select>
-        </Field>
       </div>
 
+      {/* Single guest details */}
+      {!isGroup && (
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field label="Full name" required>
+            <input value={name} onChange={(e) => setName(e.target.value)} required={!isGroup} className={inputCls} placeholder="Your name" />
+          </Field>
+          <Field label="Gender (for therapist matching)" required>
+            <select value={gender} onChange={(e) => setGender(e.target.value as Gender)} className={inputCls}>
+              <option value="">Select…</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </Field>
+        </div>
+      )}
+
+      {/* Group guests */}
+      {isGroup && (
+        <fieldset className="rounded-xl border border-accent/25 bg-white/60 p-4">
+          <legend className="px-1 font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-accent">Guests</legend>
+          <p className="mb-3 font-body text-[12px] italic text-dark/55">Each guest gets a same-gender therapist at the same time.</p>
+          <div className="space-y-2.5">
+            {guests.slice(0, partySize).map((g, i) => (
+              <div key={i} className="grid grid-cols-[1fr_110px_72px] gap-2">
+                <input
+                  value={g.name}
+                  onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))}
+                  className={inputCls}
+                  placeholder={`Guest ${i + 1} name`}
+                />
+                <select
+                  value={g.gender}
+                  onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, gender: e.target.value as Gender } : x)))}
+                  className={inputCls}
+                >
+                  <option value="">Gender…</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                </select>
+                <input
+                  value={g.age}
+                  onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, age: e.target.value.replace(/\D/g, '') } : x)))}
+                  className={inputCls}
+                  placeholder="Age"
+                  inputMode="numeric"
+                />
+              </div>
+            ))}
+          </div>
+        </fieldset>
+      )}
+
+      {/* Time slots */}
       <div className="grid gap-3">
-        <SlotPicker
-          treatmentId={treatment?.id ?? null}
-          gender={gender}
-          value={preferredAt}
-          onChange={setPreferredAt}
-          label="Preferred date & time"
-          required
-        />
-        <SlotPicker
-          treatmentId={treatment?.id ?? null}
-          gender={gender}
-          value={preferredAtAlt}
-          onChange={setPreferredAtAlt}
-          label="Alternate date & time (optional)"
-        />
+        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} party={party} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
+        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} party={party} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
       </div>
 
-      <HealthIntakeFields value={health} onChange={setHealth} gender={gender} />
+      <HealthIntakeFields value={health} onChange={setHealth} gender={isGroup ? '' : gender} />
       <PolicyDisclaimers accepted={accepted} onAcceptedChange={setAccepted} />
 
       {error && (
-        <p role="alert" className="rounded-lg border border-red-400/40 bg-red-50 px-4 py-3 font-body text-[13px] text-red-700">
-          {error}
-        </p>
+        <p role="alert" className="rounded-lg border border-red-400/40 bg-red-50 px-4 py-3 font-body text-[13px] text-red-700">{error}</p>
       )}
 
       <button
