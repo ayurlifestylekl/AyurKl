@@ -203,17 +203,47 @@ async function computeSlots(
 
   const codes = [...male, ...female].map((t) => t.code)
   const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
-  const { data: appts } = await sb
+  const now = Date.now()
+  const dayStart = new Date(dayStartMs).toISOString()
+  const dayEnd = new Date(dayStartMs + 86_400_000).toISOString()
+  const occupiedStatuses = ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress']
+
+  // Read the payment-hold expiry too, so an approved-but-unpaid slot whose
+  // 15-hour window has lapsed reopens immediately — without waiting for the
+  // daily cleanup cron. Falls back gracefully if the column isn't there yet.
+  type BusyRow = {
+    appointment_date_time: string | null
+    duration_mins: number | null
+    assigned_therapist_code: string | null
+    status?: string | null
+    payment_expires_at?: string | null
+  }
+  let appts: BusyRow[] | null = null
+  const enriched = await sb
     .from('appointments')
-    .select('appointment_date_time, duration_mins, assigned_therapist_code')
+    .select('appointment_date_time, duration_mins, assigned_therapist_code, status, payment_expires_at')
     .in('assigned_therapist_code', codes)
-    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
-    .gte('appointment_date_time', new Date(dayStartMs).toISOString())
-    .lt('appointment_date_time', new Date(dayStartMs + 86_400_000).toISOString())
+    .in('status', occupiedStatuses)
+    .gte('appointment_date_time', dayStart)
+    .lt('appointment_date_time', dayEnd)
+  if (enriched.error) {
+    const basic = await sb
+      .from('appointments')
+      .select('appointment_date_time, duration_mins, assigned_therapist_code')
+      .in('assigned_therapist_code', codes)
+      .in('status', occupiedStatuses)
+      .gte('appointment_date_time', dayStart)
+      .lt('appointment_date_time', dayEnd)
+    appts = basic.data
+  } else {
+    appts = enriched.data
+  }
 
   const busyByCode = new Map<string, Slot[]>()
   for (const a of appts ?? []) {
     if (!a.assigned_therapist_code || !a.appointment_date_time) continue
+    // Expired-but-unpaid hold no longer occupies the therapist.
+    if (a.status === 'awaiting_payment' && a.payment_expires_at && new Date(a.payment_expires_at).getTime() <= now) continue
     const arr = busyByCode.get(a.assigned_therapist_code) ?? []
     arr.push({ startISO: a.appointment_date_time, durationMins: a.duration_mins ?? 60 })
     busyByCode.set(a.assigned_therapist_code, arr)
@@ -221,7 +251,6 @@ async function computeSlots(
 
   const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
   const intervals = blockedIntervalsForDate(blocks, dateYMD)
-  const now = Date.now()
 
   const freeCount = (list: typeof male, iso: string) =>
     list.filter(
