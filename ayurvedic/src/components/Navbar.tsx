@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Menu, X, ShoppingCart, User, ChevronDown, ChevronRight, Phone, Mail, Sparkles } from 'lucide-react'
+import { COMMERCE_ENABLED } from '@/lib/admin/features'
 
 const productsDropdown = [
   { label: 'All Products',     href: '/products'                 },
@@ -232,7 +233,8 @@ export default function Navbar() {
                       />
                     </Link>
 
-                    {/* Item 2 — Brand Partner */}
+                    {/* Item 2 — Brand Partner (archived until the affiliate program launches) */}
+                    {COMMERCE_ENABLED && (
                     <Link
                       href="/partners"
                       onClick={() => setAccountDropdown(false)}
@@ -261,6 +263,7 @@ export default function Navbar() {
                         strokeWidth={2}
                       />
                     </Link>
+                    )}
 
                     {/* Footer mark */}
                     <div className="relative border-t border-white/[0.06] px-6 py-2.5 text-center">
