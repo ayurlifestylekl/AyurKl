@@ -80,6 +80,20 @@ export async function getAppointmentDetail(db: ServiceDb, id: string): Promise<D
   }
 }
 
+/** All guests in a group booking, in stable creation order. [] if not a group. */
+export async function getGroupAppointments(db: ServiceDb, groupId: string): Promise<StaffAppointment[]> {
+  const { data, error } = await db
+    .from('appointments')
+    .select(APPOINTMENT_COLUMNS)
+    .eq('group_id', groupId)
+    .order('updated_at', { ascending: true })
+  if (error) {
+    console.error('[staff/appointments] group:', error.message)
+    return []
+  }
+  return (data ?? []).map(mapAppointmentRow)
+}
+
 /** Doctor's list — only patients who have actually booked (confirmed+). */
 export async function getDoctorPatients(db: ServiceDb): Promise<StaffAppointment[]> {
   const { data, error } = await db

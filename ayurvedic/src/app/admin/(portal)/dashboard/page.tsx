@@ -30,6 +30,7 @@ import {
   LOW_STOCK_THRESHOLD,
 } from '@/lib/admin/queries'
 import { getRecentActivity } from '@/lib/admin/activity'
+import { COMMERCE_ENABLED } from '@/lib/admin/features'
 
 import StatTile from '@/components/account/StatTile'
 import UniversalSearch from '@/components/admin/UniversalSearch'
@@ -93,10 +94,9 @@ export default async function AdminDashboardPage() {
   ])
 
   const hasAnyAttention =
-    ordersAttn.length > 0 ||
     ticketsAttn.length > 0 ||
-    lowStock.length > 0 ||
-    agedPayments.length > 0
+    (COMMERCE_ENABLED &&
+      (ordersAttn.length > 0 || lowStock.length > 0 || agedPayments.length > 0))
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 sm:gap-7">
@@ -133,28 +133,56 @@ export default async function AdminDashboardPage() {
 
       {/* ── KPI TILES (8) ──────────────────────────────────────────── */}
       <section className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
-        <StatTile
-          label="Orders today"
-          value={String(stats.ordersToday)}
-          sub={
-            stats.ordersToday === 0
-              ? 'No orders yet'
-              : `${stats.ordersToday === 1 ? '1 order' : `${stats.ordersToday} orders`} placed`
-          }
-          icon={Package}
-          accent="sage"
-        />
-        <StatTile
-          label="Revenue today"
-          value={`RM ${stats.revenueTodayRm.toFixed(0)}`}
-          sub={
-            stats.avgOrderValueRm > 0
-              ? `Avg RM ${stats.avgOrderValueRm.toFixed(0)} per order`
-              : 'No paid orders yet'
-          }
-          icon={Wallet}
-          accent="gold"
-        />
+        {/* Shop KPIs — archived while the clinic runs on bookings only. */}
+        {COMMERCE_ENABLED && (
+          <>
+            <StatTile
+              label="Orders today"
+              value={String(stats.ordersToday)}
+              sub={
+                stats.ordersToday === 0
+                  ? 'No orders yet'
+                  : `${stats.ordersToday === 1 ? '1 order' : `${stats.ordersToday} orders`} placed`
+              }
+              icon={Package}
+              accent="sage"
+            />
+            <StatTile
+              label="Revenue today"
+              value={`RM ${stats.revenueTodayRm.toFixed(0)}`}
+              sub={
+                stats.avgOrderValueRm > 0
+                  ? `Avg RM ${stats.avgOrderValueRm.toFixed(0)} per order`
+                  : 'No paid orders yet'
+              }
+              icon={Wallet}
+              accent="gold"
+            />
+            <StatTile
+              label="Avg order value"
+              value={stats.avgOrderValueRm > 0 ? `RM ${stats.avgOrderValueRm.toFixed(0)}` : '—'}
+              sub="Today's paid orders"
+              icon={Receipt}
+              accent="sage"
+            />
+            <StatTile
+              label="Awaiting fulfil"
+              value={String(stats.pendingFulfillment)}
+              sub={stats.pendingFulfillment === 0 ? 'All shipped' : 'Paid, ready to ship'}
+              icon={Truck}
+              accent="gold"
+            />
+            <StatTile
+              label="Low stock"
+              value={String(stats.lowStockProducts)}
+              sub={
+                stats.lowStockProducts === 0 ? 'All healthy' : `Under ${LOW_STOCK_THRESHOLD} units`
+              }
+              icon={Boxes}
+              accent="sage"
+            />
+          </>
+        )}
         <StatTile
           label="New customers"
           value={String(stats.newCustomersToday)}
@@ -163,34 +191,11 @@ export default async function AdminDashboardPage() {
           accent="olive"
         />
         <StatTile
-          label="Avg order value"
-          value={stats.avgOrderValueRm > 0 ? `RM ${stats.avgOrderValueRm.toFixed(0)}` : '—'}
-          sub="Today's paid orders"
-          icon={Receipt}
-          accent="sage"
-        />
-        <StatTile
-          label="Awaiting fulfil"
-          value={String(stats.pendingFulfillment)}
-          sub={stats.pendingFulfillment === 0 ? 'All shipped' : 'Paid, ready to ship'}
-          icon={Truck}
-          accent="gold"
-        />
-        <StatTile
           label="Unread messages"
           value={String(stats.unreadTickets)}
           sub={stats.unreadTickets === 0 ? 'Inbox zero' : 'From customers'}
           icon={MessageSquare}
           accent="olive"
-        />
-        <StatTile
-          label="Low stock"
-          value={String(stats.lowStockProducts)}
-          sub={
-            stats.lowStockProducts === 0 ? 'All healthy' : `Under ${LOW_STOCK_THRESHOLD} units`
-          }
-          icon={Boxes}
-          accent="sage"
         />
         <StatTile
           label="Today's consults"
@@ -204,18 +209,20 @@ export default async function AdminDashboardPage() {
       {/* ── TODAY'S CONSULTATIONS ──────────────────────────────────── */}
       <TodayConsultationsCard consultations={todayConsults} />
 
-      {/* ── CHARTS ROW ─────────────────────────────────────────────── */}
-      <section className="grid grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-4">
-        <OrdersBarChart data={daily7.map((d) => ({ date: d.date, count: d.count }))} />
-        <RevenueLineChart data={daily30.map((d) => ({ date: d.date, revenue: d.revenue }))} />
-        <FulfilmentFunnel stages={funnel} />
-      </section>
+      {/* ── CHARTS ROW (shop) ──────────────────────────────────────── */}
+      {COMMERCE_ENABLED && (
+        <section className="grid grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-4">
+          <OrdersBarChart data={daily7.map((d) => ({ date: d.date, count: d.count }))} />
+          <RevenueLineChart data={daily30.map((d) => ({ date: d.date, revenue: d.revenue }))} />
+          <FulfilmentFunnel stages={funnel} />
+        </section>
+      )}
 
       {/* ── NEEDS ATTENTION ────────────────────────────────────────── */}
       {hasAnyAttention ? (
         <section className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:gap-4">
           {/* Orders awaiting fulfilment */}
-          {ordersAttn.length > 0 && (
+          {COMMERCE_ENABLED && ordersAttn.length > 0 && (
             <div className="lg:col-span-7">
               <AttentionCard
                 icon={Truck}
@@ -281,7 +288,7 @@ export default async function AdminDashboardPage() {
           )}
 
           {/* Low stock */}
-          {lowStock.length > 0 && (
+          {COMMERCE_ENABLED && lowStock.length > 0 && (
             <div className="lg:col-span-6">
               <AttentionCard
                 icon={AlertCircle}
@@ -323,7 +330,7 @@ export default async function AdminDashboardPage() {
           )}
 
           {/* Aged pending payments */}
-          {agedPayments.length > 0 && (
+          {COMMERCE_ENABLED && agedPayments.length > 0 && (
             <div className="lg:col-span-6">
               <AgedPaymentsCard orders={agedPayments} />
             </div>
@@ -352,6 +359,7 @@ export default async function AdminDashboardPage() {
         utilization={utilization}
         promos={promos}
         topTreatment={topTreatment}
+        commerce={COMMERCE_ENABLED}
       />
 
       {/* ── RECENT ACTIVITY ────────────────────────────────────────── */}

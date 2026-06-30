@@ -15,7 +15,7 @@ export interface Therapist {
 export const THERAPISTS: Therapist[] = [
   { code: 'NT02', name: 'Nithin', gender: 'male' },
   { code: 'DP03', name: 'Deepak', gender: 'male' },
-  { code: 'BN08', name: 'Bintu', gender: 'female' },
+  { code: 'BN08', name: 'Bintu', gender: 'male' },
   { code: 'SM05', name: 'Sreeja Mol', gender: 'female' },
   { code: 'CR08', name: 'Seeta', gender: 'female' },
   { code: 'AS12', name: 'Asha', gender: 'female' },

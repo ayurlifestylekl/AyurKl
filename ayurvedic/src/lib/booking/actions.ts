@@ -36,6 +36,8 @@ export async function createBookingRequest(
   if (!input.acceptedPolicies) return { error: 'Please accept the booking policies to continue.' }
   if (!input.patientName?.trim()) return { error: 'Please enter the patient name.' }
   if (!input.patientPhone?.trim()) return { error: 'Please enter a contact number.' }
+  if (!input.patientEmail?.trim()) return { error: 'Please enter an email so we can send booking updates.' }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.patientEmail.trim())) return { error: 'Please enter a valid email address.' }
   if (!input.preferredAt) return { error: 'Please choose a preferred date and time.' }
   if (input.patientGender !== 'male' && input.patientGender !== 'female') {
     return { error: 'Please select a gender for therapist matching.' }
@@ -101,7 +103,9 @@ export async function createBookingRequest(
       patient_phone: input.patientPhone.trim(),
       patient_email: input.patientEmail?.trim() || null,
       patient_gender: input.patientGender,
-      gender_requirement: genderRequirementValue(input.patientGender),
+      // Consultations are conducted by the Vaidya — no same-gender therapist
+      // matching applies, so they never carry a gender requirement.
+      gender_requirement: isTreatment ? genderRequirementValue(input.patientGender) : 'any',
       pre_visit_form: input.healthIntake ?? {},
       payable_amount_rm: payable,
       payment_status: 'unpaid',
@@ -275,6 +279,45 @@ export async function getAvailableSlots(dateYMD: string, treatmentId: string | n
   return computeSlots(dateYMD, treatmentId, { male: gender === 'male' ? 1 : 0, female: gender === 'female' ? 1 : 0 })
 }
 
+const CONSULTATION_MINS = 30
+
+/**
+ * Slots for a free consultation. Consultations are conducted by the Vaidya, not
+ * a therapist, so availability does NOT depend on the therapist roster or gender
+ * — only on the Vaidya not already being in another consultation at that time.
+ */
+export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]> {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateYMD)) return []
+  const sb = admin()
+  const allSlots = slotsForDuration(CONSULTATION_MINS)
+  const now = Date.now()
+
+  const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
+  const dayStart = new Date(dayStartMs).toISOString()
+  const dayEnd = new Date(dayStartMs + 86_400_000).toISOString()
+  const occupiedStatuses = ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress']
+
+  // Other consultations already on the Vaidya's day — block overlapping starts.
+  const { data: busyRows } = await sb
+    .from('appointments')
+    .select('appointment_date_time, duration_mins')
+    .eq('booking_kind', 'consultation')
+    .in('status', occupiedStatuses)
+    .gte('appointment_date_time', dayStart)
+    .lt('appointment_date_time', dayEnd)
+  const busy: Slot[] = (busyRows ?? [])
+    .filter((r) => r.appointment_date_time)
+    .map((r) => ({ startISO: r.appointment_date_time as string, durationMins: r.duration_mins ?? CONSULTATION_MINS }))
+
+  return allSlots.map((time) => {
+    const iso = slotIso(dateYMD, time)
+    const available =
+      new Date(iso).getTime() > now &&
+      findClash({ startISO: iso, durationMins: CONSULTATION_MINS }, busy) === null
+    return { time, iso, available }
+  })
+}
+
 /** Slots for a group needing `male` male + `female` female therapists together. */
 export async function getAvailableSlotsForParty(
   dateYMD: string,
@@ -305,6 +348,8 @@ export async function createGroupBooking(input: {
 }): Promise<CreateBookingResult> {
   if (!input.acceptedPolicies) return { error: 'Please accept the booking policies to continue.' }
   if (!input.patientPhone?.trim()) return { error: 'Please enter a contact number.' }
+  if (!input.patientEmail?.trim()) return { error: 'Please enter an email so we can send booking updates.' }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.patientEmail.trim())) return { error: 'Please enter a valid email address.' }
   if (!input.preferredAt) return { error: 'Please choose a preferred date and time.' }
   if (!input.treatmentId) return { error: 'Please choose a treatment.' }
 

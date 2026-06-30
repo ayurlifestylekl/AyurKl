@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requireStaff } from '@/lib/staff/guard'
-import { getAppointmentDetail } from '@/lib/staff/appointments'
+import { getAppointmentDetail, getGroupAppointments } from '@/lib/staff/appointments'
 import StatusBadge from '@/components/staff/StatusBadge'
 import PatientHealthPanel from '@/components/staff/PatientHealthPanel'
 import AppointmentActions from '@/components/staff/AppointmentActions'
+import GroupApprovalActions from '@/components/staff/GroupApprovalActions'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,6 +17,9 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
   const { db } = await requireStaff(['admin', 'front_desk'])
   const a = await getAppointmentDetail(db, params.id)
   if (!a) notFound()
+
+  const groupMembers = a.groupId ? await getGroupAppointments(db, a.groupId) : []
+  const isGroup = groupMembers.length > 1
 
   return (
     <div>
@@ -47,16 +51,35 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
         </div>
 
         <div>
-          <AppointmentActions
-            id={a.id}
-            status={a.status}
-            bookingKind={a.bookingKind}
-            genderRequirement={a.genderRequirement}
-            requestedAt={a.requestedDatetime}
-            requestedAtAlt={a.requestedDatetimeAlt}
-            backHref="/console"
-            canDelete
-          />
+          {isGroup ? (
+            <GroupApprovalActions
+              groupId={a.groupId as string}
+              members={groupMembers.map((m) => ({
+                id: m.id,
+                patientName: m.patientName,
+                patientGender: m.patientGender,
+                genderRequirement: m.genderRequirement,
+                status: m.status,
+                assignedTherapistName: m.assignedTherapistName,
+                assignedTherapistCode: m.assignedTherapistCode,
+              }))}
+              requestedAt={a.requestedDatetime}
+              requestedAtAlt={a.requestedDatetimeAlt}
+              backHref="/console"
+              canDelete
+            />
+          ) : (
+            <AppointmentActions
+              id={a.id}
+              status={a.status}
+              bookingKind={a.bookingKind}
+              genderRequirement={a.genderRequirement}
+              requestedAt={a.requestedDatetime}
+              requestedAtAlt={a.requestedDatetimeAlt}
+              backHref="/console"
+              canDelete
+            />
+          )}
         </div>
       </div>
     </div>

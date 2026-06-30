@@ -11,6 +11,8 @@ interface Props {
   utilization: VaidyaUtilization
   promos: ActivePromo[]
   topTreatment: MostBookedTreatment | null
+  /** Show the shop insights (top-selling products, promos). Archived by default. */
+  commerce?: boolean
 }
 
 const CARD_SHADOW =
@@ -21,10 +23,15 @@ export default function InsightsRow({
   utilization,
   promos,
   topTreatment,
+  commerce = true,
 }: Props) {
+  // When the shop is archived only the clinic cards remain, so they widen to
+  // fill the row evenly (6 + 6 instead of 6 + 3 + 3).
+  const clinicSpan = commerce ? 'lg:col-span-3' : 'lg:col-span-6'
   return (
     <section className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:gap-4">
-      {/* Top selling */}
+      {/* Top selling — shop only */}
+      {commerce && (
       <article
         className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white lg:col-span-6"
         style={{ boxShadow: CARD_SHADOW }}
@@ -67,10 +74,11 @@ export default function InsightsRow({
           </ol>
         )}
       </article>
+      )}
 
       {/* Vaidya utilization */}
       <article
-        className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 lg:col-span-3"
+        className={`overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 ${clinicSpan}`}
         style={{ boxShadow: CARD_SHADOW }}
       >
         <header className="flex items-center gap-2.5">
@@ -97,8 +105,8 @@ export default function InsightsRow({
         </div>
       </article>
 
-      {/* Most-booked treatment + active promos stacked */}
-      <div className="flex flex-col gap-3 lg:col-span-3 lg:gap-4">
+      {/* Most-booked treatment (clinic) + active promos (shop) stacked */}
+      <div className={`flex flex-col gap-3 lg:gap-4 ${clinicSpan}`}>
         <article
           className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5"
           style={{ boxShadow: CARD_SHADOW }}
@@ -122,6 +130,7 @@ export default function InsightsRow({
             </p>
           )}
         </article>
+        {commerce && (
         <article
           className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5"
           style={{ boxShadow: CARD_SHADOW }}
@@ -149,6 +158,7 @@ export default function InsightsRow({
             </ul>
           )}
         </article>
+        )}
       </div>
     </section>
   )

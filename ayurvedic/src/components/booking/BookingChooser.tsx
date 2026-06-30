@@ -77,8 +77,8 @@ export default function BookingChooser() {
 
           <p className="mt-5 max-w-xl text-center font-body text-[15px] leading-[1.75] text-dark/65 sm:text-[16px]">
             Whether You&apos;re New to Ayurveda or Coming in for a Specific
-            Therapy, We have a Dedicated Flow for You. Both Lead to Vaidya
-            our Vaidyas H.S., B.A.M.S., M.D. (Ayu) at Our Brickfields Centre.
+            Therapy, We have a Dedicated Flow for You. Both lead to consultations
+            with our expert Vaidyas (B.A.M.S., M.D. (Ayu)) at our Brickfields centre.
           </p>
 
           {/* Two cards */}

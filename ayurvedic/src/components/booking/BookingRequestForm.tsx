@@ -86,6 +86,9 @@ export default function BookingRequestForm({
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    if (!phone.trim()) return setError('Please enter a contact number — we need it to confirm your booking.')
+    if (!email.trim()) return setError('Please enter an email — we need it to send your booking updates.')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setError('Please enter a valid email address.')
     if (!preferredAt) return setError('Please choose a preferred date and time.')
     if (!accepted) return setError('Please accept the booking policies to continue.')
 
@@ -109,7 +112,7 @@ export default function BookingRequestForm({
           guests: cleaned.map<GroupGuest>((g) => ({ name: g.name, gender: g.gender as Gender, age: g.age ? Number(g.age) : null })),
         })
       } else {
-        if (!gender) return setError('Please select a gender for therapist matching.')
+        if (!gender) return setError(bookingKind === 'consultation' ? 'Please select a gender.' : 'Please select a gender for therapist matching.')
         res = await createBookingRequest({
           treatmentId: treatment?.id ?? null,
           bookingKind,
@@ -179,8 +182,8 @@ export default function BookingRequestForm({
         <Field label="Contact number" required>
           <input value={phone} onChange={(e) => setPhone(e.target.value)} required className={inputCls} placeholder="01X-XXXXXXX" inputMode="tel" />
         </Field>
-        <Field label="Email">
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className={inputCls} placeholder="you@email.com" />
+        <Field label="Email" required>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required className={inputCls} placeholder="you@email.com" />
         </Field>
       </div>
 
@@ -190,7 +193,7 @@ export default function BookingRequestForm({
           <Field label="Full name" required>
             <input value={name} onChange={(e) => setName(e.target.value)} required={!isGroup} className={inputCls} placeholder="Your name" />
           </Field>
-          <Field label="Gender (for therapist matching)" required>
+          <Field label={bookingKind === 'consultation' ? 'Gender' : 'Gender (for therapist matching)'} required>
             <select value={gender} onChange={(e) => setGender(e.target.value as Gender)} className={inputCls}>
               <option value="">Select…</option>
               <option value="female">Female</option>
@@ -238,8 +241,8 @@ export default function BookingRequestForm({
 
       {/* Time slots */}
       <div className="grid gap-3">
-        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} party={party} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
-        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} party={party} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
+        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} party={party} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
+        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} party={party} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
       </div>
 
       <HealthIntakeFields value={health} onChange={setHealth} gender={isGroup ? '' : gender} />

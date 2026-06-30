@@ -264,8 +264,8 @@ export async function addAppointmentInternalNote(
 const WalkInSchema = z.object({
   customerId: z.string().uuid().nullable(),
   walkInName: z.string().min(1).optional(),
-  walkInPhone: z.string().optional(),
-  walkInEmail: z.string().email().optional().or(z.literal('')),
+  walkInPhone: z.string().min(1, 'Phone is required.').optional(),
+  walkInEmail: z.string().email('A valid email is required.').optional(),
   walkInGender: z.enum(['male', 'female']).optional(),
   treatmentName: z.string().min(1),
   doctorName: z.string().min(1).default('Vaidya Akhil HS'),
@@ -313,6 +313,8 @@ export async function createWalkInAppointment(
 
     if (!customerId) {
       if (!input.walkInName) return { ok: false, error: 'Walk-in name required.' }
+      if (!input.walkInPhone?.trim()) return { ok: false, error: 'Phone is required so we can send booking notifications.' }
+      if (!input.walkInEmail?.trim()) return { ok: false, error: 'Email is required so we can send booking notifications.' }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: u, error: ue } = await (supabase.from('users') as any)
         .insert({

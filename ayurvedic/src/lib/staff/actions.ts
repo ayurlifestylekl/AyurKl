@@ -16,8 +16,10 @@ type Ok = { ok: true }
 type Err = { error: string }
 
 /**
- * Approve a request and assign a therapist. Enforces the same-gender policy.
- * Treatment → awaiting_payment; consultation → confirmed (free).
+ * Approve a request. Treatments get a same-gender therapist assigned (with
+ * clash/leave checks) and move to awaiting_payment. Consultations are conducted
+ * by the Vaidya — no therapist is assigned; they move straight to confirmed
+ * (free), guarded only against the Vaidya being double-booked.
  */
 export async function approveAndAssign(
   id: string,
@@ -26,9 +28,6 @@ export async function approveAndAssign(
   const { userId, db } = await requireStaff()
   if (!p.confirmedAt) return { error: 'Set the confirmed date & time.' }
 
-  const therapist = therapistByCode(p.therapistCode)
-  if (!therapist) return { error: 'Select a therapist.' }
-
   const { data: appt } = await db
     .from('appointments')
     .select('status, booking_kind, gender_requirement, duration_mins, patient_email, patient_name, treatment_name, payable_amount_rm')
@@ -36,35 +35,60 @@ export async function approveAndAssign(
     .maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
 
-  if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement)) {
-    const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
-    return { error: `Same-gender policy: this patient must be assigned a ${need} therapist.` }
+  const isConsultation = appt.booking_kind === 'consultation'
+  const durationMins = appt.duration_mins ?? (isConsultation ? 30 : 60)
+
+  // Therapist assignment applies to TREATMENTS only. A consultation is conducted
+  // by the Vaidya — no therapist, no same-gender matching, no therapist roster.
+  let therapist: ReturnType<typeof therapistByCode>
+  if (isConsultation) {
+    // Vaidya double-booking guard: no two consultations may overlap (one Vaidya).
+    const { data: others } = await db
+      .from('appointments')
+      .select('appointment_date_time, duration_mins')
+      .eq('booking_kind', 'consultation')
+      .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+      .neq('id', id)
+    const busy: Slot[] = (others ?? [])
+      .filter((o) => o.appointment_date_time)
+      .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 30 }))
+    const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
+    if (clash) {
+      return { error: `The Vaidya already has a consultation until ${freeAtLabel(clash)} — pick another time.` }
+    }
+  } else {
+    therapist = therapistByCode(p.therapistCode)
+    if (!therapist) return { error: 'Select a therapist.' }
+
+    if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement)) {
+      const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
+      return { error: `Same-gender policy: this patient must be assigned a ${need} therapist.` }
+    }
+
+    // Double-booking check: is this therapist free for the session + 30-min buffer?
+    const { data: others } = await db
+      .from('appointments')
+      .select('appointment_date_time, duration_mins')
+      .eq('assigned_therapist_code', therapist.code)
+      .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+      .neq('id', id)
+    const busy: Slot[] = (others ?? [])
+      .filter((o) => o.appointment_date_time)
+      .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
+    const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
+    if (clash) {
+      return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
+    }
+
+    // Leave / blocked windows: don't allow assigning a therapist who's off.
+    const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(p.confirmedAt))
+    const intervals = blockedIntervalsForDate(blocks, mytDayKey(p.confirmedAt))
+    if (isBlocked(intervals, therapist.code, p.confirmedAt, durationMins)) {
+      return { error: `${therapist.name} (${therapist.code}) is on leave / blocked at that time — pick another therapist or time.` }
+    }
   }
 
-  // Double-booking check: is this therapist free for the session + 30-min buffer?
-  const durationMins = appt.duration_mins ?? 60
-  const { data: others } = await db
-    .from('appointments')
-    .select('appointment_date_time, duration_mins')
-    .eq('assigned_therapist_code', therapist.code)
-    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
-    .neq('id', id)
-  const busy: Slot[] = (others ?? [])
-    .filter((o) => o.appointment_date_time)
-    .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
-  const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
-  if (clash) {
-    return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
-  }
-
-  // Leave / blocked windows: don't allow assigning a therapist who's off.
-  const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(p.confirmedAt))
-  const intervals = blockedIntervalsForDate(blocks, mytDayKey(p.confirmedAt))
-  if (isBlocked(intervals, therapist.code, p.confirmedAt, durationMins)) {
-    return { error: `${therapist.name} (${therapist.code}) is on leave / blocked at that time — pick another therapist or time.` }
-  }
-
-  const to: BookingStatus = appt.booking_kind === 'consultation' ? 'confirmed' : 'awaiting_payment'
+  const to: BookingStatus = isConsultation ? 'confirmed' : 'awaiting_payment'
   if (!canTransition(appt.status as BookingStatus, to)) {
     return { error: `Cannot move ${appt.status} → ${to}.` }
   }
@@ -72,9 +96,10 @@ export async function approveAndAssign(
   const { error } = await db
     .from('appointments')
     .update({
-      assigned_therapist_code: therapist.code,
-      assigned_therapist_name: therapist.name,
-      assigned_therapist_gender: therapist.gender,
+      // Consultations carry no therapist; treatments get the assigned one.
+      assigned_therapist_code: therapist?.code ?? null,
+      assigned_therapist_name: therapist?.name ?? null,
+      assigned_therapist_gender: therapist?.gender ?? null,
       appointment_date_time: p.confirmedAt,
       duration_mins: durationMins,
       room: p.room?.trim() || null,
@@ -111,6 +136,161 @@ export async function approveAndAssign(
   revalidatePath(`/console/${id}`)
   revalidatePath('/doctor')
   revalidatePath(`/doctor/${id}`)
+  return { ok: true }
+}
+
+/**
+ * Approve a whole group booking in ONE action. Confirms a single shared time for
+ * every guest, assigns each guest their own same-gender therapist, and moves the
+ * entire group to awaiting_payment together. Payment is already combined across
+ * the group, so a single payment then confirms everyone.
+ */
+export async function approveGroup(
+  groupId: string,
+  p: { confirmedAt: string; room?: string; assignments: { id: string; therapistCode: string }[] },
+): Promise<Ok | Err> {
+  const { userId, db } = await requireStaff()
+  if (!groupId) return { error: 'Missing group.' }
+  if (!p.confirmedAt) return { error: 'Set the confirmed date & time.' }
+
+  const { data: members } = await db
+    .from('appointments')
+    .select('id, status, gender_requirement, duration_mins, patient_name, patient_email, treatment_name, payable_amount_rm')
+    .eq('group_id', groupId)
+  if (!members || members.length === 0) return { error: 'Group not found.' }
+
+  const pending = members.filter((m) => m.status === 'pending' || m.status === 'scheduled')
+  if (pending.length === 0) return { error: 'This group has already been processed.' }
+
+  // Every pending guest must have a therapist chosen.
+  const byId = new Map(p.assignments.map((a) => [a.id, a.therapistCode]))
+  for (const m of pending) {
+    if (!byId.get(m.id)) return { error: 'Assign a therapist for every guest.' }
+  }
+
+  // One therapist can't serve two guests at the same shared time.
+  const usedCodes = pending.map((m) => byId.get(m.id) as string)
+  const dupe = usedCodes.find((c, i) => usedCodes.indexOf(c) !== i)
+  if (dupe) {
+    const t = therapistByCode(dupe)
+    return { error: `${t ? t.name : dupe} is assigned to more than one guest at the same time — pick a different therapist.` }
+  }
+
+  const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(p.confirmedAt))
+  const intervals = blockedIntervalsForDate(blocks, mytDayKey(p.confirmedAt))
+
+  // Validate every assignment before writing anything.
+  for (const m of pending) {
+    const therapist = therapistByCode(byId.get(m.id) as string)
+    if (!therapist) return { error: 'Unknown therapist selected.' }
+    if (!therapistMatchesRequirement(therapist.gender, m.gender_requirement)) {
+      const need = m.gender_requirement === 'men_only' ? 'male' : 'female'
+      return { error: `${m.patient_name ?? 'A guest'} needs a ${need} therapist.` }
+    }
+    const durationMins = m.duration_mins ?? 60
+    // Busy windows from OTHER bookings (this group's own rows are excluded).
+    const { data: others } = await db
+      .from('appointments')
+      .select('appointment_date_time, duration_mins, group_id')
+      .eq('assigned_therapist_code', therapist.code)
+      .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+    const busy: Slot[] = (others ?? [])
+      .filter((o) => o.appointment_date_time && o.group_id !== groupId)
+      .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
+    const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
+    if (clash) return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
+    if (isBlocked(intervals, therapist.code, p.confirmedAt, durationMins)) {
+      return { error: `${therapist.name} (${therapist.code}) is on leave / blocked at that time — pick another therapist or time.` }
+    }
+    if (!canTransition(m.status as BookingStatus, 'awaiting_payment')) {
+      return { error: `Cannot move ${m.status} → awaiting_payment.` }
+    }
+  }
+
+  // All checks passed — assign + confirm every guest.
+  for (const m of pending) {
+    const therapist = therapistByCode(byId.get(m.id) as string)!
+    const { error } = await db
+      .from('appointments')
+      .update({
+        assigned_therapist_code: therapist.code,
+        assigned_therapist_name: therapist.name,
+        assigned_therapist_gender: therapist.gender,
+        appointment_date_time: p.confirmedAt,
+        duration_mins: m.duration_mins ?? 60,
+        room: p.room?.trim() || null,
+        approved_by: userId,
+        approved_at: new Date().toISOString(),
+        status: 'awaiting_payment',
+      })
+      .eq('id', m.id)
+    if (error) return { error: error.message }
+  }
+
+  // 15-hour payment hold for the whole group. Best-effort: harmless no-op until
+  // the payment_expiry migration is applied.
+  const expiresAt = new Date(Date.now() + 15 * 3600_000).toISOString()
+  await db
+    .from('appointments')
+    .update({ payment_expires_at: expiresAt, payment_reminded: false })
+    .eq('group_id', groupId)
+    .eq('status', 'awaiting_payment')
+
+  // One combined approval email — the lead guest pays for the whole group.
+  const lead = pending[0]
+  const totalRm = pending.reduce((s, m) => s + (m.payable_amount_rm != null ? Number(m.payable_amount_rm) : 0), 0)
+  const payUrl = `${BOOKING_SITE_URL}/book/request/${lead.id}/pay?t=${createBookingToken(lead.id)}`
+  await notifyApproved({
+    to: lead.patient_email,
+    name: lead.patient_name,
+    treatmentName: `${lead.treatment_name ?? 'Treatment'} (group of ${pending.length})`,
+    kind: 'treatment',
+    whenISO: p.confirmedAt,
+    amountRm: totalRm || null,
+    payUrl,
+  })
+
+  revalidatePath('/console')
+  revalidatePath('/doctor')
+  for (const m of pending) {
+    revalidatePath(`/console/${m.id}`)
+    revalidatePath(`/doctor/${m.id}`)
+  }
+  return { ok: true }
+}
+
+/** Reject every still-open guest in a group, with one reason + one notification. */
+export async function rejectGroup(groupId: string, reason?: string): Promise<Ok | Err> {
+  const { db } = await requireStaff()
+  if (!groupId) return { error: 'Missing group.' }
+  const { data: members } = await db
+    .from('appointments')
+    .select('id, status, patient_email, patient_name, treatment_name')
+    .eq('group_id', groupId)
+  if (!members || members.length === 0) return { error: 'Group not found.' }
+
+  const actionable = members.filter((m) => !['cancelled', 'completed', 'no_show'].includes(m.status as string))
+  if (actionable.length === 0) return { error: 'Nothing to reject in this group.' }
+
+  const finalReason = reason?.trim() || 'Declined by clinic'
+  const { error } = await db
+    .from('appointments')
+    .update({ status: 'cancelled', cancelled_at: new Date().toISOString(), cancellation_reason: finalReason })
+    .eq('group_id', groupId)
+    .in('status', ['pending', 'scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+  if (error) return { error: error.message }
+
+  const lead = actionable[0]
+  await notifyCancelled({
+    to: lead.patient_email,
+    name: lead.patient_name,
+    treatmentName: `${lead.treatment_name ?? 'Treatment'} (group)`,
+    refundable: false,
+    reason: finalReason,
+  })
+
+  revalidatePath('/console')
+  revalidatePath('/doctor')
   return { ok: true }
 }
 

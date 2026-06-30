@@ -13,9 +13,9 @@ interface AdminLoginFormProps {
 
 /**
  * Command Center sign-in.
- * Deliberately distinct from /auth/login: charcoal canvas, sharper corners,
- * monospaced eyebrow, scanline texture, status indicator. Reads like a
- * staff terminal, not a consumer card.
+ * Deliberately distinct from /auth/login: deep burgundy surface with a gold
+ * hairline, monospaced eyebrow, scanline texture, gold "secure" pulse, and a
+ * gold CTA. Reads like a premium staff terminal, not a consumer card.
  */
 export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFormProps) {
   const router = useRouter()
@@ -39,44 +39,56 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
 
   return (
     <div className="w-full">
-      {/* Card — sharp corners, almost-black charcoal, scanlines */}
+      {/* Card — deep burgundy surface, gold hairline, tinted shadow */}
       <div
-        className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a1411]"
+        className="relative overflow-hidden rounded-2xl border border-[#D4AF37]/15 bg-gradient-to-b from-[#360B18] to-[#220610]"
         style={{
           boxShadow:
-            '0 24px 60px -18px rgba(0,0,0,0.6), inset 0 1px 0 0 rgba(255,255,255,0.04)',
+            '0 34px 80px -28px rgba(18,2,8,0.9), 0 2px 14px -6px rgba(110,16,35,0.6), inset 0 1px 0 0 rgba(255,255,255,0.06)',
         }}
       >
-        {/* Scanline texture */}
+        {/* Gold hairline along the top edge */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.05]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.65), transparent)' }}
+        />
+        {/* Scanline texture — warm, faint */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
-              'repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 3px)',
+              'repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(212,175,55,0.5) 2px, rgba(212,175,55,0.5) 3px)',
           }}
         />
         {/* Faint grid */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.025]"
+          className="pointer-events-none absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
               'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
             backgroundSize: '24px 24px',
           }}
         />
+        {/* Ambient gold glow, top-right */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full opacity-50 blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.18), transparent 70%)' }}
+        />
 
         {/* Top status bar */}
-        <div className="relative flex items-center justify-between border-b border-white/8 px-6 py-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/50">
+        <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/45">
           <div className="flex items-center gap-2">
-            <Terminal className="h-3 w-3 text-[#2E7D5A]" />
+            <Terminal className="h-3 w-3 text-[#D4AF37]" />
             <span>[ command center ]</span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 text-[#D4AF37]/85">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2E7D5A] opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2E7D5A]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D4AF37] opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
             </span>
             <span>secure</span>
           </div>
@@ -90,20 +102,20 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
           >
             Staff sign-in.
           </h1>
-          <p className="mt-2 font-body text-[13px] leading-relaxed text-white/55">
+          <p className="mt-2 font-body text-[13px] leading-relaxed text-white/60">
             Restricted to authorised personnel. If you don&apos;t have an admin account, you&apos;re in the wrong place.
           </p>
 
           {resetSuccess && (
-            <div className="mt-5 flex items-start gap-3 rounded-xl border border-green-400/35 bg-green-400/[0.07] px-4 py-3">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-300" />
+            <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#D4AF37]/35 bg-[#D4AF37]/[0.07] px-4 py-3">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#D4AF37]" />
               <p className="font-body text-[12px] text-white/85">
                 Password reset. Sign in with your new password.
               </p>
             </div>
           )}
 
-          <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/[0.05] px-4 py-2.5">
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#D4AF37]/25 bg-[#D4AF37]/[0.06] px-4 py-2.5">
             <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D4AF37]" />
             <p className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-white/55">
               all sessions logged · device-fingerprinted
@@ -154,7 +166,11 @@ export default function AdminLoginForm({ resetSuccess, nextPath }: AdminLoginFor
             <button
               type="submit"
               disabled={isPending}
-              className="group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-7 font-mono text-[12px] font-bold uppercase tracking-[0.22em] text-[#0a1411] transition-all duration-200 hover:bg-white/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1411] disabled:cursor-not-allowed disabled:opacity-70"
+              className="group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl px-7 font-mono text-[12px] font-bold uppercase tracking-[0.22em] text-[#2A0610] transition-all duration-200 hover:brightness-[1.06] active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2A0610] disabled:cursor-not-allowed disabled:opacity-70"
+              style={{
+                background: 'linear-gradient(180deg, #E6C75C 0%, #D4AF37 55%, #C0972A 100%)',
+                boxShadow: '0 12px 28px -10px rgba(212,175,55,0.5), inset 0 1px 0 0 rgba(255,255,255,0.45)',
+              }}
             >
               {isPending ? 'authenticating…' : 'enter command center'}
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -187,12 +203,12 @@ function TerminalInput({
   const inputId = `t-${label.toLowerCase().replace(/\s+/g, '-')}`
   return (
     <label htmlFor={inputId} className="block">
-      <span className="mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
+      <span className="mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]/70">
         {label}
       </span>
       <input
         id={inputId}
-        className="block w-full rounded-xl border border-white/15 bg-black/30 px-4 py-3 font-mono text-[13px] text-white placeholder:text-white/30 transition-colors duration-200 hover:border-white/25 focus:border-white/45 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-white/20"
+        className="block w-full rounded-xl border border-white/12 bg-[#1A040B]/60 px-4 py-3 font-mono text-[13px] text-white placeholder:text-white/25 transition-colors duration-200 hover:border-[#D4AF37]/30 focus:border-[#D4AF37]/55 focus:bg-[#1A040B]/85 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]/25"
         {...rest}
       />
     </label>

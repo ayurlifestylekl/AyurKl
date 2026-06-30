@@ -2,13 +2,18 @@
 
 import { useEffect, useState, useTransition } from 'react'
 import type { Gender } from '@/types/booking'
-import { getAvailableSlots, getAvailableSlotsForParty, type SlotInfo } from '@/lib/booking/actions'
+import { getAvailableSlots, getAvailableSlotsForParty, getConsultationSlots, type SlotInfo } from '@/lib/booking/actions'
 import { minBookableDate } from '@/lib/booking/slots'
 import { fmtMY } from '@/lib/datetime'
 
 interface SlotPickerProps {
   treatmentId: string | null
   gender: Gender | ''
+  /**
+   * Consultations are conducted by the Vaidya, not a therapist — availability
+   * ignores the therapist roster and gender. Treatments use same-gender matching.
+   */
+  mode?: 'treatment' | 'consultation'
   /** For group bookings — therapists needed per gender at the same time. */
   party?: { male: number; female: number }
   /** Selected slot as a UTC ISO string ('' = none). */
@@ -18,16 +23,17 @@ interface SlotPickerProps {
   required?: boolean
 }
 
-export default function SlotPicker({ treatmentId, gender, party, value, onChange, label, required }: SlotPickerProps) {
+export default function SlotPicker({ treatmentId, gender, mode = 'treatment', party, value, onChange, label, required }: SlotPickerProps) {
   const [date, setDate] = useState('')
   const [slots, setSlots] = useState<SlotInfo[]>([])
   const [loading, start] = useTransition()
   const minDate = minBookableDate()
 
+  const isConsultation = mode === 'consultation'
   const male = party?.male ?? 0
   const female = party?.female ?? 0
   const partyTotal = male + female
-  const ready = party ? partyTotal > 0 : !!gender
+  const ready = isConsultation ? true : party ? partyTotal > 0 : !!gender
 
   useEffect(() => {
     if (!date || !ready) {
@@ -35,9 +41,13 @@ export default function SlotPicker({ treatmentId, gender, party, value, onChange
       return
     }
     start(async () => {
-      setSlots(party ? await getAvailableSlotsForParty(date, treatmentId, male, female) : await getAvailableSlots(date, treatmentId, gender as Gender))
+      if (isConsultation) {
+        setSlots(await getConsultationSlots(date))
+      } else {
+        setSlots(party ? await getAvailableSlotsForParty(date, treatmentId, male, female) : await getAvailableSlots(date, treatmentId, gender as Gender))
+      }
     })
-  }, [date, gender, treatmentId, party, male, female, ready])
+  }, [date, gender, treatmentId, party, male, female, ready, isConsultation])
 
   return (
     <div className="rounded-xl border border-accent/25 bg-white/60 p-4">

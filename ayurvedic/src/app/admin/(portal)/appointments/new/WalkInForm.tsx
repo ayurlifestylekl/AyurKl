@@ -50,12 +50,15 @@ export default function WalkInForm({
   function submit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
+    if (!walkInPhone.trim()) return setError('Phone is required so we can send booking notifications.')
+    if (!walkInEmail.trim()) return setError('Email is required so we can send booking notifications.')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(walkInEmail.trim())) return setError('Please enter a valid email address.')
     startTransition(async () => {
       const r = await createWalkInAppointment({
         customerId: null,
         walkInName,
-        walkInPhone: walkInPhone || undefined,
-        walkInEmail: walkInEmail || undefined,
+        walkInPhone: walkInPhone.trim(),
+        walkInEmail: walkInEmail.trim(),
         walkInGender: walkInGender || undefined,
         treatmentName,
         doctorName,
@@ -91,14 +94,16 @@ export default function WalkInForm({
           className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
         />
         <input
-          placeholder="Phone (optional)"
+          required
+          placeholder="Phone *"
           value={walkInPhone}
           onChange={(e) => setWalkInPhone(e.target.value)}
           className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
         />
         <input
           type="email"
-          placeholder="Email (optional)"
+          required
+          placeholder="Email *"
           value={walkInEmail}
           onChange={(e) => setWalkInEmail(e.target.value)}
           className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
@@ -262,7 +267,7 @@ export default function WalkInForm({
 
       <button
         type="submit"
-        disabled={pending || !walkInName || !treatmentName || !whenISO}
+        disabled={pending || !walkInName || !walkInPhone || !walkInEmail || !treatmentName || !whenISO}
         className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
       >
         {pending ? 'Saving…' : 'Create walk-in appointment'}

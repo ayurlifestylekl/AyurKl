@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Plus, UserPlus, ShoppingCart, Search, type LucideIcon } from 'lucide-react'
 import AddProductDialog from './AddProductDialog'
 import IssueInviteDialog from './IssueInviteDialog'
+import { COMMERCE_ENABLED } from '@/lib/admin/features'
 
 export default function QuickActionsRow() {
   const [showAddProduct, setShowAddProduct] = useState(false)
@@ -12,9 +13,14 @@ export default function QuickActionsRow() {
 
   return (
     <section className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
-      <ActionTile icon={Plus} label="Add product" onClick={() => setShowAddProduct(true)} />
-      <ActionTile icon={UserPlus} label="Issue partner invite" onClick={() => setShowInvite(true)} />
-      <ActionTile icon={ShoppingCart} label="Manual order" href="/admin/orders/new" />
+      {/* Shop actions — archived while the clinic runs on bookings only. */}
+      {COMMERCE_ENABLED && (
+        <>
+          <ActionTile icon={Plus} label="Add product" onClick={() => setShowAddProduct(true)} />
+          <ActionTile icon={UserPlus} label="Issue partner invite" onClick={() => setShowInvite(true)} />
+          <ActionTile icon={ShoppingCart} label="Manual order" href="/admin/orders/new" />
+        </>
+      )}
       <ActionTile icon={Search} label="Find customer" href="/admin/customers" />
 
       {showAddProduct && <AddProductDialog onClose={() => setShowAddProduct(false)} />}

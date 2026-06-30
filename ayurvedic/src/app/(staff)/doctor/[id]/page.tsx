@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requireStaff } from '@/lib/staff/guard'
-import { getAppointmentDetail } from '@/lib/staff/appointments'
+import { getAppointmentDetail, getGroupAppointments } from '@/lib/staff/appointments'
 import StatusBadge from '@/components/staff/StatusBadge'
 import PatientHealthPanel from '@/components/staff/PatientHealthPanel'
 import ClinicalNotes from '@/components/staff/ClinicalNotes'
 import UnlockTreatment from '@/components/staff/UnlockTreatment'
 import AppointmentActions from '@/components/staff/AppointmentActions'
+import GroupApprovalActions from '@/components/staff/GroupApprovalActions'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,9 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
   const { db, role } = await requireStaff(['admin', 'doctor'])
   const a = await getAppointmentDetail(db, params.id)
   if (!a) notFound()
+
+  const groupMembers = a.groupId ? await getGroupAppointments(db, a.groupId) : []
+  const isGroup = groupMembers.length > 1
 
   return (
     <div>
@@ -37,16 +41,35 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <PatientHealthPanel p={a} />
         <div className="space-y-4">
-          <AppointmentActions
-            id={a.id}
-            status={a.status}
-            bookingKind={a.bookingKind}
-            genderRequirement={a.genderRequirement}
-            requestedAt={a.requestedDatetime}
-            requestedAtAlt={a.requestedDatetimeAlt}
-            backHref="/doctor"
-            canDelete={role === 'admin'}
-          />
+          {isGroup ? (
+            <GroupApprovalActions
+              groupId={a.groupId as string}
+              members={groupMembers.map((m) => ({
+                id: m.id,
+                patientName: m.patientName,
+                patientGender: m.patientGender,
+                genderRequirement: m.genderRequirement,
+                status: m.status,
+                assignedTherapistName: m.assignedTherapistName,
+                assignedTherapistCode: m.assignedTherapistCode,
+              }))}
+              requestedAt={a.requestedDatetime}
+              requestedAtAlt={a.requestedDatetimeAlt}
+              backHref="/doctor"
+              canDelete={role === 'admin'}
+            />
+          ) : (
+            <AppointmentActions
+              id={a.id}
+              status={a.status}
+              bookingKind={a.bookingKind}
+              genderRequirement={a.genderRequirement}
+              requestedAt={a.requestedDatetime}
+              requestedAtAlt={a.requestedDatetimeAlt}
+              backHref="/doctor"
+              canDelete={role === 'admin'}
+            />
+          )}
           {a.bookingKind === 'consultation' && (
             <UnlockTreatment consultationId={a.id} treatmentId={a.treatmentId} unlocked={a.treatmentUnlocked} outcome={a.consultationOutcome ?? null} />
           )}
