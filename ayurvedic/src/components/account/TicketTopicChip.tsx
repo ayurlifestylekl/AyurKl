@@ -28,7 +28,7 @@ const ICONS: Record<TopicKey, LucideIcon> = {
 export default function TicketTopicChip({ topic }: TicketTopicChipProps) {
   const Icon = ICONS[topic] ?? MessageCircle
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#163F33]/[0.06] px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#6E1023]/[0.06] px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65">
       <Icon className="h-2.5 w-2.5" strokeWidth={2} />
       {topicLabel(topic)}
     </span>

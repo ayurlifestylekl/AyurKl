@@ -15,20 +15,20 @@ export default function ProductSummaryCard({
   }
 }) {
   return (
-    <div className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+    <div className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
       <div className="flex items-center gap-3">
         {product.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={product.image_url}
             alt=""
-            className="h-12 w-12 rounded-lg border border-[#163F33]/10 object-cover"
+            className="h-12 w-12 rounded-lg border border-[#6E1023]/10 object-cover"
           />
         ) : (
-          <div className="h-12 w-12 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40" />
+          <div className="h-12 w-12 rounded-lg border border-dashed border-[#6E1023]/15 bg-[#F7F2E8]/40" />
         )}
         <div className="min-w-0 flex-1">
-          <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
+          <h3 className="font-heading text-[13px] font-semibold text-[#6E1023]">
             {product.name}
           </h3>
           <p className="text-[11px] text-[#1F1F1F]/55">{product.sku}</p>
@@ -42,7 +42,7 @@ export default function ProductSummaryCard({
       </dl>
       <Link
         href={`/admin/products/${product.id}`}
-        className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
+        className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#6E1023]"
       >
         Edit product details
         <ArrowRight className="h-3 w-3" />

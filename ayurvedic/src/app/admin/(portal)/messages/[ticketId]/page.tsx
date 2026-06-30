@@ -80,7 +80,7 @@ export default async function AdminTicketDetailPage({
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/messages"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to inbox
       </Link>
@@ -88,7 +88,7 @@ export default async function AdminTicketDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
+            <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">
               {t.subject}
             </h1>
             <span
@@ -112,8 +112,8 @@ export default async function AdminTicketDetailPage({
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
         <div className="flex flex-col gap-4">
           {/* Thread */}
-          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
-            <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
+          <article className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
+            <header className="border-b border-[#6E1023]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#6E1023]">
               Conversation ({messages.length})
             </header>
             {messages.length === 0 ? (
@@ -121,7 +121,7 @@ export default async function AdminTicketDetailPage({
                 No messages yet.
               </p>
             ) : (
-              <ul className="divide-y divide-[#163F33]/6">
+              <ul className="divide-y divide-[#6E1023]/6">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {messages.map((m: any) => {
                   const isClinic = m.sender_kind === 'clinic'
@@ -140,7 +140,7 @@ export default async function AdminTicketDetailPage({
                               ? 'text-[#D4AF37]'
                               : isSystem
                                 ? 'text-[#1F1F1F]/55'
-                                : 'text-[#163F33]/70'
+                                : 'text-[#6E1023]/70'
                           }`}
                         >
                           {isClinic
@@ -153,7 +153,7 @@ export default async function AdminTicketDetailPage({
                           {new Date(m.created_at).toLocaleString('en-MY')}
                         </span>
                       </div>
-                      <p className="whitespace-pre-wrap text-[13px] text-[#163F33]">
+                      <p className="whitespace-pre-wrap text-[13px] text-[#6E1023]">
                         {m.body}
                       </p>
                     </li>
@@ -168,8 +168,8 @@ export default async function AdminTicketDetailPage({
 
         <aside className="flex flex-col gap-4">
           {/* Customer card */}
-          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-            <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+          <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+            <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
               Customer
             </h3>
             {cust ? (
@@ -178,7 +178,7 @@ export default async function AdminTicketDetailPage({
                 <p className="text-[12px] text-[#1F1F1F]/65">{cust.email}</p>
                 <p className="text-[12px] text-[#1F1F1F]/65">{cust.phone_number}</p>
                 {cust.allergies || cust.medical_conditions ? (
-                  <div className="mt-3 border-t border-[#163F33]/6 pt-3 text-[11.5px]">
+                  <div className="mt-3 border-t border-[#6E1023]/6 pt-3 text-[11.5px]">
                     {cust.allergies ? (
                       <p>
                         <span className="text-[#1F1F1F]/55">Allergies: </span>
@@ -195,7 +195,7 @@ export default async function AdminTicketDetailPage({
                 ) : null}
                 <Link
                   href={`/admin/customers/${t.customer_id}`}
-                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
+                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#6E1023]"
                 >
                   View full profile →
                 </Link>

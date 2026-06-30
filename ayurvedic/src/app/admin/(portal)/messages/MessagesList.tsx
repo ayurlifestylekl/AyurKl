@@ -40,13 +40,13 @@ function relativeTime(iso: string): string {
 export default function MessagesList({ items }: { items: TicketListItem[] }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+      <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         Inbox zero. Nothing to reply to right now.
       </div>
     )
   }
   return (
-    <ul className="flex flex-col divide-y divide-[#163F33]/6 overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+    <ul className="flex flex-col divide-y divide-[#6E1023]/6 overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
       {items.map((t) => (
         <li key={t.id}>
           <Link
@@ -69,8 +69,8 @@ export default function MessagesList({ items }: { items: TicketListItem[] }) {
                 <p
                   className={`truncate text-[14px] ${
                     t.unreadByClinic
-                      ? 'font-bold text-[#163F33]'
-                      : 'font-semibold text-[#163F33]/80'
+                      ? 'font-bold text-[#6E1023]'
+                      : 'font-semibold text-[#6E1023]/80'
                   }`}
                 >
                   {t.subject}
@@ -80,7 +80,7 @@ export default function MessagesList({ items }: { items: TicketListItem[] }) {
                 >
                   {STATUS_LABEL[t.status] ?? t.status}
                 </span>
-                <span className="hidden shrink-0 rounded-full border border-[#163F33]/15 bg-[#F7F2E8]/40 px-2 py-0.5 text-[10.5px] font-semibold text-[#163F33]/70 md:inline-block">
+                <span className="hidden shrink-0 rounded-full border border-[#6E1023]/15 bg-[#F7F2E8]/40 px-2 py-0.5 text-[10.5px] font-semibold text-[#6E1023]/70 md:inline-block">
                   {TOPIC_LABEL[t.topic] ?? t.topic}
                 </span>
               </div>

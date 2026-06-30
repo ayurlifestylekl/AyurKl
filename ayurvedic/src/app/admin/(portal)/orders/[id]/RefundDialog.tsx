@@ -47,7 +47,7 @@ export default function RefundDialog({
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               Record refund
             </h2>
             <p className="mt-1 text-[11px] text-[#1F1F1F]/55">
@@ -55,7 +55,7 @@ export default function RefundDialog({
               must be processed in Billplz / bank separately.
             </p>
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Amount (RM)
             </label>
             <input
@@ -64,26 +64,26 @@ export default function RefundDialog({
               step="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Reason
             </label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={2}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Method
             </label>
             <select
               value={method}
               onChange={(e) => setMethod(e.target.value as RefundMethod)}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             >
               <option value="bank_transfer">Bank transfer</option>
               <option value="cash">Cash</option>
@@ -93,14 +93,14 @@ export default function RefundDialog({
               <option value="cod">COD</option>
             </select>
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Reference (optional)
             </label>
             <input
               value={ref}
               onChange={(e) => setRef(e.target.value)}
               placeholder="Billplz refund ID or bank ref"
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
 
             {error ? <p className="mt-3 text-[12px] text-red-600">{error}</p> : null}
@@ -108,7 +108,7 @@ export default function RefundDialog({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>

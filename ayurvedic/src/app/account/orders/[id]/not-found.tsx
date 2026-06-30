@@ -4,11 +4,11 @@ import { Package, ArrowRight } from 'lucide-react'
 export default function OrderNotFound() {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center px-4 py-12 text-center sm:py-16">
-      <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#163F33]/[0.06]">
-        <Package className="h-6 w-6 text-[#1E5B4B]" strokeWidth={1.6} />
+      <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#6E1023]/[0.06]">
+        <Package className="h-6 w-6 text-[#6E1023]" strokeWidth={1.6} />
       </span>
       <h1
-        className="mt-5 font-heading text-[22px] font-bold text-[#163F33]"
+        className="mt-5 font-heading text-[22px] font-bold text-[#6E1023]"
         style={{ letterSpacing: '-0.02em' }}
       >
         Order not found.

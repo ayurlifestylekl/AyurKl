@@ -21,7 +21,7 @@ export default function PromoHistoryList({ used, expired }: PromoHistoryListProp
 
   if (rows.length === 0) {
     return (
-      <p className="rounded-3xl border border-dashed border-[#163F33]/12 bg-white px-5 py-4 text-center font-body text-[12px] italic text-[#1F1F1F]/55">
+      <p className="rounded-3xl border border-dashed border-[#6E1023]/12 bg-white px-5 py-4 text-center font-body text-[12px] italic text-[#1F1F1F]/55">
         Used and expired vouchers will live here.
       </p>
     )
@@ -29,10 +29,10 @@ export default function PromoHistoryList({ used, expired }: PromoHistoryListProp
 
   return (
     <ul
-      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       {rows.map(({ item, status }, idx) => {
@@ -44,12 +44,12 @@ export default function PromoHistoryList({ used, expired }: PromoHistoryListProp
           <li
             key={item.grant.id}
             className={`flex items-center gap-3 px-5 py-3 sm:px-6 ${
-              isLast ? '' : 'border-b border-[#163F33]/6'
+              isLast ? '' : 'border-b border-[#6E1023]/6'
             }`}
           >
             <div className="flex-1 min-w-0">
               <p
-                className="truncate font-heading text-[13px] font-semibold text-[#163F33]/75"
+                className="truncate font-heading text-[13px] font-semibold text-[#6E1023]/75"
                 style={{ letterSpacing: '-0.005em' }}
               >
                 {item.promo.title}

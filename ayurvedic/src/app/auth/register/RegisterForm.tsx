@@ -202,7 +202,7 @@ export default function RegisterForm({ invite, inviteTokenRaw, nextPath }: Regis
         <button
           type="submit"
           disabled={isPending}
-          className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all duration-200 hover:bg-[#D4AF37] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#163F33] disabled:cursor-not-allowed disabled:opacity-70"
+          className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#D4AF37] px-7 font-heading text-sm font-bold uppercase tracking-wider text-[#1F1F1F] transition-all duration-200 hover:bg-[#D4AF37] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#26060F] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? 'Creating account…' : isInviteMode ? 'Accept invite' : 'Create account'}
         </button>

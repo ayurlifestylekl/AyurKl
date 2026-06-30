@@ -22,7 +22,7 @@ export default function AuthCard({
   return (
     <div className="w-full">
       <div
-        className="relative overflow-hidden rounded-[28px] border border-[#D4AF37]/22 bg-gradient-to-b from-[#163F33]/95 via-[#163F33]/95 to-[#163F33]/95 p-8 backdrop-blur-xl sm:p-10"
+        className="relative overflow-hidden rounded-[28px] border border-[#D4AF37]/22 bg-gradient-to-b from-[#26060F]/95 via-[#26060F]/95 to-[#26060F]/95 p-8 backdrop-blur-xl sm:p-10"
         style={{
           boxShadow:
             '0 24px 60px -18px rgba(0,0,0,0.45), 0 8px 20px -10px rgba(0,0,0,0.35), inset 0 1px 0 0 rgba(255,255,255,0.06)',

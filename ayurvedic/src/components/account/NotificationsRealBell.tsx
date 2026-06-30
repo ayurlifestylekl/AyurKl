@@ -54,12 +54,12 @@ export default function NotificationsRealBell({ userId, initial }: Notifications
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-[#163F33]/8 bg-white transition-all hover:border-[#163F33]/20 hover:shadow-sm"
+        className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-[#6E1023]/8 bg-white transition-all hover:border-[#6E1023]/20 hover:shadow-sm"
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
       >
-        <Bell className="h-[17px] w-[17px] text-[#163F33]/70 group-hover:text-[#163F33]" strokeWidth={1.8} />
+        <Bell className="h-[17px] w-[17px] text-[#6E1023]/70 group-hover:text-[#6E1023]" strokeWidth={1.8} />
         {unreadCount > 0 && (
           <span className="absolute right-[9px] top-[9px] flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D4AF37] opacity-50" />
@@ -71,16 +71,16 @@ export default function NotificationsRealBell({ userId, initial }: Notifications
       {open && (
         <>
           <button type="button" aria-label="Close notifications" onClick={() => setOpen(false)} className="fixed inset-0 z-30 cursor-default" />
-          <div className="absolute right-0 top-full z-40 mt-2 w-80 overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white shadow-2xl shadow-black/8">
-            <div className="flex items-center justify-between border-b border-[#163F33]/6 px-4 py-2.5">
-              <p className="font-heading text-[12px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/65">Notifications</p>
+          <div className="absolute right-0 top-full z-40 mt-2 w-80 overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white shadow-2xl shadow-black/8">
+            <div className="flex items-center justify-between border-b border-[#6E1023]/6 px-4 py-2.5">
+              <p className="font-heading text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/65">Notifications</p>
               {unreadCount > 0 && (
                 <button type="button" onClick={handleMarkAll} className="font-heading text-[10.5px] font-semibold text-[#D4AF37] hover:underline">
                   Mark all read
                 </button>
               )}
             </div>
-            <ul className="max-h-96 divide-y divide-[#163F33]/6 overflow-y-auto">
+            <ul className="max-h-96 divide-y divide-[#6E1023]/6 overflow-y-auto">
               {items.length === 0 ? (
                 <li className="px-4 py-6 text-center font-body text-[12.5px] italic text-[#1F1F1F]/55">No notifications yet.</li>
               ) : items.map((n) => (
@@ -108,12 +108,12 @@ function NotificationRow({ notification }: { notification: Notification }) {
   return (
     <div className="flex items-start gap-2">
       <div className="flex-1 min-w-0">
-        <p className="font-heading text-[12.5px] font-semibold text-[#163F33]">{notification.title}</p>
+        <p className="font-heading text-[12.5px] font-semibold text-[#6E1023]">{notification.title}</p>
         <p className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/70 line-clamp-2">{notification.body}</p>
-        <p className="mt-1 font-body text-[10.5px] text-[#163F33]/45">{relativeTime(notification.created_at)}</p>
+        <p className="mt-1 font-body text-[10.5px] text-[#6E1023]/45">{relativeTime(notification.created_at)}</p>
       </div>
       {!notification.read_at && <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#D4AF37]" aria-label="Unread" />}
-      {notification.read_at && <Check className="h-3 w-3 text-[#163F33]/30" aria-label="Read" />}
+      {notification.read_at && <Check className="h-3 w-3 text-[#6E1023]/30" aria-label="Read" />}
     </div>
   )
 }

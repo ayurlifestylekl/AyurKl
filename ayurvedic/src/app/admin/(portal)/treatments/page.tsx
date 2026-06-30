@@ -8,7 +8,7 @@ export default function AdminTreatmentsRedirectPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <Link
         href="/admin/appointments"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to appointments
       </Link>
@@ -16,7 +16,7 @@ export default function AdminTreatmentsRedirectPage() {
         <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Catalog
         </span>
-        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
           Treatments
         </h1>
         <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -28,10 +28,10 @@ export default function AdminTreatmentsRedirectPage() {
         className="rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8]/60 p-5"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+            '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
         }}
       >
-        <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+        <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
           Treatments live in Sanity Studio
         </h2>
         <p className="mt-2 text-[13px] text-[#1F1F1F]/70">
@@ -51,15 +51,15 @@ export default function AdminTreatmentsRedirectPage() {
           href="/studio"
           target="_blank"
           rel="noopener"
-          className="mt-3 inline-flex items-center gap-2 rounded-lg bg-[#1E5B4B] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#163F33]"
+          className="mt-3 inline-flex items-center gap-2 rounded-lg bg-[#6E1023] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#6E1023]"
         >
           <ExternalLink className="h-3.5 w-3.5" /> Open Sanity Studio
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </article>
 
-      <article className="rounded-2xl border border-[#163F33]/8 bg-white p-5">
-        <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
+      <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-5">
+        <h3 className="font-heading text-[13px] font-semibold text-[#6E1023]">
           Why not in the admin panel directly?
         </h3>
         <p className="mt-2 text-[12.5px] text-[#1F1F1F]/65">

@@ -107,7 +107,7 @@ export default async function AdminAppointmentDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <Link
         href="/admin/appointments"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to appointments
       </Link>
@@ -115,7 +115,7 @@ export default async function AdminAppointmentDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
+            <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">
               {a.treatment_name}
             </h1>
             <span
@@ -158,8 +158,8 @@ export default async function AdminAppointmentDetailPage({
       ) : null}
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4 lg:col-span-2">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+        <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4 lg:col-span-2">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
             Session details
           </h2>
           <dl className="mt-3 grid grid-cols-3 gap-y-2 text-[12.5px]">
@@ -184,7 +184,7 @@ export default async function AdminAppointmentDetailPage({
                   ) : null}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[#163F33]">
+                <span className="inline-flex items-center gap-1 text-[#6E1023]">
                   <MapPin className="h-3.5 w-3.5" /> In-person
                   {a.room ? ` · ${a.room}` : ''}
                 </span>
@@ -243,16 +243,16 @@ export default async function AdminAppointmentDetailPage({
           </dl>
         </article>
 
-        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Customer</h2>
+        <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">Customer</h2>
           {cust ? (
             <>
               <p className="mt-2 text-[13px] font-semibold">{cust.full_name ?? '—'}</p>
               <p className="text-[12px] text-[#1F1F1F]/65">{cust.email}</p>
               <p className="text-[12px] text-[#1F1F1F]/65">{cust.phone_number}</p>
               {cust.allergies || cust.current_medications || cust.medical_conditions ? (
-                <div className="mt-3 border-t border-[#163F33]/6 pt-3 text-[11.5px]">
-                  <p className="font-semibold text-[#163F33]">Health flags</p>
+                <div className="mt-3 border-t border-[#6E1023]/6 pt-3 text-[11.5px]">
+                  <p className="font-semibold text-[#6E1023]">Health flags</p>
                   {cust.allergies ? (
                     <p className="mt-1">
                       <span className="text-[#1F1F1F]/55">Allergies: </span>
@@ -276,7 +276,7 @@ export default async function AdminAppointmentDetailPage({
               {a.customer_id ? (
                 <Link
                   href={`/admin/customers/${a.customer_id}`}
-                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
+                  className="mt-3 inline-block text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#6E1023]"
                 >
                   View full profile →
                 </Link>
@@ -290,8 +290,8 @@ export default async function AdminAppointmentDetailPage({
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <InternalNotesPanel appointmentId={a.id} initial={a.internal_notes} />
-        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-          <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+        <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+          <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
             Cal.com sync
           </h3>
           {a.calcom_booking_uid ? (

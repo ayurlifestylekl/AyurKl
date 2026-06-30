@@ -38,14 +38,14 @@ export default function UniversalSearch() {
   return (
     <div className="relative w-full max-w-md">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#163F33]/40" />
+        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E1023]/40" />
         <input
           type="search"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           onFocus={() => setOpen(true)}
           placeholder="Find a customer, order #, or product…"
-          className="h-10 w-full rounded-full border border-[#163F33]/15 bg-white pl-9 pr-9 font-body text-[13px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30"
+          className="h-10 w-full rounded-full border border-[#6E1023]/15 bg-white pl-9 pr-9 font-body text-[13px] text-[#6E1023] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30"
         />
         {q && (
           <button
@@ -57,7 +57,7 @@ export default function UniversalSearch() {
             className="absolute right-3 top-1/2 -translate-y-1/2"
             aria-label="Clear search"
           >
-            <X className="h-3.5 w-3.5 text-[#163F33]/40" />
+            <X className="h-3.5 w-3.5 text-[#6E1023]/40" />
           </button>
         )}
       </div>
@@ -69,13 +69,13 @@ export default function UniversalSearch() {
             onClick={() => setOpen(false)}
             className="fixed inset-0 z-30"
           />
-          <div className="absolute left-0 right-0 top-full z-40 mt-2 max-h-96 overflow-y-auto rounded-2xl border border-[#163F33]/8 bg-white shadow-2xl shadow-black/8">
+          <div className="absolute left-0 right-0 top-full z-40 mt-2 max-h-96 overflow-y-auto rounded-2xl border border-[#6E1023]/8 bg-white shadow-2xl shadow-black/8">
             {hits.length === 0 ? (
               <p className="px-4 py-6 text-center font-body text-[12.5px] italic text-[#1F1F1F]/55">
                 No matches.
               </p>
             ) : (
-              <ul className="divide-y divide-[#163F33]/6">
+              <ul className="divide-y divide-[#6E1023]/6">
                 {hits.map((h) => {
                   const Icon = ICONS[h.kind]
                   return (
@@ -85,18 +85,18 @@ export default function UniversalSearch() {
                         onClick={() => setOpen(false)}
                         className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                       >
-                        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
-                          <Icon className="h-3.5 w-3.5 text-[#1E5B4B]" />
+                        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#6E1023]/[0.06]">
+                          <Icon className="h-3.5 w-3.5 text-[#6E1023]" />
                         </span>
                         <div className="min-w-0 flex-1">
-                          <p className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]">
+                          <p className="truncate font-heading text-[12.5px] font-semibold text-[#6E1023]">
                             {h.title}
                           </p>
                           <p className="truncate font-body text-[11px] text-[#1F1F1F]/65">
                             {h.subtitle}
                           </p>
                         </div>
-                        <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.12em] text-[#163F33]/45">
+                        <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.12em] text-[#6E1023]/45">
                           {h.kind}
                         </span>
                       </Link>

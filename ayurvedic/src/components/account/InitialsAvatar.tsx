@@ -15,10 +15,10 @@ interface InitialsAvatarProps {
 }
 
 const PALETTES = [
-  { bg: '#1E5B4B', fg: '#F7F2E8' }, // herbal green
-  { bg: '#2E7D5A', fg: '#F7F2E8' }, // olive
+  { bg: '#6E1023', fg: '#F7F2E8' }, // herbal green
+  { bg: '#6E1023', fg: '#F7F2E8' }, // olive
   { bg: '#D4AF37', fg: '#1F1F1F' }, // turmeric gold
-  { bg: '#163F33', fg: '#F7F2E8' }, // deep green
+  { bg: '#6E1023', fg: '#F7F2E8' }, // deep green
   { bg: '#9c6f3e', fg: '#F7F2E8' }, // warm amber
 ] as const
 
@@ -63,7 +63,7 @@ export default function InitialsAvatar({
         alt={name ?? ''}
         className={`inline-block shrink-0 rounded-2xl object-cover ${sizes.box}`}
         style={{
-          boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.08), 0 12px 30px -16px rgba(22, 63, 51,0.35)',
+          boxShadow: '0 1px 0 0 rgba(110,16,35,0.08), 0 12px 30px -16px rgba(110,16,35,0.35)',
         }}
       />
     )
@@ -80,7 +80,7 @@ export default function InitialsAvatar({
         backgroundColor: palette.bg,
         color: palette.fg,
         letterSpacing: '-0.02em',
-        boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.08), 0 12px 30px -16px rgba(22, 63, 51,0.35)',
+        boxShadow: '0 1px 0 0 rgba(110,16,35,0.08), 0 12px 30px -16px rgba(110,16,35,0.35)',
       }}
     >
       {letter}

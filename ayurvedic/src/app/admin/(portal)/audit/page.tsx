@@ -48,7 +48,7 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
         <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Activity ledger
         </span>
-        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
           Audit log
         </h1>
         <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -60,7 +60,7 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
       <AuditFilterBar active={entity} />
 
       {entries.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+        <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No events in this view.
         </div>
       ) : (
@@ -71,7 +71,7 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
             return (
               <li
                 key={`${e.entity}-${e.id}`}
-                className="flex items-start gap-3 rounded-2xl border border-[#163F33]/8 bg-white p-3.5"
+                className="flex items-start gap-3 rounded-2xl border border-[#6E1023]/8 bg-white p-3.5"
               >
                 <span
                   className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${bg}`}
@@ -80,7 +80,7 @@ export default async function AdminAuditPage({ searchParams }: PageProps) {
                 </span>
                 <div className="flex-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
+                    <h3 className="font-heading text-[13px] font-semibold text-[#6E1023]">
                       {e.title}
                     </h3>
                     <time className="text-[11px] text-[#1F1F1F]/55">

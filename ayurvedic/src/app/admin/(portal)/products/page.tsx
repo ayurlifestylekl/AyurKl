@@ -76,7 +76,7 @@ export default async function AdminProductsPage({ searchParams }: PageProps) {
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Catalog
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             Products
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -87,21 +87,21 @@ export default async function AdminProductsPage({ searchParams }: PageProps) {
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/products/import"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#6E1023] hover:bg-[#F7F2E8]/60"
           >
             <Upload className="h-3.5 w-3.5" />
             Import CSV
           </Link>
           <a
             href="/admin/products/export"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#6E1023] hover:bg-[#F7F2E8]/60"
           >
             <Download className="h-3.5 w-3.5" />
             Export CSV
           </a>
           <Link
             href="/admin/products/new"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#6E1023]"
           >
             <Plus className="h-3.5 w-3.5" />
             Add product

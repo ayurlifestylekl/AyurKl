@@ -39,7 +39,7 @@ export default function AddressBookCard({ address }: AddressBookCardProps) {
         <button
           type="button"
           onClick={() => setEditing(false)}
-          className="absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#163F33]/15 bg-white text-[#163F33]/55 hover:text-[#163F33]"
+          className="absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#6E1023]/15 bg-white text-[#6E1023]/55 hover:text-[#6E1023]"
           aria-label="Close edit"
         >
           <X className="h-3.5 w-3.5" />
@@ -51,19 +51,19 @@ export default function AddressBookCard({ address }: AddressBookCardProps) {
 
   return (
     <article
-      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5"
+      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white p-5"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-[#1E5B4B]/8">
-            <MapPin className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
+          <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-[#6E1023]/8">
+            <MapPin className="h-4 w-4 text-[#6E1023]" strokeWidth={1.8} />
           </span>
           <div>
-            <h3 className="font-heading text-[14px] font-bold text-[#163F33]">{address.label}</h3>
+            <h3 className="font-heading text-[14px] font-bold text-[#6E1023]">{address.label}</h3>
             <p className="font-body text-[11.5px] text-[#1F1F1F]/55">{address.country}</p>
           </div>
         </div>
@@ -76,20 +76,20 @@ export default function AddressBookCard({ address }: AddressBookCardProps) {
       </div>
 
       <div className="mt-4 flex-1 font-body text-[13px] leading-[1.6] text-[#1F1F1F]/80">
-        <p className="font-heading font-semibold text-[#163F33]">{address.recipient}</p>
+        <p className="font-heading font-semibold text-[#6E1023]">{address.recipient}</p>
         <p>{address.line1}</p>
         {address.line2 && <p>{address.line2}</p>}
         <p>{address.postcode} {address.city}, {address.state}</p>
         <p className="mt-2 text-[#1F1F1F]/60">{address.phone}</p>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2 border-t border-[#163F33]/6 pt-3">
+      <div className="mt-4 flex flex-wrap gap-2 border-t border-[#6E1023]/6 pt-3">
         {!address.is_default && (
           <button
             type="button"
             onClick={handleSetDefault}
             disabled={isPending}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/15 px-3 py-1.5 font-heading text-[11px] font-semibold text-[#163F33] hover:bg-[#163F33]/[0.04] disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/15 px-3 py-1.5 font-heading text-[11px] font-semibold text-[#6E1023] hover:bg-[#6E1023]/[0.04] disabled:opacity-50"
           >
             <Star className="h-3 w-3" />
             Set default
@@ -99,7 +99,7 @@ export default function AddressBookCard({ address }: AddressBookCardProps) {
           type="button"
           onClick={() => setEditing(true)}
           disabled={isPending}
-          className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/15 px-3 py-1.5 font-heading text-[11px] font-semibold text-[#163F33] hover:bg-[#163F33]/[0.04] disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/15 px-3 py-1.5 font-heading text-[11px] font-semibold text-[#6E1023] hover:bg-[#6E1023]/[0.04] disabled:opacity-50"
         >
           <Pencil className="h-3 w-3" />
           Edit

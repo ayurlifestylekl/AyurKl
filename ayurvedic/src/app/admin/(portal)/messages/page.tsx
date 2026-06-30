@@ -68,7 +68,7 @@ export default async function AdminMessagesPage({ searchParams }: PageProps) {
         <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Customer support
         </span>
-        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
           Messages
         </h1>
         <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">

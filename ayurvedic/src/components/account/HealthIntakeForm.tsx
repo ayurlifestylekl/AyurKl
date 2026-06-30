@@ -73,7 +73,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
           <ShieldCheck className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2} />
         </span>
         <div>
-          <p className="font-heading text-[12px] font-semibold text-[#163F33]">
+          <p className="font-heading text-[12px] font-semibold text-[#6E1023]">
             Vaidya uses this to keep you safe.
           </p>
           <p className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/65" style={{ lineHeight: 1.55 }}>
@@ -88,7 +88,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
       <div>
         <label
           htmlFor="health-allergies"
-          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
+          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55"
         >
           Allergies
         </label>
@@ -100,7 +100,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
           maxLength={1500}
           disabled={isPending}
           placeholder="e.g. Penicillin, peanuts, sesame oil. Write &lsquo;none known&rsquo; if none."
-          className="mt-2 w-full resize-y rounded-2xl border border-[#163F33]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
+          className="mt-2 w-full resize-y rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#6E1023] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           style={{ lineHeight: 1.6 }}
         />
       </div>
@@ -109,7 +109,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
       <div>
         <label
           htmlFor="health-meds"
-          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
+          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55"
         >
           Current medications
         </label>
@@ -121,7 +121,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
           maxLength={1500}
           disabled={isPending}
           placeholder="Include over-the-counter, prescriptions, supplements, and any other herbal preparations."
-          className="mt-2 w-full resize-y rounded-2xl border border-[#163F33]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
+          className="mt-2 w-full resize-y rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#6E1023] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           style={{ lineHeight: 1.6 }}
         />
       </div>
@@ -130,7 +130,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
       <div>
         <label
           htmlFor="health-conditions"
-          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
+          className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55"
         >
           Medical conditions
         </label>
@@ -142,7 +142,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
           maxLength={1500}
           disabled={isPending}
           placeholder="e.g. asthma, diabetes, hypertension, recent surgery, pregnancy."
-          className="mt-2 w-full resize-y rounded-2xl border border-[#163F33]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
+          className="mt-2 w-full resize-y rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-3 font-body text-[13.5px] text-[#6E1023] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           style={{ lineHeight: 1.6 }}
         />
       </div>
@@ -152,7 +152,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
         <div>
           <label
             htmlFor="health-height"
-            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
+            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55"
           >
             Height (cm)
           </label>
@@ -167,13 +167,13 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
             onChange={(e) => setHeight(e.target.value)}
             placeholder="e.g. 172"
             disabled={isPending}
-            className="mt-2 w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
+            className="mt-2 w-full rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#6E1023] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           />
         </div>
         <div>
           <label
             htmlFor="health-weight"
-            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
+            className="block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55"
           >
             Weight (kg)
           </label>
@@ -188,7 +188,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
             onChange={(e) => setWeight(e.target.value)}
             placeholder="e.g. 68"
             disabled={isPending}
-            className="mt-2 w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#163F33] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
+            className="mt-2 w-full rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#6E1023] placeholder:text-[#1F1F1F]/40 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           />
         </div>
       </div>
@@ -197,7 +197,7 @@ export default function HealthIntakeForm({ initial }: HealthIntakeFormProps) {
         <button
           type="submit"
           disabled={isPending || !isDirty}
-          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#6E1023] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#6E1023] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isPending ? 'Saving…' : 'Save health intake'}
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

@@ -31,7 +31,7 @@ export default function AppointmentRow({ appointment }: AppointmentRowProps) {
           {month}
         </span>
         <span
-          className="font-heading text-[20px] font-bold leading-none text-[#163F33]"
+          className="font-heading text-[20px] font-bold leading-none text-[#6E1023]"
           style={{ letterSpacing: '-0.02em' }}
         >
           {day}
@@ -41,7 +41,7 @@ export default function AppointmentRow({ appointment }: AppointmentRowProps) {
       {/* Content */}
       <div className="flex-1 min-w-0">
         <h3
-          className="font-heading text-[14.5px] font-semibold text-[#163F33]"
+          className="font-heading text-[14.5px] font-semibold text-[#6E1023]"
           style={{ letterSpacing: '-0.005em' }}
         >
           {appointment.treatment_name}
@@ -49,13 +49,13 @@ export default function AppointmentRow({ appointment }: AppointmentRowProps) {
         <p className="mt-0.5 font-body text-[11.5px] italic text-[#1F1F1F]/55">
           with {appointment.doctor_name}
         </p>
-        <div className="mt-2 flex flex-wrap items-center gap-3 font-body text-[11.5px] text-[#163F33]/60">
+        <div className="mt-2 flex flex-wrap items-center gap-3 font-body text-[11.5px] text-[#6E1023]/60">
           <span className="inline-flex items-center gap-1">
             <Clock className="h-3 w-3" />
             {time} · {duration} min
           </span>
           {appointment.mode === 'virtual' ? (
-            <span className="inline-flex items-center gap-1 text-[#1E5B4B]/85">
+            <span className="inline-flex items-center gap-1 text-[#6E1023]/85">
               <Video className="h-3 w-3" strokeWidth={2} />
               Virtual
             </span>
@@ -66,14 +66,14 @@ export default function AppointmentRow({ appointment }: AppointmentRowProps) {
             </span>
           )}
           {advance != null && Number(advance) > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#2E7D5A]/25 bg-[#2E7D5A]/8 px-2 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.08em] text-[#1E5B4B]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#6E1023]/25 bg-[#6E1023]/8 px-2 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6E1023]">
               Advance · RM {Number(advance).toFixed(0)}
             </span>
           )}
         </div>
       </div>
 
-      <Calendar className="mt-1 h-3.5 w-3.5 shrink-0 text-[#163F33]/25" strokeWidth={1.8} />
+      <Calendar className="mt-1 h-3.5 w-3.5 shrink-0 text-[#6E1023]/25" strokeWidth={1.8} />
     </div>
   )
 }

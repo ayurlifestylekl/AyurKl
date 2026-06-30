@@ -24,16 +24,16 @@ export default function AgentSubmissionsTable({
 }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+      <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No agent submissions in this view. When affiliates submit marketplace
         sales from their portal, they appear here for your approval.
       </div>
     )
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
       <table className="w-full text-left text-[13px]">
-        <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+        <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           <tr>
             <th className="px-4 py-3">Submitted</th>
             <th className="px-4 py-3">Affiliate</th>
@@ -45,7 +45,7 @@ export default function AgentSubmissionsTable({
             <th className="px-4 py-3">Status</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#163F33]/6">
+        <tbody className="divide-y divide-[#6E1023]/6">
           {items.map((m) => (
             <tr
               key={m.id}
@@ -60,7 +60,7 @@ export default function AgentSubmissionsTable({
                 {m.referralAgentCode ? (
                   <Link
                     href={`/admin/partners/${m.referralAgentId}`}
-                    className="font-mono text-[11.5px] font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                    className="font-mono text-[11.5px] font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                   >
                     {m.referralAgentCode}
                   </Link>
@@ -78,7 +78,7 @@ export default function AgentSubmissionsTable({
               <td className="px-4 py-3">
                 <Link
                   href={`/admin/agent-submissions/${m.id}`}
-                  className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                  className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                 >
                   {m.customerName}
                 </Link>

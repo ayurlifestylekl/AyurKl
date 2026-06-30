@@ -14,7 +14,7 @@ export default function CustomerBulkActions({
 
   return (
     <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8] p-3">
-      <span className="text-[12px] font-semibold text-[#163F33]">
+      <span className="text-[12px] font-semibold text-[#6E1023]">
         {selectedIds.length} selected
       </span>
       <button

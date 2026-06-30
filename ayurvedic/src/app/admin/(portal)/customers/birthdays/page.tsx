@@ -14,14 +14,14 @@ export default async function BirthdaysPage() {
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <Link
         href="/admin/customers"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to customers
       </Link>
       <header>
         <div className="flex items-center gap-2">
           <Cake className="h-5 w-5 text-[#D4AF37]" />
-          <h1 className="font-heading text-[24px] font-bold text-[#163F33]">Birthdays</h1>
+          <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">Birthdays</h1>
         </div>
         <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">
           Customers with a birthday this month — send them a voucher to celebrate.
@@ -43,9 +43,9 @@ function BirthdaySection({
   customers: any[]
 }) {
   return (
-    <section className="rounded-2xl border border-[#163F33]/8 bg-white">
-      <header className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3">
-        <h2 className="font-heading text-[14px] font-semibold text-[#163F33]">
+    <section className="rounded-2xl border border-[#6E1023]/8 bg-white">
+      <header className="flex items-center justify-between border-b border-[#6E1023]/6 px-5 py-3">
+        <h2 className="font-heading text-[14px] font-semibold text-[#6E1023]">
           {title} ({customers.length})
         </h2>
       </header>
@@ -54,7 +54,7 @@ function BirthdaySection({
           No birthdays {title.toLowerCase()}.
         </p>
       ) : (
-        <ul className="divide-y divide-[#163F33]/6">
+        <ul className="divide-y divide-[#6E1023]/6">
           {customers.map((c) => (
             <li
               key={c.id}
@@ -63,7 +63,7 @@ function BirthdaySection({
               <div>
                 <Link
                   href={`/admin/customers/${c.id}`}
-                  className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                  className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                 >
                   {c.full_name ?? 'Unnamed'}
                 </Link>

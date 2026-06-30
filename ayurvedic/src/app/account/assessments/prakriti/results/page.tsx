@@ -26,7 +26,7 @@ export default async function PrakritiResultsPage() {
           <Compass className="h-6 w-6 text-[#D4AF37]" strokeWidth={1.6} />
         </span>
         <h1
-          className="font-heading text-[26px] font-bold text-[#163F33]"
+          className="font-heading text-[26px] font-bold text-[#6E1023]"
           style={{ letterSpacing: '-0.02em' }}
         >
           No assessment on file yet.
@@ -37,7 +37,7 @@ export default async function PrakritiResultsPage() {
         </p>
         <Link
           href="/account/assessments/prakriti"
-          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98]"
+          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#6E1023] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#6E1023] active:scale-[0.98]"
         >
           Begin assessment
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

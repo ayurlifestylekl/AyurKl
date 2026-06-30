@@ -83,7 +83,7 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Affiliate program
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             Brand Partners
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -96,7 +96,7 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/partners/external-sales"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#6E1023] hover:bg-[#F7F2E8]/60"
           >
             External sales
           </Link>
@@ -105,7 +105,7 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
             className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-[12.5px] font-semibold ${
               pendingAgentCount > 0
                 ? 'bg-[#D4AF37] text-white hover:bg-[#b58a5d]'
-                : 'border border-[#163F33]/20 bg-white text-[#163F33] hover:bg-[#F7F2E8]/60'
+                : 'border border-[#6E1023]/20 bg-white text-[#6E1023] hover:bg-[#F7F2E8]/60'
             }`}
           >
             <Wallet className="h-3.5 w-3.5" />
@@ -124,19 +124,19 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
       {/* Leaderboard */}
       {leaderboard.length > 0 ? (
         <section
-          className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white"
+          className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+              '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
           }}
         >
-          <header className="flex items-center gap-2 border-b border-[#163F33]/6 px-5 py-3">
+          <header className="flex items-center gap-2 border-b border-[#6E1023]/6 px-5 py-3">
             <Trophy className="h-3.5 w-3.5 text-[#D4AF37]" />
-            <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[13px] font-semibold text-[#6E1023]">
               Top partners — this month
             </h2>
           </header>
-          <ol className="divide-y divide-[#163F33]/6">
+          <ol className="divide-y divide-[#6E1023]/6">
             {leaderboard.map((entry, idx) => (
               <li
                 key={entry.agentId}
@@ -147,7 +147,7 @@ export default async function AdminPartnersPage({ searchParams }: PageProps) {
                 </span>
                 <Link
                   href={`/admin/partners/${entry.agentId}`}
-                  className="flex-1 font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                  className="flex-1 font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                 >
                   {entry.agentName ?? entry.referralCode}
                 </Link>

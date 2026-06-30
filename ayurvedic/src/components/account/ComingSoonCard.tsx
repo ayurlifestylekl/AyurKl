@@ -24,20 +24,20 @@ export default function ComingSoonCard({
 }: ComingSoonCardProps) {
   return (
     <article
-      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+      className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       {/* Header */}
-      <header className="flex items-start justify-between gap-3 border-b border-[#163F33]/6 px-5 py-4 sm:px-6">
+      <header className="flex items-start justify-between gap-3 border-b border-[#6E1023]/6 px-5 py-4 sm:px-6">
         <div className="flex items-start gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-[#D4AF37]/12">
             <Icon className="h-4 w-4 text-[#D4AF37]" strokeWidth={1.8} />
           </span>
           <div>
-            <h2 className="font-heading text-[14px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[14px] font-semibold text-[#6E1023]">
               {title}
             </h2>
             <p className="mt-0.5 font-body text-[11px] text-[#1F1F1F]/50">
@@ -56,7 +56,7 @@ export default function ComingSoonCard({
 
       {/* Footnote */}
       {footnote && (
-        <p className="border-t border-[#163F33]/6 px-5 py-3 font-body text-[11px] italic text-[#1F1F1F]/50 sm:px-6">
+        <p className="border-t border-[#6E1023]/6 px-5 py-3 font-body text-[11px] italic text-[#1F1F1F]/50 sm:px-6">
           {footnote}
         </p>
       )}

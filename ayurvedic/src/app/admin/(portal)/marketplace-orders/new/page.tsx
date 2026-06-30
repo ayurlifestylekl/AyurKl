@@ -20,12 +20,12 @@ export default async function NewMarketplaceOrderPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-4">
       <Link
         href="/admin/marketplace-orders"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to marketplace orders
       </Link>
       <header>
-        <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
+        <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">
           Enter marketplace order
         </h1>
         <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">

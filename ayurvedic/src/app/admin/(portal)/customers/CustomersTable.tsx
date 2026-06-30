@@ -24,7 +24,7 @@ export default function CustomersTable({ items }: { items: CustomerListItem[] })
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+      <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No customers match your filters.
       </div>
     )
@@ -36,9 +36,9 @@ export default function CustomersTable({ items }: { items: CustomerListItem[] })
     <div className="flex flex-col gap-3">
       <CustomerBulkActions selectedIds={Array.from(selected)} />
 
-      <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
         <table className="w-full text-left text-[13px]">
-          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             <tr>
               <th className="px-4 py-3">
                 <input
@@ -57,7 +57,7 @@ export default function CustomersTable({ items }: { items: CustomerListItem[] })
               <th className="px-4 py-3">Joined</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#163F33]/6">
+          <tbody className="divide-y divide-[#6E1023]/6">
             {items.map((c) => (
               <tr key={c.id} className="hover:bg-[#F7F2E8]/30">
                 <td className="px-4 py-3">
@@ -71,7 +71,7 @@ export default function CustomersTable({ items }: { items: CustomerListItem[] })
                 <td className="px-4 py-3">
                   <Link
                     href={`/admin/customers/${c.id}`}
-                    className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                    className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                   >
                     {c.fullName ?? '—'}
                   </Link>
@@ -97,7 +97,7 @@ export default function CustomersTable({ items }: { items: CustomerListItem[] })
                     c.tags.map((t) => (
                       <span
                         key={t}
-                        className="mr-1 inline-block rounded-full border border-[#163F33]/15 bg-[#F7F2E8]/40 px-2 py-0.5"
+                        className="mr-1 inline-block rounded-full border border-[#6E1023]/15 bg-[#F7F2E8]/40 px-2 py-0.5"
                       >
                         {t}
                       </span>

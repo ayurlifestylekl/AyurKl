@@ -31,14 +31,14 @@ export default function BulkActionsBar({ selectedIds }: { selectedIds: string[] 
 
   return (
     <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8] p-3">
-      <span className="text-[12px] font-semibold text-[#163F33]">
+      <span className="text-[12px] font-semibold text-[#6E1023]">
         {selectedIds.length} selected
       </span>
       <button
         type="button"
         disabled={pending}
         onClick={() => run('activate')}
-        className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
+        className="rounded-lg bg-[#6E1023] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
       >
         Set active
       </button>
@@ -46,7 +46,7 @@ export default function BulkActionsBar({ selectedIds }: { selectedIds: string[] 
         type="button"
         disabled={pending}
         onClick={() => run('draft')}
-        className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33]"
+        className="rounded-lg border border-[#6E1023]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6E1023]"
       >
         Set draft
       </button>

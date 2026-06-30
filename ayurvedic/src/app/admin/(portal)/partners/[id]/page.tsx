@@ -91,7 +91,7 @@ export default async function AdminPartnerDetailPage({
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/partners"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to partners
       </Link>
@@ -99,7 +99,7 @@ export default async function AdminPartnerDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
+            <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">
               {u?.full_name ?? 'Unnamed partner'}
             </h1>
             <span
@@ -129,13 +129,13 @@ export default async function AdminPartnerDetailPage({
         <div className="flex flex-col gap-4">
           {/* Performance summary */}
           <article
-            className="rounded-2xl border border-[#163F33]/8 bg-white p-5"
+            className="rounded-2xl border border-[#6E1023]/8 bg-white p-5"
             style={{
               boxShadow:
-                '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+                '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
             }}
           >
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
               Performance
             </h2>
             <div className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -143,7 +143,7 @@ export default async function AdminPartnerDetailPage({
                 <p className="text-[10px] uppercase tracking-wider text-[#1F1F1F]/55">
                   Attributed orders
                 </p>
-                <p className="mt-1 font-heading text-[22px] font-bold text-[#163F33]">
+                <p className="mt-1 font-heading text-[22px] font-bold text-[#6E1023]">
                   {orders.length || 0}
                 </p>
               </div>
@@ -151,7 +151,7 @@ export default async function AdminPartnerDetailPage({
                 <p className="text-[10px] uppercase tracking-wider text-[#1F1F1F]/55">
                   Sales generated
                 </p>
-                <p className="mt-1 font-heading text-[22px] font-bold text-[#163F33]">
+                <p className="mt-1 font-heading text-[22px] font-bold text-[#6E1023]">
                   RM {Number(a.total_sales_generated_rm ?? 0).toFixed(2)}
                 </p>
               </div>
@@ -177,7 +177,7 @@ export default async function AdminPartnerDetailPage({
                 {pendingTotal > 0 ? (
                   <Link
                     href="/admin/partners/payouts"
-                    className="mt-1 inline-block text-[10.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
+                    className="mt-1 inline-block text-[10.5px] font-semibold text-[#D4AF37] hover:text-[#6E1023]"
                   >
                     Pay out →
                   </Link>
@@ -187,12 +187,12 @@ export default async function AdminPartnerDetailPage({
           </article>
 
           {/* Referral link */}
-          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+          <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
               Referral
             </h2>
             <p className="mt-2 text-[12px] text-[#1F1F1F]/65">
-              Code: <code className="font-mono font-bold text-[#163F33]">{a.referral_code}</code>
+              Code: <code className="font-mono font-bold text-[#6E1023]">{a.referral_code}</code>
             </p>
             <p className="mt-2 break-all font-mono text-[11px] text-[#1F1F1F]/65">
               {referralLink}
@@ -200,8 +200,8 @@ export default async function AdminPartnerDetailPage({
           </article>
 
           {/* Attributed orders */}
-          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
-            <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
+          <article className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
+            <header className="border-b border-[#6E1023]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#6E1023]">
               Attributed orders ({orders.length})
             </header>
             {orders.length === 0 ? (
@@ -209,7 +209,7 @@ export default async function AdminPartnerDetailPage({
                 No attributed orders yet.
               </p>
             ) : (
-              <ul className="divide-y divide-[#163F33]/6">
+              <ul className="divide-y divide-[#6E1023]/6">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {orders.map((o: any) => {
                   const cust = Array.isArray(o.customer) ? o.customer[0] : o.customer
@@ -220,7 +220,7 @@ export default async function AdminPartnerDetailPage({
                     >
                       <Link
                         href={`/admin/orders/${o.id}`}
-                        className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                        className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                       >
                         #{String(o.id).slice(-6).toUpperCase()}
                       </Link>
@@ -240,15 +240,15 @@ export default async function AdminPartnerDetailPage({
           </article>
 
           {/* Commission ledger */}
-          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
-            <header className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3">
-              <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
+          <article className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
+            <header className="flex items-center justify-between border-b border-[#6E1023]/6 px-5 py-3">
+              <h2 className="font-heading text-[13px] font-semibold text-[#6E1023]">
                 Commission ledger ({commissions.length})
               </h2>
               {pendingTotal > 0 ? (
                 <Link
                   href="/admin/partners/payouts"
-                  className="text-[11px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
+                  className="text-[11px] font-semibold text-[#D4AF37] hover:text-[#6E1023]"
                 >
                   Pending RM {pendingTotal.toFixed(2)} →
                 </Link>
@@ -259,8 +259,8 @@ export default async function AdminPartnerDetailPage({
           </article>
 
           {/* Payouts history */}
-          <article className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
-            <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
+          <article className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
+            <header className="border-b border-[#6E1023]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#6E1023]">
               Payouts history ({payouts.length})
             </header>
             {payouts.length === 0 ? (
@@ -268,7 +268,7 @@ export default async function AdminPartnerDetailPage({
                 No payouts recorded yet.
               </p>
             ) : (
-              <ul className="divide-y divide-[#163F33]/6">
+              <ul className="divide-y divide-[#6E1023]/6">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(payouts as any[]).map((p) => (
                   <li
@@ -284,7 +284,7 @@ export default async function AdminPartnerDetailPage({
                     <span className="text-[11px] text-[#1F1F1F]/55">
                       {p.commission_count} commissions
                     </span>
-                    <span className="font-semibold text-[#163F33]">
+                    <span className="font-semibold text-[#6E1023]">
                       RM {Number(p.amount_rm).toFixed(2)}
                     </span>
                   </li>
@@ -297,8 +297,8 @@ export default async function AdminPartnerDetailPage({
         {/* Sidebar */}
         <div className="flex flex-col gap-4">
           {/* Contact card */}
-          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-            <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+          <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+            <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
               Contact
             </h3>
             <p className="mt-2 text-[13px] font-semibold">{u?.full_name ?? '—'}</p>

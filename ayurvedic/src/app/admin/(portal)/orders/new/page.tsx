@@ -17,11 +17,11 @@ export default async function NewManualOrderPage() {
     <div className="mx-auto max-w-3xl">
       <Link
         href="/admin/orders"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to orders
       </Link>
-      <h1 className="mt-1 font-heading text-[24px] font-bold text-[#163F33]">
+      <h1 className="mt-1 font-heading text-[24px] font-bold text-[#6E1023]">
         Manual order
       </h1>
       <p className="mt-1 text-[12px] text-[#1F1F1F]/65">

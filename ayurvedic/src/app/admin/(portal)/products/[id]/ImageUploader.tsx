@@ -69,9 +69,9 @@ export default function ImageUploader({
   }
 
   return (
-    <div className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+    <div className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Images</h3>
+        <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">Images</h3>
         <span className="text-[10px] text-[#1F1F1F]/55">JPEG / PNG / WebP, ≤ 4 MB</span>
       </div>
 
@@ -86,7 +86,7 @@ export default function ImageUploader({
                 className={`h-28 w-full rounded-lg border object-cover ${
                   u === primary
                     ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30'
-                    : 'border-[#163F33]/10'
+                    : 'border-[#6E1023]/10'
                 }`}
               />
               {u === primary ? (
@@ -107,12 +107,12 @@ export default function ImageUploader({
           ))}
         </div>
       ) : (
-        <p className="mt-3 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40 p-6 text-center text-[12px] italic text-[#1F1F1F]/55">
+        <p className="mt-3 rounded-lg border border-dashed border-[#6E1023]/15 bg-[#F7F2E8]/40 p-6 text-center text-[12px] italic text-[#1F1F1F]/55">
           No images yet.
         </p>
       )}
 
-      <label className="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60">
+      <label className="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6E1023] hover:bg-[#F7F2E8]/60">
         <Upload className="h-3.5 w-3.5" />
         {pending ? 'Uploading…' : 'Upload image'}
         <input

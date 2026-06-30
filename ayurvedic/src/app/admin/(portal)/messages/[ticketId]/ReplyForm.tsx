@@ -26,8 +26,8 @@ export default function ReplyForm({ ticketId }: { ticketId: string }) {
   }
 
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-      <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+    <form onSubmit={submit} className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+      <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
         Reply to customer
       </label>
       <textarea
@@ -35,7 +35,7 @@ export default function ReplyForm({ ticketId }: { ticketId: string }) {
         onChange={(e) => setBody(e.target.value)}
         rows={5}
         placeholder="Hi [name], thanks for reaching out…"
-        className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+        className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
       />
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <label className="flex items-center gap-2 text-[12px]">
@@ -49,7 +49,7 @@ export default function ReplyForm({ ticketId }: { ticketId: string }) {
         <button
           type="submit"
           disabled={pending || body.trim().length < 1}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#6E1023] disabled:opacity-50"
         >
           <Send className="h-3.5 w-3.5" />
           {pending ? 'Sending…' : 'Send reply'}

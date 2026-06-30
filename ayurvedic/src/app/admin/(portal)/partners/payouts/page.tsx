@@ -25,7 +25,7 @@ export default async function PayoutsQueuePage() {
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/partners"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to partners
       </Link>
@@ -33,7 +33,7 @@ export default async function PayoutsQueuePage() {
         <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Affiliate program
         </span>
-        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
           Payouts queue
         </h1>
         <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">

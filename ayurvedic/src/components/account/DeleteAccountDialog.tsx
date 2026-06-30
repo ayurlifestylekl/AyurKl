@@ -40,7 +40,7 @@ export default function DeleteAccountDialog({ onClose }: DeleteAccountDialogProp
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           disabled={isPending}
-          className="mt-2 w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#163F33] focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:opacity-50"
+          className="mt-2 w-full rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#6E1023] focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:opacity-50"
           autoFocus
         />
         <div className="mt-4 flex justify-end gap-2">
@@ -48,7 +48,7 @@ export default function DeleteAccountDialog({ onClose }: DeleteAccountDialogProp
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="rounded-full border border-[#163F33]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#163F33] disabled:opacity-50"
+            className="rounded-full border border-[#6E1023]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#6E1023] disabled:opacity-50"
           >
             Cancel
           </button>

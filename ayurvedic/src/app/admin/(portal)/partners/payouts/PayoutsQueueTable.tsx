@@ -77,7 +77,7 @@ export default function PayoutsQueueTable({
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+      <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         Nothing pending. All paid up.
       </div>
     )
@@ -87,7 +87,7 @@ export default function PayoutsQueueTable({
     <div className="flex flex-col gap-3">
       {selected.size > 0 ? (
         <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8] p-3">
-          <span className="text-[12px] font-semibold text-[#163F33]">
+          <span className="text-[12px] font-semibold text-[#6E1023]">
             {selected.size} agent{selected.size === 1 ? '' : 's'} · RM {selectedTotal.toFixed(2)}
           </span>
           <select
@@ -97,7 +97,7 @@ export default function PayoutsQueueTable({
                 e.target.value as 'bank_transfer' | 'cash' | 'fpx' | 'cheque',
               )
             }
-            className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-1.5 text-[12px]"
+            className="rounded-lg border border-[#6E1023]/15 bg-white px-3 py-1.5 text-[12px]"
           >
             <option value="bank_transfer">Bank transfer</option>
             <option value="fpx">FPX</option>
@@ -108,7 +108,7 @@ export default function PayoutsQueueTable({
             type="button"
             disabled={pending}
             onClick={bulkPay}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
           >
             <Send className="h-3.5 w-3.5" />
             {pending ? 'Marking…' : 'Mark all as paid'}
@@ -116,7 +116,7 @@ export default function PayoutsQueueTable({
           <button
             type="button"
             onClick={exportCsv}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33]"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6E1023]"
           >
             <Download className="h-3.5 w-3.5" />
             Bank-transfer CSV
@@ -127,9 +127,9 @@ export default function PayoutsQueueTable({
         </div>
       ) : null}
 
-      <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
         <table className="w-full text-left text-[13px]">
-          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             <tr>
               <th className="px-4 py-3">
                 <input
@@ -146,7 +146,7 @@ export default function PayoutsQueueTable({
               <th className="px-4 py-3">Oldest pending</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#163F33]/6">
+          <tbody className="divide-y divide-[#6E1023]/6">
             {rows.map((r) => (
               <tr key={r.agentId} className="hover:bg-[#F7F2E8]/30">
                 <td className="px-4 py-3">
@@ -160,7 +160,7 @@ export default function PayoutsQueueTable({
                 <td className="px-4 py-3">
                   <a
                     href={`/admin/partners/${r.agentId}`}
-                    className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                    className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                   >
                     {r.agentName ?? '—'}
                   </a>

@@ -6,6 +6,7 @@ import {
   getUpcomingAppointments,
   getActiveOrdersCount,
 } from '@/lib/dashboard/queries'
+import { COMMERCE_ENABLED } from '@/lib/admin/features'
 
 import DashboardHero from '@/components/account/DashboardHero'
 import StatTile from '@/components/account/StatTile'
@@ -42,11 +43,10 @@ export default async function AccountDashboardPage() {
 
   const supabase = await createClient()
 
-  const [recentOrders, upcomingAppointments, activeOrdersCount] = await Promise.all([
-    getRecentOrders(supabase, customerId, 3),
-    getUpcomingAppointments(supabase, customerId, 2),
-    getActiveOrdersCount(supabase, customerId),
-  ])
+  const upcomingAppointments = await getUpcomingAppointments(supabase, customerId, 2)
+  // Shop data only fetched while the storefront is live.
+  const recentOrders = COMMERCE_ENABLED ? await getRecentOrders(supabase, customerId, 3) : []
+  const activeOrdersCount = COMMERCE_ENABLED ? await getActiveOrdersCount(supabase, customerId) : 0
 
   const next = upcomingAppointments[0]
   const nextAptValue = next
@@ -61,15 +61,17 @@ export default async function AccountDashboardPage() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <DashboardHero firstName={firstName} />
 
-      {/* ── QUICK STATS — 3-up grid ──────────────────────────────────── */}
-      <section className="grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3">
-        <StatTile
-          label="Active orders"
-          value={String(activeOrdersCount)}
-          sub={activeOrdersCount === 0 ? 'All caught up' : `${activeOrdersCount === 1 ? '1 order' : `${activeOrdersCount} orders`} in motion`}
-          icon={Package}
-          accent="sage"
-        />
+      {/* ── QUICK STATS ──────────────────────────────────────────────── */}
+      <section className={`grid grid-cols-1 gap-2.5 sm:gap-3 ${COMMERCE_ENABLED ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+        {COMMERCE_ENABLED && (
+          <StatTile
+            label="Active orders"
+            value={String(activeOrdersCount)}
+            sub={activeOrdersCount === 0 ? 'All caught up' : `${activeOrdersCount === 1 ? '1 order' : `${activeOrdersCount} orders`} in motion`}
+            icon={Package}
+            accent="sage"
+          />
+        )}
         <StatTile
           label="Next consultation"
           value={nextAptValue}
@@ -89,15 +91,19 @@ export default async function AccountDashboardPage() {
       {/* ── QUICK ACTIONS ────────────────────────────────────────────── */}
       <QuickActionsRow />
 
-      {/* ── RECENT ORDERS + UPCOMING APPOINTMENTS — side-by-side at lg+ ── */}
-      <section className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:gap-4">
-        <div className="lg:col-span-7">
-          <RecentOrdersCard orders={recentOrders} />
-        </div>
-        <div className="lg:col-span-5">
-          <UpcomingAppointmentsCard appointments={upcomingAppointments} />
-        </div>
-      </section>
+      {/* ── RECENT ORDERS + UPCOMING APPOINTMENTS ────────────────────── */}
+      {COMMERCE_ENABLED ? (
+        <section className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:gap-4">
+          <div className="lg:col-span-7">
+            <RecentOrdersCard orders={recentOrders} />
+          </div>
+          <div className="lg:col-span-5">
+            <UpcomingAppointmentsCard appointments={upcomingAppointments} />
+          </div>
+        </section>
+      ) : (
+        <UpcomingAppointmentsCard appointments={upcomingAppointments} />
+      )}
 
       {/* ── MESSAGES PREVIEW ─────────────────────────────────────────── */}
       <VaidyaMessagesPreview />

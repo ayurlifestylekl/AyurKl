@@ -11,15 +11,15 @@ const STATUS_CHIP: Record<InventoryRow['status'], { label: string; tone: string 
 export default function InventoryTable({ items }: { items: InventoryRow[] }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+      <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No products match this filter.
       </div>
     )
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
       <table className="w-full text-left text-[13px]">
-        <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+        <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           <tr>
             <th className="px-4 py-3">Product</th>
             <th className="px-4 py-3">SKU</th>
@@ -30,7 +30,7 @@ export default function InventoryTable({ items }: { items: InventoryRow[] }) {
             <th className="px-4 py-3">Status</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#163F33]/6">
+        <tbody className="divide-y divide-[#6E1023]/6">
           {items.map((r) => {
             const chip = STATUS_CHIP[r.status]
             return (
@@ -42,14 +42,14 @@ export default function InventoryTable({ items }: { items: InventoryRow[] }) {
                       <img
                         src={r.imageUrl}
                         alt=""
-                        className="h-10 w-10 rounded-lg border border-[#163F33]/10 object-cover"
+                        className="h-10 w-10 rounded-lg border border-[#6E1023]/10 object-cover"
                       />
                     ) : (
-                      <div className="h-10 w-10 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40" />
+                      <div className="h-10 w-10 rounded-lg border border-dashed border-[#6E1023]/15 bg-[#F7F2E8]/40" />
                     )}
                     <Link
                       href={`/admin/inventory/${r.id}`}
-                      className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                      className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                     >
                       {r.name}
                     </Link>
@@ -65,7 +65,7 @@ export default function InventoryTable({ items }: { items: InventoryRow[] }) {
                       ? 'text-red-600'
                       : r.status === 'low'
                         ? 'text-amber-600'
-                        : 'text-[#163F33]'
+                        : 'text-[#6E1023]'
                   }`}
                 >
                   {r.stockQty}

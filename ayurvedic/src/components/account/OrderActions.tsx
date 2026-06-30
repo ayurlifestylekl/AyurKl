@@ -35,14 +35,14 @@ export default function OrderActions({
 
   return (
     <section
-      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
-      <div className="border-b border-[#163F33]/6 px-5 py-3 sm:px-6">
-        <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
+      <div className="border-b border-[#6E1023]/6 px-5 py-3 sm:px-6">
+        <h2 className="font-heading text-[13px] font-semibold text-[#6E1023]">
           Need something else?
         </h2>
       </div>
@@ -61,7 +61,7 @@ export default function OrderActions({
           <button
             type="button"
             disabled
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#163F33]/12 bg-[#F7F2E8]/40 px-4 font-heading text-[12px] font-semibold text-[#163F33]/45"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#6E1023]/12 bg-[#F7F2E8]/40 px-4 font-heading text-[12px] font-semibold text-[#6E1023]/45"
           >
             Reorder
           </button>
@@ -72,7 +72,7 @@ export default function OrderActions({
           <a
             href={`/account/orders/${orderId}/invoice`}
             download
-            className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-4 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#163F33] transition-all hover:border-[#163F33]/35 hover:bg-[#163F33]/[0.03] active:scale-[0.98]"
+            className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-4 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35 hover:bg-[#6E1023]/[0.03] active:scale-[0.98]"
           >
             <FileText className="h-3.5 w-3.5" strokeWidth={2} />
             Download receipt
@@ -86,7 +86,7 @@ export default function OrderActions({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#1E5B4B] px-4 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98]"
+          className="group inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#6E1023] px-4 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#6E1023] active:scale-[0.98]"
         >
           <MessageCircle className="h-3.5 w-3.5" />
           Contact support
@@ -101,7 +101,7 @@ export default function OrderActions({
         )}
       </div>
 
-      <p className="border-t border-[#163F33]/6 px-5 py-3 font-body text-[11px] italic text-[#1F1F1F]/55 sm:px-6">
+      <p className="border-t border-[#6E1023]/6 px-5 py-3 font-body text-[11px] italic text-[#1F1F1F]/55 sm:px-6">
         Cancellations require 48 hours&apos; notice. Advance payments are non-refundable per our practice policy.
       </p>
     </section>

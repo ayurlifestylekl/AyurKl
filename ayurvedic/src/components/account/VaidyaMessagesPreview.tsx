@@ -26,23 +26,23 @@ export default async function VaidyaMessagesPreview() {
   return (
     <Link
       href={href}
-      className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35 sm:p-6"
+      className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35 sm:p-6"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
-            <Inbox className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#6E1023]/[0.06]">
+            <Inbox className="h-4 w-4 text-[#6E1023]" strokeWidth={1.8} />
           </span>
           <div>
-            <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+            <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
               Messages & support
             </p>
             <p
-              className="font-heading text-[14px] font-bold text-[#163F33]"
+              className="font-heading text-[14px] font-bold text-[#6E1023]"
               style={{ letterSpacing: '-0.005em' }}
             >
               {latest ? 'A note from the clinic' : 'Messages from the clinic'}
@@ -50,7 +50,7 @@ export default async function VaidyaMessagesPreview() {
           </div>
         </div>
         <ArrowUpRight
-          className="h-4 w-4 text-[#163F33]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
+          className="h-4 w-4 text-[#6E1023]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
           strokeWidth={2}
         />
       </div>
@@ -63,7 +63,7 @@ export default async function VaidyaMessagesPreview() {
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline justify-between gap-2">
               <p
-                className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]"
+                className="truncate font-heading text-[12.5px] font-semibold text-[#6E1023]"
                 style={{ letterSpacing: '-0.005em' }}
               >
                 {CLINIC_LONG_NAME}

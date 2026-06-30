@@ -39,7 +39,7 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+      <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No products match your filters. Click <strong>+ Add product</strong> to create one,
         or <strong>Import CSV</strong> to bulk-load.
       </div>
@@ -52,9 +52,9 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
     <div className="flex flex-col gap-3">
       <BulkActionsBar selectedIds={Array.from(selected)} />
 
-      <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
         <table className="w-full text-left text-[13px]">
-          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             <tr>
               <th className="px-4 py-3">
                 <input
@@ -74,7 +74,7 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
               <th className="px-4 py-3">Updated</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#163F33]/6">
+          <tbody className="divide-y divide-[#6E1023]/6">
             {items.map((p) => {
               const stock = stockChip(p.stockQty)
               return (
@@ -94,14 +94,14 @@ export default function ProductsTable({ items }: { items: ProductListItem[] }) {
                         <img
                           src={p.imageUrl}
                           alt=""
-                          className="h-10 w-10 rounded-lg border border-[#163F33]/10 object-cover"
+                          className="h-10 w-10 rounded-lg border border-[#6E1023]/10 object-cover"
                         />
                       ) : (
-                        <div className="h-10 w-10 rounded-lg border border-dashed border-[#163F33]/15 bg-[#F7F2E8]/40" />
+                        <div className="h-10 w-10 rounded-lg border border-dashed border-[#6E1023]/15 bg-[#F7F2E8]/40" />
                       )}
                       <Link
                         href={`/admin/products/${p.id}`}
-                        className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                        className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                       >
                         {p.name}
                       </Link>

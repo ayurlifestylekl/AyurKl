@@ -14,7 +14,7 @@ const STATUS_CLASS: Record<string, string> = {
 export default function ReviewsTable({ items }: { items: AdminReviewListItem[] }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+      <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
         No reviews in this view.
       </div>
     )
@@ -53,7 +53,7 @@ function ReviewCard({ review }: { review: AdminReviewListItem }) {
   }
 
   return (
-    <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+    <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ function ReviewCard({ review }: { review: AdminReviewListItem }) {
             </span>
           </div>
           {review.title ? (
-            <h3 className="mt-2 font-heading text-[15px] font-semibold text-[#163F33]">
+            <h3 className="mt-2 font-heading text-[15px] font-semibold text-[#6E1023]">
               {review.title}
             </h3>
           ) : null}
@@ -86,7 +86,7 @@ function ReviewCard({ review }: { review: AdminReviewListItem }) {
         </p>
       ) : null}
       {review.status === 'pending' || review.status === 'rejected' ? (
-        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#163F33]/6 pt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#6E1023]/6 pt-3">
           <button
             type="button"
             disabled={pending}
@@ -108,7 +108,7 @@ function ReviewCard({ review }: { review: AdminReviewListItem }) {
           {error ? <span className="text-[11.5px] text-red-700">{error}</span> : null}
         </div>
       ) : (
-        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#163F33]/6 pt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#6E1023]/6 pt-3">
           <button
             type="button"
             disabled={pending}
@@ -124,17 +124,17 @@ function ReviewCard({ review }: { review: AdminReviewListItem }) {
       {showReject ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               Reject review
             </h2>
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Reason *
             </label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={3}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
               placeholder="e.g. inappropriate language, spam, off-topic"
             />
             {error ? <p className="mt-2 text-[12px] text-red-600">{error}</p> : null}
@@ -142,7 +142,7 @@ function ReviewCard({ review }: { review: AdminReviewListItem }) {
               <button
                 type="button"
                 onClick={() => setShowReject(false)}
-                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>
@@ -169,7 +169,7 @@ function Stars({ value }: { value: number }) {
         <Star
           key={n}
           className={`h-3.5 w-3.5 ${
-            n <= value ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-[#163F33]/20'
+            n <= value ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-[#6E1023]/20'
           }`}
           strokeWidth={1.5}
         />

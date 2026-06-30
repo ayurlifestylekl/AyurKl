@@ -98,7 +98,7 @@ export default function PushVoucherDialog({
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               Push voucher to {customerName}
             </h2>
 
@@ -127,7 +127,7 @@ export default function PushVoucherDialog({
                     type="button"
                     onClick={() => setTab('oneoff')}
                     className={`flex-1 rounded-full px-3 py-1.5 ${
-                      tab === 'oneoff' ? 'bg-white shadow text-[#163F33]' : 'text-[#1F1F1F]/65'
+                      tab === 'oneoff' ? 'bg-white shadow text-[#6E1023]' : 'text-[#1F1F1F]/65'
                     }`}
                   >
                     Create one-off
@@ -137,7 +137,7 @@ export default function PushVoucherDialog({
                     onClick={() => setTab('existing')}
                     className={`flex-1 rounded-full px-3 py-1.5 ${
                       tab === 'existing'
-                        ? 'bg-white shadow text-[#163F33]'
+                        ? 'bg-white shadow text-[#6E1023]'
                         : 'text-[#1F1F1F]/65'
                     }`}
                   >
@@ -148,24 +148,24 @@ export default function PushVoucherDialog({
                 {tab === 'oneoff' ? (
                   <div className="mt-3 flex flex-col gap-3">
                     <label className="flex flex-col gap-1">
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                         Title *
                       </span>
                       <input
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                        className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                       />
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       <label className="flex flex-col gap-1">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                           Type
                         </span>
                         <select
                           value={kind}
                           onChange={(e) => setKind(e.target.value as Kind)}
-                          className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                          className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                         >
                           <option value="percentage">% off</option>
                           <option value="fixed">RM off</option>
@@ -174,7 +174,7 @@ export default function PushVoucherDialog({
                       </label>
                       {kind !== 'free-shipping' ? (
                         <label className="flex flex-col gap-1">
-                          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                             {kind === 'percentage' ? '% off' : 'RM off'}
                           </span>
                           <input
@@ -182,14 +182,14 @@ export default function PushVoucherDialog({
                             min="0"
                             value={value}
                             onChange={(e) => setValue(Number(e.target.value))}
-                            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                           />
                         </label>
                       ) : null}
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <label className="flex flex-col gap-1">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                           Min spend (RM)
                         </span>
                         <input
@@ -197,11 +197,11 @@ export default function PushVoucherDialog({
                           min="0"
                           value={minSpend}
                           onChange={(e) => setMinSpend(Number(e.target.value))}
-                          className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                          className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                         />
                       </label>
                       <label className="flex flex-col gap-1">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                           Expires in (days)
                         </span>
                         <input
@@ -209,12 +209,12 @@ export default function PushVoucherDialog({
                           min="1"
                           value={expiresInDays}
                           onChange={(e) => setExpiresInDays(Number(e.target.value))}
-                          className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                          className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                         />
                       </label>
                     </div>
                     <label className="flex flex-col gap-1">
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                         Message
                       </span>
                       <textarea
@@ -222,20 +222,20 @@ export default function PushVoucherDialog({
                         onChange={(e) => setMessage(e.target.value)}
                         rows={2}
                         placeholder="Optional. e.g. 'Welcome — first order on us.'"
-                        className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                        className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                       />
                     </label>
                   </div>
                 ) : (
                   <div className="mt-3 flex flex-col gap-3">
                     <label className="flex flex-col gap-1">
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                         Pick a promo
                       </span>
                       <select
                         value={selectedPromoId}
                         onChange={(e) => setSelectedPromoId(e.target.value)}
-                        className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                        className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                       >
                         <option value="">Select…</option>
                         {promos
@@ -248,7 +248,7 @@ export default function PushVoucherDialog({
                       </select>
                     </label>
                     <label className="flex flex-col gap-1">
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                         Personal note
                       </span>
                       <textarea
@@ -256,7 +256,7 @@ export default function PushVoucherDialog({
                         onChange={(e) => setExistingMessage(e.target.value)}
                         rows={2}
                         placeholder="Optional."
-                        className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                        className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                       />
                     </label>
                     {promos.length === 0 ? (
@@ -276,7 +276,7 @@ export default function PushVoucherDialog({
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                    className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
                   >
                     Cancel
                   </button>

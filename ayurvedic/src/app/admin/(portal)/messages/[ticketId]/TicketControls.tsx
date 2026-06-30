@@ -59,18 +59,18 @@ export default function TicketControls({
   const isMine = assignedToAdminId === currentAdminId
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-[#163F33]/8 bg-white p-4">
-      <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Controls</h3>
+    <div className="flex flex-col gap-3 rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+      <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">Controls</h3>
 
       <div>
-        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Status
         </label>
         <select
           value={status}
           onChange={(e) => changeStatus(e.target.value as Status)}
           disabled={pending}
-          className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         >
           <option value="open">Open</option>
           <option value="awaiting-customer">Awaiting customer</option>
@@ -80,14 +80,14 @@ export default function TicketControls({
       </div>
 
       <div>
-        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Topic
         </label>
         <select
           value={topic}
           onChange={(e) => changeTopic(e.target.value as Topic)}
           disabled={pending}
-          className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         >
           <option value="treatment">Treatment</option>
           <option value="prescription">Prescription</option>
@@ -99,8 +99,8 @@ export default function TicketControls({
         </select>
       </div>
 
-      <div className="border-t border-[#163F33]/6 pt-3">
-        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <div className="border-t border-[#6E1023]/6 pt-3">
+        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Assignment
         </label>
         <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
@@ -114,18 +114,18 @@ export default function TicketControls({
           type="button"
           onClick={toggleAssignment}
           disabled={pending}
-          className="mt-2 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] disabled:opacity-50"
+          className="mt-2 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6E1023] disabled:opacity-50"
         >
           {assignedToAdminId ? 'Clear assignment' : 'Assign to me'}
         </button>
       </div>
 
-      <div className="border-t border-[#163F33]/6 pt-3">
+      <div className="border-t border-[#6E1023]/6 pt-3">
         <button
           type="button"
           onClick={toggleRead}
           disabled={pending}
-          className="rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] disabled:opacity-50"
+          className="rounded-lg border border-[#6E1023]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6E1023] disabled:opacity-50"
         >
           Mark as {unreadByClinic ? 'read' : 'unread'}
         </button>

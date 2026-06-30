@@ -31,14 +31,14 @@ export default function WriteOffDialog({ productId }: { productId: string }) {
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               Write off stock
             </h2>
             <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">
               For damaged, expired, or lost stock. This decreases stock and is permanent.
             </p>
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Quantity to write off *
             </label>
             <input
@@ -46,10 +46,10 @@ export default function WriteOffDialog({ productId }: { productId: string }) {
               min="1"
               value={qty}
               onChange={(e) => setQty(Number(e.target.value))}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Reason *
             </label>
             <textarea
@@ -57,7 +57,7 @@ export default function WriteOffDialog({ productId }: { productId: string }) {
               onChange={(e) => setReason(e.target.value)}
               rows={2}
               placeholder="Damaged in transit, expired, etc."
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
 
             {error ? <p className="mt-3 text-[12px] text-red-600">{error}</p> : null}
@@ -65,7 +65,7 @@ export default function WriteOffDialog({ productId }: { productId: string }) {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>

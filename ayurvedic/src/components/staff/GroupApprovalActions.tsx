@@ -114,7 +114,7 @@ export default function GroupApprovalActions({
                       name="groupConfirmTime"
                       checked={chosenTime === o.iso}
                       onChange={() => setChosenTime(o.iso)}
-                      className="h-4 w-4 flex-none accent-[#1e5b4b]"
+                      className="h-4 w-4 flex-none accent-[#6E1023]"
                     />
                     <span className="font-body text-[13px] text-dark/80">
                       <strong className="font-heading text-[10px] uppercase tracking-[0.12em] text-dark/55">{o.label}:</strong>{' '}

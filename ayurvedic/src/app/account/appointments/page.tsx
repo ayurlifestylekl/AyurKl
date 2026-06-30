@@ -110,17 +110,17 @@ export default async function AppointmentsPage({
       {/* ── HEADER ────────────────────────────────────────────────── */}
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+          <span className="inline-flex items-center gap-2 font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6E1023]/55">
             <Calendar className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2} />
             Bookings & care
           </span>
           <h1
-            className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[36px]"
+            className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023] sm:text-[36px]"
             style={{ letterSpacing: '-0.025em' }}
           >
             Hello, {firstName}.{' '}
             <span
-              className="italic font-normal text-[#163F33]/70"
+              className="italic font-normal text-[#6E1023]/70"
               style={{ fontFamily: 'var(--font-playfair)' }}
             >
               Your visits.
@@ -151,10 +151,10 @@ export default async function AppointmentsPage({
       {/* ── APPOINTMENT LIST / EMPTY STATES ──────────────────────── */}
       {isEmptyOverall ? (
         <div
-          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+          className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+              '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
           }}
         >
           <EmptyState
@@ -169,10 +169,10 @@ export default async function AppointmentsPage({
         </div>
       ) : isEmptyInFilter ? (
         <div
-          className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+          className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+              '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
           }}
         >
           <EmptyState
@@ -218,14 +218,14 @@ export default async function AppointmentsPage({
             Or{' '}
             <Link
               href="/book/consultation"
-              className="font-semibold text-[#163F33]/70 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
+              className="font-semibold text-[#6E1023]/70 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
             >
               book a new consultation
             </Link>
             {' · '}
             <Link
               href="/book/treatment"
-              className="font-semibold text-[#163F33]/70 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
+              className="font-semibold text-[#6E1023]/70 underline-offset-4 transition-colors hover:text-[#D4AF37] hover:underline"
             >
               book a treatment
             </Link>

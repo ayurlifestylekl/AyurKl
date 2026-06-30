@@ -30,23 +30,23 @@ export default function MfaQrDialog({ factorId, qrSvg, secret, onClose, onVerifi
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-md rounded-3xl border border-[#163F33]/8 bg-white p-6">
-        <h3 className="font-heading text-[16px] font-bold text-[#163F33]">Set up two-factor authentication</h3>
+      <div className="w-full max-w-md rounded-3xl border border-[#6E1023]/8 bg-white p-6">
+        <h3 className="font-heading text-[16px] font-bold text-[#6E1023]">Set up two-factor authentication</h3>
         <p className="mt-2 font-body text-[13px] text-[#1F1F1F]/70">
           Scan the QR code with Google Authenticator, Authy, or 1Password. Then enter the 6-digit code it shows.
         </p>
 
-        <div className="mt-4 flex justify-center rounded-2xl border border-[#163F33]/10 bg-white p-4">
+        <div className="mt-4 flex justify-center rounded-2xl border border-[#6E1023]/10 bg-white p-4">
           {/* qrSvg is a data: URI from Supabase Auth */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qrSvg} alt="MFA QR code" className="h-44 w-44" />
         </div>
 
-        <p className="mt-3 break-all rounded-xl bg-[#F7F2E8]/60 px-3 py-2 font-mono text-[11px] text-[#163F33]/70">
+        <p className="mt-3 break-all rounded-xl bg-[#F7F2E8]/60 px-3 py-2 font-mono text-[11px] text-[#6E1023]/70">
           Can&apos;t scan? Enter this secret manually: <strong>{secret}</strong>
         </p>
 
-        <label className="mt-4 block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+        <label className="mt-4 block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
           Verification code
         </label>
         <input
@@ -55,7 +55,7 @@ export default function MfaQrDialog({ factorId, qrSvg, secret, onClose, onVerifi
           value={code}
           onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
           disabled={isPending}
-          className="mt-2 w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 text-center font-mono text-[20px] tracking-[0.4em] text-[#163F33] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
+          className="mt-2 w-full rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-2.5 text-center font-mono text-[20px] tracking-[0.4em] text-[#6E1023] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 disabled:opacity-50"
           placeholder="000000"
           autoFocus
         />
@@ -65,7 +65,7 @@ export default function MfaQrDialog({ factorId, qrSvg, secret, onClose, onVerifi
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="rounded-full border border-[#163F33]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#163F33] disabled:opacity-50"
+            className="rounded-full border border-[#6E1023]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#6E1023] disabled:opacity-50"
           >
             Cancel
           </button>
@@ -73,7 +73,7 @@ export default function MfaQrDialog({ factorId, qrSvg, secret, onClose, onVerifi
             type="button"
             onClick={handleVerify}
             disabled={isPending || code.length !== 6}
-            className="rounded-full bg-[#1E5B4B] px-4 py-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#163F33] disabled:opacity-50"
+            className="rounded-full bg-[#6E1023] px-4 py-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#6E1023] disabled:opacity-50"
           >
             {isPending ? 'Verifying…' : 'Verify & enable'}
           </button>

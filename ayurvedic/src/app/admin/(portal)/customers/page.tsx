@@ -50,7 +50,7 @@ export default async function AdminCustomersPage({ searchParams }: PageProps) {
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             CRM
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             Customers
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -61,7 +61,7 @@ export default async function AdminCustomersPage({ searchParams }: PageProps) {
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/customers/birthdays"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#6E1023] hover:bg-[#F7F2E8]/60"
           >
             <Cake className="h-3.5 w-3.5" /> Birthdays
           </Link>

@@ -31,7 +31,7 @@ export default async function MyReviewsPage() {
         <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Your voice
         </span>
-        <h1 className="mt-2 font-heading text-[26px] font-bold leading-tight text-[#163F33]">
+        <h1 className="mt-2 font-heading text-[26px] font-bold leading-tight text-[#6E1023]">
           My reviews
         </h1>
         <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -40,7 +40,7 @@ export default async function MyReviewsPage() {
       </header>
 
       {reviews.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center">
           <p className="font-body text-sm italic text-[#1F1F1F]/55">
             You haven&apos;t reviewed any products yet.
           </p>
@@ -54,7 +54,7 @@ export default async function MyReviewsPage() {
       ) : (
         <ul className="flex flex-col gap-3">
           {reviews.map((r) => (
-            <li key={r.id} className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+            <li key={r.id} className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
@@ -66,7 +66,7 @@ export default async function MyReviewsPage() {
                     </span>
                   </div>
                   {r.title ? (
-                    <h2 className="mt-2 font-heading text-[15px] font-semibold text-[#163F33]">
+                    <h2 className="mt-2 font-heading text-[15px] font-semibold text-[#6E1023]">
                       {r.title}
                     </h2>
                   ) : null}
@@ -74,7 +74,7 @@ export default async function MyReviewsPage() {
                     on{' '}
                     <Link
                       href={`/shop/${r.productId}`}
-                      className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                      className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                     >
                       {r.productName}
                     </Link>{' '}
@@ -105,7 +105,7 @@ function Stars({ value }: { value: number }) {
         <Star
           key={n}
           className={`h-3.5 w-3.5 ${
-            n <= value ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-[#163F33]/20'
+            n <= value ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-[#6E1023]/20'
           }`}
           strokeWidth={1.5}
         />

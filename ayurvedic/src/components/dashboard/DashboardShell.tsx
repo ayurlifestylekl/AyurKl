@@ -95,12 +95,18 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
       <aside
         className={[
           'fixed inset-y-0 left-0 z-40 flex w-[268px] flex-col',
-          'border-r border-[#163F33]/8 bg-[#163F33] text-white',
+          'border-r border-black/20 bg-gradient-to-b from-[#6E1023] to-[#4A0C18] text-white',
           'transition-transform duration-300 ease-out',
           drawerOpen ? 'translate-x-0' : '-translate-x-full',
           'lg:translate-x-0',
         ].join(' ')}
       >
+        {/* Gold hairline along the right edge */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 w-px"
+          style={{ background: 'linear-gradient(180deg, transparent, rgba(212,175,55,0.45), transparent)' }}
+        />
         {/* Sidebar header */}
         <div className="flex items-center justify-between border-b border-white/8 px-5 py-5">
           <Link href="/" className="group flex items-center gap-2.5">
@@ -192,17 +198,17 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
       {/* ── Right column ───────────────────────────────────────────────── */}
       <div className="lg:pl-[268px]">
         {/* Topbar */}
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-[#163F33]/10 bg-[#F7F2E8]/85 px-4 backdrop-blur sm:px-6 lg:px-10">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-[#6E1023]/10 bg-[#F7F2E8]/85 px-4 backdrop-blur sm:px-6 lg:px-10">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-[#163F33]/70 transition-colors hover:bg-[#163F33]/[0.06] lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-[#6E1023]/70 transition-colors hover:bg-[#6E1023]/[0.06] lg:hidden"
               aria-label="Open menu"
             >
               <Menu className="h-5 w-5" />
             </button>
-            <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+            <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#6E1023]/55">
               {portal.shortName}
             </span>
           </div>
@@ -238,7 +244,7 @@ function UserMenu({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="group flex items-center gap-2.5 rounded-full border border-[#163F33]/8 bg-white px-2.5 py-1.5 transition-all hover:border-[#163F33]/20 hover:shadow-sm"
+        className="group flex items-center gap-2.5 rounded-full border border-[#6E1023]/8 bg-white px-2.5 py-1.5 transition-all hover:border-[#6E1023]/20 hover:shadow-sm"
         aria-haspopup="menu"
         aria-expanded={open}
       >
@@ -250,20 +256,20 @@ function UserMenu({
             className="h-7 w-7 rounded-full object-cover"
           />
         ) : (
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#163F33] font-heading text-[12px] font-bold text-[#D4AF37]">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6E1023] font-heading text-[12px] font-bold text-[#D4AF37]">
             {initial}
           </span>
         )}
         <span className="hidden text-left sm:block">
-          <span className="block font-heading text-[12px] font-semibold leading-tight text-[#163F33]">
+          <span className="block font-heading text-[12px] font-semibold leading-tight text-[#6E1023]">
             {firstName}
           </span>
-          <span className="block font-body text-[10px] leading-tight text-[#163F33]/55">
+          <span className="block font-body text-[10px] leading-tight text-[#6E1023]/55">
             {roleLabel}
           </span>
         </span>
         <ChevronDown
-          className={`h-3.5 w-3.5 text-[#163F33]/40 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`h-3.5 w-3.5 text-[#6E1023]/40 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -275,21 +281,21 @@ function UserMenu({
             onClick={() => setOpen(false)}
             className="fixed inset-0 z-30 cursor-default"
           />
-          <div className="absolute right-0 top-full z-40 mt-2 w-64 overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white shadow-2xl shadow-black/8">
-            <div className="border-b border-[#163F33]/6 px-4 py-3">
-              <p className="font-heading text-[13px] font-semibold text-[#163F33]">
+          <div className="absolute right-0 top-full z-40 mt-2 w-64 overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white shadow-2xl shadow-black/8">
+            <div className="border-b border-[#6E1023]/6 px-4 py-3">
+              <p className="font-heading text-[13px] font-semibold text-[#6E1023]">
                 {user.fullName || 'Welcome'}
               </p>
-              <p className="mt-0.5 truncate font-body text-[11.5px] text-[#163F33]/55">
+              <p className="mt-0.5 truncate font-body text-[11.5px] text-[#6E1023]/55">
                 {user.email}
               </p>
             </div>
             <form action={signOut}>
               <button
                 type="submit"
-                className="flex w-full items-center gap-2.5 px-4 py-3 text-left font-heading text-[13px] font-semibold text-[#163F33] transition-colors hover:bg-[#163F33]/[0.04]"
+                className="flex w-full items-center gap-2.5 px-4 py-3 text-left font-heading text-[13px] font-semibold text-[#6E1023] transition-colors hover:bg-[#6E1023]/[0.04]"
               >
-                <LogOut className="h-4 w-4 text-[#163F33]/55" strokeWidth={1.8} />
+                <LogOut className="h-4 w-4 text-[#6E1023]/55" strokeWidth={1.8} />
                 Sign out
               </button>
             </form>

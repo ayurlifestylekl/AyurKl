@@ -42,7 +42,7 @@ export default async function AdminWholesaleOrdersPage({ searchParams }: PagePro
         <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
           Reseller channel
         </span>
-        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+        <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
           Wholesale orders
         </h1>
         <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -54,8 +54,8 @@ export default async function AdminWholesaleOrdersPage({ searchParams }: PagePro
         </p>
       </header>
 
-      <section className="rounded-2xl border border-[#163F33]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
-        <p className="font-semibold text-[#163F33]">How wholesale works</p>
+      <section className="rounded-2xl border border-[#6E1023]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
+        <p className="font-semibold text-[#6E1023]">How wholesale works</p>
         <p className="mt-1">
           Reseller-capable partners place orders at wholesale prices from their portal. Mark them{' '}
           <strong>paid</strong> once you confirm the bank transfer / payment proof — stock deducts
@@ -67,13 +67,13 @@ export default async function AdminWholesaleOrdersPage({ searchParams }: PagePro
       <WholesaleFilters active={status} q={searchParams.q ?? ''} />
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+        <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No wholesale orders in this view.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
           <table className="w-full text-left text-[13px]">
-            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               <tr>
                 <th className="px-4 py-3">Order</th>
                 <th className="px-4 py-3">Date</th>
@@ -83,7 +83,7 @@ export default async function AdminWholesaleOrdersPage({ searchParams }: PagePro
                 <th className="px-4 py-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#163F33]/6">
+            <tbody className="divide-y divide-[#6E1023]/6">
               {items.map((w) => (
                 <tr
                   key={w.id}
@@ -94,7 +94,7 @@ export default async function AdminWholesaleOrdersPage({ searchParams }: PagePro
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/wholesale-orders/${w.id}`}
-                      className="font-mono text-[11.5px] font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                      className="font-mono text-[11.5px] font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                     >
                       {w.orderNumber}
                     </Link>
@@ -103,7 +103,7 @@ export default async function AdminWholesaleOrdersPage({ searchParams }: PagePro
                     {new Date(w.createdAt).toLocaleDateString('en-MY')}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="text-[12.5px] font-semibold text-[#163F33]">
+                    <div className="text-[12.5px] font-semibold text-[#6E1023]">
                       {w.agentName}
                     </div>
                     <div className="font-mono text-[11px] text-[#D4AF37]">

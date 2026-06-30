@@ -48,8 +48,8 @@ export default function CsvImportForm() {
 
   return (
     <div className="flex flex-col gap-4">
-      <section className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
+      <section className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <h2 className="font-heading text-[13px] font-semibold text-[#6E1023]">
           Required columns
         </h2>
         <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
@@ -65,8 +65,8 @@ export default function CsvImportForm() {
         </p>
       </section>
 
-      <section className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <section className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Upload CSV file
         </label>
         <input
@@ -78,7 +78,7 @@ export default function CsvImportForm() {
           }}
           className="mt-2 block w-full text-[12.5px]"
         />
-        <label className="mt-4 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+        <label className="mt-4 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           …or paste CSV text
         </label>
         <textarea
@@ -88,7 +88,7 @@ export default function CsvImportForm() {
             preview(e.target.value)
           }}
           rows={6}
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 font-mono text-[11.5px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 font-mono text-[11.5px]"
           placeholder="name,sku,price_rm,stock_qty,status&#10;Kesha Oil,KSH-100,85,42,active&#10;…"
         />
         {previewCount !== null ? (
@@ -111,14 +111,14 @@ export default function CsvImportForm() {
             type="button"
             disabled={pending || !csv || (previewCount ?? 0) === 0}
             onClick={submit}
-            className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
+            className="rounded-lg bg-[#6E1023] px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-[#6E1023] disabled:opacity-50"
           >
             {pending ? 'Importing…' : `Import ${previewCount ?? 0} row(s)`}
           </button>
         </div>
 
         {result ? (
-          <pre className="mt-3 whitespace-pre-wrap rounded-lg bg-[#F7F2E8]/40 p-3 text-[11.5px] text-[#163F33]">
+          <pre className="mt-3 whitespace-pre-wrap rounded-lg bg-[#F7F2E8]/40 p-3 text-[11.5px] text-[#6E1023]">
             {result}
           </pre>
         ) : null}

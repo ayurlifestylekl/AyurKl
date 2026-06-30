@@ -37,12 +37,12 @@ export default function OrderTimeline({ events }: { events: Event[] }) {
   )
 
   return (
-    <ul className="divide-y divide-[#163F33]/6">
+    <ul className="divide-y divide-[#6E1023]/6">
       {sorted.map((e) => (
         <li key={e.id} className="flex items-start gap-3 px-5 py-3">
-          <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#163F33]/40" strokeWidth={1.8} />
+          <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#6E1023]/40" strokeWidth={1.8} />
           <div className="min-w-0 flex-1">
-            <p className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+            <p className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
               {HUMAN[e.event_type] ?? e.event_type}
               {e.from_status && e.to_status ? (
                 <span className="ml-2 font-normal text-[#1F1F1F]/60">

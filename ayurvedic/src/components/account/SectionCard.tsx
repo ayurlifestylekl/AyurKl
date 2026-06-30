@@ -25,11 +25,11 @@ export default function SectionCard({
   return (
     <section
       className={`relative overflow-hidden rounded-3xl border bg-white ${
-        isSensitive ? 'border-[#D4AF37]/25' : 'border-[#163F33]/8'
+        isSensitive ? 'border-[#D4AF37]/25' : 'border-[#6E1023]/8'
       }`}
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       {isSensitive && (
@@ -37,23 +37,23 @@ export default function SectionCard({
       )}
       <header
         className={`flex items-start justify-between gap-3 border-b px-5 py-4 sm:px-6 ${
-          isSensitive ? 'border-[#D4AF37]/15' : 'border-[#163F33]/6'
+          isSensitive ? 'border-[#D4AF37]/15' : 'border-[#6E1023]/6'
         }`}
       >
         <div className="flex items-center gap-3">
           <span
             className={`flex h-9 w-9 items-center justify-center rounded-xl ${
-              isSensitive ? 'bg-[#D4AF37]/15' : 'bg-[#163F33]/[0.06]'
+              isSensitive ? 'bg-[#D4AF37]/15' : 'bg-[#6E1023]/[0.06]'
             }`}
           >
             <Icon
-              className={`h-4 w-4 ${isSensitive ? 'text-[#D4AF37]' : 'text-[#1E5B4B]'}`}
+              className={`h-4 w-4 ${isSensitive ? 'text-[#D4AF37]' : 'text-[#6E1023]'}`}
               strokeWidth={1.8}
             />
           </span>
           <div>
             <h2
-              className="font-heading text-[14px] font-bold text-[#163F33]"
+              className="font-heading text-[14px] font-bold text-[#6E1023]"
               style={{ letterSpacing: '-0.005em' }}
             >
               {title}

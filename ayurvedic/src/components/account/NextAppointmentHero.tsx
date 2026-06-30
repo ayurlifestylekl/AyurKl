@@ -59,7 +59,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
       className="relative overflow-hidden rounded-3xl border border-[#D4AF37]/30 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 18px 36px -20px rgba(22, 63, 51,0.22)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 18px 36px -20px rgba(110,16,35,0.22)',
       }}
     >
       <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[#D4AF37]" />
@@ -70,23 +70,23 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
           <div className="flex items-stretch gap-5">
             {/* Date block */}
             <div className="flex shrink-0 flex-col items-center justify-center rounded-2xl bg-[#F7F2E8] px-4 py-3 text-center min-w-[76px]">
-              <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55">
+              <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/55">
                 {dayFormat.format(start)}
               </span>
               <span
-                className="mt-0.5 font-heading text-[28px] font-bold leading-none text-[#163F33]"
+                className="mt-0.5 font-heading text-[28px] font-bold leading-none text-[#6E1023]"
                 style={{ letterSpacing: '-0.02em' }}
               >
                 {dayNumFormat.format(start)}
               </span>
-              <span className="mt-0.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55">
+              <span className="mt-0.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/55">
                 {monthFormat.format(start)}
               </span>
             </div>
 
             {/* Treatment + Vaidya + time */}
             <div className="flex flex-col justify-center">
-              <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+              <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#6E1023]/55">
                 Your next visit
               </span>
               {therapy?.tagline && (
@@ -98,7 +98,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
                 </p>
               )}
               <h2
-                className="mt-0.5 font-heading text-[24px] font-bold leading-tight text-[#163F33] sm:text-[28px]"
+                className="mt-0.5 font-heading text-[24px] font-bold leading-tight text-[#6E1023] sm:text-[28px]"
                 style={{ letterSpacing: '-0.02em' }}
               >
                 {appointment.treatment_name}
@@ -113,12 +113,12 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
               </div>
               <div className="mt-2.5 flex flex-wrap items-center gap-2">
                 {isVirtual ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1E5B4B]/10 px-2.5 py-0.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[#1E5B4B]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#6E1023]/10 px-2.5 py-0.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]">
                     <Video className="h-3 w-3" strokeWidth={2} />
                     Virtual
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#163F33]/[0.06] px-2.5 py-0.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#6E1023]/[0.06] px-2.5 py-0.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65">
                     <MapPin className="h-3 w-3" strokeWidth={2} />
                     Brickfields, KL
                   </span>
@@ -158,7 +158,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
               href={CLINIC_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98]"
+              className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#6E1023] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#6E1023] active:scale-[0.98]"
             >
               <Navigation className="h-3.5 w-3.5" strokeWidth={2.2} />
               Get directions
@@ -170,7 +170,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
                 href={getBookingUrl(uid)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#1E5B4B] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#163F33] active:scale-[0.98]"
+                className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#6E1023] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#6E1023] active:scale-[0.98]"
               >
                 View booking
                 <ExternalLink className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
@@ -182,7 +182,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
           <a
             href={`/account/appointments/${appointment.id}/ics`}
             download
-            className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#163F33] transition-all hover:border-[#163F33]/35"
+            className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
           >
             <CalendarPlus className="h-3.5 w-3.5" strokeWidth={2} />
             Add to calendar
@@ -193,7 +193,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
               href={getRescheduleUrl(uid)}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#163F33] transition-all hover:border-[#163F33]/35"
+              className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
             >
               <RotateCw className="h-3.5 w-3.5" strokeWidth={2} />
               Reschedule
@@ -203,7 +203,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
               href={whatsappCancelUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#163F33] transition-all hover:border-[#163F33]/35"
+              className="inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
             >
               <MessageCircle className="h-3.5 w-3.5" strokeWidth={2} />
               WhatsApp to change
@@ -226,7 +226,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
                 href={whatsappCancelUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#163F33]/15 bg-white px-5 font-heading text-[11.5px] font-semibold tracking-[0.04em] text-[#1F1F1F]/70 transition-all hover:border-[#163F33]/35"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[11.5px] font-semibold tracking-[0.04em] text-[#1F1F1F]/70 transition-all hover:border-[#6E1023]/35"
                 title="Cancellations under 48 hours need to go through us directly."
               >
                 <MessageCircle className="h-3.5 w-3.5" strokeWidth={2} />
@@ -236,7 +236,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
         </div>
 
         {/* Pre-visit checklist */}
-        <div className="mt-6 border-t border-[#163F33]/6 pt-5">
+        <div className="mt-6 border-t border-[#6E1023]/6 pt-5">
           <PreVisitChecklist items={preVisitItems} />
         </div>
 

@@ -93,13 +93,13 @@ export default async function AdminProductEditPage({
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/products"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to products
       </Link>
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-heading text-[24px] font-bold text-[#163F33]">{p.name}</h1>
+          <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">{p.name}</h1>
           <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
             {p.sku} · {p.slug ?? 'no-slug'} · updated{' '}
             {new Date(p.updated_at).toLocaleString('en-MY')}

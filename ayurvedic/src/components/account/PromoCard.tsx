@@ -43,12 +43,12 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
       className={`relative overflow-hidden rounded-3xl border bg-white transition-all ${
         isFeatured
           ? 'border-[#D4AF37]/35'
-          : 'border-[#163F33]/8 hover:-translate-y-0.5 hover:border-[#D4AF37]/35'
+          : 'border-[#6E1023]/8 hover:-translate-y-0.5 hover:border-[#D4AF37]/35'
       }`}
       style={{
         boxShadow: isFeatured
-          ? '0 1px 0 0 rgba(22, 63, 51,0.04), 0 18px 36px -22px rgba(212, 175, 55,0.5)'
-          : '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          ? '0 1px 0 0 rgba(110,16,35,0.04), 0 18px 36px -22px rgba(212, 175, 55,0.5)'
+          : '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       {isFeatured && (
@@ -58,13 +58,13 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
       <div className={isFeatured ? 'px-5 py-6 sm:px-8 sm:py-7' : 'px-5 py-5 sm:px-6'}>
         {/* Top — applies-to + expiry chip */}
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#163F33]/[0.06] px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#6E1023]/[0.06] px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65">
             {applies}
           </span>
           {expiry && (
             <span
               className={`font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] ${
-                expiresSoon ? 'text-[#9c6f3e]' : 'text-[#163F33]/45'
+                expiresSoon ? 'text-[#9c6f3e]' : 'text-[#6E1023]/45'
               }`}
             >
               {expiry}
@@ -75,7 +75,7 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
         {/* Value + Title */}
         <div className={isFeatured ? 'mt-4' : 'mt-3'}>
           <p
-            className={`font-heading font-bold text-[#163F33] ${
+            className={`font-heading font-bold text-[#6E1023] ${
               isFeatured ? 'text-[34px] sm:text-[40px]' : 'text-[24px]'
             }`}
             style={{ letterSpacing: '-0.025em', lineHeight: 1 }}
@@ -83,7 +83,7 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
             {value}
           </p>
           <h3
-            className={`mt-1.5 font-heading font-semibold text-[#163F33] ${
+            className={`mt-1.5 font-heading font-semibold text-[#6E1023] ${
               isFeatured ? 'text-[15px]' : 'text-[13.5px]'
             }`}
             style={{ letterSpacing: '-0.005em' }}
@@ -99,11 +99,11 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
           }`}
         >
           <div>
-            <p className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+            <p className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
               Code
             </p>
             <p
-              className={`font-mono font-bold text-[#163F33] ${
+              className={`font-mono font-bold text-[#6E1023] ${
                 isFeatured ? 'text-[18px] sm:text-[20px]' : 'text-[15px]'
               }`}
               style={{ letterSpacing: '0.04em' }}
@@ -133,11 +133,11 @@ export default function PromoCard({ item, variant = 'compact' }: PromoCardProps)
 
         {/* Description + How to use expander */}
         {(promo.description || promo.min_spend_rm > 0) && (
-          <div className="mt-4 border-t border-[#163F33]/6 pt-3">
+          <div className="mt-4 border-t border-[#6E1023]/6 pt-3">
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="group inline-flex w-full items-center justify-between gap-3 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55 transition-colors hover:text-[#D4AF37]"
+              className="group inline-flex w-full items-center justify-between gap-3 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55 transition-colors hover:text-[#D4AF37]"
               aria-expanded={open}
             >
               <span className="inline-flex items-center gap-1.5">

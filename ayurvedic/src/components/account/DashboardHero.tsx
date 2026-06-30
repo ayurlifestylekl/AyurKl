@@ -12,19 +12,25 @@ export default function DashboardHero({ firstName }: DashboardHeroProps) {
 
   return (
     <section
-      className="relative overflow-hidden rounded-3xl border border-[#163F33]/8 bg-[#163F33] px-6 py-5 text-white sm:px-8 sm:py-5"
+      className="relative overflow-hidden rounded-3xl border border-black/15 bg-gradient-to-br from-[#6E1023] to-[#4A0C18] px-6 py-5 text-white sm:px-8 sm:py-5"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 20px 40px -20px rgba(22, 63, 51,0.25)',
+          '0 1px 0 0 rgba(255,255,255,0.05), 0 24px 50px -24px rgba(74,12,24,0.55)',
       }}
     >
+      {/* Gold hairline along the top edge */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.55), transparent)' }}
+      />
       {/* Decoration layers */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            'radial-gradient(65% 60% at 80% 10%, rgba(212, 175, 55,0.16), transparent 65%), radial-gradient(55% 60% at 0% 100%, rgba(46, 125, 90,0.14), transparent 65%)',
+            'radial-gradient(65% 60% at 82% 6%, rgba(212,175,55,0.20), transparent 64%), radial-gradient(50% 60% at 0% 100%, rgba(201,138,147,0.12), transparent 64%)',
         }}
       />
       <BotanicalMandala
@@ -34,7 +40,7 @@ export default function DashboardHero({ firstName }: DashboardHeroProps) {
       />
       <FloatingLeaf
         className="pointer-events-none absolute right-8 bottom-4 hidden h-12 w-10 rotate-[12deg] lg:block"
-        color="#2E7D5A"
+        color="#6E1023"
         strokeColor="#D4AF37"
         opacity={0.18}
       />

@@ -79,7 +79,7 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
+        className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#6E1023]"
       >
         <Plus className="h-3.5 w-3.5" />
         Log external sale
@@ -87,7 +87,7 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               Log external sale
             </h2>
             <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">
@@ -102,13 +102,13 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
               </div>
             ) : (
               <>
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Affiliate *
                 </label>
                 <select
                   value={agentId}
                   onChange={(e) => setAgentId(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 >
                   <option value="">Pick an agent…</option>
                   {agents.map((a) => (
@@ -120,13 +120,13 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
 
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                       Channel *
                     </label>
                     <select
                       value={channel}
                       onChange={(e) => setChannel(e.target.value as ExternalChannel)}
-                      className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                      className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                     >
                       {(
                         Object.entries(EXTERNAL_CHANNEL_LABEL) as [
@@ -141,7 +141,7 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                       Gross amount (RM) *
                     </label>
                     <input
@@ -150,7 +150,7 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
                       step="0.01"
                       value={grossAmount}
                       onChange={(e) => setGrossAmount(e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                      className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                     />
                   </div>
                 </div>
@@ -162,52 +162,52 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
                   </p>
                 ) : null}
 
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Customer name (optional)
                 </label>
                 <input
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
 
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Customer contact (phone / handle)
                 </label>
                 <input
                   value={customerContact}
                   onChange={(e) => setCustomerContact(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
 
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Marketplace order reference
                 </label>
                 <input
                   value={marketplaceRef}
                   onChange={(e) => setMarketplaceRef(e.target.value)}
                   placeholder="e.g. Shopee #2026100012345"
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
 
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Proof URL (WhatsApp screenshot, etc.)
                 </label>
                 <input
                   value={proofUrl}
                   onChange={(e) => setProofUrl(e.target.value)}
                   placeholder="https://…"
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
 
-                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Notes
                 </label>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={2}
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
 
                 {error ? (
@@ -221,7 +221,7 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
                       setOpen(false)
                       reset()
                     }}
-                    className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                    className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
                   >
                     Cancel
                   </button>
@@ -229,7 +229,7 @@ export default function LogSaleDialog({ agents }: { agents: AgentOption[] }) {
                     type="button"
                     disabled={pending || !agentId || !grossAmount}
                     onClick={submit}
-                    className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
+                    className="rounded-lg bg-[#6E1023] px-3 py-1.5 text-[12px] font-semibold text-white disabled:opacity-50"
                   >
                     {pending ? 'Logging…' : 'Log sale'}
                   </button>

@@ -10,13 +10,13 @@ interface IssueInviteDialogProps {
 }
 
 function inputClass(disabled: boolean) {
-  return `w-full rounded-2xl border border-[#163F33]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#163F33] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 ${
+  return `w-full rounded-2xl border border-[#6E1023]/15 bg-white px-4 py-2.5 font-body text-[13.5px] text-[#6E1023] focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 ${
     disabled ? 'opacity-50' : ''
   }`
 }
 
 function labelClass() {
-  return 'block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55'
+  return 'block font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55'
 }
 
 export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
@@ -58,8 +58,8 @@ export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-lg rounded-3xl border border-[#163F33]/8 bg-white p-6">
-        <h3 className="font-heading text-[16px] font-bold text-[#163F33]">Issue partner invite</h3>
+      <div className="w-full max-w-lg rounded-3xl border border-[#6E1023]/8 bg-white p-6">
+        <h3 className="font-heading text-[16px] font-bold text-[#6E1023]">Issue partner invite</h3>
         <p className="mt-1 font-body text-[12.5px] text-[#1F1F1F]/65">
           Creates a one-time signup link. Share with your new brand partner — link expires in 14 days.
         </p>
@@ -107,7 +107,7 @@ export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
               </p>
             </div>
 
-            <fieldset className="rounded-2xl border border-[#163F33]/10 bg-[#F7F2E8]/40 p-3">
+            <fieldset className="rounded-2xl border border-[#6E1023]/10 bg-[#F7F2E8]/40 p-3">
               <legend className={`${labelClass()} px-1`}>
                 What can this partner do? *
               </legend>
@@ -119,7 +119,7 @@ export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
                   disabled={isPending}
                   className="mt-0.5 h-4 w-4"
                 />
-                <span className="text-[12.5px] text-[#163F33]">
+                <span className="text-[12.5px] text-[#6E1023]">
                   <strong>Earn commission on referred sales</strong>
                   <span className="block text-[11px] text-[#1F1F1F]/60">
                     Shares their link / submits TikTok &amp; Shopee orders for commission.
@@ -134,7 +134,7 @@ export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
                   disabled={isPending}
                   className="mt-0.5 h-4 w-4"
                 />
-                <span className="text-[12.5px] text-[#163F33]">
+                <span className="text-[12.5px] text-[#6E1023]">
                   <strong>Buy wholesale to resell</strong>
                   <span className="block text-[11px] text-[#1F1F1F]/60">
                     Purchases stock at wholesale price, resells via their own channels.
@@ -153,14 +153,14 @@ export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
                 type="button"
                 onClick={onClose}
                 disabled={isPending}
-                className="rounded-full border border-[#163F33]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#163F33] disabled:opacity-50"
+                className="rounded-full border border-[#6E1023]/15 px-4 py-2 font-heading text-[12px] font-semibold uppercase tracking-[0.14em] text-[#6E1023] disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isPending || (!canAffiliate && !canWholesale)}
-                className="rounded-full bg-[#1E5B4B] px-4 py-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#163F33] disabled:opacity-50"
+                className="rounded-full bg-[#6E1023] px-4 py-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#6E1023] disabled:opacity-50"
               >
                 {isPending ? 'Creating…' : 'Create invite'}
               </button>
@@ -168,28 +168,28 @@ export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
           </form>
         ) : (
           <div className="mt-4 flex flex-col gap-4">
-            <div className="rounded-2xl border border-[#1E5B4B]/20 bg-[#F7F2E8]/60 p-4">
-              <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+            <div className="rounded-2xl border border-[#6E1023]/20 bg-[#F7F2E8]/60 p-4">
+              <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
                 Invite link
               </p>
-              <p className="mt-2 break-all font-mono text-[11.5px] text-[#163F33]">
+              <p className="mt-2 break-all font-mono text-[11.5px] text-[#6E1023]">
                 {issued.inviteUrl}
               </p>
               <button
                 type="button"
                 onClick={handleCopy}
-                className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#1E5B4B] px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#163F33]"
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#6E1023] px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#6E1023]"
               >
                 {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                 {copied ? 'Copied!' : 'Copy link'}
               </button>
             </div>
 
-            <div className="rounded-2xl border border-[#163F33]/10 p-4">
-              <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+            <div className="rounded-2xl border border-[#6E1023]/10 p-4">
+              <p className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
                 Referral code (auto-assigned)
               </p>
-              <p className="mt-2 font-mono text-[14px] font-semibold text-[#163F33]">
+              <p className="mt-2 font-mono text-[14px] font-semibold text-[#6E1023]">
                 {issued.referralCode}
               </p>
             </div>
@@ -197,7 +197,7 @@ export default function IssueInviteDialog({ onClose }: IssueInviteDialogProps) {
             <button
               type="button"
               onClick={onClose}
-              className="self-end rounded-full bg-[#1E5B4B] px-5 py-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#163F33]"
+              className="self-end rounded-full bg-[#6E1023] px-5 py-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#6E1023]"
             >
               Done
             </button>

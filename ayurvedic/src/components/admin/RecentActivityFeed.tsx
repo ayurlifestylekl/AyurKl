@@ -56,23 +56,23 @@ export default function RecentActivityFeed({ initial }: { initial: ActivityEvent
 
   return (
     <article
-      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
-      <header className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3.5">
+      <header className="flex items-center justify-between border-b border-[#6E1023]/6 px-5 py-3.5">
         <div className="flex items-center gap-2.5">
-          <Activity className="h-3.5 w-3.5 text-[#1E5B4B]" />
-          <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
+          <Activity className="h-3.5 w-3.5 text-[#6E1023]" />
+          <h2 className="font-heading text-[13px] font-semibold text-[#6E1023]">
             Recent activity
           </h2>
         </div>
-        <span className="inline-flex items-center gap-1.5 font-heading text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1E5B4B]/70">
+        <span className="inline-flex items-center gap-1.5 font-heading text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/70">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1E5B4B] opacity-60" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#1E5B4B]" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#6E1023] opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#6E1023]" />
           </span>
           Live
         </span>
@@ -82,7 +82,7 @@ export default function RecentActivityFeed({ initial }: { initial: ActivityEvent
           No recent activity.
         </p>
       ) : (
-        <ul className="divide-y divide-[#163F33]/6">
+        <ul className="divide-y divide-[#6E1023]/6">
           {events.map((e) => {
             const Icon = ICONS[e.kind]
             return (
@@ -91,18 +91,18 @@ export default function RecentActivityFeed({ initial }: { initial: ActivityEvent
                   href={e.href}
                   className="flex items-start gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                 >
-                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
-                    <Icon className="h-3.5 w-3.5 text-[#1E5B4B]" />
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#6E1023]/[0.06]">
+                    <Icon className="h-3.5 w-3.5 text-[#6E1023]" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]">
+                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#6E1023]">
                       {e.title}
                     </p>
                     <p className="truncate font-body text-[11px] text-[#1F1F1F]/65">
                       {e.subtitle}
                     </p>
                   </div>
-                  <span className="shrink-0 font-body text-[10.5px] text-[#163F33]/45">
+                  <span className="shrink-0 font-body text-[10.5px] text-[#6E1023]/45">
                     {ago(e.at)}
                   </span>
                 </Link>

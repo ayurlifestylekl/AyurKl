@@ -37,7 +37,7 @@ export default async function MarketplaceOrdersPage({ searchParams }: PageProps)
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Multi-channel sales
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             Marketplace orders
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -47,15 +47,15 @@ export default async function MarketplaceOrdersPage({ searchParams }: PageProps)
         </div>
         <Link
           href="/admin/marketplace-orders/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#6E1023]"
         >
           <Plus className="h-3.5 w-3.5" />
           Enter order
         </Link>
       </header>
 
-      <section className="rounded-2xl border border-[#163F33]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
-        <p className="font-semibold text-[#163F33]">Admin-entered marketplace orders</p>
+      <section className="rounded-2xl border border-[#6E1023]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
+        <p className="font-semibold text-[#6E1023]">Admin-entered marketplace orders</p>
         <p className="mt-1">
           This page is for orders <strong>your clinic staff</strong> received on Shopee Seller
           Center, TikTok Seller Center, Lazada, or via WhatsApp / Instagram DM. Click{' '}

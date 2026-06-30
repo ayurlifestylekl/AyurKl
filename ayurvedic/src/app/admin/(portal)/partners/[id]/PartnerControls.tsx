@@ -114,12 +114,12 @@ export default function PartnerControls({
   return (
     <div className="flex flex-col gap-4">
       {/* Commission rate */}
-      <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+      <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
           Commission
         </h3>
         <label className="mt-3 flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             Rate (%)
           </span>
           <input
@@ -129,61 +129,61 @@ export default function PartnerControls({
             step="0.1"
             value={newRate}
             onChange={(e) => setNewRate(Number(e.target.value))}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
         </label>
         <label className="mt-3 flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             Reason for change *
           </span>
           <input
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="e.g. promoted to senior tier"
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
         </label>
         <button
           type="button"
           disabled={pending || reason.trim().length < 3 || newRate === initialRate}
           onClick={saveRate}
-          className="mt-3 rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
+          className="mt-3 rounded-lg bg-[#6E1023] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#6E1023] disabled:opacity-50"
         >
           {pending ? 'Saving…' : 'Save rate'}
         </button>
       </article>
 
       {/* Capabilities */}
-      <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+      <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
           Capabilities
         </h3>
         <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">
           Determines which sections this partner sees in their portal.
         </p>
         <div className="mt-3 flex flex-col gap-2">
-          <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-[#163F33]/8 px-3 py-2">
+          <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-[#6E1023]/8 px-3 py-2">
             <input
               type="checkbox"
               checked={canAffiliate}
               onChange={(e) => setCanAffiliate(e.target.checked)}
               className="mt-0.5 h-4 w-4"
             />
-            <span className="text-[12.5px] text-[#163F33]">
+            <span className="text-[12.5px] text-[#6E1023]">
               <strong>Earn commission on referred sales</strong>
               <span className="block text-[11px] text-[#1F1F1F]/55">
                 Sees Referred Sales, Marketplace, Earnings.
               </span>
             </span>
           </label>
-          <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-[#163F33]/8 px-3 py-2">
+          <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-[#6E1023]/8 px-3 py-2">
             <input
               type="checkbox"
               checked={canWholesale}
               onChange={(e) => setCanWholesale(e.target.checked)}
               className="mt-0.5 h-4 w-4"
             />
-            <span className="text-[12.5px] text-[#163F33]">
+            <span className="text-[12.5px] text-[#6E1023]">
               <strong>Buy wholesale to resell</strong>
               <span className="block text-[11px] text-[#1F1F1F]/55">
                 Sees Wholesale Shop, My Wholesale Orders.
@@ -195,15 +195,15 @@ export default function PartnerControls({
           type="button"
           disabled={pending || !capsDirty || (!canAffiliate && !canWholesale)}
           onClick={saveCapabilities}
-          className="mt-3 rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
+          className="mt-3 rounded-lg bg-[#6E1023] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#6E1023] disabled:opacity-50"
         >
           {pending ? 'Saving…' : 'Save capabilities'}
         </button>
       </article>
 
       {/* Status */}
-      <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+      <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
           Status
         </h3>
         <p className="mt-2 text-[12px] text-[#1F1F1F]/65">
@@ -247,9 +247,9 @@ export default function PartnerControls({
       </article>
 
       {/* Internal notes */}
-      <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
+      <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+          <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
             Internal notes
           </h3>
           <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1F1F1F]/55">
@@ -261,13 +261,13 @@ export default function PartnerControls({
           onChange={(e) => setNotes(e.target.value)}
           rows={4}
           placeholder="Audit log of rate changes appears here automatically."
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 font-mono text-[11.5px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 font-mono text-[11.5px]"
         />
         <button
           type="button"
           disabled={pending}
           onClick={saveNotes}
-          className="mt-2 rounded-lg border border-[#163F33]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#163F33] disabled:opacity-50"
+          className="mt-2 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6E1023] disabled:opacity-50"
         >
           Save notes
         </button>
@@ -287,7 +287,7 @@ export default function PartnerControls({
       {confirmSuspend ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               Suspend partner?
             </h2>
             <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
@@ -295,20 +295,20 @@ export default function PartnerControls({
               still create attributed orders (we keep historical commission intact). Reversible
               any time.
             </p>
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Reason *
             </label>
             <textarea
               value={suspendReason}
               onChange={(e) => setSuspendReason(e.target.value)}
               rows={2}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
             <div className="mt-3 flex gap-2">
               <button
                 type="button"
                 onClick={() => setConfirmSuspend(false)}
-                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>

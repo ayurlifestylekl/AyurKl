@@ -1,11 +1,11 @@
 export default function OrderListHeader() {
   return (
     <header>
-      <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+      <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#6E1023]/55">
         Order History
       </span>
       <h1
-        className="mt-1.5 font-heading text-[26px] font-bold leading-tight text-[#163F33] sm:text-[30px]"
+        className="mt-1.5 font-heading text-[26px] font-bold leading-tight text-[#6E1023] sm:text-[30px]"
         style={{ letterSpacing: '-0.02em' }}
       >
         My Orders.

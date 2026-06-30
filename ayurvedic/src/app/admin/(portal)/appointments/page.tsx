@@ -107,7 +107,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Clinic
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             Appointments
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -118,21 +118,21 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
         <div className="flex flex-wrap gap-2">
           <Link
             href="/console"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#D4AF37]/20"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-3 py-2 text-[12.5px] font-semibold text-[#6E1023] hover:bg-[#D4AF37]/20"
           >
             <ExternalLink className="h-3.5 w-3.5" />
             Bookings Console
           </Link>
           <Link
             href="/admin/treatments"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#163F33]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]/60"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E1023]/20 bg-white px-3 py-2 text-[12.5px] font-semibold text-[#6E1023] hover:bg-[#F7F2E8]/60"
           >
             <ExternalLink className="h-3.5 w-3.5" />
             Treatments
           </Link>
           <Link
             href="/admin/appointments/new"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#6E1023]"
           >
             <Plus className="h-3.5 w-3.5" />
             Walk-in

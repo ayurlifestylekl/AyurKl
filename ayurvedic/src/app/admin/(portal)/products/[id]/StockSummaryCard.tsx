@@ -17,14 +17,14 @@ export default function StockSummaryCard({
   const isOut = stockQty === 0
 
   return (
-    <div className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-      <div className="flex items-center gap-2 text-[#163F33]">
+    <div className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+      <div className="flex items-center gap-2 text-[#6E1023]">
         <Boxes className="h-3.5 w-3.5" />
         <h3 className="font-heading text-[12.5px] font-semibold">Stock</h3>
       </div>
       <p
         className={`mt-2 font-heading text-[28px] font-bold ${
-          isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#163F33]'
+          isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#6E1023]'
         }`}
       >
         {stockQty}
@@ -43,7 +43,7 @@ export default function StockSummaryCard({
       ) : null}
       <Link
         href={`/admin/inventory/${productId}`}
-        className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#163F33]"
+        className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#D4AF37] hover:text-[#6E1023]"
       >
         View stock history
         <ArrowRight className="h-3 w-3" />

@@ -23,7 +23,7 @@ export default async function AdminPromosPage() {
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Marketing
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             Vouchers
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -33,7 +33,7 @@ export default async function AdminPromosPage() {
         </div>
         <Link
           href="/admin/promos/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E5B4B] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#163F33]"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#6E1023]"
         >
           <Plus className="h-3.5 w-3.5" />
           Create promo
@@ -41,13 +41,13 @@ export default async function AdminPromosPage() {
       </header>
 
       {promos.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+        <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No promos yet. Create one to use it as a template for voucher push.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
           <table className="w-full text-left text-[13px]">
-            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               <tr>
                 <th className="px-4 py-3">Code</th>
                 <th className="px-4 py-3">Title</th>
@@ -59,10 +59,10 @@ export default async function AdminPromosPage() {
                 <th className="px-4 py-3">Expires</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#163F33]/6">
+            <tbody className="divide-y divide-[#6E1023]/6">
               {promos.map((p) => (
                 <tr key={p.id} className="hover:bg-[#F7F2E8]/30">
-                  <td className="px-4 py-3 font-mono font-semibold text-[#163F33]">
+                  <td className="px-4 py-3 font-mono font-semibold text-[#6E1023]">
                     <Link
                       href={`/admin/promos/${p.id}`}
                       className="hover:text-[#D4AF37]"

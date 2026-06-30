@@ -32,7 +32,7 @@ import {
 import { getRecentActivity } from '@/lib/admin/activity'
 import { COMMERCE_ENABLED } from '@/lib/admin/features'
 
-import StatTile from '@/components/account/StatTile'
+import KpiTile from '@/components/admin/KpiTile'
 import UniversalSearch from '@/components/admin/UniversalSearch'
 import QuickActionsRow from '@/components/admin/QuickActionsRow'
 import TodayConsultationsCard from '@/components/admin/TodayConsultationsCard'
@@ -106,12 +106,12 @@ export default async function AdminDashboardPage() {
           Command Center
         </span>
         <h1
-          className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[36px]"
+          className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023] sm:text-[36px]"
           style={{ letterSpacing: '-0.025em' }}
         >
           Good day,{' '}
           <span
-            className="italic font-normal text-[#163F33]/70"
+            className="italic font-normal text-[#6E1023]/70"
             style={{ fontFamily: 'var(--font-playfair)' }}
           >
             {firstName}.
@@ -136,7 +136,7 @@ export default async function AdminDashboardPage() {
         {/* Shop KPIs — archived while the clinic runs on bookings only. */}
         {COMMERCE_ENABLED && (
           <>
-            <StatTile
+            <KpiTile
               label="Orders today"
               value={String(stats.ordersToday)}
               sub={
@@ -145,9 +145,9 @@ export default async function AdminDashboardPage() {
                   : `${stats.ordersToday === 1 ? '1 order' : `${stats.ordersToday} orders`} placed`
               }
               icon={Package}
-              accent="sage"
+              accent="burgundy"
             />
-            <StatTile
+            <KpiTile
               label="Revenue today"
               value={`RM ${stats.revenueTodayRm.toFixed(0)}`}
               sub={
@@ -158,46 +158,46 @@ export default async function AdminDashboardPage() {
               icon={Wallet}
               accent="gold"
             />
-            <StatTile
+            <KpiTile
               label="Avg order value"
               value={stats.avgOrderValueRm > 0 ? `RM ${stats.avgOrderValueRm.toFixed(0)}` : '—'}
               sub="Today's paid orders"
               icon={Receipt}
-              accent="sage"
+              accent="burgundy"
             />
-            <StatTile
+            <KpiTile
               label="Awaiting fulfil"
               value={String(stats.pendingFulfillment)}
               sub={stats.pendingFulfillment === 0 ? 'All shipped' : 'Paid, ready to ship'}
               icon={Truck}
-              accent="gold"
+              accent="rose"
             />
-            <StatTile
+            <KpiTile
               label="Low stock"
               value={String(stats.lowStockProducts)}
               sub={
                 stats.lowStockProducts === 0 ? 'All healthy' : `Under ${LOW_STOCK_THRESHOLD} units`
               }
               icon={Boxes}
-              accent="sage"
+              accent="burgundy"
             />
           </>
         )}
-        <StatTile
+        <KpiTile
           label="New customers"
           value={String(stats.newCustomersToday)}
           sub="Signed up today"
           icon={UserPlus}
-          accent="olive"
+          accent="burgundy"
         />
-        <StatTile
+        <KpiTile
           label="Unread messages"
           value={String(stats.unreadTickets)}
           sub={stats.unreadTickets === 0 ? 'Inbox zero' : 'From customers'}
           icon={MessageSquare}
-          accent="olive"
+          accent="rose"
         />
-        <StatTile
+        <KpiTile
           label="Today's consults"
           value={String(stats.pendingConsultationsToday)}
           sub={stats.pendingConsultationsToday === 0 ? 'Calendar clear' : 'Scheduled'}
@@ -231,7 +231,7 @@ export default async function AdminDashboardPage() {
                 viewAllHref="/admin/orders?status=processing"
                 emptyText="All caught up."
               >
-                <ul className="divide-y divide-[#163F33]/6">
+                <ul className="divide-y divide-[#6E1023]/6">
                   {ordersAttn.map((o) => (
                     <li key={o.id}>
                       <Link
@@ -239,14 +239,14 @@ export default async function AdminDashboardPage() {
                         className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="font-heading text-[13px] font-semibold text-[#163F33]">
+                          <p className="font-heading text-[13px] font-semibold text-[#6E1023]">
                             #{o.shortId} · {o.customerName ?? 'Unknown customer'}
                           </p>
                           <p className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/55">
                             {relativeTime(o.createdAt)} · RM {o.totalRm.toFixed(2)}
                           </p>
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#163F33]/40" />
+                        <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#6E1023]/40" />
                       </Link>
                     </li>
                   ))}
@@ -265,14 +265,14 @@ export default async function AdminDashboardPage() {
                 viewAllHref="/admin/messages?filter=unread"
                 emptyText="No new messages."
               >
-                <ul className="divide-y divide-[#163F33]/6">
+                <ul className="divide-y divide-[#6E1023]/6">
                   {ticketsAttn.map((t) => (
                     <li key={t.id}>
                       <Link
                         href={`/admin/messages/${t.id}`}
                         className="block px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                       >
-                        <p className="truncate font-heading text-[13px] font-semibold text-[#163F33]">
+                        <p className="truncate font-heading text-[13px] font-semibold text-[#6E1023]">
                           {t.subject}
                         </p>
                         <p className="mt-0.5 truncate font-body text-[11.5px] text-[#1F1F1F]/55">
@@ -297,7 +297,7 @@ export default async function AdminDashboardPage() {
                 viewAllHref="/admin/inventory?filter=low-stock"
                 emptyText="All stock healthy."
               >
-                <ul className="divide-y divide-[#163F33]/6">
+                <ul className="divide-y divide-[#6E1023]/6">
                   {lowStock.map((p) => (
                     <li key={p.id}>
                       <Link
@@ -305,7 +305,7 @@ export default async function AdminDashboardPage() {
                         className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="font-heading text-[13px] font-semibold text-[#163F33]">
+                          <p className="font-heading text-[13px] font-semibold text-[#6E1023]">
                             {p.name}
                           </p>
                           <p className="mt-0.5 font-body text-[11.5px] text-[#1F1F1F]/55">
@@ -338,13 +338,13 @@ export default async function AdminDashboardPage() {
         </section>
       ) : (
         <section
-          className="rounded-3xl border border-[#163F33]/8 bg-white p-8 text-center"
+          className="rounded-3xl border border-[#6E1023]/8 bg-white p-8 text-center"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+              '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
           }}
         >
-          <p className="font-heading text-[18px] font-semibold text-[#163F33]">
+          <p className="font-heading text-[18px] font-semibold text-[#6E1023]">
             All caught up.
           </p>
           <p className="mt-2 font-body text-[13px] text-[#1F1F1F]/65">
@@ -387,25 +387,25 @@ function AttentionCard({
 }: AttentionCardProps) {
   return (
     <article
-      className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+      className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
-      <header className="flex items-center justify-between gap-3 border-b border-[#163F33]/6 px-5 py-3.5">
+      <header className="flex items-center justify-between gap-3 border-b border-[#6E1023]/6 px-5 py-3.5">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#163F33]/[0.06]">
-            <Icon className="h-3.5 w-3.5 text-[#1E5B4B]" strokeWidth={1.8} />
+          <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#6E1023]/[0.06]">
+            <Icon className="h-3.5 w-3.5 text-[#6E1023]" strokeWidth={1.8} />
           </span>
           <div>
-            <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">{title}</h2>
+            <h2 className="font-heading text-[13px] font-semibold text-[#6E1023]">{title}</h2>
             <p className="font-body text-[10.5px] text-[#1F1F1F]/55">{subtitle}</p>
           </div>
         </div>
         <Link
           href={viewAllHref}
-          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55 hover:text-[#D4AF37]"
+          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/55 hover:text-[#D4AF37]"
         >
           View all →
         </Link>

@@ -37,8 +37,8 @@ export default function WishlistButton({ productId, initialSaved, variant = 'ico
         disabled={isPending}
         className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-3 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] transition-all disabled:opacity-50 ${
           saved
-            ? 'border-[#D4AF37] bg-[#D4AF37]/[0.12] text-[#163F33]'
-            : 'border-[#163F33]/15 bg-white text-[#163F33] hover:bg-[#163F33]/[0.04]'
+            ? 'border-[#D4AF37] bg-[#D4AF37]/[0.12] text-[#6E1023]'
+            : 'border-[#6E1023]/15 bg-white text-[#6E1023] hover:bg-[#6E1023]/[0.04]'
         }`}
         aria-label={saved ? 'Remove from wishlist' : 'Add to wishlist'}
       >
@@ -56,7 +56,7 @@ export default function WishlistButton({ productId, initialSaved, variant = 'ico
       className={`inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all disabled:opacity-50 ${
         saved
           ? 'border-[#D4AF37] bg-white text-[#D4AF37]'
-          : 'border-[#163F33]/12 bg-white text-[#163F33]/55 hover:border-[#D4AF37]/40 hover:text-[#D4AF37]'
+          : 'border-[#6E1023]/12 bg-white text-[#6E1023]/55 hover:border-[#D4AF37]/40 hover:text-[#D4AF37]'
       }`}
       aria-label={saved ? 'Remove from wishlist' : 'Add to wishlist'}
     >

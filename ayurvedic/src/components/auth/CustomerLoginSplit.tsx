@@ -12,7 +12,7 @@ import { FloatingLeaf, BotanicalMandala } from '@/components/ui/Decorations'
  */
 export default function CustomerLoginSplit({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#163F33] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#26060F] text-white">
       {/* ── MOBILE-ONLY: full-screen warm brand canvas ──────────────────
          Direction 2 (Lifted Form Card) on mobile only. Fills the whole
          viewport with the same atmosphere as the desktop left pane, so
@@ -23,7 +23,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           className="absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(80% 50% at 30% 12%, rgba(212, 175, 55,0.22), transparent 70%), radial-gradient(70% 50% at 80% 92%, rgba(46, 125, 90,0.18), transparent 70%)',
+              'radial-gradient(80% 50% at 30% 12%, rgba(212, 175, 55,0.22), transparent 70%), radial-gradient(70% 50% at 80% 92%, rgba(110,16,35,0.18), transparent 70%)',
           }}
         />
         <div
@@ -44,7 +44,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
             calm, doesn't crop the edge. */}
         <FloatingLeaf
           className="absolute right-4 bottom-40 h-9 w-8 rotate-[12deg]"
-          color="#2E7D5A"
+          color="#6E1023"
           strokeColor="#D4AF37"
           opacity={0.14}
         />
@@ -59,7 +59,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
             className="pointer-events-none absolute inset-0 hidden lg:block"
             style={{
               backgroundImage:
-                'radial-gradient(70% 60% at 30% 20%, rgba(212, 175, 55,0.18), transparent 65%), radial-gradient(60% 60% at 80% 100%, rgba(46, 125, 90,0.16), transparent 65%)',
+                'radial-gradient(70% 60% at 30% 20%, rgba(212, 175, 55,0.18), transparent 65%), radial-gradient(60% 60% at 80% 100%, rgba(110,16,35,0.16), transparent 65%)',
             }}
           />
           <div
@@ -78,13 +78,13 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           />
           <FloatingLeaf
             className="pointer-events-none absolute right-12 bottom-16 hidden h-24 w-20 rotate-[12deg] lg:block"
-            color="#2E7D5A"
+            color="#6E1023"
             strokeColor="#D4AF37"
             opacity={0.18}
           />
           <FloatingLeaf
             className="pointer-events-none absolute left-8 top-44 hidden h-16 w-14 -rotate-[20deg] lg:block"
-            color="#1E5B4B"
+            color="#6E1023"
             strokeColor="#D4AF37"
             opacity={0.22}
           />
@@ -188,7 +188,13 @@ export default function CustomerLoginSplit({ children }: { children: React.React
         {/* Mobile: a "lifted" glass card floating on the warm canvas,
             with margin around all four sides.
             Desktop: full-bleed deeper-green pane (unchanged). */}
-        <section className="relative flex flex-col px-3 pb-3 sm:px-4 sm:pb-4 lg:p-0 lg:bg-[#163F33] lg:h-screen">
+        <section className="relative flex flex-col px-3 pb-3 sm:px-4 sm:pb-4 lg:p-0 lg:bg-[#1E040A] lg:h-screen">
+          {/* Desktop-only gold seam between the panes */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 left-0 hidden w-px lg:block"
+            style={{ background: 'linear-gradient(180deg, transparent, rgba(212,175,55,0.4), transparent)' }}
+          />
           {/* Desktop-only subtle top highlight */}
           <div
             aria-hidden
@@ -197,7 +203,7 @@ export default function CustomerLoginSplit({ children }: { children: React.React
           <div
             className={[
               // Mobile: glass card
-              'relative flex flex-1 flex-col rounded-[28px] border border-white/12 bg-[#163F33]/88 backdrop-blur-xl',
+              'relative flex flex-1 flex-col rounded-[28px] border border-white/12 bg-[#26060F]/88 backdrop-blur-xl',
               'shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)]',
               // Desktop overrides: full-bleed, no card chrome
               'lg:rounded-none lg:border-0 lg:bg-transparent lg:shadow-none lg:backdrop-blur-none',

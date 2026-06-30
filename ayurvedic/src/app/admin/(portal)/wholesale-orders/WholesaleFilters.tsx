@@ -34,7 +34,7 @@ export default function WholesaleFilters({
   )
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#163F33]/10 bg-white p-3">
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#6E1023]/10 bg-white p-3">
       <div className="flex flex-wrap items-center gap-1.5">
         {TABS.map((t) => {
           const isActive = active === t.value
@@ -45,8 +45,8 @@ export default function WholesaleFilters({
               onClick={() => set('status', t.value)}
               className={`rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors ${
                 isActive
-                  ? 'bg-[#1E5B4B] text-white'
-                  : 'border border-[#163F33]/15 bg-white text-[#163F33] hover:bg-[#F7F2E8]/60'
+                  ? 'bg-[#6E1023] text-white'
+                  : 'border border-[#6E1023]/15 bg-white text-[#6E1023] hover:bg-[#F7F2E8]/60'
               }`}
             >
               {t.label}
@@ -59,7 +59,7 @@ export default function WholesaleFilters({
         placeholder="Search order # or partner…"
         defaultValue={q}
         onChange={(e) => set('q', e.target.value || null)}
-        className="ml-auto min-w-[220px] rounded-lg border border-[#163F33]/10 bg-white px-3 py-1.5 text-sm placeholder:text-[#1F1F1F]/40 focus:border-[#1E5B4B] focus:outline-none"
+        className="ml-auto min-w-[220px] rounded-lg border border-[#6E1023]/10 bg-white px-3 py-1.5 text-sm placeholder:text-[#1F1F1F]/40 focus:border-[#6E1023] focus:outline-none"
       />
     </div>
   )

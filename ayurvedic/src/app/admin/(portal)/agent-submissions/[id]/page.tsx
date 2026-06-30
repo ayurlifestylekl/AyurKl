@@ -39,7 +39,7 @@ export default async function AgentSubmissionDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <Link
         href="/admin/agent-submissions"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to agent submissions
       </Link>
@@ -50,7 +50,7 @@ export default async function AgentSubmissionDetailPage({
             Affiliate submission
           </span>
           <div className="mt-1 flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
+            <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">
               {EXTERNAL_CHANNEL_LABEL[
                 m.channel as keyof typeof EXTERNAL_CHANNEL_LABEL
               ]}{' '}
@@ -79,10 +79,10 @@ export default async function AgentSubmissionDetailPage({
         <section className="rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8]/50 p-4">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <h2 className="font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/70">
+              <h2 className="font-heading text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/70">
                 Submitted by
               </h2>
-              <p className="mt-1 font-heading text-[16px] font-bold text-[#163F33]">
+              <p className="mt-1 font-heading text-[16px] font-bold text-[#6E1023]">
                 {agentUser?.full_name ?? '—'}
               </p>
               <p className="mt-0.5 text-[12px] text-[#1F1F1F]/65">
@@ -92,7 +92,7 @@ export default async function AgentSubmissionDetailPage({
             </div>
             <Link
               href={`/admin/partners/${agent.id}`}
-              className="rounded-lg border border-[#163F33]/15 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-[#163F33] hover:bg-[#F7F2E8]"
+              className="rounded-lg border border-[#6E1023]/15 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-[#6E1023] hover:bg-[#F7F2E8]"
             >
               View affiliate →
             </Link>
@@ -111,13 +111,13 @@ export default async function AgentSubmissionDetailPage({
       />
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4 lg:col-span-2">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Items</h2>
+        <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4 lg:col-span-2">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">Items</h2>
           {items.length === 0 ? (
             <p className="mt-2 text-[12px] italic text-[#1F1F1F]/55">No items.</p>
           ) : (
             <table className="mt-3 w-full text-left text-[13px]">
-              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+              <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                 <tr>
                   <th className="py-2">Product</th>
                   <th className="py-2">SKU</th>
@@ -126,7 +126,7 @@ export default async function AgentSubmissionDetailPage({
                   <th className="py-2 text-right">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#163F33]/6">
+              <tbody className="divide-y divide-[#6E1023]/6">
                 {items.map((it, i) => (
                   <tr key={i}>
                     <td className="py-2">{it.product_name}</td>
@@ -161,11 +161,11 @@ export default async function AgentSubmissionDetailPage({
                 <tr>
                   <td
                     colSpan={4}
-                    className="pt-1 text-right font-semibold text-[#163F33]"
+                    className="pt-1 text-right font-semibold text-[#6E1023]"
                   >
                     Total
                   </td>
-                  <td className="pt-1 text-right font-semibold text-[#163F33]">
+                  <td className="pt-1 text-right font-semibold text-[#6E1023]">
                     RM {Number(m.total_amount_rm).toFixed(2)}
                   </td>
                 </tr>
@@ -173,8 +173,8 @@ export default async function AgentSubmissionDetailPage({
             </table>
           )}
           {m.notes ? (
-            <div className="mt-3 rounded-lg border border-[#163F33]/8 bg-[#F7F2E8]/30 p-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <div className="mt-3 rounded-lg border border-[#6E1023]/8 bg-[#F7F2E8]/30 p-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                 Affiliate note
               </p>
               <p className="mt-1 text-[12px] italic text-[#1F1F1F]/70">{m.notes}</p>
@@ -182,8 +182,8 @@ export default async function AgentSubmissionDetailPage({
           ) : null}
         </article>
 
-        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Customer</h2>
+        <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">Customer</h2>
           <p className="mt-2 text-[13px] font-semibold">{m.customer_name}</p>
           {m.customer_phone ? (
             <p className="text-[12px] text-[#1F1F1F]/65">{m.customer_phone}</p>
@@ -193,8 +193,8 @@ export default async function AgentSubmissionDetailPage({
           ) : null}
 
           {m.customer_address ? (
-            <div className="mt-3 border-t border-[#163F33]/6 pt-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <div className="mt-3 border-t border-[#6E1023]/6 pt-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                 Ship to
               </p>
               <p className="mt-1 whitespace-pre-line text-[12.5px] text-[#1F1F1F]/85">
@@ -209,8 +209,8 @@ export default async function AgentSubmissionDetailPage({
           ) : null}
 
           {m.payment_proof_url ? (
-            <div className="mt-3 border-t border-[#163F33]/6 pt-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <div className="mt-3 border-t border-[#6E1023]/6 pt-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                 Proof of sale
               </p>
               <a

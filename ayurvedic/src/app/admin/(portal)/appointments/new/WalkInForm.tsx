@@ -82,8 +82,8 @@ export default function WalkInForm({
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Customer (walk-in)
         </legend>
         <input
@@ -91,14 +91,14 @@ export default function WalkInForm({
           placeholder="Full name *"
           value={walkInName}
           onChange={(e) => setWalkInName(e.target.value)}
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         />
         <input
           required
           placeholder="Phone *"
           value={walkInPhone}
           onChange={(e) => setWalkInPhone(e.target.value)}
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         />
         <input
           type="email"
@@ -106,16 +106,16 @@ export default function WalkInForm({
           placeholder="Email *"
           value={walkInEmail}
           onChange={(e) => setWalkInEmail(e.target.value)}
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         />
         <label className="mt-2 flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             Gender (needed for gender-segregated therapies)
           </span>
           <select
             value={walkInGender}
             onChange={(e) => setWalkInGender(e.target.value as Gender)}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           >
             <option value="">Not specified</option>
             <option value="male">Male</option>
@@ -124,13 +124,13 @@ export default function WalkInForm({
         </label>
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Treatment + slot
         </legend>
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Treatment *
             </span>
             <input
@@ -138,7 +138,7 @@ export default function WalkInForm({
               required
               value={treatmentName}
               onChange={(e) => setTreatmentName(e.target.value)}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
             <datalist id="treatment-options">
               {treatmentOptions.map((t) => (
@@ -147,19 +147,19 @@ export default function WalkInForm({
             </datalist>
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Vaidya
             </span>
             <input
               value={doctorName}
               onChange={(e) => setDoctorName(e.target.value)}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
           </label>
         </div>
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               When *
             </span>
             <input
@@ -167,11 +167,11 @@ export default function WalkInForm({
               required
               value={whenISO}
               onChange={(e) => setWhenISO(e.target.value)}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Duration (min)
             </span>
             <input
@@ -180,17 +180,17 @@ export default function WalkInForm({
               step="15"
               value={durationMins}
               onChange={(e) => setDurationMins(Number(e.target.value))}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Mode
             </span>
             <select
               value={mode}
               onChange={(e) => setMode(e.target.value as Mode)}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             >
               <option value="in-person">In-person</option>
               <option value="virtual">Virtual</option>
@@ -202,7 +202,7 @@ export default function WalkInForm({
             placeholder="Room (optional)"
             value={room}
             onChange={(e) => setRoom(e.target.value)}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
           <input
             type="number"
@@ -211,17 +211,17 @@ export default function WalkInForm({
             placeholder="Advance payment (RM, optional)"
             value={advance}
             onChange={(e) => setAdvance(e.target.value)}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
         </div>
         <label className="mt-3 flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             Gender rule (clinic policy: gender-segregated therapies)
           </span>
           <select
             value={genderRequirement}
             onChange={(e) => setGenderRequirement(e.target.value as GenderReq)}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           >
             <option value="any">Any gender — consultations, online sessions</option>
             <option value="men_only">Men only — therapy for male customers</option>
@@ -235,30 +235,30 @@ export default function WalkInForm({
         </label>
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Notes
         </legend>
         <label className="mt-2 flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             Customer note (visible to customer)
           </span>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={2}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
         </label>
         <label className="mt-2 flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
             Internal note (staff-only)
           </span>
           <textarea
             value={internalNote}
             onChange={(e) => setInternalNote(e.target.value)}
             rows={2}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
         </label>
       </fieldset>
@@ -268,7 +268,7 @@ export default function WalkInForm({
       <button
         type="submit"
         disabled={pending || !walkInName || !walkInPhone || !walkInEmail || !treatmentName || !whenISO}
-        className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
+        className="rounded-lg bg-[#6E1023] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#6E1023] disabled:opacity-50"
       >
         {pending ? 'Saving…' : 'Create walk-in appointment'}
       </button>

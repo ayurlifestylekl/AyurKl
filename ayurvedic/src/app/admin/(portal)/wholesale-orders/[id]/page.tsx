@@ -33,7 +33,7 @@ export default async function AdminWholesaleDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-4">
       <Link
         href="/admin/wholesale-orders"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to wholesale orders
       </Link>
@@ -41,7 +41,7 @@ export default async function AdminWholesaleDetailPage({
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-[24px] font-bold text-[#163F33]">
+            <h1 className="font-heading text-[24px] font-bold text-[#6E1023]">
               <code className="font-mono">{w.orderNumber}</code>
             </h1>
             <span
@@ -68,10 +68,10 @@ export default async function AdminWholesaleDetailPage({
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Items + totals */}
-        <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4 lg:col-span-2">
-          <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Items</h2>
+        <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4 lg:col-span-2">
+          <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">Items</h2>
           <table className="mt-3 w-full text-left text-[13px]">
-            <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               <tr>
                 <th className="py-2">Product</th>
                 <th className="py-2">SKU</th>
@@ -80,7 +80,7 @@ export default async function AdminWholesaleDetailPage({
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#163F33]/6">
+            <tbody className="divide-y divide-[#6E1023]/6">
               {w.items.map((it) => (
                 <tr key={it.id}>
                   <td className="py-2">{it.productName}</td>
@@ -109,10 +109,10 @@ export default async function AdminWholesaleDetailPage({
                 <td className="text-right">RM {w.shippingRm.toFixed(2)}</td>
               </tr>
               <tr>
-                <td colSpan={4} className="pt-1 text-right font-semibold text-[#163F33]">
+                <td colSpan={4} className="pt-1 text-right font-semibold text-[#6E1023]">
                   Total
                 </td>
-                <td className="pt-1 text-right font-semibold text-[#163F33]">
+                <td className="pt-1 text-right font-semibold text-[#6E1023]">
                   RM {w.totalRm.toFixed(2)}
                 </td>
               </tr>
@@ -120,8 +120,8 @@ export default async function AdminWholesaleDetailPage({
           </table>
 
           {w.agentNotes ? (
-            <div className="mt-4 rounded-lg border border-[#163F33]/8 bg-[#F7F2E8]/30 p-3">
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <div className="mt-4 rounded-lg border border-[#6E1023]/8 bg-[#F7F2E8]/30 p-3">
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                 Partner note
               </p>
               <p className="mt-1 text-[12px] italic text-[#1F1F1F]/70">{w.agentNotes}</p>
@@ -137,8 +137,8 @@ export default async function AdminWholesaleDetailPage({
 
         {/* Partner + ship-to */}
         <aside className="flex flex-col gap-4">
-          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">Partner</h2>
+          <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">Partner</h2>
             <p className="mt-2 text-[13px] font-semibold">{w.agentName}</p>
             <p className="mt-0.5 text-[11.5px] text-[#1F1F1F]/65">
               <code className="font-mono font-semibold text-[#D4AF37]">
@@ -159,8 +159,8 @@ export default async function AdminWholesaleDetailPage({
             </Link>
           </article>
 
-          <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-            <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+          <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+            <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
               Ship to
             </h2>
             <p className="mt-2 whitespace-pre-line text-[12.5px] text-[#1F1F1F]/85">
@@ -172,8 +172,8 @@ export default async function AdminWholesaleDetailPage({
           </article>
 
           {w.paidAt || w.shippedAt || w.deliveredAt ? (
-            <article className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-              <h2 className="font-heading text-[12.5px] font-semibold text-[#163F33]">
+            <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+              <h2 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
                 Timeline
               </h2>
               <ul className="mt-2 space-y-1.5 text-[11.5px] text-[#1F1F1F]/70">

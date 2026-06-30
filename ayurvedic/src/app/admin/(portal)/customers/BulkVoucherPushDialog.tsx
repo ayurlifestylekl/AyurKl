@@ -48,7 +48,7 @@ export default function BulkVoucherPushDialog({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-5">
-        <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+        <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
           Push voucher to {customerIds.length} customer{customerIds.length === 1 ? '' : 's'}
         </h2>
         <p className="mt-1 text-[11.5px] text-[#1F1F1F]/65">
@@ -74,25 +74,25 @@ export default function BulkVoucherPushDialog({
           </div>
         ) : (
           <>
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Title *
             </label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
               placeholder="Welcome gift, Birthday voucher…"
             />
 
             <div className="mt-3 grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Discount type
                 </label>
                 <select
                   value={kind}
                   onChange={(e) => setKind(e.target.value as Kind)}
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 >
                   <option value="percentage">% off</option>
                   <option value="fixed">RM off</option>
@@ -101,7 +101,7 @@ export default function BulkVoucherPushDialog({
               </div>
               {kind !== 'free-shipping' ? (
                 <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                     {kind === 'percentage' ? '% off' : 'RM off'}
                   </label>
                   <input
@@ -110,7 +110,7 @@ export default function BulkVoucherPushDialog({
                     step={kind === 'percentage' ? '1' : '0.01'}
                     value={value}
                     onChange={(e) => setValue(Number(e.target.value))}
-                    className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                    className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                   />
                 </div>
               ) : null}
@@ -118,7 +118,7 @@ export default function BulkVoucherPushDialog({
 
             <div className="mt-3 grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Min spend (RM)
                 </label>
                 <input
@@ -126,11 +126,11 @@ export default function BulkVoucherPushDialog({
                   min="0"
                   value={minSpend}
                   onChange={(e) => setMinSpend(Number(e.target.value))}
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   Expires in (days)
                 </label>
                 <input
@@ -138,12 +138,12 @@ export default function BulkVoucherPushDialog({
                   min="1"
                   value={expiresInDays}
                   onChange={(e) => setExpiresInDays(Number(e.target.value))}
-                  className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
               </div>
             </div>
 
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Message (in notification + email)
             </label>
             <textarea
@@ -151,7 +151,7 @@ export default function BulkVoucherPushDialog({
               onChange={(e) => setMessage(e.target.value)}
               rows={2}
               placeholder="Optional. e.g. 'Welcome to the family — first order on us.'"
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
 
             {error ? <p className="mt-3 text-[12px] text-red-600">{error}</p> : null}
@@ -160,7 +160,7 @@ export default function BulkVoucherPushDialog({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>

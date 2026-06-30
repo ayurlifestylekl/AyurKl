@@ -75,7 +75,7 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
         </Field>
 
         <label className="flex cursor-pointer items-center gap-2.5">
-          <input type="checkbox" checked={allDay} onChange={(e) => setAllDay(e.target.checked)} className="h-4 w-4 accent-[#1e5b4b]" />
+          <input type="checkbox" checked={allDay} onChange={(e) => setAllDay(e.target.checked)} className="h-4 w-4 accent-[#6E1023]" />
           <span className="font-body text-[13px] text-dark/80">All day (leave / closure)</span>
         </label>
 

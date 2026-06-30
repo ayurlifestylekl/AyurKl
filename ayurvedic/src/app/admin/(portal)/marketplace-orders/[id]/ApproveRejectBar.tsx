@@ -67,7 +67,7 @@ export default function ApproveRejectBar({
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8] p-3">
-      <span className="text-[12px] font-semibold text-[#163F33]">
+      <span className="text-[12px] font-semibold text-[#6E1023]">
         Pending approval — review and choose:
       </span>
       <button
@@ -93,17 +93,17 @@ export default function ApproveRejectBar({
       {showReject ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               Reject marketplace order
             </h2>
-            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Reason *
             </label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={3}
-              className="mt-1 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
               placeholder="e.g. fraudulent order, customer cancelled, duplicate"
             />
             {error ? <p className="mt-2 text-[12px] text-red-600">{error}</p> : null}
@@ -111,7 +111,7 @@ export default function ApproveRejectBar({
               <button
                 type="button"
                 onClick={() => setShowReject(false)}
-                className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
               >
                 Cancel
               </button>

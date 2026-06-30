@@ -24,9 +24,9 @@ const STATUS_STYLES: Record<string, { dot: string; text: string; bg: string; lab
   },
   // Fulfillment-side states (assumes payment is paid)
   processing: {
-    dot: 'bg-[#2E7D5A]',
-    text: 'text-[#1E5B4B]',
-    bg: 'bg-[#2E7D5A]/8 border-[#2E7D5A]/25',
+    dot: 'bg-[#6E1023]',
+    text: 'text-[#6E1023]',
+    bg: 'bg-[#6E1023]/8 border-[#6E1023]/25',
     label: 'Processing',
   },
   shipped: {
@@ -36,9 +36,9 @@ const STATUS_STYLES: Record<string, { dot: string; text: string; bg: string; lab
     label: 'Shipped',
   },
   delivered: {
-    dot: 'bg-[#1E5B4B]',
-    text: 'text-[#1E5B4B]',
-    bg: 'bg-[#1E5B4B]/8 border-[#1E5B4B]/25',
+    dot: 'bg-[#6E1023]',
+    text: 'text-[#6E1023]',
+    bg: 'bg-[#6E1023]/8 border-[#6E1023]/25',
     label: 'Delivered',
   },
 }

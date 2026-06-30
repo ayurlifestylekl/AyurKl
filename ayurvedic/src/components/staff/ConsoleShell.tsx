@@ -105,12 +105,17 @@ export default function ConsoleShell({
       {/* ── Sidebar ─────────────────────────────────────────────── */}
       <aside
         className={[
-          'fixed inset-y-0 left-0 z-40 flex w-[260px] flex-col bg-primary text-white',
+          'fixed inset-y-0 left-0 z-40 flex w-[260px] flex-col bg-gradient-to-b from-[#6E1023] to-[#4A0C18] text-white',
           'transition-transform duration-300 ease-out',
           drawerOpen ? 'translate-x-0' : '-translate-x-full',
           'lg:translate-x-0',
         ].join(' ')}
       >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 w-px"
+          style={{ background: 'linear-gradient(180deg, transparent, rgba(212,175,55,0.45), transparent)' }}
+        />
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
           <Link href="/console" className="flex flex-col">
             <span className="font-heading text-[15px] font-extrabold leading-tight text-white">Kerala Ayurvedic</span>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Plus, UserPlus, ShoppingCart, Search, type LucideIcon } from 'lucide-react'
+import { Plus, UserPlus, ShoppingCart, Search, CalendarPlus, CalendarDays, MessageSquare, type LucideIcon } from 'lucide-react'
 import AddProductDialog from './AddProductDialog'
 import IssueInviteDialog from './IssueInviteDialog'
 import { COMMERCE_ENABLED } from '@/lib/admin/features'
@@ -21,6 +21,10 @@ export default function QuickActionsRow() {
           <ActionTile icon={ShoppingCart} label="Manual order" href="/admin/orders/new" />
         </>
       )}
+      {/* Clinic actions — the live day-to-day. */}
+      <ActionTile icon={CalendarPlus} label="New walk-in" href="/admin/appointments/new" />
+      <ActionTile icon={CalendarDays} label="Consultations" href="/admin/appointments" />
+      <ActionTile icon={MessageSquare} label="Messages" href="/admin/messages" />
       <ActionTile icon={Search} label="Find customer" href="/admin/customers" />
 
       {showAddProduct && <AddProductDialog onClose={() => setShowAddProduct(false)} />}
@@ -42,13 +46,13 @@ function ActionTile({
 }) {
   const body = (
     <div
-      className="flex items-center gap-3 rounded-3xl border border-[#163F33]/8 bg-white px-4 py-3.5 transition-all hover:border-[#D4AF37]/40 hover:bg-[#F7F2E8]/40"
-      style={{ boxShadow: '0 1px 0 0 rgba(22, 63, 51,0.04)' }}
+      className="flex items-center gap-3 rounded-3xl border border-[#6E1023]/8 bg-white px-4 py-3.5 transition-all hover:border-[#D4AF37]/40 hover:bg-[#F7F2E8]/40"
+      style={{ boxShadow: '0 1px 0 0 rgba(110,16,35,0.04)' }}
     >
-      <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#1E5B4B]/10">
-        <Icon className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
+      <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#6E1023]/10">
+        <Icon className="h-4 w-4 text-[#6E1023]" strokeWidth={1.8} />
       </span>
-      <span className="font-heading text-[12.5px] font-semibold text-[#163F33]">{label}</span>
+      <span className="font-heading text-[12.5px] font-semibold text-[#6E1023]">{label}</span>
     </div>
   )
   return href ? (

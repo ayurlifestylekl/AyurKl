@@ -50,14 +50,14 @@ export default function StatusTransitionDialog({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#163F33]"
+        className="rounded-lg bg-[#6E1023] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#6E1023]"
       >
         Move status
       </button>
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5">
-            <h2 className="font-heading text-[16px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
               {confirmCancel ? 'Cancel order' : 'Move status'}
             </h2>
             {!confirmCancel ? (
@@ -75,7 +75,7 @@ export default function StatusTransitionDialog({
                       className={`rounded-lg border px-3 py-2 text-left text-[13px] hover:bg-[#F7F2E8]/60 ${
                         s === 'cancelled'
                           ? 'border-red-200 text-red-700'
-                          : 'border-[#163F33]/15 text-[#163F33]'
+                          : 'border-[#6E1023]/15 text-[#6E1023]'
                       }`}
                     >
                       {s}
@@ -92,13 +92,13 @@ export default function StatusTransitionDialog({
                   value={cancelReason}
                   onChange={(e) => setCancelReason(e.target.value)}
                   rows={3}
-                  className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+                  className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
                 />
                 <div className="mt-3 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setConfirmCancel(false)}
-                    className="rounded-lg border border-[#163F33]/15 px-3 py-1.5 text-[12px]"
+                    className="rounded-lg border border-[#6E1023]/15 px-3 py-1.5 text-[12px]"
                   >
                     Back
                   </button>

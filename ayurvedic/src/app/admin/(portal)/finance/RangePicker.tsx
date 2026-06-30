@@ -35,24 +35,24 @@ export default function RangePicker({ start, end }: { start: string; end: string
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#163F33]/10 bg-white p-2.5">
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#6E1023]/10 bg-white p-2.5">
       <input
         type="date"
         value={s}
         onChange={(ev) => setS(ev.target.value)}
-        className="rounded-lg border border-[#163F33]/15 px-2 py-1 text-[12px]"
+        className="rounded-lg border border-[#6E1023]/15 px-2 py-1 text-[12px]"
       />
       <span className="text-[12px] text-[#1F1F1F]/55">→</span>
       <input
         type="date"
         value={e}
         onChange={(ev) => setE(ev.target.value)}
-        className="rounded-lg border border-[#163F33]/15 px-2 py-1 text-[12px]"
+        className="rounded-lg border border-[#6E1023]/15 px-2 py-1 text-[12px]"
       />
       <button
         type="button"
         onClick={apply}
-        className="rounded-lg bg-[#1E5B4B] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#163F33]"
+        className="rounded-lg bg-[#6E1023] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#6E1023]"
       >
         Apply
       </button>
@@ -60,14 +60,14 @@ export default function RangePicker({ start, end }: { start: string; end: string
         <button
           type="button"
           onClick={presetThisMonth}
-          className="rounded-md border border-[#163F33]/15 bg-white px-2 py-1 text-[11px] hover:bg-[#F7F2E8]/60"
+          className="rounded-md border border-[#6E1023]/15 bg-white px-2 py-1 text-[11px] hover:bg-[#F7F2E8]/60"
         >
           This month
         </button>
         <button
           type="button"
           onClick={presetLastMonth}
-          className="rounded-md border border-[#163F33]/15 bg-white px-2 py-1 text-[11px] hover:bg-[#F7F2E8]/60"
+          className="rounded-md border border-[#6E1023]/15 bg-white px-2 py-1 text-[11px] hover:bg-[#F7F2E8]/60"
         >
           Last month
         </button>

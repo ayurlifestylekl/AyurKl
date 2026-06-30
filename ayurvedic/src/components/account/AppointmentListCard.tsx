@@ -68,25 +68,25 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
 
   return (
     <article
-      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
+      className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       <div className="flex items-stretch gap-4 px-5 py-4 sm:gap-5 sm:px-6 sm:py-5">
         {/* Date block */}
         <div className="flex shrink-0 flex-col items-center justify-center rounded-2xl bg-[#F7F2E8] px-3 py-2.5 text-center min-w-[64px] sm:min-w-[72px]">
-          <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55">
+          <span className="font-heading text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/55">
             {dayFormat.format(start)}
           </span>
           <span
-            className="mt-0.5 font-heading text-[22px] font-bold leading-none text-[#163F33] sm:text-[24px]"
+            className="mt-0.5 font-heading text-[22px] font-bold leading-none text-[#6E1023] sm:text-[24px]"
             style={{ letterSpacing: '-0.02em' }}
           >
             {dayNumFormat.format(start)}
           </span>
-          <span className="mt-0.5 font-heading text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55">
+          <span className="mt-0.5 font-heading text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/55">
             {monthFormat.format(start)} {yearFormat.format(start)}
           </span>
         </div>
@@ -96,19 +96,19 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
           <div className="flex flex-wrap items-center gap-2">
             <AppointmentStatusPill bucket={bucket} />
             {isVirtual ? (
-              <span className="inline-flex items-center gap-1 font-body text-[11.5px] text-[#1E5B4B]/85">
+              <span className="inline-flex items-center gap-1 font-body text-[11.5px] text-[#6E1023]/85">
                 <Video className="h-3 w-3" strokeWidth={2} />
                 Virtual
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 font-body text-[11.5px] text-[#163F33]/55">
+              <span className="inline-flex items-center gap-1 font-body text-[11.5px] text-[#6E1023]/55">
                 <MapPin className="h-3 w-3" strokeWidth={2} />
                 Brickfields, KL
               </span>
             )}
           </div>
           <h3
-            className="truncate font-heading text-[15px] font-bold text-[#163F33]"
+            className="truncate font-heading text-[15px] font-bold text-[#6E1023]"
             style={{ letterSpacing: '-0.005em' }}
           >
             {appointment.treatment_name}
@@ -126,11 +126,11 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
         {/* Right side: advance payment */}
         {appointment.advance_payment_rm != null && (
           <div className="hidden shrink-0 flex-col items-end justify-center sm:flex">
-            <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/45">
+            <span className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/45">
               Advance
             </span>
             <span
-              className="font-heading text-[15px] font-bold leading-none text-[#163F33]"
+              className="font-heading text-[15px] font-bold leading-none text-[#6E1023]"
               style={{ letterSpacing: '-0.01em' }}
             >
               RM {Number(appointment.advance_payment_rm).toFixed(2)}
@@ -140,7 +140,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
       </div>
 
       {/* Footer actions row — state-driven */}
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#163F33]/6 px-5 py-2.5 sm:px-6">
+      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#6E1023]/6 px-5 py-2.5 sm:px-6">
         {needsAction && (
           <Link
             href={`/book/request/${appointment.id}`}
@@ -169,7 +169,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
                 href={CLINIC_MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65 transition-all hover:border-[#163F33]/25 hover:text-[#163F33]"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25 hover:text-[#6E1023]"
               >
                 <Navigation className="h-3 w-3" strokeWidth={2} />
                 Directions
@@ -178,7 +178,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
             <a
               href={`/account/appointments/${appointment.id}/ics`}
               download
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65 transition-all hover:border-[#163F33]/25 hover:text-[#163F33]"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25 hover:text-[#6E1023]"
             >
               <CalendarPlus className="h-3 w-3" strokeWidth={2} />
               Calendar
@@ -189,7 +189,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
                   href={getRescheduleUrl(uid)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65 transition-all hover:border-[#163F33]/25 hover:text-[#163F33]"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25 hover:text-[#6E1023]"
                 >
                   <RotateCw className="h-3 w-3" strokeWidth={2} />
                   Reschedule
@@ -209,7 +209,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
                     href={whatsappChangeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold tracking-[0.03em] text-[#1F1F1F]/65 transition-all hover:border-[#163F33]/25"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold tracking-[0.03em] text-[#1F1F1F]/65 transition-all hover:border-[#6E1023]/25"
                     title="Within 48 hours of the visit — please message us."
                   >
                     <MessageCircle className="h-3 w-3" strokeWidth={2} />
@@ -222,7 +222,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
                 href={whatsappChangeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65 transition-all hover:border-[#163F33]/25"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25"
               >
                 <MessageCircle className="h-3 w-3" strokeWidth={2} />
                 WhatsApp to change
@@ -236,14 +236,14 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
             <Link
               href="#aftercare"
               scroll
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#163F33]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/65 transition-all hover:border-[#163F33]/25"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25"
             >
               View aftercare
               <ArrowRight className="h-3 w-3" />
             </Link>
             <Link
               href={followUpHref}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#1E5B4B] px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#163F33]"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#6E1023] px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#6E1023]"
             >
               <RefreshCcw className="h-3 w-3" strokeWidth={2} />
               Book follow-up
@@ -254,7 +254,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
         {bucket === 'cancelled' && (
           <Link
             href={followUpHref}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#1E5B4B] px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#163F33]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#6E1023] px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#6E1023]"
           >
             <RefreshCcw className="h-3 w-3" strokeWidth={2} />
             Re-book

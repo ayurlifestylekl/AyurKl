@@ -114,19 +114,19 @@ export default function MarketplaceOrderForm({
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Source
         </legend>
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Channel *
             </span>
             <select
               value={channel}
               onChange={(e) => setChannel(e.target.value as ExternalChannel)}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             >
               {(
                 Object.entries(EXTERNAL_CHANNEL_LABEL) as [ExternalChannel, string][]
@@ -138,21 +138,21 @@ export default function MarketplaceOrderForm({
             </select>
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Marketplace order ref
             </span>
             <input
               value={marketplaceRef}
               onChange={(e) => setMarketplaceRef(e.target.value)}
               placeholder="e.g. Shopee 2026100012345"
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
           </label>
         </div>
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Customer
         </legend>
         <input
@@ -160,27 +160,27 @@ export default function MarketplaceOrderForm({
           placeholder="Full name *"
           value={customerName}
           onChange={(e) => setCustomerName(e.target.value)}
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         />
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
           <input
             placeholder="Phone"
             value={customerPhone}
             onChange={(e) => setCustomerPhone(e.target.value)}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
           <input
             type="email"
             placeholder="Email"
             value={customerEmail}
             onChange={(e) => setCustomerEmail(e.target.value)}
-            className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+            className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
           />
         </div>
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Items *
         </legend>
         <select
@@ -190,7 +190,7 @@ export default function MarketplaceOrderForm({
               e.target.value = ''
             }
           }}
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         >
           <option value="">Add product…</option>
           {products.map((p) => (
@@ -200,7 +200,7 @@ export default function MarketplaceOrderForm({
           ))}
         </select>
         {items.length > 0 ? (
-          <ul className="mt-2 divide-y divide-[#163F33]/6 text-[13px]">
+          <ul className="mt-2 divide-y divide-[#6E1023]/6 text-[13px]">
             {items.map((it, i) => {
               const p = products.find((x) => x.id === it.productId)
               return (
@@ -218,7 +218,7 @@ export default function MarketplaceOrderForm({
                       min="1"
                       value={it.quantity}
                       onChange={(e) => setQty(i, Number(e.target.value))}
-                      className="w-16 rounded border border-[#163F33]/15 px-2 py-1 text-right text-[13px]"
+                      className="w-16 rounded border border-[#6E1023]/15 px-2 py-1 text-right text-[13px]"
                     />
                   </label>
                   <label className="flex items-center gap-1 text-[11px] text-[#1F1F1F]/65">
@@ -229,7 +229,7 @@ export default function MarketplaceOrderForm({
                       step="0.01"
                       value={it.unitPriceRm}
                       onChange={(e) => setPrice(i, Number(e.target.value))}
-                      className="w-20 rounded border border-[#163F33]/15 px-2 py-1 text-right text-[13px]"
+                      className="w-20 rounded border border-[#6E1023]/15 px-2 py-1 text-right text-[13px]"
                     />
                   </label>
                   <span className="w-24 text-right font-semibold">
@@ -249,13 +249,13 @@ export default function MarketplaceOrderForm({
         ) : null}
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Totals + attribution
         </legend>
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Shipping (RM)
             </span>
             <input
@@ -264,17 +264,17 @@ export default function MarketplaceOrderForm({
               step="0.01"
               value={shipping}
               onChange={(e) => setShipping(e.target.value)}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               Attribute to affiliate (optional)
             </span>
             <select
               value={agentId}
               onChange={(e) => setAgentId(e.target.value)}
-              className="rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+              className="rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             >
               <option value="">No attribution</option>
               {agents.map((a) => (
@@ -285,20 +285,20 @@ export default function MarketplaceOrderForm({
             </select>
           </label>
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-1 border-t border-[#163F33]/6 pt-3 text-[12.5px]">
+        <div className="mt-3 grid grid-cols-2 gap-1 border-t border-[#6E1023]/6 pt-3 text-[12.5px]">
           <span className="text-[#1F1F1F]/65">Subtotal</span>
           <span className="text-right">RM {subtotal.toFixed(2)}</span>
           <span className="text-[#1F1F1F]/65">Shipping</span>
           <span className="text-right">RM {Number(shipping || 0).toFixed(2)}</span>
-          <span className="font-semibold text-[#163F33]">Total</span>
-          <span className="text-right font-semibold text-[#163F33]">
+          <span className="font-semibold text-[#6E1023]">Total</span>
+          <span className="text-right font-semibold text-[#6E1023]">
             RM {total.toFixed(2)}
           </span>
         </div>
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-[#163F33]/8 bg-white p-4">
-        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <fieldset className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
+        <legend className="px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
           Notes
         </legend>
         <textarea
@@ -306,7 +306,7 @@ export default function MarketplaceOrderForm({
           onChange={(e) => setNotes(e.target.value)}
           rows={2}
           placeholder="Anything the approver should know (delivery address, special instructions, etc.)"
-          className="mt-2 w-full rounded-lg border border-[#163F33]/15 px-3 py-2 text-[13px]"
+          className="mt-2 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
         />
       </fieldset>
 
@@ -315,7 +315,7 @@ export default function MarketplaceOrderForm({
       <button
         type="submit"
         disabled={pending || !customerName || items.length === 0}
-        className="rounded-lg bg-[#1E5B4B] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#163F33] disabled:opacity-50"
+        className="rounded-lg bg-[#6E1023] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#6E1023] disabled:opacity-50"
       >
         {pending ? 'Saving…' : 'Submit for approval'}
       </button>

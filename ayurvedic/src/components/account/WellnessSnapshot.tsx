@@ -25,10 +25,10 @@ export default function WellnessSnapshot({
       {/* Dosha */}
       <Link
         href={archetype ? '/account/assessments/prakriti/results' : '/account/assessments/prakriti'}
-        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
+        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+            '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
         }}
       >
         <div className="flex items-start justify-between">
@@ -36,11 +36,11 @@ export default function WellnessSnapshot({
             <Compass className="h-4 w-4 text-[#D4AF37]" strokeWidth={1.8} />
           </span>
           <ArrowUpRight
-            className="h-3.5 w-3.5 text-[#163F33]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
+            className="h-3.5 w-3.5 text-[#6E1023]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
             strokeWidth={2}
           />
         </div>
-        <p className="mt-4 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+        <p className="mt-4 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
           Your dosha
         </p>
         {archetype ? (
@@ -52,7 +52,7 @@ export default function WellnessSnapshot({
               {archetype.sanskrit}
             </p>
             <p
-              className="font-heading text-[20px] font-bold text-[#163F33]"
+              className="font-heading text-[20px] font-bold text-[#6E1023]"
               style={{ letterSpacing: '-0.015em' }}
             >
               {archetype.name}
@@ -64,7 +64,7 @@ export default function WellnessSnapshot({
         ) : (
           <>
             <p
-              className="mt-1 font-heading text-[20px] font-bold text-[#163F33]"
+              className="mt-1 font-heading text-[20px] font-bold text-[#6E1023]"
               style={{ letterSpacing: '-0.015em' }}
             >
               Take the quiz
@@ -79,26 +79,26 @@ export default function WellnessSnapshot({
       {/* Visits */}
       <Link
         href="/account/appointments"
-        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
+        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+            '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
         }}
       >
         <div className="flex items-start justify-between">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1E5B4B]/10">
-            <Calendar className="h-4 w-4 text-[#1E5B4B]" strokeWidth={1.8} />
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#6E1023]/10">
+            <Calendar className="h-4 w-4 text-[#6E1023]" strokeWidth={1.8} />
           </span>
           <ArrowUpRight
-            className="h-3.5 w-3.5 text-[#163F33]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
+            className="h-3.5 w-3.5 text-[#6E1023]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
             strokeWidth={2}
           />
         </div>
-        <p className="mt-4 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+        <p className="mt-4 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
           Visits
         </p>
         <p
-          className="mt-1 font-heading text-[28px] font-bold leading-none text-[#163F33]"
+          className="mt-1 font-heading text-[28px] font-bold leading-none text-[#6E1023]"
           style={{ letterSpacing: '-0.025em' }}
         >
           {totalAppointments}
@@ -113,26 +113,26 @@ export default function WellnessSnapshot({
       {/* Orders */}
       <Link
         href="/account/orders"
-        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
+        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[#D4AF37]/35"
         style={{
           boxShadow:
-            '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+            '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
         }}
       >
         <div className="flex items-start justify-between">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2E7D5A]/15">
-            <Package className="h-4 w-4 text-[#2E7D5A]" strokeWidth={1.8} />
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#6E1023]/15">
+            <Package className="h-4 w-4 text-[#6E1023]" strokeWidth={1.8} />
           </span>
           <ArrowUpRight
-            className="h-3.5 w-3.5 text-[#163F33]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
+            className="h-3.5 w-3.5 text-[#6E1023]/35 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D4AF37]"
             strokeWidth={2}
           />
         </div>
-        <p className="mt-4 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55">
+        <p className="mt-4 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55">
           Orders
         </p>
         <p
-          className="mt-1 font-heading text-[28px] font-bold leading-none text-[#163F33]"
+          className="mt-1 font-heading text-[28px] font-bold leading-none text-[#6E1023]"
           style={{ letterSpacing: '-0.025em' }}
         >
           {totalOrders}

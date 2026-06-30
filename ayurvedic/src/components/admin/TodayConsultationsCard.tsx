@@ -15,19 +15,19 @@ export default function TodayConsultationsCard({
 }) {
   return (
     <article
-      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white"
+      className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
-      <header className="flex items-center justify-between border-b border-[#163F33]/6 px-5 py-3.5">
+      <header className="flex items-center justify-between border-b border-[#6E1023]/6 px-5 py-3.5">
         <div className="flex items-center gap-2.5">
           <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#D4AF37]/12">
             <CalendarDays className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={1.8} />
           </span>
           <div>
-            <h2 className="font-heading text-[13px] font-semibold text-[#163F33]">
+            <h2 className="font-heading text-[13px] font-semibold text-[#6E1023]">
               Today&apos;s consultations
             </h2>
             <p className="font-body text-[10.5px] text-[#1F1F1F]/55">
@@ -39,7 +39,7 @@ export default function TodayConsultationsCard({
         </div>
         <Link
           href="/admin/appointments?filter=today"
-          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#163F33]/55 hover:text-[#D4AF37]"
+          className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#6E1023]/55 hover:text-[#D4AF37]"
         >
           View all →
         </Link>
@@ -49,7 +49,7 @@ export default function TodayConsultationsCard({
           Calendar is clear today.
         </p>
       ) : (
-        <ul className="divide-y divide-[#163F33]/6">
+        <ul className="divide-y divide-[#6E1023]/6">
           {consultations.map((c) => (
             <li key={c.id}>
               <Link
@@ -57,12 +57,12 @@ export default function TodayConsultationsCard({
                 className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-[#F7F2E8]/40"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="font-mono text-[12px] font-semibold tabular-nums text-[#163F33]">
+                  <span className="font-mono text-[12px] font-semibold tabular-nums text-[#6E1023]">
                     {TIME_FMT.format(new Date(c.startsAt))}
                   </span>
-                  <span className="h-4 w-px bg-[#163F33]/10" />
+                  <span className="h-4 w-px bg-[#6E1023]/10" />
                   <div className="min-w-0">
-                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#163F33]">
+                    <p className="truncate font-heading text-[12.5px] font-semibold text-[#6E1023]">
                       {c.treatmentName}
                     </p>
                     <p className="truncate font-body text-[11px] text-[#1F1F1F]/55">
@@ -70,7 +70,7 @@ export default function TodayConsultationsCard({
                     </p>
                   </div>
                 </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#163F33]/[0.06] px-2 py-0.5 font-heading text-[10px] font-semibold text-[#163F33]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#6E1023]/[0.06] px-2 py-0.5 font-heading text-[10px] font-semibold text-[#6E1023]">
                   {c.mode === 'virtual' ? (
                     <Video className="h-2.5 w-2.5" />
                   ) : (

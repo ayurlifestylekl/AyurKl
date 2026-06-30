@@ -56,7 +56,7 @@ export default function AppointmentFilterTabs({
               'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-heading text-[11.5px] font-semibold transition-all duration-200',
               isActive
                 ? 'border-[#D4AF37] bg-[#D4AF37] text-[#1F1F1F]'
-                : 'border-[#163F33]/12 bg-white text-[#163F33]/65 hover:border-[#D4AF37]/40 hover:text-[#163F33]',
+                : 'border-[#6E1023]/12 bg-white text-[#6E1023]/65 hover:border-[#D4AF37]/40 hover:text-[#6E1023]',
             ].join(' ')}
           >
             <span>{tab.label}</span>
@@ -65,7 +65,7 @@ export default function AppointmentFilterTabs({
                 'rounded-full px-1.5 py-px font-mono text-[9.5px] font-semibold',
                 isActive
                   ? 'bg-black/15 text-[#1F1F1F]'
-                  : 'bg-[#163F33]/[0.06] text-[#163F33]/50',
+                  : 'bg-[#6E1023]/[0.06] text-[#6E1023]/50',
               ].join(' ')}
             >
               {count}

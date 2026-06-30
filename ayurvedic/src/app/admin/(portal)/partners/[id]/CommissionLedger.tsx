@@ -35,7 +35,7 @@ export default function CommissionLedger({
     )
   }
   return (
-    <ul className="divide-y divide-[#163F33]/6">
+    <ul className="divide-y divide-[#6E1023]/6">
       {commissions.map((c) => {
         const ord = Array.isArray(c.order) ? c.order[0] : c.order
         return (
@@ -45,7 +45,7 @@ export default function CommissionLedger({
           >
             <Link
               href={`/admin/orders/${c.order_id}`}
-              className="font-mono text-[11.5px] font-semibold text-[#163F33] hover:text-[#D4AF37]"
+              className="font-mono text-[11.5px] font-semibold text-[#6E1023] hover:text-[#D4AF37]"
             >
               #{String(c.order_id).slice(-6).toUpperCase()}
             </Link>

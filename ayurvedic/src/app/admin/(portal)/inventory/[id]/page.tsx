@@ -36,7 +36,7 @@ export default async function AdminInventoryDetailPage({
     <div className="mx-auto flex max-w-5xl flex-col gap-5">
       <Link
         href="/admin/inventory"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to inventory
       </Link>
@@ -45,7 +45,7 @@ export default async function AdminInventoryDetailPage({
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Stock & Movements
           </span>
-          <h1 className="mt-2 font-heading text-[24px] font-bold text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[24px] font-bold text-[#6E1023]">
             {p.name}
           </h1>
           <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
@@ -55,7 +55,7 @@ export default async function AdminInventoryDetailPage({
         <div className="flex flex-wrap items-center gap-3">
           <div
             className={`flex flex-col items-end ${
-              isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#163F33]'
+              isOut ? 'text-red-600' : isLow ? 'text-amber-600' : 'text-[#6E1023]'
             }`}
           >
             <span className="font-heading text-[36px] font-bold leading-none">
@@ -76,13 +76,13 @@ export default async function AdminInventoryDetailPage({
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <article
-          className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white lg:col-span-2"
+          className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white lg:col-span-2"
           style={{
             boxShadow:
-              '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+              '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
           }}
         >
-          <header className="border-b border-[#163F33]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#163F33]">
+          <header className="border-b border-[#6E1023]/6 px-5 py-3 font-heading text-[13px] font-semibold text-[#6E1023]">
             Movement history
           </header>
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

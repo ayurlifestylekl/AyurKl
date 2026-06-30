@@ -32,7 +32,7 @@ export default async function ExternalSalesPage() {
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
       <Link
         href="/admin/partners"
-        className="text-[11px] uppercase tracking-wider text-[#163F33]/55 hover:text-[#D4AF37]"
+        className="text-[11px] uppercase tracking-wider text-[#6E1023]/55 hover:text-[#D4AF37]"
       >
         ← Back to partners
       </Link>
@@ -41,7 +41,7 @@ export default async function ExternalSalesPage() {
           <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
             Affiliate program
           </span>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             External sales
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -52,8 +52,8 @@ export default async function ExternalSalesPage() {
         <LogSaleDialog agents={agents} />
       </header>
 
-      <section className="rounded-2xl border border-[#163F33]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
-        <p className="font-semibold text-[#163F33]">How this works</p>
+      <section className="rounded-2xl border border-[#6E1023]/10 bg-white p-4 text-[12.5px] text-[#1F1F1F]/70">
+        <p className="font-semibold text-[#6E1023]">How this works</p>
         <p className="mt-1">
           Affiliates send proof of external sales (TikTok Shop, Shopee, Instagram DM, WhatsApp,
           etc.) via WhatsApp. You key those in here. The system uses their current commission
@@ -63,13 +63,13 @@ export default async function ExternalSalesPage() {
       </section>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#163F33]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
+        <div className="rounded-2xl border border-dashed border-[#6E1023]/15 p-12 text-center font-body text-sm italic text-[#1F1F1F]/55">
           No external sales logged yet. Click <strong>Log external sale</strong> when an affiliate sends proof.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#163F33]/8 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#6E1023]/8 bg-white">
           <table className="w-full text-left text-[13px]">
-            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+            <thead className="bg-[#F7F2E8]/40 text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
               <tr>
                 <th className="px-4 py-3">When</th>
                 <th className="px-4 py-3">Affiliate</th>
@@ -81,7 +81,7 @@ export default async function ExternalSalesPage() {
                 <th className="px-4 py-3">Ref</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#163F33]/6">
+            <tbody className="divide-y divide-[#6E1023]/6">
               {items.map((s) => (
                 <tr key={s.id} className="hover:bg-[#F7F2E8]/30">
                   <td className="px-4 py-3 text-[11.5px] text-[#1F1F1F]/65">
@@ -90,7 +90,7 @@ export default async function ExternalSalesPage() {
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/partners/${s.agentId}`}
-                      className="font-semibold text-[#163F33] hover:text-[#D4AF37]"
+                      className="font-semibold text-[#6E1023] hover:text-[#D4AF37]"
                     >
                       {s.agentName ?? '—'}
                     </Link>

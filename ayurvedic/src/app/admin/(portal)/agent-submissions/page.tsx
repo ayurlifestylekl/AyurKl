@@ -41,7 +41,7 @@ export default async function AgentSubmissionsPage({ searchParams }: PageProps) 
               Brand partners
             </span>
           </div>
-          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#163F33]">
+          <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight text-[#6E1023]">
             Agent submissions
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
@@ -54,7 +54,7 @@ export default async function AgentSubmissionsPage({ searchParams }: PageProps) 
       </header>
 
       <section className="rounded-2xl border border-[#D4AF37]/30 bg-[#F7F2E8]/40 p-4 text-[12.5px] text-[#1F1F1F]/70">
-        <p className="font-semibold text-[#163F33]">Marketplace orders from your affiliates</p>
+        <p className="font-semibold text-[#6E1023]">Marketplace orders from your affiliates</p>
         <p className="mt-1">
           Brand partners submit their TikTok Shop / Shopee / Instagram / WhatsApp sales via{' '}
           <code className="font-mono">/agent/marketplace-orders/new</code>. Each submission lands

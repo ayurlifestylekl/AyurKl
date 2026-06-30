@@ -33,7 +33,7 @@ export default function StockMovementsLog({ movements }: { movements: Movement[]
   }
   return (
     <table className="w-full text-left text-[13px]">
-      <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#163F33]/70">
+      <thead className="text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
         <tr>
           <th className="px-5 py-3">When</th>
           <th className="px-5 py-3">Type</th>
@@ -42,7 +42,7 @@ export default function StockMovementsLog({ movements }: { movements: Movement[]
           <th className="px-5 py-3">By</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-[#163F33]/6">
+      <tbody className="divide-y divide-[#6E1023]/6">
         {movements.map((m) => {
           const positive = m.quantity_delta >= 0
           const actor = Array.isArray(m.actor) ? m.actor[0] : m.actor

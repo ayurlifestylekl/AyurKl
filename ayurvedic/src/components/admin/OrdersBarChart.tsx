@@ -17,14 +17,14 @@ export default function OrdersBarChart({ data }: Props) {
   const isEmpty = max === 1 && data.every((d) => d.count === 0)
   return (
     <article
-      className="overflow-hidden rounded-3xl border border-[#163F33]/8 bg-white p-5"
+      className="overflow-hidden rounded-3xl border border-[#6E1023]/8 bg-white p-5"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 12px 30px -16px rgba(22, 63, 51,0.18)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 12px 30px -16px rgba(110,16,35,0.18)',
       }}
     >
       <header className="flex items-baseline justify-between">
-        <h3 className="font-heading text-[13px] font-semibold text-[#163F33]">
+        <h3 className="font-heading text-[13px] font-semibold text-[#6E1023]">
           Orders · last 7 days
         </h3>
         <span className="font-body text-[11px] text-[#1F1F1F]/55">Peak {max}</span>
@@ -37,12 +37,12 @@ export default function OrdersBarChart({ data }: Props) {
       >
         {bars.map((b, i) => (
           <g key={i}>
-            <rect x={b.x} y={b.y} width={b.w} height={b.h} rx={2} fill="#1E5B4B" opacity={0.85} />
+            <rect x={b.x} y={b.y} width={b.w} height={b.h} rx={2} fill="#6E1023" opacity={0.85} />
             <text
               x={b.x + b.w / 2}
               y={h + 14}
               textAnchor="middle"
-              className="fill-[#163F33]/55"
+              className="fill-[#6E1023]/55"
               style={{ font: '9px ui-sans-serif' }}
             >
               {DAY_FMT.format(new Date(data[i].date))[0]}

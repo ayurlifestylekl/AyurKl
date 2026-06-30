@@ -41,7 +41,7 @@ export default function WalletBalanceHero({ active }: WalletBalanceHeroProps) {
       className="relative overflow-hidden rounded-3xl border border-[#D4AF37]/30 bg-white"
       style={{
         boxShadow:
-          '0 1px 0 0 rgba(22, 63, 51,0.04), 0 18px 36px -22px rgba(212, 175, 55,0.4)',
+          '0 1px 0 0 rgba(110,16,35,0.04), 0 18px 36px -22px rgba(212, 175, 55,0.4)',
       }}
     >
       <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[#D4AF37]" />
@@ -49,7 +49,7 @@ export default function WalletBalanceHero({ active }: WalletBalanceHeroProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left — balance */}
         <div className="flex flex-col gap-3 px-5 py-7 sm:px-9 sm:py-9">
-          <span className="inline-flex w-fit items-center gap-2 font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#163F33]/55">
+          <span className="inline-flex w-fit items-center gap-2 font-heading text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#6E1023]/55">
             <Gift className="h-3.5 w-3.5 text-[#D4AF37]" strokeWidth={2} />
             Wallet balance
           </span>
@@ -57,27 +57,27 @@ export default function WalletBalanceHero({ active }: WalletBalanceHeroProps) {
           {fixedCount > 0 ? (
             <div className="flex items-baseline gap-2">
               <span
-                className="font-heading text-[44px] font-bold leading-none text-[#163F33] sm:text-[56px]"
+                className="font-heading text-[44px] font-bold leading-none text-[#6E1023] sm:text-[56px]"
                 style={{ letterSpacing: '-0.03em' }}
               >
                 RM {totalRm.toFixed(0)}
               </span>
               <span
-                className="font-heading text-[14px] font-semibold uppercase tracking-[0.18em] text-[#163F33]/55"
+                className="font-heading text-[14px] font-semibold uppercase tracking-[0.18em] text-[#6E1023]/55"
               >
                 available
               </span>
             </div>
           ) : voucherCount > 0 ? (
             <p
-              className="font-heading text-[28px] font-bold leading-tight text-[#163F33] sm:text-[32px]"
+              className="font-heading text-[28px] font-bold leading-tight text-[#6E1023] sm:text-[32px]"
               style={{ letterSpacing: '-0.02em' }}
             >
               {voucherCount} {voucherCount === 1 ? 'voucher' : 'vouchers'} ready
             </p>
           ) : (
             <p
-              className="font-heading text-[24px] font-semibold text-[#163F33]/70"
+              className="font-heading text-[24px] font-semibold text-[#6E1023]/70"
               style={{ letterSpacing: '-0.01em' }}
             >
               No vouchers yet
@@ -116,19 +116,19 @@ export default function WalletBalanceHero({ active }: WalletBalanceHeroProps) {
 
         {/* Right — featured voucher preview */}
         {featured && (
-          <div className="relative flex flex-col gap-3 border-t border-[#163F33]/8 bg-[#F7F2E8]/55 px-5 py-7 sm:px-9 sm:py-9 lg:border-l lg:border-t-0">
+          <div className="relative flex flex-col gap-3 border-t border-[#6E1023]/8 bg-[#F7F2E8]/55 px-5 py-7 sm:px-9 sm:py-9 lg:border-l lg:border-t-0">
             <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-[0.16em] text-[#9c6f3e]">
               <Sparkles className="h-3 w-3 text-[#D4AF37]" strokeWidth={2} />
               Featured
             </span>
             <p
-              className="font-heading text-[15px] font-bold text-[#163F33]"
+              className="font-heading text-[15px] font-bold text-[#6E1023]"
               style={{ letterSpacing: '-0.01em' }}
             >
               {featured.promo.title}
             </p>
             <p
-              className="font-mono text-[13px] font-semibold text-[#163F33]/85"
+              className="font-mono text-[13px] font-semibold text-[#6E1023]/85"
               style={{ letterSpacing: '0.05em' }}
             >
               {featured.promo.code}
