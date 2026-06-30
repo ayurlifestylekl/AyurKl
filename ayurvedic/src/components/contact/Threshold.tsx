@@ -32,7 +32,7 @@ export default function Threshold() {
 
   return (
     <section
-      className="relative flex h-[calc(100svh-6.5rem)] max-h-[calc(100svh-6.5rem)] min-h-[560px] overflow-hidden bg-primary"
+      className="relative flex min-h-[calc(100svh-6.5rem)] overflow-hidden bg-primary lg:h-[calc(100svh-6.5rem)] lg:max-h-[calc(100svh-6.5rem)] lg:min-h-[560px]"
       aria-labelledby="threshold-heading"
     >
       {/* L0  Gold dot grid */}
@@ -113,7 +113,7 @@ export default function Threshold() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.0, delay: 0.7, ease: EASE_OUT_PREMIUM }}
-              className="relative mx-auto w-full max-w-[220px] sm:max-w-[260px] lg:mx-0 lg:max-w-[280px]"
+              className="relative mx-auto w-full max-w-[260px] lg:mx-0 lg:max-w-[280px]"
             >
               {/* Mandala — offset right+up (Treatments has it left+up; flipped) */}
               <motion.div
@@ -200,7 +200,7 @@ export default function Threshold() {
                 initial={{ opacity: 0, scale: 0.92, y: 12 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 1.5, ease: EASE_OUT_PREMIUM }}
-                className="absolute -bottom-6 right-2 flex w-[260px] items-start gap-3 rounded-sm bg-cream px-4 py-3 shadow-[0_24px_50px_-18px_rgba(0,0,0,0.45)] sm:-bottom-7 sm:-right-4"
+                className="relative mt-5 flex w-full items-start gap-3 rounded-sm bg-cream px-4 py-3 shadow-[0_24px_50px_-18px_rgba(0,0,0,0.45)] lg:absolute lg:-bottom-7 lg:-right-4 lg:mt-0 lg:w-[260px]"
                 style={{ backdropFilter: 'blur(8px)' }}
               >
                 {/* Gold hairline top */}
