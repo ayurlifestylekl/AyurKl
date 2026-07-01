@@ -340,8 +340,13 @@ export async function rejectGroup(groupId: string, reason?: string): Promise<Ok 
 /** Generic guarded status change (check-in, complete, no-show, cancel, …). */
 export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err> {
   const { db } = await requireStaff()
-  const { data: appt } = await db.from('appointments').select('status').eq('id', id).maybeSingle()
+  const { data: appt } = await db.from('appointments').select('status, group_id').eq('id', id).maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
+  // A group awaiting payment is billed as one unit — removing one guest mid-payment
+  // would desync the shared bill. Cancel the whole group instead.
+  if (appt.group_id && appt.status === 'awaiting_payment' && (to === 'cancelled' || to === 'no_show')) {
+    return { error: 'This guest is part of a group awaiting payment — use “Reject group” to cancel them together.' }
+  }
   if (!canTransition(appt.status as BookingStatus, to)) {
     return { error: `Cannot move ${appt.status} → ${to}.` }
   }
@@ -365,12 +370,16 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
   const { db } = await requireStaff()
   const { data: appt } = await db
     .from('appointments')
-    .select('status, patient_email, patient_name, treatment_name')
+    .select('status, group_id, patient_email, patient_name, treatment_name')
     .eq('id', id)
     .maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
   if (['cancelled', 'completed', 'no_show'].includes(appt.status as string)) {
     return { error: `Cannot reject a ${appt.status} booking.` }
+  }
+  // Keep group bills consistent — once approved, reject the whole group, not one guest.
+  if (appt.group_id && appt.status === 'awaiting_payment') {
+    return { error: 'This guest is part of a group awaiting payment — use “Reject group” instead.' }
   }
 
   const finalReason = reason?.trim() || 'Declined by clinic'

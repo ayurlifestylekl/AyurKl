@@ -137,7 +137,7 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, appointment_date_time, payment_status, customer_id, patient_email, patient_name, treatment_name')
+    .select('id, status, appointment_date_time, payment_status, customer_id, patient_email, patient_name, treatment_name, group_id')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
@@ -154,19 +154,23 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
   const wasPaid = a.payment_status === 'paid'
   const refundable = wasPaid && !within12h
 
-  const { error } = await sb
-    .from('appointments')
-    .update({
-      status: 'cancelled',
-      cancelled_at: new Date().toISOString(),
-      cancellation_reason: 'Cancelled by customer',
-      internal_notes: wasPaid
-        ? refundable
-          ? 'Customer cancelled >12h before — refund eligible.'
-          : 'Customer cancelled within 12h — non-refundable.'
-        : null,
-    })
-    .eq('id', id)
+  const cancelPatch = {
+    status: 'cancelled' as const,
+    cancelled_at: new Date().toISOString(),
+    cancellation_reason: 'Cancelled by customer',
+    internal_notes: wasPaid
+      ? refundable
+        ? 'Customer cancelled >12h before — refund eligible.'
+        : 'Customer cancelled within 12h — non-refundable.'
+      : null,
+  }
+  // A group booking cancels as one unit — never leave a single guest behind.
+  const q = sb.from('appointments').update(cancelPatch)
+  const { error } = a.group_id
+    ? await q
+        .eq('group_id', a.group_id)
+        .in('status', ['pending', 'scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+    : await q.eq('id', id)
   if (error) return { error: error.message }
   await notifyCancelled({ to: a.patient_email, name: a.patient_name, treatmentName: a.treatment_name, refundable })
   return { ok: true, refundable }

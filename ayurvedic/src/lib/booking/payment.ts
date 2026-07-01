@@ -98,12 +98,17 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
   // Group booking: one payment confirms every guest (best-effort group lookup).
   const { data: g } = await sb.from('appointments').select('group_id').eq('id', a.id).maybeSingle()
   if (g?.group_id) {
-    const { error: gErr } = await sb
+    const { data: flipped, error: gErr } = await sb
       .from('appointments')
       .update({ payment_status: 'paid', paid_at: paidAt, status: 'confirmed' })
       .eq('group_id', g.group_id)
       .eq('status', 'awaiting_payment')
+      .select('id')
     if (gErr) return { error: gErr.message }
+    if (!flipped || flipped.length === 0) {
+      // Payment landed but no guest was awaiting confirmation — surface for manual review/refund.
+      console.error(`[payment] GROUP CONFIRM MISMATCH billId=${billId} group=${g.group_id}: paid but 0 guests confirmed.`)
+    }
     await notifyConfirmed({
       to: a.patient_email,
       name: a.patient_name,
