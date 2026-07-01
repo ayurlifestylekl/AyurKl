@@ -309,11 +309,17 @@ export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]>
     .filter((r) => r.appointment_date_time)
     .map((r) => ({ startISO: r.appointment_date_time as string, durationMins: r.duration_mins ?? CONSULTATION_MINS }))
 
+  // Centre-wide closures (blocks with therapist_code = null) still apply to the
+  // Vaidya. Passing an empty code means only all-therapist closures match.
+  const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
+  const intervals = blockedIntervalsForDate(blocks, dateYMD)
+
   return allSlots.map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
       new Date(iso).getTime() > now &&
-      findClash({ startISO: iso, durationMins: CONSULTATION_MINS }, busy) === null
+      findClash({ startISO: iso, durationMins: CONSULTATION_MINS }, busy) === null &&
+      !isBlocked(intervals, '', iso, CONSULTATION_MINS)
     return { time, iso, available }
   })
 }

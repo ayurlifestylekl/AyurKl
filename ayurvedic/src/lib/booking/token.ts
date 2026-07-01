@@ -10,7 +10,16 @@ import { createHmac, timingSafeEqual } from 'crypto'
  * No DB column needed — the token is derived, not stored.
  */
 const SECRET =
-  process.env.BOOKING_LINK_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || 'dev-only-secret'
+  process.env.BOOKING_LINK_SECRET ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  (process.env.NODE_ENV === 'production'
+    ? // Never sign production booking links with a public constant — tokens would
+      // be forgeable. Fail loudly instead. (In practice the service-role key is
+      // always set in prod, so this never triggers.)
+      (() => {
+        throw new Error('BOOKING_LINK_SECRET (or SUPABASE_SERVICE_ROLE_KEY) is required in production for booking-link signing.')
+      })()
+    : 'dev-only-secret')
 
 export function createBookingToken(id: string): string {
   return createHmac('sha256', SECRET).update(id).digest('base64url').slice(0, 24)

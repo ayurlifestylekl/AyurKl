@@ -4,6 +4,7 @@
  * account dashboard lists a signed-in customer's own bookings via their
  * authed client (RLS scopes to customer_id = auth.uid()).
  */
+import 'server-only'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { createClient as createSb } from '@supabase/supabase-js'
 import type { StaffAppointment } from '@/types/booking'

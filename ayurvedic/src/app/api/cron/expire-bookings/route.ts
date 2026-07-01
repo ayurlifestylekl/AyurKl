@@ -25,56 +25,89 @@ async function handle(req: NextRequest) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
-  const sb = admin()
-  const now = new Date()
-  const nowISO = now.toISOString()
+  try {
+    const sb = admin()
+    const now = new Date()
+    const nowISO = now.toISOString()
+    // Fallback cutoff: if a hold somehow has no expiry stamp, treat >15h-old as expired.
+    const staleISO = new Date(now.getTime() - 15 * 3600_000).toISOString()
 
-  // 1) Expire + release
-  const { data: expired } = await sb
-    .from('appointments')
-    .select('id, patient_email, patient_name, treatment_name')
-    .eq('status', 'awaiting_payment')
-    .lt('payment_expires_at', nowISO)
+    // 1) Expire + release — explicit-expiry holds, plus a safety net for any
+    //    awaiting_payment row missing its expiry stamp but approved >15h ago.
+    const [byExpiry, byStale] = await Promise.all([
+      sb.from('appointments')
+        .select('id, patient_email, patient_name, treatment_name')
+        .eq('status', 'awaiting_payment')
+        .lt('payment_expires_at', nowISO),
+      sb.from('appointments')
+        .select('id, patient_email, patient_name, treatment_name')
+        .eq('status', 'awaiting_payment')
+        .is('payment_expires_at', null)
+        .lt('approved_at', staleISO),
+    ])
+    if (byExpiry.error) throw byExpiry.error
+    // byStale is best-effort (approved_at may be null on old rows); don't hard-fail on it.
+    const expired = [...(byExpiry.data ?? []), ...(byStale.data ?? [])]
 
-  for (const a of expired ?? []) {
-    const { error } = await sb
-      .from('appointments')
-      .update({ status: 'cancelled', cancelled_at: nowISO, cancellation_reason: EXPIRED_REASON })
-      .eq('id', a.id)
-      .eq('status', 'awaiting_payment') // guard against a race with a just-completed payment
-    if (!error) {
-      await notifyCancelled({
-        to: a.patient_email,
-        name: a.patient_name,
-        treatmentName: a.treatment_name,
-        refundable: false,
-        reason: EXPIRED_REASON,
-      })
+    let expiredCount = 0
+    for (const a of expired) {
+      const { error } = await sb
+        .from('appointments')
+        .update({ status: 'cancelled', cancelled_at: nowISO, cancellation_reason: EXPIRED_REASON })
+        .eq('id', a.id)
+        .eq('status', 'awaiting_payment') // guard against a race with a just-completed payment
+      if (error) continue
+      expiredCount++
+      // One bad email must not abort the whole sweep.
+      try {
+        await notifyCancelled({
+          to: a.patient_email,
+          name: a.patient_name,
+          treatmentName: a.treatment_name,
+          refundable: false,
+          reason: EXPIRED_REASON,
+        })
+      } catch (e) {
+        console.error('[cron] notifyCancelled failed for', a.id, e)
+      }
     }
+
+    // 2) Remind (within 2h of expiry, not yet reminded)
+    const soonISO = new Date(now.getTime() + 2 * 3600_000).toISOString()
+    const { data: soon, error: soonErr } = await sb
+      .from('appointments')
+      .select('id, patient_email, patient_name, treatment_name, payment_expires_at')
+      .eq('status', 'awaiting_payment')
+      .eq('payment_reminded', false)
+      .gt('payment_expires_at', nowISO)
+      .lt('payment_expires_at', soonISO)
+    if (soonErr) throw soonErr
+
+    let remindedCount = 0
+    for (const a of soon ?? []) {
+      try {
+        await notifyPaymentReminder({
+          to: a.patient_email,
+          name: a.patient_name,
+          treatmentName: a.treatment_name,
+          payUrl: `${BOOKING_SITE_URL}/book/request/${a.id}/pay?t=${createBookingToken(a.id)}`,
+          expiresISO: a.payment_expires_at,
+        })
+        await sb.from('appointments').update({ payment_reminded: true }).eq('id', a.id)
+        remindedCount++
+      } catch (e) {
+        console.error('[cron] reminder failed for', a.id, e)
+      }
+    }
+
+    return NextResponse.json({ expired: expiredCount, reminded: remindedCount })
+  } catch (err) {
+    console.error('[cron] expire-bookings failed:', err)
+    return NextResponse.json(
+      { error: 'cron_failed', message: err instanceof Error ? err.message : String(err) },
+      { status: 500 },
+    )
   }
-
-  // 2) Remind (within 2h of expiry, not yet reminded)
-  const soonISO = new Date(now.getTime() + 2 * 3600_000).toISOString()
-  const { data: soon } = await sb
-    .from('appointments')
-    .select('id, patient_email, patient_name, treatment_name, payment_expires_at')
-    .eq('status', 'awaiting_payment')
-    .eq('payment_reminded', false)
-    .gt('payment_expires_at', nowISO)
-    .lt('payment_expires_at', soonISO)
-
-  for (const a of soon ?? []) {
-    await notifyPaymentReminder({
-      to: a.patient_email,
-      name: a.patient_name,
-      treatmentName: a.treatment_name,
-      payUrl: `${BOOKING_SITE_URL}/book/request/${a.id}/pay?t=${createBookingToken(a.id)}`,
-      expiresISO: a.payment_expires_at,
-    })
-    await sb.from('appointments').update({ payment_reminded: true }).eq('id', a.id)
-  }
-
-  return NextResponse.json({ expired: expired?.length ?? 0, reminded: soon?.length ?? 0 })
 }
 
 export const GET = handle

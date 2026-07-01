@@ -56,6 +56,13 @@ export async function approveAndAssign(
     if (clash) {
       return { error: `The Vaidya already has a consultation until ${freeAtLabel(clash)} — pick another time.` }
     }
+
+    // Centre-wide closures still apply to the Vaidya (empty code = closures only).
+    const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(p.confirmedAt))
+    const intervals = blockedIntervalsForDate(blocks, mytDayKey(p.confirmedAt))
+    if (isBlocked(intervals, '', p.confirmedAt, durationMins)) {
+      return { error: 'The centre is closed at that time — pick another slot.' }
+    }
   } else {
     therapist = therapistByCode(p.therapistCode)
     if (!therapist) return { error: 'Select a therapist.' }
@@ -68,12 +75,15 @@ export async function approveAndAssign(
     // Double-booking check: is this therapist free for the session + 30-min buffer?
     const { data: others } = await db
       .from('appointments')
-      .select('appointment_date_time, duration_mins')
+      .select('appointment_date_time, duration_mins, status, payment_expires_at')
       .eq('assigned_therapist_code', therapist.code)
       .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
       .neq('id', id)
+    const nowMs = Date.now()
     const busy: Slot[] = (others ?? [])
       .filter((o) => o.appointment_date_time)
+      // An expired-but-unpaid hold no longer occupies the therapist (matches slot display).
+      .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
       .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
     const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
     if (clash) {
@@ -108,7 +118,13 @@ export async function approveAndAssign(
       status: to,
     })
     .eq('id', id)
-  if (error) return { error: error.message }
+  if (error) {
+    // DB exclusion constraint caught a concurrent double-book (23P01).
+    if (error.code === '23P01') {
+      return { error: 'That therapist was just booked for this time — pick another therapist or time.' }
+    }
+    return { error: error.message }
+  }
 
   // Treatments get a 15-hour window to pay before the slot is auto-released.
   // Best-effort: harmless no-op until the payment_expiry migration is applied.
@@ -191,11 +207,14 @@ export async function approveGroup(
     // Busy windows from OTHER bookings (this group's own rows are excluded).
     const { data: others } = await db
       .from('appointments')
-      .select('appointment_date_time, duration_mins, group_id')
+      .select('appointment_date_time, duration_mins, group_id, status, payment_expires_at')
       .eq('assigned_therapist_code', therapist.code)
       .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+    const nowMs = Date.now()
     const busy: Slot[] = (others ?? [])
       .filter((o) => o.appointment_date_time && o.group_id !== groupId)
+      // An expired-but-unpaid hold no longer occupies the therapist.
+      .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
       .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
     const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
     if (clash) return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
@@ -207,7 +226,10 @@ export async function approveGroup(
     }
   }
 
-  // All checks passed — assign + confirm every guest.
+  // All checks passed — assign + confirm every guest. Track the writes so a
+  // mid-loop failure can be rolled back (no half-approved, unpayable group).
+  const approvedAt = new Date().toISOString()
+  const doneIds: string[] = []
   for (const m of pending) {
     const therapist = therapistByCode(byId.get(m.id) as string)!
     const { error } = await db
@@ -220,11 +242,32 @@ export async function approveGroup(
         duration_mins: m.duration_mins ?? 60,
         room: p.room?.trim() || null,
         approved_by: userId,
-        approved_at: new Date().toISOString(),
+        approved_at: approvedAt,
         status: 'awaiting_payment',
       })
       .eq('id', m.id)
-    if (error) return { error: error.message }
+    if (error) {
+      // Revert the guests already flipped so the whole group stays pending
+      // and can be re-approved cleanly, rather than getting stuck unpayable.
+      if (doneIds.length) {
+        await db
+          .from('appointments')
+          .update({
+            status: 'pending',
+            assigned_therapist_code: null,
+            assigned_therapist_name: null,
+            assigned_therapist_gender: null,
+            approved_by: null,
+            approved_at: null,
+          })
+          .in('id', doneIds)
+      }
+      if (error.code === '23P01') {
+        return { error: 'A therapist was just booked for this time by someone else — please re-assign and try again.' }
+      }
+      return { error: error.message }
+    }
+    doneIds.push(m.id)
   }
 
   // 15-hour payment hold for the whole group. Best-effort: harmless no-op until
