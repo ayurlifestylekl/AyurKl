@@ -45,3 +45,7 @@ docs/phase2-proposal.html
 docs/Kerala-Ayurvedic-Phase2-Proposal.pdf
 docs/phase2-delivery.html
 docs/Kerala-Ayurvedic-Phase2-Delivery.pdf
+
+# Confidential client handover — contains live secrets, never commit
+docs/onboarding-handover.html
+docs/Kerala-Ayurvedic-Onboarding-Handover.pdf

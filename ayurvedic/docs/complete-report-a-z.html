@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Kerala Ayurvedic Lifestyle — Complete Project Report (A–Z)</title>
+<style>
+  :root { --burgundy:#6E1023; --deep:#4A0C18; --gold:#B8860B; --cream:#F7F2E8; --ink:#1F1F1F; }
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink); line-height: 1.5; margin: 0; font-size: 11.5px; }
+  .page { padding: 24px 32px; }
+  h1, h2, h3 { font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--burgundy); }
+  h1 { font-size: 28px; margin: 0 0 2px; }
+  h2 { font-size: 16px; margin: 24px 0 8px; padding-bottom: 5px; border-bottom: 2px solid var(--gold); }
+  h3 { font-size: 12.5px; margin: 13px 0 3px; color: var(--deep); }
+  p { margin: 5px 0; }
+  .sub { font-family: 'Helvetica Neue', Arial, sans-serif; color: #777; font-size: 11px; letter-spacing: .04em; }
+  .lede { background: var(--cream); border-left: 4px solid var(--gold); padding: 10px 14px; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 10.5px; }
+  th, td { border: 1px solid #ddd; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: var(--burgundy); color: #fff; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9.5px; letter-spacing: .05em; text-transform: uppercase; }
+  tr:nth-child(even) td { background: #faf7f0; }
+  td.num { text-align: center; white-space: nowrap; }
+  ul, ol { margin: 5px 0; padding-left: 19px; }
+  li { margin: 2.5px 0; }
+  .flow { background:#fff; border:1px solid var(--gold); border-radius:6px; padding:9px 13px; margin:7px 0; font-family:'Helvetica Neue',Arial,sans-serif; font-size:10.5px; }
+  .flow b { color: var(--burgundy); }
+  .arrow { color: var(--gold); font-weight: bold; }
+  .note { font-size: 10.5px; color:#555; font-style: italic; }
+  .section { page-break-inside: avoid; }
+  .card { background:#fff; border:1px solid rgba(184,134,11,0.4); border-radius:7px; padding:11px 15px; margin:10px 0; page-break-inside: avoid; }
+  .card .ttl { font-family:'Helvetica Neue',Arial,sans-serif; font-weight:700; color:var(--burgundy); font-size:12.5px; margin-bottom:3px; }
+  .grid2 { display:flex; gap:12px; }
+  .grid2 > div { flex:1; }
+  .ok { color:#1a7a3c; font-weight:700; font-family:'Helvetica Neue',Arial,sans-serif; font-size:10px; }
+  .pill { display:inline-block; background:var(--burgundy); color:#fff; font-family:'Helvetica Neue',Arial,sans-serif; font-size:9px; padding:1px 7px; border-radius:10px; letter-spacing:.05em; vertical-align:middle; }
+  .pill.amber { background:#B8860B; }
+  .pill.slate { background:#5b6470; }
+  .tag { display:inline-block; font-family:'Helvetica Neue',Arial,sans-serif; font-size:9px; color:#fff; background:var(--gold); padding:1px 7px; border-radius:10px; vertical-align:middle; }
+  .toc { font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; columns:2; column-gap:30px; }
+  .toc div { margin:3px 0; }
+  .kpi { display:flex; gap:10px; margin:10px 0; }
+  .kpi .box { flex:1; background:var(--cream); border:1px solid rgba(184,134,11,0.4); border-radius:7px; padding:9px 11px; text-align:center; }
+  .kpi .box .n { font-family:'Helvetica Neue',Arial,sans-serif; font-size:20px; font-weight:800; color:var(--burgundy); }
+  .kpi .box .l { font-family:'Helvetica Neue',Arial,sans-serif; font-size:9px; color:#555; text-transform:uppercase; letter-spacing:.04em; }
+  .footer { margin-top: 22px; padding-top: 9px; border-top: 1px solid #ccc; font-family:'Helvetica Neue',Arial,sans-serif; font-size:9.5px; color:#999; text-align:center; }
+  .pb { page-break-before: always; }
+  .cover { text-align:center; padding:70px 40px 40px; }
+  .cover h1 { font-size:40px; color:var(--burgundy); margin-bottom:6px; }
+  .cover .rule { width:90px; height:3px; background:var(--gold); margin:16px auto; }
+  .cover .tit { font-family:'Helvetica Neue',Arial,sans-serif; font-size:15px; letter-spacing:.12em; text-transform:uppercase; color:var(--deep); }
+  .cover .meta { font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; color:#666; margin-top:36px; line-height:1.9; }
+  .cover .badge { display:inline-block; margin:30px 6px 0; background:var(--cream); border:1px solid var(--gold); border-radius:20px; padding:6px 16px; font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; color:var(--burgundy); }
+  @page { size: A4; margin: 13mm; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="tit">Kerala Ayurvedic Lifestyle</div>
+  <div class="rule"></div>
+  <h1>Complete Project Report</h1>
+  <div class="tit" style="color:var(--gold)">A to Z — What We Built, Why It's Secure &amp; Fast</div>
+  <div>
+    <span class="badge">Public Website &amp; Shop</span>
+    <span class="badge">Booking &amp; Consultation</span>
+    <span class="badge">Admin &amp; Staff Portals</span>
+    <span class="badge">Security &amp; Performance</span>
+  </div>
+  <div class="meta">
+    Prepared by <b>Aurexis Solution</b><br/>
+    For: Kerala Ayurvedic Lifestyle — Brickfields, Kuala Lumpur<br/>
+    keralaayurvediclifestyle.com.my<br/>
+    Report v1 · Full Delivery Summary
+  </div>
+</div>
+
+<div class="page pb">
+
+  <div class="lede">
+    This report is a full <b>A–Z account of everything built</b> for Kerala Ayurvedic Lifestyle — the public
+    website and online shop, the native booking &amp; consultation system, the customer account area, and the
+    complete back-office (front desk, doctor, admin and sales-partner portals). It also explains, in plain
+    language, <b>why the platform is secure</b>, <b>why it is fast</b>, <b>what is currently "archived"</b> (built
+    but switched off until the next phase), and how the delivered work maps <b>against the Phase 2 proposal</b>.
+  </div>
+
+  <h2 style="margin-top:18px">Contents</h2>
+  <div class="toc">
+    <div>1. At a glance</div>
+    <div>2. Technology &amp; integrations</div>
+    <div>3. Public website &amp; shop</div>
+    <div>4. Booking &amp; consultation system</div>
+    <div>5. Customer account area</div>
+    <div>6. Front desk &amp; doctor portals</div>
+    <div>7. Admin back-office</div>
+    <div>8. Sales partner / agent portal</div>
+    <div>9. Accounts, login &amp; roles</div>
+    <div>10. Payments &amp; email</div>
+    <div>11. Phase 2 — proposal vs. delivered</div>
+    <div>12. Why it is secure</div>
+    <div>13. Why it is fast</div>
+    <div>14. What is "archived"</div>
+    <div>15. Status &amp; recommended next steps</div>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+  <h2>1. At a glance</h2>
+  <p>A single, integrated platform runs the clinic and its online business — one login system, one database,
+  one admin. Everything below is <b>built and deployed live</b> on Vercel.</p>
+  <div class="kpi">
+    <div class="box"><div class="n">5</div><div class="l">User roles</div></div>
+    <div class="box"><div class="n">4</div><div class="l">Staff / partner portals</div></div>
+    <div class="box"><div class="n">15+</div><div class="l">Admin modules</div></div>
+    <div class="box"><div class="n">10+</div><div class="l">Account features</div></div>
+    <div class="box"><div class="n">100%</div><div class="l">Mobile responsive</div></div>
+  </div>
+  <ul>
+    <li><b>Public website</b> — brand pages, treatments catalogue (with photos), an online product shop, blog and contact.</li>
+    <li><b>Online booking &amp; consultation</b> — customers request treatments or consultations, staff approve and assign a therapist, and customers pay online by FPX.</li>
+    <li><b>Customer accounts</b> — a personal dashboard for appointments, orders, health profile, the Prakriti body-type assessment, support messages, wishlist, reviews and vouchers.</li>
+    <li><b>Staff dashboards</b> — a Front Desk console, a Doctor portal, and a full Admin back-office.</li>
+    <li><b>Sales-partner portal</b> — for affiliates / resellers to track commissions, submit marketplace sales and buy wholesale stock.</li>
+  </ul>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+  <h2>2. Technology &amp; integrations</h2>
+  <table>
+    <tr><th>Layer</th><th>What we use</th><th>Used for</th></tr>
+    <tr><td>Website framework</td><td>Next.js 14 (React, TypeScript)</td><td>The whole site — fast, modern, SEO-friendly</td></tr>
+    <tr><td>Database &amp; accounts</td><td>Supabase (PostgreSQL)</td><td>Customers, treatments, products, orders, appointments, reviews, vouchers, logins</td></tr>
+    <tr><td>Content (CMS)</td><td>Sanity.io</td><td>Blog posts, About-page content, FAQs</td></tr>
+    <tr><td>Payments</td><td>Billplz (FPX / online banking)</td><td>Treatment &amp; product payments — Malaysian banking</td></tr>
+    <tr><td>Email</td><td>SMTP via Brevo</td><td>Booking &amp; order confirmations, payment links, reminders</td></tr>
+    <tr><td>Hosting &amp; automation</td><td>Vercel (edge + cron)</td><td>Live hosting, automatic deploys, scheduled slot-release job</td></tr>
+    <tr><td>Design</td><td>Tailwind CSS</td><td>The burgundy &amp; gold branded look, fully responsive</td></tr>
+  </table>
+  <p class="note">The treatment catalogue and product shop both run on Supabase (one system, editable from the
+  admin — no developer needed to change prices or details). Sanity handles long-form content (blog, about, FAQs).</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+  <h2>3. Public website &amp; shop</h2>
+  <h3>Homepage</h3>
+  <ul>
+    <li>Branded hero, the clinic's story &amp; heritage, featured therapies, testimonials and FAQs — fully responsive on phone, tablet and desktop.</li>
+    <li>Built-in <b>SEO structured data</b> (LocalBusiness, FAQ, ratings) so Google can show the clinic richly in search.</li>
+  </ul>
+  <h3>Treatments catalogue</h3>
+  <ul>
+    <li>Browse by category — Massage, Face Care, Hair &amp; Scalp, Stress &amp; Sleep, Joint Care, Panchakarma, Kids, Post-natal and more — each treatment has a photo, description, benefits, duration and price.</li>
+    <li>Every treatment page has a <b>Book</b> button leading straight into the booking flow.</li>
+    <li>Fully editable from the admin.</li>
+  </ul>
+  <h3>Online product shop</h3>
+  <ul>
+    <li>Browse products, view detail pages, add to <b>cart</b>, and check out — paying by FPX / online banking via Billplz.</li>
+    <li>Live <b>stock tracking</b> so out-of-stock items are handled correctly.</li>
+  </ul>
+  <h3>Other pages</h3>
+  <ul>
+    <li><b>Blog</b> (articles), <b>About</b> (heritage &amp; practitioner), <b>Contact</b> (form + FAQs), and a <b>Partners</b> landing page for affiliates / resellers.</li>
+  </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+  <h2>4. Booking &amp; consultation system</h2>
+  <p>A native booking engine (no third-party calendar), with two journeys:</p>
+  <div class="flow"><b>Direct treatment:</b> pick treatment <span class="arrow">→</span> choose date &amp; slot
+    <span class="arrow">→</span> submit request <span class="arrow">→</span> staff approve &amp; assign therapist
+    <span class="arrow">→</span> <b>pay online</b> <span class="arrow">→</span> confirmed</div>
+  <div class="flow"><b>Consultation-first:</b> request consultation <span class="arrow">→</span> pick time
+    <span class="arrow">→</span> approve <span class="arrow">→</span> consultation (free) <span class="arrow">→</span>
+    doctor clears guest <span class="arrow">→</span> book &amp; pay for treatment <span class="arrow">→</span> confirmed</div>
+  <ul>
+    <li>Book as a <b>guest</b> or signed in. A "Before you book" arrival note and policy disclaimers (same-gender therapist, non-refundable cancellation window, WhatsApp rescheduling) are shown at checkout.</li>
+    <li><b>Smart time-slot picker</b> — dates from tomorrow onward, 30-minute slots, last slot adjusted to therapy length, with a 30-minute buffer after each booking. Only times where a same-gender therapist is genuinely free appear, so the clinic is <b>never double-booked</b> — and the therapist's name is never shown to the customer.</li>
+    <li><b>Group bookings</b> — a couple or up to 6 guests in one request, each with name, gender and age; the group pays once, after all guests are approved.</li>
+    <li><b>Payment window &amp; auto-release</b> — an approved booking must be paid within 15 hours; a reminder email is sent, and if the window lapses the slot is automatically released and re-opened.</li>
+    <li>Every request appears on the front-desk, doctor and admin dashboards; any one can approve, or reject with a reason so the guest can easily re-book.</li>
+  </ul>
+  </div>
+
+  <!-- 5 -->
+  <div class="section pb">
+  <h2>5. Customer account area <span class="sub">for signed-in customers</span></h2>
+  <table>
+    <tr><th>Section</th><th>What the customer can do</th></tr>
+    <tr><td>Dashboard</td><td>Personalised overview — next appointment, recent orders, unread messages, quick actions</td></tr>
+    <tr><td>Appointments</td><td>View upcoming / past appointments, download to their calendar (.ics), see aftercare notes</td></tr>
+    <tr><td>Orders</td><td>Order history by status, live shipment tracking, download invoices (paid orders)</td></tr>
+    <tr><td>Assessments</td><td>Take the <b>Prakriti</b> body-type quiz &amp; see results + product recommendations; deeper assessments unlock after a Vaidya review</td></tr>
+    <tr><td>Profile</td><td>Update details, avatar, health intake (allergies, medications, conditions), communication preferences, password &amp; security</td></tr>
+    <tr><td>Messages</td><td>Open support tickets and chat with the clinic; WhatsApp quick-contact</td></tr>
+    <tr><td>Addresses</td><td>Save multiple delivery addresses, set a default</td></tr>
+    <tr><td>Wishlist</td><td>Save products to buy later</td></tr>
+    <tr><td>Reviews</td><td>See submitted product reviews and their moderation status</td></tr>
+    <tr><td>Promos &amp; wallet</td><td>View &amp; claim vouchers, see balances and expiry, redemption history</td></tr>
+  </table>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+  <h2>6. Front desk &amp; doctor portals</h2>
+  <h3>Front Desk — Bookings Console <span class="sub">/console</span></h3>
+  <ul>
+    <li><b>Today</b> board (one-tap check-in / start / complete + WhatsApp / call), <b>New requests</b>, <b>Awaiting payment</b>, <b>Confirmed</b>, a live <b>Therapists</b> availability board, <b>All</b>, instant <b>Search</b>, and <b>+ New booking</b> for walk-ins.</li>
+    <li><b>Visual day schedule</b> — therapists across the top, time down the side, appointments as colour-coded blocks, per-day counts, a waiting-list column, and clear "day off" markers.</li>
+    <li>Approve a request → select the guest's preferred or alternate time → assign a same-gender therapist → guest pays. Reject with a reason, or delete as needed.</li>
+    <li><b>Availability controls</b> — block a slot for one therapist or the whole centre, repeat it weekly / monthly, and mark staff on leave; blocked / on-leave therapists drop out of booking and assignment automatically.</li>
+  </ul>
+  <h3>Doctor — Doctor Portal <span class="sub">/doctor</span></h3>
+  <ul>
+    <li><b>Overview</b>, <b>Schedule</b>, <b>Requests</b>, <b>Calendar</b> (by day), <b>Patients</b> directory (with health history), and <b>Consultations</b> to clear.</li>
+    <li>For each booked guest the doctor sees name, prior health information and contact number, can add clinical notes, and can clear a consultation for treatment.</li>
+  </ul>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+  <h2>7. Admin back-office <span class="sub">/admin</span></h2>
+  <p>A complete operations centre — each module below is fully working:</p>
+  <table>
+    <tr><th>Module</th><th>What it does</th></tr>
+    <tr><td>Dashboard</td><td>Live KPIs — revenue, pending payments, stock health, today's consultations, trends, attention queue</td></tr>
+    <tr><td>Appointments</td><td>List / filter / search bookings, create walk-ins, open the approve &amp; assign screen</td></tr>
+    <tr><td>Treatments</td><td>Manage the treatment catalogue, categories, pricing, durations and photos</td></tr>
+    <tr><td>Products</td><td>Create / edit products, bulk CSV import / export, pricing &amp; categories</td></tr>
+    <tr><td>Inventory</td><td>Stock levels, manual adjustments, low-stock alerts, stock-movement ledger</td></tr>
+    <tr><td>Customers</td><td>Search, profiles &amp; history, tags / segments, birthdays view, push vouchers</td></tr>
+    <tr><td>Orders</td><td>Manage orders by status, mark paid, print invoice / label / packing slip, batch print</td></tr>
+    <tr><td>Marketplace orders</td><td>Shopee / Lazada / TikTok order channel with approval workflow</td></tr>
+    <tr><td>Wholesale orders</td><td>Reseller bulk orders at wholesale pricing</td></tr>
+    <tr><td>Partners</td><td>Affiliate directory, commissions, leaderboard, payouts, external sales</td></tr>
+    <tr><td>Promos</td><td>Create vouchers (% / fixed / free shipping), public or private, expiry &amp; usage</td></tr>
+    <tr><td>Finance</td><td>Revenue, refunds, AOV, commission summary, sales by channel</td></tr>
+    <tr><td>Reviews</td><td>Moderate product reviews (approve / reject)</td></tr>
+    <tr><td>Messages</td><td>Customer support ticket queue with status workflow</td></tr>
+    <tr><td>Audit log</td><td>Read-only record of who did what and when (compliance)</td></tr>
+    <tr><td>Settings</td><td>Clinic-wide configuration (details, tax, shipping, booking rules)</td></tr>
+  </table>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+  <h2>8. Sales partner / agent portal <span class="sub">/agent</span></h2>
+  <ul>
+    <li><b>Referral dashboard</b> — a unique referral code &amp; QR, monthly &amp; lifetime sales, commissions earned.</li>
+    <li><b>Marketplace submissions</b> — log sales from Shopee / TikTok / Lazada / Instagram / WhatsApp for admin approval.</li>
+    <li><b>Wholesale shop</b> — buy stock at partner pricing to resell.</li>
+    <li><b>Commissions &amp; payouts</b> tracking, and a profile with payout / bank details.</li>
+  </ul>
+  </div>
+
+  <!-- 9 -->
+  <div class="section">
+  <h2>9. Accounts, login &amp; roles</h2>
+  <ul>
+    <li><b>Customers</b> sign up / log in with email &amp; password (optional "Continue with Google"). A 6-digit email verification (OTP) can be switched on or off.</li>
+    <li><b>Five roles</b>, each routed to its own area and protected so no one sees another's pages: Customer (account), Front Desk (console), Doctor (doctor portal), Admin (back-office), Sales Agent (partner portal).</li>
+    <li>Affiliate <b>referral links</b> (?ref=CODE) are tracked for commission attribution.</li>
+  </ul>
+  </div>
+
+  <!-- 10 -->
+  <div class="section">
+  <h2>10. Payments &amp; email</h2>
+  <ul>
+    <li><b>Payments — Billplz (FPX / online banking).</b> Treatments are paid in full online after approval; products are paid at checkout. Payment auto-confirms the booking / order. Refunds are processed from the Billplz dashboard. Consultations are free.</li>
+    <li><b>Email — Brevo (SMTP).</b> Sends booking &amp; order confirmations, payment links, reminders and rejection / auto-release notices. The system is provider-agnostic, so the email provider can be swapped without code changes.</li>
+  </ul>
+  </div>
+
+  <!-- 11 -->
+  <div class="section pb">
+  <h2>11. Phase 2 — proposal vs. delivered</h2>
+  <p>Every item from the approved Phase 2 proposal is <b>built and live</b>. This table traces each scope item to its delivery.</p>
+  <table>
+    <tr><th style="width:16%">Ref</th><th style="width:56%">Proposal item</th><th>Status</th></tr>
+    <tr><td>P2.0</td><td>Booking-page content — "Before you book" 15-min arrival note; female "on my period / not on my period" question</td><td class="ok">DELIVERED</td></tr>
+    <tr><td>P2.1</td><td>Smart customer time-slot picker — date from tomorrow, 30-min slots, length-aware last slot, 30-min buffer, same-gender availability, therapist name hidden</td><td class="ok">DELIVERED</td></tr>
+    <tr><td>P2.2</td><td>Availability controls — block slots (one-off or weekly / monthly repeat); staff leave &amp; off-day locking; auto-removal from availability</td><td class="ok">DELIVERED</td></tr>
+    <tr><td>P2.3</td><td>Visual staff schedule — day grid, therapists as columns, coloured blocks, per-day counts, waiting-list column, day-off markers</td><td class="ok">DELIVERED</td></tr>
+    <tr><td>P2.4</td><td>Payment-link 15-hour expiry &amp; auto-release, with reminder email; slot re-opens on lapse</td><td class="ok">DELIVERED</td></tr>
+    <tr><td>P2.5</td><td>Approval refinements — "Guest" wording; read-only Preferred / Alternate times to select from; reject-with-reason and re-book</td><td class="ok">DELIVERED</td></tr>
+    <tr><td>P2.6</td><td>Group / multi-guest bookings — 2–6 guests, each with name, gender, age; one combined payment; grouped on the schedule</td><td class="ok">DELIVERED</td></tr>
+  </table>
+  <table>
+    <tr><th>Confirmed setting</th><th>Value delivered</th></tr>
+    <tr><td>Open days</td><td>All 7 days</td></tr>
+    <tr><td>Customer booking window</td><td>9:30 AM first slot · last start 7:30 PM (1-hr) / 7:00 PM (90-min)</td></tr>
+    <tr><td>Centre hours (displayed)</td><td>9:00 AM – 9:00 PM</td></tr>
+    <tr><td>Therapist visibility</td><td>Hidden from customers — doctor / front desk assigns</td></tr>
+    <tr><td>Payment window</td><td>15 hours, then auto-released</td></tr>
+    <tr><td>Notifications</td><td>Email only</td></tr>
+  </table>
+  <p class="note">Built on the existing live platform with no migration — the current site kept running throughout,
+  and each phase was reviewed and approved as it was delivered.</p>
+  </div>
+
+  <!-- 12 SECURITY -->
+  <div class="section">
+  <h2>12. Why it is secure</h2>
+  <p>Security is layered — a request has to pass several independent checks before it can read or change anything.
+  These are the protections actually built into the platform:</p>
+
+  <div class="card">
+    <div class="ttl">Managed, industry-standard sign-in</div>
+    <p>Accounts and sessions are handled by <b>Supabase Auth</b> — a managed service used by thousands of companies —
+    over secure, server-side session cookies. Passwords are never stored by us in readable form. Sign-in supports
+    email &amp; password, one-time email codes (OTP), and "Continue with Google". Signups are validated (email format,
+    minimum 8-character password) before an account is created.</p>
+  </div>
+
+  <div class="card">
+    <div class="ttl">Two layers of role protection</div>
+    <p>Every staff and customer area is gated <b>twice</b>: first at the front door (middleware checks your role on
+    every request and redirects you to your own portal), and again on the server before any sensitive action runs.
+    An Admin URL simply cannot be opened by a customer, doctor or agent — the five roles (customer, front desk,
+    doctor, admin, sales agent) are kept strictly apart.</p>
+  </div>
+
+  <div class="card">
+    <div class="ttl">Database-level Row-Level Security (RLS)</div>
+    <p>Even if application code were bypassed, the database itself enforces the rules. Postgres <b>RLS policies</b>
+    ensure a customer can only ever read their <i>own</i> appointments, orders and messages, an agent can only see
+    <i>their</i> marketplace orders (and can't approve their own), and only admins can change protected records.
+    Full-access "service-role" keys are used <b>only on the server, after the role is verified</b> — never in the browser.</p>
+  </div>
+
+  <div class="card">
+    <div class="ttl">Cryptographically verified payments</div>
+    <p>Payment confirmations from Billplz are verified with an <b>HMAC-SHA256 X-Signature</b> using a secret only the
+    server knows, compared in a <b>timing-safe</b> way (resistant to timing attacks). A booking is marked paid
+    <b>only</b> after this check passes. The amount is always computed <b>on the server from the database</b> — never
+    trusted from the browser — so prices can't be tampered with. Confirmation is idempotent (a replayed callback
+    can't double-charge or double-confirm). Incoming Cal.com webhooks are verified the same way.</p>
+  </div>
+
+  <div class="card">
+    <div class="ttl">Protected links, secrets &amp; audit trail</div>
+    <p>Guest booking links are protected by a <b>private signed token</b> (and the system refuses to run in production
+    without its signing secret set). All secret keys (service role, Billplz, email) live only in server environment
+    variables and are kept out of the code repository via <code>.gitignore</code>. Sensitive staff actions and every
+    order status change are written to an <b>audit log</b> (who did what, when) for accountability, and customer health
+    data is treated as <b>PDPA-protected</b>.</p>
+  </div>
+  <p class="note">Recommended hardening before public launch: turn customer email-OTP back on, add explicit
+  security response headers (CSP / HSTS) at the hosting layer, and verify the clinic domain in Brevo for best
+  email delivery — see Section 15.</p>
+  </div>
+
+  <!-- 13 PERFORMANCE -->
+  <div class="section pb">
+  <h2>13. Why it is fast</h2>
+  <p>Speed is designed in, not bolted on. The site is built on modern rendering techniques that send the browser
+  the least work possible:</p>
+  <table>
+    <tr><th style="width:34%">Technique</th><th>What it means for speed</th></tr>
+    <tr><td>Next.js 14 server components</td><td>Pages are rendered on the server and sent as ready-made HTML, so very little JavaScript ships to the phone — pages appear quickly even on mobile data.</td></tr>
+    <tr><td>Cached &amp; pre-built pages (ISR)</td><td>Home, About, Contact and Blog are served from a cache and quietly refreshed, so most visitors get an near-instant page. Every treatment and blog page is pre-generated.</td></tr>
+    <tr><td>Global image CDN + optimisation</td><td>Photos are delivered from Sanity's and Supabase's global CDNs in modern formats and correct sizes, so images load fast without slowing the page.</td></tr>
+    <tr><td>Vercel edge hosting</td><td>The site is served from Vercel's global edge network with automatic deployments — close to the user, always on.</td></tr>
+    <tr><td>Optimised fonts</td><td>Fonts load with a "swap" strategy and are automatically subset, so text is readable immediately with no invisible-text flash.</td></tr>
+    <tr><td>Efficient database queries</td><td>Admin lists use pagination and indexed columns, so large tables (orders, customers, appointments) stay quick to load and filter.</td></tr>
+    <tr><td>Lean styling &amp; code-splitting</td><td>Tailwind ships only the CSS actually used, and each page loads only the code it needs; animations run on the client without blocking content.</td></tr>
+    <tr><td>Automatic background jobs</td><td>Housekeeping such as releasing unpaid slots runs on a scheduled server cron — never on the visitor's device.</td></tr>
+  </table>
+  <p class="note">The result: fast first paint, strong mobile performance, and search-engine-friendly pages
+  (server-rendered HTML with structured data).</p>
+  </div>
+
+  <!-- 14 ARCHIVED -->
+  <div class="section">
+  <h2>14. What is "archived"</h2>
+  <p>"Archived" means <b>fully built but intentionally switched off</b> for the current clinic-first (bookings-only)
+  launch. Nothing is deleted — it can be turned on later without rebuilding. There are three kinds of "archive" in
+  the project:</p>
+
+  <h3>a) Phase-2 commerce, hidden behind one switch</h3>
+  <p>The full online shop and partner programme are complete but hidden by a single feature flag
+  (<code>COMMERCE_ENABLED</code>). While it's off, the clinic runs on bookings only, and these are removed from the
+  menus and dashboards — yet remain ready to go live instantly:</p>
+  <div class="grid2">
+    <div>
+      <p><b>Customer-facing (archived):</b></p>
+      <ul>
+        <li>Product shop &amp; product pages</li>
+        <li>Home-page shop &amp; promo sections</li>
+        <li>Account: Orders, Wishlist, Promo wallet, Reviews, Addresses</li>
+        <li>"Brand Partner" navigation link</li>
+      </ul>
+    </div>
+    <div>
+      <p><b>Admin-facing (archived):</b></p>
+      <ul>
+        <li>Products, Inventory, Orders</li>
+        <li>Marketplace &amp; Wholesale orders</li>
+        <li>Brand Partners &amp; Agent submissions</li>
+        <li>Vouchers &amp; Finance; shop KPIs on the dashboard</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">These routes still exist and work — they are simply not shown in the sidebars until commerce is
+  switched on.</p>
+
+  <h3>b) "Archived" product status (soft-delete)</h3>
+  <p>Within the product catalogue, each product can be <b>Active</b>, <b>Draft</b> or <b>Archived</b>. Archiving a
+  product hides it from the shop without deleting it or losing its history — a safe way to retire an item and bring
+  it back later.</p>
+
+  <h3>c) Design &amp; planning archive (internal)</h3>
+  <p>Early prototypes, mockup variants (business-card, hero and directory explorations) and the original planning
+  documents are kept in the project's <code>/mockups</code>, <code>/prototypes</code> and docs folders for reference —
+  not part of the live site, but retained so the design history isn't lost.</p>
+  </div>
+
+  <!-- 15 -->
+  <div class="section">
+  <h2>15. Status &amp; recommended next steps</h2>
+  <p><span class="pill">LIVE</span> Website, shop engine, booking &amp; consultation, all dashboards, payments
+     (Billplz), email (Brevo), Phase 2 upgrades, treatment photos — all built and deployed.</p>
+  <p><span class="pill slate">ARCHIVED / READY</span> Full commerce &amp; partner programme — built, switched off,
+     one flag away from launch.</p>
+  <p><span class="pill amber">BEFORE PUBLIC LAUNCH</span> Recommended final touches:</p>
+  <ul>
+    <li>Turn customer email-OTP verification back <b>on</b> (it can be off for testing).</li>
+    <li>Verify the clinic <b>domain in Brevo</b> for best email inbox delivery.</li>
+    <li>Add explicit <b>security response headers</b> (CSP / HSTS) at the hosting layer for defence-in-depth.</li>
+    <li>Optional: enable automated appointment <b>reminders</b>, and flip on <b>commerce</b> when the shop is ready.</li>
+  </ul>
+  </div>
+
+  <div class="footer">
+    Kerala Ayurvedic Lifestyle · Brickfields, Kuala Lumpur &nbsp;·&nbsp; Complete Project Report (A–Z)
+    &nbsp;·&nbsp; Built by Aurexis Solution
+  </div>
+
+</div>
+</body>
+</html>
