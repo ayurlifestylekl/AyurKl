@@ -83,7 +83,7 @@ export default function Threshold() {
       </motion.div>
 
       {/* ══════════ CONTENT ══════════════════════════════ */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-6 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10 md:pb-10 md:pt-10 lg:pb-8 lg:pt-8">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-8 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10 md:pb-10 md:pt-10 lg:pb-8 lg:pt-8">
         {/* Masthead — Vol. II  |  Plate N°01 */}
         <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
           <motion.span

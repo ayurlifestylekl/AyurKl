@@ -25,13 +25,13 @@ export default function FinalBookingCTA() {
       aria-labelledby="booking-heading"
       className="relative overflow-hidden"
     >
-      <div className="grid min-h-[60vh] grid-cols-1 lg:grid-cols-[3fr_2fr]">
+      <div className="grid min-h-[420px] grid-cols-1 lg:grid-cols-[3fr_2fr]">
         {/* ── LEFT: Atmospheric photograph ────────────── */}
         <motion.div
           variants={clipReveal('left', 0)}
           initial="initial"
           animate="animate"
-          className="relative hidden min-h-[400px] lg:block"
+          className="relative hidden min-h-[340px] lg:block"
         >
           <Image
             src="/cta-herbs.webp"
@@ -99,7 +99,7 @@ export default function FinalBookingCTA() {
 
         {/* ── RIGHT: CTA content ─────────────────────── */}
         <div
-          className="relative flex flex-col justify-center px-6 py-16 sm:px-10 lg:px-14 lg:py-20"
+          className="relative flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 lg:py-14"
           style={{
             background: `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DEEP} 100%)`,
           }}

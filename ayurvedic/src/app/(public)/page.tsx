@@ -8,6 +8,7 @@ import VideoTestimonials from '@/components/sections/VideoTestimonials'
 import Reviews from '@/components/sections/Reviews'
 import FAQs from '@/components/sections/FAQs'
 import FinalBookingCTA from '@/components/sections/FinalBookingCTA'
+import { COMMERCE_ENABLED } from '@/lib/admin/features'
 import { faqs as homeFaqsFallback } from '@/data/faqs'
 import { fetchFaqs } from '@/sanity/fetchFaqs'
 
@@ -97,8 +98,13 @@ export default async function Home() {
       <TrustStrip />
       <EmpathyBridge />
       <ClinicTherapies />
-      <PromoBanners />
-      <FeaturedProducts />
+      {/* Shop sections — archived until the product catalogue launches (Phase 2). */}
+      {COMMERCE_ENABLED && (
+        <>
+          <PromoBanners />
+          <FeaturedProducts />
+        </>
+      )}
       <VideoTestimonials />
       <Reviews />
       <FAQs items={homeFaqs} />

@@ -34,7 +34,7 @@ export default function FAQs({
   id = 'faqs',
 }: FAQsProps = {}) {
   const displayedItems = items.slice(0, 5)
-  const [openId, setOpenId] = useState<string | null>(displayedItems[0]?.id ?? null)
+  const [openId, setOpenId] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
 
   const visibleItems = showAll ? items : displayedItems

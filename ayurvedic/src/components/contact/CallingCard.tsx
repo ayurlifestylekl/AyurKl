@@ -74,9 +74,9 @@ export default function CallingCard() {
       </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-6 py-10 sm:px-10 sm:py-12 lg:px-20 lg:py-14">
-        <div className="grid grid-cols-12 items-start gap-10">
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
           {/* ═══════════ LEFT — main editorial column (8/12) ═══════════ */}
-          <div className="col-span-12 lg:col-span-8">
+          <div className="lg:col-span-8">
             {/* Eyebrow with No. 02 */}
             <motion.div
               variants={fadeUp(0)}

@@ -72,7 +72,7 @@ export default function Bureau() {
         <div className="absolute -bottom-[1px] -right-[1px] h-4 w-4 border-b-2 border-r-2 border-accent/80" />
       </motion.div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-10">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-8 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-10">
         {/* Masthead */}
         <motion.div
           variants={fadeUp(0)}

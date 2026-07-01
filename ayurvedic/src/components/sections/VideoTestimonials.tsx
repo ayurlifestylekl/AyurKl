@@ -263,11 +263,10 @@ function VideoCard({ item, index }: { item: VideoTestimonial; index: number }) {
         <video
           ref={videoRef}
           src={item.videoSrc}
-          poster={item.posterImage}
           playsInline
           loop
           muted={isMuted}
-          preload="none"
+          preload="metadata"
           className={`h-full w-full object-cover transition-[transform,opacity] duration-[1800ms] ease-out ${
             isPlaying
               ? 'scale-100 opacity-100'

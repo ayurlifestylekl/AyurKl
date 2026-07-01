@@ -122,7 +122,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
         <div className="absolute -bottom-[1px] -right-[1px] h-4 w-4 border-b-2 border-r-2 border-accent/70" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-5xl px-6 sm:px-10 lg:px-8">
+      <div className="relative mx-auto w-full max-w-5xl px-8 sm:px-10 lg:px-8">
         {/* Eyebrow */}
         <motion.div
           variants={fadeUp(0)}
