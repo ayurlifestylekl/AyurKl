@@ -115,3 +115,12 @@
   opacity: 0.045;
   mix-blend-mode: soft-light;
 }
+
+/* Lift the floating WhatsApp button above the mobile "Book" bar so it never
+   covers the Book button. Only applies below the lg breakpoint (where the bar
+   is shown) and only on pages that actually render the bar (via :has). */
+@media (max-width: 1023.98px) {
+  body:has([data-booking-bar]) .whatsapp-widget {
+    bottom: 6rem;
+  }
+}

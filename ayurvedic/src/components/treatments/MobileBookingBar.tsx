@@ -14,6 +14,7 @@ export default function MobileBookingBar({ treatmentId, treatmentTitle }: Mobile
     <div
       role="region"
       aria-label={`Book ${treatmentTitle}`}
+      data-booking-bar
       className="fixed inset-x-0 bottom-0 z-40 border-t border-accent/30 bg-cream/95 px-4 py-3 backdrop-blur-md lg:hidden"
     >
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
