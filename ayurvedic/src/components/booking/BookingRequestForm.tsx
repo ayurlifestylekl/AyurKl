@@ -11,6 +11,13 @@ import HealthIntakeFields from './HealthIntakeFields'
 import PolicyDisclaimers from './PolicyDisclaimers'
 import SlotPicker from './SlotPicker'
 
+/** A treatment a group guest can choose from. */
+export interface GroupTreatmentOption {
+  id: string
+  title: string
+  price?: number | null
+}
+
 interface BookingRequestFormProps {
   bookingKind: BookingKind
   treatment?: {
@@ -21,30 +28,43 @@ interface BookingRequestFormProps {
     priceLabel?: string | null
     bookingLeadTimeHours?: number | null
   } | null
+  /** Bookable treatments a group guest can pick from (per-guest therapy choice). */
+  treatmentOptions?: GroupTreatmentOption[]
   account?: { email: string | null; signedIn: boolean } | null
   parentConsultationId?: string | null
 }
 
-type GuestRow = { name: string; gender: Gender | ''; age: string }
+type GuestRow = { name: string; gender: Gender | ''; age: string; treatmentId: string }
 const MAX_GUESTS = 6
-const emptyGuest = (): GuestRow => ({ name: '', gender: '', age: '' })
+const emptyGuest = (treatmentId = ''): GuestRow => ({ name: '', gender: '', age: '', treatmentId })
 
 export default function BookingRequestForm({
   bookingKind,
   treatment,
+  treatmentOptions,
   account,
   parentConsultationId,
 }: BookingRequestFormProps) {
   const router = useRouter()
   const signedIn = account?.signedIn ?? false
   const canGroup = bookingKind === 'treatment'
+  const defaultTreatmentId = treatment?.id ?? ''
+
+  // Treatments a guest can pick from. Falls back to the page's treatment.
+  const options: GroupTreatmentOption[] =
+    treatmentOptions && treatmentOptions.length > 0
+      ? treatmentOptions
+      : treatment
+        ? [{ id: treatment.id, title: treatment.title, price: treatment.price }]
+        : []
+  const priceById = new Map(options.map((o) => [o.id, typeof o.price === 'number' ? o.price : null]))
 
   const [partySize, setPartySize] = useState(1)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState(account?.email ?? '')
   const [gender, setGender] = useState<Gender | ''>('')
-  const [guests, setGuests] = useState<GuestRow[]>([emptyGuest(), emptyGuest()])
+  const [guests, setGuests] = useState<GuestRow[]>([emptyGuest(defaultTreatmentId), emptyGuest(defaultTreatmentId)])
   const [preferredAt, setPreferredAt] = useState('')
   const [preferredAtAlt, setPreferredAtAlt] = useState('')
   const [bookAsGuest, setBookAsGuest] = useState(!signedIn)
@@ -62,25 +82,31 @@ export default function BookingRequestForm({
     if (n > 1) {
       setGuests((prev) => {
         const next = [...prev]
-        while (next.length < n) next.push(emptyGuest())
+        while (next.length < n) next.push(emptyGuest(defaultTreatmentId))
         return next.slice(0, n)
       })
     }
   }
 
-  const party = isGroup
-    ? {
-        male: guests.filter((g) => g.gender === 'male').length,
-        female: guests.filter((g) => g.gender === 'female').length,
-      }
+  // Each guest's gender + chosen treatment, for same-time same-gender matching.
+  const members = isGroup
+    ? guests.slice(0, partySize).map((g) => ({
+        gender: g.gender,
+        treatmentId: g.treatmentId || defaultTreatmentId || null,
+      }))
     : undefined
 
   const unitPrice = typeof treatment?.price === 'number' ? treatment.price : null
+  const groupTotal = isGroup
+    ? guests
+        .slice(0, partySize)
+        .reduce((sum, g) => sum + (priceById.get(g.treatmentId || defaultTreatmentId) ?? 0), 0)
+    : 0
   const priceText =
     bookingKind === 'consultation'
       ? 'Free'
-      : isGroup && unitPrice != null
-        ? `RM${unitPrice} × ${partySize} = RM${unitPrice * partySize}`
+      : isGroup
+        ? `RM${groupTotal} total`
         : treatment?.priceLabel || (unitPrice != null ? `RM${unitPrice}` : 'On consultation')
 
   const submit = (e: React.FormEvent) => {
@@ -100,6 +126,10 @@ export default function BookingRequestForm({
           setError('Please enter a name and gender for every guest.')
           return
         }
+        if (options.length > 1 && cleaned.some((g) => !(g.treatmentId || defaultTreatmentId))) {
+          setError('Please choose a therapy for every guest.')
+          return
+        }
         res = await createGroupBooking({
           treatmentId: treatment?.id ?? '',
           preferredAt: new Date(preferredAt).toISOString(),
@@ -109,7 +139,12 @@ export default function BookingRequestForm({
           isGuest: bookAsGuest || !signedIn,
           healthIntake: health,
           acceptedPolicies: accepted,
-          guests: cleaned.map<GroupGuest>((g) => ({ name: g.name, gender: g.gender as Gender, age: g.age ? Number(g.age) : null })),
+          guests: cleaned.map<GroupGuest>((g) => ({
+            name: g.name,
+            gender: g.gender as Gender,
+            age: g.age ? Number(g.age) : null,
+            treatmentId: g.treatmentId || defaultTreatmentId,
+          })),
         })
       } else {
         if (!gender) return setError(bookingKind === 'consultation' ? 'Please select a gender.' : 'Please select a gender for therapist matching.')
@@ -207,32 +242,53 @@ export default function BookingRequestForm({
       {isGroup && (
         <fieldset className="rounded-xl border border-accent/25 bg-white/60 p-4">
           <legend className="px-1 font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-accent">Guests</legend>
-          <p className="mb-3 font-body text-[12px] italic text-dark/55">Each guest gets a same-gender therapist at the same time.</p>
-          <div className="space-y-2.5">
+          <p className="mb-3 font-body text-[12px] italic text-dark/55">
+            Each guest gets a same-gender therapist at the same time
+            {options.length > 1 ? ' — and can choose their own therapy.' : '.'}
+          </p>
+          <div className="space-y-3">
             {guests.slice(0, partySize).map((g, i) => (
-              <div key={i} className="grid grid-cols-[1fr_110px_72px] gap-2">
-                <input
-                  value={g.name}
-                  onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))}
-                  className={inputCls}
-                  placeholder={`Guest ${i + 1} name`}
-                />
-                <select
-                  value={g.gender}
-                  onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, gender: e.target.value as Gender } : x)))}
-                  className={inputCls}
-                >
-                  <option value="">Gender…</option>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                </select>
-                <input
-                  value={g.age}
-                  onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, age: e.target.value.replace(/\D/g, '') } : x)))}
-                  className={inputCls}
-                  placeholder="Age"
-                  inputMode="numeric"
-                />
+              <div key={i} className="rounded-lg border border-accent/15 bg-white/70 p-2.5">
+                <div className="grid grid-cols-[1fr_110px_72px] gap-2">
+                  <input
+                    value={g.name}
+                    onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))}
+                    className={inputCls}
+                    placeholder={`Guest ${i + 1} name`}
+                  />
+                  <select
+                    value={g.gender}
+                    onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, gender: e.target.value as Gender } : x)))}
+                    className={inputCls}
+                  >
+                    <option value="">Gender…</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                  </select>
+                  <input
+                    value={g.age}
+                    onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, age: e.target.value.replace(/\D/g, '') } : x)))}
+                    className={inputCls}
+                    placeholder="Age"
+                    inputMode="numeric"
+                  />
+                </div>
+                {options.length > 1 && (
+                  <select
+                    value={g.treatmentId}
+                    onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, treatmentId: e.target.value } : x)))}
+                    className={`${inputCls} mt-2`}
+                    aria-label={`Therapy for guest ${i + 1}`}
+                  >
+                    <option value="">Choose therapy…</option>
+                    {options.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.title}
+                        {typeof o.price === 'number' ? ` — RM${o.price}` : ''}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             ))}
           </div>
@@ -241,8 +297,8 @@ export default function BookingRequestForm({
 
       {/* Time slots */}
       <div className="grid gap-3">
-        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} party={party} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
-        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} party={party} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
+        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} members={members} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
+        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} members={members} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
       </div>
 
       <HealthIntakeFields value={health} onChange={setHealth} gender={isGroup ? '' : gender} />

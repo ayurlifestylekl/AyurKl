@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react'
 import type { Gender } from '@/types/booking'
-import { getAvailableSlots, getAvailableSlotsForParty, getConsultationSlots, type SlotInfo } from '@/lib/booking/actions'
+import { getAvailableSlots, getAvailableSlotsForMixedParty, getConsultationSlots, type SlotInfo } from '@/lib/booking/actions'
 import { minBookableDate } from '@/lib/booking/slots'
 import { fmtMY } from '@/lib/datetime'
 
@@ -14,8 +14,12 @@ interface SlotPickerProps {
    * ignores the therapist roster and gender. Treatments use same-gender matching.
    */
   mode?: 'treatment' | 'consultation'
-  /** For group bookings — therapists needed per gender at the same time. */
-  party?: { male: number; female: number }
+  /**
+   * For group bookings — each guest's gender + chosen treatment. When present,
+   * availability finds a start time where every guest can be matched to a free
+   * same-gender therapist for their own treatment length.
+   */
+  members?: { gender: Gender | ''; treatmentId: string | null }[]
   /** Selected slot as a UTC ISO string ('' = none). */
   value: string
   onChange: (iso: string) => void
@@ -23,17 +27,23 @@ interface SlotPickerProps {
   required?: boolean
 }
 
-export default function SlotPicker({ treatmentId, gender, mode = 'treatment', party, value, onChange, label, required }: SlotPickerProps) {
+export default function SlotPicker({ treatmentId, gender, mode = 'treatment', members, value, onChange, label, required }: SlotPickerProps) {
   const [date, setDate] = useState('')
   const [slots, setSlots] = useState<SlotInfo[]>([])
   const [loading, start] = useTransition()
   const minDate = minBookableDate()
 
   const isConsultation = mode === 'consultation'
-  const male = party?.male ?? 0
-  const female = party?.female ?? 0
-  const partyTotal = male + female
-  const ready = isConsultation ? true : party ? partyTotal > 0 : !!gender
+  const isGroup = !!members
+  // Every guest must have a gender AND a chosen treatment before we can look up times.
+  const groupReady =
+    isGroup &&
+    members!.length > 0 &&
+    members!.every((m) => (m.gender === 'male' || m.gender === 'female') && !!m.treatmentId)
+  const ready = isConsultation ? true : isGroup ? groupReady : !!gender
+
+  // Stable dependency for the members list so the effect only re-runs on real changes.
+  const membersKey = members ? members.map((m) => `${m.gender}:${m.treatmentId ?? ''}`).join('|') : ''
 
   useEffect(() => {
     if (!date || !ready) {
@@ -43,11 +53,21 @@ export default function SlotPicker({ treatmentId, gender, mode = 'treatment', pa
     start(async () => {
       if (isConsultation) {
         setSlots(await getConsultationSlots(date))
+      } else if (isGroup) {
+        setSlots(
+          await getAvailableSlotsForMixedParty(
+            date,
+            members!.map((m) => ({ gender: m.gender as Gender, treatmentId: m.treatmentId })),
+          ),
+        )
       } else {
-        setSlots(party ? await getAvailableSlotsForParty(date, treatmentId, male, female) : await getAvailableSlots(date, treatmentId, gender as Gender))
+        setSlots(await getAvailableSlots(date, treatmentId, gender as Gender))
       }
     })
-  }, [date, gender, treatmentId, party, male, female, ready, isConsultation])
+    // `membersKey` is the stable serialisation of `members` — depending on the
+    // array itself would refetch on every keystroke-driven re-render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date, gender, treatmentId, membersKey, isGroup, ready, isConsultation])
 
   return (
     <div className="rounded-xl border border-accent/25 bg-white/60 p-4">
@@ -57,7 +77,7 @@ export default function SlotPicker({ treatmentId, gender, mode = 'treatment', pa
 
       {!ready ? (
         <p className="font-body text-[12.5px] italic text-dark/55">
-          {party ? 'Add your guests above to see available times.' : 'Select a gender above to see available times.'}
+          {isGroup ? 'Add every guest — name, gender and therapy — to see available times.' : 'Select a gender above to see available times.'}
         </p>
       ) : (
         <>

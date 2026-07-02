@@ -11,6 +11,8 @@ export interface GroupGuestRow {
   id: string
   patientName: string | null
   patientGender: Gender | null
+  /** The therapy this guest chose (guests in a group may differ). */
+  treatmentName?: string | null
   /** Same-gender therapist required for this guest (null = any). */
   genderRequirement: Gender | null
   status: string
@@ -131,7 +133,12 @@ export default function GroupApprovalActions({
               {pendingMembers.map((m) => (
                 <div key={m.id} className="rounded-lg border border-accent/20 px-3 py-2">
                   <div className="mb-1.5 flex items-center justify-between">
-                    <span className="font-body text-[13px] font-semibold text-primary">{m.patientName ?? 'Guest'}</span>
+                    <span className="font-body text-[13px] font-semibold text-primary">
+                      {m.patientName ?? 'Guest'}
+                      {m.treatmentName && (
+                        <span className="ml-1.5 font-body text-[12px] font-normal text-dark/55">· {m.treatmentName}</span>
+                      )}
+                    </span>
                     <span className="font-heading text-[9px] uppercase tracking-[0.12em] text-dark/45">
                       {m.genderRequirement ?? m.patientGender ?? 'any'}
                     </span>

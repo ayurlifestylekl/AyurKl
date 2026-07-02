@@ -48,6 +48,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
                 id: m.id,
                 patientName: m.patientName,
                 patientGender: m.patientGender,
+                treatmentName: m.treatmentName,
                 genderRequirement: m.genderRequirement,
                 status: m.status,
                 assignedTherapistName: m.assignedTherapistName,

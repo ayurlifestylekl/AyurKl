@@ -36,6 +36,12 @@ export default function BookingTreatmentOrchestrator({
       }
     : null
 
+  // Directly-bookable therapies a group guest can pick from (excludes
+  // enquiry-only and consultation-first treatments).
+  const treatmentOptions = treatments
+    .filter((t) => t.bookingType !== 'enquiry' && !t.requiresConsultation)
+    .map((t) => ({ id: t._id, title: t.title, price: t.price }))
+
   const isEnquiry = selected?.bookingType === 'enquiry'
   // A consultation is required first UNLESS this booking follows a cleared one.
   const needsConsult =
@@ -63,6 +69,7 @@ export default function BookingTreatmentOrchestrator({
           key={selected._id}
           bookingKind="treatment"
           treatment={formTreatment}
+          treatmentOptions={treatmentOptions}
           account={account}
           parentConsultationId={fromConsultation}
         />

@@ -41,3 +41,31 @@ export function findClash(
 export function freeAtLabel(clash: Slot, buffer: number = THERAPIST_BUFFER_MINS): string {
   return new Date(occupiedEnd(clash, buffer)).toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short' })
 }
+
+/**
+ * Can every guest of one gender in a group get a DISTINCT therapist who is free
+ * for that guest's own treatment length, all starting at the same slot?
+ *
+ * Because every guest starts together, a therapist free for a longer treatment
+ * is necessarily free for any shorter one — so assigning the longest treatments
+ * first (to any therapist that can take them) is an optimal greedy match: if it
+ * fails, no assignment exists.
+ *
+ * @param therapistCodes  distinct therapist codes of the relevant gender
+ * @param memberDurations each guest's treatment length, in minutes
+ * @param canServe        whether a therapist is free for a treatment of `durationMins`
+ */
+export function canMatchParty(
+  therapistCodes: string[],
+  memberDurations: number[],
+  canServe: (code: string, durationMins: number) => boolean,
+): boolean {
+  const durations = [...memberDurations].sort((a, b) => b - a)
+  const used = new Set<string>()
+  for (const d of durations) {
+    const pick = therapistCodes.find((code) => !used.has(code) && canServe(code, d))
+    if (!pick) return false
+    used.add(pick)
+  }
+  return true
+}

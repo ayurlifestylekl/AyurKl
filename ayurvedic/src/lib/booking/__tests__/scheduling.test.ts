@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { findClash } from '../scheduling'
+import { findClash, canMatchParty } from '../scheduling'
 import { parseDurationMins } from '../duration'
 
 describe('parseDurationMins', () => {
@@ -37,5 +37,41 @@ describe('findClash (30-min buffer)', () => {
   it('allows a session well before', () => {
     // new 08:00 +60 → occupies 08:00–09:30, busy needs 09:30 buffer-free; busy starts 10:00 → ok
     expect(findClash({ startISO: '2026-06-25T08:00:00+08:00', durationMins: 60 }, busy)).toBeNull()
+  })
+})
+
+describe('canMatchParty (mixed-treatment group)', () => {
+  // A therapist can serve a guest if free for that treatment length. Longer-capable
+  // therapists are also free for shorter treatments (same start time).
+  const capable = (capacity: Record<string, number>) => (code: string, d: number) => d <= (capacity[code] ?? 0)
+
+  it('matches two guests of the same treatment to two free therapists', () => {
+    const canServe = capable({ A: 90, B: 90 })
+    expect(canMatchParty(['A', 'B'], [60, 60], canServe)).toBe(true)
+  })
+
+  it('matches guests picking DIFFERENT treatments (60 + 90)', () => {
+    const canServe = capable({ A: 90, B: 90 })
+    expect(canMatchParty(['A', 'B'], [90, 60], canServe)).toBe(true)
+  })
+
+  it('fails when there are more guests than therapists', () => {
+    const canServe = capable({ A: 90 })
+    expect(canMatchParty(['A'], [60, 60], canServe)).toBe(false)
+  })
+
+  it('assigns the long treatment to the only therapist who can take it', () => {
+    // Only A can serve 90 min; B is free for 60 only. Longest-first must give 90→A, 60→B.
+    const canServe = capable({ A: 90, B: 60 })
+    expect(canMatchParty(['A', 'B'], [60, 90], canServe)).toBe(true)
+  })
+
+  it('fails when no therapist is free long enough for the longest treatment', () => {
+    const canServe = capable({ A: 60, B: 60 })
+    expect(canMatchParty(['A', 'B'], [90, 60], canServe)).toBe(false)
+  })
+
+  it('is vacuously true for an empty party', () => {
+    expect(canMatchParty([], [], () => false)).toBe(true)
   })
 })
