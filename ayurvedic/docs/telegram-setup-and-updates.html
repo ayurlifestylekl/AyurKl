@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Kerala Ayurvedic Lifestyle — Telegram Setup & Latest Updates</title>
+<style>
+  :root { --burgundy:#6E1023; --deep:#4A0C18; --gold:#B8860B; --cream:#F7F2E8; --ink:#1F1F1F; }
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink); line-height: 1.5; margin: 0; font-size: 11.5px; }
+  .page { padding: 24px 32px; }
+  h1, h2, h3 { font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--burgundy); }
+  h1 { font-size: 27px; margin: 0 0 2px; }
+  h2 { font-size: 16px; margin: 22px 0 8px; padding-bottom: 5px; border-bottom: 2px solid var(--gold); }
+  h3 { font-size: 12.5px; margin: 13px 0 3px; color: var(--deep); }
+  p { margin: 5px 0; }
+  .sub { font-family: 'Helvetica Neue', Arial, sans-serif; color: #777; font-size: 11px; letter-spacing: .04em; }
+  .lede { background: var(--cream); border-left: 4px solid var(--gold); padding: 10px 14px; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 10.5px; }
+  th, td { border: 1px solid #ddd; padding: 6px 9px; text-align: left; vertical-align: top; }
+  th { background: var(--burgundy); color: #fff; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 9.5px; letter-spacing: .05em; text-transform: uppercase; }
+  tr:nth-child(even) td { background: #faf7f0; }
+  code { font-family:'SF Mono','Menlo','Consolas',monospace; font-size:10px; background:#f3efe6; padding:1px 5px; border-radius:3px; }
+  ul, ol { margin: 5px 0; padding-left: 19px; }
+  li { margin: 3px 0; }
+  .note { font-size: 10.5px; color:#555; font-style: italic; }
+  .section { page-break-inside: avoid; }
+  .card { background:#fff; border:1px solid rgba(184,134,11,0.4); border-radius:7px; padding:11px 15px; margin:10px 0; page-break-inside: avoid; }
+  .card .ttl { font-family:'Helvetica Neue',Arial,sans-serif; font-weight:700; color:var(--burgundy); font-size:12.5px; margin-bottom:3px; }
+  .steps { counter-reset: step; list-style:none; padding-left:0; }
+  .steps > li { position:relative; padding-left:34px; margin:11px 0; }
+  .steps > li::before { counter-increment: step; content: counter(step); position:absolute; left:0; top:-2px; width:23px; height:23px; background:var(--burgundy); color:#fff; border-radius:50%; font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; font-weight:700; text-align:center; line-height:23px; }
+  .steps .h { font-family:'Helvetica Neue',Arial,sans-serif; font-weight:700; color:var(--deep); font-size:12px; }
+  .tag { display:inline-block; font-family:'Helvetica Neue',Arial,sans-serif; font-size:9px; color:#fff; background:var(--gold); padding:1px 7px; border-radius:10px; vertical-align:middle; }
+  .warn { background:#fdecec; border:1px solid #e3b7b7; border-left:4px solid #B00020; padding:9px 13px; margin:10px 0; font-size:10.5px; color:#5c000f; border-radius:5px; }
+  .footer { margin-top: 22px; padding-top: 9px; border-top: 1px solid #ccc; font-family:'Helvetica Neue',Arial,sans-serif; font-size:9.5px; color:#999; text-align:center; }
+  .pb { page-break-before: always; }
+  @page { size: A4; margin: 14mm; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Telegram Alerts — Setup Guide</h1>
+  <div class="sub">KERALA AYURVEDIC LIFESTYLE &nbsp;·&nbsp; STAFF NOTIFICATIONS &amp; LATEST UPDATES</div>
+  <p class="sub" style="margin-top:6px">Prepared by <b>Aurexis Solution</b></p>
+
+  <div class="lede">
+    Your website can now send an <b>instant Telegram message to your team</b> whenever something needs attention —
+    a new booking request, a payment received, or a cancellation. This guide shows you, step by step, how to switch
+    it on by adding your bot token. The second half lists the other new features added in this update.
+  </div>
+
+  <!-- PART A -->
+  <div class="section">
+  <h2>1. What you'll get</h2>
+  <p>Once set up, your staff Telegram group receives a short message the moment any of these happen:</p>
+  <ul>
+    <li>🆕 <b>New booking / consultation request</b> — so the front desk can approve quickly.</li>
+    <li>✅ <b>Payment received</b> — a booking is paid and confirmed.</li>
+    <li>❌ <b>Cancelled / auto-released</b> — a booking was cancelled or its unpaid slot reopened.</li>
+  </ul>
+  <p class="note">These alerts are in addition to the emails customers already receive. No customer health details are
+  ever sent to Telegram — only the name, therapy and time.</p>
+  </div>
+
+  <div class="section">
+  <h2>2. Before you start</h2>
+  <table>
+    <tr><th style="width:32%">You need</th><th>Detail</th></tr>
+    <tr><td>The Telegram app</td><td>On a phone or on a computer at <code>web.telegram.org</code> — either works.</td></tr>
+    <tr><td>Your bot</td><td><b>@bookingkalsbot</b> (“Booking Bot”), already created for you.</td></tr>
+    <tr><td>The bot token</td><td>The secret code BotFather gave you (looks like <code>8693911665:AAE3…</code>). Keep it private.</td></tr>
+    <tr><td>Website admin login</td><td>To open <b>Admin → Settings</b>.</td></tr>
+  </table>
+  <div class="warn"><b>Keep the token secret.</b> Anyone with it can control your bot. Never post it publicly. If it
+  ever leaks, open <b>BotFather → your bot → API Token → Revoke</b> to get a new one, then update it in the website.</div>
+  </div>
+
+  <!-- The steps -->
+  <div class="section">
+  <h2>3. Step-by-step setup</h2>
+  <ol class="steps">
+    <li>
+      <div class="h">Create a Telegram group for your team</div>
+      Make a new Telegram group (e.g. <b>“Kerala Bookings”</b>) and add the staff who should get the alerts.
+    </li>
+    <li>
+      <div class="h">Add the bot to the group</div>
+      In the group, tap <b>Add members</b> and search for <b>@bookingkalsbot</b> — add it like any other member.
+    </li>
+    <li>
+      <div class="h">Wake the bot up</div>
+      In the group, send this exact message: <code>/start@bookingkalsbot</code><br/>
+      <span class="note">This lets the bot “see” the group so the website can find it in the next step.</span>
+    </li>
+    <li>
+      <div class="h">Open the website settings</div>
+      Log in to your website <b>Admin</b>, go to <b>Settings</b>, and scroll to the
+      <b>“Telegram staff alerts”</b> section.
+    </li>
+    <li>
+      <div class="h">Paste the bot token</div>
+      In the <b>Bot token</b> box, paste the token from BotFather (e.g. <code>8693911665:AAE3…</code>).
+    </li>
+    <li>
+      <div class="h">Detect your group</div>
+      Click <b>Detect</b>. The website reads your bot and lists the group(s) that messaged it. <b>Click your group</b>
+      to select it — its Chat ID fills in automatically. <span class="note">(No copying long web links.)</span>
+    </li>
+    <li>
+      <div class="h">Save</div>
+      Click <b>Save Telegram settings</b>. You’ll see a green <b>“Connected”</b> label. That’s it — alerts start
+      arriving straight away.
+    </li>
+  </ol>
+  </div>
+
+  <div class="section">
+  <h2>4. If “Detect” finds nothing</h2>
+  <ul>
+    <li>Make sure you sent <code>/start@bookingkalsbot</code> <b>inside the group</b> (not to yourself).</li>
+    <li>Confirm the bot is actually a member of the group.</li>
+    <li>Double-check the token was pasted fully, with no spaces before or after.</li>
+    <li>Send the <code>/start@bookingkalsbot</code> message once more, then click <b>Detect</b> again.</li>
+  </ul>
+  <p class="note">Tip: to test it end to end, make a booking request on the website — a “New request” message should
+  appear in your group within a few seconds.</p>
+  </div>
+
+  <!-- PART B -->
+  <div class="section pb">
+  <h2>5. Also new in this update</h2>
+  <p>Alongside Telegram alerts, this update added the following. Everything is already live.</p>
+
+  <div class="card">
+    <div class="ttl">Group bookings — a different therapy per guest <span class="tag">NEW</span></div>
+    <p>A group booking no longer forces everyone into the same therapy. Each guest can choose their <b>own therapy</b>,
+    is matched to their <b>own same-gender therapist</b> at the same time, and the group still <b>pays once</b> in a
+    single bill. Your staff see each guest as <b>Name · age · gender · therapy</b>.</p>
+  </div>
+
+  <div class="card">
+    <div class="ttl">Smarter staff schedule</div>
+    <ul>
+      <li><b>Block reasons show on the schedule</b> — each blocked slot displays its reason at a glance.</li>
+      <li><b>Search your blocks</b> — the Availability list has a search box to find a block by date, time,
+          therapist or reason, so you can remove the right one quickly.</li>
+      <li><b>Block &amp; unblock right on the schedule</b> — tap a free 30-minute slot to block it (with a reason),
+          or tap a block to remove it — no separate screen needed.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="ttl">Customer announcements &amp; closures <span class="tag">NEW</span></div>
+    <p>From <b>Front Desk → Announcements</b> you can push a notice to the public website:</p>
+    <ul>
+      <li><b>Closure</b> (e.g. Deepavali) — shows a “we’re closed on [date]” banner to customers <b>and</b>
+          automatically stops bookings on those dates. Remove it and bookings reopen.</li>
+      <li><b>Message</b> — a free-text banner (holiday hours, a promotion) that doesn’t affect bookings.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="ttl">Lead capture — grow your customer list <span class="tag">NEW</span></div>
+    <ul>
+      <li>A <b>welcome pop-up</b> greets first-time visitors and invites them to leave their name, email and phone
+          for exclusive deals (they can dismiss it).</li>
+      <li>The <b>WhatsApp button</b> now asks for name, phone and email first — so every WhatsApp enquiry becomes a
+          saved contact.</li>
+      <li>All captured details appear in <b>Admin → Leads</b>, with a <b>Download (Excel)</b> button.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="ttl">More reliable payments</div>
+    <p>The booking payment flow was hardened so a paid booking always confirms — even if a payment notification is
+    delayed or missed, the system re-checks with the payment gateway and confirms automatically, and the status
+    page updates the moment payment lands.</p>
+  </div>
+  </div>
+
+  <div class="footer">
+    Kerala Ayurvedic Lifestyle · Brickfields, Kuala Lumpur &nbsp;·&nbsp; Telegram Setup &amp; Latest Updates
+    &nbsp;·&nbsp; Prepared by Aurexis Solution
+  </div>
+
+</div>
+</body>
+</html>
