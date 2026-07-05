@@ -64,6 +64,8 @@ export interface StaffAppointment {
   patientName: string | null
   patientPhone: string | null
   patientGender: Gender | null
+  /** Guest age, captured for group bookings. */
+  guestAge: number | null
   /** Required therapist gender (= patient gender by policy). */
   genderRequirement: Gender | null
   requestedDatetime: string | null

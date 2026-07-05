@@ -20,6 +20,7 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
   const [recurrence, setRecurrence] = useState<'none' | 'weekly' | 'monthly'>('none')
   const [until, setUntil] = useState('')
   const [reason, setReason] = useState('')
+  const [query, setQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
@@ -58,6 +59,23 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
 
   const therapistName = (code: string | null) =>
     code ? THERAPISTS.find((t) => t.code === code)?.name ?? code : 'All therapists'
+
+  // Searchable across therapist, date, time and reason so staff can pinpoint the
+  // exact block to remove.
+  const haystack = (b: ScheduleBlock) =>
+    [
+      therapistName(b.therapist_code),
+      b.therapist_code ?? 'centre closed',
+      fmtMY(b.start_at, { dateStyle: 'medium' }),
+      fmtMY(b.start_at, { timeStyle: 'short' }),
+      b.all_day ? 'all day' : fmtMY(b.end_at, { timeStyle: 'short' }),
+      RECUR_LABEL[b.recurrence],
+      b.reason ?? '',
+    ]
+      .join(' ')
+      .toLowerCase()
+  const q = query.trim().toLowerCase()
+  const filtered = q ? blocks.filter((b) => haystack(b).includes(q)) : blocks
 
   return (
     <div className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
@@ -117,12 +135,24 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
 
       {/* Existing blocks */}
       <div>
-        <h3 className="mb-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-accent">Current blocks</h3>
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-accent">Current blocks</h3>
+          {blocks.length > 0 && (
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search date, time, therapist, reason…"
+              className="w-full rounded-lg border border-accent/30 bg-white px-3 py-1.5 font-body text-[13px] text-dark placeholder:text-dark/40 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40 sm:w-64"
+            />
+          )}
+        </div>
         {blocks.length === 0 ? (
           <p className="rounded-xl border border-dashed border-accent/30 bg-white/60 px-5 py-10 text-center font-body text-[14px] text-dark/50">No blocks set.</p>
+        ) : filtered.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-accent/30 bg-white/60 px-5 py-10 text-center font-body text-[14px] text-dark/50">No blocks match &ldquo;{query}&rdquo;.</p>
         ) : (
           <div className="divide-y divide-accent/10 overflow-hidden rounded-xl border border-accent/20 bg-white">
-            {blocks.map((b) => (
+            {filtered.map((b) => (
               <div key={b.id} className="flex items-center gap-3 px-4 py-3">
                 <div className="min-w-0 flex-1">
                   <div className="font-semibold text-primary">{therapistName(b.therapist_code)}</div>

@@ -11,6 +11,8 @@ export interface GroupGuestRow {
   id: string
   patientName: string | null
   patientGender: Gender | null
+  /** Guest age (group bookings capture it per guest). */
+  age?: number | null
   /** The therapy this guest chose (guests in a group may differ). */
   treatmentName?: string | null
   /** Same-gender therapist required for this guest (null = any). */
@@ -132,16 +134,9 @@ export default function GroupApprovalActions({
             <div className="space-y-2">
               {pendingMembers.map((m) => (
                 <div key={m.id} className="rounded-lg border border-accent/20 px-3 py-2">
-                  <div className="mb-1.5 flex items-center justify-between">
-                    <span className="font-body text-[13px] font-semibold text-primary">
-                      {m.patientName ?? 'Guest'}
-                      {m.treatmentName && (
-                        <span className="ml-1.5 font-body text-[12px] font-normal text-dark/55">· {m.treatmentName}</span>
-                      )}
-                    </span>
-                    <span className="font-heading text-[9px] uppercase tracking-[0.12em] text-dark/45">
-                      {m.genderRequirement ?? m.patientGender ?? 'any'}
-                    </span>
+                  <div className="mb-1.5">
+                    <div className="font-body text-[13px] font-semibold text-primary">{m.patientName ?? 'Guest'}</div>
+                    <div className="font-body text-[11.5px] text-dark/55">{guestMeta(m)}</div>
                   </div>
                   <select value={assign[m.id] ?? ''} onChange={(e) => setTherapist(m.id, e.target.value)} className={inp}>
                     <option value="">Select therapist…</option>
@@ -172,9 +167,12 @@ export default function GroupApprovalActions({
             </p>
           )}
           {members.map((m) => (
-            <div key={m.id} className="flex items-center justify-between rounded-lg border border-accent/15 px-3 py-2 font-body text-[12.5px]">
-              <span className="font-semibold text-primary">{m.patientName ?? 'Guest'}</span>
-              <span className="text-dark/60">{m.assignedTherapistName ? `${m.assignedTherapistName} · ${m.assignedTherapistCode}` : '—'}</span>
+            <div key={m.id} className="flex items-center justify-between gap-2 rounded-lg border border-accent/15 px-3 py-2 font-body text-[12.5px]">
+              <span className="min-w-0">
+                <span className="font-semibold text-primary">{m.patientName ?? 'Guest'}</span>
+                <span className="block text-[11px] text-dark/55">{guestMeta(m)}</span>
+              </span>
+              <span className="flex-none text-right text-dark/60">{m.assignedTherapistName ? `${m.assignedTherapistName} · ${m.assignedTherapistCode}` : '—'}</span>
             </div>
           ))}
         </div>
@@ -209,6 +207,14 @@ export default function GroupApprovalActions({
       {error && <p role="alert" className="mt-3 rounded-lg border border-red-300 bg-red-50 px-3 py-2 font-body text-[12.5px] text-red-700">{error}</p>}
     </div>
   )
+}
+
+/** "34 yrs · female · Ayurveda Face Massage" — omits any missing parts. */
+function guestMeta(m: GroupGuestRow): string {
+  const gender = m.patientGender ?? m.genderRequirement ?? null
+  return [m.age != null ? `${m.age} yrs` : null, gender, m.treatmentName ?? null]
+    .filter(Boolean)
+    .join(' · ')
 }
 
 const inp = 'w-full rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40'

@@ -58,6 +58,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
                 id: m.id,
                 patientName: m.patientName,
                 patientGender: m.patientGender,
+                age: m.guestAge,
                 treatmentName: m.treatmentName,
                 genderRequirement: m.genderRequirement,
                 status: m.status,

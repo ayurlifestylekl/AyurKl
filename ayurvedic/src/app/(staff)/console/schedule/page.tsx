@@ -16,7 +16,7 @@ export default async function ConsoleSchedulePage({ searchParams }: { searchPara
     <div>
       <AutoRefresh />
       <h1 className="font-heading text-[22px] font-extrabold text-primary">Schedule</h1>
-      <p className="mb-4 font-body text-[13px] text-dark/55">Day view by therapist. Tap an appointment to open it.</p>
+      <p className="mb-4 font-body text-[13px] text-dark/55">Day view by therapist. Tap an appointment to open it, a free slot to block it, or a block to remove it.</p>
       <ScheduleGrid
         basePath="/console/schedule"
         detailBase="/console"
@@ -25,6 +25,7 @@ export default async function ConsoleSchedulePage({ searchParams }: { searchPara
         appts={day.appts}
         unassigned={day.unassigned}
         blocks={day.blocks}
+        editable
       />
     </div>
   )

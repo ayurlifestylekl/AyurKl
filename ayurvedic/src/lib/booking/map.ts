@@ -3,7 +3,7 @@ import type { BookingKind, BookingStatus, Gender, PaymentStatus, StaffAppointmen
 /** Columns needed to build a StaffAppointment. */
 export const APPOINTMENT_COLUMNS =
   `id, booking_kind, status, payment_status, treatment_name, treatment_id,
-   patient_name, patient_phone, patient_gender, gender_requirement,
+   patient_name, patient_phone, patient_gender, gender_requirement, guest_age,
    requested_datetime, requested_datetime_alt, appointment_date_time,
    assigned_therapist_code, assigned_therapist_name, assigned_therapist_gender, duration_mins, payable_amount_rm,
    room, is_guest, customer_id, parent_consultation_id, treatment_unlocked, cancellation_reason, group_id, updated_at`
@@ -20,6 +20,7 @@ export function mapAppointmentRow(r: any): StaffAppointment {
     patientName: r.patient_name ?? null,
     patientPhone: r.patient_phone ?? null,
     patientGender: (r.patient_gender ?? null) as Gender | null,
+    guestAge: r.guest_age ?? null,
     genderRequirement:
       r.gender_requirement === 'men_only'
         ? 'male'

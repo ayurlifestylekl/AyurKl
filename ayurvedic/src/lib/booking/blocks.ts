@@ -14,6 +14,8 @@ export interface ScheduleBlock {
 }
 
 export interface BlockedInterval {
+  /** Source block id — lets the schedule delete an occurrence directly. */
+  id: string | null
   therapistCode: string | null
   startMs: number
   endMs: number
@@ -54,7 +56,7 @@ export function blockedIntervalsForDate(blocks: ScheduleBlock[], dateYMD: string
       startMs = new Date(slotIso(dateYMD, mytTimeOfDay(b.start_at))).getTime()
       endMs = new Date(slotIso(dateYMD, mytTimeOfDay(b.end_at))).getTime()
     }
-    out.push({ therapistCode: b.therapist_code, startMs, endMs, reason: b.reason })
+    out.push({ id: b.id, therapistCode: b.therapist_code, startMs, endMs, reason: b.reason })
   }
   return out
 }

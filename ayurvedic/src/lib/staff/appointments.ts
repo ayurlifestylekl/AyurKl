@@ -10,6 +10,16 @@ import type { ServiceDb } from './guard'
 /** Statuses that count as a real, booked patient for the doctor view. */
 export const BOOKED_STATUSES: BookingStatus[] = ['confirmed', 'checked_in', 'in_progress', 'completed']
 
+/**
+ * Doctors may not see customer contact details (PDPA) — only name, gender and
+ * health history. Strip the phone so it never reaches a doctor-facing view.
+ */
+export function redactContact<T extends { patientPhone: string | null }>(a: T): T {
+  return { ...a, patientPhone: null }
+}
+export const redactContactList = <T extends { patientPhone: string | null }>(list: T[]): T[] =>
+  list.map(redactContact)
+
 export interface AppointmentFilters {
   status?: BookingStatus | BookingStatus[]
   kind?: BookingKind
@@ -205,6 +215,7 @@ export interface GridAppt {
   room: string | null
 }
 export interface GridBlock {
+  id: string | null
   therapistCode: string | null
   startMin: number
   endMin: number
@@ -248,6 +259,7 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
 
   const blocksRaw = await fetchBlocksOnOrAfter(db, dateYMD)
   const blocks: GridBlock[] = blockedIntervalsForDate(blocksRaw, dateYMD).map((iv) => ({
+    id: iv.id,
     therapistCode: iv.therapistCode,
     startMin: Math.max(0, Math.round((iv.startMs - dayStartMs) / 60_000)),
     endMin: Math.min(1440, Math.round((iv.endMs - dayStartMs) / 60_000)),
