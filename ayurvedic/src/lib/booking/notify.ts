@@ -33,6 +33,20 @@ export interface NotifyBase {
   treatmentName?: string | null
 }
 
+/** One guest in a group booking, as shown in group emails. */
+export interface GuestLine {
+  name: string | null
+  age: number | null
+  treatmentName: string | null
+}
+
+function guestListLines(guests: GuestLine[]): string[] {
+  return guests.map((g) => {
+    const who = `${esc(g.name ?? 'Guest')}${g.age != null ? `, ${g.age}` : ''}`
+    return `• <strong>${who}</strong> — ${esc(g.treatmentName ?? 'Treatment')}`
+  })
+}
+
 export async function notifyRequestReceived(p: NotifyBase & { kind: string; whenISO: string | null }) {
   await sendTelegram(
     `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
@@ -46,27 +60,45 @@ export async function notifyRequestReceived(p: NotifyBase & { kind: string; when
   await sendEmail({ to: p.to, category: 'transactional', subject: 'Your booking request — Kerala Ayurvedic Lifestyle', html, text })
 }
 
-export async function notifyApproved(p: NotifyBase & { kind: string; whenISO: string | null; amountRm: number | null; payUrl: string | null }) {
+export async function notifyApproved(
+  p: NotifyBase & { kind: string; whenISO: string | null; amountRm: number | null; payUrl: string | null; guests?: GuestLine[] },
+) {
   if (!p.to) return
   const isTreatment = p.kind === 'treatment'
+  const isGroup = (p.guests?.length ?? 0) > 1
+  const intro = isGroup
+    ? [
+        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> on <strong>${when(p.whenISO)}</strong> has been approved:`,
+        ...guestListLines(p.guests!),
+      ]
+    : [`Hi ${p.name ?? 'there'}, your ${p.kind} for <strong>${p.treatmentName ?? ''}</strong> on <strong>${when(p.whenISO)}</strong> has been approved.`]
   const { html, text } = shell(
     isTreatment ? 'Approved — please complete payment' : 'Your consultation is confirmed',
     [
-      `Hi ${p.name ?? 'there'}, your ${p.kind} for <strong>${p.treatmentName ?? ''}</strong> on <strong>${when(p.whenISO)}</strong> has been approved.`,
-      isTreatment && p.amountRm != null ? `Please pay <strong>RM${p.amountRm}</strong> to secure your appointment.` : 'We look forward to seeing you.',
+      ...intro,
+      isTreatment && p.amountRm != null
+        ? `Please pay <strong>RM${p.amountRm}</strong>${isGroup ? ' (total for the group)' : ''} to secure your appointment.`
+        : 'We look forward to seeing you.',
     ],
     isTreatment && p.payUrl ? { label: `Pay RM${p.amountRm}`, url: p.payUrl } : undefined,
   )
   await sendEmail({ to: p.to, category: 'transactional', subject: isTreatment ? 'Approved — pay to confirm your appointment' : 'Your consultation is confirmed', html, text })
 }
 
-export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null }) {
+export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; guests?: GuestLine[] }) {
+  const isGroup = (p.guests?.length ?? 0) > 1
   await sendTelegram(
-    `✅ <b>Payment received — confirmed</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(when(p.whenISO))}`,
+    `✅ <b>Payment received — confirmed</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}`,
   )
   if (!p.to) return
+  const intro = isGroup
+    ? [
+        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> is confirmed for <strong>${when(p.whenISO)}</strong>:`,
+        ...guestListLines(p.guests!),
+      ]
+    : [`Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`]
   const { html, text } = shell('Your appointment is confirmed', [
-    `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`,
+    ...intro,
     'A same-gender therapist will be assigned as requested. Please arrive 10 minutes early.',
     'To reschedule, message us on WhatsApp at least 12–24 hours beforehand. Cancellations within 12 hours are non-refundable.',
   ])

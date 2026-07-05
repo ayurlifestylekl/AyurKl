@@ -171,7 +171,7 @@ export async function approveGroup(
 
   const { data: members } = await db
     .from('appointments')
-    .select('id, status, gender_requirement, duration_mins, patient_name, patient_email, treatment_name, payable_amount_rm')
+    .select('id, status, gender_requirement, duration_mins, patient_name, patient_email, treatment_name, payable_amount_rm, guest_age')
     .eq('group_id', groupId)
   if (!members || members.length === 0) return { error: 'Group not found.' }
 
@@ -291,6 +291,11 @@ export async function approveGroup(
     whenISO: p.confirmedAt,
     amountRm: totalRm || null,
     payUrl,
+    guests: pending.map((m) => ({
+      name: m.patient_name,
+      age: m.guest_age != null ? Number(m.guest_age) : null,
+      treatmentName: m.treatment_name,
+    })),
   })
 
   revalidatePath('/console')
