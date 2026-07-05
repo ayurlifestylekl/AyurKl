@@ -80,6 +80,40 @@ export async function startPaymentForAppointment(
   return { url }
 }
 
+/**
+ * Authoritatively reconcile a bill against the provider's API and confirm the
+ * booking if the provider reports it paid. Safety net for a webhook that was
+ * missed or failed signature verification. Idempotent; a no-op if the provider
+ * can't be queried or the bill isn't paid.
+ */
+export async function reconcileByBill(
+  billId: string,
+): Promise<{ appointmentId: string } | { error: string } | { skipped: true }> {
+  if (!billId) return { skipped: true }
+  const provider = getPaymentProvider()
+  if (!provider.fetchBillStatus) return { skipped: true }
+  const status = await provider.fetchBillStatus(billId)
+  if (!status?.paid) return { skipped: true }
+  return markBillPaid(billId)
+}
+
+/**
+ * Reconcile a single appointment that's awaiting payment — used when the
+ * customer returns from the gateway, so a paid booking self-heals even if the
+ * webhook never landed. Returns 'confirmed' when it flips, else 'noop'.
+ */
+export async function reconcileAppointment(appointmentId: string): Promise<'confirmed' | 'noop'> {
+  const sb = admin()
+  const { data: a } = await sb
+    .from('appointments')
+    .select('status, payment_bill_id')
+    .eq('id', appointmentId)
+    .maybeSingle()
+  if (!a || a.status !== 'awaiting_payment' || !a.payment_bill_id) return 'noop'
+  const res = await reconcileByBill(a.payment_bill_id)
+  return 'appointmentId' in res ? 'confirmed' : 'noop'
+}
+
 /** Mark a bill paid and confirm its appointment. Idempotent. */
 export async function markBillPaid(billId: string): Promise<{ appointmentId: string } | { error: string }> {
   const sb = admin()

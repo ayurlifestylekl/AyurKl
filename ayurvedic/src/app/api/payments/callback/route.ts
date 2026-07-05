@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { getPaymentProvider } from '@/lib/payments'
-import { markBillPaid } from '@/lib/booking/payment'
+import { markBillPaid, reconcileByBill } from '@/lib/booking/payment'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,6 +9,10 @@ async function handle(req: NextRequest) {
   const result = await provider.verifyCallback(req)
   if (result.paid && result.billId) {
     await markBillPaid(result.billId)
+  } else if (result.billId) {
+    // Signature check failed or the paid flag wasn't set — don't silently drop
+    // it. Ask the provider's API directly; confirm only if it's genuinely paid.
+    await reconcileByBill(result.billId)
   }
   // Stub return flow carries a redirect back to the customer status page.
   if (result.redirectTo) {

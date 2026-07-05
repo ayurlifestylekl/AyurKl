@@ -52,6 +52,20 @@ export const billplzProvider: PaymentProvider = {
     return { billId: json.id, url: json.url }
   },
 
+  async fetchBillStatus(billId: string): Promise<{ paid: boolean } | null> {
+    if (!billId) return null
+    try {
+      const res = await fetch(`${API_BASE}/api/v3/bills/${billId}`, {
+        headers: { Authorization: authHeader() },
+      })
+      if (!res.ok) return null
+      const json = (await res.json()) as { paid?: boolean }
+      return { paid: json.paid === true }
+    } catch {
+      return null
+    }
+  },
+
   async verifyCallback(req: Request): Promise<CallbackResult> {
     // Server-to-server callback is an x-www-form-urlencoded POST.
     const form = await req.formData()

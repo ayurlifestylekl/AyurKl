@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient as createSb } from '@supabase/supabase-js'
 import { createBookingToken } from '@/lib/booking/token'
+import { reconcileByBill } from '@/lib/booking/payment'
 import { notifyCancelled, notifyPaymentReminder, BOOKING_SITE_URL } from '@/lib/booking/notify'
 
 export const dynamic = 'force-dynamic'
@@ -36,11 +37,11 @@ async function handle(req: NextRequest) {
     //    awaiting_payment row missing its expiry stamp but approved >15h ago.
     const [byExpiry, byStale] = await Promise.all([
       sb.from('appointments')
-        .select('id, patient_email, patient_name, treatment_name')
+        .select('id, patient_email, patient_name, treatment_name, payment_bill_id')
         .eq('status', 'awaiting_payment')
         .lt('payment_expires_at', nowISO),
       sb.from('appointments')
-        .select('id, patient_email, patient_name, treatment_name')
+        .select('id, patient_email, patient_name, treatment_name, payment_bill_id')
         .eq('status', 'awaiting_payment')
         .is('payment_expires_at', null)
         .lt('approved_at', staleISO),
@@ -50,7 +51,19 @@ async function handle(req: NextRequest) {
     const expired = [...(byExpiry.data ?? []), ...(byStale.data ?? [])]
 
     let expiredCount = 0
+    let rescuedCount = 0
     for (const a of expired) {
+      // Never cancel a booking the customer actually paid for: if a bill is
+      // attached, confirm-if-paid against the provider's API first. This catches
+      // payments whose webhook was missed/rejected before they get released.
+      if (a.payment_bill_id) {
+        try {
+          const r = await reconcileByBill(a.payment_bill_id)
+          if ('appointmentId' in r) { rescuedCount++; continue }
+        } catch (e) {
+          console.error('[cron] reconcile check failed for', a.id, e)
+        }
+      }
       const { error } = await sb
         .from('appointments')
         .update({ status: 'cancelled', cancelled_at: nowISO, cancellation_reason: EXPIRED_REASON })
@@ -100,7 +113,7 @@ async function handle(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ expired: expiredCount, reminded: remindedCount })
+    return NextResponse.json({ expired: expiredCount, rescued: rescuedCount, reminded: remindedCount })
   } catch (err) {
     console.error('[cron] expire-bookings failed:', err)
     return NextResponse.json(

@@ -34,4 +34,10 @@ export interface PaymentProvider {
   createBill(args: CreateBillArgs): Promise<CreateBillResult>
   /** Parse + verify a provider callback/return request. */
   verifyCallback(req: Request): Promise<CallbackResult>
+  /**
+   * Authoritative status lookup straight from the provider's API — used to
+   * reconcile a webhook that was missed or failed signature verification.
+   * Returns null when the provider can't be queried (e.g. the test stub).
+   */
+  fetchBillStatus?(billId: string): Promise<{ paid: boolean } | null>
 }
