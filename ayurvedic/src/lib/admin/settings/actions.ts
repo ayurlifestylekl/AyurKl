@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { createClient } from '@/lib/supabase/server'
+import { detectChats } from '@/lib/integrations/telegram'
 
 export type ActionResult<T = void> =
   | { ok: true; data?: T }
@@ -68,6 +69,37 @@ export async function updateSiteSettings(
     revalidatePath('/admin/settings')
     revalidatePath('/', 'layout')
     return { ok: true }
+  } catch (err) {
+    return { ok: false, error: (err as Error).message }
+  }
+}
+
+/* ── Telegram integration ───────────────────────────────────────────── */
+
+export async function saveTelegramSettings(input: { token: string; chatId: string }): Promise<ActionResult> {
+  try {
+    await requireAdminSession()
+    const supabase = await createClient()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from('integration_settings') as any)
+      .update({ telegram_bot_token: input.token.trim() || null, telegram_chat_id: input.chatId.trim() || null })
+      .eq('id', 1)
+    if (error) return { ok: false, error: error.message }
+    revalidatePath('/admin/settings')
+    return { ok: true }
+  } catch (err) {
+    return { ok: false, error: (err as Error).message }
+  }
+}
+
+export async function detectTelegramChatId(
+  token: string,
+): Promise<ActionResult<{ chats: { id: string; title: string }[] }>> {
+  try {
+    await requireAdminSession()
+    const res = await detectChats(token)
+    if ('error' in res) return { ok: false, error: res.error }
+    return { ok: true, data: { chats: res.chats } }
   } catch (err) {
     return { ok: false, error: (err as Error).message }
   }

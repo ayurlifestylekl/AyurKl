@@ -1,8 +1,14 @@
 import 'server-only'
 import { sendEmail } from '@/lib/email/send'
+import { sendTelegram } from '@/lib/integrations/telegram'
 import { fmtMY } from '@/lib/datetime'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
+
+/** Escape user-supplied text for Telegram HTML parse mode. */
+function esc(s: string | null | undefined): string {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
 
 function when(iso: string | null | undefined): string {
   return fmtMY(iso, { dateStyle: 'full', timeStyle: 'short' })
@@ -28,6 +34,9 @@ export interface NotifyBase {
 }
 
 export async function notifyRequestReceived(p: NotifyBase & { kind: string; whenISO: string | null }) {
+  await sendTelegram(
+    `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
+  )
   if (!p.to) return
   const { html, text } = shell('We’ve received your request', [
     `Hi ${p.name ?? 'there'}, thank you for your ${p.kind} request for <strong>${p.treatmentName ?? 'your appointment'}</strong>.`,
@@ -52,6 +61,9 @@ export async function notifyApproved(p: NotifyBase & { kind: string; whenISO: st
 }
 
 export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null }) {
+  await sendTelegram(
+    `✅ <b>Payment received — confirmed</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(when(p.whenISO))}`,
+  )
   if (!p.to) return
   const { html, text } = shell('Your appointment is confirmed', [
     `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`,
@@ -77,6 +89,9 @@ export async function notifyPaymentReminder(p: NotifyBase & { payUrl: string; ex
 }
 
 export async function notifyCancelled(p: NotifyBase & { refundable: boolean; reason?: string }) {
+  await sendTelegram(
+    `❌ <b>Cancelled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${p.reason ? `\nReason: ${esc(p.reason)}` : ''}`,
+  )
   if (!p.to) return
   const lines = [
     `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been cancelled.`,

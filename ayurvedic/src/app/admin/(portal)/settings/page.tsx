@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { getSiteSettings } from '@/lib/admin/settings/queries'
+import { getSiteSettings, getTelegramSettings } from '@/lib/admin/settings/queries'
 import SettingsForm from './SettingsForm'
+import TelegramSettings from './TelegramSettings'
 
 export const metadata = { title: 'Settings · Admin' }
 export const dynamic = 'force-dynamic'
@@ -8,6 +9,7 @@ export const dynamic = 'force-dynamic'
 export default async function AdminSettingsPage() {
   const supabase = await createClient()
   const settings = await getSiteSettings(supabase)
+  const telegram = await getTelegramSettings(supabase)
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-4">
@@ -31,6 +33,7 @@ export default async function AdminSettingsPage() {
       </header>
 
       <SettingsForm initial={settings} />
+      <TelegramSettings initial={telegram} />
     </div>
   )
 }

@@ -65,6 +65,23 @@ const DEFAULTS: SiteSettings = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface TelegramSettings {
+  token: string | null
+  chatId: string | null
+}
+
+/** Telegram integration config (admin-only table; is_admin RLS). */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getTelegramSettings(supabase: SupabaseClient<any>): Promise<TelegramSettings> {
+  const { data } = await supabase
+    .from('integration_settings')
+    .select('telegram_bot_token, telegram_chat_id')
+    .eq('id', 1)
+    .maybeSingle()
+  return { token: data?.telegram_bot_token ?? null, chatId: data?.telegram_chat_id ?? null }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getSiteSettings(supabase: SupabaseClient<any>): Promise<SiteSettings> {
   const { data, error } = await supabase
     .from('site_settings')
