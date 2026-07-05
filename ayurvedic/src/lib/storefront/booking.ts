@@ -9,6 +9,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createClient as createSb } from '@supabase/supabase-js'
 import type { StaffAppointment } from '@/types/booking'
 import { APPOINTMENT_COLUMNS, mapAppointmentRow } from '@/lib/booking/map'
+import { type Announcement, mapAnnouncementRow, pickActive, mytTodayYMD } from '@/lib/booking/announcements'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SB = SupabaseClient<any, 'public', any>
@@ -54,6 +55,33 @@ export async function getGroupMembers(groupId: string): Promise<StaffAppointment
     return []
   }
   return (data ?? []).map(mapAppointmentRow)
+}
+
+/**
+ * The single announcement to show on the public banner right now (nearest
+ * active/upcoming closure, else newest message), or null. Read via a lightly-
+ * cached, tagged client so the public layout stays ISR-friendly; staff actions
+ * bust it instantly with revalidateTag('announcements').
+ */
+export async function getActiveAnnouncement(): Promise<Announcement | null> {
+  const cached = createSb(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+      global: { fetch: (input, init) => fetch(input, { ...init, next: { revalidate: 300, tags: ['announcements'] } }) },
+    },
+  )
+  const { data, error } = await cached
+    .from('announcements')
+    .select('id, kind, message, start_date, end_date, block_id, created_at')
+    .order('created_at', { ascending: false })
+    .limit(50)
+  if (error) {
+    console.error('[storefront/booking] getActiveAnnouncement:', error.message)
+    return null
+  }
+  return pickActive((data ?? []).map(mapAnnouncementRow), mytTodayYMD())
 }
 
 /** A signed-in customer's own bookings (RLS-scoped client). */

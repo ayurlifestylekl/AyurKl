@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import type { BookingStatus } from '@/types/booking'
 import { canTransition } from '@/lib/booking/status'
 import { therapistMatchesRequirement } from '@/lib/booking/policy'
@@ -482,5 +482,76 @@ export async function deleteBlock(id: string): Promise<Ok | Err> {
   const { error } = await db.from('schedule_blocks').delete().eq('id', id)
   if (error) return { error: error.message }
   revalidatePath('/console/blocks')
+  return { ok: true }
+}
+
+/* ── Customer announcements (public banner) ─────────────────────────── */
+
+export interface AnnouncementInput {
+  kind: 'closure' | 'message'
+  message: string
+  /** Required for closures. 'YYYY-MM-DD'. */
+  startDate: string | null
+  endDate: string | null
+}
+
+/**
+ * Publish an announcement. A 'closure' also creates a linked centre-closed
+ * all-day block so customers can't book those dates; a 'message' is banner-only.
+ */
+export async function createAnnouncement(input: AnnouncementInput): Promise<Ok | Err> {
+  const { userId, db } = await requireStaff(['admin', 'front_desk'])
+  const message = input.message?.trim()
+  if (!message) return { error: 'Enter a message.' }
+  if (input.kind === 'closure' && !input.startDate) return { error: 'Pick the closure date.' }
+  if (input.endDate && input.startDate && input.endDate < input.startDate) {
+    return { error: 'End date must be on or after the start date.' }
+  }
+
+  let blockId: string | null = null
+  if (input.kind === 'closure') {
+    const start = input.startDate as string
+    const end = input.endDate || start
+    const { data: block, error: bErr } = await db
+      .from('schedule_blocks')
+      .insert({
+        therapist_code: null, // whole centre
+        start_at: new Date(`${start}T00:00:00+08:00`).toISOString(),
+        end_at: new Date(`${end}T23:59:00+08:00`).toISOString(),
+        all_day: true,
+        recurrence: 'none',
+        until_date: null,
+        reason: message,
+        created_by: userId,
+      })
+      .select('id')
+      .single()
+    if (bErr) return { error: bErr.message }
+    blockId = block.id as string
+  }
+
+  const { error } = await db.from('announcements').insert({
+    kind: input.kind,
+    message,
+    start_date: input.startDate || null,
+    end_date: input.endDate || null,
+    block_id: blockId,
+    created_by: userId,
+  })
+  if (error) return { error: error.message }
+  revalidatePath('/console/announcements')
+  revalidateTag('announcements')
+  return { ok: true }
+}
+
+/** Remove an announcement. A closure also deletes its block, reopening bookings. */
+export async function deleteAnnouncement(id: string): Promise<Ok | Err> {
+  const { db } = await requireStaff(['admin', 'front_desk'])
+  const { data: a } = await db.from('announcements').select('block_id').eq('id', id).maybeSingle()
+  const { error } = await db.from('announcements').delete().eq('id', id)
+  if (error) return { error: error.message }
+  if (a?.block_id) await db.from('schedule_blocks').delete().eq('id', a.block_id)
+  revalidatePath('/console/announcements')
+  revalidateTag('announcements')
   return { ok: true }
 }

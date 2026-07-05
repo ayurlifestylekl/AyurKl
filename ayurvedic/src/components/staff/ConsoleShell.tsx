@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
-  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, Inbox, CreditCard, CheckCircle2, Users, LayoutList, CalendarOff, CalendarRange,
+  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, Inbox, CreditCard, CheckCircle2, Users, LayoutList, CalendarOff, CalendarRange, Megaphone,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
@@ -64,6 +64,7 @@ function NavLinks({ pendingCount, onNavigate }: { pendingCount: number; onNaviga
       {([
         { href: '/console/schedule', label: 'Schedule', Icon: CalendarRange },
         { href: '/console/blocks', label: 'Availability', Icon: CalendarOff },
+        { href: '/console/announcements', label: 'Announcements', Icon: Megaphone },
       ] as const).map(({ href, label, Icon }) => {
         const active = pathname.startsWith(href)
         return (
