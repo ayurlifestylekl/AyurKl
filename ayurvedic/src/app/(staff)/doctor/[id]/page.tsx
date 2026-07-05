@@ -23,6 +23,12 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
   const groupMembers = a.groupId ? await getGroupAppointments(db, a.groupId) : []
   const isGroup = groupMembers.length > 1
 
+  // Doctors see name/gender/health only — never contact details.
+  const hideContact = role === 'doctor'
+  const subline = [a.treatmentName, fmt(a.appointmentDatetime), hideContact ? null : a.patientPhone]
+    .filter(Boolean)
+    .join(' · ')
+
   return (
     <div>
       <Link href="/doctor" className="font-heading text-[11px] font-semibold uppercase tracking-[0.12em] text-dark/50 hover:text-primary">
@@ -34,12 +40,10 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
         <StatusBadge status={a.status} />
         <span className="rounded-full border border-dark/15 px-2 py-0.5 font-heading text-[10px] uppercase tracking-[0.12em] text-dark/50">{a.bookingKind}</span>
       </div>
-      <p className="mt-1 font-body text-[13.5px] text-dark/60">
-        {a.treatmentName} · {fmt(a.appointmentDatetime)} · {a.patientPhone}
-      </p>
+      <p className="mt-1 font-body text-[13.5px] text-dark/60">{subline}</p>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <PatientHealthPanel p={a} />
+        <PatientHealthPanel p={a} hideContact={hideContact} />
         <div className="space-y-4">
           {isGroup ? (
             <GroupApprovalActions
@@ -48,6 +52,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
                 id: m.id,
                 patientName: m.patientName,
                 patientGender: m.patientGender,
+                age: m.guestAge,
                 treatmentName: m.treatmentName,
                 genderRequirement: m.genderRequirement,
                 status: m.status,

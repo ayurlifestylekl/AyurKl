@@ -1,13 +1,14 @@
 import { requireStaff } from '@/lib/staff/guard'
-import { getIncomingRequests } from '@/lib/staff/appointments'
+import { getIncomingRequests, redactContactList } from '@/lib/staff/appointments'
 import BookingQueue from '@/components/staff/BookingQueue'
 import AutoRefresh from '@/components/staff/AutoRefresh'
 
 export const dynamic = 'force-dynamic'
 
 export default async function DoctorRequestsPage() {
-  const { db } = await requireStaff(['admin', 'doctor'])
-  const requests = await getIncomingRequests(db)
+  const { db, role } = await requireStaff(['admin', 'doctor'])
+  const raw = await getIncomingRequests(db)
+  const requests = role === 'doctor' ? redactContactList(raw) : raw
   const pending = requests.filter((r) => r.status === 'pending')
   const awaiting = requests.filter((r) => r.status !== 'pending')
 

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { requireStaff } from '@/lib/staff/guard'
-import { getConsultationsToClear } from '@/lib/staff/appointments'
+import { getConsultationsToClear, redactContactList } from '@/lib/staff/appointments'
 import StatusBadge from '@/components/staff/StatusBadge'
 import AutoRefresh from '@/components/staff/AutoRefresh'
 
@@ -11,8 +11,9 @@ function fmt(iso: string | null) {
 }
 
 export default async function DoctorConsultationsPage() {
-  const { db } = await requireStaff(['admin', 'doctor'])
-  const list = await getConsultationsToClear(db)
+  const { db, role } = await requireStaff(['admin', 'doctor'])
+  const raw = await getConsultationsToClear(db)
+  const list = role === 'doctor' ? redactContactList(raw) : raw
 
   return (
     <div>
@@ -33,7 +34,7 @@ export default async function DoctorConsultationsPage() {
               <div className="min-w-0 flex-1">
                 <div className="font-semibold text-primary">{c.patientName ?? '—'}</div>
                 <div className="truncate text-[12.5px] text-dark/55">
-                  {c.treatmentName ?? 'Consultation'} · {fmt(c.appointmentDatetime)} · {c.patientPhone ?? '—'}
+                  {[c.treatmentName ?? 'Consultation', fmt(c.appointmentDatetime), c.patientPhone].filter(Boolean).join(' · ')}
                 </div>
               </div>
               <StatusBadge status={c.status} />

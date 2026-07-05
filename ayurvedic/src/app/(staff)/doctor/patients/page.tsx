@@ -9,23 +9,28 @@ function fmtDate(iso: string | null) {
 }
 
 export default async function DoctorPatientsPage({ searchParams }: { searchParams: { q?: string } }) {
-  const { db } = await requireStaff(['admin', 'doctor'])
+  const { db, role } = await requireStaff(['admin', 'doctor'])
+  const hideContact = role === 'doctor' // doctors may not see contact details (PDPA)
   const all = await getPatientDirectory(db)
   const q = (searchParams.q ?? '').trim().toLowerCase()
   const list = q
-    ? all.filter((p) => (p.name ?? '').toLowerCase().includes(q) || (p.phone ?? '').toLowerCase().includes(q))
+    ? all.filter(
+        (p) =>
+          (p.name ?? '').toLowerCase().includes(q) ||
+          (!hideContact && (p.phone ?? '').toLowerCase().includes(q)),
+      )
     : all
 
   return (
     <div>
       <h1 className="font-heading text-[22px] font-extrabold text-primary">Patients</h1>
-      <p className="mb-5 font-body text-[13px] text-dark/55">Everyone who has booked. Search by name or phone, then open the latest visit for full history.</p>
+      <p className="mb-5 font-body text-[13px] text-dark/55">Everyone who has booked. Search by {hideContact ? 'name' : 'name or phone'}, then open the latest visit for full history.</p>
 
       <form method="get" className="mb-5 flex gap-2">
         <input
           name="q"
           defaultValue={searchParams.q ?? ''}
-          placeholder="Search name or phone…"
+          placeholder={hideContact ? 'Search by name…' : 'Search name or phone…'}
           className="w-full max-w-sm rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
         />
         <button type="submit" className="rounded-lg bg-accent px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white hover:bg-accent/90">
@@ -48,7 +53,7 @@ export default async function DoctorPatientsPage({ searchParams }: { searchParam
             <thead className="border-b border-accent/20 font-heading text-[10px] uppercase tracking-[0.12em] text-dark/45">
               <tr>
                 <th className="px-4 py-3">Patient</th>
-                <th className="px-4 py-3">Phone</th>
+                {!hideContact && <th className="px-4 py-3">Phone</th>}
                 <th className="px-4 py-3 text-center">Visits</th>
                 <th className="px-4 py-3">Last visit</th>
                 <th className="px-4 py-3" />
@@ -61,7 +66,7 @@ export default async function DoctorPatientsPage({ searchParams }: { searchParam
                     <span className="font-semibold text-primary">{p.name ?? '—'}</span>
                     {p.isGuest && <span className="ml-2 text-[11px] uppercase tracking-wide text-dark/40">guest</span>}
                   </td>
-                  <td className="px-4 py-3 text-dark/70">{p.phone ?? '—'}</td>
+                  {!hideContact && <td className="px-4 py-3 text-dark/70">{p.phone ?? '—'}</td>}
                   <td className="px-4 py-3 text-center text-dark/70">{p.visits}</td>
                   <td className="px-4 py-3 text-dark/70">{fmtDate(p.lastVisitISO)}</td>
                   <td className="px-4 py-3 text-right">

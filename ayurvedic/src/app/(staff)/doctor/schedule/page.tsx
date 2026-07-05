@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { requireStaff } from '@/lib/staff/guard'
-import { getDoctorPatients, getConsultationsToClear } from '@/lib/staff/appointments'
+import { getDoctorPatients, getConsultationsToClear, redactContactList } from '@/lib/staff/appointments'
 import BookingQueue from '@/components/staff/BookingQueue'
 import AutoRefresh from '@/components/staff/AutoRefresh'
 import { mytDayKey } from '@/lib/datetime'
@@ -8,8 +8,9 @@ import { mytDayKey } from '@/lib/datetime'
 export const dynamic = 'force-dynamic'
 
 export default async function DoctorSchedulePage() {
-  const { db } = await requireStaff(['admin', 'doctor'])
-  const [patients, toClear] = await Promise.all([getDoctorPatients(db), getConsultationsToClear(db)])
+  const { db, role } = await requireStaff(['admin', 'doctor'])
+  const [rawPatients, toClear] = await Promise.all([getDoctorPatients(db), getConsultationsToClear(db)])
+  const patients = role === 'doctor' ? redactContactList(rawPatients) : rawPatients
 
   const todayStr = mytDayKey(new Date())
   const today = patients.filter((p) => p.appointmentDatetime && mytDayKey(p.appointmentDatetime) === todayStr)

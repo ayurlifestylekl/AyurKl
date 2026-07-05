@@ -1,7 +1,11 @@
 import type { DoctorPatientView } from '@/types/booking'
 
-/** Read-only patient + health context. Shown on console + doctor detail. */
-export default function PatientHealthPanel({ p }: { p: DoctorPatientView }) {
+/**
+ * Read-only patient + health context. Shown on console + doctor detail.
+ * `hideContact` drops phone/email for the doctor role — doctors see only name,
+ * gender and health history, never contact details (PDPA).
+ */
+export default function PatientHealthPanel({ p, hideContact = false }: { p: DoctorPatientView; hideContact?: boolean }) {
   const intake = p.healthIntake ?? {}
   const acct = p.accountHealth
   const hasIntake = !!(intake.conditions || intake.allergies || intake.medications || intake.pregnant || intake.onPeriod || intake.notes)
@@ -13,8 +17,8 @@ export default function PatientHealthPanel({ p }: { p: DoctorPatientView }) {
         <h3 className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-accent">Guest</h3>
         <div className="space-y-1.5">
           <Row label="Name" value={p.patientName} />
-          <Row label="Contact" value={p.patientPhone} />
-          <Row label="Email" value={p.patientEmail} />
+          {!hideContact && <Row label="Contact" value={p.patientPhone} />}
+          {!hideContact && <Row label="Email" value={p.patientEmail} />}
           <Row label="Gender" value={p.patientGender} />
           <Row label="Account" value={p.isGuest ? 'Guest' : 'Registered'} />
         </div>
