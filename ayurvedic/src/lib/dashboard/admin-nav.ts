@@ -13,6 +13,7 @@ export const adminNav: NavItem[] = [
   { label: 'Overview', href: '/admin/dashboard', icon: 'dashboard' },
   { label: 'Consultations', href: '/admin/appointments', icon: 'calendar' },
   { label: 'Customers', href: '/admin/customers', icon: 'users' },
+  { label: 'Leads', href: '/admin/leads', icon: 'inbox' },
   { label: 'Messages', href: '/admin/messages', icon: 'message-square' },
   { label: 'Reviews', href: '/admin/reviews', icon: 'star' },
   { label: 'Audit', href: '/admin/audit', icon: 'history' },
