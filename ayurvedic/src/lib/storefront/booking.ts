@@ -17,7 +17,14 @@ function admin() {
   return createSb(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { persistSession: false, autoRefreshToken: false } },
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+      // The customer status/pay page MUST reflect the live booking state. Next.js
+      // caches fetch() by default (keyed per booking id), which would freeze the
+      // page at whatever status it had on first view — so approval/payment never
+      // appear. Force every read from this client to bypass the Data Cache.
+      global: { fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }) },
+    },
   )
 }
 
