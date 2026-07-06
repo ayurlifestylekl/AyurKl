@@ -149,7 +149,7 @@ export default function PostHero({ post, readingMinutes }: PostHeroProps) {
               sizes="(min-width: 1280px) 1280px, 100vw"
               className="object-cover"
             />
-            {/* Gradient + grain — per CLAUDE.md anti-generic image rules */}
+            {/* Gradient + grain — per the house anti-generic image rules */}
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent"

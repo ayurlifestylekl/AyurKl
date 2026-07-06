@@ -18,7 +18,7 @@ ayurvedic/.vercel
 ayurvedic/*.tsbuildinfo
 ayurvedic/next-env.d.ts
 
-# Claude Code
+# Local dev tooling (not for deployment)
 .claude/
 
 # Raw video source files (workspace root) — never ship to git.
@@ -31,3 +31,7 @@ ayurvedic/next-env.d.ts
 # Preserved originals of the compressed videos (kept locally as backup).
 ayurvedic/public/videos/.originals/
 .superpowers/
+CLAUDE.md
+SKILL1.md
+skills-lock.json
+docs/superpowers/

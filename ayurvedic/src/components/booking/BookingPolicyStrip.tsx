@@ -17,7 +17,7 @@ const items = [
 
 /**
  * Tight policy strip shown above every booking surface. Pulls the three
- * clinic rules from CLAUDE.md into a single glance before the visitor
+ * clinic rules into a single glance before the visitor
  * starts picking slots — so nothing on the confirmation screen is a
  * surprise.
  */

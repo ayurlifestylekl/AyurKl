@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 /**
  * Sticky 2px Turmeric Gold reading-progress bar at the top of the viewport.
  *
- * Uses `transform: scaleX` only (per CLAUDE.md anti-generic guardrails),
+ * Uses `transform: scaleX` only (per the house anti-generic guardrails),
  * runs inside requestAnimationFrame to avoid jank during fast scrolls,
  * and respects `prefers-reduced-motion` by hiding the bar entirely when set.
  */
