@@ -131,7 +131,8 @@ export default async function BookingRequestPage({
           <div className="mt-7">
             {b.status === 'pending' && (
               <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13.5px] text-dark/70">
-                Thanks! We&apos;ll review and confirm shortly. {b.bookingKind === 'treatment' && 'Once approved, you can pay here to secure your slot.'}
+                Thanks! We&apos;ll review and confirm shortly.{' '}
+                {b.bookingKind === 'treatment' && 'Once approved, we’ll email you a payment link to secure your slot — you can also pay right here on this page.'}
               </p>
             )}
             {b.status === 'awaiting_payment' &&
