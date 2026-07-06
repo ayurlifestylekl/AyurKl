@@ -30,11 +30,11 @@ export default function Footer() {
               className="mb-4 inline-flex items-center gap-3"
             >
               <Image
-                src="/kerala-logo.jpg"
+                src="/kerala-logo.png"
                 alt="Kerala Ayurvedic Lifestyle"
-                width={1024}
-                height={881}
-                className="h-14 w-auto rounded-lg"
+                width={714}
+                height={391}
+                className="h-14 w-auto rounded-lg bg-white p-1.5"
               />
             </Link>
             <p className="font-body text-sm leading-relaxed text-white/60">

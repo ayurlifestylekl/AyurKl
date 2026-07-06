@@ -57,11 +57,11 @@ export default function AuthCanvas({
       <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
         <Link href="/" className="group flex items-center gap-2.5">
           <Image
-            src="/kerala-logo.jpg"
+            src="/kerala-logo.png"
             alt="Kerala Ayurvedic Lifestyle"
-            width={1024}
-            height={881}
-            className="h-10 w-auto rounded-md transition-transform duration-300 group-hover:scale-[1.03]"
+            width={714}
+            height={391}
+            className="h-10 w-auto transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </Link>
         <Link

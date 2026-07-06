@@ -86,12 +86,12 @@ export default function Navbar() {
             onClick={() => setMobileOpen(false)}
           >
             <Image
-              src="/kerala-logo.jpg"
+              src="/kerala-logo.png"
               alt="Kerala Ayurvedic Lifestyle"
-              width={1024}
-              height={900}
+              width={714}
+              height={391}
               priority
-              className="h-10 w-auto rounded-md transition-transform duration-300 group-hover:scale-[1.03] sm:h-11"
+              className="h-10 w-auto transition-transform duration-300 group-hover:scale-[1.03] sm:h-11"
             />
           </Link>
 

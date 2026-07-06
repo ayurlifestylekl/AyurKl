@@ -111,11 +111,11 @@ export default function DashboardShell({ user, nav, portal, initialNotifications
         <div className="flex items-center justify-between border-b border-white/8 px-5 py-5">
           <Link href="/" className="group flex items-center gap-2.5">
             <Image
-              src="/kerala-logo.jpg"
+              src="/kerala-logo.png"
               alt="Kerala Ayurvedic Lifestyle"
-              width={1024}
-              height={881}
-              className="h-9 w-auto rounded-md"
+              width={714}
+              height={391}
+              className="h-9 w-auto rounded-md bg-white p-1"
             />
             <span className="flex flex-col">
               <span className="font-heading text-[9.5px] font-bold uppercase tracking-[0.22em] leading-tight text-[#D4AF37]">
