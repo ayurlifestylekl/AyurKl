@@ -34,9 +34,18 @@ interface BookingRequestFormProps {
   parentConsultationId?: string | null
 }
 
-type GuestRow = { name: string; gender: Gender | ''; age: string; treatmentId: string }
+type GuestRow = {
+  name: string
+  gender: Gender | ''
+  age: string
+  treatmentId: string
+  /** This guest's own slot (ISO) — guests may pick different dates & times. */
+  preferredAt: string
+  /** This guest's own health intake. */
+  health: HealthIntake
+}
 const MAX_GUESTS = 6
-const emptyGuest = (treatmentId = ''): GuestRow => ({ name: '', gender: '', age: '', treatmentId })
+const emptyGuest = (treatmentId = ''): GuestRow => ({ name: '', gender: '', age: '', treatmentId, preferredAt: '', health: {} })
 
 export default function BookingRequestForm({
   bookingKind,
@@ -88,14 +97,6 @@ export default function BookingRequestForm({
     }
   }
 
-  // Each guest's gender + chosen treatment, for same-time same-gender matching.
-  const members = isGroup
-    ? guests.slice(0, partySize).map((g) => ({
-        gender: g.gender,
-        treatmentId: g.treatmentId || defaultTreatmentId || null,
-      }))
-    : undefined
-
   const unitPrice = typeof treatment?.price === 'number' ? treatment.price : null
   const groupTotal = isGroup
     ? guests
@@ -115,7 +116,7 @@ export default function BookingRequestForm({
     if (!phone.trim()) return setError('Please enter a contact number — we need it to confirm your booking.')
     if (!email.trim()) return setError('Please enter an email — we need it to send your booking updates.')
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setError('Please enter a valid email address.')
-    if (!preferredAt) return setError('Please choose a preferred date and time.')
+    if (!isGroup && !preferredAt) return setError('Please choose a preferred date and time.')
     if (!accepted) return setError('Please accept the booking policies to continue.')
 
     startTransition(async () => {
@@ -130,20 +131,23 @@ export default function BookingRequestForm({
           setError('Please choose a therapy for every guest.')
           return
         }
+        if (cleaned.some((g) => !g.preferredAt)) {
+          setError('Please choose a date and time for every guest.')
+          return
+        }
         res = await createGroupBooking({
           treatmentId: treatment?.id ?? '',
-          preferredAt: new Date(preferredAt).toISOString(),
-          preferredAtAlt: preferredAtAlt ? new Date(preferredAtAlt).toISOString() : null,
           patientPhone: phone,
           patientEmail: email,
           isGuest: bookAsGuest || !signedIn,
-          healthIntake: health,
           acceptedPolicies: accepted,
           guests: cleaned.map<GroupGuest>((g) => ({
             name: g.name,
             gender: g.gender as Gender,
             age: g.age ? Number(g.age) : null,
             treatmentId: g.treatmentId || defaultTreatmentId,
+            preferredAt: new Date(g.preferredAt).toISOString(),
+            healthIntake: g.health,
           })),
         })
       } else {
@@ -243,12 +247,12 @@ export default function BookingRequestForm({
         <fieldset className="rounded-xl border border-accent/25 bg-white/60 p-4">
           <legend className="px-1 font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-accent">Guests</legend>
           <p className="mb-3 font-body text-[12px] italic text-dark/55">
-            Each guest gets a same-gender therapist at the same time
+            Each guest picks their own date &amp; time and gets a same-gender therapist
             {options.length > 1 ? ' — and can choose their own therapy.' : '.'}
           </p>
           <div className="space-y-3">
             {guests.slice(0, partySize).map((g, i) => (
-              <div key={i} className="rounded-lg border border-accent/15 bg-white/70 p-2.5">
+              <div key={i} className="space-y-2 rounded-lg border border-accent/15 bg-white/70 p-2.5">
                 <div className="grid grid-cols-[1fr_110px_72px] gap-2">
                   <input
                     value={g.name}
@@ -277,7 +281,7 @@ export default function BookingRequestForm({
                   <select
                     value={g.treatmentId}
                     onChange={(e) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, treatmentId: e.target.value } : x)))}
-                    className={`${inputCls} mt-2`}
+                    className={inputCls}
                     aria-label={`Therapy for guest ${i + 1}`}
                   >
                     <option value="">Choose therapy…</option>
@@ -289,19 +293,44 @@ export default function BookingRequestForm({
                     ))}
                   </select>
                 )}
+                <SlotPicker
+                  treatmentId={g.treatmentId || defaultTreatmentId || null}
+                  gender={g.gender}
+                  mode="treatment"
+                  value={g.preferredAt}
+                  onChange={(iso) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, preferredAt: iso } : x)))}
+                  label={`Date & time for ${g.name.trim() || `guest ${i + 1}`}`}
+                  required
+                />
+                <details className="rounded-lg border border-accent/15 bg-white/60 px-3 py-2">
+                  <summary className="cursor-pointer font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">
+                    Health details for {g.name.trim() || `guest ${i + 1}`} (optional)
+                  </summary>
+                  <div className="pt-3">
+                    <HealthIntakeFields
+                      embedded
+                      radioGroup={`onPeriod-guest-${i}`}
+                      value={g.health}
+                      onChange={(v) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, health: v } : x)))}
+                      gender={g.gender}
+                    />
+                  </div>
+                </details>
               </div>
             ))}
           </div>
         </fieldset>
       )}
 
-      {/* Time slots */}
-      <div className="grid gap-3">
-        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} members={members} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
-        <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} members={members} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
-      </div>
+      {/* Time slots (single bookings — each group guest picks theirs above) */}
+      {!isGroup && (
+        <div className="grid gap-3">
+          <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
+          <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
+        </div>
+      )}
 
-      <HealthIntakeFields value={health} onChange={setHealth} gender={isGroup ? '' : gender} />
+      {!isGroup && <HealthIntakeFields value={health} onChange={setHealth} gender={gender} />}
       <PolicyDisclaimers accepted={accepted} onAcceptedChange={setAccepted} />
 
       {error && (

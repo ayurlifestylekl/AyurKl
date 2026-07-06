@@ -137,7 +137,7 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
       .update({ payment_status: 'paid', paid_at: paidAt, status: 'confirmed' })
       .eq('group_id', g.group_id)
       .eq('status', 'awaiting_payment')
-      .select('id, patient_name, guest_age, treatment_name')
+      .select('id, patient_name, guest_age, treatment_name, appointment_date_time')
     if (gErr) return { error: gErr.message }
     if (!flipped || flipped.length === 0) {
       // Payment landed but no guest was awaiting confirmation — surface for manual review/refund.
@@ -152,6 +152,7 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
         name: m.patient_name,
         age: m.guest_age != null ? Number(m.guest_age) : null,
         treatmentName: m.treatment_name,
+        whenISO: m.appointment_date_time,
       })),
     })
     return { appointmentId: a.id }

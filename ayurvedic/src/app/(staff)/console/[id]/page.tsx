@@ -60,13 +60,13 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
                 patientGender: m.patientGender,
                 age: m.guestAge,
                 treatmentName: m.treatmentName,
+                requestedAt: m.requestedDatetime,
+                appointmentAt: m.appointmentDatetime,
                 genderRequirement: m.genderRequirement,
                 status: m.status,
                 assignedTherapistName: m.assignedTherapistName,
                 assignedTherapistCode: m.assignedTherapistCode,
               }))}
-              requestedAt={a.requestedDatetime}
-              requestedAtAlt={a.requestedDatetimeAlt}
               backHref="/console"
               canDelete
             />

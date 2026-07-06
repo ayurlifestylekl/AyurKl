@@ -37,11 +37,11 @@ async function handle(req: NextRequest) {
     //    awaiting_payment row missing its expiry stamp but approved >15h ago.
     const [byExpiry, byStale] = await Promise.all([
       sb.from('appointments')
-        .select('id, patient_email, patient_name, treatment_name, payment_bill_id')
+        .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id')
         .eq('status', 'awaiting_payment')
         .lt('payment_expires_at', nowISO),
       sb.from('appointments')
-        .select('id, patient_email, patient_name, treatment_name, payment_bill_id')
+        .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id')
         .eq('status', 'awaiting_payment')
         .is('payment_expires_at', null)
         .lt('approved_at', staleISO),
@@ -52,6 +52,8 @@ async function handle(req: NextRequest) {
 
     let expiredCount = 0
     let rescuedCount = 0
+    // A group shares one email address — send its expiry notice once, not per guest.
+    const cancelledGroups = new Set<string>()
     for (const a of expired) {
       // Never cancel a booking the customer actually paid for: if a bill is
       // attached, confirm-if-paid against the provider's API first. This catches
@@ -71,12 +73,14 @@ async function handle(req: NextRequest) {
         .eq('status', 'awaiting_payment') // guard against a race with a just-completed payment
       if (error) continue
       expiredCount++
+      if (a.group_id && cancelledGroups.has(a.group_id)) continue
+      if (a.group_id) cancelledGroups.add(a.group_id)
       // One bad email must not abort the whole sweep.
       try {
         await notifyCancelled({
           to: a.patient_email,
           name: a.patient_name,
-          treatmentName: a.treatment_name,
+          treatmentName: a.group_id ? `${a.treatment_name ?? 'Treatment'} (group)` : a.treatment_name,
           refundable: false,
           reason: EXPIRED_REASON,
         })
@@ -89,24 +93,32 @@ async function handle(req: NextRequest) {
     const soonISO = new Date(now.getTime() + 2 * 3600_000).toISOString()
     const { data: soon, error: soonErr } = await sb
       .from('appointments')
-      .select('id, patient_email, patient_name, treatment_name, payment_expires_at')
+      .select('id, group_id, patient_email, patient_name, treatment_name, payment_expires_at')
       .eq('status', 'awaiting_payment')
       .eq('payment_reminded', false)
       .gt('payment_expires_at', nowISO)
       .lt('payment_expires_at', soonISO)
     if (soonErr) throw soonErr
 
+    // A group shares one combined bill — remind it ONCE, not once per guest.
+    const remindedGroups = new Set<string>()
     let remindedCount = 0
     for (const a of soon ?? []) {
+      if (a.group_id && remindedGroups.has(a.group_id)) continue
       try {
         await notifyPaymentReminder({
           to: a.patient_email,
           name: a.patient_name,
-          treatmentName: a.treatment_name,
+          treatmentName: a.group_id ? `${a.treatment_name ?? 'Treatment'} (group)` : a.treatment_name,
           payUrl: `${BOOKING_SITE_URL}/book/request/${a.id}/pay?t=${createBookingToken(a.id)}`,
           expiresISO: a.payment_expires_at,
         })
-        await sb.from('appointments').update({ payment_reminded: true }).eq('id', a.id)
+        if (a.group_id) {
+          remindedGroups.add(a.group_id)
+          await sb.from('appointments').update({ payment_reminded: true }).eq('group_id', a.group_id)
+        } else {
+          await sb.from('appointments').update({ payment_reminded: true }).eq('id', a.id)
+        }
         remindedCount++
       } catch (e) {
         console.error('[cron] reminder failed for', a.id, e)

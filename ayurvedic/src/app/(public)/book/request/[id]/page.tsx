@@ -92,15 +92,15 @@ export default async function BookingRequestPage({
               done={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)}
               icon={CalendarCheck}
               label="Confirmed"
-              sub={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) ? whenText : 'Final confirmation.'}
+              sub={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) ? (isGroup ? 'Each guest’s time is listed below.' : whenText) : 'Final confirmation.'}
             />
             {b.status === 'cancelled' && <Step done icon={XCircle} label="Cancelled" sub={b.cancellationReason || 'This booking was cancelled.'} tone="danger" />}
           </ol>
 
           {/* Details */}
           <dl className="mt-7 grid grid-cols-2 gap-y-2 border-t border-accent/15 pt-5 font-body text-[13.5px]">
-            <Row label="Preferred time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />
-            {isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
+            {!isGroup && <Row label="Preferred time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
+            {!isGroup && isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
             {isGroup ? <Row label="Guests" value={`${members.length} guests`} /> : <Row label="Guest" value={b.patientName ?? '—'} />}
             <Row label="Status" value={STATUS_LABEL[b.status]} />
             {amount && <Row label={isGroup ? 'Total' : 'Price'} value={amount} />}
@@ -109,12 +109,18 @@ export default async function BookingRequestPage({
 
           {isGroup && (
             <div className="mt-4 rounded-xl border border-accent/15 bg-cream/40 p-4">
-              <div className="mb-2 font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-accent">Group guests</div>
-              <ul className="space-y-1.5">
+              <div className="mb-2 font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-accent">Group guests — each has their own time</div>
+              <ul className="space-y-2">
                 {members.map((m) => (
-                  <li key={m.id} className="flex items-center justify-between font-body text-[13px]">
-                    <span className="text-dark/80">{m.patientName ?? '—'} <span className="text-dark/45">· {m.patientGender}</span></span>
-                    <span className="font-heading text-[10px] uppercase tracking-[0.1em] text-dark/55">{STATUS_LABEL[m.status]}</span>
+                  <li key={m.id} className="flex items-start justify-between gap-2 font-body text-[13px]">
+                    <span className="min-w-0">
+                      <span className="text-dark/80">{m.patientName ?? '—'} <span className="text-dark/45">· {m.patientGender}</span></span>
+                      <span className="block text-[12px] text-dark/55">{m.treatmentName ?? ''}</span>
+                      <span className="block text-[12px] font-semibold text-dark/75">
+                        {fmtMY(m.appointmentDatetime ?? m.requestedDatetime, { dateStyle: 'medium', timeStyle: 'short' })}
+                      </span>
+                    </span>
+                    <span className="flex-none font-heading text-[10px] uppercase tracking-[0.1em] text-dark/55">{STATUS_LABEL[m.status]}</span>
                   </li>
                 ))}
               </ul>
@@ -144,7 +150,9 @@ export default async function BookingRequestPage({
             {['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) && when && (
               <div className="space-y-3">
                 <p className="rounded-xl border border-green-500/30 bg-green-50 px-4 py-3 font-body text-[13.5px] text-green-800">
-                  You&apos;re confirmed for <strong>{whenText}</strong>. Same-gender therapist as requested.
+                  {isGroup
+                    ? <>Your group booking is confirmed — each guest&apos;s time is listed above. Same-gender therapists as requested.</>
+                    : <>You&apos;re confirmed for <strong>{whenText}</strong>. Same-gender therapist as requested.</>}
                 </p>
                 <a
                   href={whatsappRescheduleLink(b.patientName ?? 'there', when)}

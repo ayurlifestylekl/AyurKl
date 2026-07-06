@@ -15,6 +15,10 @@ export interface GroupGuestRow {
   age?: number | null
   /** The therapy this guest chose (guests in a group may differ). */
   treatmentName?: string | null
+  /** This guest's own requested slot (guests in a group may pick different times). */
+  requestedAt: string | null
+  /** This guest's confirmed slot, once approved. */
+  appointmentAt: string | null
   /** Same-gender therapist required for this guest (null = any). */
   genderRequirement: Gender | null
   status: string
@@ -25,18 +29,24 @@ export interface GroupGuestRow {
 interface Props {
   groupId: string
   members: GroupGuestRow[]
-  /** Shared requested time (the whole group is booked for one slot). */
-  requestedAt: string | null
-  requestedAtAlt?: string | null
   backHref?: string
   canDelete?: boolean
+}
+
+/** UTC ISO → 'YYYY-MM-DDTHH:mm' in Malaysia time (UTC+8) for a datetime-local input. */
+function toMytInput(iso: string | null): string {
+  if (!iso) return ''
+  const t = new Date(iso).getTime()
+  return Number.isNaN(t) ? '' : new Date(t + 8 * 3600_000).toISOString().slice(0, 16)
+}
+/** datetime-local value (Malaysia time) → UTC ISO. */
+function fromMytInput(v: string): string {
+  return v ? new Date(`${v}:00+08:00`).toISOString() : ''
 }
 
 export default function GroupApprovalActions({
   groupId,
   members,
-  requestedAt,
-  requestedAtAlt = null,
   backHref = '/console',
   canDelete = false,
 }: Props) {
@@ -45,12 +55,10 @@ export default function GroupApprovalActions({
   const needsApproval = pendingMembers.length > 0
   const awaitingPayment = members.some((m) => m.status === 'awaiting_payment')
 
-  const timeOptions = [
-    { key: 'preferred', label: 'Preferred', iso: requestedAt },
-    { key: 'alt', label: 'Alternate', iso: requestedAtAlt },
-  ].filter((o): o is { key: string; label: string; iso: string } => !!o.iso)
-
-  const [chosenTime, setChosenTime] = useState(timeOptions[0]?.iso ?? '')
+  // Each guest confirms at THEIR requested time by default; staff may adjust.
+  const [times, setTimes] = useState<Record<string, string>>(() =>
+    Object.fromEntries(pendingMembers.map((m) => [m.id, toMytInput(m.requestedAt)])),
+  )
   const [room, setRoom] = useState('')
   const [assign, setAssign] = useState<Record<string, string>>({})
   const [rejecting, setRejecting] = useState(false)
@@ -59,6 +67,7 @@ export default function GroupApprovalActions({
   const [pending, start] = useTransition()
 
   const setTherapist = (id: string, code: string) => setAssign((p) => ({ ...p, [id]: code }))
+  const setTime = (id: string, v: string) => setTimes((p) => ({ ...p, [id]: v }))
 
   const run = (fn: () => Promise<{ ok: true } | { error: string }>) => {
     setError(null)
@@ -70,14 +79,17 @@ export default function GroupApprovalActions({
   }
 
   const onApprove = () => {
-    if (!chosenTime) { setError('Select the confirmed time.'); return }
     for (const m of pendingMembers) {
+      if (!times[m.id]) { setError(`Set the confirmed time for ${m.patientName ?? 'every guest'}.`); return }
       if (!assign[m.id]) { setError('Assign a therapist for every guest.'); return }
     }
     run(() => approveGroup(groupId, {
-      confirmedAt: chosenTime,
       room,
-      assignments: pendingMembers.map((m) => ({ id: m.id, therapistCode: assign[m.id] })),
+      assignments: pendingMembers.map((m) => ({
+        id: m.id,
+        therapistCode: assign[m.id],
+        confirmedAt: fromMytInput(times[m.id]),
+      })),
     }))
   }
 
@@ -101,43 +113,32 @@ export default function GroupApprovalActions({
         Group · {members.length} guests
       </h3>
       <p className="mb-3 font-body text-[12px] text-dark/55">
-        One request, one shared time. Assign a same-gender therapist to each guest, then approve the whole group.
+        Each guest has their own time. Confirm the time and assign a same-gender therapist per guest, then approve the whole group.
+        The same therapist can take two guests when their sessions don’t overlap.
       </p>
 
       {needsApproval && (
         <div className="space-y-3">
-          <Field label="Confirm a time the guest requested">
-            {timeOptions.length === 0 ? (
-              <p className="font-body text-[12.5px] italic text-dark/55">No time provided.</p>
-            ) : (
-              <div className="space-y-1.5">
-                {timeOptions.map((o) => (
-                  <label key={o.key} className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-accent/20 px-3 py-2">
-                    <input
-                      type="radio"
-                      name="groupConfirmTime"
-                      checked={chosenTime === o.iso}
-                      onChange={() => setChosenTime(o.iso)}
-                      className="h-4 w-4 flex-none accent-[#6E1023]"
-                    />
-                    <span className="font-body text-[13px] text-dark/80">
-                      <strong className="font-heading text-[10px] uppercase tracking-[0.12em] text-dark/55">{o.label}:</strong>{' '}
-                      {fmtMY(o.iso, { dateStyle: 'medium', timeStyle: 'short' })}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            )}
-          </Field>
-
-          <Field label="Assign a therapist per guest">
+          <Field label="Confirm time & therapist per guest">
             <div className="space-y-2">
               {pendingMembers.map((m) => (
-                <div key={m.id} className="rounded-lg border border-accent/20 px-3 py-2">
-                  <div className="mb-1.5">
+                <div key={m.id} className="space-y-1.5 rounded-lg border border-accent/20 px-3 py-2">
+                  <div>
                     <div className="font-body text-[13px] font-semibold text-primary">{m.patientName ?? 'Guest'}</div>
                     <div className="font-body text-[11.5px] text-dark/55">{guestMeta(m)}</div>
+                    {m.requestedAt && (
+                      <div className="font-body text-[11.5px] text-dark/55">
+                        Requested: {fmtMY(m.requestedAt, { dateStyle: 'medium', timeStyle: 'short' })}
+                      </div>
+                    )}
                   </div>
+                  <input
+                    type="datetime-local"
+                    value={times[m.id] ?? ''}
+                    onChange={(e) => setTime(m.id, e.target.value)}
+                    className={inp}
+                    aria-label={`Confirmed time for ${m.patientName ?? 'guest'} (Malaysia time)`}
+                  />
                   <select value={assign[m.id] ?? ''} onChange={(e) => setTherapist(m.id, e.target.value)} className={inp}>
                     <option value="">Select therapist…</option>
                     {therapistsForGender(m.genderRequirement).map((t) => (
@@ -171,6 +172,9 @@ export default function GroupApprovalActions({
               <span className="min-w-0">
                 <span className="font-semibold text-primary">{m.patientName ?? 'Guest'}</span>
                 <span className="block text-[11px] text-dark/55">{guestMeta(m)}</span>
+                {m.appointmentAt && (
+                  <span className="block text-[11px] text-dark/70">{fmtMY(m.appointmentAt, { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                )}
               </span>
               <span className="flex-none text-right text-dark/60">{m.assignedTherapistName ? `${m.assignedTherapistName} · ${m.assignedTherapistCode}` : '—'}</span>
             </div>

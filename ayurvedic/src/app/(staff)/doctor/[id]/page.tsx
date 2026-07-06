@@ -54,13 +54,13 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
                 patientGender: m.patientGender,
                 age: m.guestAge,
                 treatmentName: m.treatmentName,
+                requestedAt: m.requestedDatetime,
+                appointmentAt: m.appointmentDatetime,
                 genderRequirement: m.genderRequirement,
                 status: m.status,
                 assignedTherapistName: m.assignedTherapistName,
                 assignedTherapistCode: m.assignedTherapistCode,
               }))}
-              requestedAt={a.requestedDatetime}
-              requestedAtAlt={a.requestedDatetimeAlt}
               backHref="/doctor"
               canDelete={role === 'admin'}
             />

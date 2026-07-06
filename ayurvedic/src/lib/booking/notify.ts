@@ -38,25 +38,40 @@ export interface GuestLine {
   name: string | null
   age: number | null
   treatmentName: string | null
+  /** This guest's own slot — guests in a group may book different times. */
+  whenISO?: string | null
 }
 
 function guestListLines(guests: GuestLine[]): string[] {
   return guests.map((g) => {
     const who = `${esc(g.name ?? 'Guest')}${g.age != null ? `, ${g.age}` : ''}`
-    return `• <strong>${who}</strong> — ${esc(g.treatmentName ?? 'Treatment')}`
+    const slot = g.whenISO ? ` — ${fmtMY(g.whenISO, { dateStyle: 'medium', timeStyle: 'short' })}` : ''
+    return `• <strong>${who}</strong> — ${esc(g.treatmentName ?? 'Treatment')}${slot}`
   })
 }
 
-export async function notifyRequestReceived(p: NotifyBase & { kind: string; whenISO: string | null }) {
+export async function notifyRequestReceived(p: NotifyBase & { kind: string; whenISO: string | null; guests?: GuestLine[] }) {
+  const isGroup = (p.guests?.length ?? 0) > 1
   await sendTelegram(
-    `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
+    isGroup
+      ? `🆕 <b>New group request — ${p.guests!.length} guests</b>\n${p.guests!
+          .map((g) => `${esc(g.name ?? 'Guest')} — ${esc(g.treatmentName ?? '')} — ${esc(fmtMY(g.whenISO ?? null, { dateStyle: 'medium', timeStyle: 'short' }))}`)
+          .join('\n')}`
+      : `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
   )
   if (!p.to) return
-  const { html, text } = shell('We’ve received your request', [
-    `Hi ${p.name ?? 'there'}, thank you for your ${p.kind} request for <strong>${p.treatmentName ?? 'your appointment'}</strong>.`,
-    `Preferred time: <strong>${when(p.whenISO)}</strong>.`,
-    'Our team will review it shortly and confirm your slot.',
-  ])
+  const lines = isGroup
+    ? [
+        `Hi ${p.name ?? 'there'}, thank you for your group booking request for <strong>${p.guests!.length} guests</strong>:`,
+        ...guestListLines(p.guests!),
+        'Our team will review it shortly and confirm each slot.',
+      ]
+    : [
+        `Hi ${p.name ?? 'there'}, thank you for your ${p.kind} request for <strong>${p.treatmentName ?? 'your appointment'}</strong>.`,
+        `Preferred time: <strong>${when(p.whenISO)}</strong>.`,
+        'Our team will review it shortly and confirm your slot.',
+      ]
+  const { html, text } = shell('We’ve received your request', lines)
   await sendEmail({ to: p.to, category: 'transactional', subject: 'Your booking request — Kerala Ayurvedic Lifestyle', html, text })
 }
 
@@ -68,7 +83,7 @@ export async function notifyApproved(
   const isGroup = (p.guests?.length ?? 0) > 1
   const intro = isGroup
     ? [
-        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> on <strong>${when(p.whenISO)}</strong> has been approved:`,
+        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> has been approved:`,
         ...guestListLines(p.guests!),
       ]
     : [`Hi ${p.name ?? 'there'}, your ${p.kind} for <strong>${p.treatmentName ?? ''}</strong> on <strong>${when(p.whenISO)}</strong> has been approved.`]
@@ -93,7 +108,7 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
   if (!p.to) return
   const intro = isGroup
     ? [
-        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> is confirmed for <strong>${when(p.whenISO)}</strong>:`,
+        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> is confirmed:`,
         ...guestListLines(p.guests!),
       ]
     : [`Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`]

@@ -156,18 +156,18 @@ export async function approveAndAssign(
 }
 
 /**
- * Approve a whole group booking in ONE action. Confirms a single shared time for
- * every guest, assigns each guest their own same-gender therapist, and moves the
- * entire group to awaiting_payment together. Payment is already combined across
- * the group, so a single payment then confirms everyone.
+ * Approve a whole group booking in ONE action. Each guest gets their OWN
+ * confirmed time and a same-gender therapist, and the entire group moves to
+ * awaiting_payment together. Payment is combined across the group, so a single
+ * payment then confirms everyone. The same therapist may serve two guests as
+ * long as their sessions (plus buffer) don't overlap.
  */
 export async function approveGroup(
   groupId: string,
-  p: { confirmedAt: string; room?: string; assignments: { id: string; therapistCode: string }[] },
+  p: { room?: string; assignments: { id: string; therapistCode: string; confirmedAt: string }[] },
 ): Promise<Ok | Err> {
   const { userId, db } = await requireStaff()
   if (!groupId) return { error: 'Missing group.' }
-  if (!p.confirmedAt) return { error: 'Set the confirmed date & time.' }
 
   const { data: members } = await db
     .from('appointments')
@@ -178,33 +178,51 @@ export async function approveGroup(
   const pending = members.filter((m) => m.status === 'pending' || m.status === 'scheduled')
   if (pending.length === 0) return { error: 'This group has already been processed.' }
 
-  // Every pending guest must have a therapist chosen.
-  const byId = new Map(p.assignments.map((a) => [a.id, a.therapistCode]))
+  // Every pending guest must have a therapist AND a confirmed time.
+  const byId = new Map(p.assignments.map((a) => [a.id, a]))
   for (const m of pending) {
-    if (!byId.get(m.id)) return { error: 'Assign a therapist for every guest.' }
+    const a = byId.get(m.id)
+    if (!a?.therapistCode) return { error: 'Assign a therapist for every guest.' }
+    if (!a.confirmedAt || Number.isNaN(new Date(a.confirmedAt).getTime())) {
+      return { error: `Set the confirmed date & time for ${m.patient_name ?? 'every guest'}.` }
+    }
   }
 
-  // One therapist can't serve two guests at the same shared time.
-  const usedCodes = pending.map((m) => byId.get(m.id) as string)
-  const dupe = usedCodes.find((c, i) => usedCodes.indexOf(c) !== i)
-  if (dupe) {
-    const t = therapistByCode(dupe)
-    return { error: `${t ? t.name : dupe} is assigned to more than one guest at the same time — pick a different therapist.` }
+  // A therapist may serve several guests in this group, but their sessions
+  // (plus the standard buffer) must not overlap.
+  const byTherapist = new Map<string, { name: string | null; slot: Slot }[]>()
+  for (const m of pending) {
+    const a = byId.get(m.id)!
+    const list = byTherapist.get(a.therapistCode) ?? []
+    list.push({ name: m.patient_name, slot: { startISO: a.confirmedAt, durationMins: m.duration_mins ?? 60 } })
+    byTherapist.set(a.therapistCode, list)
+  }
+  for (const [code, sessions] of Array.from(byTherapist.entries())) {
+    for (let i = 0; i < sessions.length; i++) {
+      const clash = findClash(sessions[i].slot, sessions.filter((_, j) => j !== i).map((s) => s.slot))
+      if (clash) {
+        const t = therapistByCode(code)
+        return { error: `${t ? t.name : code} is assigned to two guests whose sessions overlap — stagger the times (30-min gap between sessions) or pick another therapist.` }
+      }
+    }
   }
 
-  const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(p.confirmedAt))
-  const intervals = blockedIntervalsForDate(blocks, mytDayKey(p.confirmedAt))
+  // Schedule blocks from the earliest confirmed day onward cover every guest's own day.
+  const earliestAt = p.assignments.map((a) => a.confirmedAt).sort()[0]
+  const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(earliestAt))
 
   // Validate every assignment before writing anything.
   for (const m of pending) {
-    const therapist = therapistByCode(byId.get(m.id) as string)
+    const a = byId.get(m.id)!
+    const therapist = therapistByCode(a.therapistCode)
     if (!therapist) return { error: 'Unknown therapist selected.' }
     if (!therapistMatchesRequirement(therapist.gender, m.gender_requirement)) {
       const need = m.gender_requirement === 'men_only' ? 'male' : 'female'
       return { error: `${m.patient_name ?? 'A guest'} needs a ${need} therapist.` }
     }
     const durationMins = m.duration_mins ?? 60
-    // Busy windows from OTHER bookings (this group's own rows are excluded).
+    // Busy windows from OTHER bookings (this group's own rows are excluded —
+    // within-group overlaps were already checked from the proposed assignments).
     const { data: others } = await db
       .from('appointments')
       .select('appointment_date_time, duration_mins, group_id, status, payment_expires_at')
@@ -216,9 +234,10 @@ export async function approveGroup(
       // An expired-but-unpaid hold no longer occupies the therapist.
       .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
       .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
-    const clash = findClash({ startISO: p.confirmedAt, durationMins }, busy)
+    const clash = findClash({ startISO: a.confirmedAt, durationMins }, busy)
     if (clash) return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
-    if (isBlocked(intervals, therapist.code, p.confirmedAt, durationMins)) {
+    const intervals = blockedIntervalsForDate(blocks, mytDayKey(a.confirmedAt))
+    if (isBlocked(intervals, therapist.code, a.confirmedAt, durationMins)) {
       return { error: `${therapist.name} (${therapist.code}) is on leave / blocked at that time — pick another therapist or time.` }
     }
     if (!canTransition(m.status as BookingStatus, 'awaiting_payment')) {
@@ -231,14 +250,15 @@ export async function approveGroup(
   const approvedAt = new Date().toISOString()
   const doneIds: string[] = []
   for (const m of pending) {
-    const therapist = therapistByCode(byId.get(m.id) as string)!
+    const a = byId.get(m.id)!
+    const therapist = therapistByCode(a.therapistCode)!
     const { error } = await db
       .from('appointments')
       .update({
         assigned_therapist_code: therapist.code,
         assigned_therapist_name: therapist.name,
         assigned_therapist_gender: therapist.gender,
-        appointment_date_time: p.confirmedAt,
+        appointment_date_time: a.confirmedAt,
         duration_mins: m.duration_mins ?? 60,
         room: p.room?.trim() || null,
         approved_by: userId,
@@ -288,13 +308,14 @@ export async function approveGroup(
     name: lead.patient_name,
     treatmentName: `${lead.treatment_name ?? 'Treatment'} (group of ${pending.length})`,
     kind: 'treatment',
-    whenISO: p.confirmedAt,
+    whenISO: byId.get(lead.id)!.confirmedAt,
     amountRm: totalRm || null,
     payUrl,
     guests: pending.map((m) => ({
       name: m.patient_name,
       age: m.guest_age != null ? Number(m.guest_age) : null,
       treatmentName: m.treatment_name,
+      whenISO: byId.get(m.id)!.confirmedAt,
     })),
   })
 

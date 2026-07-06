@@ -400,6 +400,10 @@ export interface GroupGuest {
   age?: number | null
   /** Treatment this guest chose. Falls back to the booking's default treatment. */
   treatmentId?: string | null
+  /** This guest's own preferred slot (ISO datetime) — guests may pick different times. */
+  preferredAt: string
+  /** This guest's own health intake. */
+  healthIntake?: HealthIntake | null
 }
 
 /**
@@ -411,12 +415,9 @@ export interface GroupGuest {
 export async function createGroupBooking(input: {
   /** Default treatment for guests who didn't pick their own. */
   treatmentId: string
-  preferredAt: string
-  preferredAtAlt?: string | null
   patientPhone: string
   patientEmail?: string | null
   isGuest: boolean
-  healthIntake?: HealthIntake | null
   acceptedPolicies: boolean
   guests: GroupGuest[]
 }): Promise<CreateBookingResult> {
@@ -424,7 +425,6 @@ export async function createGroupBooking(input: {
   if (!input.patientPhone?.trim()) return { error: 'Please enter a contact number.' }
   if (!input.patientEmail?.trim()) return { error: 'Please enter an email so we can send booking updates.' }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.patientEmail.trim())) return { error: 'Please enter a valid email address.' }
-  if (!input.preferredAt) return { error: 'Please choose a preferred date and time.' }
   if (!input.treatmentId) return { error: 'Please choose a treatment.' }
 
   const guests = (input.guests ?? []).filter(
@@ -432,6 +432,9 @@ export async function createGroupBooking(input: {
   )
   if (guests.length < 2) return { error: 'Add at least two guests (with name and gender) for a group booking.' }
   if (guests.length > 6) return { error: 'Up to 6 guests per group booking.' }
+  if (guests.some((g) => !g.preferredAt || Number.isNaN(new Date(g.preferredAt).getTime()))) {
+    return { error: 'Please choose a date and time for every guest.' }
+  }
 
   const sb = admin()
 
@@ -473,9 +476,9 @@ export async function createGroupBooking(input: {
       treatment_name: t.title,
       duration_mins: parseDurationMins(t.duration),
       status: 'pending',
-      requested_datetime: input.preferredAt,
-      requested_datetime_alt: input.preferredAtAlt ?? null,
-      appointment_date_time: input.preferredAt,
+      requested_datetime: g.preferredAt,
+      requested_datetime_alt: null,
+      appointment_date_time: g.preferredAt,
       patient_name: g.name.trim(),
       patient_phone: input.patientPhone.trim(),
       patient_email: input.patientEmail?.trim() || null,
@@ -483,7 +486,7 @@ export async function createGroupBooking(input: {
       gender_requirement: genderRequirementValue(g.gender),
       guest_age: g.age ?? null,
       group_id: groupId,
-      pre_visit_form: input.healthIntake ?? {},
+      pre_visit_form: g.healthIntake ?? {},
       payable_amount_rm: t.price_rm ?? null,
       payment_status: 'unpaid',
     }
@@ -506,7 +509,13 @@ export async function createGroupBooking(input: {
     name: guests[0].name,
     treatmentName: summary,
     kind: 'treatment',
-    whenISO: input.preferredAt,
+    whenISO: guests[0].preferredAt,
+    guests: guests.map((g, i) => ({
+      name: g.name,
+      age: g.age ?? null,
+      treatmentName: byId.get(guestTreatmentIds[i])!.title,
+      whenISO: g.preferredAt,
+    })),
   })
   return { id: leadId, token: createBookingToken(leadId) }
 }
