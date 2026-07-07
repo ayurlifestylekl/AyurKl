@@ -221,6 +221,17 @@ export default function Footer() {
               </span>
             </div>
           </div>
+
+          {/* Agency credit */}
+          <p className="mt-6 text-center font-body text-[11px] tracking-wide text-white/25">
+            Designed &amp; developed by{' '}
+            <a
+              href="mailto:aurexissolution@gmail.com"
+              className="font-semibold text-white/40 transition-colors hover:text-accent"
+            >
+              Aurexis Solution
+            </a>
+          </p>
         </div>
       </div>
     </footer>
