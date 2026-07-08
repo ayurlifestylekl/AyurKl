@@ -263,6 +263,7 @@ function VideoCard({ item, index }: { item: VideoTestimonial; index: number }) {
         <video
           ref={videoRef}
           src={item.videoSrc}
+          poster={item.posterImage}
           playsInline
           loop
           muted={isMuted}
