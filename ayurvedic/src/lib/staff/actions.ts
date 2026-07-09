@@ -482,12 +482,48 @@ export interface BlockInput {
   reason: string
 }
 
+/** 'YYYY-MM-DD' + n days, in Malaysia time. */
+function shiftDayMYT(ymd: string, days: number): string {
+  const d = new Date(`${ymd}T00:00:00+08:00`)
+  d.setDate(d.getDate() + days)
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kuala_Lumpur', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d)
+}
+
 export async function createBlock(input: BlockInput): Promise<Ok | Err> {
   const { userId, db } = await requireStaff(['admin', 'front_desk'])
   if (!input.startAt || !input.endAt) return { error: 'Start and end times are required.' }
   if (new Date(input.endAt).getTime() <= new Date(input.startAt).getTime()) {
     return { error: 'End must be after start.' }
   }
+
+  // No double-blocking: reject a block whose window is already covered for the
+  // same therapist (or centre-wide). Recurring inputs are checked on their first
+  // occurrence; multi-day spans are checked day by day (capped at 62 days).
+  const existing = await fetchBlocksOnOrAfter(db, mytDayKey(input.startAt))
+  const newStartMs = new Date(input.startAt).getTime()
+  const newEndMs = new Date(input.endAt).getTime()
+  const lastDay = mytDayKey(input.endAt)
+  let day = mytDayKey(input.startAt)
+  for (let i = 0; i < 62 && day <= lastDay; i++, day = shiftDayMYT(day, 1)) {
+    const dayStartMs = new Date(`${day}T00:00:00+08:00`).getTime()
+    const dayEndMs = dayStartMs + 86_400_000
+    const sMs = input.allDay ? dayStartMs : Math.max(newStartMs, dayStartMs)
+    const eMs = input.allDay ? dayEndMs : Math.min(newEndMs, dayEndMs)
+    const clash = blockedIntervalsForDate(existing, day).find(
+      (iv) =>
+        sMs < iv.endMs &&
+        iv.startMs < eMs &&
+        (input.therapistCode ? iv.therapistCode === null || iv.therapistCode === input.therapistCode : iv.therapistCode === null),
+    )
+    if (clash) {
+      const t = clash.therapistCode ? therapistByCode(clash.therapistCode) : null
+      const who = clash.therapistCode === null ? 'the whole centre' : t?.name ?? clash.therapistCode
+      return {
+        error: `That time is already blocked for ${who}${clash.reason ? ` (${clash.reason})` : ''} — tap the existing block to edit or remove it.`,
+      }
+    }
+  }
+
   const { error } = await db.from('schedule_blocks').insert({
     therapist_code: input.therapistCode || null,
     start_at: input.startAt,
@@ -500,6 +536,7 @@ export async function createBlock(input: BlockInput): Promise<Ok | Err> {
   })
   if (error) return { error: error.message }
   revalidatePath('/console/blocks')
+  revalidatePath('/console/schedule')
   return { ok: true }
 }
 
@@ -508,6 +545,18 @@ export async function deleteBlock(id: string): Promise<Ok | Err> {
   const { error } = await db.from('schedule_blocks').delete().eq('id', id)
   if (error) return { error: error.message }
   revalidatePath('/console/blocks')
+  revalidatePath('/console/schedule')
+  return { ok: true }
+}
+
+/** Edit the reason shown on an existing block (from the schedule grid). */
+export async function updateBlockReason(id: string, reason: string): Promise<Ok | Err> {
+  const { db } = await requireStaff(['admin', 'front_desk'])
+  if (!id) return { error: 'Missing block.' }
+  const { error } = await db.from('schedule_blocks').update({ reason: reason.trim() || null }).eq('id', id)
+  if (error) return { error: error.message }
+  revalidatePath('/console/blocks')
+  revalidatePath('/console/schedule')
   return { ok: true }
 }
 

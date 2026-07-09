@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { GridAppt, GridBlock } from '@/lib/staff/appointments'
 import type { Therapist } from '@/lib/staff/therapists'
-import { createBlock, deleteBlock } from '@/lib/staff/actions'
+import { createBlock, deleteBlock, updateBlockReason } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
 
 const OPEN = 9 * 60 + 30   // 09:30
@@ -53,9 +53,13 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const router = useRouter()
   const go = (d: string) => router.push(`${basePath}?date=${d}`)
 
-  // Quick-block draft: which therapist column + start minute the user tapped.
-  const [draft, setDraft] = useState<{ code: string; startMin: number } | null>(null)
+  // Quick-block draft: a therapist column + a slot RANGE. Tapping more free
+  // slots in the same column extends the range, so several slots block together.
+  const [draft, setDraft] = useState<{ code: string; startMin: number; endMin: number } | null>(null)
   const [reason, setReason] = useState('')
+  // An existing block the user tapped — offers Remove / Edit-reason.
+  const [blockSel, setBlockSel] = useState<{ id: string | null; name: string; startMin: number; endMin: number } | null>(null)
+  const [editReason, setEditReason] = useState('')
   const [err, setErr] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
@@ -67,6 +71,17 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const minLabel = (min: number) =>
     fmtMY(`${date}T${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })
 
+  const tapSlot = (code: string, m: number) => {
+    setErr(null)
+    setBlockSel(null)
+    setDraft((prev) => {
+      if (!prev || prev.code !== code) return { code, startMin: m, endMin: m + ROW }
+      if (m + ROW > prev.endMin) return { ...prev, endMin: m + ROW }
+      if (m < prev.startMin) return { ...prev, startMin: m }
+      return { code, startMin: m, endMin: m + ROW } // tap inside the range → restart there
+    })
+  }
+
   const addBlock = () => {
     if (!draft) return
     setErr(null)
@@ -74,7 +89,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
       const res = await createBlock({
         therapistCode: draft.code,
         startAt: isoAt(draft.startMin),
-        endAt: isoAt(draft.startMin + ROW),
+        endAt: isoAt(draft.endMin),
         allDay: false,
         recurrence: 'none',
         untilDate: null,
@@ -85,14 +100,24 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     })
   }
 
-  const removeBlock = (id: string | null) => {
-    if (!id) { setErr('This block can only be removed from the Availability page.'); return }
+  const removeBlock = () => {
+    if (!blockSel?.id) return
     if (!confirm('Remove this block?')) return
     setErr(null)
     start(async () => {
-      const res = await deleteBlock(id)
+      const res = await deleteBlock(blockSel.id as string)
       if ('error' in res) setErr(res.error)
-      else router.refresh()
+      else { setBlockSel(null); router.refresh() }
+    })
+  }
+
+  const saveReason = () => {
+    if (!blockSel?.id) return
+    setErr(null)
+    start(async () => {
+      const res = await updateBlockReason(blockSel.id as string, editReason)
+      if ('error' in res) setErr(res.error)
+      else { setBlockSel(null); router.refresh() }
     })
   }
 
@@ -137,8 +162,18 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
           {draft ? (
             <div className="flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-cream/60 p-3">
               <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-primary">
-                Block {therapistName(draft.code)} · {minLabel(draft.startMin)}–{minLabel(draft.startMin + ROW)}
+                Block {therapistName(draft.code)} · {minLabel(draft.startMin)} –
               </span>
+              <select
+                value={draft.endMin}
+                onChange={(e) => setDraft((p) => (p ? { ...p, endMin: Number(e.target.value) } : p))}
+                className="rounded-lg border border-accent/30 bg-white px-2 py-1.5 font-body text-[13px] focus:border-accent focus:outline-none"
+                aria-label="Block end time"
+              >
+                {SLOTS.filter((m) => m + ROW > draft.startMin).map((m) => (
+                  <option key={m + ROW} value={m + ROW}>{minLabel(m + ROW)}</option>
+                ))}
+              </select>
               <input
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
@@ -147,14 +182,46 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 autoFocus
               />
               <button onClick={addBlock} disabled={pending} className="rounded-lg bg-accent px-4 py-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.14em] text-white hover:bg-accent/90 disabled:opacity-60">
-                {pending ? 'Blocking…' : 'Block slot'}
+                {pending ? 'Blocking…' : `Block ${(draft.endMin - draft.startMin) / ROW > 1 ? `${(draft.endMin - draft.startMin) / ROW} slots` : 'slot'}`}
               </button>
               <button onClick={() => { setDraft(null); setReason(''); setErr(null) }} className="rounded-lg border border-accent/30 p-1.5 text-dark/50 hover:text-primary" aria-label="Cancel">
                 <X className="h-4 w-4" />
               </button>
             </div>
+          ) : blockSel ? (
+            <div className="flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-cream/60 p-3">
+              <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-primary">
+                Blocked · {blockSel.name} · {minLabel(blockSel.startMin)}–{minLabel(blockSel.endMin)}
+              </span>
+              {blockSel.id ? (
+                <>
+                  <input
+                    value={editReason}
+                    onChange={(e) => setEditReason(e.target.value)}
+                    placeholder="Reason (optional)"
+                    className="min-w-[180px] flex-1 rounded-lg border border-accent/30 bg-white px-3 py-1.5 font-body text-[13px] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
+                    autoFocus
+                  />
+                  <button onClick={saveReason} disabled={pending} className="rounded-lg bg-accent px-4 py-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.14em] text-white hover:bg-accent/90 disabled:opacity-60">
+                    {pending ? 'Saving…' : 'Save reason'}
+                  </button>
+                  <button onClick={removeBlock} disabled={pending} className="rounded-lg border border-red-300 px-4 py-1.5 font-heading text-[10.5px] font-bold uppercase tracking-[0.14em] text-red-700 hover:bg-red-50 disabled:opacity-60">
+                    {pending ? '…' : 'Remove block'}
+                  </button>
+                </>
+              ) : (
+                <span className="font-body text-[12px] italic text-dark/55">
+                  Recurring / availability block — edit it from the Availability page.
+                </span>
+              )}
+              <button onClick={() => { setBlockSel(null); setErr(null) }} className="rounded-lg border border-accent/30 p-1.5 text-dark/50 hover:text-primary" aria-label="Close">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           ) : (
-            <p className="font-body text-[11.5px] italic text-dark/50">Tap a free slot to block it · tap a block to remove it.</p>
+            <p className="font-body text-[11.5px] italic text-dark/50">
+              Tap a free slot to start a block — tap more slots to extend it · tap a block to edit or remove it.
+            </p>
           )}
           {err && <p className="mt-1.5 rounded-lg border border-red-300 bg-red-50 px-3 py-1.5 font-body text-[12px] text-red-700">{err}</p>}
         </div>
@@ -192,7 +259,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   <button
                     key={`s${m}`}
                     type="button"
-                    onClick={() => { setErr(null); setDraft({ code: col.code as string, startMin: m }) }}
+                    onClick={() => tapSlot(col.code as string, m)}
                     title={`Block ${minLabel(m)}`}
                     className="group absolute inset-x-0 z-0 hover:bg-accent/10"
                     style={{ top: topFor(m), height: ROW_PX }}
@@ -200,6 +267,14 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                     <span className="pointer-events-none absolute inset-0 hidden items-center justify-center text-[9px] font-bold uppercase tracking-wide text-accent group-hover:flex">+ Block</span>
                   </button>
                 ))}
+
+                {/* Draft range preview — shows exactly what will be blocked */}
+                {editable && draft && draft.code === col.code && (
+                  <div
+                    className="pointer-events-none absolute inset-x-0.5 z-[1] rounded-md border-2 border-dashed border-accent/70 bg-accent/10"
+                    style={{ top: topFor(draft.startMin), height: ((draft.endMin - draft.startMin) / ROW) * ROW_PX }}
+                  />
+                )}
 
                 {/* Blocked / leave shading — removable when editable */}
                 {blocksFor(col.code).map((b, i) => {
@@ -225,10 +300,16 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                     <button
                       key={`b${i}`}
                       type="button"
-                      onClick={() => removeBlock(b.id)}
+                      onClick={() => {
+                        setErr(null)
+                        setDraft(null)
+                        setReason('')
+                        setBlockSel({ id: b.id, name: col.code ? therapistName(col.code) : 'Centre', startMin: clamp(b.startMin), endMin: clamp(b.endMin) })
+                        setEditReason(b.reason ?? '')
+                      }}
                       disabled={pending}
-                      title={`${b.reason ?? (isDayOff ? 'Day off' : 'Blocked')} — tap to remove`}
-                      className="absolute inset-x-0 z-[1] flex items-center justify-center bg-dark/[0.07] hover:bg-red-500/10"
+                      title={`${b.reason ?? (isDayOff ? 'Day off' : 'Blocked')} — tap to edit or remove`}
+                      className="absolute inset-x-0 z-[1] flex items-center justify-center bg-dark/[0.07] hover:bg-accent/10"
                       style={style}
                     >
                       {content}
