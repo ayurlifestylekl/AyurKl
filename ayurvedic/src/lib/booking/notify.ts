@@ -50,6 +50,21 @@ function guestListLines(guests: GuestLine[]): string[] {
   })
 }
 
+/**
+ * Mirror a staff Telegram alert to the clinic inbox (STAFF_NOTIFY_EMAIL).
+ * Fire-and-forget: a missing config or mail failure never blocks a booking.
+ */
+async function sendStaffEmail(subject: string, lines: string[]): Promise<void> {
+  const to = process.env.STAFF_NOTIFY_EMAIL
+  if (!to) return
+  try {
+    const { html, text } = shell(subject, lines, { label: 'Open booking console', url: `${SITE}/console` })
+    await sendEmail({ to, category: 'transactional', subject: `${subject} — Kerala Ayurvedic bookings`, html, text })
+  } catch (e) {
+    console.error('[notify] staff email failed:', e)
+  }
+}
+
 export async function notifyRequestReceived(p: NotifyBase & { kind: string; whenISO: string | null; guests?: GuestLine[] }) {
   const isGroup = (p.guests?.length ?? 0) > 1
   await sendTelegram(
@@ -58,6 +73,12 @@ export async function notifyRequestReceived(p: NotifyBase & { kind: string; when
           .map((g) => `${esc(g.name ?? 'Guest')} — ${esc(g.treatmentName ?? '')} — ${esc(fmtMY(g.whenISO ?? null, { dateStyle: 'medium', timeStyle: 'short' }))}`)
           .join('\n')}`
       : `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
+  )
+  await sendStaffEmail(
+    isGroup ? `New group request — ${p.guests!.length} guests` : `New ${p.kind} request`,
+    isGroup
+      ? guestListLines(p.guests!)
+      : [`<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`, `Preferred: <strong>${when(p.whenISO)}</strong>`],
   )
   if (!p.to) return
   const lines = isGroup
@@ -105,6 +126,12 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
   await sendTelegram(
     `✅ <b>Payment received — confirmed</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}`,
   )
+  await sendStaffEmail(
+    'Payment received — booking confirmed',
+    isGroup
+      ? [`<strong>${esc(p.name ?? 'Guest')}</strong> paid for a group of ${p.guests!.length}:`, ...guestListLines(p.guests!)]
+      : [`<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`, `Appointment: <strong>${when(p.whenISO)}</strong>`],
+  )
   if (!p.to) return
   const intro = isGroup
     ? [
@@ -139,6 +166,10 @@ export async function notifyCancelled(p: NotifyBase & { refundable: boolean; rea
   await sendTelegram(
     `❌ <b>Cancelled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${p.reason ? `\nReason: ${esc(p.reason)}` : ''}`,
   )
+  await sendStaffEmail('Booking cancelled', [
+    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+    ...(p.reason ? [`Reason: ${esc(p.reason)}`] : []),
+  ])
   if (!p.to) return
   const lines = [
     `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been cancelled.`,
