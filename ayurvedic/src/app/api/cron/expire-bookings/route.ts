@@ -15,14 +15,19 @@ function admin() {
 const EXPIRED_REASON = 'Payment wasn’t completed in time — the slot has been released. You’re welcome to book again.'
 
 /**
- * Scheduled sweep (Vercel Cron):
+ * Scheduled sweep (Vercel Cron daily + UptimeRobot every 30 min):
  *  1. Cancel awaiting_payment bookings past their 15-hour window and free the slot.
  *  2. Email a reminder ~2 hours before a window expires (once).
- * Protected by CRON_SECRET when set (Vercel sends it as a Bearer token).
+ * Protected by CRON_SECRET when set — either as a Bearer token (Vercel Cron) or
+ * a `?key=` query param (UptimeRobot's free plan can't send custom headers).
  */
 async function handle(req: NextRequest) {
   const secret = process.env.CRON_SECRET
-  if (secret && req.headers.get('authorization') !== `Bearer ${secret}`) {
+  const authorized =
+    !secret ||
+    req.headers.get('authorization') === `Bearer ${secret}` ||
+    req.nextUrl.searchParams.get('key') === secret
+  if (!authorized) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
