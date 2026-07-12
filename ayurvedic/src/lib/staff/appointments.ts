@@ -24,6 +24,8 @@ export interface AppointmentFilters {
   status?: BookingStatus | BookingStatus[]
   kind?: BookingKind
   search?: string
+  /** 'activity' = most recently touched first (the "All" view); default = by requested time. */
+  orderBy?: 'requested' | 'activity'
 }
 
 export async function listAppointments(
@@ -41,7 +43,10 @@ export async function listAppointments(
     q = q.or(`patient_name.ilike.${s},patient_phone.ilike.${s},treatment_name.ilike.${s}`)
   }
 
-  const { data, error } = await q.order('requested_datetime', { ascending: true })
+  const { data, error } =
+    filters.orderBy === 'activity'
+      ? await q.order('updated_at', { ascending: false })
+      : await q.order('requested_datetime', { ascending: true })
   if (error) {
     console.error('[staff/appointments] list:', error.message)
     return []

@@ -8,6 +8,7 @@ import ClinicalNotes from '@/components/staff/ClinicalNotes'
 import UnlockTreatment from '@/components/staff/UnlockTreatment'
 import AppointmentActions from '@/components/staff/AppointmentActions'
 import GroupApprovalActions from '@/components/staff/GroupApprovalActions'
+import MarkContactedButton from '@/components/staff/MarkContactedButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -45,6 +46,9 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <PatientHealthPanel p={a} hideContact={hideContact} />
         <div className="space-y-4">
+          {['pending', 'scheduled'].includes(a.status) && (
+            <MarkContactedButton id={a.id} contactedAt={a.contactedAt} />
+          )}
           {isGroup ? (
             <GroupApprovalActions
               groupId={a.groupId as string}

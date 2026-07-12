@@ -363,6 +363,29 @@ export async function rejectGroup(groupId: string, reason?: string): Promise<Ok 
   return { ok: true }
 }
 
+/**
+ * Flag a pending request as contacted (e.g. clarified via WhatsApp) so admin can
+ * see the centre has already acted on it. Groups are flagged as one unit.
+ * Requires the 20260712_contacted_flag migration.
+ */
+export async function markContacted(id: string): Promise<Ok | Err> {
+  const { userId, db } = await requireStaff()
+  const { data: appt } = await db.from('appointments').select('status, group_id').eq('id', id).maybeSingle()
+  if (!appt) return { error: 'Appointment not found.' }
+  if (appt.status !== 'pending' && appt.status !== 'scheduled') {
+    return { error: 'Only open requests can be marked as contacted.' }
+  }
+  const patch = { contacted_at: new Date().toISOString(), contacted_by: userId }
+  const q = db.from('appointments').update(patch)
+  const { error } = appt.group_id ? await q.eq('group_id', appt.group_id) : await q.eq('id', id)
+  if (error) return { error: error.message }
+  revalidatePath('/console')
+  revalidatePath(`/console/${id}`)
+  revalidatePath('/doctor')
+  revalidatePath(`/doctor/${id}`)
+  return { ok: true }
+}
+
 /** Generic guarded status change (check-in, complete, no-show, cancel, …). */
 export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err> {
   const { db } = await requireStaff()

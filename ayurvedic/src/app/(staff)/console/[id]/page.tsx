@@ -6,6 +6,7 @@ import StatusBadge from '@/components/staff/StatusBadge'
 import PatientHealthPanel from '@/components/staff/PatientHealthPanel'
 import AppointmentActions from '@/components/staff/AppointmentActions'
 import GroupApprovalActions from '@/components/staff/GroupApprovalActions'
+import MarkContactedButton from '@/components/staff/MarkContactedButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,6 +42,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
               <Row label="Preferred" value={fmt(a.requestedDatetime)} />
               {a.requestedDatetimeAlt && <Row label="Alternate" value={fmt(a.requestedDatetimeAlt)} />}
               <Row label="Confirmed" value={a.appointmentDatetime && a.status !== 'pending' ? fmt(a.appointmentDatetime) : 'Not set'} />
+              {a.approvedAt && <Row label="Approved at" value={fmt(a.approvedAt)} />}
               <Row label="Therapist" value={a.assignedTherapistName ? `${a.assignedTherapistName} · ${a.assignedTherapistCode} (${a.assignedTherapistGender})` : '—'} />
               <Row label="Room" value={a.room} />
               <Row label="Price" value={a.payableAmountRm != null ? `RM${a.payableAmountRm}` : 'Free'} />
@@ -50,7 +52,10 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
           <PatientHealthPanel p={a} />
         </div>
 
-        <div>
+        <div className="space-y-3">
+          {['pending', 'scheduled'].includes(a.status) && (
+            <MarkContactedButton id={a.id} contactedAt={a.contactedAt} />
+          )}
           {isGroup ? (
             <GroupApprovalActions
               groupId={a.groupId as string}

@@ -146,7 +146,8 @@ async function TabView({ db, tab }: { db: any; tab: { key: string; status?: Book
     const board = await getTherapistBoard(db)
     return <TherapistBoard board={board} />
   }
-  const appointments = await listAppointments(db, { status: tab.status })
+  // "All" reads like an activity log — the most recently touched booking first.
+  const appointments = await listAppointments(db, { status: tab.status, orderBy: tab.key === 'all' ? 'activity' : 'requested' })
   return <BookingQueue appointments={appointments} linkBase="/console" emptyLabel="Nothing in this view yet." />
 }
 

@@ -84,6 +84,10 @@ export interface StaffAppointment {
   cancellationReason: string | null
   groupId: string | null
   createdAt: string | null
+  /** When staff approved the request (null until approved). */
+  approvedAt: string | null
+  /** When staff marked the request as contacted via WhatsApp. */
+  contactedAt: string | null
 }
 
 /** Doctor's clinical view — booked patients only, with health context. */

@@ -101,7 +101,7 @@ function SingleRow({ a, linkBase }: { a: StaffAppointment; linkBase: string }) {
       </td>
       <td className="px-4 py-3 text-dark/70">{fmt(a.requestedDatetime)}</td>
       <td className="px-4 py-3 text-dark/70">{a.genderRequirement ?? 'any'}</td>
-      <td className="px-4 py-3"><StatusBadge status={a.status} /></td>
+      <td className="px-4 py-3"><StatusCell a={a} /></td>
       <td className="px-4 py-3 text-right font-semibold text-dark">{a.payableAmountRm != null ? `RM${a.payableAmountRm}` : '—'}</td>
       <td className="px-4 py-3 text-right">
         <Link href={`${linkBase}/${a.id}`} className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-accent hover:text-primary">
@@ -109,6 +109,22 @@ function SingleRow({ a, linkBase }: { a: StaffAppointment; linkBase: string }) {
         </Link>
       </td>
     </tr>
+  )
+}
+
+/** Status badge plus the action context staff asked for: when it was approved,
+ *  and whether the centre has already contacted a pending request. */
+function StatusCell({ a }: { a: StaffAppointment }) {
+  return (
+    <div className="space-y-1">
+      <StatusBadge status={a.status} />
+      {a.status === 'pending' && a.contactedAt && (
+        <div className="text-[10.5px] font-semibold text-green-700">Contacted · {fmt(a.contactedAt)}</div>
+      )}
+      {a.approvedAt && ['awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'].includes(a.status) && (
+        <div className="text-[10.5px] text-dark/45">approved {fmt(a.approvedAt)}</div>
+      )}
+    </div>
   )
 }
 
@@ -139,7 +155,7 @@ function GroupRow({ members, linkBase }: { members: StaffAppointment[]; linkBase
       </td>
       <td className="px-4 py-3 text-dark/70">{fmt(lead.requestedDatetime)}</td>
       <td className="px-4 py-3 text-dark/70">{genderSummary(members)}</td>
-      <td className="px-4 py-3"><StatusBadge status={lead.status} /></td>
+      <td className="px-4 py-3"><StatusCell a={lead} /></td>
       <td className="px-4 py-3 text-right font-semibold text-dark">{sumPrice(members) != null ? `RM${sumPrice(members)}` : '—'}</td>
       <td className="px-4 py-3 text-right">
         <Link href={`${linkBase}/${lead.id}`} className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-accent hover:text-primary">
