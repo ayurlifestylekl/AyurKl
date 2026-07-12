@@ -9,6 +9,7 @@ import {
 import StatCard from '@/components/staff/StatCard'
 import StatusBadge from '@/components/staff/StatusBadge'
 import AutoRefresh from '@/components/staff/AutoRefresh'
+import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,8 @@ function timeOf(iso: string | null) {
 
 export default async function DoctorOverviewPage() {
   const { db } = await requireStaff(['admin', 'doctor'])
+  // Expire overdue payment holds before rendering so the list is never stale.
+  await sweepExpiredBookingsSafe()
   const [today, requests, toClear, patients] = await Promise.all([
     getTodayAppointments(db),
     getIncomingRequests(db),

@@ -5,6 +5,7 @@ import {
   getTodayAppointments,
   getTherapistBoard,
 } from '@/lib/staff/appointments'
+import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 import type { BookingStatus } from '@/types/booking'
 import BookingQueue from '@/components/staff/BookingQueue'
 import TodayBoard from '@/components/staff/TodayBoard'
@@ -34,6 +35,9 @@ export default async function ConsolePage({
   searchParams: { tab?: string; q?: string }
 }) {
   const { db } = await requireStaff(['admin', 'front_desk'])
+  // Expire overdue payment holds before rendering, so the console never shows a
+  // stale "awaiting payment" — the page auto-refreshes, keeping this current.
+  await sweepExpiredBookingsSafe()
   const q = (searchParams.q ?? '').trim()
   const hasTab = !!searchParams.tab
   const tab = TABS.find((t) => t.key === searchParams.tab)

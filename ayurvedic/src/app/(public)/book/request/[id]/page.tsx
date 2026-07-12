@@ -5,6 +5,7 @@ import { CheckCircle2, Clock, CreditCard, CalendarCheck, XCircle } from 'lucide-
 
 import { getBookingForPayment, getGroupMembers } from '@/lib/storefront/booking'
 import { reconcileAppointment } from '@/lib/booking/payment'
+import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 import { STATUS_LABEL } from '@/lib/booking/status'
 import { whatsappRescheduleLink } from '@/lib/booking/policy'
 import { canAccessBooking } from '@/lib/booking/access'
@@ -33,10 +34,17 @@ export default async function BookingRequestPage({
 
   // Self-heal: if the customer is back from the gateway but the webhook hasn't
   // confirmed yet (missed or failed signature), verify with the provider's API
-  // and confirm here so a paid booking is never left hanging.
+  // and confirm here so a paid booking is never left hanging. Likewise, an
+  // overdue hold is expired on view so the page never shows a payable booking
+  // whose window has actually closed.
   if (b.status === 'awaiting_payment') {
     const reconciled = await reconcileAppointment(params.id)
-    if (reconciled === 'confirmed') b = (await getBookingForPayment(params.id)) ?? b
+    if (reconciled === 'confirmed') {
+      b = (await getBookingForPayment(params.id)) ?? b
+    } else {
+      const swept = await sweepExpiredBookingsSafe()
+      if (swept && swept.expired > 0) b = (await getBookingForPayment(params.id)) ?? b
+    }
   }
 
   // Group bookings: load all guests for the combined view + payment.
