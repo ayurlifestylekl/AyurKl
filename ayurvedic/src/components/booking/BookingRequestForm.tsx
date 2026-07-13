@@ -10,6 +10,7 @@ import { createBookingRequest, createGroupBooking, type GroupGuest } from '@/lib
 import HealthIntakeFields from './HealthIntakeFields'
 import PolicyDisclaimers from './PolicyDisclaimers'
 import SlotPicker from './SlotPicker'
+import PhoneInput from './PhoneInput'
 
 /** A treatment a group guest can choose from. */
 export interface GroupTreatmentOption {
@@ -222,9 +223,9 @@ export default function BookingRequestForm({
       )}
 
       {/* Contact */}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3">
         <Field label="Contact number" required>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} required className={inputCls} placeholder="01X-XXXXXXX" inputMode="tel" />
+          <PhoneInput value={phone} onChange={setPhone} required />
         </Field>
         <Field label="Email" required>
           <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required className={inputCls} placeholder="you@email.com" />
