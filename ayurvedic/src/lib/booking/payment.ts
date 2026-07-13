@@ -3,7 +3,7 @@ import { createClient as createSb } from '@supabase/supabase-js'
 import { getPaymentProvider } from '@/lib/payments'
 import { canTransition } from './status'
 import { canAccessBooking } from './access'
-import { notifyConfirmed } from './notify'
+import { notifyConfirmed, notifyPaymentProblem } from './notify'
 import type { BookingStatus } from '@/types/booking'
 
 function admin() {
@@ -35,7 +35,7 @@ export async function startPaymentForAppointment(
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, payable_amount_rm, patient_name, patient_email, patient_phone, treatment_name, customer_id')
+    .select('id, status, payable_amount_rm, patient_name, patient_email, patient_phone, treatment_name, customer_id, payment_bill_id, payment_url')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
@@ -49,6 +49,20 @@ export async function startPaymentForAppointment(
     return { error: 'This payment link has expired and the slot was released. Please book again.' }
   }
   if (a.payable_amount_rm == null) return { error: 'No amount is payable for this booking.' }
+
+  // Re-use the bill from an earlier "Pay" click while it's still open — minting
+  // a new bill per click leaves multiple payable bills (double-charge risk).
+  const provider = getPaymentProvider()
+  if (a.payment_bill_id && a.payment_url && provider.fetchBillStatus) {
+    const existing = await provider.fetchBillStatus(a.payment_bill_id).catch(() => null)
+    if (existing && !existing.paid) return { url: a.payment_url }
+    if (existing?.paid) {
+      // Paid but the webhook hasn't landed — confirm now instead of re-billing.
+      await markBillPaid(a.payment_bill_id)
+      return { error: 'This booking is already paid — please check your email for the confirmation.' }
+    }
+    // Bill deleted/unreachable → fall through and mint a fresh one.
+  }
 
   // Group bookings: one combined bill across all guests (best-effort group lookup).
   let amountRm = Number(a.payable_amount_rm)
@@ -65,7 +79,6 @@ export async function startPaymentForAppointment(
     description = `${a.treatment_name ?? 'Treatment'} — group of ${list.length}`
   }
 
-  const provider = getPaymentProvider()
   const base = siteUrl()
   // A provider rejection must degrade to a friendly message on the status page,
   // never a 500 — the customer is mid-payment and needs a way forward.
@@ -93,6 +106,28 @@ export async function startPaymentForAppointment(
     .eq('id', a.id)
 
   return { url }
+}
+
+/**
+ * Void an open bill after its booking is cancelled, so the customer can never
+ * pay for a booking that no longer exists. Never throws — a delete failure
+ * usually means the bill was JUST paid, so we reconcile instead: either the
+ * payment confirms the booking, or staff get the payment-problem alert.
+ */
+export async function voidBill(billId: string | null | undefined): Promise<void> {
+  if (!billId || billId.startsWith('stub_')) return
+  try {
+    const provider = getPaymentProvider()
+    if (!provider.deleteBill) return
+    await provider.deleteBill(billId)
+  } catch (e) {
+    console.error('[payment] voidBill failed (bill may be paid) —', billId, e)
+    try {
+      await reconcileByBill(billId)
+    } catch (e2) {
+      console.error('[payment] voidBill reconcile also failed —', billId, e2)
+    }
+  }
 }
 
 /**
@@ -140,6 +175,9 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
   if (!a) return { error: 'Bill not found.' }
   if (a.status === 'confirmed') return { appointmentId: a.id } // already done
   if (!canTransition(a.status as BookingStatus, 'confirmed')) {
+    // Money arrived for a booking that can't be confirmed (e.g. cancelled while
+    // the customer was mid-payment). Staff must review + refund — never silent.
+    await notifyPaymentProblem({ billId, name: a.patient_name, treatmentName: a.treatment_name, bookingStatus: a.status })
     return { error: `Cannot confirm from ${a.status}.` }
   }
   const paidAt = new Date().toISOString()
@@ -155,8 +193,12 @@ export async function markBillPaid(billId: string): Promise<{ appointmentId: str
       .select('id, patient_name, guest_age, treatment_name, appointment_date_time')
     if (gErr) return { error: gErr.message }
     if (!flipped || flipped.length === 0) {
-      // Payment landed but no guest was awaiting confirmation — surface for manual review/refund.
+      // Payment landed but no guest was awaiting confirmation — the group was
+      // cancelled/rejected mid-payment. Alert staff for a refund and do NOT
+      // send the customer a (false) confirmation email.
       console.error(`[payment] GROUP CONFIRM MISMATCH billId=${billId} group=${g.group_id}: paid but 0 guests confirmed.`)
+      await notifyPaymentProblem({ billId, name: a.patient_name, treatmentName: `${a.treatment_name ?? 'Treatment'} (group)`, bookingStatus: 'cancelled' })
+      return { error: 'Payment received but the group was no longer awaiting payment.' }
     }
     await notifyConfirmed({
       to: a.patient_email,

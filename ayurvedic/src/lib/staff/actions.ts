@@ -6,6 +6,7 @@ import { canTransition } from '@/lib/booking/status'
 import { therapistMatchesRequirement } from '@/lib/booking/policy'
 import { createBookingToken } from '@/lib/booking/token'
 import { notifyApproved, notifyCancelled, BOOKING_SITE_URL } from '@/lib/booking/notify'
+import { voidBill } from '@/lib/booking/payment'
 import { findClash, freeAtLabel, type Slot } from '@/lib/booking/scheduling'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from '@/lib/booking/blocks'
 import { mytDayKey } from '@/lib/datetime'
@@ -334,7 +335,7 @@ export async function rejectGroup(groupId: string, reason?: string): Promise<Ok 
   if (!groupId) return { error: 'Missing group.' }
   const { data: members } = await db
     .from('appointments')
-    .select('id, status, patient_email, patient_name, treatment_name')
+    .select('id, status, patient_email, patient_name, treatment_name, payment_bill_id, payment_status')
     .eq('group_id', groupId)
   if (!members || members.length === 0) return { error: 'Group not found.' }
 
@@ -348,6 +349,10 @@ export async function rejectGroup(groupId: string, reason?: string): Promise<Ok 
     .eq('group_id', groupId)
     .in('status', ['pending', 'scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
   if (error) return { error: error.message }
+
+  // Void any open bill so the rejected group can never be paid for.
+  const openBills = new Set(actionable.filter((m) => m.payment_bill_id && m.payment_status !== 'paid').map((m) => m.payment_bill_id as string))
+  for (const b of Array.from(openBills)) await voidBill(b)
 
   const lead = actionable[0]
   await notifyCancelled({
@@ -389,7 +394,7 @@ export async function markContacted(id: string): Promise<Ok | Err> {
 /** Generic guarded status change (check-in, complete, no-show, cancel, …). */
 export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err> {
   const { db } = await requireStaff()
-  const { data: appt } = await db.from('appointments').select('status, group_id').eq('id', id).maybeSingle()
+  const { data: appt } = await db.from('appointments').select('status, group_id, payment_bill_id, payment_status').eq('id', id).maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
   // A group awaiting payment is billed as one unit — removing one guest mid-payment
   // would desync the shared bill. Cancel the whole group instead.
@@ -405,6 +410,9 @@ export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err
   if (to === 'cancelled') stamp.cancelled_at = new Date().toISOString()
   const { error } = await db.from('appointments').update({ status: to, ...stamp }).eq('id', id)
   if (error) return { error: error.message }
+  if ((to === 'cancelled' || to === 'no_show') && appt.payment_bill_id && appt.payment_status !== 'paid') {
+    await voidBill(appt.payment_bill_id)
+  }
   revalidatePath('/console')
   revalidatePath('/doctor')
   revalidatePath(`/console/${id}`)
@@ -419,7 +427,7 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
   const { db } = await requireStaff()
   const { data: appt } = await db
     .from('appointments')
-    .select('status, group_id, patient_email, patient_name, treatment_name')
+    .select('status, group_id, patient_email, patient_name, treatment_name, payment_bill_id, payment_status')
     .eq('id', id)
     .maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
@@ -442,6 +450,9 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
     .eq('id', id)
   if (error) return { error: error.message }
 
+  if (appt.payment_bill_id && appt.payment_status !== 'paid') {
+    await voidBill(appt.payment_bill_id)
+  }
   await notifyCancelled({
     to: appt.patient_email,
     name: appt.patient_name,

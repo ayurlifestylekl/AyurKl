@@ -40,4 +40,10 @@ export interface PaymentProvider {
    * Returns null when the provider can't be queried (e.g. the test stub).
    */
   fetchBillStatus?(billId: string): Promise<{ paid: boolean } | null>
+  /**
+   * Remove an UNPAID bill so a cancelled booking can never be paid for.
+   * Providers reject deleting a paid bill — callers treat failure as
+   * "possibly paid" and rely on reconciliation, never on this succeeding.
+   */
+  deleteBill?(billId: string): Promise<void>
 }

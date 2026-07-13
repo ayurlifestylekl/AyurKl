@@ -1,7 +1,7 @@
 import 'server-only'
 import { createClient as createSb } from '@supabase/supabase-js'
 import { createBookingToken } from './token'
-import { reconcileByBill } from './payment'
+import { reconcileByBill, voidBill } from './payment'
 import { notifyCancelled, notifyPaymentReminder, BOOKING_SITE_URL } from './notify'
 
 function admin() {
@@ -76,6 +76,8 @@ export async function sweepExpiredBookings(): Promise<SweepResult> {
       .eq('status', 'awaiting_payment') // guard against a race with a just-completed payment
     if (error) continue
     expiredCount++
+    // Kill the open bill so the released slot can never be paid for afterwards.
+    await voidBill(a.payment_bill_id)
     if (a.group_id && cancelledGroups.has(a.group_id)) continue
     if (a.group_id) cancelledGroups.add(a.group_id)
     // One bad email must not abort the whole sweep.

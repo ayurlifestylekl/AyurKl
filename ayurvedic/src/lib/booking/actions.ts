@@ -7,6 +7,7 @@ import { genderRequirementValue, canCancel } from './policy'
 import { createBookingToken } from './token'
 import { canAccessBooking } from './access'
 import { notifyRequestReceived, notifyCancelled } from './notify'
+import { voidBill } from './payment'
 import { parseDurationMins } from './duration'
 import { slotsForDuration, slotIso } from './slots'
 import { findClash, canMatchParty, type Slot } from './scheduling'
@@ -137,7 +138,7 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, appointment_date_time, payment_status, customer_id, patient_email, patient_name, treatment_name, group_id')
+    .select('id, status, appointment_date_time, payment_status, customer_id, patient_email, patient_name, treatment_name, group_id, payment_bill_id')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
@@ -164,6 +165,20 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
         : 'Customer cancelled within 12h — non-refundable.'
       : null,
   }
+  // Collect any open bills BEFORE cancelling so they can be voided after —
+  // an open bill on a cancelled booking could still be paid.
+  const billIds = new Set<string>()
+  if (!wasPaid && a.payment_bill_id) billIds.add(a.payment_bill_id)
+  if (a.group_id && !wasPaid) {
+    const { data: members } = await sb
+      .from('appointments')
+      .select('payment_bill_id, payment_status')
+      .eq('group_id', a.group_id)
+    for (const m of members ?? []) {
+      if (m.payment_bill_id && m.payment_status !== 'paid') billIds.add(m.payment_bill_id)
+    }
+  }
+
   // A group booking cancels as one unit — never leave a single guest behind.
   const q = sb.from('appointments').update(cancelPatch)
   const { error } = a.group_id
@@ -172,6 +187,7 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
         .in('status', ['pending', 'scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
     : await q.eq('id', id)
   if (error) return { error: error.message }
+  for (const b of Array.from(billIds)) await voidBill(b)
   await notifyCancelled({ to: a.patient_email, name: a.patient_name, treatmentName: a.treatment_name, refundable })
   return { ok: true, refundable }
 }

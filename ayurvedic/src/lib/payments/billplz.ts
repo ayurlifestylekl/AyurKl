@@ -57,6 +57,16 @@ export const billplzProvider: PaymentProvider = {
     return { billId: json.id, url: json.url }
   },
 
+  async deleteBill(billId: string): Promise<void> {
+    if (!billId) return
+    const res = await fetch(`${API_BASE}/api/v3/bills/${billId}`, {
+      method: 'DELETE',
+      headers: { Authorization: authHeader() },
+    })
+    // Billplz refuses to delete a paid bill — that's the caller's signal to reconcile.
+    if (!res.ok) throw new Error(`Billplz deleteBill failed (${res.status})`)
+  },
+
   async fetchBillStatus(billId: string): Promise<{ paid: boolean } | null> {
     if (!billId) return null
     try {

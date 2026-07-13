@@ -147,6 +147,27 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
   await sendEmail({ to: p.to, category: 'transactional', subject: 'Appointment confirmed — Kerala Ayurvedic Lifestyle', html, text })
 }
 
+/**
+ * URGENT staff alert: money arrived for a booking that can't be confirmed
+ * (e.g. it was already cancelled/rejected when the payment settled). Someone
+ * must review and refund the same day — this must never be silent.
+ */
+export async function notifyPaymentProblem(p: {
+  billId: string
+  name?: string | null
+  treatmentName?: string | null
+  bookingStatus: string
+}) {
+  await sendTelegram(
+    `⚠️ <b>Payment received but NOT confirmed — action needed</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nBooking status: ${esc(p.bookingStatus)} · Bill: ${esc(p.billId)}\nReview in Billplz and refund or manually confirm.`,
+  )
+  await sendStaffEmail('Payment received but NOT confirmed — action needed', [
+    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+    `The booking is <strong>${esc(p.bookingStatus)}</strong>, so the payment could not confirm it.`,
+    `Billplz bill: <strong>${esc(p.billId)}</strong>. Please review and refund, or contact the customer to rebook.`,
+  ])
+}
+
 export async function notifyPaymentReminder(p: NotifyBase & { payUrl: string; expiresISO: string | null }) {
   if (!p.to) return
   const { html, text } = shell(
