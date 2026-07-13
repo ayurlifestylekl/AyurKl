@@ -114,6 +114,11 @@ export default function BookingRequestForm({
     e.preventDefault()
     setError(null)
     if (!phone.trim()) return setError('Please enter a contact number — we need it to confirm your booking.')
+    // Digits (with optional +, spaces, dashes) only — customers sometimes type
+    // their email here, which later breaks payment-gateway validation.
+    if (!/^\+?[0-9 ()-]{7,20}$/.test(phone.trim())) {
+      return setError('That contact number doesn’t look right — please enter digits only, e.g. 012-3456789.')
+    }
     if (!email.trim()) return setError('Please enter an email — we need it to send your booking updates.')
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setError('Please enter a valid email address.')
     if (!isGroup && !preferredAt) return setError('Please choose a preferred date and time.')

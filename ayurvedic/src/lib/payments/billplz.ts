@@ -26,9 +26,14 @@ export const billplzProvider: PaymentProvider = {
   name: 'billplz',
 
   async createBill(args: CreateBillArgs): Promise<CreateBillResult> {
+    // Customers sometimes put an email in the phone field (or vice versa).
+    // Billplz hard-rejects the whole bill on an invalid mobile/email, so only
+    // forward values that actually look right — both are optional extras.
+    const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(args.email ?? '') ? args.email : 'no-reply@keralaayurvediclifestyle.com.my'
+    const mobile = (args.phone ?? '').replace(/[\s()-]/g, '')
     const body = new URLSearchParams({
       collection_id: process.env.BILLPLZ_COLLECTION_ID ?? '',
-      email: args.email || 'no-reply@keralaayurvediclifestyle.com.my',
+      email,
       name: args.name || 'Guest',
       amount: String(Math.round(args.amountRm * 100)), // sen
       callback_url: args.callbackUrl,
@@ -37,7 +42,7 @@ export const billplzProvider: PaymentProvider = {
       reference_1_label: 'Appointment',
       reference_1: args.appointmentId,
     })
-    if (args.phone) body.set('mobile', args.phone)
+    if (/^\+?\d{7,15}$/.test(mobile)) body.set('mobile', mobile)
 
     const res = await fetch(`${API_BASE}/api/v3/bills`, {
       method: 'POST',

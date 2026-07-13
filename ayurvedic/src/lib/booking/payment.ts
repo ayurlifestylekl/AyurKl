@@ -10,7 +10,13 @@ function admin() {
   return createSb(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { persistSession: false, autoRefreshToken: false } },
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+      // Payment decisions must always read the live row — never Next's fetch
+      // cache. A stale row once re-sent an already-corrected invalid phone to
+      // Billplz and kept the pay page failing after the data was fixed.
+      global: { fetch: (i, init) => fetch(i, { ...init, cache: 'no-store' }) },
+    },
   )
 }
 
@@ -61,16 +67,25 @@ export async function startPaymentForAppointment(
 
   const provider = getPaymentProvider()
   const base = siteUrl()
-  const { billId, url } = await provider.createBill({
-    appointmentId: a.id,
-    amountRm,
-    name: a.patient_name ?? 'Guest',
-    email: a.patient_email ?? '',
-    phone: a.patient_phone ?? '',
-    description,
-    callbackUrl: `${base}/api/payments/callback`,
-    redirectUrl: `${base}/book/request/${a.id}${token ? `?t=${token}` : ''}`,
-  })
+  // A provider rejection must degrade to a friendly message on the status page,
+  // never a 500 — the customer is mid-payment and needs a way forward.
+  let billId: string
+  let url: string
+  try {
+    ;({ billId, url } = await provider.createBill({
+      appointmentId: a.id,
+      amountRm,
+      name: a.patient_name ?? 'Guest',
+      email: a.patient_email ?? '',
+      phone: a.patient_phone ?? '',
+      description,
+      callbackUrl: `${base}/api/payments/callback`,
+      redirectUrl: `${base}/book/request/${a.id}${token ? `?t=${token}` : ''}`,
+    }))
+  } catch (e) {
+    console.error('[payment] createBill failed for', a.id, e)
+    return { error: 'The payment could not be started — please try again shortly, or WhatsApp us and we will send you a payment link.' }
+  }
 
   await sb
     .from('appointments')

@@ -24,7 +24,7 @@ export default async function BookingRequestPage({
   searchParams,
 }: {
   params: { id: string }
-  searchParams: { t?: string }
+  searchParams: { t?: string; payerror?: string }
 }) {
   let b = await getBookingForPayment(params.id)
   if (!b) notFound()
@@ -137,6 +137,11 @@ export default async function BookingRequestPage({
 
           {/* Contextual CTA */}
           <div className="mt-7">
+            {searchParams.payerror && b.status === 'awaiting_payment' && (
+              <p className="mb-3 rounded-xl border border-red-300 bg-red-50 px-4 py-3 font-body text-[13.5px] text-red-800">
+                The payment couldn&apos;t be started just now. Please try again below — if it keeps happening, message us on WhatsApp and we&apos;ll send you a payment link directly.
+              </p>
+            )}
             {b.status === 'pending' && (
               <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13.5px] text-dark/70">
                 Thanks! We&apos;ll review and confirm shortly.{' '}
