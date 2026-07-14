@@ -6,6 +6,7 @@ import { CheckCircle2, Clock, CreditCard, CalendarCheck, XCircle } from 'lucide-
 import { getBookingForPayment, getGroupMembers } from '@/lib/storefront/booking'
 import { reconcileAppointment } from '@/lib/booking/payment'
 import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
+import { isCardPaymentEnabled } from '@/lib/payments'
 import { STATUS_LABEL } from '@/lib/booking/status'
 import { whatsappRescheduleLink } from '@/lib/booking/policy'
 import { canAccessBooking } from '@/lib/booking/access'
@@ -153,6 +154,24 @@ export default async function BookingRequestPage({
                 <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13.5px] text-dark/70">
                   Some guests are still being approved. You&apos;ll be able to pay for the group once every guest is approved.
                 </p>
+              ) : isCardPaymentEnabled() ? (
+                <div className="space-y-2.5">
+                  <Link
+                    href={`/book/request/${b.id}/pay${tokenQuery}`}
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
+                  >
+                    Pay {amount} — Online Banking (FPX)
+                  </Link>
+                  <Link
+                    href={`/book/request/${b.id}/pay${tokenQuery ? `${tokenQuery}&` : '?'}method=card`}
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-accent/40 px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-primary transition-colors hover:bg-accent/5"
+                  >
+                    Pay {amount} — Credit / Debit Card
+                  </Link>
+                  <p className="text-center font-body text-[11.5px] italic text-dark/50">
+                    No Malaysian bank account? Use the card option — it works with any international card.
+                  </p>
+                </div>
               ) : (
                 <Link
                   href={`/book/request/${b.id}/pay${tokenQuery}`}

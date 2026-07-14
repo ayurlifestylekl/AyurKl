@@ -40,11 +40,11 @@ export async function sweepExpiredBookings(): Promise<SweepResult> {
   //    awaiting_payment row missing its expiry stamp but approved >15h ago.
   const [byExpiry, byStale] = await Promise.all([
     sb.from('appointments')
-      .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id')
+      .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id, payment_provider')
       .eq('status', 'awaiting_payment')
       .lt('payment_expires_at', nowISO),
     sb.from('appointments')
-      .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id')
+      .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id, payment_provider')
       .eq('status', 'awaiting_payment')
       .is('payment_expires_at', null)
       .lt('approved_at', staleISO),
@@ -63,7 +63,7 @@ export async function sweepExpiredBookings(): Promise<SweepResult> {
     // payments whose webhook was missed/rejected before they get released.
     if (a.payment_bill_id) {
       try {
-        const r = await reconcileByBill(a.payment_bill_id)
+        const r = await reconcileByBill(a.payment_bill_id, a.payment_provider)
         if ('appointmentId' in r) { rescuedCount++; continue }
       } catch (e) {
         console.error('[expiry] reconcile check failed for', a.id, e)
@@ -77,7 +77,7 @@ export async function sweepExpiredBookings(): Promise<SweepResult> {
     if (error) continue
     expiredCount++
     // Kill the open bill so the released slot can never be paid for afterwards.
-    await voidBill(a.payment_bill_id)
+    await voidBill(a.payment_bill_id, a.payment_provider)
     if (a.group_id && cancelledGroups.has(a.group_id)) continue
     if (a.group_id) cancelledGroups.add(a.group_id)
     // One bad email must not abort the whole sweep.

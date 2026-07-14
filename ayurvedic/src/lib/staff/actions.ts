@@ -335,7 +335,7 @@ export async function rejectGroup(groupId: string, reason?: string): Promise<Ok 
   if (!groupId) return { error: 'Missing group.' }
   const { data: members } = await db
     .from('appointments')
-    .select('id, status, patient_email, patient_name, treatment_name, payment_bill_id, payment_status')
+    .select('id, status, patient_email, patient_name, treatment_name, payment_bill_id, payment_status, payment_provider')
     .eq('group_id', groupId)
   if (!members || members.length === 0) return { error: 'Group not found.' }
 
@@ -351,8 +351,11 @@ export async function rejectGroup(groupId: string, reason?: string): Promise<Ok 
   if (error) return { error: error.message }
 
   // Void any open bill so the rejected group can never be paid for.
-  const openBills = new Set(actionable.filter((m) => m.payment_bill_id && m.payment_status !== 'paid').map((m) => m.payment_bill_id as string))
-  for (const b of Array.from(openBills)) await voidBill(b)
+  const openBills = new Map<string, string | null>()
+  for (const m of actionable) {
+    if (m.payment_bill_id && m.payment_status !== 'paid') openBills.set(m.payment_bill_id, m.payment_provider)
+  }
+  for (const [billId, providerName] of Array.from(openBills)) await voidBill(billId, providerName)
 
   const lead = actionable[0]
   await notifyCancelled({
@@ -394,7 +397,7 @@ export async function markContacted(id: string): Promise<Ok | Err> {
 /** Generic guarded status change (check-in, complete, no-show, cancel, …). */
 export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err> {
   const { db } = await requireStaff()
-  const { data: appt } = await db.from('appointments').select('status, group_id, payment_bill_id, payment_status').eq('id', id).maybeSingle()
+  const { data: appt } = await db.from('appointments').select('status, group_id, payment_bill_id, payment_status, payment_provider').eq('id', id).maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
   // A group awaiting payment is billed as one unit — removing one guest mid-payment
   // would desync the shared bill. Cancel the whole group instead.
@@ -411,7 +414,7 @@ export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err
   const { error } = await db.from('appointments').update({ status: to, ...stamp }).eq('id', id)
   if (error) return { error: error.message }
   if ((to === 'cancelled' || to === 'no_show') && appt.payment_bill_id && appt.payment_status !== 'paid') {
-    await voidBill(appt.payment_bill_id)
+    await voidBill(appt.payment_bill_id, appt.payment_provider)
   }
   revalidatePath('/console')
   revalidatePath('/doctor')
@@ -427,7 +430,7 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
   const { db } = await requireStaff()
   const { data: appt } = await db
     .from('appointments')
-    .select('status, group_id, patient_email, patient_name, treatment_name, payment_bill_id, payment_status')
+    .select('status, group_id, patient_email, patient_name, treatment_name, payment_bill_id, payment_status, payment_provider')
     .eq('id', id)
     .maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
@@ -451,7 +454,7 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
   if (error) return { error: error.message }
 
   if (appt.payment_bill_id && appt.payment_status !== 'paid') {
-    await voidBill(appt.payment_bill_id)
+    await voidBill(appt.payment_bill_id, appt.payment_provider)
   }
   await notifyCancelled({
     to: appt.patient_email,

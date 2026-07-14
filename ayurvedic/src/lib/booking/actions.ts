@@ -138,7 +138,7 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, appointment_date_time, payment_status, customer_id, patient_email, patient_name, treatment_name, group_id, payment_bill_id')
+    .select('id, status, appointment_date_time, payment_status, customer_id, patient_email, patient_name, treatment_name, group_id, payment_bill_id, payment_provider')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
@@ -167,15 +167,15 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
   }
   // Collect any open bills BEFORE cancelling so they can be voided after —
   // an open bill on a cancelled booking could still be paid.
-  const billIds = new Set<string>()
-  if (!wasPaid && a.payment_bill_id) billIds.add(a.payment_bill_id)
+  const bills = new Map<string, string | null>()
+  if (!wasPaid && a.payment_bill_id) bills.set(a.payment_bill_id, a.payment_provider)
   if (a.group_id && !wasPaid) {
     const { data: members } = await sb
       .from('appointments')
-      .select('payment_bill_id, payment_status')
+      .select('payment_bill_id, payment_status, payment_provider')
       .eq('group_id', a.group_id)
     for (const m of members ?? []) {
-      if (m.payment_bill_id && m.payment_status !== 'paid') billIds.add(m.payment_bill_id)
+      if (m.payment_bill_id && m.payment_status !== 'paid') bills.set(m.payment_bill_id, m.payment_provider)
     }
   }
 
@@ -187,7 +187,7 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
         .in('status', ['pending', 'scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
     : await q.eq('id', id)
   if (error) return { error: error.message }
-  for (const b of Array.from(billIds)) await voidBill(b)
+  for (const [billId, providerName] of Array.from(bills)) await voidBill(billId, providerName)
   await notifyCancelled({ to: a.patient_email, name: a.patient_name, treatmentName: a.treatment_name, refundable })
   return { ok: true, refundable }
 }

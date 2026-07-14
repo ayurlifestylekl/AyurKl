@@ -1,6 +1,6 @@
 import 'server-only'
 import { createClient as createSb } from '@supabase/supabase-js'
-import { getPaymentProvider } from '@/lib/payments'
+import { getPaymentProvider, getProviderForMethod, getProviderByName, type PaymentMethod } from '@/lib/payments'
 import { canTransition } from './status'
 import { canAccessBooking } from './access'
 import { notifyConfirmed, notifyPaymentProblem } from './notify'
@@ -31,11 +31,12 @@ function siteUrl(): string {
 export async function startPaymentForAppointment(
   id: string,
   token?: string | null,
+  method: PaymentMethod = 'fpx',
 ): Promise<{ url: string } | { error: string }> {
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('id, status, payable_amount_rm, patient_name, patient_email, patient_phone, treatment_name, customer_id, payment_bill_id, payment_url')
+    .select('id, status, payable_amount_rm, patient_name, patient_email, patient_phone, treatment_name, customer_id, payment_bill_id, payment_url, payment_provider')
     .eq('id', id)
     .maybeSingle()
   if (!a) return { error: 'Booking not found.' }
@@ -50,10 +51,18 @@ export async function startPaymentForAppointment(
   }
   if (a.payable_amount_rm == null) return { error: 'No amount is payable for this booking.' }
 
-  // Re-use the bill from an earlier "Pay" click while it's still open — minting
-  // a new bill per click leaves multiple payable bills (double-charge risk).
-  const provider = getPaymentProvider()
-  if (a.payment_bill_id && a.payment_url && provider.fetchBillStatus) {
+  let provider
+  try {
+    provider = getProviderForMethod(method)
+  } catch (e) {
+    console.error('[payment] provider unavailable for method', method, e)
+    return { error: 'That payment method is not available right now — please try Online Banking (FPX), or WhatsApp us.' }
+  }
+
+  // Re-use the bill from an earlier "Pay" click on the SAME method while it's
+  // still open — minting a new bill per click leaves multiple payable bills
+  // (double-charge risk). Switching method (e.g. FPX → Card) mints a fresh one.
+  if (a.payment_bill_id && a.payment_url && a.payment_provider === provider.name && provider.fetchBillStatus) {
     const existing = await provider.fetchBillStatus(a.payment_bill_id).catch(() => null)
     if (existing && !existing.paid) return { url: a.payment_url }
     if (existing?.paid) {
@@ -113,17 +122,22 @@ export async function startPaymentForAppointment(
  * pay for a booking that no longer exists. Never throws — a delete failure
  * usually means the bill was JUST paid, so we reconcile instead: either the
  * payment confirms the booking, or staff get the payment-problem alert.
+ *
+ * `providerName` should be the bill's own stored `payment_provider` — voiding
+ * MUST talk to the provider that created the bill, not whichever is default
+ * today. Omit only for legacy callers that predate multi-provider (falls
+ * back to the FPX/stub selector, matching the old single-provider behaviour).
  */
-export async function voidBill(billId: string | null | undefined): Promise<void> {
+export async function voidBill(billId: string | null | undefined, providerName?: string | null): Promise<void> {
   if (!billId || billId.startsWith('stub_')) return
   try {
-    const provider = getPaymentProvider()
-    if (!provider.deleteBill) return
+    const provider = providerName !== undefined ? getProviderByName(providerName) : getPaymentProvider()
+    if (!provider?.deleteBill) return
     await provider.deleteBill(billId)
   } catch (e) {
     console.error('[payment] voidBill failed (bill may be paid) —', billId, e)
     try {
-      await reconcileByBill(billId)
+      await reconcileByBill(billId, providerName)
     } catch (e2) {
       console.error('[payment] voidBill reconcile also failed —', billId, e2)
     }
@@ -135,13 +149,19 @@ export async function voidBill(billId: string | null | undefined): Promise<void>
  * booking if the provider reports it paid. Safety net for a webhook that was
  * missed or failed signature verification. Idempotent; a no-op if the provider
  * can't be queried or the bill isn't paid.
+ *
+ * `providerName` should be the bill's own stored `payment_provider` (multiple
+ * providers may now be live at once, so we must ask the SAME one that issued
+ * the bill). Omit only for legacy callers that predate multi-provider (falls
+ * back to the FPX/stub selector, matching the old single-provider behaviour).
  */
 export async function reconcileByBill(
   billId: string,
+  providerName?: string | null,
 ): Promise<{ appointmentId: string } | { error: string } | { skipped: true }> {
   if (!billId) return { skipped: true }
-  const provider = getPaymentProvider()
-  if (!provider.fetchBillStatus) return { skipped: true }
+  const provider = providerName !== undefined ? getProviderByName(providerName) : getPaymentProvider()
+  if (!provider?.fetchBillStatus) return { skipped: true }
   const status = await provider.fetchBillStatus(billId)
   if (!status?.paid) return { skipped: true }
   return markBillPaid(billId)
@@ -156,11 +176,11 @@ export async function reconcileAppointment(appointmentId: string): Promise<'conf
   const sb = admin()
   const { data: a } = await sb
     .from('appointments')
-    .select('status, payment_bill_id')
+    .select('status, payment_bill_id, payment_provider')
     .eq('id', appointmentId)
     .maybeSingle()
   if (!a || a.status !== 'awaiting_payment' || !a.payment_bill_id) return 'noop'
-  const res = await reconcileByBill(a.payment_bill_id)
+  const res = await reconcileByBill(a.payment_bill_id, a.payment_provider)
   return 'appointmentId' in res ? 'confirmed' : 'noop'
 }
 
