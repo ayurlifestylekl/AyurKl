@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import type { BookingKind } from '@/types/booking'
+import { getOperationalTransitionOffer } from '@/lib/booking/operations'
 import {
   moveAppointmentStatus,
   cancelAppointment,
@@ -19,17 +21,29 @@ export default function StatusDialog({
   appointmentId,
   currentStatus,
   currentDateTime,
+  bookingKind,
+  assignedTherapistCode,
 }: {
   appointmentId: string
   currentStatus: AppointmentStatus
   currentDateTime: string
+  bookingKind: BookingKind
+  assignedTherapistCode: string | null
 }) {
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState<Mode>('menu')
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
-  const options = nextAppointmentStatuses(currentStatus)
+  const statusOptions = nextAppointmentStatuses(currentStatus)
+  const options = statusOptions.filter((status) => getOperationalTransitionOffer({
+    bookingKind,
+    assignedTherapistCode,
+    to: status,
+  }).offered)
+  const blockedOffer = statusOptions
+    .map((status) => getOperationalTransitionOffer({ bookingKind, assignedTherapistCode, to: status }))
+    .find((offer) => !offer.offered)
 
   // form state
   const [reason, setReason] = useState('')
@@ -116,6 +130,9 @@ export default function StatusDialog({
                 <p className="mt-1 text-[12px] text-[#1F1F1F]/65">
                   From <strong>{STATUS_LABELS[currentStatus]}</strong> to:
                 </p>
+                {blockedOffer ? (
+                  <p className="mt-2 text-[12px] font-semibold text-[#D4AF37]">{blockedOffer.message}</p>
+                ) : null}
                 <div className="mt-3 flex flex-col gap-2">
                   {options.map((s) => (
                     <button

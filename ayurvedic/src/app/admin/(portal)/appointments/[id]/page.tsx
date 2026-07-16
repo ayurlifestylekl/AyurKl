@@ -52,6 +52,8 @@ export default async function AdminAppointmentDetailPage({
       appointment_date_time: m.appointmentDateTime,
       duration_mins: m.durationMins,
       status: m.status,
+      booking_kind: 'treatment',
+      assigned_therapist_code: 'DEMO',
       mode: m.mode,
       room: m.room,
       meeting_link: null,
@@ -147,6 +149,8 @@ export default async function AdminAppointmentDetailPage({
           appointmentId={a.id}
           currentStatus={a.status}
           currentDateTime={a.appointment_date_time}
+          bookingKind={a.booking_kind}
+          assignedTherapistCode={a.assigned_therapist_code}
         />
       </header>
 

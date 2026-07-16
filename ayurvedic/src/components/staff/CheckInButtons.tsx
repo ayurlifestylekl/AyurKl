@@ -2,13 +2,30 @@
 
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import type { BookingStatus } from '@/types/booking'
+import type { BookingKind, BookingStatus } from '@/types/booking'
+import { getOperationalTransitionOffer } from '@/lib/booking/operations'
 import { setStatus } from '@/lib/staff/actions'
 
 /** Inline quick-action buttons for the front-desk Today board. */
-export default function CheckInButtons({ id, status }: { id: string; status: BookingStatus }) {
+export default function CheckInButtons({
+  id,
+  status,
+  bookingKind,
+  assignedTherapistCode,
+}: {
+  id: string
+  status: BookingStatus
+  bookingKind: BookingKind
+  assignedTherapistCode: string | null
+}) {
   const router = useRouter()
   const [pending, start] = useTransition()
+  const operationalActionOffer = getOperationalTransitionOffer({
+    bookingKind,
+    assignedTherapistCode,
+    to: status === 'confirmed' ? 'checked_in' : 'in_progress',
+  })
+  const operationalActionBlocked = (status === 'confirmed' || status === 'checked_in') && !operationalActionOffer.offered
 
   const move = (to: BookingStatus) =>
     start(async () => {
@@ -22,12 +39,17 @@ export default function CheckInButtons({ id, status }: { id: string; status: Boo
   }
 
   return (
-    <div className="flex flex-wrap justify-end gap-1.5">
-      {status === 'confirmed' && <Btn onClick={() => move('checked_in')} disabled={pending}>Check in</Btn>}
-      {status === 'checked_in' && <Btn onClick={() => move('in_progress')} disabled={pending}>Start</Btn>}
-      {status === 'in_progress' && <Btn onClick={() => move('completed')} disabled={pending}>Complete</Btn>}
-      {(status === 'confirmed' || status === 'checked_in') && (
-        <Btn onClick={() => move('no_show')} disabled={pending} danger>No-show</Btn>
+    <div className="text-right">
+      <div className="flex flex-wrap justify-end gap-1.5">
+        {status === 'confirmed' && <Btn onClick={() => move('checked_in')} disabled={pending || operationalActionBlocked}>Check in</Btn>}
+        {status === 'checked_in' && <Btn onClick={() => move('in_progress')} disabled={pending || operationalActionBlocked}>Start</Btn>}
+        {status === 'in_progress' && <Btn onClick={() => move('completed')} disabled={pending}>Complete</Btn>}
+        {(status === 'confirmed' || status === 'checked_in') && (
+          <Btn onClick={() => move('no_show')} disabled={pending} danger>No-show</Btn>
+        )}
+      </div>
+      {operationalActionBlocked && (
+        <p className="mt-1 font-body text-[10.5px] font-semibold text-accent">{operationalActionOffer.message}</p>
       )}
     </div>
   )

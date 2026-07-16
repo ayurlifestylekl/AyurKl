@@ -85,6 +85,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
               requestedAtAlt={a.requestedDatetimeAlt}
               backHref="/console"
               canDelete
+              assignedTherapistCode={a.assignedTherapistCode}
             />
           )}
         </div>

@@ -3,6 +3,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import type { BookingKind, BookingStatus } from '@/types/booking'
 import { canTransition } from '@/lib/booking/status'
+import { mapOperationalTransitionWriteFailure, validateOperationalTransition } from '@/lib/booking/operations'
 import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/booking/consultation-rules'
 import { therapistMatchesRequirement } from '@/lib/booking/policy'
 import { createBookingToken } from '@/lib/booking/token'
@@ -398,7 +399,7 @@ export async function markContacted(id: string): Promise<Ok | Err> {
 /** Generic guarded status change (check-in, complete, no-show, cancel, …). */
 export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err> {
   const { db } = await requireStaff()
-  const { data: appt } = await db.from('appointments').select('status, group_id, payment_bill_id, payment_status, payment_provider').eq('id', id).maybeSingle()
+  const { data: appt } = await db.from('appointments').select('status, booking_kind, assigned_therapist_code, group_id, payment_bill_id, payment_status, payment_provider').eq('id', id).maybeSingle()
   if (!appt) return { error: 'Appointment not found.' }
   // A group awaiting payment is billed as one unit — removing one guest mid-payment
   // would desync the shared bill. Cancel the whole group instead.
@@ -408,12 +409,25 @@ export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err
   if (!canTransition(appt.status as BookingStatus, to)) {
     return { error: `Cannot move ${appt.status} → ${to}.` }
   }
+  const operationalTransition = validateOperationalTransition({
+    bookingKind: appt.booking_kind as BookingKind,
+    assignedTherapistCode: appt.assigned_therapist_code,
+    to,
+  })
+  if ('error' in operationalTransition) return { error: operationalTransition.error }
   const stamp: Record<string, string> = {}
   if (to === 'checked_in') stamp.checked_in_at = new Date().toISOString()
   if (to === 'completed') stamp.completed_at = new Date().toISOString()
   if (to === 'cancelled') stamp.cancelled_at = new Date().toISOString()
-  const { error } = await db.from('appointments').update({ status: to, ...stamp }).eq('id', id)
-  if (error) return { error: error.message }
+  const { data: updated, error } = await db
+    .from('appointments')
+    .update({ status: to, ...stamp })
+    .eq('id', id)
+    .eq('status', appt.status)
+    .select('id')
+    .maybeSingle()
+  const writeFailure = mapOperationalTransitionWriteFailure({ error, updated: !!updated })
+  if (writeFailure) return { error: writeFailure }
   if ((to === 'cancelled' || to === 'no_show') && appt.payment_bill_id && appt.payment_status !== 'paid') {
     await voidBill(appt.payment_bill_id, appt.payment_provider)
   }

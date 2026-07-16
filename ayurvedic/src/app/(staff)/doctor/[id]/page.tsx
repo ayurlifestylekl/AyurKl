@@ -85,6 +85,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
               requestedAtAlt={a.requestedDatetimeAlt}
               backHref="/doctor"
               canDelete={role === 'admin'}
+              assignedTherapistCode={a.assignedTherapistCode}
             />
           )}
           {a.bookingKind === 'consultation' && (canShowClearance ? (

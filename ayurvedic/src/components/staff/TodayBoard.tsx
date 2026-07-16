@@ -50,7 +50,12 @@ export default function TodayBoard({ appointments }: { appointments: StaffAppoin
             </div>
 
             <StatusBadge status={a.status} />
-            <CheckInButtons id={a.id} status={a.status} />
+            <CheckInButtons
+              id={a.id}
+              status={a.status}
+              bookingKind={a.bookingKind}
+              assignedTherapistCode={a.assignedTherapistCode}
+            />
           </div>
         )
       })}

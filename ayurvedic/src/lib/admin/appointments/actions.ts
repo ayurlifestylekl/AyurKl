@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { createClient } from '@/lib/supabase/server'
 import { createNotification } from '@/lib/notifications/create'
+import type { BookingKind } from '@/types/booking'
+import { mapOperationalTransitionWriteFailure, validateOperationalTransition } from '@/lib/booking/operations'
 import {
   canTransitionAppointment,
   type AppointmentStatus,
@@ -51,7 +53,7 @@ export async function moveAppointmentStatus(
 
     const { data: aRaw } = await supabase
       .from('appointments')
-      .select('id, status, customer_id, treatment_name')
+      .select('id, status, booking_kind, assigned_therapist_code, customer_id, treatment_name')
       .eq('id', appointmentId)
       .single()
     if (!aRaw) return { ok: false, error: 'Appointment not found.' }
@@ -61,16 +63,28 @@ export async function moveAppointmentStatus(
     if (!canTransitionAppointment(from, to)) {
       return { ok: false, error: `Cannot move from ${from} to ${to}.` }
     }
+    const operationalTransition = validateOperationalTransition({
+      bookingKind: a.booking_kind as BookingKind,
+      assignedTherapistCode: a.assigned_therapist_code as string | null,
+      to,
+    })
+    if ('error' in operationalTransition) {
+      return { ok: false, error: operationalTransition.error }
+    }
 
     const patch: Record<string, unknown> = { status: to }
     if (to === 'checked_in') patch.checked_in_at = new Date().toISOString()
     if (to === 'completed') patch.completed_at = new Date().toISOString()
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase.from('appointments') as any)
+    const { data: updated, error } = await (supabase.from('appointments') as any)
       .update(patch)
       .eq('id', appointmentId)
-    if (error) return { ok: false, error: error.message }
+      .eq('status', from)
+      .select('id')
+      .maybeSingle()
+    const writeFailure = mapOperationalTransitionWriteFailure({ error, updated: !!updated })
+    if (writeFailure) return { ok: false, error: writeFailure }
 
     const customerKind =
       to === 'confirmed'

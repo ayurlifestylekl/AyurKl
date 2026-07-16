@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
+import { getOperationalTransitionOffer } from '@/lib/booking/operations'
 import { approveAndAssign, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
 import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
 import { fmtMY } from '@/lib/datetime'
@@ -21,11 +22,13 @@ interface Props {
   backHref?: string
   /** Whether to show the destructive Delete button (front desk / admin only). */
   canDelete?: boolean
+  /** Current therapist assignment used to guard operational actions. */
+  assignedTherapistCode?: string | null
 }
 
 export default function AppointmentActions({
   id, status, bookingKind, genderRequirement, requestedAt, requestedAtAlt = null,
-  backHref = '/console', canDelete = false,
+  backHref = '/console', canDelete = false, assignedTherapistCode = null,
 }: Props) {
   const router = useRouter()
   const [therapistCode, setTherapistCode] = useState('')
@@ -70,6 +73,12 @@ export default function AppointmentActions({
   }
 
   const isConsultation = bookingKind === 'consultation'
+  const operationalActionOffer = getOperationalTransitionOffer({
+    bookingKind,
+    assignedTherapistCode,
+    to: status === 'confirmed' ? 'checked_in' : 'in_progress',
+  })
+  const operationalActionBlocked = (status === 'confirmed' || status === 'checked_in') && !operationalActionOffer.offered
   const needsApproval = status === 'pending' || status === 'scheduled'
   const isRequestPhase = status === 'pending' || status === 'scheduled' || status === 'awaiting_payment'
   const canReject = isRequestPhase
@@ -141,12 +150,17 @@ export default function AppointmentActions({
       )}
 
       {(status === 'confirmed' || status === 'checked_in' || status === 'in_progress') && (
-        <div className="flex flex-wrap gap-2">
-          {status === 'confirmed' && <Btn onClick={() => run(() => setStatus(id, 'checked_in'))} disabled={pending}>Check in</Btn>}
-          {status === 'checked_in' && <Btn onClick={() => run(() => setStatus(id, 'in_progress'))} disabled={pending}>Start treatment</Btn>}
-          {status === 'in_progress' && <Btn onClick={() => run(() => setStatus(id, 'completed'))} disabled={pending}>Complete</Btn>}
-          {status !== 'in_progress' && <Btn danger onClick={() => run(() => setStatus(id, 'no_show'))} disabled={pending}>No-show</Btn>}
-          <Btn danger onClick={() => run(() => setStatus(id, 'cancelled'))} disabled={pending}>Cancel</Btn>
+        <div>
+          <div className="flex flex-wrap gap-2">
+            {status === 'confirmed' && <Btn onClick={() => run(() => setStatus(id, 'checked_in'))} disabled={pending || operationalActionBlocked}>Check in</Btn>}
+            {status === 'checked_in' && <Btn onClick={() => run(() => setStatus(id, 'in_progress'))} disabled={pending || operationalActionBlocked}>Start treatment</Btn>}
+            {status === 'in_progress' && <Btn onClick={() => run(() => setStatus(id, 'completed'))} disabled={pending}>Complete</Btn>}
+            {status !== 'in_progress' && <Btn danger onClick={() => run(() => setStatus(id, 'no_show'))} disabled={pending}>No-show</Btn>}
+            <Btn danger onClick={() => run(() => setStatus(id, 'cancelled'))} disabled={pending}>Cancel</Btn>
+          </div>
+          {operationalActionBlocked && (
+            <p className="mt-2 font-body text-[12.5px] font-semibold text-accent">{operationalActionOffer.message}</p>
+          )}
         </div>
       )}
 
