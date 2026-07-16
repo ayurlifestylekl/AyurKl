@@ -1,10 +1,16 @@
 import 'server-only'
 import { createClient as createSb } from '@supabase/supabase-js'
 import { getPaymentProvider, getProviderForMethod, getProviderByName, type PaymentMethod } from '@/lib/payments'
-import { canTransition } from './status'
 import { canAccessBooking } from './access'
-import { notifyConfirmed, notifyPaymentProblem } from './notify'
-import type { BookingStatus } from '@/types/booking'
+import { createBookingToken } from './token'
+import { notifyConfirmed, notifyPaymentAssociationProblem, notifyPaymentProblem, BOOKING_SITE_URL } from './notify'
+import {
+  classifyPaymentConfirmation,
+  parsePaymentConfirmation,
+  persistBillAssociation,
+  paymentProblemAlertInput,
+  type PaymentHandlingResult,
+} from './payment-result'
 
 function admin() {
   return createSb(
@@ -76,14 +82,27 @@ export async function startPaymentForAppointment(
   // Group bookings: one combined bill across all guests (best-effort group lookup).
   let amountRm = Number(a.payable_amount_rm)
   let description = `${a.treatment_name ?? 'Treatment'} booking`
+  let expectedAssociationCount = 1
   const { data: g } = await sb.from('appointments').select('group_id').eq('id', id).maybeSingle()
   const groupId: string | null = g?.group_id ?? null
   if (groupId) {
-    const { data: members } = await sb.from('appointments').select('status, payable_amount_rm').eq('group_id', groupId)
+    const { data: members, error: membersError } = await sb
+      .from('appointments')
+      .select('status, payable_amount_rm, payment_bill_id')
+      .eq('group_id', groupId)
     const list = members ?? []
-    if (list.some((m) => m.status !== 'awaiting_payment')) {
-      return { error: 'All guests must be approved by the clinic before payment.' }
+    if (membersError || list.length === 0) {
+      console.error('[payment] group lookup failed before bill creation for', a.id, membersError)
+      return { error: 'The payment could not be started — please try again shortly, or WhatsApp us and we will send you a payment link.' }
     }
+    if (list.some((m) => m.status !== 'awaiting_payment')) {
+      return { error: 'This group can’t be paid right now — one of the guests is no longer awaiting payment. Please check the booking status page.' }
+    }
+    if (list.some((m) => (m.payment_bill_id ?? null) !== (a.payment_bill_id ?? null))) {
+      console.error('[payment] group has inconsistent existing bill associations for', a.id)
+      return { error: 'The payment could not be started — please try again shortly, or WhatsApp us and we will send you a payment link.' }
+    }
+    expectedAssociationCount = list.length
     amountRm = list.reduce((sum, m) => sum + Number(m.payable_amount_rm ?? 0), 0)
     description = `${a.treatment_name ?? 'Treatment'} — group of ${list.length}`
   }
@@ -109,10 +128,37 @@ export async function startPaymentForAppointment(
     return { error: 'The payment could not be started — please try again shortly, or WhatsApp us and we will send you a payment link.' }
   }
 
-  await sb
-    .from('appointments')
-    .update({ payment_bill_id: billId, payment_url: url, payment_provider: provider.name, payment_status: 'pending' })
-    .eq('id', a.id)
+  // Group bookings share one bill — write it onto EVERY guest's row, not just
+  // the lead's. sweepExpiredBookings reconciles a bill per-row before
+  // cancelling it, so a non-lead row missing payment_bill_id would get
+  // cancelled with no paid-check at all if the sweep ran while payment was
+  // still landing (a real risk now that holds are minutes, not hours).
+  const billPatch = { payment_bill_id: billId, payment_url: url, payment_provider: provider.name, payment_status: 'pending' }
+  const association = await persistBillAssociation({
+    billId,
+    expectedCount: expectedAssociationCount,
+    associate: async () => {
+      let query = groupId
+        ? sb.from('appointments').update(billPatch, { count: 'exact' }).eq('group_id', groupId)
+        : sb.from('appointments').update(billPatch, { count: 'exact' }).eq('id', a.id)
+      query = query.eq('status', 'awaiting_payment')
+      query = a.payment_bill_id
+        ? query.eq('payment_bill_id', a.payment_bill_id)
+        : query.is('payment_bill_id', null)
+      const result = await query
+      return { count: result.count, error: result.error }
+    },
+    deactivate: async (unsafeBillId) => {
+      if (provider.deleteBill) await provider.deleteBill(unsafeBillId)
+    },
+    alert: async (unsafeBillId) => {
+      console.error(`[payment] bill association failed billId=${unsafeBillId} appointment=${a.id}`)
+      await notifyPaymentAssociationProblem({ billId: unsafeBillId, name: a.patient_name, treatmentName: a.treatment_name })
+    },
+  })
+  if (association === 'failed') {
+    return { error: 'The payment could not be started — please try again shortly, or WhatsApp us and we will send you a payment link.' }
+  }
 
   return { url }
 }
@@ -158,12 +204,12 @@ export async function voidBill(billId: string | null | undefined, providerName?:
 export async function reconcileByBill(
   billId: string,
   providerName?: string | null,
-): Promise<{ appointmentId: string } | { error: string } | { skipped: true }> {
+): Promise<PaymentHandlingResult | { skipped: true }> {
   if (!billId) return { skipped: true }
   const provider = providerName !== undefined ? getProviderByName(providerName) : getPaymentProvider()
-  if (!provider?.fetchBillStatus) return { skipped: true }
+  if (!provider?.fetchBillStatus) return { disposition: 'transient', state: 'provider_unconfirmed' }
   const status = await provider.fetchBillStatus(billId)
-  if (!status?.paid) return { skipped: true }
+  if (!status?.paid) return { disposition: 'transient', state: 'provider_unconfirmed' }
   return markBillPaid(billId)
 }
 
@@ -181,70 +227,68 @@ export async function reconcileAppointment(appointmentId: string): Promise<'conf
     .maybeSingle()
   if (!a || a.status !== 'awaiting_payment' || !a.payment_bill_id) return 'noop'
   const res = await reconcileByBill(a.payment_bill_id, a.payment_provider)
-  return 'appointmentId' in res ? 'confirmed' : 'noop'
+  return 'disposition' in res && res.disposition === 'terminal' && ['confirmed', 'already_confirmed'].includes(res.state)
+    ? 'confirmed'
+    : 'noop'
 }
 
 /** Mark a bill paid and confirm its appointment. Idempotent. */
-export async function markBillPaid(billId: string): Promise<{ appointmentId: string } | { error: string }> {
+export async function markBillPaid(billId: string): Promise<PaymentHandlingResult> {
   const sb = admin()
-  const { data: a } = await sb
-    .from('appointments')
-    .select('id, status, patient_email, patient_name, treatment_name, appointment_date_time')
-    .eq('payment_bill_id', billId)
-    .maybeSingle()
-  if (!a) return { error: 'Bill not found.' }
-  if (a.status === 'confirmed') return { appointmentId: a.id } // already done
-  if (!canTransition(a.status as BookingStatus, 'confirmed')) {
-    // Money arrived for a booking that can't be confirmed (e.g. cancelled while
-    // the customer was mid-payment). Staff must review + refund — never silent.
-    await notifyPaymentProblem({ billId, name: a.patient_name, treatmentName: a.treatment_name, bookingStatus: a.status })
-    return { error: `Cannot confirm from ${a.status}.` }
-  }
-  const paidAt = new Date().toISOString()
-
-  // Group booking: one payment confirms every guest (best-effort group lookup).
-  const { data: g } = await sb.from('appointments').select('group_id').eq('id', a.id).maybeSingle()
-  if (g?.group_id) {
-    const { data: flipped, error: gErr } = await sb
-      .from('appointments')
-      .update({ payment_status: 'paid', paid_at: paidAt, status: 'confirmed' })
-      .eq('group_id', g.group_id)
-      .eq('status', 'awaiting_payment')
-      .select('id, patient_name, guest_age, treatment_name, appointment_date_time')
-    if (gErr) return { error: gErr.message }
-    if (!flipped || flipped.length === 0) {
-      // Payment landed but no guest was awaiting confirmation — the group was
-      // cancelled/rejected mid-payment. Alert staff for a refund and do NOT
-      // send the customer a (false) confirmation email.
-      console.error(`[payment] GROUP CONFIRM MISMATCH billId=${billId} group=${g.group_id}: paid but 0 guests confirmed.`)
-      await notifyPaymentProblem({ billId, name: a.patient_name, treatmentName: `${a.treatment_name ?? 'Treatment'} (group)`, bookingStatus: 'cancelled' })
-      return { error: 'Payment received but the group was no longer awaiting payment.' }
+  let data: unknown
+  try {
+    const rpc = await sb.rpc('confirm_appointment_payment', { p_bill_id: billId })
+    if (rpc.error) {
+      console.error('[payment] atomic confirmation RPC failed for', billId, rpc.error)
+      return { disposition: 'transient', state: 'rpc_error' }
     }
-    await notifyConfirmed({
-      to: a.patient_email,
-      name: a.patient_name,
-      treatmentName: a.treatment_name,
-      whenISO: a.appointment_date_time,
-      guests: (flipped ?? []).map((m) => ({
-        name: m.patient_name,
-        age: m.guest_age != null ? Number(m.guest_age) : null,
-        treatmentName: m.treatment_name,
-        whenISO: m.appointment_date_time,
-      })),
-    })
-    return { appointmentId: a.id }
+    data = rpc.data
+  } catch (error) {
+    console.error('[payment] atomic confirmation request failed for', billId, error)
+    return { disposition: 'transient', state: 'rpc_error' }
   }
 
-  const { error } = await sb
-    .from('appointments')
-    .update({ payment_status: 'paid', paid_at: paidAt, status: 'confirmed' })
-    .eq('id', a.id)
-  if (error) return { error: error.message }
+  let result
+  try {
+    result = parsePaymentConfirmation(data)
+  } catch (error) {
+    console.error('[payment] invalid atomic confirmation result for', billId, error)
+    return { disposition: 'transient', state: 'invalid_result' }
+  }
+
+  const handling = classifyPaymentConfirmation(result)
+  if (result.state === 'not_found' || result.state === 'already_confirmed') return handling
+  if (result.state === 'not_payable') {
+    // Money arrived after the booking ceased to be payable. The RPC changed no
+    // appointment rows; staff must review and refund rather than silently lose it.
+    const alert = paymentProblemAlertInput(result)
+    if (alert) await notifyPaymentProblem({ billId, ...alert })
+    return handling
+  }
+
+  const lead = result.rows.find((row) => row.id === result.leadId) ?? result.rows[0]
+  if (!lead) {
+    console.error('[payment] atomic confirmation returned no changed rows for', billId)
+    return { disposition: 'transient', state: 'invalid_result' }
+  }
+
+  // Only the callback that changed awaiting_payment -> confirmed receives the
+  // rows and reaches this notification. Duplicate callbacks get
+  // already_confirmed above, making confirmation notifications exactly once.
   await notifyConfirmed({
-    to: a.patient_email,
-    name: a.patient_name,
-    treatmentName: a.treatment_name,
-    whenISO: a.appointment_date_time,
+    to: lead.patient_email,
+    name: lead.patient_name,
+    treatmentName: lead.treatment_name,
+    whenISO: lead.appointment_date_time ?? null,
+    statusUrl: `${BOOKING_SITE_URL}/book/request/${lead.id}?t=${createBookingToken(lead.id)}`,
+    guests: result.groupId
+      ? result.rows.map((row) => ({
+          name: row.patient_name ?? null,
+          age: row.guest_age != null ? Number(row.guest_age) : null,
+          treatmentName: row.treatment_name ?? null,
+          whenISO: row.appointment_date_time ?? null,
+        }))
+      : undefined,
   })
-  return { appointmentId: a.id }
+  return handling
 }

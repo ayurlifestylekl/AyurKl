@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { stripeProvider } from '@/lib/payments/stripe'
 import { markBillPaid, reconcileByBill } from '@/lib/booking/payment'
+import { paymentCallbackResponse } from '@/lib/booking/payment-result'
 
 export const dynamic = 'force-dynamic'
 // The Stripe SDK needs Node's crypto module for signature verification — not
@@ -15,13 +16,23 @@ export const runtime = 'nodejs'
  * stripeProvider.verifyCallback(req) before any other body parsing.
  */
 async function handle(req: NextRequest) {
-  const result = await stripeProvider.verifyCallback(req)
-  if (result.paid && result.billId) {
-    await markBillPaid(result.billId)
-  } else if (result.billId) {
-    await reconcileByBill(result.billId, 'stripe')
+  try {
+    const result = await stripeProvider.verifyCallback(req)
+    if (result.paid && result.billId) {
+      const response = paymentCallbackResponse(await markBillPaid(result.billId))
+      return NextResponse.json(response, { status: response.status })
+    } else if (result.billId) {
+      const reconciliation = await reconcileByBill(result.billId, 'stripe')
+      if ('disposition' in reconciliation) {
+        const response = paymentCallbackResponse(reconciliation)
+        return NextResponse.json(response, { status: response.status })
+      }
+    }
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error('[stripe webhook] processing failed', error)
+    return NextResponse.json({ ok: false }, { status: 503 })
   }
-  return NextResponse.json({ ok: true })
 }
 
 export const POST = handle

@@ -225,6 +225,26 @@ export async function notifyPaymentProblem(p: {
   ])
 }
 
+/**
+ * A provider bill exists but could not be associated with exactly the expected
+ * appointment rows. The URL is never shown to the customer; staff still need
+ * the bill ID in case provider-side deactivation did not succeed.
+ */
+export async function notifyPaymentAssociationProblem(p: {
+  billId: string
+  name?: string | null
+  treatmentName?: string | null
+}) {
+  await sendTelegram(
+    `⚠️ <b>Payment bill was NOT activated — review needed</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nBill: ${esc(p.billId)}\nThe booking rows could not be linked safely. Confirm the bill is inactive in the provider dashboard.`,
+  )
+  await sendStaffEmail('Payment bill was NOT activated — review needed', [
+    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+    `Bill <strong>${esc(p.billId)}</strong> could not be linked to exactly the expected booking rows.`,
+    'The customer was not shown the payment URL. Confirm the bill is inactive in the provider dashboard.',
+  ])
+}
+
 export async function notifyPaymentReminder(p: NotifyBase & { payUrl: string; expiresISO: string | null }) {
   if (!p.to) return
   const { html, text } = shell(
