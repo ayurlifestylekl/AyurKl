@@ -40,6 +40,7 @@ export interface BookingRequestInput {
   bookingKind: BookingKind
   /** Customer's preferred slot (ISO datetime). Staff confirm the real time. */
   preferredAt: string
+  /** Historical staff-request field; instant online forms do not submit it. */
   preferredAtAlt?: string | null
   patientName: string
   patientPhone: string
@@ -51,6 +52,8 @@ export interface BookingRequestInput {
   acceptedPolicies: boolean
   /** Set when a treatment booking follows a cleared consultation. */
   parentConsultationId?: string | null
+  /** Signed access token for a cleared guest consultation. */
+  parentConsultationToken?: string | null
 }
 
 /** Row shape used across staff console + customer status views. */
@@ -83,9 +86,15 @@ export interface StaffAppointment {
   treatmentUnlocked: boolean
   cancellationReason: string | null
   groupId: string | null
+  /** Last activity on this row (bumped by the DB touch trigger on every update) — used to sort the "All" list by most recent action, NOT the original submission time. */
   createdAt: string | null
-  /** When staff approved the request (null until approved). */
+  /** When the customer's web booking actually reached us (immutable, set once on insert). */
+  requestReceivedAt: string | null
+  /** When staff approved the request (null until approved — also null for
+   *  instant bookings, which skip staff review entirely). */
   approvedAt: string | null
+  /** Deadline to pay before an awaiting_payment hold is released. */
+  paymentExpiresAt: string | null
   /** When staff marked the request as contacted via WhatsApp. */
   contactedAt: string | null
 }

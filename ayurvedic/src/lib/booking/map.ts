@@ -7,7 +7,7 @@ export const APPOINTMENT_COLUMNS =
    requested_datetime, requested_datetime_alt, appointment_date_time,
    assigned_therapist_code, assigned_therapist_name, assigned_therapist_gender, duration_mins, payable_amount_rm,
    room, is_guest, customer_id, parent_consultation_id, treatment_unlocked, cancellation_reason, group_id, updated_at,
-   approved_at, contacted_at`
+   approved_at, contacted_at, created_at, payment_expires_at`
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function mapAppointmentRow(r: any): StaffAppointment {
@@ -44,7 +44,9 @@ export function mapAppointmentRow(r: any): StaffAppointment {
     cancellationReason: r.cancellation_reason ?? null,
     groupId: r.group_id ?? null,
     createdAt: r.updated_at ?? null,
+    requestReceivedAt: r.created_at ?? null,
     approvedAt: r.approved_at ?? null,
     contactedAt: r.contacted_at ?? null,
+    paymentExpiresAt: r.payment_expires_at ?? null,
   }
 }

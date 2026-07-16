@@ -9,10 +9,11 @@ import { canAccessBooking } from './access'
 import { notifyRequestReceived, notifyCancelled } from './notify'
 import { voidBill } from './payment'
 import { parseDurationMins } from './duration'
-import { slotsForDuration, slotIso } from './slots'
-import { findClash, canMatchParty, type Slot } from './scheduling'
+import { CONSULTATION_MINS, consultationSlots, slotsForDuration, slotIso } from './slots'
+import { findClash, countOverlapping, hasCapacity, type Slot } from './scheduling'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from './blocks'
-import { therapistsForGender } from '@/lib/staff/therapists'
+import { therapistsForGender, VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
+import { mytDayKey } from '@/lib/datetime'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -279,74 +280,98 @@ async function computeMixedSlots(dateYMD: string, members: PartyMemberResolved[]
     return allSlots.map((time) => ({ time, iso: slotIso(dateYMD, time), available: false }))
   }
 
-  const codes = [...maleTh, ...femaleTh].map((t) => t.code)
   const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
   const now = Date.now()
   const dayStart = new Date(dayStartMs).toISOString()
   const dayEnd = new Date(dayStartMs + 86_400_000).toISOString()
   const occupiedStatuses = ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress']
+  // gender_requirement stores the DB enum ('men_only' / 'ladies_only'), not
+  // the plain 'male' / 'female' gender — translate before querying/matching.
+  const genderReqs = [
+    ...(male.length > 0 ? [genderRequirementValue('male')] : []),
+    ...(female.length > 0 ? [genderRequirementValue('female')] : []),
+  ]
 
-  // Read the payment-hold expiry too, so an approved-but-unpaid slot whose
-  // 15-hour window has lapsed reopens immediately — without waiting for the
-  // daily cleanup cron. Falls back gracefully if the column isn't there yet.
+  // Headcount-based capacity: count EVERY occupying appointment requiring this
+  // gender, whether or not it has a named therapist yet. Under instant booking,
+  // a paid/confirmed booking has no name until front desk assigns one later —
+  // matching by assigned_therapist_code (the old approach) made such a booking
+  // invisible to availability checks. Matching by gender_requirement instead
+  // means it's counted the instant it's confirmed, regardless of naming.
   type BusyRow = {
     appointment_date_time: string | null
     duration_mins: number | null
-    assigned_therapist_code: string | null
+    gender_requirement: string | null
     status?: string | null
     payment_expires_at?: string | null
   }
-  let appts: BusyRow[] | null = null
-  const enriched = await sb
+  const { data: appts } = await sb
     .from('appointments')
-    .select('appointment_date_time, duration_mins, assigned_therapist_code, status, payment_expires_at')
-    .in('assigned_therapist_code', codes)
+    .select('appointment_date_time, duration_mins, gender_requirement, status, payment_expires_at')
+    .in('gender_requirement', genderReqs)
     .in('status', occupiedStatuses)
     .gte('appointment_date_time', dayStart)
     .lt('appointment_date_time', dayEnd)
-  if (enriched.error) {
-    const basic = await sb
-      .from('appointments')
-      .select('appointment_date_time, duration_mins, assigned_therapist_code')
-      .in('assigned_therapist_code', codes)
-      .in('status', occupiedStatuses)
-      .gte('appointment_date_time', dayStart)
-      .lt('appointment_date_time', dayEnd)
-    appts = basic.data
-  } else {
-    appts = enriched.data
-  }
 
-  const busyByCode = new Map<string, Slot[]>()
-  for (const a of appts ?? []) {
-    if (!a.assigned_therapist_code || !a.appointment_date_time) continue
-    // Expired-but-unpaid hold no longer occupies the therapist.
+  const busyByGender = new Map<string, Slot[]>()
+  for (const a of (appts ?? []) as BusyRow[]) {
+    if (!a.appointment_date_time || !a.gender_requirement) continue
+    // Expired-but-unpaid hold no longer occupies a seat.
     if (a.status === 'awaiting_payment' && a.payment_expires_at && new Date(a.payment_expires_at).getTime() <= now) continue
-    const arr = busyByCode.get(a.assigned_therapist_code) ?? []
+    const arr = busyByGender.get(a.gender_requirement) ?? []
     arr.push({ startISO: a.appointment_date_time, durationMins: a.duration_mins ?? 60 })
-    busyByCode.set(a.assigned_therapist_code, arr)
+    busyByGender.set(a.gender_requirement, arr)
   }
 
   const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
   const intervals = blockedIntervalsForDate(blocks, dateYMD)
 
-  const canServe = (code: string, durationMins: number, iso: string) =>
-    findClash({ startISO: iso, durationMins }, busyByCode.get(code) ?? []) === null &&
-    !isBlocked(intervals, code, iso, durationMins)
+  // Roster seats actually available at this instant (excludes anyone on leave
+  // or centre-wide-blocked for this window) — the true capacity ceiling.
+  const freeSeats = (roster: typeof maleTh, iso: string, durationMins: number) =>
+    roster.filter((t) => !isBlocked(intervals, t.code, iso, durationMins)).length
 
-  const maleCodes = maleTh.map((t) => t.code)
-  const femaleCodes = femaleTh.map((t) => t.code)
-  const maleDurations = male.map((m) => m.durationMins)
-  const femaleDurations = female.map((m) => m.durationMins)
+  // How many existing appointments of this gender would still overlap a seat
+  // occupied for `durationMins` starting at `iso`. Overlap only grows with
+  // duration, so using the party's longest member is the safe (conservative)
+  // bound for the whole party sharing this start time.
+  const occupiedSeats = (gender: 'male' | 'female', iso: string, durationMins: number) => {
+    const busy = busyByGender.get(genderRequirementValue(gender)) ?? []
+    return countOverlapping({ startISO: iso, durationMins }, busy)
+  }
+
+  const genderOk = (list: PartyMemberResolved[], roster: typeof maleTh, iso: string) => {
+    if (list.length === 0) return true
+    const gender = list[0].gender
+    const maxDur = Math.max(...list.map((m) => m.durationMins))
+    const ceiling = freeSeats(roster, iso, maxDur)
+    const already = occupiedSeats(gender, iso, maxDur)
+    return hasCapacity(ceiling, already, list.length)
+  }
 
   return allSlots.map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
       new Date(iso).getTime() > now &&
-      canMatchParty(maleCodes, maleDurations, (code, d) => canServe(code, d, iso)) &&
-      canMatchParty(femaleCodes, femaleDurations, (code, d) => canServe(code, d, iso))
+      genderOk(male, maleTh, iso) &&
+      genderOk(female, femaleTh, iso)
     return { time, iso, available }
   })
+}
+
+/**
+ * How many of a gender's therapists are actually free (not on leave / blocked)
+ * for a session of `durationMins` starting at `iso` — the true capacity
+ * ceiling. Shared by the browse-time estimate above and the write-time claim
+ * in `instant.ts`, which passes this as the atomic count's ceiling.
+ */
+export async function effectiveGenderCapacity(gender: Gender, iso: string, durationMins: number): Promise<number> {
+  const sb = admin()
+  const dateYMD = mytDayKey(iso)
+  const roster = therapistsForGender(gender)
+  const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
+  const intervals = blockedIntervalsForDate(blocks, dateYMD)
+  return roster.filter((t) => !isBlocked(intervals, t.code, iso, durationMins)).length
 }
 
 /** Slots for a single guest of the given gender. */
@@ -354,8 +379,6 @@ export async function getAvailableSlots(dateYMD: string, treatmentId: string | n
   if (gender !== 'male' && gender !== 'female') return []
   return computeSlots(dateYMD, treatmentId, { male: gender === 'male' ? 1 : 0, female: gender === 'female' ? 1 : 0 })
 }
-
-const CONSULTATION_MINS = 30
 
 /**
  * Slots for a free consultation. Consultations are conducted by the Vaidya, not
@@ -365,7 +388,7 @@ const CONSULTATION_MINS = 30
 export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]> {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateYMD)) return []
   const sb = admin()
-  const allSlots = slotsForDuration(CONSULTATION_MINS)
+  const allSlots = consultationSlots()
   const now = Date.now()
 
   const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
@@ -385,8 +408,8 @@ export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]>
     .filter((r) => r.appointment_date_time)
     .map((r) => ({ startISO: r.appointment_date_time as string, durationMins: r.duration_mins ?? CONSULTATION_MINS }))
 
-  // Centre-wide closures (blocks with therapist_code = null) still apply to the
-  // Vaidya. Passing an empty code means only all-therapist closures match.
+  // Centre-wide closures (blocks with therapist_code = null) AND the Vaidya's
+  // own leave (VAIDYA_BLOCK_CODE) both apply to consultations.
   const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
   const intervals = blockedIntervalsForDate(blocks, dateYMD)
 
@@ -395,7 +418,7 @@ export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]>
     const available =
       new Date(iso).getTime() > now &&
       findClash({ startISO: iso, durationMins: CONSULTATION_MINS }, busy) === null &&
-      !isBlocked(intervals, '', iso, CONSULTATION_MINS)
+      !isBlocked(intervals, VAIDYA_BLOCK_CODE, iso, CONSULTATION_MINS)
     return { time, iso, available }
   })
 }

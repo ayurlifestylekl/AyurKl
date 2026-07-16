@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { findClash, canMatchParty } from '../scheduling'
+import { findClash, canMatchParty, countOverlapping, hasCapacity } from '../scheduling'
 import { parseDurationMins } from '../duration'
 
 describe('parseDurationMins', () => {
@@ -73,5 +73,59 @@ describe('canMatchParty (mixed-treatment group)', () => {
 
   it('is vacuously true for an empty party', () => {
     expect(canMatchParty([], [], () => false)).toBe(true)
+  })
+})
+
+describe('countOverlapping (gender-headcount capacity)', () => {
+  // Two existing appointments requiring the same gender, one overlapping the
+  // candidate window (with buffer), one not — the headcount equivalent of
+  // findClash: it counts every clash instead of stopping at the first.
+  const busy = [
+    { startISO: '2026-06-25T10:00:00+08:00', durationMins: 60 }, // occupied 10:00–11:30
+    { startISO: '2026-06-25T14:00:00+08:00', durationMins: 60 }, // occupied 14:00–15:30
+  ]
+
+  it('counts zero when nothing overlaps', () => {
+    expect(countOverlapping({ startISO: '2026-06-25T08:00:00+08:00', durationMins: 60 }, busy)).toBe(0)
+  })
+
+  it('counts exactly the appointments whose buffered window overlaps', () => {
+    expect(countOverlapping({ startISO: '2026-06-25T11:00:00+08:00', durationMins: 60 }, busy)).toBe(1)
+  })
+
+  it('counts multiple simultaneous overlaps — unlike findClash, which only reports the first', () => {
+    const stacked = [
+      { startISO: '2026-06-25T10:00:00+08:00', durationMins: 60 },
+      { startISO: '2026-06-25T10:15:00+08:00', durationMins: 60 },
+      { startISO: '2026-06-25T10:30:00+08:00', durationMins: 60 },
+    ]
+    expect(countOverlapping({ startISO: '2026-06-25T10:30:00+08:00', durationMins: 30 }, stacked)).toBe(3)
+  })
+
+  it('respects the 30-min buffer boundary exactly like findClash', () => {
+    expect(countOverlapping({ startISO: '2026-06-25T11:15:00+08:00', durationMins: 60 }, busy)).toBe(1) // inside buffer
+    expect(countOverlapping({ startISO: '2026-06-25T11:30:00+08:00', durationMins: 60 }, busy)).toBe(0) // exactly at buffer edge
+  })
+})
+
+describe('hasCapacity (leave-aware headcount ceiling)', () => {
+  it('allows a party when seats remain', () => {
+    expect(hasCapacity(3, 1, 2)).toBe(true) // 1 already occupying + 2 more == ceiling
+  })
+
+  it('rejects a party that would exceed the ceiling', () => {
+    expect(hasCapacity(3, 2, 2)).toBe(false) // 2 already + 2 more > 3
+  })
+
+  it('rejects entirely when the whole roster is on leave (ceiling 0)', () => {
+    expect(hasCapacity(0, 0, 1)).toBe(false)
+  })
+
+  it('is independent of naming — capacity is consumed by occupying appointments regardless of an assigned therapist', () => {
+    // This is the core fix: under instant booking, a paid/confirmed booking
+    // with NO named therapist still counts against `alreadyOccupied`.
+    const rosterSize = 3
+    const paidButUnassigned = 3
+    expect(hasCapacity(rosterSize, paidButUnassigned, 1)).toBe(false)
   })
 })

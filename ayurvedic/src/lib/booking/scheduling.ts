@@ -37,6 +37,33 @@ export function findClash(
   return null
 }
 
+/**
+ * How many busy windows overlap `candidate` (buffered) — the headcount
+ * equivalent of findClash, used where only the COUNT of occupying
+ * appointments matters, not which specific one clashes (e.g. gender-headcount
+ * capacity, where no named therapist may exist yet to check individually).
+ */
+export function countOverlapping(candidate: Slot, busy: Slot[], buffer: number = THERAPIST_BUFFER_MINS): number {
+  const cStart = new Date(candidate.startISO).getTime()
+  const cEnd = occupiedEnd(candidate, buffer)
+  let n = 0
+  for (const b of busy) {
+    const bStart = new Date(b.startISO).getTime()
+    const bEnd = occupiedEnd(b, buffer)
+    if (cStart < bEnd && bStart < cEnd) n++
+  }
+  return n
+}
+
+/**
+ * Pure capacity decision: given how many seats are free right now (ceiling)
+ * and how many already-occupying appointments overlap the candidate window,
+ * is there room for `partySize` more members starting at this window?
+ */
+export function hasCapacity(ceiling: number, alreadyOccupied: number, partySize: number): boolean {
+  return alreadyOccupied + partySize <= ceiling
+}
+
 /** When a clashing therapist next becomes free (treatment end + buffer). */
 export function freeAtLabel(clash: Slot, buffer: number = THERAPIST_BUFFER_MINS): string {
   return new Date(occupiedEnd(clash, buffer)).toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short' })

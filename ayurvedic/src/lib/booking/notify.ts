@@ -2,6 +2,8 @@ import 'server-only'
 import { sendEmail } from '@/lib/email/send'
 import { sendTelegram } from '@/lib/integrations/telegram'
 import { fmtMY } from '@/lib/datetime'
+import type { BookingKind } from '@/types/booking'
+import { confirmationCopy } from './confirmation-copy'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
 
@@ -153,16 +155,26 @@ export async function notifyApproved(
   })
 }
 
-export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; guests?: GuestLine[] }) {
+export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; guests?: GuestLine[]; bookingKind?: BookingKind; statusUrl?: string | null }) {
   const isGroup = (p.guests?.length ?? 0) > 1
+  // Historical payment callers predate bookingKind and are treatment-only.
+  const copy = confirmationCopy(p.bookingKind ?? 'treatment')
   await sendTelegram(
-    `✅ <b>Payment received — confirmed</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}`,
+    `${copy.telegramHeading}\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}${copy.needsAssignment ? '\n👉 Assign a therapist in the console.' : ''}`,
   )
   await sendStaffEmail(
-    'Payment received — booking confirmed',
+    copy.staffHeading,
     isGroup
-      ? [`<strong>${esc(p.name ?? 'Guest')}</strong> paid for a group of ${p.guests!.length}:`, ...guestListLines(p.guests!)]
-      : [`<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`, `Appointment: <strong>${when(p.whenISO)}</strong>`],
+      ? [
+          `<strong>${esc(p.name ?? 'Guest')}</strong> — group of ${p.guests!.length}:`,
+          ...guestListLines(p.guests!),
+          ...(copy.needsAssignment ? ['No therapist is assigned yet — please assign one per guest in the console.'] : []),
+        ]
+      : [
+          `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+          `Appointment: <strong>${when(p.whenISO)}</strong>`,
+          ...(copy.needsAssignment ? ['No therapist is assigned yet — please assign one in the console.'] : []),
+        ],
   )
   if (!p.to) return
   const intro = isGroup
@@ -171,12 +183,25 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
         ...guestListLines(p.guests!),
       ]
     : [`Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`]
-  const { html, text } = shell('Your appointment is confirmed', [
-    ...intro,
-    'A same-gender therapist will be assigned as requested. Please arrive 10 minutes early.',
-    'To reschedule, message us on WhatsApp at least 12–24 hours beforehand. Cancellations within 12 hours are non-refundable.',
-  ])
-  await sendCustomerEmail({ to: p.to, subject: 'Appointment confirmed — Kerala Ayurvedic Lifestyle', html, text, context: 'payment confirmed', name: p.name })
+  const { html, text } = shell(
+    copy.customerHeading,
+    [
+      ...intro,
+      ...copy.customerLines,
+      p.bookingKind === 'consultation'
+        ? 'To reschedule, message us on WhatsApp at least 12–24 hours beforehand.'
+        : 'To reschedule, message us on WhatsApp at least 12–24 hours beforehand. Cancellations within 12 hours are non-refundable.',
+    ],
+    p.statusUrl ? { label: 'View your booking', url: p.statusUrl } : undefined,
+  )
+  await sendCustomerEmail({
+    to: p.to,
+    subject: `${copy.customerHeading} — Kerala Ayurvedic Lifestyle`,
+    html,
+    text,
+    context: p.bookingKind === 'consultation' ? 'consultation confirmed' : 'payment confirmed',
+    name: p.name,
+  })
 }
 
 /**

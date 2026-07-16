@@ -21,6 +21,15 @@ export const THERAPISTS: Therapist[] = [
   { code: 'AS12', name: 'Asha', gender: 'female' },
 ]
 
+/**
+ * Not a massage therapist — a synthetic code so the Vaidya's consultation
+ * slots can be blocked (e.g. a personal day off) independently of a
+ * whole-centre closure, reusing the same schedule_blocks mechanism. Never
+ * appears in THERAPISTS / therapistsForGender — the Vaidya has no gender
+ * matching role.
+ */
+export const VAIDYA_BLOCK_CODE = 'VAIDYA'
+
 export function therapistByCode(code: string | null | undefined): Therapist | undefined {
   if (!code) return undefined
   return THERAPISTS.find((t) => t.code === code)
