@@ -2,17 +2,11 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Video, MapPin, Calendar, Stethoscope } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { getAppointmentById } from '@/lib/admin/appointments/queries'
 import {
   STATUS_LABELS,
   type AppointmentStatus,
 } from '@/lib/admin/appointments/status-transitions'
-import {
-  DEMO_ADMIN_EMAIL,
-  isMockAppointmentId,
-  MOCK_APPOINTMENTS,
-} from '@/lib/admin/appointments/mocks'
 import StatusDialog from './StatusDialog'
 import InternalNotesPanel from './InternalNotesPanel'
 
@@ -37,58 +31,12 @@ export default async function AdminAppointmentDetailPage({
   params: { id: string }
 }) {
   const supabase = await createClient()
-  const me = await getCurrentUser()
-  const isDemoAdmin = me?.email === DEMO_ADMIN_EMAIL
-
-  let appointment
-  if (isDemoAdmin && isMockAppointmentId(params.id)) {
-    const m = MOCK_APPOINTMENTS.find((a) => a.id === params.id)
-    if (!m) notFound()
-    appointment = {
-      id: m.id,
-      customer_id: m.customerId,
-      treatment_name: m.treatmentName,
-      doctor_name: m.doctorName,
-      appointment_date_time: m.appointmentDateTime,
-      duration_mins: m.durationMins,
-      status: m.status,
-      booking_kind: 'treatment',
-      assigned_therapist_code: 'DEMO',
-      mode: m.mode,
-      room: m.room,
-      meeting_link: null,
-      advance_payment_rm: m.advancePaymentRm,
-      advance_payment_status: m.advancePaymentStatus,
-      calcom_booking_uid: m.calcomBookingUid,
-      notes: 'Customer prefers room with natural light.',
-      internal_notes: null,
-      gender_requirement: 'any',
-      cancellation_reason: m.status === 'cancelled' ? 'Customer requested change.' : null,
-      customer: m.customerId
-        ? {
-            id: m.customerId,
-            full_name: m.customerName,
-            email: m.customerEmail,
-            phone_number: m.customerPhone,
-            date_of_birth: null,
-            gender: null,
-            allergies: null,
-            current_medications: null,
-            medical_conditions: null,
-          }
-        : null,
-      rescheduled_from: null,
-      updated_at: m.appointmentDateTime,
-    }
-  } else {
-    appointment = await getAppointmentById(supabase, params.id)
-    if (!appointment) notFound()
-  }
+  const appointment = await getAppointmentById(supabase, params.id)
+  if (!appointment) notFound()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const a: any = appointment
   const cust = Array.isArray(a.customer) ? a.customer[0] : a.customer
-  const isMock = isDemoAdmin && isMockAppointmentId(params.id)
   const dt = new Date(a.appointment_date_time)
 
   const genderReq: 'any' | 'men_only' | 'ladies_only' = a.gender_requirement ?? 'any'
@@ -125,11 +73,6 @@ export default async function AdminAppointmentDetailPage({
             >
               {STATUS_LABELS[a.status as AppointmentStatus]}
             </span>
-            {isMock ? (
-              <span className="rounded-full border border-[#D4AF37]/40 bg-[#F7F2E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#8a6a3d]">
-                Demo data
-              </span>
-            ) : null}
           </div>
           <p className="mt-1 text-[12.5px] text-[#1F1F1F]/65">
             <Calendar className="inline h-3.5 w-3.5" />{' '}
@@ -292,33 +235,8 @@ export default async function AdminAppointmentDetailPage({
         </article>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <section>
         <InternalNotesPanel appointmentId={a.id} initial={a.internal_notes} />
-        <article className="rounded-2xl border border-[#6E1023]/8 bg-white p-4">
-          <h3 className="font-heading text-[12.5px] font-semibold text-[#6E1023]">
-            Cal.com sync
-          </h3>
-          {a.calcom_booking_uid ? (
-            <p className="mt-2 text-[12px]">
-              <span className="text-[#1F1F1F]/55">Booking UID:</span>{' '}
-              <code className="font-mono text-[11px]">{a.calcom_booking_uid}</code>
-            </p>
-          ) : (
-            <p className="mt-2 text-[12px] italic text-[#1F1F1F]/55">
-              Created in admin — not synced from Cal.com.
-            </p>
-          )}
-          <p className="mt-3 text-[11px] text-[#1F1F1F]/55">
-            Cal.com → our system: webhook-based (
-            <a href="/api/webhooks/calcom" className="underline">
-              /api/webhooks/calcom
-            </a>
-            ).
-            <br />
-            Our system → Cal.com: not implemented — when you reschedule or cancel
-            here, also update Cal.com manually.
-          </p>
-        </article>
       </section>
     </div>
   )

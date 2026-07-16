@@ -11,7 +11,6 @@ import {
   Navigation,
 } from 'lucide-react'
 import { findTherapyByName, GENERIC_PRE_VISIT } from '@/data/therapies'
-import { getCancelUrl, getRescheduleUrl, getBookingUrl } from '@/lib/calcom/links'
 import {
   canCancelInApp,
   countdownLabel,
@@ -167,7 +166,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
           ) : (
             uid && (
               <a
-                href={getBookingUrl(uid)}
+                href={`/book/request/${appointment.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#6E1023] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#6E1023] active:scale-[0.98]"
@@ -190,7 +189,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
 
           {uid ? (
             <a
-              href={getRescheduleUrl(uid)}
+              href={whatsappCancelUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
@@ -213,7 +212,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
           {uid &&
             (canCancel ? (
               <a
-                href={getCancelUrl(uid)}
+                href={`/book/request/${appointment.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-11 items-center gap-2 rounded-full border border-red-200 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-red-700/85 transition-all hover:border-red-300 hover:bg-red-50/40"

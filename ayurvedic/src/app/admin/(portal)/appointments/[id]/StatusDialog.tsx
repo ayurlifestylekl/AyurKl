@@ -188,9 +188,6 @@ export default function StatusDialog({
                 <h2 className="font-heading text-[16px] font-semibold text-[#6E1023]">
                   Reschedule
                 </h2>
-                <p className="mt-1 text-[11.5px] italic text-[#1F1F1F]/55">
-                  Remember to also update Cal.com manually — we don&apos;t push to Cal.com yet.
-                </p>
                 <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
                   New date & time *
                 </label>

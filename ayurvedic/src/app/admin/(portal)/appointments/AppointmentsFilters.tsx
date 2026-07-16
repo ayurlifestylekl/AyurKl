@@ -4,7 +4,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
 const SEGMENTS = [
-  { value: 'requests', label: 'Requests' },
+  { value: 'needs_therapist', label: 'Needs therapist' },
+  { value: 'awaiting_payment', label: 'Awaiting payment' },
   { value: 'today', label: 'Today' },
   { value: 'upcoming', label: 'Upcoming' },
   { value: 'past', label: 'Past' },
@@ -16,7 +17,7 @@ const SEGMENTS = [
 export default function AppointmentsFilters({ requestCount = 0 }: { requestCount?: number }) {
   const router = useRouter()
   const sp = useSearchParams()
-  const active = sp.get('segment') ?? 'requests'
+  const active = sp.get('segment') ?? 'today'
 
   const set = useCallback(
     (k: string, v: string | null) => {
@@ -45,7 +46,7 @@ export default function AppointmentsFilters({ requestCount = 0 }: { requestCount
               }`}
             >
               {s.label}
-              {s.value === 'requests' && requestCount > 0 && (
+              {s.value === 'needs_therapist' && requestCount > 0 && (
                 <span
                   className={`inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold ${
                     isActive ? 'bg-white/25 text-white' : 'bg-[#D4AF37] text-[#1F1F1F]'

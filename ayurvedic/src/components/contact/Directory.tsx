@@ -25,7 +25,7 @@ const CHANNELS: Channel[] = [
     title: 'Consult',
     description:
       'Begin with a consultation. Open every day, 10:00 AM — 8:00 PM, by appointment only.',
-    meta: 'Same-day reply · Cal.com booking',
+    meta: 'Same-day reply · Online booking',
     href: '/treatments#booking',
     pill: 'Booking',
   },

@@ -1,17 +1,11 @@
 import Link from 'next/link'
 import { Plus, ExternalLink } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import {
   listAppointments,
   countPendingRequests,
   type AppointmentFilters,
-  type AppointmentListItem,
 } from '@/lib/admin/appointments/queries'
-import {
-  DEMO_ADMIN_EMAIL,
-  MOCK_APPOINTMENTS,
-} from '@/lib/admin/appointments/mocks'
 import AppointmentsFilters from './AppointmentsFilters'
 import AppointmentsTable from './AppointmentsTable'
 
@@ -22,71 +16,11 @@ interface PageProps {
   searchParams: { segment?: string; q?: string }
 }
 
-function filterMocks(
-  items: AppointmentListItem[],
-  filters: AppointmentFilters,
-): AppointmentListItem[] {
-  const now = Date.now()
-  const todayStart = new Date()
-  todayStart.setHours(0, 0, 0, 0)
-  const todayEnd = new Date(todayStart)
-  todayEnd.setDate(todayEnd.getDate() + 1)
-
-  let arr = items
-  if (filters.segment === 'requests') {
-    arr = arr.filter((a) => ['pending', 'scheduled', 'awaiting_payment'].includes(a.status))
-  } else if (filters.segment === 'today') {
-    arr = arr.filter((a) => {
-      const t = new Date(a.appointmentDateTime).getTime()
-      return t >= todayStart.getTime() && t < todayEnd.getTime()
-    })
-  } else if (filters.segment === 'upcoming') {
-    arr = arr.filter(
-      (a) =>
-        new Date(a.appointmentDateTime).getTime() >= todayEnd.getTime() &&
-        ['pending', 'scheduled', 'confirmed', 'checked_in', 'in_progress'].includes(a.status),
-    )
-  } else if (filters.segment === 'past') {
-    arr = arr.filter((a) => new Date(a.appointmentDateTime).getTime() < todayStart.getTime())
-  } else if (filters.segment === 'cancelled') {
-    arr = arr.filter((a) => a.status === 'cancelled')
-  } else if (filters.segment === 'no_show') {
-    arr = arr.filter((a) => a.status === 'no_show')
-  }
-  if (filters.search) {
-    const s = filters.search.toLowerCase()
-    arr = arr.filter((a) =>
-      [a.customerName, a.customerEmail, a.treatmentName, a.doctorName]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase()
-        .includes(s),
-    )
-  }
-  // sort
-  if (filters.segment === 'today' || filters.segment === 'upcoming' || filters.segment === 'requests') {
-    arr = [...arr].sort(
-      (a, b) =>
-        new Date(a.appointmentDateTime).getTime() -
-        new Date(b.appointmentDateTime).getTime(),
-    )
-  } else {
-    arr = [...arr].sort(
-      (a, b) =>
-        new Date(b.appointmentDateTime).getTime() -
-        new Date(a.appointmentDateTime).getTime(),
-    )
-  }
-  void now
-  return arr
-}
-
 export default async function AdminAppointmentsPage({ searchParams }: PageProps) {
   const supabase = await createClient()
-  const me = await getCurrentUser()
   const filters: AppointmentFilters = {
     segment:
-      (searchParams.segment as AppointmentFilters['segment']) ?? 'requests',
+      (searchParams.segment as AppointmentFilters['segment']) ?? 'today',
     search: searchParams.q,
     limit: 100,
   }
@@ -95,10 +29,8 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
     countPendingRequests(supabase),
   ])
 
-  const isDemoAdmin = me?.email === DEMO_ADMIN_EMAIL
-  const showMocks = isDemoAdmin && real.items.length === 0
-  const items = showMocks ? filterMocks(MOCK_APPOINTMENTS, filters) : real.items
-  const total = showMocks ? items.length : real.total
+  const items = real.items
+  const total = real.total
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
@@ -112,7 +44,6 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
           </h1>
           <p className="mt-1 font-body text-[13px] text-[#1F1F1F]/65">
             {total} appointment{total === 1 ? '' : 's'} · {filters.segment}
-            {showMocks ? ' · demo data' : ''}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

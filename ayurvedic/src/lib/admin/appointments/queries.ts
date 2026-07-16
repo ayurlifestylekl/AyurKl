@@ -27,15 +27,12 @@ export interface AppointmentListItem {
 }
 
 export interface AppointmentFilters {
-  segment?: 'requests' | 'all' | 'today' | 'upcoming' | 'past' | 'cancelled' | 'no_show'
+  segment?: 'needs_therapist' | 'awaiting_payment' | 'all' | 'today' | 'upcoming' | 'past' | 'cancelled' | 'no_show'
   search?: string
   status?: AppointmentStatus
   limit?: number
   offset?: number
 }
-
-/** Statuses that count as an actionable incoming request (awaiting approval/payment). */
-const REQUEST_STATUSES = ['pending', 'scheduled', 'awaiting_payment'] as const
 
 export async function listAppointments(
   supabase: SB,
@@ -46,7 +43,7 @@ export async function listAppointments(
     .select(
       `id, appointment_date_time, customer_id, treatment_name, doctor_name,
        duration_mins, status, mode, room, advance_payment_rm,
-       advance_payment_status, calcom_booking_uid,
+       advance_payment_status, calcom_booking_uid, assigned_therapist_code,
        customer:users!appointments_customer_id_fkey(full_name, email, phone_number)`,
       { count: 'exact' },
     )
@@ -55,8 +52,11 @@ export async function listAppointments(
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
   const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toISOString()
 
-  if (filters.segment === 'requests') {
-    q = q.in('status', REQUEST_STATUSES as unknown as string[])
+  if (filters.segment === 'needs_therapist') {
+    q = q.in('status', ['confirmed', 'checked_in', 'in_progress']).is('assigned_therapist_code', null)
+    q = q.order('appointment_date_time', { ascending: true })
+  } else if (filters.segment === 'awaiting_payment') {
+    q = q.eq('status', 'awaiting_payment')
     q = q.order('appointment_date_time', { ascending: true })
   } else if (filters.segment === 'today') {
     q = q.gte('appointment_date_time', todayStart).lt('appointment_date_time', todayEnd)
@@ -150,12 +150,13 @@ export async function getAppointmentById(supabase: SB, id: string) {
   return data
 }
 
-/** Count of requests awaiting approval — drives the Requests segment badge. */
+/** Count paid/confirmed appointments still requiring therapist assignment. */
 export async function countPendingRequests(supabase: SB): Promise<number> {
   const { count } = await supabase
     .from('appointments')
     .select('id', { count: 'exact', head: true })
-    .eq('status', 'pending')
+    .in('status', ['confirmed', 'checked_in', 'in_progress'])
+    .is('assigned_therapist_code', null)
   return count ?? 0
 }
 

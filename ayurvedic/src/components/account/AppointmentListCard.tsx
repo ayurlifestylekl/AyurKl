@@ -13,7 +13,6 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import AppointmentStatusPill from './AppointmentStatusPill'
-import { getCancelUrl, getRescheduleUrl } from '@/lib/calcom/links'
 import { findTherapyByName } from '@/data/therapies'
 import {
   appointmentBucket,
@@ -50,8 +49,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
     `Hi Kerala Ayurvedic, I need to change my ${appointment.treatment_name} appointment.`
   )}`
 
-  // New approval-gated bookings (no Cal.com uid) awaiting approval or payment.
-  // Cast: the hand-maintained DB type predates the pending/awaiting_payment enum values.
+  // Cast: the hand-maintained DB type predates awaiting_payment.
   const status = appointment.status as string
   const needsAction = status === 'awaiting_payment'
   const isFuture = (bucket === 'upcoming' || bucket === 'today') && !needsAction
@@ -186,7 +184,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
             {uid ? (
               <>
                 <a
-                  href={getRescheduleUrl(uid)}
+                  href={whatsappChangeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25 hover:text-[#6E1023]"
@@ -196,7 +194,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
                 </a>
                 {canCancel ? (
                   <a
-                    href={getCancelUrl(uid)}
+                    href={`/book/request/${appointment.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-red-700/80 transition-all hover:border-red-300 hover:bg-red-50/40"

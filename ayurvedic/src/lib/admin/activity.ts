@@ -61,7 +61,7 @@ export async function getRecentActivity(
     events.push({
       id: `a:${r.id}`,
       kind: 'appointment',
-      title: `Appointment booked${r.calcom_booking_uid ? ' (Cal.com)' : ''}`,
+      title: 'Appointment booked',
       subtitle: `${r.treatment_name} · ${r.customer?.full_name ?? 'walk-in'}`,
       href: `/admin/appointments/${r.id}`,
       at: r.appointment_date_time,

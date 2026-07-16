@@ -11,7 +11,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@calcom/embed-react": "^1.5.3",
     "@portabletext/react": "^3.2.0",
     "@portabletext/types": "^2.0.13",
     "@react-pdf/renderer": "^4.5.1",

@@ -1,4 +1,5 @@
 import type { NavItem, PortalChrome } from './nav-types'
+import { COMMERCE_ENABLED } from '@/lib/admin/features'
 
 /**
  * Active admin sidebar — the clinic-only Command Center (Phase 1).
@@ -9,9 +10,9 @@ import type { NavItem, PortalChrome } from './nav-types'
  * and remain reachable by URL — they're only hidden from the sidebar. To bring
  * one back, move its entry from `adminNavArchived` into `adminNav`.
  */
-export const adminNav: NavItem[] = [
+export const clinicAdminNav: NavItem[] = [
   { label: 'Overview', href: '/admin/dashboard', icon: 'dashboard' },
-  { label: 'Consultations', href: '/admin/appointments', icon: 'calendar' },
+  { label: 'Appointments', href: '/admin/appointments', icon: 'calendar' },
   { label: 'Customers', href: '/admin/customers', icon: 'users' },
   { label: 'Leads', href: '/admin/leads', icon: 'inbox' },
   { label: 'Messages', href: '/admin/messages', icon: 'message-square' },
@@ -21,7 +22,7 @@ export const adminNav: NavItem[] = [
 ]
 
 /** Archived — Phase 2 (commerce + partners). Not rendered in the sidebar. */
-export const adminNavArchived: NavItem[] = [
+export const commerceAdminNav: NavItem[] = [
   { label: 'Products', href: '/admin/products', icon: 'shopping-bag' },
   { label: 'Inventory', href: '/admin/inventory', icon: 'boxes' },
   { label: 'Orders', href: '/admin/orders', icon: 'clipboard-list' },
@@ -32,6 +33,13 @@ export const adminNavArchived: NavItem[] = [
   { label: 'Brand Partners', href: '/admin/partners', icon: 'sparkles' },
   { label: 'Finance', href: '/admin/finance', icon: 'bar-chart' },
 ]
+
+export function getAdminNav(commerceEnabled: boolean): NavItem[] {
+  return commerceEnabled ? [...clinicAdminNav, ...commerceAdminNav] : clinicAdminNav
+}
+
+export const adminNav = getAdminNav(COMMERCE_ENABLED)
+export const adminNavArchived = commerceAdminNav
 
 export const adminChrome: PortalChrome = {
   label: 'Command Center',
