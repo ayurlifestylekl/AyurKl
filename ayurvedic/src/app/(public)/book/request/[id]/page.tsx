@@ -6,12 +6,13 @@ import { CheckCircle2, Clock, CreditCard, CalendarCheck, XCircle } from 'lucide-
 import { getBookingForPayment, getGroupMembers } from '@/lib/storefront/booking'
 import { reconcileAppointment } from '@/lib/booking/payment'
 import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
-import { isCardPaymentEnabled } from '@/lib/payments'
 import { STATUS_LABEL } from '@/lib/booking/status'
 import { whatsappRescheduleLink } from '@/lib/booking/policy'
 import { canAccessBooking } from '@/lib/booking/access'
+import { flowLabels } from '@/lib/booking/flow-copy'
 import { fmtMY } from '@/lib/datetime'
 import CancelBookingButton from '@/components/booking/CancelBookingButton'
+import HoldCountdown from '@/components/booking/HoldCountdown'
 
 export const metadata: Metadata = {
   title: 'Your booking request — Kerala Ayurvedic Lifestyle',
@@ -54,6 +55,10 @@ export default async function BookingRequestPage({
   const groupTotal = isGroup ? members.reduce((s, m) => s + (m.payableAmountRm ?? 0), 0) : null
   const groupAllAwaiting = isGroup && members.every((m) => m.status === 'awaiting_payment')
 
+  // Instant bookings skip staff review entirely (no 'pending' stop, no
+  // approved_at stamp) — showing a "Clinic approval" step for them would be
+  // misleading, so only the old staff-approved flow gets that step.
+  const wasStaffApproved = b.status === 'pending' || b.approvedAt != null
   const isConfirmed = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)
   const when = b.appointmentDatetime ?? b.requestedDatetime
   const whenText = fmtMY(when, { dateStyle: 'full', timeStyle: 'short' })
@@ -64,6 +69,8 @@ export default async function BookingRequestPage({
     : b.payableAmountRm != null
       ? `RM${b.payableAmountRm}`
       : null
+  const labels = flowLabels(b.bookingKind, b.status, b.approvedAt)
+  const complete = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-cream">
@@ -74,7 +81,7 @@ export default async function BookingRequestPage({
 
         <div className="mt-6 rounded-2xl border border-accent/30 bg-white p-7 shadow-elevated sm:p-9">
           <div className="font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-accent">
-            {b.bookingKind === 'consultation' ? 'Consultation request' : 'Treatment request'}
+            {b.bookingKind === 'consultation' ? 'Free consultation' : 'Treatment booking'}
           </div>
           <h1 className="mt-1 font-heading text-[26px] font-extrabold leading-tight text-primary">
             {b.treatmentName ?? 'Your appointment'}
@@ -82,33 +89,17 @@ export default async function BookingRequestPage({
 
           {/* Status timeline */}
           <ol className="mt-6 space-y-3">
-            <Step done icon={CheckCircle2} label="Request received" sub="We have your preferred time." />
-            <Step
-              done={['awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)}
-              icon={Clock}
-              label="Clinic approval"
-              sub={b.status === 'pending' ? 'Our team is reviewing your request.' : 'Approved by our clinic.'}
-            />
-            {b.bookingKind === 'treatment' && (
-              <Step
-                done={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)}
-                icon={CreditCard}
-                label="Payment"
-                sub={b.status === 'awaiting_payment' ? 'Pay to secure your slot.' : isConfirmed && amount ? `${amount} paid` : amount ? `${amount} due after approval` : ''}
-              />
-            )}
-            <Step
-              done={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)}
-              icon={CalendarCheck}
-              label="Confirmed"
-              sub={['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) ? (isGroup ? 'Each guest’s time is listed below.' : whenText) : 'Final confirmation.'}
-            />
-            {b.status === 'cancelled' && <Step done icon={XCircle} label="Cancelled" sub={b.cancellationReason || 'This booking was cancelled.'} tone="danger" />}
+            {labels.map((label) => {
+              const icon = label === 'Payment' ? CreditCard : label === 'Clinic approval' ? Clock : label === 'Cancelled' ? XCircle : label === 'Slot selected' ? CheckCircle2 : CalendarCheck
+              const done = label === 'Slot selected' || label === 'Cancelled' || (label === 'Clinic approval' && b.status !== 'pending') || ((label === 'Confirmed' || label === 'Confirmation' || label === 'Payment') && complete)
+              const sub = label === 'Slot selected' ? whenText : label === 'Payment' ? (b.status === 'awaiting_payment' ? 'Pay to secure your slot.' : complete && amount ? `${amount} paid` : '') : label === 'Clinic approval' ? (b.status === 'pending' ? 'Our team is reviewing this historical request.' : 'Approved by our clinic.') : label === 'Cancelled' ? (b.cancellationReason || 'This booking was cancelled.') : complete ? (isGroup ? 'Each guest’s time is listed below.' : whenText) : 'Instant confirmation follows payment.'
+              return <Step key={label} done={done} icon={icon} label={label} sub={sub} tone={label === 'Cancelled' ? 'danger' : undefined} />
+            })}
           </ol>
 
           {/* Details */}
           <dl className="mt-7 grid grid-cols-2 gap-y-2 border-t border-accent/15 pt-5 font-body text-[13.5px]">
-            {!isGroup && <Row label="Preferred time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
+            {!isGroup && <Row label="Selected time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
             {!isGroup && isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
             {isGroup ? <Row label="Guests" value={`${members.length} guests`} /> : <Row label="Guest" value={b.patientName ?? '—'} />}
             <Row label="Status" value={STATUS_LABEL[b.status]} />
@@ -150,40 +141,25 @@ export default async function BookingRequestPage({
                 {' '}Bookmark this page and check back — if our email doesn&apos;t reach you (please check Spam/Junk too), you can still see your status and pay right here.
               </p>
             )}
-            {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && (
+            {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && wasStaffApproved && (
               <p className="mb-3 font-body text-[12.5px] italic text-dark/55">
                 Good news — this has been approved! If our approval email didn&apos;t reach you (do check Spam/Junk), you can pay right here.
               </p>
+            )}
+            {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && b.paymentExpiresAt && (
+              <HoldCountdown expiresAt={b.paymentExpiresAt} />
             )}
             {b.status === 'awaiting_payment' &&
               (isGroup && !groupAllAwaiting ? (
                 <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13.5px] text-dark/70">
                   Some guests are still being approved. You&apos;ll be able to pay for the group once every guest is approved.
                 </p>
-              ) : isCardPaymentEnabled() ? (
-                <div className="space-y-2.5">
-                  <Link
-                    href={`/book/request/${b.id}/pay${tokenQuery}`}
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
-                  >
-                    Pay {amount} — Online Banking (FPX)
-                  </Link>
-                  <Link
-                    href={`/book/request/${b.id}/pay${tokenQuery ? `${tokenQuery}&` : '?'}method=card`}
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-accent/40 px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-primary transition-colors hover:bg-accent/5"
-                  >
-                    Pay {amount} — Credit / Debit Card
-                  </Link>
-                  <p className="text-center font-body text-[11.5px] italic text-dark/50">
-                    No Malaysian bank account? Use the card option — it works with any international card.
-                  </p>
-                </div>
               ) : (
                 <Link
-                  href={`/book/request/${b.id}/pay${tokenQuery}`}
+                  href={`/book/request/${b.id}/checkout${tokenQuery}`}
                   className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
                 >
-                  Pay {amount} to confirm
+                  Continue to payment — {amount}
                 </Link>
               ))}
             {['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) && when && (
@@ -208,6 +184,9 @@ export default async function BookingRequestPage({
                     ? <>Your group booking is confirmed — each guest&apos;s time is listed above. Same-gender therapists as requested.</>
                     : <>You&apos;re confirmed for <strong>{whenText}</strong>. Same-gender therapist as requested.</>}
                 </p>
+                {b.bookingKind === 'treatment' && !b.assignedTherapistName && (
+                  <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13px] text-dark/70">Your slot is confirmed. Our team will assign the best-matched therapist before your visit.</p>
+                )}
                 <a
                   href={whatsappRescheduleLink(b.patientName ?? 'there', when)}
                   className="inline-flex w-full items-center justify-center rounded-xl border border-primary/40 px-6 py-3 font-heading text-[10.5px] font-bold uppercase tracking-[0.2em] text-primary hover:bg-primary/5"

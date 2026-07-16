@@ -53,7 +53,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
   // New approval-gated bookings (no Cal.com uid) awaiting approval or payment.
   // Cast: the hand-maintained DB type predates the pending/awaiting_payment enum values.
   const status = appointment.status as string
-  const needsAction = status === 'pending' || status === 'awaiting_payment'
+  const needsAction = status === 'awaiting_payment'
   const isFuture = (bucket === 'upcoming' || bucket === 'today') && !needsAction
   const canJoin =
     isFuture &&
@@ -146,7 +146,7 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
             href={`/book/request/${appointment.id}`}
             className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF37] px-3.5 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1F1F1F] transition-all hover:bg-[#D4AF37]/90"
           >
-            {status === 'awaiting_payment' ? 'Pay now' : 'Track request'}
+            Pay now
             <ArrowRight className="h-3 w-3" strokeWidth={2.2} />
           </Link>
         )}

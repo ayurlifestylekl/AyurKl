@@ -8,7 +8,7 @@ import { ArrowRight } from 'lucide-react'
 import type { BookingKind, Gender, HealthIntake } from '@/types/booking'
 import type { GroupGuest } from '@/lib/booking/actions'
 import { createInstantTreatmentBooking, createInstantGroupBooking, createInstantConsultation } from '@/lib/booking/instant'
-import { instantBookingSuccessPath, submitInstantSingleBooking } from '@/lib/booking/instant-rules'
+import { submitInstantSingleBooking } from '@/lib/booking/instant-rules'
 import HealthIntakeFields from './HealthIntakeFields'
 import PolicyDisclaimers from './PolicyDisclaimers'
 import SlotPicker from './SlotPicker'
@@ -80,7 +80,6 @@ export default function BookingRequestForm({
   const [gender, setGender] = useState<Gender | ''>('')
   const [guests, setGuests] = useState<GuestRow[]>([emptyGuest(defaultTreatmentId), emptyGuest(defaultTreatmentId)])
   const [preferredAt, setPreferredAt] = useState('')
-  const [preferredAtAlt, setPreferredAtAlt] = useState('')
   const [bookAsGuest, setBookAsGuest] = useState(!signedIn)
   const [health, setHealth] = useState<HealthIntake>({})
   const [accepted, setAccepted] = useState(false)
@@ -92,7 +91,6 @@ export default function BookingRequestForm({
   const resizeParty = (n: number) => {
     setPartySize(n)
     setPreferredAt('')
-    setPreferredAtAlt('')
     if (n > 1) {
       setGuests((prev) => {
         const next = [...prev]
@@ -166,7 +164,6 @@ export default function BookingRequestForm({
           treatmentId: treatment?.id ?? null,
           bookingKind,
           preferredAt: new Date(preferredAt).toISOString(),
-          preferredAtAlt: preferredAtAlt ? new Date(preferredAtAlt).toISOString() : null,
           patientName: name,
           patientPhone: phone,
           patientEmail: email,
@@ -183,7 +180,16 @@ export default function BookingRequestForm({
         })
       }
       if ('error' in res) setError(res.error)
-      else router.push(instantBookingSuccessPath(res))
+      else {
+        // Free consultations are confirmed instantly — nothing to pay, go
+        // straight to the status page. Treatments (single or group) still
+        // owe payment, so go to checkout to pick a method.
+        router.push(
+          bookingKind === 'consultation'
+            ? `/book/request/${res.id}?t=${res.token}`
+            : `/book/request/${res.id}/checkout?t=${res.token}`,
+        )
+      }
     })
   }
 
@@ -341,7 +347,6 @@ export default function BookingRequestForm({
       {!isGroup && (
         <div className="grid gap-3">
           <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} value={preferredAt} onChange={setPreferredAt} label="Preferred date & time" required />
-          <SlotPicker treatmentId={treatment?.id ?? null} gender={gender} mode={bookingKind === 'consultation' ? 'consultation' : 'treatment'} value={preferredAtAlt} onChange={setPreferredAtAlt} label="Alternate date & time (optional)" />
         </div>
       )}
 
@@ -357,12 +362,13 @@ export default function BookingRequestForm({
         disabled={isPending}
         className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isPending ? 'Sending request…' : 'Request this appointment'}
+        {isPending ? (bookingKind === 'consultation' ? 'Confirming…' : 'Reserving your slot…') : bookingKind === 'consultation' ? 'Confirm free consultation' : 'Continue to payment'}
         <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
       </button>
       <p className="text-center font-body text-[12px] italic text-dark/55">
-        We&apos;ll review your request and confirm your slot
-        {bookingKind === 'consultation' ? '.' : ' — you pay only after it&apos;s approved.'}
+        {bookingKind === 'consultation'
+          ? "You're confirmed instantly — no review needed."
+          : "Your slot is held while you pay — it's released if payment isn't completed in time."}
       </p>
     </form>
   )

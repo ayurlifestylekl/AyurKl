@@ -88,8 +88,8 @@ describe('consultation clearance integration contracts', () => {
     expect(form).toContain('parentConsultationToken: parentConsultationToken ?? null')
     expect(form).toContain('submitInstantSingleBooking')
     expect(form).not.toContain('createBookingRequest')
-    expect(form).toContain('instantBookingSuccessPath(res)')
-    expect(form).not.toContain('/checkout?t=${res.token}')
+    expect(form).toContain("bookingKind === 'consultation'")
+    expect(form).toContain('/checkout?t=${res.token}')
   })
 
   it('authorizes and validates the parent consultation before claiming a treatment hold', () => {
