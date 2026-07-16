@@ -21,9 +21,10 @@ function shell(heading: string, lines: string[], cta?: { label: string; url: str
     : ''
   const html = `<div style="max-width:520px;margin:0 auto;font-family:Georgia,serif">
     <h1 style="color:#5b0f1c;font-size:22px;margin:0 0 16px">${heading}</h1>${para}${button}
-    <p style="margin:24px 0 0;color:#9a9a9a;font-size:12px">Kerala Ayurvedic Lifestyle · Brickfields, Kuala Lumpur</p>
+    <p style="margin:20px 0 0;color:#b08a3e;font-size:12.5px">Don&rsquo;t see this in your inbox next time? Please check your Spam / Junk folder — some mail providers file us there.</p>
+    <p style="margin:8px 0 0;color:#9a9a9a;font-size:12px">Kerala Ayurvedic Lifestyle · Brickfields, Kuala Lumpur</p>
   </div>`
-  const text = `${heading}\n\n${lines.join('\n')}\n${cta ? `\n${cta.label}: ${cta.url}\n` : ''}\nKerala Ayurvedic Lifestyle · Brickfields, Kuala Lumpur`
+  const text = `${heading}\n\n${lines.join('\n')}\n${cta ? `\n${cta.label}: ${cta.url}\n` : ''}\nDon't see this in your inbox next time? Please check your Spam / Junk folder — some mail providers file us there.\nKerala Ayurvedic Lifestyle · Brickfields, Kuala Lumpur`
   return { html, text }
 }
 
@@ -65,6 +66,30 @@ async function sendStaffEmail(subject: string, lines: string[]): Promise<void> {
   }
 }
 
+/**
+ * Send a customer-facing transactional email. `sendEmail` swallows SMTP
+ * failures internally (so a mail outage never blocks a booking), which means
+ * a genuinely failed send was previously silent — nobody found out until the
+ * customer complained that they never got their approval email. Any failure
+ * here now alerts staff on Telegram immediately so they can follow up by
+ * WhatsApp instead.
+ */
+async function sendCustomerEmail(args: {
+  to: string
+  subject: string
+  html: string
+  text: string
+  context: string
+  name?: string | null
+}): Promise<void> {
+  const res = await sendEmail({ to: args.to, category: 'transactional', subject: args.subject, html: args.html, text: args.text })
+  if (!res.sent) {
+    await sendTelegram(
+      `📧⚠️ <b>Email to customer FAILED to send</b>\n${esc(args.name ?? 'Guest')} — ${esc(args.to)}\nCouldn't send: ${esc(args.context)}\nPlease follow up directly on WhatsApp.`,
+    )
+  }
+}
+
 export async function notifyRequestReceived(p: NotifyBase & { kind: string; whenISO: string | null; guests?: GuestLine[] }) {
   const isGroup = (p.guests?.length ?? 0) > 1
   await sendTelegram(
@@ -93,7 +118,7 @@ export async function notifyRequestReceived(p: NotifyBase & { kind: string; when
         'Our team will review it shortly and confirm your slot.',
       ]
   const { html, text } = shell('We’ve received your request', lines)
-  await sendEmail({ to: p.to, category: 'transactional', subject: 'Your booking request — Kerala Ayurvedic Lifestyle', html, text })
+  await sendCustomerEmail({ to: p.to, subject: 'Your booking request — Kerala Ayurvedic Lifestyle', html, text, context: 'request received', name: p.name })
 }
 
 export async function notifyApproved(
@@ -118,7 +143,14 @@ export async function notifyApproved(
     ],
     isTreatment && p.payUrl ? { label: `Pay RM${p.amountRm}`, url: p.payUrl } : undefined,
   )
-  await sendEmail({ to: p.to, category: 'transactional', subject: isTreatment ? 'Approved — pay to confirm your appointment' : 'Your consultation is confirmed', html, text })
+  await sendCustomerEmail({
+    to: p.to,
+    subject: isTreatment ? 'Approved — pay to confirm your appointment' : 'Your consultation is confirmed',
+    html,
+    text,
+    context: isTreatment ? 'approval + payment link' : 'consultation confirmed',
+    name: p.name,
+  })
 }
 
 export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; guests?: GuestLine[] }) {
@@ -144,7 +176,7 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
     'A same-gender therapist will be assigned as requested. Please arrive 10 minutes early.',
     'To reschedule, message us on WhatsApp at least 12–24 hours beforehand. Cancellations within 12 hours are non-refundable.',
   ])
-  await sendEmail({ to: p.to, category: 'transactional', subject: 'Appointment confirmed — Kerala Ayurvedic Lifestyle', html, text })
+  await sendCustomerEmail({ to: p.to, subject: 'Appointment confirmed — Kerala Ayurvedic Lifestyle', html, text, context: 'payment confirmed', name: p.name })
 }
 
 /**
@@ -180,7 +212,7 @@ export async function notifyPaymentReminder(p: NotifyBase & { payUrl: string; ex
     ],
     { label: 'Pay now', url: p.payUrl },
   )
-  await sendEmail({ to: p.to, category: 'transactional', subject: 'Reminder: complete your payment — Kerala Ayurvedic Lifestyle', html, text })
+  await sendCustomerEmail({ to: p.to, subject: 'Reminder: complete your payment — Kerala Ayurvedic Lifestyle', html, text, context: 'payment reminder', name: p.name })
 }
 
 export async function notifyCancelled(p: NotifyBase & { refundable: boolean; reason?: string }) {
@@ -206,7 +238,7 @@ export async function notifyCancelled(p: NotifyBase & { refundable: boolean; rea
     )
   }
   const { html, text } = shell('Your appointment was cancelled', lines, { label: 'Book again', url: `${SITE}/book` })
-  await sendEmail({ to: p.to, category: 'transactional', subject: 'Appointment cancelled — Kerala Ayurvedic Lifestyle', html, text })
+  await sendCustomerEmail({ to: p.to, subject: 'Appointment cancelled — Kerala Ayurvedic Lifestyle', html, text, context: 'cancellation notice', name: p.name })
 }
 
 export { SITE as BOOKING_SITE_URL }
