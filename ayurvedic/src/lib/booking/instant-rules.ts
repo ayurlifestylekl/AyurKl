@@ -1,8 +1,9 @@
-import type { BookingKind } from '@/types/booking'
+import type { BookingKind, BookingRequestInput } from '@/types/booking'
 import { CONSULTATION_MINS } from './slots'
 
 export const GENERIC_INSTANT_ERROR = 'We couldn’t complete your booking right now. Please try again.'
 export const SLOT_TAKEN_ERROR = 'That slot was just taken — please pick another time.'
+export const ACTIVE_LINKED_TREATMENT_ERROR = 'A treatment booking is already active for this consultation.'
 
 type SubmittedGroupGuest = {
   name?: unknown
@@ -60,7 +61,28 @@ function failureMessage(error: unknown): string {
 }
 
 export function publicInstantFailure(error: unknown): string {
-  return failureMessage(error).includes('SLOT_FULL') ? SLOT_TAKEN_ERROR : GENERIC_INSTANT_ERROR
+  const message = failureMessage(error)
+  if (message.includes('SLOT_FULL')) return SLOT_TAKEN_ERROR
+  if (message.includes('ACTIVE_LINKED_TREATMENT_EXISTS')) return ACTIVE_LINKED_TREATMENT_ERROR
+  return GENERIC_INSTANT_ERROR
+}
+
+type InstantSubmissionResult = { id: string; token: string; holdExpiresAt?: string } | { error: string }
+
+export async function submitInstantSingleBooking(
+  input: BookingRequestInput,
+  actions: {
+    createTreatment: (input: BookingRequestInput) => Promise<InstantSubmissionResult>
+    createConsultation: (input: BookingRequestInput) => Promise<InstantSubmissionResult>
+  },
+): Promise<InstantSubmissionResult> {
+  return input.bookingKind === 'consultation'
+    ? actions.createConsultation(input)
+    : actions.createTreatment(input)
+}
+
+export function instantBookingSuccessPath(result: { id: string; token: string }): string {
+  return `/book/request/${encodeURIComponent(result.id)}?t=${encodeURIComponent(result.token)}`
 }
 
 export function resolveRequestedConsultationTreatment<T>(input: {

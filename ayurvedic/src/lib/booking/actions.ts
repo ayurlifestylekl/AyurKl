@@ -13,7 +13,9 @@ import { CONSULTATION_MINS, consultationSlots, slotsForDuration, slotIso } from 
 import { findClash, countOverlapping, hasCapacity, type Slot } from './scheduling'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from './blocks'
 import { therapistsForGender, VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
+import { requireStaff } from '@/lib/staff/guard'
 import { mytDayKey } from '@/lib/datetime'
+import { validateLegacyParentConsultationLink } from './consultation-rules'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -35,6 +37,10 @@ export type CreateBookingResult = { id: string; token: string } | { error: strin
 export async function createBookingRequest(
   input: BookingRequestInput,
 ): Promise<CreateBookingResult> {
+  const { db: sb } = await requireStaff()
+  const parentLink = validateLegacyParentConsultationLink(input.parentConsultationId)
+  if ('error' in parentLink) return parentLink
+
   if (!input.acceptedPolicies) return { error: 'Please accept the booking policies to continue.' }
   if (!input.patientName?.trim()) return { error: 'Please enter the patient name.' }
   if (!input.patientPhone?.trim()) return { error: 'Please enter a contact number.' }
@@ -44,8 +50,6 @@ export async function createBookingRequest(
   if (input.patientGender !== 'male' && input.patientGender !== 'female') {
     return { error: 'Please select a gender for therapist matching.' }
   }
-
-  const sb = admin()
 
   const isTreatment = input.bookingKind === 'treatment'
   if (isTreatment && !input.treatmentId) {
@@ -111,7 +115,6 @@ export async function createBookingRequest(
       pre_visit_form: input.healthIntake ?? {},
       payable_amount_rm: payable,
       payment_status: 'unpaid',
-      parent_consultation_id: input.parentConsultationId ?? null,
     })
     .select('id')
     .single()

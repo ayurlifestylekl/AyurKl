@@ -1,6 +1,7 @@
 import 'server-only'
 import type { BookingKind, BookingStatus, DoctorPatientView, HealthIntake, StaffAppointment } from '@/types/booking'
 import { APPOINTMENT_COLUMNS, mapAppointmentRow } from '@/lib/booking/map'
+import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/booking/consultation-rules'
 import { THERAPISTS, type Therapist } from './therapists'
 import { THERAPIST_BUFFER_MINS } from '@/lib/booking/scheduling'
 import { mytTodayRange, mytTimeOfDay } from '@/lib/datetime'
@@ -280,18 +281,27 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
 
 /** Consultations still awaiting the doctor's clearance before treatment. */
 export async function getConsultationsToClear(db: ServiceDb): Promise<StaffAppointment[]> {
+  const nowMs = Date.now()
   const { data, error } = await db
     .from('appointments')
     .select(APPOINTMENT_COLUMNS)
     .eq('booking_kind', 'consultation')
-    .in('status', BOOKED_STATUSES)
+    .in('status', CLEARABLE_CONSULTATION_STATUSES)
+    .lte('appointment_date_time', new Date(nowMs).toISOString())
     .or('treatment_unlocked.is.null,treatment_unlocked.eq.false')
     .order('appointment_date_time', { ascending: true })
   if (error) {
     console.error('[staff/appointments] consultationsToClear:', error.message)
     return []
   }
-  return (data ?? []).map(mapAppointmentRow)
+  return (data ?? [])
+    .map(mapAppointmentRow)
+    .filter((a) => canClearConsultation({
+      bookingKind: a.bookingKind,
+      status: a.status,
+      appointmentISO: a.appointmentDatetime,
+      nowMs,
+    }))
 }
 
 export interface PatientDirectoryEntry {

@@ -23,6 +23,7 @@ export default function BookingTreatmentOrchestrator({
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
   const fromConsultation = searchParams.get('from') // set when a cleared consultation unlocks a treatment
+  const consultationToken = searchParams.get('ct')
   const selected = id ? treatments.find((t) => t._id === id) ?? null : null
 
   const formTreatment = selected
@@ -72,6 +73,7 @@ export default function BookingTreatmentOrchestrator({
           treatmentOptions={treatmentOptions}
           account={account}
           parentConsultationId={fromConsultation}
+          parentConsultationToken={consultationToken}
         />
       )}
     </div>

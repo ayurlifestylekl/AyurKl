@@ -1,8 +1,9 @@
 'use server'
 
 import { revalidatePath, revalidateTag } from 'next/cache'
-import type { BookingStatus } from '@/types/booking'
+import type { BookingKind, BookingStatus } from '@/types/booking'
 import { canTransition } from '@/lib/booking/status'
+import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/booking/consultation-rules'
 import { therapistMatchesRequirement } from '@/lib/booking/policy'
 import { createBookingToken } from '@/lib/booking/token'
 import { notifyApproved, notifyCancelled, BOOKING_SITE_URL } from '@/lib/booking/notify'
@@ -498,11 +499,37 @@ export async function saveClinicalNotes(id: string, notes: string): Promise<Ok |
  */
 export async function unlockTreatment(consultationId: string, note: string): Promise<Ok | Err> {
   const { db } = await requireStaff(['admin', 'doctor'])
-  const { error } = await db
+  const outcome = note.trim()
+  if (!outcome) return { error: 'Record the consultation outcome before clearing treatment.' }
+
+  const nowMs = Date.now()
+  const { data: consultation, error: lookupError } = await db
     .from('appointments')
-    .update({ consultation_outcome: note, treatment_unlocked: true })
+    .select('booking_kind, status, appointment_date_time')
     .eq('id', consultationId)
+    .maybeSingle()
+  if (lookupError) return { error: lookupError.message }
+  if (!consultation) return { error: 'Consultation not found.' }
+  if (!canClearConsultation({
+    bookingKind: consultation.booking_kind as BookingKind,
+    status: consultation.status as BookingStatus,
+    appointmentISO: consultation.appointment_date_time,
+    nowMs,
+  })) {
+    return { error: 'Only an attended consultation at or after its appointment time can be cleared.' }
+  }
+
+  const { data: updated, error } = await db
+    .from('appointments')
+    .update({ consultation_outcome: outcome, treatment_unlocked: true })
+    .eq('id', consultationId)
+    .eq('booking_kind', 'consultation')
+    .in('status', CLEARABLE_CONSULTATION_STATUSES)
+    .lte('appointment_date_time', new Date(nowMs).toISOString())
+    .select('id')
+    .maybeSingle()
   if (error) return { error: error.message }
+  if (!updated) return { error: 'This consultation is no longer eligible for clearance.' }
   revalidatePath(`/doctor/${consultationId}`)
   return { ok: true }
 }

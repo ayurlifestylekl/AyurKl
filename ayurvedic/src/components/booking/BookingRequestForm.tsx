@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 
 import type { BookingKind, Gender, HealthIntake } from '@/types/booking'
-import { createBookingRequest, createGroupBooking, type GroupGuest } from '@/lib/booking/actions'
+import type { GroupGuest } from '@/lib/booking/actions'
+import { createInstantTreatmentBooking, createInstantGroupBooking, createInstantConsultation } from '@/lib/booking/instant'
+import { instantBookingSuccessPath, submitInstantSingleBooking } from '@/lib/booking/instant-rules'
 import HealthIntakeFields from './HealthIntakeFields'
 import PolicyDisclaimers from './PolicyDisclaimers'
 import SlotPicker from './SlotPicker'
@@ -33,6 +35,7 @@ interface BookingRequestFormProps {
   treatmentOptions?: GroupTreatmentOption[]
   account?: { email: string | null; signedIn: boolean } | null
   parentConsultationId?: string | null
+  parentConsultationToken?: string | null
 }
 
 type GuestRow = {
@@ -54,6 +57,7 @@ export default function BookingRequestForm({
   treatmentOptions,
   account,
   parentConsultationId,
+  parentConsultationToken,
 }: BookingRequestFormProps) {
   const router = useRouter()
   const signedIn = account?.signedIn ?? false
@@ -141,7 +145,7 @@ export default function BookingRequestForm({
           setError('Please choose a date and time for every guest.')
           return
         }
-        res = await createGroupBooking({
+        res = await createInstantGroupBooking({
           treatmentId: treatment?.id ?? '',
           patientPhone: phone,
           patientEmail: email,
@@ -158,7 +162,7 @@ export default function BookingRequestForm({
         })
       } else {
         if (!gender) return setError(bookingKind === 'consultation' ? 'Please select a gender.' : 'Please select a gender for therapist matching.')
-        res = await createBookingRequest({
+        const payload = {
           treatmentId: treatment?.id ?? null,
           bookingKind,
           preferredAt: new Date(preferredAt).toISOString(),
@@ -171,10 +175,15 @@ export default function BookingRequestForm({
           healthIntake: health,
           acceptedPolicies: accepted,
           parentConsultationId: parentConsultationId ?? null,
+          parentConsultationToken: parentConsultationToken ?? null,
+        }
+        res = await submitInstantSingleBooking(payload, {
+          createTreatment: createInstantTreatmentBooking,
+          createConsultation: createInstantConsultation,
         })
       }
       if ('error' in res) setError(res.error)
-      else router.push(`/book/request/${res.id}?t=${res.token}`)
+      else router.push(instantBookingSuccessPath(res))
     })
   }
 

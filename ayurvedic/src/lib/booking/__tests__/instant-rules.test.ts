@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
+import type { BookingRequestInput } from '@/types/booking'
 import {
   GENERIC_INSTANT_ERROR,
   canonicalInstantTiming,
+  instantBookingSuccessPath,
   patientGenderError,
   publicInstantFailure,
   resolveRequestedConsultationTreatment,
+  submitInstantSingleBooking,
   validateInstantGroupGuests,
 } from '../instant-rules'
 
@@ -99,6 +102,12 @@ describe('publicInstantFailure', () => {
   it('preserves the stable just-taken slot response', () => {
     expect(publicInstantFailure(new Error('SLOT_FULL: female'))).toBe('That slot was just taken — please pick another time.')
   })
+
+  it('preserves the stable duplicate linked-treatment response', () => {
+    expect(publicInstantFailure(new Error('ACTIVE_LINKED_TREATMENT_EXISTS'))).toBe(
+      'A treatment booking is already active for this consultation.',
+    )
+  })
 })
 
 describe('resolveRequestedConsultationTreatment', () => {
@@ -112,5 +121,60 @@ describe('resolveRequestedConsultationTreatment', () => {
 
   it('allows an intentional standalone free consultation', () => {
     expect(resolveRequestedConsultationTreatment({ requested: false, data: null, error: null })).toEqual({ value: null })
+  })
+})
+
+describe('submitInstantSingleBooking', () => {
+  const base: BookingRequestInput = {
+    bookingKind: 'treatment',
+    treatmentId: 'therapy-a',
+    preferredAt: '2026-07-18T02:00:00.000Z',
+    patientName: 'Anu',
+    patientPhone: '0123456789',
+    patientEmail: 'anu@example.com',
+    patientGender: 'female',
+    isGuest: true,
+    healthIntake: {},
+    acceptedPolicies: true,
+    parentConsultationId: 'consultation-a',
+    parentConsultationToken: 'signed-consultation-token',
+  }
+
+  it('routes treatment payloads with the signed parent token to the instant treatment action', async () => {
+    const received: BookingRequestInput[] = []
+    const result = await submitInstantSingleBooking(base, {
+      createTreatment: async (input) => { received.push(input); return { id: 'treatment-booking', token: 'treatment-token' } },
+      createConsultation: async () => { throw new Error('wrong action') },
+    })
+
+    expect(received).toEqual([base])
+    expect(received[0]?.parentConsultationToken).toBe('signed-consultation-token')
+    expect(result).toEqual({ id: 'treatment-booking', token: 'treatment-token' })
+  })
+
+  it('routes consultation payloads to the instant consultation action', async () => {
+    const consultation = { ...base, bookingKind: 'consultation' as const, parentConsultationId: null, parentConsultationToken: null }
+    const received: BookingRequestInput[] = []
+    const result = await submitInstantSingleBooking(consultation, {
+      createTreatment: async () => { throw new Error('wrong action') },
+      createConsultation: async (input) => { received.push(input); return { id: 'consultation-booking', token: 'consultation-token' } },
+    })
+
+    expect(received).toEqual([consultation])
+    expect(result).toEqual({ id: 'consultation-booking', token: 'consultation-token' })
+  })
+})
+
+describe('instantBookingSuccessPath', () => {
+  it('returns the existing signed status route for a treatment hold', () => {
+    const path = instantBookingSuccessPath({ id: 'treatment-booking', token: 'treatment-token' })
+    expect(path).toBe('/book/request/treatment-booking?t=treatment-token')
+    expect(path).not.toContain('/checkout')
+  })
+
+  it('returns the same signed status route for an instant consultation', () => {
+    expect(instantBookingSuccessPath({ id: 'consultation-booking', token: 'consultation-token' })).toBe(
+      '/book/request/consultation-booking?t=consultation-token',
+    )
   })
 })

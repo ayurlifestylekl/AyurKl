@@ -188,6 +188,21 @@ export default async function BookingRequestPage({
               ))}
             {['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) && when && (
               <div className="space-y-3">
+                {/* The Vaidya cleared this consultation — close the loop by letting
+                    the customer book the actual treatment right from here. */}
+                {b.bookingKind === 'consultation' && b.treatmentUnlocked && (
+                  <div className="rounded-xl border border-accent/40 bg-cream px-4 py-4">
+                    <p className="font-body text-[13.5px] text-dark/80">
+                      Good news — our Vaidya has cleared you for treatment. You can now book and pay for your therapy.
+                    </p>
+                    <Link
+                      href={`/book/treatment?from=${b.id}&ct=${token ?? ''}${b.treatmentId ? `&id=${b.treatmentId}` : ''}`}
+                      className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-xl bg-accent px-6 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent/90"
+                    >
+                      Book your treatment →
+                    </Link>
+                  </div>
+                )}
                 <p className="rounded-xl border border-green-500/30 bg-green-50 px-4 py-3 font-body text-[13.5px] text-green-800">
                   {isGroup
                     ? <>Your group booking is confirmed — each guest&apos;s time is listed above. Same-gender therapists as requested.</>

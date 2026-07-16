@@ -30,8 +30,13 @@ import { mytDayKey } from '@/lib/datetime'
 import { VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
 import { CONSULTATION_MINS, validateSubmittedSlot } from './slots'
 import { canAccessBooking } from './access'
-import { canLinkTreatmentToConsultation } from './consultation-rules'
 import {
+  ACTIVE_LINKED_TREATMENT_STATUSES,
+  canLinkTreatmentToConsultation,
+  hasActiveLinkedTreatment,
+} from './consultation-rules'
+import {
+  ACTIVE_LINKED_TREATMENT_ERROR,
   canonicalInstantTiming,
   patientGenderError,
   publicInstantFailure,
@@ -109,7 +114,7 @@ export async function createInstantTreatmentBooking(input: BookingRequestInput):
   if (input.parentConsultationId) {
     const { data: consult, error: consultErr } = await sb
       .from('appointments')
-      .select('id, customer_id, booking_kind, treatment_unlocked')
+      .select('id, customer_id, patient_email, booking_kind, treatment_id, treatment_unlocked')
       .eq('id', input.parentConsultationId)
       .maybeSingle()
     if (consultErr) {
@@ -123,8 +128,30 @@ export async function createInstantTreatmentBooking(input: BookingRequestInput):
       bookingKind: consult.booking_kind,
       treatmentUnlocked: !!consult.treatment_unlocked,
       accessGranted,
+      consultationTreatmentId: consult.treatment_id,
+      requestedTreatmentId: t.id,
     })) {
       return { error: 'Your consultation hasn’t been cleared for this therapy yet — please check with the clinic.' }
+    }
+
+    const { data: children, error: childrenErr } = await sb
+      .from('appointments')
+      .select('status, payment_expires_at')
+      .eq('parent_consultation_id', consult.id)
+      .eq('booking_kind', 'treatment')
+      .in('status', ACTIVE_LINKED_TREATMENT_STATUSES)
+    if (childrenErr) {
+      console.error('[instant-booking] linked treatment lookup failed:', childrenErr)
+      return { error: publicInstantFailure(childrenErr) }
+    }
+    if (hasActiveLinkedTreatment(
+      (children ?? []).map((child) => ({
+        status: child.status,
+        paymentExpiresAt: child.payment_expires_at,
+      })),
+      Date.now(),
+    )) {
+      return { error: ACTIVE_LINKED_TREATMENT_ERROR }
     }
   }
 
