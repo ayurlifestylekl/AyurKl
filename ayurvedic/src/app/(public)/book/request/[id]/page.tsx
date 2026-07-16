@@ -147,6 +147,12 @@ export default async function BookingRequestPage({
               <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13.5px] text-dark/70">
                 Thanks! We&apos;ll review and confirm shortly.{' '}
                 {b.bookingKind === 'treatment' && 'Once approved, we’ll email you a payment link to secure your slot — you can also pay right here on this page.'}
+                {' '}Bookmark this page and check back — if our email doesn&apos;t reach you (please check Spam/Junk too), you can still see your status and pay right here.
+              </p>
+            )}
+            {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && (
+              <p className="mb-3 font-body text-[12.5px] italic text-dark/55">
+                Good news — this has been approved! If our approval email didn&apos;t reach you (do check Spam/Junk), you can pay right here.
               </p>
             )}
             {b.status === 'awaiting_payment' &&
