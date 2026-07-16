@@ -155,10 +155,9 @@ export async function notifyApproved(
   })
 }
 
-export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; guests?: GuestLine[]; bookingKind?: BookingKind; statusUrl?: string | null }) {
+export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; guests?: GuestLine[]; bookingKind: BookingKind; statusUrl?: string | null }) {
   const isGroup = (p.guests?.length ?? 0) > 1
-  // Historical payment callers predate bookingKind and are treatment-only.
-  const copy = confirmationCopy(p.bookingKind ?? 'treatment')
+  const copy = confirmationCopy(p.bookingKind)
   await sendTelegram(
     `${copy.telegramHeading}\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}${copy.needsAssignment ? '\n👉 Assign a therapist in the console.' : ''}`,
   )
