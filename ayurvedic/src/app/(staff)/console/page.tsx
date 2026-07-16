@@ -16,8 +16,9 @@ import AutoRefresh from '@/components/staff/AutoRefresh'
 
 export const dynamic = 'force-dynamic'
 
-const TABS: { key: string; label: string; status?: BookingStatus | BookingStatus[] }[] = [
+const TABS: { key: string; label: string; status?: BookingStatus | BookingStatus[]; unassignedOnly?: boolean }[] = [
   { key: 'today', label: 'Today' },
+  { key: 'needs-therapist', label: 'Needs therapist', status: ['confirmed', 'checked_in', 'in_progress'], unassignedOnly: true },
   { key: 'new', label: 'New requests', status: 'pending' },
   { key: 'awaiting', label: 'Awaiting payment', status: 'awaiting_payment' },
   { key: 'confirmed', label: 'Confirmed', status: ['confirmed', 'checked_in', 'in_progress'] },
@@ -49,7 +50,7 @@ export default async function ConsolePage({
       <AutoRefresh />
       <div className="mb-5">
         <h1 className="font-heading text-[22px] font-extrabold text-primary">{heading}</h1>
-        <p className="font-body text-[13px] text-dark/55">Review requests, approve &amp; assign therapists.</p>
+        <p className="font-body text-[13px] text-dark/55">Assign therapists to paid bookings, check guests in, and manage the day.</p>
       </div>
 
       {/* Search — always available, overrides the view when present. */}
@@ -77,9 +78,10 @@ export default async function ConsolePage({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function Overview({ db }: { db: any }) {
-  const [pending, awaiting, today, board] = await Promise.all([
+  const [pending, awaiting, unassigned, today, board] = await Promise.all([
     listAppointments(db, { status: 'pending' }),
     listAppointments(db, { status: 'awaiting_payment' }),
+    listAppointments(db, { status: ['confirmed', 'checked_in', 'in_progress'], unassignedOnly: true }),
     getTodayAppointments(db),
     getTherapistBoard(db),
   ])
@@ -87,9 +89,10 @@ async function Overview({ db }: { db: any }) {
 
   return (
     <div>
-      <div className="mb-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <StatCard label="Needs therapist" value={unassigned.length} href="/console?tab=needs-therapist" tone={unassigned.length > 0 ? 'alert' : 'default'} hint="Paid, no one assigned" />
         <StatCard label="New requests" value={pending.length} href="/console?tab=new" tone={pending.length > 0 ? 'alert' : 'default'} hint="Awaiting approval" />
-        <StatCard label="Awaiting payment" value={awaiting.length} href="/console?tab=awaiting" hint="Approved, unpaid" />
+        <StatCard label="Awaiting payment" value={awaiting.length} href="/console?tab=awaiting" hint="Customer mid-checkout" />
         <StatCard label="Today" value={today.length} href="/console?tab=today" hint="Appointments today" />
         <StatCard label="Therapists free" value={`${freeNow}/${board.length}`} href="/console?tab=therapists" tone={freeNow > 0 ? 'good' : 'default'} hint="Available now" />
       </div>
@@ -118,10 +121,11 @@ async function Overview({ db }: { db: any }) {
         <section>
           <h2 className="mb-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-accent">Needs attention</h2>
           <div className="space-y-2">
+            <AttentionRow href="/console?tab=needs-therapist" label="paid booking(s) with no therapist assigned" count={unassigned.length} />
             <AttentionRow href="/console?tab=new" label="new request(s) to approve" count={pending.length} />
             <AttentionRow href="/console?tab=awaiting" label="awaiting customer payment" count={awaiting.length} />
-            {pending.length === 0 && awaiting.length === 0 && (
-              <p className="rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 font-body text-[13.5px] text-green-800">All clear — no pending requests or payments. 🎉</p>
+            {pending.length === 0 && awaiting.length === 0 && unassigned.length === 0 && (
+              <p className="rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 font-body text-[13.5px] text-green-800">All clear — nothing waiting. 🎉</p>
             )}
           </div>
         </section>
@@ -141,7 +145,7 @@ function AttentionRow({ href, label, count }: { href: string; label: string; cou
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function TabView({ db, tab }: { db: any; tab: { key: string; status?: BookingStatus | BookingStatus[] } }) {
+async function TabView({ db, tab }: { db: any; tab: { key: string; status?: BookingStatus | BookingStatus[]; unassignedOnly?: boolean } }) {
   if (tab.key === 'today') {
     const today = await getTodayAppointments(db)
     return <TodayBoard appointments={today} />
@@ -151,8 +155,18 @@ async function TabView({ db, tab }: { db: any; tab: { key: string; status?: Book
     return <TherapistBoard board={board} />
   }
   // "All" reads like an activity log — the most recently touched booking first.
-  const appointments = await listAppointments(db, { status: tab.status, orderBy: tab.key === 'all' ? 'activity' : 'requested' })
-  return <BookingQueue appointments={appointments} linkBase="/console" emptyLabel="Nothing in this view yet." />
+  const appointments = await listAppointments(db, {
+    status: tab.status,
+    unassignedOnly: tab.unassignedOnly,
+    orderBy: tab.key === 'all' ? 'activity' : 'requested',
+  })
+  return (
+    <BookingQueue
+      appointments={appointments}
+      linkBase="/console"
+      emptyLabel={tab.key === 'needs-therapist' ? 'Every paid booking has a therapist assigned. 🎉' : 'Nothing in this view yet.'}
+    />
+  )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
-  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, Inbox, CreditCard, CheckCircle2, Users, LayoutList, CalendarOff, CalendarRange, Megaphone,
+  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, Users, LayoutList, CalendarOff, CalendarRange, Megaphone,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
@@ -17,12 +17,11 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
+  { tab: 'therapists', label: 'Needs therapist', icon: Users },
   { tab: null, label: 'Overview', icon: LayoutDashboard },
   { tab: 'today', label: 'Today', icon: CalendarDays },
-  { tab: 'new', label: 'New requests', icon: Inbox },
   { tab: 'awaiting', label: 'Awaiting payment', icon: CreditCard },
   { tab: 'confirmed', label: 'Confirmed', icon: CheckCircle2 },
-  { tab: 'therapists', label: 'Therapists', icon: Users },
   { tab: 'all', label: 'All', icon: LayoutList },
 ]
 

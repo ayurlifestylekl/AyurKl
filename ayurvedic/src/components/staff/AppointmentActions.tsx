@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
 import { getOperationalActionState } from '@/lib/booking/operations'
-import { approveAndAssign, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
+import { approveAndAssign, assignTherapist, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
 import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
 import { fmtMY } from '@/lib/datetime'
 
@@ -22,16 +22,21 @@ interface Props {
   backHref?: string
   /** Whether to show the destructive Delete button (front desk / admin only). */
   canDelete?: boolean
-  /** Current therapist assignment used to guard operational actions. */
+  /** Current therapist assignment, if any — a confirmed instant booking has none until front desk names one. */
   assignedTherapistCode?: string | null
+  assignedTherapistName?: string | null
 }
 
 export default function AppointmentActions({
   id, status, bookingKind, genderRequirement, requestedAt, requestedAtAlt = null,
-  backHref = '/console', canDelete = false, assignedTherapistCode = null,
+  backHref = '/console', canDelete = false, assignedTherapistCode = null, assignedTherapistName = null,
 }: Props) {
   const router = useRouter()
   const [therapistCode, setTherapistCode] = useState('')
+  const [postTherapistCode, setPostTherapistCode] = useState('')
+  const [postRoom, setPostRoom] = useState('')
+  const [assignError, setAssignError] = useState<string | null>(null)
+  const [assignPending, startAssign] = useTransition()
   // Guest can only be confirmed at a time THEY offered — not a free-typed time.
   const timeOptions = [
     { key: 'preferred', label: 'Preferred', iso: requestedAt },
@@ -60,6 +65,16 @@ export default function AppointmentActions({
 
   const onConfirmReject = () => {
     run(() => rejectBooking(id, rejectReason))
+  }
+
+  const onAssign = () => {
+    setAssignError(null)
+    if (!postTherapistCode) { setAssignError('Select a therapist.'); return }
+    startAssign(async () => {
+      const res = await assignTherapist(id, { therapistCode: postTherapistCode, room: postRoom })
+      if ('error' in res) setAssignError(res.error)
+      else { setPostTherapistCode(''); router.refresh() }
+    })
   }
 
   const onDelete = () => {
@@ -146,6 +161,32 @@ export default function AppointmentActions({
 
       {status === 'awaiting_payment' && (
         <p className="font-body text-[13px] text-dark/65">Approved — waiting for the customer to pay. They&apos;ll be confirmed automatically once payment succeeds.</p>
+      )}
+
+      {(status === 'confirmed' || status === 'checked_in' || status === 'in_progress') && !isConsultation && (
+        <div className="mb-4 space-y-3 rounded-lg bg-cream px-3 py-3">
+          <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">
+            Therapist{assignedTherapistCode ? '' : ' — not yet assigned'}
+          </p>
+          {assignedTherapistName && (
+            <p className="font-body text-[13px] text-dark/80">
+              Currently: <strong>{assignedTherapistName}</strong> · {assignedTherapistCode}
+            </p>
+          )}
+          <div className="flex flex-wrap items-end gap-2">
+            <select value={postTherapistCode} onChange={(e) => setPostTherapistCode(e.target.value)} className={inp}>
+              <option value="">{assignedTherapistCode ? 'Reassign to…' : 'Select therapist…'}</option>
+              {therapistsForGender(genderRequirement).map((t) => (
+                <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
+              ))}
+            </select>
+            <input value={postRoom} onChange={(e) => setPostRoom(e.target.value)} className={inp} placeholder="Room (optional)" />
+            <button disabled={assignPending} onClick={onAssign} className="h-11 flex-none rounded-xl bg-accent px-4 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white hover:bg-accent/90 disabled:opacity-60">
+              {assignPending ? 'Saving…' : assignedTherapistCode ? 'Reassign' : 'Assign'}
+            </button>
+          </div>
+          {assignError && <p role="alert" className="font-body text-[12.5px] text-red-700">{assignError}</p>}
+        </div>
       )}
 
       {(status === 'confirmed' || status === 'checked_in' || status === 'in_progress') && (

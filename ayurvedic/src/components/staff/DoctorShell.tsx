@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, LogOut, LayoutDashboard, Inbox, CalendarDays, Users, Stethoscope, ClipboardList, type LucideIcon } from 'lucide-react'
+import { Menu, X, LogOut, LayoutDashboard, CalendarDays, Users, Stethoscope, ClipboardList, type LucideIcon } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
 
 interface NavItem {
@@ -17,7 +17,6 @@ interface NavItem {
 const NAV: NavItem[] = [
   { href: '/doctor', label: 'Overview', icon: LayoutDashboard, exact: true },
   { href: '/doctor/schedule', label: 'Schedule', icon: ClipboardList },
-  { href: '/doctor/requests', label: 'Requests', icon: Inbox },
   { href: '/doctor/calendar', label: 'Calendar', icon: CalendarDays },
   { href: '/doctor/patients', label: 'Patients', icon: Users },
   { href: '/doctor/consultations', label: 'Consultations', icon: Stethoscope },
@@ -26,12 +25,10 @@ const NAV: NavItem[] = [
 export default function DoctorShell({
   role,
   toClearCount = 0,
-  requestCount = 0,
   children,
 }: {
   role: string
   toClearCount?: number
-  requestCount?: number
   children: React.ReactNode
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -82,9 +79,7 @@ export default function DoctorShell({
               const badge =
                 item.href === '/doctor/consultations' && toClearCount > 0
                   ? toClearCount
-                  : item.href === '/doctor/requests' && requestCount > 0
-                    ? requestCount
-                    : null
+                  : null
               return (
                 <li key={item.href}>
                   <Link

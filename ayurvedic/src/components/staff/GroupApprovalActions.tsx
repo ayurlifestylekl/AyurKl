@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Gender } from '@/types/booking'
-import { approveGroup, rejectGroup, deleteBooking } from '@/lib/staff/actions'
+import { approveGroup, assignTherapist, rejectGroup, deleteBooking } from '@/lib/staff/actions'
 import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
 import { fmtMY } from '@/lib/datetime'
 
@@ -66,8 +66,30 @@ export default function GroupApprovalActions({
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
+  // Post-confirmation therapist assignment — each guest is its own row, so
+  // front desk assigns them independently, at their own pace, with no forced
+  // all-at-once batch (unlike the pre-payment approval flow above).
+  const [postAssign, setPostAssign] = useState<Record<string, string>>({})
+  const [postRoom, setPostRoom] = useState<Record<string, string>>({})
+  const [assignErrors, setAssignErrors] = useState<Record<string, string>>({})
+  const [assigningId, setAssigningId] = useState<string | null>(null)
+  const [assignPending, startAssign] = useTransition()
+
   const setTherapist = (id: string, code: string) => setAssign((p) => ({ ...p, [id]: code }))
   const setTime = (id: string, v: string) => setTimes((p) => ({ ...p, [id]: v }))
+
+  const onAssignGuest = (id: string) => {
+    setAssignErrors((p) => ({ ...p, [id]: '' }))
+    const code = postAssign[id]
+    if (!code) { setAssignErrors((p) => ({ ...p, [id]: 'Select a therapist.' })); return }
+    setAssigningId(id)
+    startAssign(async () => {
+      const res = await assignTherapist(id, { therapistCode: code, room: postRoom[id] })
+      if ('error' in res) setAssignErrors((p) => ({ ...p, [id]: res.error }))
+      else { setPostAssign((p) => ({ ...p, [id]: '' })); router.refresh() }
+      setAssigningId(null)
+    })
+  }
 
   const run = (fn: () => Promise<{ ok: true } | { error: string }>) => {
     setError(null)
@@ -167,18 +189,58 @@ export default function GroupApprovalActions({
               Approved — waiting for the customer to pay. One payment confirms the whole group.
             </p>
           )}
-          {members.map((m) => (
-            <div key={m.id} className="flex items-center justify-between gap-2 rounded-lg border border-accent/15 px-3 py-2 font-body text-[12.5px]">
-              <span className="min-w-0">
-                <span className="font-semibold text-primary">{m.patientName ?? 'Guest'}</span>
-                <span className="block text-[11px] text-dark/55">{guestMeta(m)}</span>
-                {m.appointmentAt && (
-                  <span className="block text-[11px] text-dark/70">{fmtMY(m.appointmentAt, { dateStyle: 'medium', timeStyle: 'short' })}</span>
+          {members.map((m) => {
+            const canAssign = ['confirmed', 'checked_in', 'in_progress'].includes(m.status)
+            return (
+              <div key={m.id} className="rounded-lg border border-accent/15 px-3 py-2 font-body text-[12.5px]">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="min-w-0">
+                    <span className="font-semibold text-primary">{m.patientName ?? 'Guest'}</span>
+                    <span className="block text-[11px] text-dark/55">{guestMeta(m)}</span>
+                    {m.appointmentAt && (
+                      <span className="block text-[11px] text-dark/70">{fmtMY(m.appointmentAt, { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                    )}
+                  </span>
+                  {!canAssign && (
+                    <span className="flex-none text-right text-dark/60">{m.assignedTherapistName ? `${m.assignedTherapistName} · ${m.assignedTherapistCode}` : '—'}</span>
+                  )}
+                </div>
+                {canAssign && (
+                  <div className="mt-2 space-y-1.5">
+                    {m.assignedTherapistName && (
+                      <p className="text-[11.5px] text-dark/70">Currently: <strong>{m.assignedTherapistName}</strong> · {m.assignedTherapistCode}</p>
+                    )}
+                    <div className="flex flex-wrap items-end gap-1.5">
+                      <select
+                        value={postAssign[m.id] ?? ''}
+                        onChange={(e) => setPostAssign((p) => ({ ...p, [m.id]: e.target.value }))}
+                        className={inp}
+                      >
+                        <option value="">{m.assignedTherapistCode ? 'Reassign to…' : 'Select therapist…'}</option>
+                        {therapistsForGender(m.genderRequirement).map((t) => (
+                          <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
+                        ))}
+                      </select>
+                      <input
+                        value={postRoom[m.id] ?? ''}
+                        onChange={(e) => setPostRoom((p) => ({ ...p, [m.id]: e.target.value }))}
+                        className={inp}
+                        placeholder="Room (optional)"
+                      />
+                      <button
+                        disabled={assignPending && assigningId === m.id}
+                        onClick={() => onAssignGuest(m.id)}
+                        className="h-9 flex-none rounded-lg bg-accent px-3 font-heading text-[10.5px] font-bold uppercase tracking-[0.12em] text-white hover:bg-accent/90 disabled:opacity-60"
+                      >
+                        {assignPending && assigningId === m.id ? 'Saving…' : m.assignedTherapistCode ? 'Reassign' : 'Assign'}
+                      </button>
+                    </div>
+                    {assignErrors[m.id] && <p role="alert" className="text-[11.5px] text-red-700">{assignErrors[m.id]}</p>}
+                  </div>
                 )}
-              </span>
-              <span className="flex-none text-right text-dark/60">{m.assignedTherapistName ? `${m.assignedTherapistName} · ${m.assignedTherapistCode}` : '—'}</span>
-            </div>
-          ))}
+              </div>
+            )
+          })}
         </div>
       )}
 
