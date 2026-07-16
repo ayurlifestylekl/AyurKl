@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
-import { getOperationalTransitionOffer } from '@/lib/booking/operations'
+import { getOperationalActionState } from '@/lib/booking/operations'
 import { approveAndAssign, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
 import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
 import { fmtMY } from '@/lib/datetime'
@@ -73,12 +73,11 @@ export default function AppointmentActions({
   }
 
   const isConsultation = bookingKind === 'consultation'
-  const operationalActionOffer = getOperationalTransitionOffer({
+  const { blocked: operationalActionBlocked, message: operationalActionMessage } = getOperationalActionState({
     bookingKind,
     assignedTherapistCode,
-    to: status === 'confirmed' ? 'checked_in' : 'in_progress',
+    status,
   })
-  const operationalActionBlocked = (status === 'confirmed' || status === 'checked_in') && !operationalActionOffer.offered
   const needsApproval = status === 'pending' || status === 'scheduled'
   const isRequestPhase = status === 'pending' || status === 'scheduled' || status === 'awaiting_payment'
   const canReject = isRequestPhase
@@ -159,7 +158,7 @@ export default function AppointmentActions({
             <Btn danger onClick={() => run(() => setStatus(id, 'cancelled'))} disabled={pending}>Cancel</Btn>
           </div>
           {operationalActionBlocked && (
-            <p className="mt-2 font-body text-[12.5px] font-semibold text-accent">{operationalActionOffer.message}</p>
+            <p className="mt-2 font-body text-[12.5px] font-semibold text-accent">{operationalActionMessage}</p>
           )}
         </div>
       )}

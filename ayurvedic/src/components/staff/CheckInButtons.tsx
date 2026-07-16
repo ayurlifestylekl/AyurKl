@@ -3,7 +3,7 @@
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus } from '@/types/booking'
-import { getOperationalTransitionOffer } from '@/lib/booking/operations'
+import { getOperationalActionState } from '@/lib/booking/operations'
 import { setStatus } from '@/lib/staff/actions'
 
 /** Inline quick-action buttons for the front-desk Today board. */
@@ -20,12 +20,11 @@ export default function CheckInButtons({
 }) {
   const router = useRouter()
   const [pending, start] = useTransition()
-  const operationalActionOffer = getOperationalTransitionOffer({
+  const { blocked: operationalActionBlocked, message: operationalActionMessage } = getOperationalActionState({
     bookingKind,
     assignedTherapistCode,
-    to: status === 'confirmed' ? 'checked_in' : 'in_progress',
+    status,
   })
-  const operationalActionBlocked = (status === 'confirmed' || status === 'checked_in') && !operationalActionOffer.offered
 
   const move = (to: BookingStatus) =>
     start(async () => {
@@ -49,7 +48,7 @@ export default function CheckInButtons({
         )}
       </div>
       {operationalActionBlocked && (
-        <p className="mt-1 font-body text-[10.5px] font-semibold text-accent">{operationalActionOffer.message}</p>
+        <p className="mt-1 font-body text-[10.5px] font-semibold text-accent">{operationalActionMessage}</p>
       )}
     </div>
   )

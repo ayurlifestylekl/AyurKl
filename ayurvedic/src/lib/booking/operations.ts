@@ -30,6 +30,29 @@ export function getOperationalTransitionOffer(input: OperationalTransitionInput)
   return { offered: true, message: null }
 }
 
+/**
+ * Shared UI derivation: whether the check-in/start action is currently blocked
+ * for this booking's status, and the message to show if so. Centralizes the
+ * `status → destination transition → offer` mapping so staff detail and
+ * Today-board quick actions can't drift out of sync with each other.
+ */
+export function getOperationalActionState(input: {
+  bookingKind: BookingKind
+  assignedTherapistCode: string | null
+  status: BookingStatus
+}): { blocked: boolean; message: string | null } {
+  if (input.status !== 'confirmed' && input.status !== 'checked_in') {
+    return { blocked: false, message: null }
+  }
+  const offer = getOperationalTransitionOffer({
+    bookingKind: input.bookingKind,
+    assignedTherapistCode: input.assignedTherapistCode,
+    to: input.status === 'confirmed' ? 'checked_in' : 'in_progress',
+  })
+  if (offer.offered) return { blocked: false, message: null }
+  return { blocked: true, message: offer.message }
+}
+
 export function mapOperationalTransitionWriteFailure(input: {
   error: { code?: string; message: string } | null
   updated: boolean

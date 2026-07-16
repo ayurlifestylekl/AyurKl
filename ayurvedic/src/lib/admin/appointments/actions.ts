@@ -76,15 +76,29 @@ export async function moveAppointmentStatus(
     if (to === 'checked_in') patch.checked_in_at = new Date().toISOString()
     if (to === 'completed') patch.completed_at = new Date().toISOString()
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: updated, error } = await (supabase.from('appointments') as any)
-      .update(patch)
-      .eq('id', appointmentId)
-      .eq('status', from)
-      .select('id')
-      .maybeSingle()
-    const writeFailure = mapOperationalTransitionWriteFailure({ error, updated: !!updated })
-    if (writeFailure) return { ok: false, error: writeFailure }
+    // Only checked_in/in_progress can be rejected by the therapist-assignment
+    // invariant, so only those re-check status and verify a row changed. This
+    // client runs under RLS (unlike staff's service-role client), so adding the
+    // compare-and-set to transitions the invariant never touches would risk a
+    // false "status changed" error if the appointments RLS policy is ever
+    // scoped by status — keep other transitions on the plain update.
+    if (to === 'checked_in' || to === 'in_progress') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: updated, error } = await (supabase.from('appointments') as any)
+        .update(patch)
+        .eq('id', appointmentId)
+        .eq('status', from)
+        .select('id')
+        .maybeSingle()
+      const writeFailure = mapOperationalTransitionWriteFailure({ error, updated: !!updated })
+      if (writeFailure) return { ok: false, error: writeFailure }
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('appointments') as any)
+        .update(patch)
+        .eq('id', appointmentId)
+      if (error) return { ok: false, error: error.message }
+    }
 
     const customerKind =
       to === 'confirmed'

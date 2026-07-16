@@ -419,15 +419,23 @@ export async function setStatus(id: string, to: BookingStatus): Promise<Ok | Err
   if (to === 'checked_in') stamp.checked_in_at = new Date().toISOString()
   if (to === 'completed') stamp.completed_at = new Date().toISOString()
   if (to === 'cancelled') stamp.cancelled_at = new Date().toISOString()
-  const { data: updated, error } = await db
-    .from('appointments')
-    .update({ status: to, ...stamp })
-    .eq('id', id)
-    .eq('status', appt.status)
-    .select('id')
-    .maybeSingle()
-  const writeFailure = mapOperationalTransitionWriteFailure({ error, updated: !!updated })
-  if (writeFailure) return { error: writeFailure }
+  // Only checked_in/in_progress can be rejected by the therapist-assignment
+  // invariant, so only those re-check status and verify a row changed. Other
+  // transitions keep the plain update, matching this task's actual scope.
+  if (to === 'checked_in' || to === 'in_progress') {
+    const { data: updated, error } = await db
+      .from('appointments')
+      .update({ status: to, ...stamp })
+      .eq('id', id)
+      .eq('status', appt.status)
+      .select('id')
+      .maybeSingle()
+    const writeFailure = mapOperationalTransitionWriteFailure({ error, updated: !!updated })
+    if (writeFailure) return { error: writeFailure }
+  } else {
+    const { error } = await db.from('appointments').update({ status: to, ...stamp }).eq('id', id)
+    if (error) return { error: error.message }
+  }
   if ((to === 'cancelled' || to === 'no_show') && appt.payment_bill_id && appt.payment_status !== 'paid') {
     await voidBill(appt.payment_bill_id, appt.payment_provider)
   }
