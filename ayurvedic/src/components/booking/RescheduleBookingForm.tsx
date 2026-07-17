@@ -15,6 +15,22 @@ type RescheduleAction = (
   input: RescheduleBookingInput,
 ) => Promise<ManagementActionResult<{ appointmentIds: string[] }>>
 
+const REJECTED_ACTION_FAILURE = {
+  code: 'PROVIDER_ERROR' as const,
+  error: 'We could not reschedule the booking right now. No changes were made.',
+}
+
+export async function runRescheduleAction(
+  action: RescheduleAction,
+  input: RescheduleBookingInput,
+): Promise<ManagementActionResult<{ appointmentIds: string[] }>> {
+  try {
+    return await action(input)
+  } catch {
+    return REJECTED_ACTION_FAILURE
+  }
+}
+
 export default function RescheduleBookingForm({
   anchorId,
   bookings,
@@ -58,7 +74,7 @@ export default function RescheduleBookingForm({
     setError(null)
     startTransition(async () => {
       const appointmentIds = selectedBookings.map((booking) => booking.id)
-      const result = await action({
+      const result = await runRescheduleAction(action, {
         anchorId,
         appointmentIds,
         token: searchParams.get('t'),

@@ -18,6 +18,7 @@ const checks = [
   ['booking management grants', () => sb.from('booking_management_grants').select('id').limit(1)],
   ['booking events', () => sb.from('booking_events').select('id').limit(1)],
   ['booking refunds', () => sb.from('booking_refunds').select('id').limit(1)],
+  ['booking resource members', () => sb.from('booking_resource_members').select('resource_type,resource_key,member_key,active').limit(1)],
 ]
 
 let failed = false

@@ -25,6 +25,25 @@ export interface RescheduleBookingInput {
   wholeGroup: boolean
 }
 
+export function validateRescheduleScope(input: {
+  anchorId: string
+  appointmentIds: string[]
+  wholeGroup: boolean
+}): { ok: true; appointmentIds: string[] } | { error: string } {
+  if (input.appointmentIds.length === 0) return { error: 'Choose at least one booking to reschedule.' }
+  if (new Set(input.appointmentIds).size !== input.appointmentIds.length) {
+    return { error: 'Duplicate appointments cannot be rescheduled.' }
+  }
+  if (!input.appointmentIds.includes(input.anchorId)) {
+    return { error: 'The managed booking must be included in the move.' }
+  }
+  if (!input.wholeGroup
+    && (input.appointmentIds.length !== 1 || input.appointmentIds[0] !== input.anchorId)) {
+    return { error: 'Choose either this appointment or the whole active group.' }
+  }
+  return { ok: true, appointmentIds: [...input.appointmentIds] }
+}
+
 export interface RescheduleClaimInput {
   bookingKind: string | null | undefined
   requestedDurationMins: number | null | undefined
@@ -170,14 +189,18 @@ export async function rescheduleBooking(
     || typeof input.wholeGroup !== 'boolean') {
     return publicFailure('INVALID_INPUT', 'Choose a valid booking to reschedule.')
   }
-  const appointmentIds = Array.from(new Set(input.appointmentIds))
-  if (!appointmentIds.length || appointmentIds.some((id) => !UUID_RE.test(id))) {
+  if (input.token != null && typeof input.token !== 'string') {
+    return publicFailure('INVALID_INPUT', 'The booking access token is invalid.')
+  }
+  if (input.appointmentIds.some((id) => typeof id !== 'string' || !UUID_RE.test(id))) {
     return publicFailure('INVALID_INPUT', 'Choose at least one valid booking to reschedule.')
   }
-  if (!appointmentIds.includes(input.anchorId)) {
-    return publicFailure('INVALID_INPUT', 'The managed booking must be included in the move.')
-  }
-  if (!input.selections || !exactIdSet(Object.keys(input.selections), appointmentIds)) {
+  const scope = validateRescheduleScope(input)
+  if ('error' in scope) return publicFailure('INVALID_INPUT', scope.error)
+  const appointmentIds = scope.appointmentIds
+  if (!input.selections || typeof input.selections !== 'object' || Array.isArray(input.selections)
+    || !exactIdSet(Object.keys(input.selections), appointmentIds)
+    || Object.values(input.selections).some((selection) => typeof selection !== 'string')) {
     return publicFailure('INVALID_INPUT', 'Choose a new time for every selected booking.')
   }
 

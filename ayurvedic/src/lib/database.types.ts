@@ -791,6 +791,26 @@ export type Database = {
           created_at?: string
         }
       }
+      booking_resource_members: {
+        Row: {
+          resource_type: 'gender' | 'consultation'
+          resource_key: string
+          member_key: string
+          active: boolean
+        }
+        Insert: {
+          resource_type: 'gender' | 'consultation'
+          resource_key: string
+          member_key: string
+          active?: boolean
+        }
+        Update: {
+          resource_type?: 'gender' | 'consultation'
+          resource_key?: string
+          member_key?: string
+          active?: boolean
+        }
+      }
       sales_agents: {
         Row: {
           id: string
