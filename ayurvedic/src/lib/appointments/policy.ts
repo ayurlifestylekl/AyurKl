@@ -4,22 +4,20 @@
  */
 
 import type { Database } from '@/lib/database.types'
+import { REFUND_ADVANCE_MS } from '@/lib/booking/management-policy'
 
 type AppointmentRow = Database['public']['Tables']['appointments']['Row']
 
 const HOUR_MS = 60 * 60 * 1000
-const CANCEL_WINDOW_HOURS = 48
 const JOIN_LEAD_MIN = 15
 
 /**
- * True when the appointment start is at least 48 hours away — the
- * in-app Cancel button is only shown while this returns true. Outside
- * the window we fall back to a WhatsApp deep link.
+ * @deprecated Use managementEligibility with a trusted server clock.
  */
 export function canCancelInApp(startISO: string, nowMs: number = Date.now()): boolean {
   const start = new Date(startISO).getTime()
   if (Number.isNaN(start)) return false
-  return start - nowMs >= CANCEL_WINDOW_HOURS * HOUR_MS
+  return start - nowMs >= REFUND_ADVANCE_MS
 }
 
 /**

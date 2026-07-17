@@ -1,7 +1,8 @@
 import type { Gender } from '@/types/booking'
+import { RESCHEDULE_CUTOFF_MS } from '@/lib/booking/management-policy'
 
-/** Cancellation cutoff: appointments cancelled within 12h are non-refundable. */
-export const CANCEL_WINDOW_MS = 12 * 60 * 60 * 1000
+/** @deprecated Compatibility cutoff until callers move to managementEligibility. */
+export const CANCEL_WINDOW_MS = RESCHEDULE_CUTOFF_MS / 2
 
 /** Clinic WhatsApp number for rescheduling (no self-serve reschedule). */
 export const CLINIC_WHATSAPP = '601165043436'
@@ -38,12 +39,12 @@ export function payableAmount(priceRm: number | null): number {
   return priceRm
 }
 
-/** The latest moment a booking can be cancelled with a refund (apptTime − 12h). */
+/** @deprecated Use managementEligibility with a trusted server clock. */
 export function cancellationDeadline(apptISO: string): Date {
   return new Date(new Date(apptISO).getTime() - CANCEL_WINDOW_MS)
 }
 
-/** True if `now` is on/before the 12h cancellation deadline. */
+/** @deprecated Use managementEligibility with a trusted server clock. */
 export function canCancel(apptISO: string, now: Date): boolean {
   return now.getTime() <= cancellationDeadline(apptISO).getTime()
 }
