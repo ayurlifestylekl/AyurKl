@@ -127,7 +127,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   for (let m = Math.ceil(OPEN / 60) * 60; m <= CLOSE; m += 60) hourLabels.push(m)
 
   const columns: { code: string | null; name: string }[] = [
-    ...(unassigned.length ? [{ code: null as string | null, name: 'Waiting list' }] : []),
+    ...(unassigned.length ? [{ code: null as string | null, name: 'Unassigned' }] : []),
     ...therapists.map((t) => ({ code: t.code as string | null, name: t.name })),
   ]
   const apptsFor = (code: string | null) =>
@@ -244,7 +244,15 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
           {/* Columns */}
           {columns.map((col) => (
             <div key={col.code ?? 'wait'} className="flex-1 border-l border-accent/15" style={{ minWidth: COL_W }}>
-              <div style={{ height: HEADER_PX }} className="flex items-center justify-center border-b border-accent/20 bg-cream/60 px-2 text-center font-heading text-[11px] font-bold uppercase tracking-[0.1em] text-primary">
+              {/* The Unassigned column is the backstop for paid bookings nobody
+                  has picked a therapist for yet — it must read as an alert. */}
+              <div
+                style={{ height: HEADER_PX }}
+                className={`flex items-center justify-center border-b border-accent/20 px-2 text-center font-heading text-[11px] font-bold uppercase tracking-[0.1em] ${
+                  col.code === null ? 'bg-red-100 text-red-800' : 'bg-cream/60 text-primary'
+                }`}
+              >
+                {col.code === null && <span aria-hidden className="mr-1.5 inline-block h-2 w-2 flex-none animate-pulse rounded-full bg-red-500" />}
                 {col.name}
               </div>
               <div

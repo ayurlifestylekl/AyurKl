@@ -35,6 +35,12 @@ export async function sweepExpiredBookings(): Promise<SweepResult> {
   const nowISO = now.toISOString()
   // Fallback cutoff: if a hold somehow has no expiry stamp, treat >15h-old as expired.
   const staleISO = new Date(now.getTime() - 15 * 3600_000).toISOString()
+  // Slack past the stamped expiry before actually cancelling. Instant-booking
+  // holds are ~20 minutes now (vs the old 15-hour staff-approved window), so
+  // "payment is landing right at the deadline" went from a freak coincidence
+  // to an expected case for a slower payer — this buffer gives an in-flight
+  // bank redirect room to land before the sweep pulls the slot back.
+  const cutoffISO = new Date(now.getTime() - 5 * 60_000).toISOString()
 
   // 1) Expire + release — explicit-expiry holds, plus a safety net for any
   //    awaiting_payment row missing its expiry stamp but approved >15h ago.
@@ -42,7 +48,7 @@ export async function sweepExpiredBookings(): Promise<SweepResult> {
     sb.from('appointments')
       .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id, payment_provider')
       .eq('status', 'awaiting_payment')
-      .lt('payment_expires_at', nowISO),
+      .lt('payment_expires_at', cutoffISO),
     sb.from('appointments')
       .select('id, group_id, patient_email, patient_name, treatment_name, payment_bill_id, payment_provider')
       .eq('status', 'awaiting_payment')
@@ -94,13 +100,17 @@ export async function sweepExpiredBookings(): Promise<SweepResult> {
     }
   }
 
-  // 2) Remind (within 2h of expiry, not yet reminded)
+  // 2) Remind (within 2h of expiry, not yet reminded). Instant-booking holds
+  //    (~20 min, never staff-approved so approved_at is null) are excluded —
+  //    a "2 hours left" reminder is meaningless on a 20-minute window; the
+  //    on-page countdown is the signal for that flow instead.
   const soonISO = new Date(now.getTime() + 2 * 3600_000).toISOString()
   const { data: soon, error: soonErr } = await sb
     .from('appointments')
     .select('id, group_id, patient_email, patient_name, treatment_name, payment_expires_at')
     .eq('status', 'awaiting_payment')
     .eq('payment_reminded', false)
+    .not('approved_at', 'is', null)
     .gt('payment_expires_at', nowISO)
     .lt('payment_expires_at', soonISO)
   if (soonErr) throw soonErr

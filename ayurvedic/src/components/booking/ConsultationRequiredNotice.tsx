@@ -58,9 +58,10 @@ export default function ConsultationRequiredNotice({
           </h2>
           <p className="max-w-xl font-body text-[15px] leading-[1.7] text-dark/70">
             This protocol is designed around your dosha and any medication,
-            pregnancy, or chronic condition you&apos;re managing — so Vaidya
-            our Vaidyas want to meet you first before scheduling the therapy. The
-            consultation is free and takes 30 minutes.
+            pregnancy, or chronic condition you&apos;re managing — so our Vaidya
+            needs to meet you first before the therapy can be booked. The
+            consultation is free, takes 30 minutes, and you can pick your slot
+            right now.
           </p>
         </div>
 
