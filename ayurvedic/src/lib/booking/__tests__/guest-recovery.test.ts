@@ -143,6 +143,22 @@ describe('guest OTP request behavior', () => {
     expect(eq).toHaveBeenCalledWith('id', 'otp-delivery-failed')
   })
 
+  it('keeps an invalidation write failure neutral and logs no database details', async () => {
+    const errorLog = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const eq = vi.fn(async () => ({ error: { message: 'private-otp-hash-and-database-details' } }))
+    const update = vi.fn(() => ({ eq }))
+    mockRpc.mockResolvedValue({ data: 'otp-delivery-failed', error: null })
+    mockNotifyGuestManagementOtp.mockResolvedValue(false)
+    mockFrom.mockReturnValue({ update })
+
+    const result = await requestGuestManagementOtp('guest@example.com')
+
+    expect(result).toEqual(NEUTRAL)
+    expect(errorLog).toHaveBeenCalledWith('[booking-recovery] OTP invalidation failed')
+    expect(JSON.stringify(errorLog.mock.calls)).not.toContain('private-otp-hash-and-database-details')
+    errorLog.mockRestore()
+  })
+
   it('ignores spoofable forwarding headers outside Vercel', async () => {
     delete process.env.VERCEL
     mockHeadersGet.mockImplementation((name: string) => {

@@ -74,7 +74,7 @@ security definer
 set search_path = public, pg_temp
 as $$
 declare
-  v_now timestamptz := clock_timestamp();
+  v_now timestamptz;
   v_otp_id uuid;
 begin
   if p_email_hash is null or p_email_hash = ''
@@ -87,6 +87,7 @@ begin
   -- the same key serialize before they count and insert, closing check/insert races.
   perform pg_advisory_xact_lock(hashtextextended('booking-otp-email:' || p_email_hash, 0));
   perform pg_advisory_xact_lock(hashtextextended('booking-otp-ip:' || p_request_ip_hash, 0));
+  v_now := clock_timestamp();
 
   if exists (
     select 1
@@ -149,7 +150,7 @@ security definer
 set search_path = public, pg_temp
 as $$
 declare
-  v_now timestamptz := clock_timestamp();
+  v_now timestamptz;
   v_otp public.booking_management_otps%rowtype;
   v_appointment_ids uuid[];
   v_actual_hash bytea;
@@ -175,6 +176,8 @@ begin
   order by created_at desc, id desc
   limit 1
   for update;
+
+  v_now := clock_timestamp();
 
   if not found
     or v_otp.consumed_at is not null

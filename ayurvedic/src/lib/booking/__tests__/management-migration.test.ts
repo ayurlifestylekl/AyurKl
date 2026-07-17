@@ -27,6 +27,16 @@ describe('self-service booking management migration', () => {
     expect(sql).toContain('on public.booking_management_otps(request_ip_hash, created_at desc)')
   })
 
+  it('captures reservation time only after acquiring both advisory locks', () => {
+    const reserve = sql.slice(
+      sql.indexOf('create or replace function public.reserve_booking_management_otp'),
+      sql.indexOf('create or replace function public.verify_booking_management_otp'),
+    )
+    expect(reserve.indexOf('v_now := clock_timestamp()')).toBeGreaterThan(
+      reserve.lastIndexOf('pg_advisory_xact_lock'),
+    )
+  })
+
   it('locks and consumes only the latest OTP while issuing grants and events transactionally', () => {
     expect(sql).toContain('create or replace function public.verify_booking_management_otp')
     expect(sql).toMatch(/order by created_at desc, id desc[\s\S]*limit 1[\s\S]*for update/)
@@ -38,6 +48,11 @@ describe('self-service booking management migration', () => {
     expect(sql).toContain('lower(btrim(patient_email)) = p_normalized_email')
     expect(sql).toContain('customer_id is null')
     expect(sql).toContain('is_guest = true')
+  })
+
+  it('captures verification time only after the latest OTP row is locked', () => {
+    const verify = sql.slice(sql.indexOf('create or replace function public.verify_booking_management_otp'))
+    expect(verify.indexOf('v_now := clock_timestamp()')).toBeGreaterThan(verify.indexOf('for update'))
   })
 
   it('exposes both recovery RPCs only to the service role with fixed search paths', () => {

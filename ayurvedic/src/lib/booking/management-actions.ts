@@ -70,10 +70,11 @@ export async function requestGuestManagementOtp(email: string): Promise<RequestR
 
     const delivered = await notifyGuestManagementOtp({ to: normalizedEmail, code })
     if (!delivered) {
-      await sb
+      const { error: invalidationError } = await sb
         .from('booking_management_otps')
         .update({ consumed_at: new Date().toISOString() })
         .eq('id', otpId)
+      if (invalidationError) console.error('[booking-recovery] OTP invalidation failed')
     }
   } catch {
     // Recovery is deliberately fail-closed and enumeration-neutral.
