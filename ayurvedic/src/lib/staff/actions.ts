@@ -12,7 +12,7 @@ import { voidBill } from '@/lib/booking/payment'
 import { findClash, freeAtLabel, type Slot } from '@/lib/booking/scheduling'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from '@/lib/booking/blocks'
 import { mytDayKey } from '@/lib/datetime'
-import { therapistByCode } from './therapists'
+import { therapistByCode, VAIDYA_BLOCK_CODE } from './therapists'
 import { requireStaff } from './guard'
 
 type Ok = { ok: true }
@@ -60,11 +60,11 @@ export async function approveAndAssign(
       return { error: `The Vaidya already has a consultation until ${freeAtLabel(clash)} — pick another time.` }
     }
 
-    // Centre-wide closures still apply to the Vaidya (empty code = closures only).
+    // Centre-wide closures AND the Vaidya's own leave both apply.
     const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(p.confirmedAt))
     const intervals = blockedIntervalsForDate(blocks, mytDayKey(p.confirmedAt))
-    if (isBlocked(intervals, '', p.confirmedAt, durationMins)) {
-      return { error: 'The centre is closed at that time — pick another slot.' }
+    if (isBlocked(intervals, VAIDYA_BLOCK_CODE, p.confirmedAt, durationMins)) {
+      return { error: 'The Vaidya is on leave or the centre is closed at that time — pick another slot.' }
     }
   } else {
     therapist = therapistByCode(p.therapistCode)
@@ -150,6 +150,85 @@ export async function approveAndAssign(
     amountRm: appt.payable_amount_rm != null ? Number(appt.payable_amount_rm) : null,
     payUrl,
   })
+
+  revalidatePath('/console')
+  revalidatePath(`/console/${id}`)
+  revalidatePath('/doctor')
+  revalidatePath(`/doctor/${id}`)
+  return { ok: true }
+}
+
+/**
+ * Assign (or reassign) a named therapist to a booking that's already
+ * confirmed — the post-payment workflow under instant booking, where naming
+ * happens after the customer has paid, at front desk's own pace. Works one
+ * row at a time, single or group guest alike (a group guest is its own
+ * appointment row), with NO status change — the booking is already confirmed;
+ * this only records who's serving it. Reuses the exact gender / clash / leave
+ * checks approveAndAssign uses, minus the status transition.
+ */
+export async function assignTherapist(id: string, p: { therapistCode: string; room?: string }): Promise<Ok | Err> {
+  const { db } = await requireStaff()
+  const { data: appt } = await db
+    .from('appointments')
+    .select('status, booking_kind, gender_requirement, duration_mins, appointment_date_time')
+    .eq('id', id)
+    .maybeSingle()
+  if (!appt) return { error: 'Appointment not found.' }
+  if (appt.booking_kind === 'consultation') {
+    return { error: 'Consultations are conducted by the Vaidya — there is no therapist to assign.' }
+  }
+  if (!['confirmed', 'checked_in', 'in_progress'].includes(appt.status)) {
+    return { error: `Cannot assign a therapist while this booking is ${appt.status}.` }
+  }
+  if (!appt.appointment_date_time) return { error: 'This booking has no confirmed time yet.' }
+
+  const therapist = therapistByCode(p.therapistCode)
+  if (!therapist) return { error: 'Select a therapist.' }
+  if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement)) {
+    const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
+    return { error: `Same-gender policy: this patient must be assigned a ${need} therapist.` }
+  }
+
+  const durationMins = appt.duration_mins ?? 60
+  const { data: others } = await db
+    .from('appointments')
+    .select('appointment_date_time, duration_mins, status, payment_expires_at')
+    .eq('assigned_therapist_code', therapist.code)
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+    .neq('id', id)
+  const nowMs = Date.now()
+  const busy: Slot[] = (others ?? [])
+    .filter((o) => o.appointment_date_time)
+    .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
+    .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
+  const clash = findClash({ startISO: appt.appointment_date_time, durationMins }, busy)
+  if (clash) {
+    return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
+  }
+
+  const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(appt.appointment_date_time))
+  const intervals = blockedIntervalsForDate(blocks, mytDayKey(appt.appointment_date_time))
+  if (isBlocked(intervals, therapist.code, appt.appointment_date_time, durationMins)) {
+    return { error: `${therapist.name} (${therapist.code}) is on leave / blocked at that time — pick another therapist or time.` }
+  }
+
+  const { error } = await db
+    .from('appointments')
+    .update({
+      assigned_therapist_code: therapist.code,
+      assigned_therapist_name: therapist.name,
+      assigned_therapist_gender: therapist.gender,
+      room: p.room?.trim() || null,
+    })
+    .eq('id', id)
+  if (error) {
+    // DB exclusion constraint caught a concurrent double-book (23P01).
+    if (error.code === '23P01') {
+      return { error: 'That therapist was just booked for this time — pick another therapist or time.' }
+    }
+    return { error: error.message }
+  }
 
   revalidatePath('/console')
   revalidatePath(`/console/${id}`)

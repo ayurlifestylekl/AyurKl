@@ -25,6 +25,8 @@ export interface AppointmentFilters {
   status?: BookingStatus | BookingStatus[]
   kind?: BookingKind
   search?: string
+  /** Only treatments still waiting for front desk to name a therapist. */
+  unassignedOnly?: boolean
   /** 'activity' = most recently touched first (the "All" view); default = by requested time. */
   orderBy?: 'requested' | 'activity'
 }
@@ -39,6 +41,10 @@ export async function listAppointments(
     q = Array.isArray(filters.status) ? q.in('status', filters.status) : q.eq('status', filters.status)
   }
   if (filters.kind) q = q.eq('booking_kind', filters.kind)
+  if (filters.unassignedOnly) {
+    // Consultations are conducted by the Vaidya and never get a therapist.
+    q = q.is('assigned_therapist_code', null).eq('booking_kind', 'treatment')
+  }
   if (filters.search) {
     const s = `%${filters.search}%`
     q = q.or(`patient_name.ilike.${s},patient_phone.ilike.${s},treatment_name.ilike.${s}`)
