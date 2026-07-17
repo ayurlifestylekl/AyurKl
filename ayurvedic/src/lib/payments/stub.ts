@@ -1,4 +1,12 @@
-import type { CallbackResult, CreateBillArgs, CreateBillResult, PaymentProvider } from './provider'
+import type {
+  CallbackResult,
+  CreateBillArgs,
+  CreateBillResult,
+  PaymentProvider,
+  ProviderRefundResult,
+  RefundArgs,
+  RefundStatusResult,
+} from './provider'
 
 /**
  * Test-mode payment. No real money: createBill returns a URL that points
@@ -23,5 +31,16 @@ export const stubProvider: PaymentProvider = {
       paid: searchParams.get('paid') === 'true',
       redirectTo: searchParams.get('redirect') ?? undefined,
     }
+  },
+
+  async createRefund(args: RefundArgs): Promise<ProviderRefundResult> {
+    return {
+      providerRefundId: `stub_refund_${args.idempotencyKey}`,
+      status: 'confirmed',
+    }
+  },
+
+  async fetchRefundStatus(providerRefundId: string): Promise<RefundStatusResult | null> {
+    return providerRefundId.startsWith('stub_refund_') ? { status: 'confirmed' } : null
   },
 }

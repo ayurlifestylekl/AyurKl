@@ -1,5 +1,14 @@
 import Stripe from 'stripe'
-import type { CallbackResult, CreateBillArgs, CreateBillResult, PaymentProvider } from './provider'
+import type {
+  CallbackResult,
+  CreateBillArgs,
+  CreateBillResult,
+  PaymentProvider,
+  ProviderRefundResult,
+  RefundArgs,
+  RefundCallbackResult,
+  RefundStatusResult,
+} from './provider'
 
 /**
  * Stripe (card) provider — for customers without a Malaysian bank account,
@@ -25,6 +34,25 @@ function client(): Stripe {
   if (!key) throw new Error('STRIPE_SECRET_KEY is not configured.')
   cached = new Stripe(key)
   return cached
+}
+
+function stripeRefundStatus(status: Stripe.Refund['status']): RefundStatusResult['status'] {
+  if (status === 'succeeded') return 'confirmed'
+  if (status === 'pending' || status === 'requires_action') return 'pending'
+  return 'exception'
+}
+
+async function verifiedEvent(req: Request): Promise<Stripe.Event | null> {
+  const secret = process.env.STRIPE_WEBHOOK_SECRET
+  const sig = req.headers.get('stripe-signature')
+  const raw = await req.text()
+  if (!secret || !sig) return null
+  try {
+    return client().webhooks.constructEvent(raw, sig, secret)
+  } catch {
+    // Signature errors are deliberately opaque: never echo webhook payloads.
+    return null
+  }
 }
 
 export const stripeProvider: PaymentProvider = {
@@ -75,25 +103,57 @@ export const stripeProvider: PaymentProvider = {
     }
   },
 
+  async createRefund(args: RefundArgs): Promise<ProviderRefundResult> {
+    try {
+      const amount = Math.round(args.amountRm * 100)
+      if (!Number.isSafeInteger(amount) || amount <= 0 || !args.idempotencyKey) {
+        throw new Error('invalid refund request')
+      }
+      const session = await client().checkout.sessions.retrieve(args.billId)
+      const paymentIntent = typeof session.payment_intent === 'string'
+        ? session.payment_intent
+        : session.payment_intent?.id
+      if (!paymentIntent) throw new Error('missing payment intent')
+
+      const refund = await client().refunds.create({
+        payment_intent: paymentIntent,
+        amount,
+      }, { idempotencyKey: args.idempotencyKey })
+      const status = stripeRefundStatus(refund.status)
+      if (status === 'exception') throw new Error('terminal refund failure')
+      return { providerRefundId: refund.id, status }
+    } catch {
+      throw new Error('Stripe refund request failed.')
+    }
+  },
+
+  async fetchRefundStatus(providerRefundId: string): Promise<RefundStatusResult | null> {
+    if (!providerRefundId) return null
+    try {
+      const refund = await client().refunds.retrieve(providerRefundId)
+      return { status: stripeRefundStatus(refund.status) }
+    } catch {
+      return null
+    }
+  },
+
+  async verifyRefundCallback(req: Request): Promise<RefundCallbackResult | null> {
+    const event = await verifiedEvent(req)
+    if (!event || event.type !== 'refund.updated') return null
+    const refund = event.data.object as Stripe.Refund
+    return {
+      providerRefundId: refund.id,
+      status: stripeRefundStatus(refund.status),
+    }
+  },
+
   /**
    * Verifies a Stripe webhook. Requires the RAW request body — the caller
    * (the /api/payments/stripe-webhook route) must not have parsed it first.
    */
   async verifyCallback(req: Request): Promise<CallbackResult> {
-    const secret = process.env.STRIPE_WEBHOOK_SECRET
-    const sig = req.headers.get('stripe-signature')
-    const raw = await req.text()
-    if (!secret || !sig) return { billId: '', paid: false }
-
-    let event: Stripe.Event
-    try {
-      event = client().webhooks.constructEvent(raw, sig, secret)
-    } catch (e) {
-      console.error('[stripe] webhook signature verification failed:', e)
-      return { billId: '', paid: false }
-    }
-
-    if (event.type !== 'checkout.session.completed') return { billId: '', paid: false }
+    const event = await verifiedEvent(req)
+    if (!event || event.type !== 'checkout.session.completed') return { billId: '', paid: false }
     const session = event.data.object as Stripe.Checkout.Session
     return { billId: session.id, paid: session.payment_status === 'paid' }
   },

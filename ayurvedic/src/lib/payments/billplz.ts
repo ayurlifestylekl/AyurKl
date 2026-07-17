@@ -1,5 +1,14 @@
 import { createHmac, timingSafeEqual } from 'crypto'
-import type { CallbackResult, CreateBillArgs, CreateBillResult, PaymentProvider } from './provider'
+import type {
+  CallbackResult,
+  CreateBillArgs,
+  CreateBillResult,
+  PaymentProvider,
+  ProviderRefundResult,
+  RefundArgs,
+  RefundCallbackResult,
+  RefundStatusResult,
+} from './provider'
 
 /**
  * Billplz (FPX) provider.
@@ -20,6 +29,37 @@ const API_BASE = process.env.BILLPLZ_API_BASE || 'https://www.billplz.com'
 function authHeader(): string {
   // Basic auth: base64(`${API_KEY}:`) — key as username, blank password.
   return 'Basic ' + Buffer.from(`${process.env.BILLPLZ_API_KEY}:`).toString('base64')
+}
+
+export function buildBillplzChecksum(values: Array<string | number>, secret: string): string {
+  return createHmac('sha512', secret).update(values.join('')).digest('hex')
+}
+
+export function maskBankAccount(accountNumber: string): string {
+  if (accountNumber.length <= 4) return '*'.repeat(accountNumber.length)
+  return `${'*'.repeat(accountNumber.length - 4)}${accountNumber.slice(-4)}`
+}
+
+function safeChecksumEqual(expected: string, supplied: string): boolean {
+  if (!/^[a-f0-9]{128}$/i.test(supplied)) return false
+  const a = Buffer.from(expected, 'hex')
+  const b = Buffer.from(supplied, 'hex')
+  return a.length === b.length && timingSafeEqual(a, b)
+}
+
+function paymentOrderStatus(status: string): RefundStatusResult['status'] {
+  if (status === 'completed') return 'confirmed'
+  if (['refunded', 'cancelled', 'failed'].includes(status)) return 'exception'
+  return 'pending'
+}
+
+function paymentOrderConfig(): { collectionId: string; signatureKey: string } {
+  const collectionId = process.env.BILLPLZ_PAYMENT_ORDER_COLLECTION_ID
+  const signatureKey = process.env.BILLPLZ_PAYMENT_ORDER_SIGNATURE_KEY
+  if (!collectionId || !signatureKey) {
+    throw new Error('Billplz Payment Order refunds are not configured.')
+  }
+  return { collectionId, signatureKey }
 }
 
 export const billplzProvider: PaymentProvider = {
@@ -79,6 +119,104 @@ export const billplzProvider: PaymentProvider = {
     } catch {
       return null
     }
+  },
+
+  async createRefund(args: RefundArgs): Promise<ProviderRefundResult> {
+    const bank = args.bank
+    if (!bank?.bankCode || !bank.accountNumber || !bank.accountHolderName) {
+      throw new Error('Bank details are required for a Billplz refund.')
+    }
+    if (!/^[A-Z0-9]{8}(?:[A-Z0-9]{3})?$/.test(bank.bankCode) || !/^\d{5,32}$/.test(bank.accountNumber)) {
+      throw new Error('Bank details are invalid for a Billplz refund.')
+    }
+    const { collectionId, signatureKey } = paymentOrderConfig()
+    const amountSen = Math.round(args.amountRm * 100)
+    if (!Number.isSafeInteger(amountSen) || amountSen <= 0 || !args.idempotencyKey) {
+      throw new Error('Billplz refund request failed.')
+    }
+    const total = String(amountSen)
+    const epoch = String(Math.floor(Date.now() / 1000))
+    const body = new URLSearchParams({
+      payment_order_collection_id: collectionId,
+      bank_code: bank.bankCode,
+      bank_account_number: bank.accountNumber,
+      name: bank.accountHolderName,
+      description: 'Booking refund',
+      total,
+      email: args.customerEmail,
+      recipient_notification: 'true',
+      reference_id: args.idempotencyKey,
+      epoch,
+      checksum: buildBillplzChecksum([collectionId, bank.accountNumber, total, epoch], signatureKey),
+    })
+
+    try {
+      const res = await fetch(`${API_BASE}/api/v5/payment_orders`, {
+        method: 'POST',
+        headers: { Authorization: authHeader(), 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
+      })
+      if (!res.ok) throw new Error('provider rejected request')
+      const json = (await res.json()) as { id?: unknown; status?: unknown }
+      if (typeof json.id !== 'string' || typeof json.status !== 'string') {
+        throw new Error('invalid provider response')
+      }
+      const status = paymentOrderStatus(json.status)
+      if (status === 'exception') throw new Error('terminal payment order failure')
+      return {
+        providerRefundId: json.id,
+        status,
+        bankCode: bank.bankCode,
+        bankAccountLast4: bank.accountNumber.length > 4 ? bank.accountNumber.slice(-4) : undefined,
+      }
+    } catch {
+      // Provider bodies can echo recipient details; never surface them.
+      throw new Error('Billplz refund request failed.')
+    }
+  },
+
+  async fetchRefundStatus(providerRefundId: string): Promise<RefundStatusResult | null> {
+    if (!providerRefundId) return null
+    try {
+      const { signatureKey } = paymentOrderConfig()
+      const epoch = String(Math.floor(Date.now() / 1000))
+      const query = new URLSearchParams({
+        epoch,
+        checksum: buildBillplzChecksum([providerRefundId, epoch], signatureKey),
+      })
+      const res = await fetch(`${API_BASE}/api/v5/payment_orders/${encodeURIComponent(providerRefundId)}?${query}`, {
+        headers: { Authorization: authHeader() },
+      })
+      if (!res.ok) return null
+      const json = (await res.json()) as { status?: unknown }
+      if (typeof json.status !== 'string') return null
+      return { status: paymentOrderStatus(json.status) }
+    } catch {
+      return null
+    }
+  },
+
+  async verifyRefundCallback(req: Request): Promise<RefundCallbackResult | null> {
+    const signatureKey = process.env.BILLPLZ_PAYMENT_ORDER_SIGNATURE_KEY
+    if (!signatureKey) return null
+    const form = await req.formData()
+    const value = (key: string): string => {
+      const item = form.get(key)
+      return typeof item === 'string' ? item : ''
+    }
+    const providerRefundId = value('id')
+    const status = value('status')
+    const supplied = value('checksum')
+    const expected = buildBillplzChecksum([
+      providerRefundId,
+      value('bank_account_number'),
+      status,
+      value('total'),
+      value('reference_id'),
+      value('epoch'),
+    ], signatureKey)
+    if (!providerRefundId || !safeChecksumEqual(expected, supplied)) return null
+    return { providerRefundId, status: paymentOrderStatus(status) }
   },
 
   async verifyCallback(req: Request): Promise<CallbackResult> {

@@ -29,6 +29,33 @@ export interface CallbackResult {
   redirectTo?: string
 }
 
+export interface RefundArgs {
+  billId: string
+  amountRm: number
+  idempotencyKey: string
+  customerEmail: string
+  bank?: {
+    bankCode: string
+    accountNumber: string
+    accountHolderName: string
+  }
+}
+
+export interface ProviderRefundResult {
+  providerRefundId: string
+  status: 'pending' | 'confirmed'
+  bankCode?: string
+  bankAccountLast4?: string
+}
+
+export interface RefundStatusResult {
+  status: 'pending' | 'confirmed' | 'exception'
+}
+
+export interface RefundCallbackResult extends RefundStatusResult {
+  providerRefundId: string
+}
+
 export interface PaymentProvider {
   readonly name: string
   createBill(args: CreateBillArgs): Promise<CreateBillResult>
@@ -46,4 +73,10 @@ export interface PaymentProvider {
    * "possibly paid" and rely on reconciliation, never on this succeeding.
    */
   deleteBill?(billId: string): Promise<void>
+  /** Create an idempotent refund or outgoing refund disbursement. */
+  createRefund(args: RefundArgs): Promise<ProviderRefundResult>
+  /** Authoritative provider lookup used to reconcile a pending refund. */
+  fetchRefundStatus(providerRefundId: string): Promise<RefundStatusResult | null>
+  /** Parse and verify a provider refund callback without returning recipient PII. */
+  verifyRefundCallback?(req: Request): Promise<RefundCallbackResult | null>
 }
