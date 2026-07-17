@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { ProviderRefundError, isSafeProviderRefundId } from './provider'
 import type {
   CallbackResult,
   CreateBillArgs,
@@ -55,6 +56,18 @@ async function verifiedEvent(req: Request): Promise<Stripe.Event | null> {
   }
 }
 
+function stripeFailure(error: unknown): ProviderRefundError {
+  const statusCode = typeof error === 'object' && error !== null && 'statusCode' in error
+    ? Number((error as { statusCode?: unknown }).statusCode)
+    : null
+  const definitive = statusCode !== null
+    && Number.isInteger(statusCode)
+    && statusCode >= 400
+    && statusCode < 500
+    && statusCode !== 409
+  return new ProviderRefundError(definitive ? 'definitive' : 'ambiguous')
+}
+
 export const stripeProvider: PaymentProvider = {
   name: 'stripe',
 
@@ -104,31 +117,46 @@ export const stripeProvider: PaymentProvider = {
   },
 
   async createRefund(args: RefundArgs): Promise<ProviderRefundResult> {
-    try {
-      const amount = Math.round(args.amountRm * 100)
-      if (!Number.isSafeInteger(amount) || amount <= 0 || !args.idempotencyKey) {
-        throw new Error('invalid refund request')
-      }
-      const session = await client().checkout.sessions.retrieve(args.billId)
-      const paymentIntent = typeof session.payment_intent === 'string'
-        ? session.payment_intent
-        : session.payment_intent?.id
-      if (!paymentIntent) throw new Error('missing payment intent')
+    const amount = Math.round(args.amountRm * 100)
+    if (
+      !process.env.STRIPE_SECRET_KEY
+      || !Number.isSafeInteger(amount)
+      || amount <= 0
+      || !args.idempotencyKey
+      || !args.billId
+    ) {
+      throw new ProviderRefundError('definitive')
+    }
 
-      const refund = await client().refunds.create({
+    let session: Stripe.Checkout.Session
+    try {
+      session = await client().checkout.sessions.retrieve(args.billId)
+    } catch (error) {
+      throw stripeFailure(error)
+    }
+    const paymentIntent = typeof session.payment_intent === 'string'
+      ? session.payment_intent
+      : session.payment_intent?.id
+    if (!paymentIntent) throw new ProviderRefundError('definitive')
+
+    let refund: Stripe.Refund
+    try {
+      refund = await client().refunds.create({
         payment_intent: paymentIntent,
         amount,
+        metadata: { booking_refund_idempotency_key: args.idempotencyKey },
       }, { idempotencyKey: args.idempotencyKey })
-      const status = stripeRefundStatus(refund.status)
-      if (status === 'exception') throw new Error('terminal refund failure')
-      return { providerRefundId: refund.id, status }
-    } catch {
-      throw new Error('Stripe refund request failed.')
+    } catch (error) {
+      throw stripeFailure(error)
     }
+    if (!isSafeProviderRefundId('stripe', refund.id)) throw new ProviderRefundError('ambiguous')
+    const status = stripeRefundStatus(refund.status)
+    if (status === 'exception') throw new ProviderRefundError('definitive')
+    return { providerRefundId: refund.id, status }
   },
 
   async fetchRefundStatus(providerRefundId: string): Promise<RefundStatusResult | null> {
-    if (!providerRefundId) return null
+    if (!isSafeProviderRefundId('stripe', providerRefundId)) return null
     try {
       const refund = await client().refunds.retrieve(providerRefundId)
       return { status: stripeRefundStatus(refund.status) }
@@ -141,9 +169,15 @@ export const stripeProvider: PaymentProvider = {
     const event = await verifiedEvent(req)
     if (!event || event.type !== 'refund.updated') return null
     const refund = event.data.object as Stripe.Refund
+    if (!isSafeProviderRefundId('stripe', refund.id)) return null
+    const idempotencyKey = refund.metadata?.booking_refund_idempotency_key
     return {
       providerRefundId: refund.id,
       status: stripeRefundStatus(refund.status),
+      provider: 'stripe',
+      ...(typeof idempotencyKey === 'string' && idempotencyKey.length <= 255
+        ? { idempotencyKey }
+        : {}),
     }
   },
 

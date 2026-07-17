@@ -54,6 +54,36 @@ export interface RefundStatusResult {
 
 export interface RefundCallbackResult extends RefundStatusResult {
   providerRefundId: string
+  idempotencyKey?: string
+  provider?: 'stripe' | 'billplz' | 'stub'
+}
+
+export type ProviderRefundErrorCategory = 'definitive' | 'ambiguous'
+
+/** A fixed, redacted provider failure classification for durable retry decisions. */
+export class ProviderRefundError extends Error {
+  readonly category: ProviderRefundErrorCategory
+
+  constructor(category: ProviderRefundErrorCategory) {
+    super(category === 'definitive'
+      ? 'Refund provider rejected the request.'
+      : 'Refund provider outcome is pending.')
+    this.name = 'ProviderRefundError'
+    this.category = category
+  }
+}
+
+export function isSafeProviderRefundId(provider: string, value: unknown): value is string {
+  if (typeof value !== 'string' || value.length === 0 || value.length > 255 || value.trim() !== value) {
+    return false
+  }
+  if (provider === 'stripe') return /^re_[A-Za-z0-9]+$/.test(value)
+  if (provider === 'stub') return /^stub_refund_[A-Za-z0-9:_-]+$/.test(value)
+  if (provider !== 'billplz') return false
+
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+  const safeToken = /^(?=.*[A-Za-z])[A-Za-z0-9][A-Za-z0-9_-]*$/
+  return uuid.test(value) || safeToken.test(value)
 }
 
 export interface PaymentProvider {

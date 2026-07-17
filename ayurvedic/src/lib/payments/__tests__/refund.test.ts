@@ -20,6 +20,7 @@ vi.mock('stripe', () => ({
 import { billplzProvider, buildBillplzChecksum, maskBankAccount } from '../billplz'
 import {
   applyRefundCallback,
+  REFUND_ATTEMPT_LEASE_MS,
   reconcileRefund,
   requestProviderRefund,
   type RefundRecord,
@@ -27,9 +28,14 @@ import {
 } from '../refund'
 import { stripeProvider } from '../stripe'
 import { stubProvider } from '../stub'
-import type { PaymentProvider, RefundCallbackResult } from '../provider'
+import {
+  ProviderRefundError,
+  type PaymentProvider,
+  type RefundCallbackResult,
+} from '../provider'
 
 const RAW_ACCOUNT = '1234567890'
+const NOW_MS = Date.parse('2026-07-18T01:00:00.000Z')
 const REFUND_ARGS = {
   billId: 'bill_123',
   amountRm: 20,
@@ -64,8 +70,9 @@ function billplzCallback(
   })
 }
 
-function memoryStore(initial: RefundRecord) {
+function memoryStore(initial: RefundRecord, options: { failCompleteOnce?: boolean } = {}) {
   let row = { ...initial }
+  let failComplete = options.failCompleteOnce === true
   const store: RefundStore = {
     async findById(id) {
       return row.id === id ? { ...row } : null
@@ -73,8 +80,39 @@ function memoryStore(initial: RefundRecord) {
     async findByProviderRefundId(providerRefundId) {
       return row.providerRefundId === providerRefundId ? { ...row } : null
     },
-    async transition(id, expectedStatus, patch) {
-      if (row.id !== id || row.status !== expectedStatus) return false
+    async findByIdempotencyKey(idempotencyKey) {
+      return row.idempotencyKey === idempotencyKey ? { ...row } : null
+    },
+    async claimAttempt(id, expected, requestedAt) {
+      if (
+        row.id !== id
+        || row.status !== expected.status
+        || row.providerRefundId !== null
+        || (row.requestedAt ?? null) !== expected.requestedAt
+      ) return false
+      row = { ...row, status: 'pending', requestedAt }
+      return true
+    },
+    async completeAttempt(id, requestedAt, patch) {
+      if (failComplete) {
+        failComplete = false
+        throw new Error('database unavailable')
+      }
+      if (
+        row.id !== id
+        || row.status !== 'pending'
+        || row.providerRefundId !== null
+        || row.requestedAt !== requestedAt
+      ) return false
+      row = { ...row, ...patch }
+      return true
+    },
+    async applyCallback(id, expectedProviderRefundId, patch) {
+      if (
+        row.id !== id
+        || row.status !== 'pending'
+        || row.providerRefundId !== expectedProviderRefundId
+      ) return false
       row = { ...row, ...patch }
       return true
     },
@@ -138,7 +176,11 @@ describe('Stripe refunds', () => {
     })
     expect(stripeMocks.retrieveSession).toHaveBeenCalledWith('bill_123')
     expect(stripeMocks.createRefund).toHaveBeenCalledWith(
-      { payment_intent: 'pi_123', amount: 2000 },
+      {
+        payment_intent: 'pi_123',
+        amount: 2000,
+        metadata: { booking_refund_idempotency_key: REFUND_ARGS.idempotencyKey },
+      },
       { idempotencyKey: 'booking-refund:appointment-a:full' },
     )
   })
@@ -155,14 +197,27 @@ describe('Stripe refunds', () => {
     stripeMocks.retrieveSession.mockResolvedValue({ payment_intent: 'pi_123' })
     stripeMocks.createRefund.mockResolvedValue({ id: 're_123', status, failure_reason: RAW_ACCOUNT })
     const error = await stripeProvider.createRefund!(REFUND_ARGS).catch((value) => value)
-    expect(error).toBeInstanceOf(Error)
+    expect(error).toMatchObject({ category: 'definitive' })
+    expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
+  })
+
+  it('classifies a Stripe timeout or 5xx as ambiguous without exposing the SDK error', async () => {
+    stripeMocks.retrieveSession.mockResolvedValue({ payment_intent: 'pi_123' })
+    stripeMocks.createRefund.mockRejectedValue({ statusCode: 503, message: RAW_ACCOUNT })
+    const error = await stripeProvider.createRefund!(REFUND_ARGS).catch((value) => value)
+    expect(error).toMatchObject({ category: 'ambiguous' })
     expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
   })
 
   it('verifies and redacts refund.updated on the existing signed webhook seam', async () => {
     stripeMocks.constructEvent.mockReturnValue({
       type: 'refund.updated',
-      data: { object: { id: 're_123', status: 'failed', failure_reason: RAW_ACCOUNT } },
+      data: { object: {
+        id: 're_123',
+        status: 'failed',
+        failure_reason: RAW_ACCOUNT,
+        metadata: { booking_refund_idempotency_key: REFUND_ARGS.idempotencyKey },
+      } },
     })
     const request = new Request('https://example.test/api/payments/stripe-webhook', {
       method: 'POST',
@@ -170,7 +225,12 @@ describe('Stripe refunds', () => {
       body: 'raw signed payload',
     })
     const result = await stripeProvider.verifyRefundCallback!(request)
-    expect(result).toEqual({ providerRefundId: 're_123', status: 'exception' })
+    expect(result).toEqual({
+      providerRefundId: 're_123',
+      status: 'exception',
+      idempotencyKey: REFUND_ARGS.idempotencyKey,
+      provider: 'stripe',
+    })
     expect(JSON.stringify(result)).not.toContain(RAW_ACCOUNT)
     expect(stripeMocks.constructEvent).toHaveBeenCalledWith(
       'raw signed payload', 'signed', 'whsec_not_real',
@@ -221,9 +281,22 @@ describe('Billplz Payment Order refunds', () => {
       ...REFUND_ARGS,
       bank: { bankCode: 'MBBEMYKL', accountNumber: RAW_ACCOUNT, accountHolderName: 'Asha Nair' },
     }).catch((value) => value)
-    expect(error).toBeInstanceOf(Error)
+    expect(error).toMatchObject({ category: 'ambiguous' })
     expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
     expect(JSON.stringify(error)).not.toContain('Asha Nair')
+  })
+
+  it('rejects a Payment Order ID equal to the raw bank account as ambiguous', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(responseJson({
+      id: RAW_ACCOUNT,
+      status: 'processing',
+    })))
+    const error = await billplzProvider.createRefund!({
+      ...REFUND_ARGS,
+      bank: { bankCode: 'MBBEMYKL', accountNumber: RAW_ACCOUNT, accountHolderName: 'Asha Nair' },
+    }).catch((value) => value)
+    expect(error).toMatchObject({ category: 'ambiguous' })
+    expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
   })
 
   it('verifies the callback checksum before returning a redacted status', async () => {
@@ -236,7 +309,12 @@ describe('Billplz Payment Order refunds', () => {
       epoch: '123',
     }
     const verified = await billplzProvider.verifyRefundCallback!(billplzCallback(values))
-    expect(verified).toEqual({ providerRefundId: 'po_123', status: 'confirmed' })
+    expect(verified).toEqual({
+      providerRefundId: 'po_123',
+      status: 'confirmed',
+      idempotencyKey: REFUND_ARGS.idempotencyKey,
+      provider: 'billplz',
+    })
     expect(JSON.stringify(verified)).not.toContain(RAW_ACCOUNT)
 
     const tampered = billplzCallback(values)
@@ -270,16 +348,17 @@ describe('shared refund persistence', () => {
     idempotencyKey: REFUND_ARGS.idempotencyKey,
     bankCode: null,
     bankAccountLast4: null,
+    requestedAt: null,
   }
 
   it('persists only safe provider fields and does not call a provider twice after transition', async () => {
     const memory = memoryStore(claimed)
     const provider = refundProvider({
       createRefund: vi.fn().mockResolvedValue({
-        providerRefundId: 'po_123', status: 'pending', bankCode: 'MBBEMYKL', bankAccountLast4: '7890',
+        providerRefundId: 're_123', status: 'pending', bankCode: 'MBBEMYKL', bankAccountLast4: '7890',
       }),
     })
-    const deps = { store: memory.store, providerForName: () => provider }
+    const deps = { store: memory.store, providerForName: () => provider, now: () => NOW_MS }
     const args = { refundId: claimed.id, ...REFUND_ARGS, bank: {
       bankCode: 'MBBEMYKL', accountNumber: RAW_ACCOUNT, accountHolderName: 'Asha Nair',
     } }
@@ -296,27 +375,150 @@ describe('shared refund persistence', () => {
     let finish!: (result: { providerRefundId: string; status: 'pending' }) => void
     const createRefund = vi.fn().mockImplementation(() => new Promise((resolve) => { finish = resolve }))
     const provider = refundProvider({ createRefund })
-    const deps = { store: memory.store, providerForName: () => provider }
+    const deps = { store: memory.store, providerForName: () => provider, now: () => NOW_MS }
     const args = { refundId: claimed.id, ...REFUND_ARGS }
 
     const first = requestProviderRefund(args, deps)
     await vi.waitFor(() => expect(createRefund).toHaveBeenCalledTimes(1))
-    await expect(requestProviderRefund(args, deps)).rejects.toThrow('Refund request could not be processed.')
+    await expect(requestProviderRefund(args, deps)).rejects.toMatchObject({ category: 'ambiguous' })
     expect(createRefund).toHaveBeenCalledTimes(1)
     finish({ providerRefundId: 're_123', status: 'pending' })
     await expect(first).resolves.toMatchObject({ providerRefundId: 're_123', status: 'pending' })
   })
 
+  it('recovers a crashed pending attempt after its lease expires', async () => {
+    const staleAt = new Date(NOW_MS - REFUND_ATTEMPT_LEASE_MS - 1).toISOString()
+    const memory = memoryStore({ ...claimed, status: 'pending', requestedAt: staleAt })
+    const createRefund = vi.fn().mockResolvedValue({ providerRefundId: 're_123', status: 'pending' })
+    const provider = refundProvider({ createRefund })
+
+    await expect(requestProviderRefund(
+      { refundId: claimed.id, ...REFUND_ARGS },
+      { store: memory.store, providerForName: () => provider, now: () => NOW_MS },
+    )).resolves.toMatchObject({ providerRefundId: 're_123', status: 'pending' })
+    expect(createRefund).toHaveBeenCalledTimes(1)
+    expect(memory.current().requestedAt).toBe(new Date(NOW_MS).toISOString())
+  })
+
+  it('does not retry a recent pending attempt with no provider ID', async () => {
+    const recentAt = new Date(NOW_MS - REFUND_ATTEMPT_LEASE_MS + 1).toISOString()
+    const memory = memoryStore({ ...claimed, status: 'pending', requestedAt: recentAt })
+    const provider = refundProvider()
+
+    const error = await requestProviderRefund(
+      { refundId: claimed.id, ...REFUND_ARGS },
+      { store: memory.store, providerForName: () => provider, now: () => NOW_MS },
+    ).catch((value) => value)
+    expect(error).toMatchObject({ category: 'ambiguous' })
+    expect(provider.createRefund).not.toHaveBeenCalled()
+    expect(memory.current()).toMatchObject({ status: 'pending', providerRefundId: null, requestedAt: recentAt })
+  })
+
+  it('keeps an accepted-then-threw outcome pending and retries the same idempotency key after the lease', async () => {
+    let now = NOW_MS
+    const memory = memoryStore(claimed)
+    const createRefund = vi.fn()
+      .mockRejectedValueOnce(new ProviderRefundError('ambiguous'))
+      .mockResolvedValueOnce({ providerRefundId: 're_same', status: 'pending' })
+    const provider = refundProvider({ createRefund })
+    const deps = { store: memory.store, providerForName: () => provider, now: () => now }
+    const args = { refundId: claimed.id, ...REFUND_ARGS }
+
+    await expect(requestProviderRefund(args, deps)).rejects.toMatchObject({ category: 'ambiguous' })
+    expect(memory.current()).toMatchObject({ status: 'pending', providerRefundId: null })
+    now += REFUND_ATTEMPT_LEASE_MS + 1
+    await expect(requestProviderRefund(args, deps)).resolves.toMatchObject({ providerRefundId: 're_same' })
+    expect(createRefund.mock.calls.map(([call]) => call.idempotencyKey))
+      .toEqual([REFUND_ARGS.idempotencyKey, REFUND_ARGS.idempotencyKey])
+  })
+
+  it('recovers provider success followed by a database persistence failure', async () => {
+    let now = NOW_MS
+    const memory = memoryStore(claimed, { failCompleteOnce: true })
+    const createRefund = vi.fn().mockResolvedValue({ providerRefundId: 're_same', status: 'pending' })
+    const provider = refundProvider({ createRefund })
+    const deps = { store: memory.store, providerForName: () => provider, now: () => now }
+    const args = { refundId: claimed.id, ...REFUND_ARGS }
+
+    await expect(requestProviderRefund(args, deps)).rejects.toMatchObject({ category: 'ambiguous' })
+    expect(memory.current()).toMatchObject({ status: 'pending', providerRefundId: null })
+    now += REFUND_ATTEMPT_LEASE_MS + 1
+    await expect(requestProviderRefund(args, deps)).resolves.toMatchObject({ providerRefundId: 're_same' })
+    expect(createRefund).toHaveBeenCalledTimes(2)
+    expect(createRefund.mock.calls.map(([call]) => call.idempotencyKey))
+      .toEqual([REFUND_ARGS.idempotencyKey, REFUND_ARGS.idempotencyKey])
+  })
+
+  it('recovers a callback that arrives before provider ID persistence via idempotency metadata', async () => {
+    const memory = memoryStore({
+      ...claimed,
+      status: 'pending',
+      requestedAt: new Date(NOW_MS).toISOString(),
+    })
+    const callback: RefundCallbackResult = {
+      providerRefundId: 're_123',
+      status: 'confirmed',
+      idempotencyKey: REFUND_ARGS.idempotencyKey,
+    }
+    await expect(applyRefundCallback(callback, {
+      store: memory.store,
+      providerForName: () => refundProvider(),
+      now: () => NOW_MS,
+    })).resolves.toMatchObject({
+      providerRefundId: 're_123',
+      status: 'confirmed',
+    })
+    expect(memory.current()).toMatchObject({ providerRefundId: 're_123', status: 'confirmed' })
+  })
+
+  it('moves only a definitive provider failure to exception with a fixed reason', async () => {
+    const memory = memoryStore(claimed)
+    const provider = refundProvider({
+      createRefund: vi.fn().mockRejectedValue(new ProviderRefundError('definitive')),
+    })
+    await expect(requestProviderRefund(
+      { refundId: claimed.id, ...REFUND_ARGS },
+      { store: memory.store, providerForName: () => provider, now: () => NOW_MS },
+    )).rejects.toMatchObject({ category: 'definitive' })
+    expect(memory.current()).toMatchObject({
+      status: 'exception',
+      providerRefundId: null,
+      failureReason: 'Provider refund request failed.',
+    })
+  })
+
+  it.each([
+    RAW_ACCOUNT,
+    'asha@example.com',
+    'Asha Nair',
+    '  re_123  ',
+  ])('rejects unsafe or PII-like provider ID %j without persisting it', async (providerRefundId) => {
+    const memory = memoryStore(claimed)
+    const provider = refundProvider({
+      createRefund: vi.fn().mockResolvedValue({ providerRefundId, status: 'pending' }),
+    })
+    await expect(requestProviderRefund(
+      { refundId: claimed.id, ...REFUND_ARGS },
+      { store: memory.store, providerForName: () => provider, now: () => NOW_MS },
+    )).rejects.toMatchObject({ category: 'ambiguous' })
+    expect(JSON.stringify(memory.current())).not.toContain(providerRefundId)
+    expect(memory.current()).toMatchObject({ status: 'pending', providerRefundId: null })
+  })
+
   it('reconciles only pending rows and leaves duplicate terminal callbacks as no-ops', async () => {
-    const memory = memoryStore({ ...claimed, status: 'pending', providerRefundId: 'po_123' })
+    const memory = memoryStore({ ...claimed, status: 'pending', providerRefundId: 're_123' })
     const provider = refundProvider({ fetchRefundStatus: vi.fn().mockResolvedValue({ status: 'confirmed' }) })
-    const deps = { store: memory.store, providerForName: () => provider }
+    const deps = { store: memory.store, providerForName: () => provider, now: () => NOW_MS }
 
     await expect(reconcileRefund(claimed.id, deps)).resolves.toMatchObject({ status: 'confirmed' })
     await expect(reconcileRefund(claimed.id, deps)).resolves.toMatchObject({ status: 'confirmed' })
     expect(provider.fetchRefundStatus).toHaveBeenCalledTimes(1)
 
-    const callback: RefundCallbackResult = { providerRefundId: 'po_123', status: 'exception' }
+    const callback: RefundCallbackResult = {
+      providerRefundId: 're_123',
+      status: 'exception',
+      idempotencyKey: REFUND_ARGS.idempotencyKey,
+    }
     await expect(applyRefundCallback(callback, deps)).resolves.toMatchObject({ status: 'confirmed' })
     expect(memory.current().status).toBe('confirmed')
   })

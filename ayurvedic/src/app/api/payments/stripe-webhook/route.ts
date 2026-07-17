@@ -38,8 +38,8 @@ async function handle(req: NextRequest) {
       }
     }
     return NextResponse.json({ ok: true })
-  } catch (error) {
-    console.error('[stripe webhook] processing failed', error)
+  } catch {
+    console.error('[stripe webhook] processing failed')
     return NextResponse.json({ ok: false }, { status: 503 })
   }
 }

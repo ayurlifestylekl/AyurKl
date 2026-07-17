@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from 'crypto'
+import { ProviderRefundError, isSafeProviderRefundId } from './provider'
 import type {
   CallbackResult,
   CreateBillArgs,
@@ -56,8 +57,8 @@ function paymentOrderStatus(status: string): RefundStatusResult['status'] {
 function paymentOrderConfig(): { collectionId: string; signatureKey: string } {
   const collectionId = process.env.BILLPLZ_PAYMENT_ORDER_COLLECTION_ID
   const signatureKey = process.env.BILLPLZ_PAYMENT_ORDER_SIGNATURE_KEY
-  if (!collectionId || !signatureKey) {
-    throw new Error('Billplz Payment Order refunds are not configured.')
+  if (!process.env.BILLPLZ_API_KEY || !collectionId || !signatureKey) {
+    throw new ProviderRefundError('definitive')
   }
   return { collectionId, signatureKey }
 }
@@ -124,15 +125,15 @@ export const billplzProvider: PaymentProvider = {
   async createRefund(args: RefundArgs): Promise<ProviderRefundResult> {
     const bank = args.bank
     if (!bank?.bankCode || !bank.accountNumber || !bank.accountHolderName) {
-      throw new Error('Bank details are required for a Billplz refund.')
+      throw new ProviderRefundError('definitive')
     }
-    if (!/^[A-Z0-9]{8}(?:[A-Z0-9]{3})?$/.test(bank.bankCode) || !/^\d{5,32}$/.test(bank.accountNumber)) {
-      throw new Error('Bank details are invalid for a Billplz refund.')
+    if (!/^(?=.*[A-Z])[A-Z0-9]{8}(?:[A-Z0-9]{3})?$/.test(bank.bankCode) || !/^\d{5,32}$/.test(bank.accountNumber)) {
+      throw new ProviderRefundError('definitive')
     }
     const { collectionId, signatureKey } = paymentOrderConfig()
     const amountSen = Math.round(args.amountRm * 100)
     if (!Number.isSafeInteger(amountSen) || amountSen <= 0 || !args.idempotencyKey) {
-      throw new Error('Billplz refund request failed.')
+      throw new ProviderRefundError('definitive')
     }
     const total = String(amountSen)
     const epoch = String(Math.floor(Date.now() / 1000))
@@ -150,33 +151,46 @@ export const billplzProvider: PaymentProvider = {
       checksum: buildBillplzChecksum([collectionId, bank.accountNumber, total, epoch], signatureKey),
     })
 
+    let res: Response
     try {
-      const res = await fetch(`${API_BASE}/api/v5/payment_orders`, {
+      res = await fetch(`${API_BASE}/api/v5/payment_orders`, {
         method: 'POST',
         headers: { Authorization: authHeader(), 'Content-Type': 'application/x-www-form-urlencoded' },
         body,
       })
-      if (!res.ok) throw new Error('provider rejected request')
-      const json = (await res.json()) as { id?: unknown; status?: unknown }
-      if (typeof json.id !== 'string' || typeof json.status !== 'string') {
-        throw new Error('invalid provider response')
-      }
-      const status = paymentOrderStatus(json.status)
-      if (status === 'exception') throw new Error('terminal payment order failure')
-      return {
-        providerRefundId: json.id,
-        status,
-        bankCode: bank.bankCode,
-        bankAccountLast4: bank.accountNumber.length > 4 ? bank.accountNumber.slice(-4) : undefined,
-      }
     } catch {
-      // Provider bodies can echo recipient details; never surface them.
-      throw new Error('Billplz refund request failed.')
+      throw new ProviderRefundError('ambiguous')
+    }
+    if (!res.ok) {
+      const ambiguous = res.status >= 500 || res.status === 409 || res.status === 422
+      throw new ProviderRefundError(ambiguous ? 'ambiguous' : 'definitive')
+    }
+
+    let json: { id?: unknown; status?: unknown }
+    try {
+      json = (await res.json()) as { id?: unknown; status?: unknown }
+    } catch {
+      throw new ProviderRefundError('ambiguous')
+    }
+    if (
+      !isSafeProviderRefundId('billplz', json.id)
+      || json.id === bank.accountNumber
+      || typeof json.status !== 'string'
+    ) {
+      throw new ProviderRefundError('ambiguous')
+    }
+    const status = paymentOrderStatus(json.status)
+    if (status === 'exception') throw new ProviderRefundError('definitive')
+    return {
+      providerRefundId: json.id,
+      status,
+      bankCode: bank.bankCode,
+      bankAccountLast4: bank.accountNumber.slice(-4),
     }
   },
 
   async fetchRefundStatus(providerRefundId: string): Promise<RefundStatusResult | null> {
-    if (!providerRefundId) return null
+    if (!isSafeProviderRefundId('billplz', providerRefundId)) return null
     try {
       const { signatureKey } = paymentOrderConfig()
       const epoch = String(Math.floor(Date.now() / 1000))
@@ -205,18 +219,29 @@ export const billplzProvider: PaymentProvider = {
       return typeof item === 'string' ? item : ''
     }
     const providerRefundId = value('id')
+    const accountNumber = value('bank_account_number')
     const status = value('status')
     const supplied = value('checksum')
     const expected = buildBillplzChecksum([
       providerRefundId,
-      value('bank_account_number'),
+      accountNumber,
       status,
       value('total'),
       value('reference_id'),
       value('epoch'),
     ], signatureKey)
-    if (!providerRefundId || !safeChecksumEqual(expected, supplied)) return null
-    return { providerRefundId, status: paymentOrderStatus(status) }
+    if (
+      !safeChecksumEqual(expected, supplied)
+      || !isSafeProviderRefundId('billplz', providerRefundId)
+      || providerRefundId === accountNumber
+    ) return null
+    const idempotencyKey = value('reference_id')
+    return {
+      providerRefundId,
+      status: paymentOrderStatus(status),
+      provider: 'billplz',
+      ...(idempotencyKey && idempotencyKey.length <= 255 ? { idempotencyKey } : {}),
+    }
   },
 
   async verifyCallback(req: Request): Promise<CallbackResult> {
