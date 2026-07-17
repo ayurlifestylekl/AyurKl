@@ -4,45 +4,51 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
-  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, Users, LayoutList, CalendarOff, CalendarRange, Megaphone,
+  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, Users, UserPlus, LayoutList, CalendarOff, CalendarRange, Megaphone,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
+import { consoleNav } from '@/lib/booking/dashboard-nav'
 
-interface NavItem {
-  /** null = the no-tab Overview landing. */
-  tab: string | null
-  label: string
-  icon: LucideIcon
+// Icons are a rendering concern and stay local to the shell — dashboard-nav.ts
+// stays plain data so it's trivially testable in Node. Keyed by label since
+// consoleNav labels are unique.
+const ICON_BY_LABEL: Record<string, LucideIcon> = {
+  Overview: LayoutDashboard,
+  'Needs therapist': UserPlus,
+  Today: CalendarDays,
+  'Awaiting payment': CreditCard,
+  Confirmed: CheckCircle2,
+  Therapists: Users,
+  All: LayoutList,
+  Schedule: CalendarRange,
+  Availability: CalendarOff,
+  Announcements: Megaphone,
 }
 
-const NAV: NavItem[] = [
-  { tab: 'therapists', label: 'Needs therapist', icon: Users },
-  { tab: null, label: 'Overview', icon: LayoutDashboard },
-  { tab: 'today', label: 'Today', icon: CalendarDays },
-  { tab: 'awaiting', label: 'Awaiting payment', icon: CreditCard },
-  { tab: 'confirmed', label: 'Confirmed', icon: CheckCircle2 },
-  { tab: 'all', label: 'All', icon: LayoutList },
-]
+/** True when `href` (a consoleNav entry) is the currently active page/tab. */
+function isActiveHref(href: string, pathname: string, params: URLSearchParams): boolean {
+  const [hrefPath, hrefQuery] = href.split('?')
+  if (hrefPath !== '/console') return pathname.startsWith(hrefPath)
+  if (pathname !== '/console' || params.get('q')) return false
+  const hrefTab = new URLSearchParams(hrefQuery).get('tab')
+  return params.get('tab') === hrefTab
+}
 
 /** Nav list — isolates useSearchParams() so it can sit under a Suspense boundary. */
-function NavLinks({ pendingCount, onNavigate }: { pendingCount: number; onNavigate: () => void }) {
+function NavLinks({ onNavigate }: { onNavigate: () => void }) {
   const pathname = usePathname()
   const params = useSearchParams()
-  const currentTab = params.get('tab')
-  const isRoot = pathname === '/console' && !params.get('q')
 
   return (
     <ul className="space-y-1">
-      {NAV.map((item) => {
-        const active = isRoot && currentTab === item.tab
-        const Icon = item.icon
-        const badge = item.tab === 'new' && pendingCount > 0 ? pendingCount : null
-        const href = item.tab ? `/console?tab=${item.tab}` : '/console'
+      {consoleNav.map((item) => {
+        const active = isActiveHref(item.href, pathname, params)
+        const Icon = ICON_BY_LABEL[item.label] ?? LayoutList
         return (
-          <li key={item.label}>
+          <li key={item.href}>
             <Link
-              href={href}
+              href={item.href}
               onClick={onNavigate}
               className={[
                 'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors duration-200',
@@ -52,33 +58,6 @@ function NavLinks({ pendingCount, onNavigate }: { pendingCount: number; onNaviga
               {active && <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-gold" />}
               <Icon className={['h-4 w-4 shrink-0 transition-colors', active ? 'text-gold' : 'text-white/55 group-hover:text-white/85'].join(' ')} strokeWidth={1.8} />
               <span className="flex-1 font-heading text-[13px] font-semibold">{item.label}</span>
-              {badge !== null && (
-                <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1.5 text-[10px] font-bold text-primary">{badge}</span>
-              )}
-            </Link>
-          </li>
-        )
-      })}
-      {/* Sub-routes (not tabs) */}
-      {([
-        { href: '/console/schedule', label: 'Schedule', Icon: CalendarRange },
-        { href: '/console/blocks', label: 'Availability', Icon: CalendarOff },
-        { href: '/console/announcements', label: 'Announcements', Icon: Megaphone },
-      ] as const).map(({ href, label, Icon }) => {
-        const active = pathname.startsWith(href)
-        return (
-          <li key={href}>
-            <Link
-              href={href}
-              onClick={onNavigate}
-              className={[
-                'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors duration-200',
-                active ? 'bg-gold/[0.16] text-white' : 'text-white/65 hover:bg-white/[0.05] hover:text-white',
-              ].join(' ')}
-            >
-              {active && <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-gold" />}
-              <Icon className={['h-4 w-4 shrink-0 transition-colors', active ? 'text-gold' : 'text-white/55 group-hover:text-white/85'].join(' ')} strokeWidth={1.8} />
-              <span className="flex-1 font-heading text-[13px] font-semibold">{label}</span>
             </Link>
           </li>
         )
@@ -89,11 +68,9 @@ function NavLinks({ pendingCount, onNavigate }: { pendingCount: number; onNaviga
 
 export default function ConsoleShell({
   role,
-  pendingCount = 0,
   children,
 }: {
   role: string
-  pendingCount?: number
   children: React.ReactNode
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -145,7 +122,7 @@ export default function ConsoleShell({
           </Link>
 
           <Suspense fallback={<div className="px-3 py-2 font-body text-[12px] text-white/40">Loading…</div>}>
-            <NavLinks pendingCount={pendingCount} onNavigate={close} />
+            <NavLinks onNavigate={close} />
           </Suspense>
         </nav>
 

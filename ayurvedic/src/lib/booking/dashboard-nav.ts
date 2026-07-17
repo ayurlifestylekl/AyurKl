@@ -1,13 +1,21 @@
 export interface DashboardNavItem { href: string; label: string }
 
+// Single source of truth for the front-desk console sidebar — both the
+// tab-based views (rendered by src/app/(staff)/console/page.tsx's TABS) and
+// the console's own sub-routes (schedule, blocks, announcements). ConsoleShell
+// attaches its Lucide icons locally, keyed off `label`, so this stays plain
+// data and is trivially testable in Node.
 export const consoleNav: DashboardNavItem[] = [
-  { href: '/console?tab=therapists', label: 'Needs therapist' },
+  { href: '/console', label: 'Overview' },
+  { href: '/console?tab=needs-therapist', label: 'Needs therapist' },
   { href: '/console?tab=today', label: 'Today' },
-  { href: '/console?tab=confirmed', label: 'Confirmed' },
   { href: '/console?tab=awaiting', label: 'Awaiting payment' },
-  { href: '/console/schedule', label: 'Schedule' },
-  { href: '/console/blocks', label: 'Therapist availability' },
+  { href: '/console?tab=confirmed', label: 'Confirmed' },
+  { href: '/console?tab=therapists', label: 'Therapists' },
   { href: '/console?tab=all', label: 'All' },
+  { href: '/console/schedule', label: 'Schedule' },
+  { href: '/console/blocks', label: 'Availability' },
+  { href: '/console/announcements', label: 'Announcements' },
 ]
 
 export const doctorNav: DashboardNavItem[] = [

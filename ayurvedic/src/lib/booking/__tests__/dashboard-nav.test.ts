@@ -9,4 +9,15 @@ describe('operational dashboard navigation', () => {
     expect(consoleNav.map((x) => x.label)).toEqual(expect.arrayContaining(['Needs therapist', 'Today', 'Confirmed', 'Schedule']))
     expect(doctorNav.map((x) => x.label)).toEqual(expect.arrayContaining(['Overview', 'Schedule', 'Calendar', 'Patients', 'Consultations']))
   })
+
+  it('points "Needs therapist" at the paid-but-unassigned backstop queue, not the availability board', () => {
+    const item = consoleNav.find((x) => x.label === 'Needs therapist')
+    expect(item?.href).toBe('/console?tab=needs-therapist')
+  })
+
+  it('keeps the therapist availability board reachable as its own distinctly-labeled entry', () => {
+    const item = consoleNav.find((x) => x.href === '/console?tab=therapists')
+    expect(item?.label).toBe('Therapists')
+    expect(item?.label).not.toBe('Needs therapist')
+  })
 })

@@ -5,22 +5,18 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, LogOut, LayoutDashboard, CalendarDays, Users, Stethoscope, ClipboardList, type LucideIcon } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
+import { doctorNav } from '@/lib/booking/dashboard-nav'
 
-interface NavItem {
-  href: string
-  label: string
-  icon: LucideIcon
-  /** Match exactly (not by prefix) — for the root Overview link. */
-  exact?: boolean
+// Icons are a rendering concern and stay local to the shell — dashboard-nav.ts
+// stays plain data so it's trivially testable in Node. Keyed by label since
+// doctorNav labels are unique.
+const ICON_BY_LABEL: Record<string, LucideIcon> = {
+  Overview: LayoutDashboard,
+  Schedule: ClipboardList,
+  Calendar: CalendarDays,
+  Patients: Users,
+  Consultations: Stethoscope,
 }
-
-const NAV: NavItem[] = [
-  { href: '/doctor', label: 'Overview', icon: LayoutDashboard, exact: true },
-  { href: '/doctor/schedule', label: 'Schedule', icon: ClipboardList },
-  { href: '/doctor/calendar', label: 'Calendar', icon: CalendarDays },
-  { href: '/doctor/patients', label: 'Patients', icon: Users },
-  { href: '/doctor/consultations', label: 'Consultations', icon: Stethoscope },
-]
 
 export default function DoctorShell({
   role,
@@ -73,9 +69,10 @@ export default function DoctorShell({
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto px-3 py-5">
           <ul className="space-y-1">
-            {NAV.map((item) => {
-              const active = item.exact ? pathname === item.href : pathname.startsWith(item.href)
-              const Icon = item.icon
+            {doctorNav.map((item) => {
+              // '/doctor' must match exactly — every other route is a prefix match.
+              const active = item.href === '/doctor' ? pathname === item.href : pathname.startsWith(item.href)
+              const Icon = ICON_BY_LABEL[item.label] ?? LayoutDashboard
               const badge =
                 item.href === '/doctor/consultations' && toClearCount > 0
                   ? toClearCount
