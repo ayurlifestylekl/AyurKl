@@ -1,0 +1,86 @@
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { sendEmail } from '@/lib/email/send'
+import { fmtMY } from '@/lib/datetime'
+
+const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
+
+export async function POST(req: Request) {
+  const auth = req.headers.get('authorization')
+  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
+  const sb = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  )
+
+  const nowMs = Date.now()
+  const nowISO = new Date(nowMs).toISOString()
+  const lowerBound = new Date(nowMs + 72 * 60 * 60 * 1000).toISOString()
+  const upperBound = new Date(nowMs + 73 * 60 * 60 * 1000).toISOString()
+
+  const { data, error } = await sb
+    .from('appointments')
+    .select('id, patient_email, patient_name, treatment_name, appointment_date_time, customer_id, group_id')
+    .eq('status', 'confirmed')
+    .is('management_reminder_sent_at', null)
+    .gte('appointment_date_time', lowerBound)
+    .lt('appointment_date_time', upperBound)
+
+  if (error) {
+    console.error('[cron/reminders] Failed to query:', error.message)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  let sent = 0
+  let skipped = 0
+
+  for (const a of data ?? []) {
+    if (!a.patient_email) {
+      skipped++
+      continue
+    }
+
+    const { error: claimErr, count } = await sb
+      .from('appointments')
+      .update({ management_reminder_sent_at: nowISO })
+      .eq('id', a.id)
+      .is('management_reminder_sent_at', null)
+
+    if (claimErr || count === 0) {
+      skipped++
+      continue
+    }
+
+    const html = `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#163F33">
+  <h1 style="font-family:'Helvetica Neue',sans-serif;font-size:22px;font-weight:700;margin:0 0 16px">Upcoming Appointment</h1>
+  <p style="line-height:1.65">Hi ${a.patient_name ?? 'there'},</p>
+  <p style="line-height:1.65">This is a reminder for your upcoming appointment in a few days.</p>
+  <div style="margin:24px 0;padding:18px 20px;border:1px solid rgba(22, 63, 51,0.1);border-radius:18px;background:#F7F2E8">
+    <p style="margin:0;font-weight:700;font-size:16px">${a.treatment_name ?? 'Treatment'}</p>
+    <p style="margin:6px 0 0;color:#163F33">${fmtMY(a.appointment_date_time, { dateStyle: 'full', timeStyle: 'short' })}</p>
+  </div>
+  <p><a href="${SITE}/book/request/${a.group_id ?? a.id}" style="display:inline-block;background:#1E5B4B;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Manage booking</a></p>
+  <p style="margin-top:32px;color:#666">With warmth,<br/>Kerala Ayurvedic Lifestyle</p>
+</div>`
+
+    const text = `Hi ${a.patient_name ?? 'there'},\n\nThis is a reminder for your upcoming appointment.\n\n${a.treatment_name ?? 'Treatment'}\n${fmtMY(a.appointment_date_time, { dateStyle: 'full', timeStyle: 'short' })}\n\nManage booking: ${SITE}/book/request/${a.group_id ?? a.id}`
+
+    const res = await sendEmail({
+      to: a.patient_email,
+      category: 'reminder',
+      subject: `Upcoming appointment: ${a.treatment_name ?? 'Treatment'}`,
+      html,
+      text,
+      userId: a.customer_id ?? undefined,
+    })
+
+    if (res.sent) sent++
+    else skipped++
+  }
+
+  return NextResponse.json({ ok: true, sent, skipped })
+}

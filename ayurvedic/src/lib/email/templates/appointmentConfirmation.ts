@@ -18,7 +18,7 @@ export function appointmentConfirmationEmail(input: {
     <p style="margin:6px 0 0;color:#163F33">${input.whenLocal}</p>
     <p style="margin:6px 0 0;color:#666">with ${input.doctorName}</p>
   </div>
-  <p><a href="${input.href}" style="display:inline-block;background:#1E5B4B;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Manage appointment</a></p>
+  <p><a href="${input.href}" style="display:inline-block;background:#1E5B4B;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Manage booking</a></p>
   <p style="margin-top:32px;color:#666">With warmth,<br/>Kerala Ayurvedic Lifestyle</p>
 </div>`,
   }

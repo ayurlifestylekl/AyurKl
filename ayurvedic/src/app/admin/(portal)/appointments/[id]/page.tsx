@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { Video, MapPin, Calendar, Stethoscope } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getAppointmentById } from '@/lib/admin/appointments/queries'
+import { getBookingEvents } from '@/lib/staff/appointments'
+import BookingEventHistory from '@/components/staff/BookingEventHistory'
 import {
   STATUS_LABELS,
   type AppointmentStatus,
@@ -33,6 +35,8 @@ export default async function AdminAppointmentDetailPage({
   const supabase = await createClient()
   const appointment = await getAppointmentById(supabase, params.id)
   if (!appointment) notFound()
+
+  const events = await getBookingEvents(supabase, params.id)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const a: any = appointment
@@ -237,6 +241,10 @@ export default async function AdminAppointmentDetailPage({
 
       <section>
         <InternalNotesPanel appointmentId={a.id} initial={a.internal_notes} />
+      </section>
+
+      <section>
+        <BookingEventHistory events={events} />
       </section>
     </div>
   )

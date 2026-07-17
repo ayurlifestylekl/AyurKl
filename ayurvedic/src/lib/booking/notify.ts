@@ -203,10 +203,10 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
       ...intro,
       ...copy.customerLines,
       p.bookingKind === 'consultation'
-        ? 'To reschedule, message us on WhatsApp at least 12–24 hours beforehand.'
-        : 'To reschedule, message us on WhatsApp at least 12–24 hours beforehand. Cancellations within 12 hours are non-refundable.',
+        ? 'You can manage or reschedule your booking online up to 24 hours beforehand.'
+        : 'You can manage or reschedule your booking online. Late cancellations are non-refundable.',
     ],
-    p.statusUrl ? { label: 'View your booking', url: p.statusUrl } : undefined,
+    p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined,
   )
   await sendCustomerEmail({
     to: p.to,

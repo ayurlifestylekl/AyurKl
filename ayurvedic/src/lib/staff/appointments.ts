@@ -356,3 +356,70 @@ export async function getPatientDirectory(db: ServiceDb): Promise<PatientDirecto
   }
   return Array.from(byPatient.values())
 }
+
+export interface RefundExceptionRow {
+  id: string
+  appointmentId: string
+  patientName: string | null
+  treatmentName: string | null
+  status: 'pending' | 'exception'
+  amountRm: number
+  provider: string
+  createdAt: string
+}
+
+/** Active or stuck refunds that require staff attention. */
+export async function getRefundExceptions(db: ServiceDb): Promise<RefundExceptionRow[]> {
+  const { data, error } = await db
+    .from('booking_refunds')
+    .select('id, appointment_id, status, amount_rm, provider, created_at, appointments(patient_name, treatment_name)')
+    .in('status', ['pending', 'exception'])
+    .order('created_at', { ascending: false })
+  if (error) {
+    console.error('[staff/appointments] refundExceptions:', error.message)
+    return []
+  }
+  return (data ?? []).map((r: any) => ({
+    id: r.id,
+    appointmentId: r.appointment_id,
+    patientName: Array.isArray(r.appointments) ? r.appointments[0]?.patient_name : r.appointments?.patient_name ?? null,
+    treatmentName: Array.isArray(r.appointments) ? r.appointments[0]?.treatment_name : r.appointments?.treatment_name ?? null,
+    status: r.status,
+    amountRm: r.amount_rm,
+    provider: r.provider,
+    createdAt: r.created_at,
+  }))
+}
+
+export interface BookingEventRow {
+  id: string
+  appointmentId: string
+  eventType: string
+  actorType: string
+  oldData: any
+  newData: any
+  createdAt: string
+}
+
+export async function getBookingEvents(db: ServiceDb, appointmentId: string): Promise<BookingEventRow[]> {
+  const { data, error } = await db
+    .from('booking_events')
+    .select('*')
+    .eq('appointment_id', appointmentId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('[staff/appointments] bookingEvents:', error.message)
+    return []
+  }
+
+  return (data ?? []).map((r: any) => ({
+    id: r.id,
+    appointmentId: r.appointment_id,
+    eventType: r.event_type,
+    actorType: r.actor_type,
+    oldData: r.old_data,
+    newData: r.new_data,
+    createdAt: r.created_at,
+  }))
+}

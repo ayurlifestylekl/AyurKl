@@ -11,6 +11,7 @@ export const consoleNav: DashboardNavItem[] = [
   { href: '/console?tab=today', label: 'Today' },
   { href: '/console?tab=awaiting', label: 'Awaiting payment' },
   { href: '/console?tab=confirmed', label: 'Confirmed' },
+  { href: '/console?tab=refunds', label: 'Refunds' },
   { href: '/console?tab=therapists', label: 'Therapists' },
   { href: '/console?tab=all', label: 'All' },
   { href: '/console/schedule', label: 'Schedule' },

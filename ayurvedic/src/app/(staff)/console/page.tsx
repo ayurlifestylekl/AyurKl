@@ -4,6 +4,7 @@ import {
   listAppointments,
   getTodayAppointments,
   getTherapistBoard,
+  getRefundExceptions,
 } from '@/lib/staff/appointments'
 import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 import type { BookingStatus } from '@/types/booking'
@@ -22,6 +23,7 @@ const TABS: { key: string; label: string; status?: BookingStatus | BookingStatus
   { key: 'new', label: 'New requests', status: 'pending' },
   { key: 'awaiting', label: 'Awaiting payment', status: 'awaiting_payment' },
   { key: 'confirmed', label: 'Confirmed', status: ['confirmed', 'checked_in', 'in_progress'] },
+  { key: 'refunds', label: 'Refunds' },
   { key: 'therapists', label: 'Therapists' },
   { key: 'all', label: 'All' },
 ]
@@ -78,12 +80,13 @@ export default async function ConsolePage({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function Overview({ db }: { db: any }) {
-  const [awaiting, confirmed, unassigned, today, board] = await Promise.all([
+  const [awaiting, confirmed, unassigned, today, board, refunds] = await Promise.all([
     listAppointments(db, { status: 'awaiting_payment' }),
     listAppointments(db, { status: ['confirmed', 'checked_in', 'in_progress'] }),
     listAppointments(db, { status: ['confirmed', 'checked_in', 'in_progress'], unassignedOnly: true }),
     getTodayAppointments(db),
     getTherapistBoard(db),
+    getRefundExceptions(db),
   ])
   const freeNow = board.filter((t) => !t.busy).length
 
@@ -128,7 +131,8 @@ async function Overview({ db }: { db: any }) {
           <div className="space-y-2">
             <AttentionRow href="/console?tab=needs-therapist" label="paid booking(s) with no therapist assigned" count={unassigned.length} />
             <AttentionRow href="/console?tab=awaiting" label="awaiting customer payment" count={awaiting.length} />
-            {awaiting.length === 0 && unassigned.length === 0 && (
+            <AttentionRow href="/console?tab=refunds" label="refunds requiring staff attention" count={refunds.length} />
+            {awaiting.length === 0 && unassigned.length === 0 && refunds.length === 0 && (
               <p className="rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 font-body text-[13.5px] text-green-800">All clear — nothing waiting. 🎉</p>
             )}
           </div>
@@ -157,6 +161,30 @@ async function TabView({ db, tab }: { db: any; tab: { key: string; status?: Book
   if (tab.key === 'therapists') {
     const board = await getTherapistBoard(db)
     return <TherapistBoard board={board} />
+  }
+  if (tab.key === 'refunds') {
+    const exceptions = await getRefundExceptions(db)
+    return (
+      <div className="space-y-3">
+        {exceptions.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-accent/30 bg-white/60 px-5 py-8 text-center font-body text-[13.5px] text-dark/50">
+            No refunds require attention right now.
+          </p>
+        ) : (
+          exceptions.map((r) => (
+            <Link key={r.id} href={`/console/${r.appointmentId}`} className="flex flex-col gap-1 rounded-xl border border-accent/20 bg-white p-4 transition hover:bg-cream/50">
+              <div className="flex items-center justify-between">
+                <span className="font-heading text-[14px] font-bold text-primary">{r.patientName ?? 'Guest'} — {r.treatmentName ?? 'Treatment'}</span>
+                <span className="rounded-full bg-amber-100 px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-wider text-amber-800">{r.status}</span>
+              </div>
+              <p className="font-body text-[13px] text-dark/60">
+                RM{r.amountRm} via {r.provider}. Requested {new Date(r.createdAt).toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', day: 'numeric', month: 'short' })}
+              </p>
+            </Link>
+          ))
+        )}
+      </div>
+    )
   }
   // "All" reads like an activity log — the most recently touched booking first.
   const appointments = await listAppointments(db, {

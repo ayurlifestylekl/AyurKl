@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requireStaff } from '@/lib/staff/guard'
-import { getAppointmentDetail, getGroupAppointments } from '@/lib/staff/appointments'
+import { getAppointmentDetail, getGroupAppointments, getBookingEvents } from '@/lib/staff/appointments'
 import StatusBadge from '@/components/staff/StatusBadge'
 import PatientHealthPanel from '@/components/staff/PatientHealthPanel'
 import AppointmentActions from '@/components/staff/AppointmentActions'
 import GroupApprovalActions from '@/components/staff/GroupApprovalActions'
 import MarkContactedButton from '@/components/staff/MarkContactedButton'
+import BookingEventHistory from '@/components/staff/BookingEventHistory'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,6 +22,8 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
 
   const groupMembers = a.groupId ? await getGroupAppointments(db, a.groupId) : []
   const isGroup = groupMembers.length > 1
+
+  const events = await getBookingEvents(db, a.id)
 
   return (
     <div>
@@ -51,6 +54,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
             </div>
           </div>
           <PatientHealthPanel p={a} />
+          <BookingEventHistory events={events} />
         </div>
 
         <div className="space-y-3">

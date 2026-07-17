@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
-  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, Users, UserPlus, LayoutList, CalendarOff, CalendarRange, Megaphone,
+  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, Users, UserPlus, LayoutList, CalendarOff, CalendarRange, Megaphone, Banknote,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
@@ -19,6 +19,7 @@ const ICON_BY_LABEL: Record<string, LucideIcon> = {
   Today: CalendarDays,
   'Awaiting payment': CreditCard,
   Confirmed: CheckCircle2,
+  Refunds: Banknote,
   Therapists: Users,
   All: LayoutList,
   Schedule: CalendarRange,
