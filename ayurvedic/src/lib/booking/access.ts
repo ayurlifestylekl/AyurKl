@@ -1,6 +1,5 @@
 import 'server-only'
-import { createClient as ssr } from '@/lib/supabase/server'
-import { verifyBookingToken } from './token'
+import { canManageBooking } from './management-access'
 
 /**
  * Authorize access to a booking's status/pay/cancel surface.
@@ -12,11 +11,5 @@ export async function canAccessBooking(
   customerId: string | null,
   token: string | null | undefined,
 ): Promise<boolean> {
-  if (verifyBookingToken(id, token)) return true
-  if (!customerId) return false
-  const s = await ssr()
-  const {
-    data: { user },
-  } = await s.auth.getUser()
-  return !!user && user.id === customerId
+  return canManageBooking(id, customerId, token)
 }

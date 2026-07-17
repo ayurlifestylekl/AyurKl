@@ -36,6 +36,20 @@ export interface NotifyBase {
   treatmentName?: string | null
 }
 
+export async function notifyGuestManagementOtp({ to, code }: { to: string; code: string }): Promise<void> {
+  const { html, text } = shell('Your booking access code', [
+    `Use this six-digit code to recover access to your bookings: <strong>${esc(code)}</strong>.`,
+    'This code expires in 10 minutes. If you did not request it, you can ignore this email.',
+  ])
+  await sendEmail({
+    to,
+    category: 'transactional',
+    subject: 'Your booking access code — Kerala Ayurvedic Lifestyle',
+    html,
+    text,
+  })
+}
+
 /** One guest in a group booking, as shown in group emails. */
 export interface GuestLine {
   name: string | null
