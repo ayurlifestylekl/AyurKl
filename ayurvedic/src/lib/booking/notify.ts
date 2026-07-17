@@ -338,4 +338,37 @@ export async function notifyManagedCancellation(p: NotifyBase & {
   await sendCustomerEmail({ to: p.to, subject: 'Appointment cancelled — Kerala Ayurvedic Lifestyle', html, text, context: 'managed cancellation', name: p.name })
 }
 
+export async function notifyManagedReschedule(p: NotifyBase & {
+  oldISO: string | null
+  newISO: string | null
+  bookingKind: BookingKind
+  statusUrl?: string | null
+}) {
+  const clearedAssignment = p.bookingKind === 'treatment'
+
+  await sendTelegram(
+    `🔁 <b>Rescheduled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(when(p.oldISO))} → ${esc(when(p.newISO))}` +
+      (clearedAssignment ? '\nTherapist assignment cleared — back in Needs therapist.' : ''),
+  )
+  await sendStaffEmail('Managed booking reschedule', [
+    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+    `${esc(when(p.oldISO))} → ${esc(when(p.newISO))}`,
+    ...(clearedAssignment ? ['Therapist assignment cleared — booking returned to Needs therapist.'] : []),
+  ])
+  if (!p.to) return
+  const lines = [
+    `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been rescheduled.`,
+    `New time: <strong>${when(p.newISO)}</strong> (previously ${when(p.oldISO)}).`,
+    p.bookingKind === 'consultation'
+      ? 'Your consultation remains free and confirmed.'
+      : 'Your booking remains confirmed and paid — a therapist will be assigned for your new time before your visit.',
+  ]
+  const { html, text } = shell(
+    'Your appointment has been rescheduled',
+    lines,
+    p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined,
+  )
+  await sendCustomerEmail({ to: p.to, subject: 'Appointment rescheduled — Kerala Ayurvedic Lifestyle', html, text, context: 'managed reschedule', name: p.name })
+}
+
 export { SITE as BOOKING_SITE_URL }

@@ -3,11 +3,19 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 const mocks = vi.hoisted(() => ({
   canManageBookingTarget: vi.fn(),
   createClient: vi.fn(),
+  notifyManagedReschedule: vi.fn().mockResolvedValue(undefined),
 }))
 
 vi.mock('@supabase/supabase-js', () => ({ createClient: mocks.createClient }))
 vi.mock('../management-access', () => ({
   canManageBookingTarget: mocks.canManageBookingTarget,
+}))
+vi.mock('../notify', () => ({
+  notifyManagedReschedule: mocks.notifyManagedReschedule,
+  BOOKING_SITE_URL: 'https://example.test',
+}))
+vi.mock('../token', () => ({
+  createBookingToken: (id: string) => `token-${id}`,
 }))
 
 import {
@@ -37,6 +45,7 @@ function chain(result: { data: unknown; error: unknown }) {
 beforeEach(() => {
   mocks.canManageBookingTarget.mockReset()
   mocks.createClient.mockReset()
+  mocks.notifyManagedReschedule.mockReset().mockResolvedValue(undefined)
 })
 
 afterEach(() => vi.restoreAllMocks())

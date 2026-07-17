@@ -13,6 +13,8 @@ import {
 } from './group-management'
 import { countOverlapping, type Slot } from './scheduling'
 import { CONSULTATION_MINS, validateSubmittedSlot } from './slots'
+import { createBookingToken } from './token'
+import { notifyManagedReschedule, BOOKING_SITE_URL } from './notify'
 import { mytDayKey } from '@/lib/datetime'
 import { therapistsForGender, VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
 import type { Gender } from '@/types/booking'
@@ -119,6 +121,8 @@ type AppointmentRow = {
   duration_mins: number | null
   patient_gender: string | null
   patient_name: string | null
+  patient_email: string | null
+  treatment_name: string | null
   gender_requirement: string | null
   group_id: string | null
   group_management_active: boolean | null
@@ -215,7 +219,7 @@ export async function rescheduleBooking(
   const sb = admin()
   const { data, error } = await sb
     .from('appointments')
-    .select('id, customer_id, created_at, appointment_date_time, status, payment_status, payment_expires_at, booking_kind, treatment_id, duration_mins, patient_gender, patient_name, gender_requirement, group_id, group_management_active')
+    .select('id, customer_id, created_at, appointment_date_time, status, payment_status, payment_expires_at, booking_kind, treatment_id, duration_mins, patient_gender, patient_name, patient_email, treatment_name, gender_requirement, group_id, group_management_active')
     .in('id', appointmentIds)
   if (error) return publicFailure('PROVIDER_ERROR', 'We could not check this booking right now. Please try again.')
   const rows = (data ?? []) as AppointmentRow[]
@@ -390,6 +394,23 @@ export async function rescheduleBooking(
     }
     console.error('[booking-reschedule] atomic RPC failed:', rpcError.code ?? 'unknown')
     return publicFailure('PROVIDER_ERROR', 'We could not reschedule the booking right now. No changes were made.')
+  }
+
+  // Best-effort notification per changed row — never rolls back a committed reschedule.
+  for (const change of changes) {
+    const row = rows.find((r) => r.id === change.appointment_id)
+    if (!row) continue
+    await notifyManagedReschedule({
+      to: row.patient_email,
+      name: row.patient_name,
+      treatmentName: row.treatment_name,
+      oldISO: change.old_start,
+      newISO: change.new_start,
+      bookingKind: row.booking_kind === 'consultation' ? 'consultation' : 'treatment',
+      statusUrl: `${BOOKING_SITE_URL}/book/request/${row.id}?t=${createBookingToken(row.id)}`,
+    }).catch((e) => {
+      console.error('[booking-reschedule] notifyManagedReschedule failed for', row.id, e)
+    })
   }
 
   return { ok: true, data: { appointmentIds } }

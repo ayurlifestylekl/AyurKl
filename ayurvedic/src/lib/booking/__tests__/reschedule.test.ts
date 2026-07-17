@@ -5,11 +5,19 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const mocks = vi.hoisted(() => ({
   canManageBookingTarget: vi.fn(),
   createClient: vi.fn(),
+  notifyManagedReschedule: vi.fn().mockResolvedValue(undefined),
 }))
 
 vi.mock('@supabase/supabase-js', () => ({ createClient: mocks.createClient }))
 vi.mock('../management-access', () => ({
   canManageBookingTarget: mocks.canManageBookingTarget,
+}))
+vi.mock('../notify', () => ({
+  notifyManagedReschedule: mocks.notifyManagedReschedule,
+  BOOKING_SITE_URL: 'https://example.test',
+}))
+vi.mock('../token', () => ({
+  createBookingToken: (id: string) => `token-${id}`,
 }))
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ refresh: vi.fn() }),
