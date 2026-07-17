@@ -78,9 +78,9 @@ export default async function ConsolePage({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function Overview({ db }: { db: any }) {
-  const [pending, awaiting, unassigned, today, board] = await Promise.all([
-    listAppointments(db, { status: 'pending' }),
+  const [awaiting, confirmed, unassigned, today, board] = await Promise.all([
     listAppointments(db, { status: 'awaiting_payment' }),
+    listAppointments(db, { status: ['confirmed', 'checked_in', 'in_progress'] }),
     listAppointments(db, { status: ['confirmed', 'checked_in', 'in_progress'], unassignedOnly: true }),
     getTodayAppointments(db),
     getTherapistBoard(db),
@@ -89,11 +89,16 @@ async function Overview({ db }: { db: any }) {
 
   return (
     <div>
+      {/* Order matches the operational workflow: therapist assignment and today's
+          schedule are the primary loop; awaiting payment is a read-only view of
+          customers mid-checkout; therapist availability closes the loop. Manual
+          "pending" requests from staff-created bookings are rare/internal and are
+          discoverable via the "All" tab rather than surfaced here. */}
       <div className="mb-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard label="Needs therapist" value={unassigned.length} href="/console?tab=needs-therapist" tone={unassigned.length > 0 ? 'alert' : 'default'} hint="Paid, no one assigned" />
-        <StatCard label="New requests" value={pending.length} href="/console?tab=new" tone={pending.length > 0 ? 'alert' : 'default'} hint="Awaiting approval" />
-        <StatCard label="Awaiting payment" value={awaiting.length} href="/console?tab=awaiting" hint="Customer mid-checkout" />
         <StatCard label="Today" value={today.length} href="/console?tab=today" hint="Appointments today" />
+        <StatCard label="Confirmed" value={confirmed.length} href="/console?tab=confirmed" hint="Paid and on the books" />
+        <StatCard label="Awaiting payment" value={awaiting.length} href="/console?tab=awaiting" hint="Customer mid-checkout" />
         <StatCard label="Therapists free" value={`${freeNow}/${board.length}`} href="/console?tab=therapists" tone={freeNow > 0 ? 'good' : 'default'} hint="Available now" />
       </div>
 
@@ -122,9 +127,8 @@ async function Overview({ db }: { db: any }) {
           <h2 className="mb-2 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-accent">Needs attention</h2>
           <div className="space-y-2">
             <AttentionRow href="/console?tab=needs-therapist" label="paid booking(s) with no therapist assigned" count={unassigned.length} />
-            <AttentionRow href="/console?tab=new" label="new request(s) to approve" count={pending.length} />
             <AttentionRow href="/console?tab=awaiting" label="awaiting customer payment" count={awaiting.length} />
-            {pending.length === 0 && awaiting.length === 0 && unassigned.length === 0 && (
+            {awaiting.length === 0 && unassigned.length === 0 && (
               <p className="rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 font-body text-[13.5px] text-green-800">All clear — nothing waiting. 🎉</p>
             )}
           </div>
