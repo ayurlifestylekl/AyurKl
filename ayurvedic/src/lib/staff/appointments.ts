@@ -379,6 +379,7 @@ export async function getRefundExceptions(db: ServiceDb): Promise<RefundExceptio
     console.error('[staff/appointments] refundExceptions:', error.message)
     return []
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (data ?? []).map((r: any) => ({
     id: r.id,
     appointmentId: r.appointment_id,
@@ -396,7 +397,9 @@ export interface BookingEventRow {
   appointmentId: string
   eventType: string
   actorType: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   oldData: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newData: any
   createdAt: string
 }
@@ -413,6 +416,7 @@ export async function getBookingEvents(db: ServiceDb, appointmentId: string): Pr
     return []
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (data ?? []).map((r: any) => ({
     id: r.id,
     appointmentId: r.appointment_id,

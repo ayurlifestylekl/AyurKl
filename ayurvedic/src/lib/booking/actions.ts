@@ -3,7 +3,7 @@
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createClient as createSb } from '@supabase/supabase-js'
 import type { BookingRequestInput, Gender, HealthIntake } from '@/types/booking'
-import { genderRequirementValue, canCancel } from './policy'
+import { genderRequirementValue } from './policy'
 import { createBookingToken } from './token'
 import { canAccessBooking } from './access'
 import { notifyRequestReceived, notifyCancelled } from './notify'
