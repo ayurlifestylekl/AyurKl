@@ -1,6 +1,7 @@
 export const MISTAKE_WINDOW_MS = 60 * 60 * 1000
 export const RESCHEDULE_CUTOFF_MS = 24 * 60 * 60 * 1000
 export const REFUND_ADVANCE_MS = 48 * 60 * 60 * 1000
+const ACTIVE_STATUSES: readonly string[] = ['pending', 'scheduled', 'awaiting_payment', 'confirmed']
 
 export type RefundEligibility = 'not_paid' | 'mistake_window' | 'advance_window' | 'not_eligible'
 export interface ManagementPolicyInput {
@@ -23,6 +24,11 @@ export function refundEligibility(input: ManagementPolicyInput): RefundEligibili
   const created = Date.parse(input.createdAt)
   const appointment = Date.parse(input.appointmentAt)
   const changeMs = appointment - input.nowMs
+  const active = ACTIVE_STATUSES.includes(input.status)
+  const started = input.nowMs >= appointment
+
+  if (!active || started) return 'not_eligible'
+
   const unpaid = input.paymentStatus !== 'paid'
   const mistake = !unpaid && input.nowMs - created <= MISTAKE_WINDOW_MS && input.nowMs >= created
   const advance = !unpaid && changeMs >= REFUND_ADVANCE_MS
@@ -32,12 +38,12 @@ export function refundEligibility(input: ManagementPolicyInput): RefundEligibili
 
 export function managementEligibility(input: ManagementPolicyInput): ManagementEligibility {
   const appointment = Date.parse(input.appointmentAt)
-  const active = ['pending', 'scheduled', 'awaiting_payment', 'confirmed'].includes(input.status)
+  const active = ACTIVE_STATUSES.includes(input.status)
   const started = input.nowMs >= appointment
   const changeMs = appointment - input.nowMs
   const canReschedule = active && !started && changeMs >= RESCHEDULE_CUTOFF_MS && input.status !== 'awaiting_payment'
   const refund = refundEligibility(input)
-  const canCancel = active && !started && refund !== 'not_eligible'
+  const canCancel = refund !== 'not_eligible'
   return {
     canReschedule,
     canCancel,
