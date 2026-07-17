@@ -2,12 +2,16 @@
 
 import { useSearchParams } from 'next/navigation'
 import { Sparkles, MessageCircle } from 'lucide-react'
+import { useState } from 'react'
 
 import type { Treatment, TreatmentCategory } from '@/types/treatments'
+import type { HealthIntake, Gender } from '@/types/booking'
 
 import BookingRequestForm from './BookingRequestForm'
 import ConsultationRequiredNotice from './ConsultationRequiredNotice'
 import TreatmentPicker from './TreatmentPicker'
+import PolicyDisclaimers from './PolicyDisclaimers'
+import HealthIntakeFields from './HealthIntakeFields'
 
 interface BookingTreatmentOrchestratorProps {
   categories: TreatmentCategory[]
@@ -25,6 +29,10 @@ export default function BookingTreatmentOrchestrator({
   const fromConsultation = searchParams.get('from') // set when a cleared consultation unlocks a treatment
   const consultationToken = searchParams.get('ct')
   const selected = id ? treatments.find((t) => t._id === id) ?? null : null
+
+  const [acceptedPolicies, setAcceptedPolicies] = useState(false)
+  const [healthIntake, setHealthIntake] = useState<HealthIntake>({})
+  const [gender, setGender] = useState<Gender | ''>('')
 
   const formTreatment = selected
     ? {
@@ -51,31 +59,82 @@ export default function BookingTreatmentOrchestrator({
     !fromConsultation
 
   return (
-    <div className="flex flex-col gap-10">
-      <TreatmentPicker categories={categories} treatments={treatments} selected={selected} />
+    <div className={selected ? "grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10 lg:gap-16 items-start" : "flex flex-col gap-10"}>
+      
+      {/* Left Column (or Top on mobile) */}
+      <div className="flex flex-col gap-6 lg:sticky lg:top-10">
+        <TreatmentPicker categories={categories} treatments={treatments} selected={selected} />
+        
+        {selected && (
+          <div className="hidden lg:flex flex-col overflow-hidden rounded-2xl bg-white shadow-xl shadow-accent/5 ring-1 ring-accent/10">
+            {/* Premium authentic image */}
+            <div 
+              className="h-64 w-full bg-cover bg-center" 
+              style={{ backgroundImage: "url('/authentic-ayurveda.jpg')" }}
+            />
+            <div className="flex flex-col items-center p-8 text-center">
+              <span className="mb-2 font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Selected</span>
+              <h3 className="mb-3 font-heading text-2xl font-bold leading-tight text-primary">{selected.title}</h3>
+              <p className="mb-6 font-body text-sm text-dark/60">{selected.description ?? 'A restorative therapy session for deep relaxation.'}</p>
+              
+              <div className="flex w-full items-center justify-between border-t border-accent/10 pt-5">
+                <span className="font-heading text-[12px] font-semibold text-dark/60">{selected.duration ? selected.duration : '30-90 min'}</span>
+                <span className="font-heading text-lg font-bold text-primary">
+                  {selected.priceLabel || (typeof selected.price === 'number' ? `RM${selected.price}` : 'Consultation')}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
-      {!selected && <PickerPlaceholder hasCatalog={treatments.length > 0} />}
+        {selected && !isEnquiry && (
+          <div className="hidden lg:flex flex-col gap-3 mt-2">
+            <HealthIntakeFields value={healthIntake} onChange={setHealthIntake} gender={gender} />
+          </div>
+        )}
+      </div>
 
-      {selected && isEnquiry && <EnquiryNotice title={selected.title} />}
+      {/* Right Column */}
+      <div className="flex flex-col gap-10">
+        {!selected && <PickerPlaceholder hasCatalog={treatments.length > 0} />}
 
-      {selected && !isEnquiry && needsConsult && (
-        <div className="flex flex-col gap-6">
-          <ConsultationRequiredNotice treatment={selected} />
-          <BookingRequestForm bookingKind="consultation" treatment={formTreatment} account={account} />
-        </div>
-      )}
+        {selected && isEnquiry && <EnquiryNotice title={selected.title} />}
 
-      {selected && !isEnquiry && !needsConsult && (
-        <BookingRequestForm
-          key={selected._id}
-          bookingKind="treatment"
-          treatment={formTreatment}
-          treatmentOptions={treatmentOptions}
-          account={account}
-          parentConsultationId={fromConsultation}
-          parentConsultationToken={consultationToken}
-        />
-      )}
+        {selected && !isEnquiry && needsConsult && (
+          <div className="flex flex-col gap-6">
+            <ConsultationRequiredNotice treatment={selected} />
+            <BookingRequestForm 
+              bookingKind="consultation" 
+              treatment={formTreatment} 
+              account={account} 
+              accepted={acceptedPolicies}
+              setAccepted={setAcceptedPolicies}
+              health={healthIntake}
+              setHealth={setHealthIntake}
+              gender={gender}
+              setGender={setGender}
+            />
+          </div>
+        )}
+
+        {selected && !isEnquiry && !needsConsult && (
+          <BookingRequestForm
+            key={selected._id}
+            bookingKind="treatment"
+            treatment={formTreatment}
+            treatmentOptions={treatmentOptions}
+            account={account}
+            parentConsultationId={fromConsultation}
+            parentConsultationToken={consultationToken}
+            accepted={acceptedPolicies}
+            setAccepted={setAcceptedPolicies}
+            health={healthIntake}
+            setHealth={setHealthIntake}
+            gender={gender}
+            setGender={setGender}
+          />
+        )}
+      </div>
     </div>
   )
 }

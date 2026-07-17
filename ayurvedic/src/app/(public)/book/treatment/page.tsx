@@ -69,7 +69,7 @@ export default async function BookTreatmentPage() {
           }}
         />
 
-        <div className="relative mx-auto flex max-w-5xl flex-col px-6 py-12 sm:px-10 sm:py-16 lg:px-12 lg:py-20">
+        <div className="relative mx-auto flex max-w-7xl flex-col px-6 py-12 sm:px-10 sm:py-16 lg:px-12 lg:py-20">
           <Link
             href="/book"
             className="group inline-flex w-fit items-center gap-2 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-primary/55 transition-colors hover:text-primary focus-visible:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cream"

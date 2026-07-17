@@ -76,7 +76,7 @@ export default function SlotPicker({ treatmentId, gender, mode = 'treatment', me
       </span>
 
       {!ready ? (
-        <p className="font-body text-[12.5px] italic text-dark/55">
+        <p className="font-body text-[12.5px] italic text-dark/40">
           {isGroup ? 'Add every guest — name, gender and therapy — to see available times.' : 'Select a gender above to see available times.'}
         </p>
       ) : (

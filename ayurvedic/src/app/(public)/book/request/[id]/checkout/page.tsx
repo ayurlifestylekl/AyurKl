@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { Landmark, CreditCard } from 'lucide-react'
+import { Landmark, CreditCard, ArrowLeft, ShieldCheck } from 'lucide-react'
 
 import { getBookingForPayment, getGroupMembers } from '@/lib/storefront/booking'
 import { reconcileAppointment } from '@/lib/booking/payment'
@@ -60,21 +60,48 @@ export default async function CheckoutPage({
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-cream">
-      <div className="mx-auto max-w-2xl px-6 py-14 sm:py-20">
-        <Link href={statusHref} className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-primary/55 hover:text-primary">
-          ← Back to booking status
+      {/* Ambient warmth — a quiet gold/burgundy glow, not a flat flood of colour. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(60% 42% at 18% 0%, rgba(212,175,55,0.10) 0%, transparent 60%), radial-gradient(50% 38% at 100% 100%, rgba(110,16,35,0.06) 0%, transparent 65%)',
+        }}
+      />
+
+      <div className="relative mx-auto max-w-2xl px-6 py-16 sm:py-24">
+        <Link
+          href={statusHref}
+          className="group inline-flex items-center gap-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-primary/55 transition-colors duration-300 hover:text-primary"
+        >
+          <ArrowLeft className="h-3 w-3 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-x-0.5" />
+          Back to booking status
         </Link>
 
-        <div className="mt-6 rounded-2xl border border-accent/30 bg-white p-7 shadow-elevated sm:p-9">
-          <div className="font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-accent">Checkout</div>
-          <h1 className="mt-1 font-heading text-[26px] font-extrabold leading-tight text-primary">
+        <div className="relative mt-7 overflow-hidden rounded-[28px] border border-accent/25 bg-white p-8 shadow-luxe sm:p-11">
+          {/* A hairline of gold along the top edge — the one flourish, kept singular. */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 top-0 h-[3px]"
+            style={{ background: 'linear-gradient(to right, transparent, rgba(212,175,55,0.9), transparent)' }}
+          />
+
+          <div className="flex items-center gap-2">
+            <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
+            <div className="font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent">Checkout</div>
+          </div>
+          <h1 className="mt-2 font-display text-[30px] font-bold leading-[1.1] tracking-[-0.01em] text-primary sm:text-[34px]">
             {isGroup ? `Group of ${members.length}` : b.treatmentName ?? 'Your appointment'}
           </h1>
 
-          {/* Order summary */}
-          <div className="mt-6 rounded-xl border border-accent/15 bg-cream/40 p-4">
+          {/* Order summary — a quiet, recessed tray rather than a flat box. */}
+          <div
+            className="mt-7 rounded-2xl border border-accent/15 bg-cream/50 p-5"
+            style={{ boxShadow: 'inset 0 1px 3px rgba(74,12,24,0.05)' }}
+          >
             {isGroup ? (
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {members.map((m) => (
                   <li key={m.id} className="flex items-start justify-between gap-2 font-body text-[13px]">
                     <span className="min-w-0">
@@ -91,17 +118,17 @@ export default async function CheckoutPage({
                 ))}
               </ul>
             ) : (
-              <div className="flex items-center justify-between gap-2 font-body text-[13.5px]">
+              <div className="flex items-center justify-between gap-3 font-body text-[13.5px]">
                 <span className="text-dark/70">
                   {fmtMY(b.appointmentDatetime ?? b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })}
                 </span>
-                <span className="font-heading text-[15px] font-bold text-accent">RM{amount}</span>
+                <span className="font-display text-[19px] font-bold text-accent">RM{amount}</span>
               </div>
             )}
             {isGroup && (
-              <div className="mt-3 flex items-center justify-between border-t border-accent/15 pt-3 font-heading text-[12px] font-bold uppercase tracking-[0.1em] text-primary">
+              <div className="mt-4 flex items-center justify-between border-t border-accent/15 pt-4 font-heading text-[12px] font-bold uppercase tracking-[0.1em] text-primary">
                 <span>Total</span>
-                <span className="text-accent">RM{amount}</span>
+                <span className="font-display text-[19px] text-accent">RM{amount}</span>
               </div>
             )}
           </div>
@@ -115,14 +142,16 @@ export default async function CheckoutPage({
           {b.paymentExpiresAt && <div className="mt-5"><HoldCountdown expiresAt={b.paymentExpiresAt} /></div>}
 
           {/* Payment method picker */}
-          <div className="mt-2 space-y-3">
+          <div className="mt-3 space-y-3">
             <p className="font-heading text-[10px] font-bold uppercase tracking-[0.18em] text-dark/50">Choose how to pay</p>
 
             <Link
               href={`/book/request/${b.id}/pay${tokenQuery}`}
-              className="flex items-center gap-4 rounded-xl border-2 border-accent bg-white p-4 transition-colors hover:bg-accent/5"
+              className="group flex items-center gap-4 rounded-2xl border-2 border-accent bg-white p-4.5 shadow-gold-glow/0 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-floating sm:p-5"
             >
-              <Landmark className="h-7 w-7 flex-none text-accent" />
+              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-accent/10 transition-colors duration-300 group-hover:bg-accent/15">
+                <Landmark className="h-5 w-5 text-accent" />
+              </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-heading text-[13.5px] font-bold text-primary">Online Banking (FPX)</span>
                 <span className="block font-body text-[12px] text-dark/55">For Malaysian bank accounts — instant confirmation.</span>
@@ -133,9 +162,11 @@ export default async function CheckoutPage({
             {isCardPaymentEnabled() ? (
               <Link
                 href={`/book/request/${b.id}/pay${tokenQuery ? `${tokenQuery}&` : '?'}method=card`}
-                className="flex items-center gap-4 rounded-xl border border-accent/30 bg-white p-4 transition-colors hover:bg-accent/5"
+                className="group flex items-center gap-4 rounded-2xl border border-accent/25 bg-white p-4.5 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-floating sm:p-5"
               >
-                <CreditCard className="h-7 w-7 flex-none text-primary" />
+                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-primary/5 transition-colors duration-300 group-hover:bg-primary/10">
+                  <CreditCard className="h-5 w-5 text-primary" />
+                </span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-heading text-[13.5px] font-bold text-primary">Credit / Debit Card</span>
                   <span className="block font-body text-[12px] text-dark/55">No Malaysian bank account? Any international card works.</span>
@@ -143,14 +174,21 @@ export default async function CheckoutPage({
                 <span className="flex-none font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-primary">RM{amount} →</span>
               </Link>
             ) : (
-              <div className="flex items-center gap-4 rounded-xl border border-dashed border-accent/25 bg-white/60 p-4 opacity-60">
-                <CreditCard className="h-7 w-7 flex-none text-dark/35" />
+              <div className="flex items-center gap-4 rounded-2xl border border-dashed border-accent/25 bg-white/60 p-4.5 opacity-60 sm:p-5">
+                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-dark/5">
+                  <CreditCard className="h-5 w-5 text-dark/35" />
+                </span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-heading text-[13.5px] font-bold text-dark/50">Credit / Debit Card</span>
                   <span className="block font-body text-[12px] text-dark/45">Coming soon.</span>
                 </span>
               </div>
             )}
+
+            <p className="flex items-center justify-center gap-1.5 pt-1 font-body text-[11px] text-dark/40">
+              <ShieldCheck className="h-3.5 w-3.5 text-accent/70" />
+              Secured checkout — your payment is processed by a licensed provider.
+            </p>
           </div>
 
           <div className="mt-6 border-t border-accent/15 pt-4">
