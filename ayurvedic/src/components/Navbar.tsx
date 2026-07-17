@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Menu, X, ShoppingCart, User, ChevronDown, ChevronRight, Phone, Mail, Sparkles } from 'lucide-react'
 import { COMMERCE_ENABLED } from '@/lib/admin/features'
+import { CLINIC_EMAIL, mailtoLink } from '@/lib/clinic'
 
 const productsDropdown = [
   { label: 'All Products',     href: '/products'                 },
@@ -49,9 +50,9 @@ export default function Navbar() {
               +60 3-2260 3436
             </a>
             <span className="h-3 w-px bg-white/10" />
-            <a href="mailto:info@keralaayurvediclifestyle.com.my" className="flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-[#D4AF37]">
+            <a href={mailtoLink()} className="flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-[#D4AF37]">
               <Mail className="h-3 w-3 text-[#D4AF37]" />
-              info@keralaayurvediclifestyle.com.my
+              {CLINIC_EMAIL}
             </a>
           </div>
           <p className="text-xs text-white/40 md:hidden">Kerala Ayurvedic Lifestyle</p>

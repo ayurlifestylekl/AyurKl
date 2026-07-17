@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 
 import { EASE_OUT_PREMIUM, fadeUp, inViewOnce, staggerParent } from '@/lib/motion'
+import { CLINIC_EMAIL, mailtoLink } from '@/lib/clinic'
 
 const heroDiamondPattern = {
   backgroundImage: `
@@ -342,10 +343,10 @@ export default function Bureau() {
                   value="+60 11 6504 3436 · fastest"
                 />
                 <ActionLink
-                  href="mailto:info@keralaayurvediclifestyle.com.my"
+                  href={mailtoLink()}
                   icon={<Mail className="h-3.5 w-3.5" strokeWidth={2} />}
                   label="Email"
-                  value="info@keralaayurvediclifestyle.com.my"
+                  value={CLINIC_EMAIL}
                 />
               </div>
             </div>

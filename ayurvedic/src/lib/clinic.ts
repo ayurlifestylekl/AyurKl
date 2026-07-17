@@ -18,7 +18,7 @@ export const CLINIC_PHONE_PRIMARY = '+60 11-6504 3436'
 export const CLINIC_PHONE_ALT_1 = '+60 3-2260 3436'
 export const CLINIC_PHONE_ALT_2 = '+60 3-2260 4436'
 
-export const CLINIC_EMAIL = 'info@keralaayurvediclifestyle.com.my'
+export const CLINIC_EMAIL = 'enquiry@keralaayurvediclifestyle.com.my'
 
 export const CLINIC_ADDRESS = 'Brickfields, Kuala Lumpur, Malaysia'
 export const CLINIC_MAPS_URL =

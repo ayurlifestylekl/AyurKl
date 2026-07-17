@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 
 import { EASE_OUT_PREMIUM, fadeUp, inViewOnce, staggerParent } from '@/lib/motion'
+import { mailtoLink } from '@/lib/clinic'
 
 type Channel = {
   serial: string
@@ -55,7 +56,7 @@ const CHANNELS: Channel[] = [
     description:
       'Journalists, brand collaborators and corporate wellness programs — we reply to serious enquiries.',
     meta: 'Editorial · Events · Corporate wellness',
-    href: 'mailto:info@keralaayurvediclifestyle.com.my?subject=Press%20or%20Partnership%20Enquiry',
+    href: mailtoLink('Press or Partnership Enquiry'),
     external: true,
   },
 ]

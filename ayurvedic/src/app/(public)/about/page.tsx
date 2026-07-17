@@ -9,6 +9,7 @@ import CommitmentCTA from '@/components/about/CommitmentCTA'
 import FAQs from '@/components/sections/FAQs'
 import { aboutFaqs as aboutFaqsFallback } from '@/data/about'
 import { fetchAboutPage } from '@/sanity/fetchAboutPage'
+import { CLINIC_EMAIL } from '@/lib/clinic'
 
 // Short window so edits to About copy / FAQs published in Sanity Studio
 // show up on the live site within ~30s.
@@ -70,7 +71,7 @@ const aboutPageJsonLd = {
       addressCountry: 'MY',
     },
     telephone: '+60-11-6504-3436',
-    email: 'info@keralaayurvediclifestyle.com.my',
+    email: CLINIC_EMAIL,
   },
 }
 

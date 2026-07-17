@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Mail } from 'lucide-react'
+import { mailtoLink } from '@/lib/clinic'
 
 const quickLinks = [
   { label: 'Treatments',    href: '/treatments' },
@@ -85,7 +86,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="mailto:info@keralaayurvediclifestyle.com.my"
+                href={mailtoLink()}
                 aria-label="Email"
                 className="text-white/50 transition-colors hover:text-accent"
               >

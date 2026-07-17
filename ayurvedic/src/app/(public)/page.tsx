@@ -9,6 +9,7 @@ import Reviews from '@/components/sections/Reviews'
 import FAQs from '@/components/sections/FAQs'
 import FinalBookingCTA from '@/components/sections/FinalBookingCTA'
 import { COMMERCE_ENABLED } from '@/lib/admin/features'
+import { CLINIC_EMAIL } from '@/lib/clinic'
 import { faqs as homeFaqsFallback } from '@/data/faqs'
 import { fetchFaqs } from '@/sanity/fetchFaqs'
 
@@ -24,7 +25,7 @@ const localBusinessJsonLd = {
     'Authentic Kerala Ayurveda Centre and apothecary in Brickfields, Kuala Lumpur. Serving Malaysia since 2008.',
   url: 'https://keralaayurvediclifestyle.com.my',
   telephone: '+60-11-6504-3436',
-  email: 'info@keralaayurvediclifestyle.com.my',
+  email: CLINIC_EMAIL,
   foundingDate: '2008',
   address: {
     '@type': 'PostalAddress',
