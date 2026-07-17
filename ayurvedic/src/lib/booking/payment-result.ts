@@ -19,6 +19,15 @@ export interface PaymentConfirmationResult {
 export type PaymentHandlingResult =
   | { disposition: 'terminal'; state: 'confirmed' | 'already_confirmed'; appointmentId: string }
   | { disposition: 'terminal'; state: 'not_payable'; bookingId: string }
+  // The provider was reachable and gave a definite answer: this bill is not
+  // paid. That's a final negative, not a glitch — acking it (no retry) is
+  // correct; the webhook/callback that eventually reports it paid will still
+  // land and confirm normally.
+  | { disposition: 'final'; state: 'provider_not_paid' }
+  // Genuinely transient: we could not get a definite answer (DB unreachable,
+  // provider unqueryable, malformed RPC result), or the bill doesn't match an
+  // appointment YET — a real race against startPaymentForAppointment's
+  // create-bill-then-associate sequence, so retrying can still resolve it.
   | { disposition: 'transient'; state: 'not_found' | 'rpc_error' | 'invalid_result' | 'provider_unconfirmed' }
 
 const INVALID_RESULT = 'Invalid payment confirmation result.'
@@ -104,9 +113,12 @@ export function classifyPaymentConfirmation(result: PaymentConfirmationResult): 
 }
 
 export function paymentCallbackResponse(result: PaymentHandlingResult): { status: 200 | 503; ok: boolean } {
-  return result.disposition === 'terminal'
-    ? { status: 200, ok: true }
-    : { status: 503, ok: false }
+  // Only a genuinely transient failure should make the provider retry.
+  // 'terminal' (confirmed/not_payable) and 'final' (definitely not paid) are
+  // both settled outcomes — ack them so the provider stops retrying forever.
+  return result.disposition === 'transient'
+    ? { status: 503, ok: false }
+    : { status: 200, ok: true }
 }
 
 export function paymentProblemAlertInput(result: PaymentConfirmationResult): {

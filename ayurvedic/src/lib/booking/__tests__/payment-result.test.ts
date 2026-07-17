@@ -137,7 +137,16 @@ describe('payment state routing', () => {
     expect(paymentCallbackResponse({ disposition: 'transient', state: 'not_found' })).toEqual({ status: 503, ok: false })
     expect(paymentCallbackResponse({ disposition: 'transient', state: 'rpc_error' })).toEqual({ status: 503, ok: false })
     expect(paymentCallbackResponse({ disposition: 'transient', state: 'invalid_result' })).toEqual({ status: 503, ok: false })
+    // Provider unreachable/unqueryable is inconclusive — retry so a later
+    // attempt can still resolve it.
     expect(paymentCallbackResponse({ disposition: 'transient', state: 'provider_unconfirmed' })).toEqual({ status: 503, ok: false })
+  })
+
+  it('acknowledges a provider-confirmed negative instead of retrying forever', () => {
+    // The provider was reachable and definitively said "not paid" — that's a
+    // settled outcome, not a glitch. Retrying it forever (503) would make the
+    // gateway hammer the callback for a bill that will never confirm this way.
+    expect(paymentCallbackResponse({ disposition: 'final', state: 'provider_not_paid' })).toEqual({ status: 200, ok: true })
   })
 })
 

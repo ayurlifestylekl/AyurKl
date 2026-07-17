@@ -209,7 +209,12 @@ export async function reconcileByBill(
   const provider = providerName !== undefined ? getProviderByName(providerName) : getPaymentProvider()
   if (!provider?.fetchBillStatus) return { disposition: 'transient', state: 'provider_unconfirmed' }
   const status = await provider.fetchBillStatus(billId)
-  if (!status?.paid) return { disposition: 'transient', state: 'provider_unconfirmed' }
+  // `status === null` means we couldn't get an answer at all (network error,
+  // provider unreachable, bill lookup failed) — that's inconclusive, so retry.
+  // `status.paid === false` means the provider positively confirmed this bill
+  // is not paid — a definite negative, not a glitch, so don't retry forever.
+  if (!status) return { disposition: 'transient', state: 'provider_unconfirmed' }
+  if (!status.paid) return { disposition: 'final', state: 'provider_not_paid' }
   return markBillPaid(billId)
 }
 
