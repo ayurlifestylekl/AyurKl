@@ -10,6 +10,7 @@ if (!url || !key) {
 const sb = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } })
 const checks = [
   ['instant claim RPC', () => sb.rpc('claim_instant_slots', { p_claims: [] })],
+  ['atomic reschedule RPC', () => sb.rpc('reschedule_bookings', { p_changes: [], p_actor_type: 'system', p_now: new Date().toISOString() })],
   ['payment confirm RPC', () => sb.rpc('confirm_appointment_payment', { p_bill_id: '__schema_probe__' })],
   ['appointment columns', () => sb.from('appointments').select('id,created_at,payment_expires_at,group_id,assigned_therapist_code,treatment_unlocked,group_management_active,group_detached_at,management_reminder_sent_at').limit(1)],
   ['schedule blocks', () => sb.from('schedule_blocks').select('id').limit(1)],
@@ -23,7 +24,8 @@ let failed = false
 for (const [name, run] of checks) {
   try {
     const { error } = await run()
-    const expectedEmptyClaim = name === 'instant claim RPC' && /non-empty json array/i.test(error?.message ?? '')
+    const expectedEmptyClaim = (name === 'instant claim RPC' || name === 'atomic reschedule RPC')
+      && /non-empty json array/i.test(error?.message ?? '')
     const missingSchema = /could not find|does not exist|schema cache|column .* not found|function .* not found/i.test(error?.message ?? '')
     const ok = !missingSchema && (!error || expectedEmptyClaim || name === 'payment confirm RPC')
     console.log(`${name}: ${ok ? 'PASS' : 'FAIL'}`)

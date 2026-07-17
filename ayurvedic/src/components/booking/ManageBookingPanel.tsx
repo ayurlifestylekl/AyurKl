@@ -2,7 +2,12 @@ import { CalendarClock, CreditCard, RotateCw, Users, XCircle } from 'lucide-reac
 
 import { STATUS_LABEL } from '@/lib/booking/status'
 import type { BookingManagementModel } from '@/lib/booking/management'
+import {
+  getRescheduleFormBookings,
+  rescheduleBooking,
+} from '@/lib/booking/reschedule'
 import { fmtMY } from '@/lib/datetime'
+import RescheduleBookingForm from './RescheduleBookingForm'
 
 const paymentLabels: Record<BookingManagementModel['payment']['display'], string> = {
   free: 'No payment required',
@@ -24,8 +29,15 @@ function refundCopy(model: BookingManagementModel): string {
   return 'This booking is not currently eligible for an online refund.'
 }
 
-export default function ManageBookingPanel({ model }: { model: BookingManagementModel }) {
+export default async function ManageBookingPanel({ model }: { model: BookingManagementModel }) {
   const amount = model.payment.amountRm == null ? null : `RM${model.payment.amountRm.toFixed(2)}`
+  const rescheduleIds = Array.from(new Set([
+    model.id,
+    ...(model.groupMembers.length > 1 ? model.groupMembers.map((member) => member.id) : []),
+  ]))
+  const rescheduleBookings = model.canReschedule
+    ? await getRescheduleFormBookings(rescheduleIds)
+    : []
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_1fr] lg:gap-12">
@@ -83,6 +95,14 @@ export default function ManageBookingPanel({ model }: { model: BookingManagement
             body={model.canCancel ? 'This booking can be cancelled online.' : 'Online cancellation is not available for this booking.'}
           />
         </div>
+
+        {model.canReschedule && rescheduleBookings.length > 0 && (
+          <RescheduleBookingForm
+            anchorId={model.id}
+            bookings={rescheduleBookings}
+            action={rescheduleBooking}
+          />
+        )}
 
         <div className="mt-4 rounded-2xl bg-white p-5 ring-1 ring-accent/15">
           <div className="flex items-start gap-3">

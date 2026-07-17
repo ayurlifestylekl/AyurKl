@@ -1313,6 +1313,14 @@ export type Database = {
         }
         Returns: string | null
       }
+      reschedule_bookings: {
+        Args: {
+          p_changes: Json
+          p_actor_type: string
+          p_now: string
+        }
+        Returns: Json
+      }
       verify_booking_management_otp: {
         Args: {
           p_email_hash: string
