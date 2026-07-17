@@ -46,6 +46,8 @@ For unpaid `awaiting_payment` bookings, cancellation releases the hold and voids
 ### 2.3 Refund completion semantics
 
 - An eligible paid cancellation requests a full refund through the original payment provider.
+- Stripe refunds return funds to the original card and require no additional customer payout details.
+- Billplz FPX payments are not reversible. An eligible FPX cancellation collects the customer's Malaysian bank SWIFT code, account number, and account-holder name and creates a Billplz V5 Payment Order disbursement. Raw bank details are submitted directly to Billplz, never written to application logs or stored in the database; only the bank code and masked last four digits may be retained for audit/support.
 - The appointment must not be presented as `refunded` until the provider confirms the refund.
 - The customer sees `Refund pending` while confirmation is outstanding.
 - A failed or ambiguous refund is placed in a prominent staff exception queue and the customer is told that the clinic is reviewing the refund.
@@ -123,6 +125,8 @@ The confirmation dialog displays:
 - the reason for that determination;
 - the amount expected to be refunded when known; and
 - whether the refund will be immediate or pending provider confirmation.
+
+For an eligible paid Billplz/FPX cancellation, the dialog also requires the refund recipient's Malaysian bank, bank account number, and account-holder name. It explains that Billplz returns FPX funds as a separate bank disbursement rather than reversing the original transfer.
 
 The customer must explicitly confirm the irreversible cancellation. After cancellation, the page displays the cancellation and refund state and offers `Book again` where appropriate.
 
