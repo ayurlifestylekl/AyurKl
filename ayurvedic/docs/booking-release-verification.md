@@ -24,3 +24,6 @@ The following checks intentionally remain pending until a human explicitly appro
 - Mobile (390px) and desktop (1440px) role-based browser screenshots.
 
 No live migration, deployment, production credential, or real payment was used.
+
+---
+**Note:** For the Phase 2 (Self-Service Booking Management) release verification, see [self-service-booking-verification.md](file:///Users/sanjaygunabalan2626gmail.com/Documents/Ayurvedic /Ayurvedic /ayurvedic/docs/self-service-booking-verification.md).
