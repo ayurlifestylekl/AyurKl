@@ -7,6 +7,11 @@ interface TherapyHeroProps {
   image: SanityImageRef | null
   /** Plain image URL (Supabase). Preferred over `image` when present. */
   imageUrl?: string | null
+  /** A second photo the clinic supplied for this therapy — when present, the
+   *  hero splits 50/50 (this photo on the right) instead of showing one. */
+  secondaryImage?: SanityImageRef | null
+  /** Plain URL for the second photo (Supabase). Preferred over `secondaryImage`. */
+  secondaryImageUrl?: string | null
   categoryTitle: string
   treatmentOrder: number | null
   treatmentTitle: string
@@ -15,6 +20,8 @@ interface TherapyHeroProps {
 export default function TherapyHero({
   image,
   imageUrl,
+  secondaryImage,
+  secondaryImageUrl,
   categoryTitle,
   treatmentOrder,
   treatmentTitle,
@@ -23,27 +30,39 @@ export default function TherapyHero({
     treatmentOrder != null ? String(treatmentOrder + 1).padStart(2, '0') : null
   const tagText = number ? `${categoryTitle} · No. ${number}` : categoryTitle
 
+  const leftSrc = imageUrl || (image ? urlForImage(image).width(1400).fit('crop').url() : null)
+  const rightSrc =
+    secondaryImageUrl || (secondaryImage ? urlForImage(secondaryImage).width(1400).fit('crop').url() : null)
+  const isSplit = !!(leftSrc && rightSrc)
+
   return (
     <div className="relative w-full overflow-hidden bg-primary">
-      <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]">
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={`${treatmentTitle} hero image`}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-        ) : image ? (
-          <Image
-            src={urlForImage(image).width(2400).fit('crop').url()}
-            alt={image.alt ?? `${treatmentTitle} hero image`}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
+      <div className="relative flex aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]">
+        {leftSrc ? (
+          <>
+            <div className={`relative h-full ${isSplit ? 'w-1/2 border-r border-white/20' : 'w-full'}`}>
+              <Image
+                src={leftSrc}
+                alt={image?.alt ?? `${treatmentTitle} hero image`}
+                fill
+                priority
+                sizes={isSplit ? '50vw' : '100vw'}
+                className="object-cover"
+              />
+            </div>
+            {isSplit && (
+              <div className="relative h-full w-1/2">
+                <Image
+                  src={rightSrc}
+                  alt={secondaryImage?.alt ?? `${treatmentTitle} hero image, alternate view`}
+                  fill
+                  priority
+                  sizes="50vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
+          </>
         ) : (
           <div
             className="absolute inset-0 flex items-center justify-center bg-primary"

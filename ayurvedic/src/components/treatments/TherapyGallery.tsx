@@ -1,10 +1,9 @@
 import Image from 'next/image'
 
-import { urlForImage } from '@/sanity/image'
-import type { SanityImageRef } from '@/types/treatments'
+import type { GalleryImageRef } from '@/types/treatments'
 
 interface TherapyGalleryProps {
-  images: SanityImageRef[]
+  images: GalleryImageRef[]
 }
 
 export default function TherapyGallery({ images }: TherapyGalleryProps) {
@@ -14,7 +13,7 @@ export default function TherapyGallery({ images }: TherapyGalleryProps) {
       {images.map((img, i) => (
         <div key={i} className="relative aspect-square overflow-hidden rounded">
           <Image
-            src={urlForImage(img).width(500).height(500).fit('crop').url()}
+            src={img.url}
             alt={img.alt ?? `Treatment gallery image ${i + 1}`}
             fill
             sizes="(max-width: 640px) 50vw, 200px"

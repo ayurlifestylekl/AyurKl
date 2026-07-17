@@ -12,6 +12,12 @@ export interface ProcedureStep {
   description: string
 }
 
+/** One photo in a treatment's gallery — stored as plain Supabase Storage URLs. */
+export interface GalleryImageRef {
+  url: string
+  alt?: string | null
+}
+
 export type BookingType = 'direct' | 'consultation' | 'enquiry'
 
 /** Pricing/booking fields shared across summary and detail projections. */
@@ -68,7 +74,7 @@ export interface TreatmentDetail extends TreatmentPricing {
   heroImage: SanityImageRef | null
   /** Plain image URL (Supabase catalogue). Preferred over `heroImage` when present. */
   heroImageUrl?: string | null
-  gallery: SanityImageRef[] | null
+  gallery: GalleryImageRef[] | null
   order: number | null
   category: {
     _id: string

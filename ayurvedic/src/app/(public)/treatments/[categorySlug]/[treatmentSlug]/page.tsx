@@ -98,6 +98,14 @@ export default async function TreatmentDetailPage({
   )
   if (!treatment) notFound()
 
+  // A hero-split pair: gallery holds exactly [hero photo again, second photo].
+  // Distinct from an ordinary editorial gallery (3–6 unrelated shots), which
+  // must keep rendering a normal single-photo hero and its own Gallery section.
+  const heroSplitImage =
+    treatment.gallery?.length === 2 && treatment.gallery[0]?.url === treatment.heroImageUrl
+      ? treatment.gallery[1]
+      : null
+
   const { prev, next } = findPrevNext(siblings, treatment.slug)
   const whatsappMessage = `Hi, I'd like to book a ${treatment.title} session.`
   const whatsappHref = `https://wa.me/601165043436?text=${encodeURIComponent(whatsappMessage)}`
@@ -150,6 +158,7 @@ export default async function TreatmentDetailPage({
       <TherapyHero
         image={treatment.heroImage}
         imageUrl={treatment.heroImageUrl}
+        secondaryImageUrl={heroSplitImage?.url ?? null}
         categoryTitle={treatment.category.title}
         treatmentOrder={treatment.category.order}
         treatmentTitle={treatment.title}
@@ -231,8 +240,8 @@ export default async function TreatmentDetailPage({
               </section>
             )}
 
-            {/* II · Gallery */}
-            {treatment.gallery && treatment.gallery.length > 0 && (
+            {/* II · Gallery — skipped for a hero-split pair (both photos already shown above) */}
+            {!heroSplitImage && treatment.gallery && treatment.gallery.length > 0 && (
               <section className="mt-12">
                 <SectionHead numeral="II" label="Gallery" />
                 <div className="mt-4">
