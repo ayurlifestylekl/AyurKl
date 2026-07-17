@@ -5,9 +5,6 @@ import {
   Video,
   ExternalLink,
   CalendarPlus,
-  RotateCw,
-  XCircle,
-  MessageCircle,
   Navigation,
   RefreshCcw,
   ArrowRight,
@@ -16,7 +13,6 @@ import AppointmentStatusPill from './AppointmentStatusPill'
 import { findTherapyByName } from '@/data/therapies'
 import {
   appointmentBucket,
-  canCancelInApp,
   isJoinableNow,
 } from '@/lib/appointments/policy'
 import type { AppointmentRow } from '@/lib/dashboard/appointment-queries'
@@ -43,12 +39,6 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
   const bucket = appointmentBucket(appointment)
   const therapy = findTherapyByName(appointment.treatment_name)
   const isVirtual = appointment.mode === 'virtual'
-  const uid = appointment.calcom_booking_uid
-
-  const whatsappChangeUrl = `https://wa.me/601165043436?text=${encodeURIComponent(
-    `Hi Kerala Ayurvedic, I need to change my ${appointment.treatment_name} appointment.`
-  )}`
-
   // Cast: the hand-maintained DB type predates awaiting_payment.
   const status = appointment.status as string
   const needsAction = status === 'awaiting_payment'
@@ -58,7 +48,6 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
     isVirtual &&
     Boolean(appointment.meeting_link) &&
     isJoinableNow(appointment.appointment_date_time, appointment.duration_mins)
-  const canCancel = isFuture && canCancelInApp(appointment.appointment_date_time)
 
   const followUpHref = therapy
     ? `/book/treatment?slug=${therapy.slug}`
@@ -140,13 +129,21 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
       {/* Footer actions row — state-driven */}
       <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#6E1023]/6 px-5 py-2.5 sm:px-6">
         {needsAction && (
-          <Link
-            href={`/book/request/${appointment.id}`}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF37] px-3.5 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1F1F1F] transition-all hover:bg-[#D4AF37]/90"
-          >
-            Pay now
-            <ArrowRight className="h-3 w-3" strokeWidth={2.2} />
-          </Link>
+          <>
+            <Link
+              href={`/book/request/${appointment.id}`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF37] px-3.5 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1F1F1F] transition-all hover:bg-[#D4AF37]/90"
+            >
+              Pay now
+              <ArrowRight className="h-3 w-3" strokeWidth={2.2} />
+            </Link>
+            <Link
+              href={`/book/request/${appointment.id}/manage`}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/15 bg-white px-3.5 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
+            >
+              Manage booking
+            </Link>
+          </>
         )}
 
         {isFuture && (
@@ -181,51 +178,12 @@ export default function AppointmentListCard({ appointment }: AppointmentListCard
               <CalendarPlus className="h-3 w-3" strokeWidth={2} />
               Calendar
             </a>
-            {uid ? (
-              <>
-                <a
-                  href={whatsappChangeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25 hover:text-[#6E1023]"
-                >
-                  <RotateCw className="h-3 w-3" strokeWidth={2} />
-                  Reschedule
-                </a>
-                {canCancel ? (
-                  <a
-                    href={`/book/request/${appointment.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-red-700/80 transition-all hover:border-red-300 hover:bg-red-50/40"
-                  >
-                    <XCircle className="h-3 w-3" strokeWidth={2} />
-                    Cancel
-                  </a>
-                ) : (
-                  <a
-                    href={whatsappChangeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold tracking-[0.03em] text-[#1F1F1F]/65 transition-all hover:border-[#6E1023]/25"
-                    title="Within 48 hours of the visit — please message us."
-                  >
-                    <MessageCircle className="h-3 w-3" strokeWidth={2} />
-                    WhatsApp us
-                  </a>
-                )}
-              </>
-            ) : (
-              <a
-                href={whatsappChangeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023]/65 transition-all hover:border-[#6E1023]/25"
-              >
-                <MessageCircle className="h-3 w-3" strokeWidth={2} />
-                WhatsApp to change
-              </a>
-            )}
+            <Link
+              href={`/book/request/${appointment.id}/manage`}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#6E1023]/12 bg-white px-3 py-1.5 font-heading text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/30"
+            >
+              Manage booking
+            </Link>
           </>
         )}
 

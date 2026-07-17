@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Calendar } from 'lucide-react'
 import AppointmentRow from './AppointmentRow'
 import EmptyState from './EmptyState'
@@ -42,6 +43,22 @@ export default function UpcomingAppointmentsCard({
           {appointments.map((apt) => (
             <li key={apt.id}>
               <AppointmentRow appointment={apt} />
+              <div className="flex items-center justify-end gap-2 px-5 pb-4 sm:px-6">
+                {(apt.status as string) === 'awaiting_payment' && (
+                  <Link
+                    href={`/book/request/${apt.id}`}
+                    className="rounded-full bg-[#D4AF37] px-3 py-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.12em] text-[#1F1F1F]"
+                  >
+                    Pay now
+                  </Link>
+                )}
+                <Link
+                  href={`/book/request/${apt.id}/manage`}
+                  className="rounded-full border border-[#6E1023]/15 px-3 py-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.12em] text-[#6E1023] transition-colors hover:border-[#6E1023]/35"
+                >
+                  Manage booking
+                </Link>
+              </div>
             </li>
           ))}
         </ul>

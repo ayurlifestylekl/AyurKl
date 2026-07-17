@@ -3,6 +3,13 @@ import type { Database } from '@/lib/database.types'
 
 export type AppointmentRow = Database['public']['Tables']['appointments']['Row']
 
+// Customer appointment surfaces never need the historical provider identifier.
+// Management availability is derived from booking status and server policy.
+const CUSTOMER_APPOINTMENT_COLUMNS = `
+  id, customer_id, treatment_name, doctor_name, appointment_date_time,
+  duration_mins, status, advance_payment_rm, mode, meeting_link, notes, updated_at
+`
+
 export interface AppointmentStats {
   upcomingCount: number
   completedThisYear: number
@@ -23,7 +30,7 @@ export async function listAppointments(
 ): Promise<AppointmentRow[]> {
   const { data, error } = await supabase
     .from('appointments')
-    .select('*')
+    .select(CUSTOMER_APPOINTMENT_COLUMNS)
     .eq('customer_id', customerId)
     .order('appointment_date_time', { ascending: false })
 
@@ -43,7 +50,7 @@ export async function getAppointmentById(
 ): Promise<AppointmentRow | null> {
   const { data, error } = await supabase
     .from('appointments')
-    .select('*')
+    .select(CUSTOMER_APPOINTMENT_COLUMNS)
     .eq('id', id)
     .eq('customer_id', customerId)
     .maybeSingle()

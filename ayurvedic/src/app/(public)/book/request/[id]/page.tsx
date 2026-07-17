@@ -7,11 +7,9 @@ import { getBookingForPayment, getGroupMembers, getTreatmentImageUrl } from '@/l
 import { reconcileAppointment } from '@/lib/booking/payment'
 import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 import { STATUS_LABEL } from '@/lib/booking/status'
-import { whatsappRescheduleLink } from '@/lib/booking/policy'
 import { canAccessBooking } from '@/lib/booking/access'
 import { flowLabels } from '@/lib/booking/flow-copy'
 import { fmtMY } from '@/lib/datetime'
-import CancelBookingButton from '@/components/booking/CancelBookingButton'
 import HoldCountdown from '@/components/booking/HoldCountdown'
 
 export const metadata: Metadata = {
@@ -32,7 +30,7 @@ export default async function BookingRequestPage({
   if (!b) notFound()
   const token = searchParams.t
   if (!(await canAccessBooking(b.id, b.customerId, token))) notFound()
-  const tokenQuery = token ? `?t=${token}` : ''
+  const tokenQuery = token ? `?t=${encodeURIComponent(token)}` : ''
 
   // Self-heal: if the customer is back from the gateway but the webhook hasn't
   // confirmed yet (missed or failed signature), verify with the provider's API
@@ -233,15 +231,6 @@ export default async function BookingRequestPage({
                   {b.bookingKind === 'treatment' && !b.assignedTherapistName && (
                     <p className="rounded-xl bg-white px-4 py-3 font-body text-[13px] text-dark/70 ring-1 ring-accent/10">Your slot is confirmed. Our team will assign the best-matched therapist before your visit.</p>
                   )}
-                  <a
-                    href={whatsappRescheduleLink(b.patientName ?? 'there', when)}
-                    className="inline-flex w-full items-center justify-center rounded-xl border border-primary/40 px-6 py-3 font-heading text-[10.5px] font-bold uppercase tracking-[0.2em] text-primary hover:bg-primary/5"
-                  >
-                    Reschedule via WhatsApp
-                  </a>
-                  <p className="text-center font-body text-[11.5px] italic text-dark/55">
-                    Cancellations within 12 hours of your appointment are non-refundable.
-                  </p>
                 </div>
               )}
               {b.status === 'cancelled' && (
@@ -259,9 +248,14 @@ export default async function BookingRequestPage({
               )}
             </div>
 
-            {['pending', 'awaiting_payment', 'confirmed'].includes(b.status) && (
+            {['pending', 'scheduled', 'awaiting_payment', 'confirmed'].includes(b.status) && (
               <div className="mt-6 border-t border-accent/15 pt-5">
-                <CancelBookingButton id={b.id} token={token} />
+                <Link
+                  href={`/book/request/${b.id}/manage${tokenQuery}`}
+                  className="inline-flex h-12 w-full items-center justify-center rounded-xl border border-primary/35 bg-white px-7 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-primary transition-colors hover:bg-primary/5"
+                >
+                  Manage booking
+                </Link>
               </div>
             )}
           </div>

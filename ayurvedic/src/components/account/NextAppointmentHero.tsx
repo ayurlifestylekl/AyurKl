@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import {
   Calendar,
   Clock,
@@ -5,14 +6,10 @@ import {
   Video,
   ExternalLink,
   CalendarPlus,
-  RotateCw,
-  XCircle,
-  MessageCircle,
   Navigation,
 } from 'lucide-react'
 import { findTherapyByName, GENERIC_PRE_VISIT } from '@/data/therapies'
 import {
-  canCancelInApp,
   countdownLabel,
   isJoinableNow,
 } from '@/lib/appointments/policy'
@@ -46,13 +43,6 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
     isVirtual &&
     Boolean(appointment.meeting_link) &&
     isJoinableNow(appointment.appointment_date_time, appointment.duration_mins)
-  const canCancel = canCancelInApp(appointment.appointment_date_time)
-  const uid = appointment.calcom_booking_uid
-
-  const whatsappCancelUrl = `https://wa.me/601165043436?text=${encodeURIComponent(
-    `Hi Kerala Ayurvedic, I need to change my ${appointment.treatment_name} appointment.`
-  )}`
-
   return (
     <section
       className="relative overflow-hidden rounded-3xl border border-[#D4AF37]/30 bg-white"
@@ -163,19 +153,7 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
               Get directions
               <ExternalLink className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
             </a>
-          ) : (
-            uid && (
-              <a
-                href={`/book/request/${appointment.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#6E1023] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:bg-[#6E1023] active:scale-[0.98]"
-              >
-                View booking
-                <ExternalLink className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            )
-          )}
+          ) : null}
 
           {/* Secondary actions */}
           <a
@@ -187,51 +165,12 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
             Add to calendar
           </a>
 
-          {uid ? (
-            <a
-              href={whatsappCancelUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
-            >
-              <RotateCw className="h-3.5 w-3.5" strokeWidth={2} />
-              Reschedule
-            </a>
-          ) : (
-            <a
-              href={whatsappCancelUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
-            >
-              <MessageCircle className="h-3.5 w-3.5" strokeWidth={2} />
-              WhatsApp to change
-            </a>
-          )}
-
-          {uid &&
-            (canCancel ? (
-              <a
-                href={`/book/request/${appointment.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-red-200 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-red-700/85 transition-all hover:border-red-300 hover:bg-red-50/40"
-              >
-                <XCircle className="h-3.5 w-3.5" strokeWidth={2} />
-                Cancel
-              </a>
-            ) : (
-              <a
-                href={whatsappCancelUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[11.5px] font-semibold tracking-[0.04em] text-[#1F1F1F]/70 transition-all hover:border-[#6E1023]/35"
-                title="Cancellations under 48 hours need to go through us directly."
-              >
-                <MessageCircle className="h-3.5 w-3.5" strokeWidth={2} />
-                Past cancel window · WhatsApp us
-              </a>
-            ))}
+          <Link
+            href={`/book/request/${appointment.id}/manage`}
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-[#6E1023]/15 bg-white px-5 font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-[#6E1023] transition-all hover:border-[#6E1023]/35"
+          >
+            Manage booking
+          </Link>
         </div>
 
         {/* Pre-visit checklist */}
@@ -239,11 +178,6 @@ export default function NextAppointmentHero({ appointment }: NextAppointmentHero
           <PreVisitChecklist items={preVisitItems} />
         </div>
 
-        {/* Policy chip */}
-        <p className="mt-4 font-body text-[11px] italic text-[#1F1F1F]/55">
-          48 hours&apos; notice required to cancel. Advance payments are non-refundable
-          per our practice policy.
-        </p>
       </div>
     </section>
   )
