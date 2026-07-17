@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { CheckCircle2, Clock, CreditCard, CalendarCheck, XCircle } from 'lucide-react'
+import { CheckCircle2, Clock, CreditCard, CalendarCheck, XCircle, ArrowLeft } from 'lucide-react'
 
-import { getBookingForPayment, getGroupMembers } from '@/lib/storefront/booking'
+import { getBookingForPayment, getGroupMembers, getTreatmentImageUrl } from '@/lib/storefront/booking'
 import { reconcileAppointment } from '@/lib/booking/payment'
 import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 import { STATUS_LABEL } from '@/lib/booking/status'
@@ -71,153 +71,200 @@ export default async function BookingRequestPage({
       : null
   const labels = flowLabels(b.bookingKind, b.status, b.approvedAt)
   const complete = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)
+  const imageUrl = !isGroup && b.treatmentId ? await getTreatmentImageUrl(b.treatmentId) : null
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-cream">
-      <div className="mx-auto max-w-2xl px-6 py-14 sm:py-20">
-        <Link href="/book" className="font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-primary/55 hover:text-primary">
-          ← Back to booking
+      {/* Ambient warmth — a quiet gold/burgundy glow, not a flat flood of colour. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(55% 45% at 12% 0%, rgba(212,175,55,0.12) 0%, transparent 60%), radial-gradient(50% 40% at 100% 100%, rgba(110,16,35,0.07) 0%, transparent 65%)',
+        }}
+      />
+
+      <div className="relative mx-auto max-w-5xl px-6 py-16 sm:py-20">
+        <Link
+          href="/book"
+          className="group inline-flex items-center gap-1.5 font-heading text-[10.5px] font-semibold uppercase tracking-[0.18em] text-primary/55 transition-colors duration-300 hover:text-primary"
+        >
+          <ArrowLeft className="h-3 w-3 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-x-0.5" />
+          Back to booking
         </Link>
 
-        <div className="mt-6 rounded-2xl border border-accent/30 bg-white p-7 shadow-elevated sm:p-9">
-          <div className="font-heading text-[10px] font-bold uppercase tracking-[0.22em] text-accent">
-            {b.bookingKind === 'consultation' ? 'Free consultation' : 'Treatment booking'}
-          </div>
-          <h1 className="mt-1 font-heading text-[26px] font-extrabold leading-tight text-primary">
-            {b.treatmentName ?? 'Your appointment'}
-          </h1>
+        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[380px_1fr] lg:gap-12">
+          {/* Left — the reservation itself, anchored by a real photo. */}
+          <div className="lg:sticky lg:top-10">
+            <div className="overflow-hidden rounded-[26px] bg-white shadow-luxe ring-1 ring-accent/10">
+              <div
+                className="h-56 w-full bg-cover bg-center"
+                style={{ backgroundImage: `url('${imageUrl || '/authentic-ayurveda.jpg'}')` }}
+              />
+              <div className="p-7">
+                <div className="flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
+                  <span className="font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent">
+                    {b.bookingKind === 'consultation' ? 'Free consultation' : 'Treatment booking'}
+                  </span>
+                </div>
+                <h1 className="mt-2 font-display text-[26px] font-bold leading-[1.15] tracking-[-0.01em] text-primary">
+                  {b.treatmentName ?? 'Your appointment'}
+                </h1>
 
-          {/* Status timeline */}
-          <ol className="mt-6 space-y-3">
-            {labels.map((label) => {
-              const icon = label === 'Payment' ? CreditCard : label === 'Clinic approval' ? Clock : label === 'Cancelled' ? XCircle : label === 'Slot selected' ? CheckCircle2 : CalendarCheck
-              const done = label === 'Slot selected' || label === 'Cancelled' || (label === 'Clinic approval' && b.status !== 'pending') || ((label === 'Confirmed' || label === 'Confirmation' || label === 'Payment') && complete)
-              const sub = label === 'Slot selected' ? whenText : label === 'Payment' ? (b.status === 'awaiting_payment' ? 'Pay to secure your slot.' : complete && amount ? `${amount} paid` : '') : label === 'Clinic approval' ? (b.status === 'pending' ? 'Our team is reviewing this historical request.' : 'Approved by our clinic.') : label === 'Cancelled' ? (b.cancellationReason || 'This booking was cancelled.') : complete ? (isGroup ? 'Each guest’s time is listed below.' : whenText) : 'Instant confirmation follows payment.'
-              return <Step key={label} done={done} icon={icon} label={label} sub={sub} tone={label === 'Cancelled' ? 'danger' : undefined} />
-            })}
-          </ol>
+                {/* Details */}
+                <dl className="mt-5 space-y-2.5 border-t border-accent/15 pt-5 font-body text-[13.5px]">
+                  {!isGroup && <Row label="Selected time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
+                  {!isGroup && isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
+                  {isGroup ? <Row label="Guests" value={`${members.length} guests`} /> : <Row label="Guest" value={b.patientName ?? '—'} />}
+                  <Row label="Status" value={STATUS_LABEL[b.status]} />
+                  {!isGroup && b.assignedTherapistName && <Row label="Therapist" value={b.assignedTherapistName} />}
+                </dl>
 
-          {/* Details */}
-          <dl className="mt-7 grid grid-cols-2 gap-y-2 border-t border-accent/15 pt-5 font-body text-[13.5px]">
-            {!isGroup && <Row label="Selected time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
-            {!isGroup && isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
-            {isGroup ? <Row label="Guests" value={`${members.length} guests`} /> : <Row label="Guest" value={b.patientName ?? '—'} />}
-            <Row label="Status" value={STATUS_LABEL[b.status]} />
-            {amount && <Row label={isGroup ? 'Total' : 'Price'} value={amount} />}
-            {!isGroup && b.assignedTherapistName && <Row label="Therapist" value={b.assignedTherapistName} />}
-          </dl>
-
-          {isGroup && (
-            <div className="mt-4 rounded-xl border border-accent/15 bg-cream/40 p-4">
-              <div className="mb-2 font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-accent">Group guests — each has their own time</div>
-              <ul className="space-y-2">
-                {members.map((m) => (
-                  <li key={m.id} className="flex items-start justify-between gap-2 font-body text-[13px]">
-                    <span className="min-w-0">
-                      <span className="text-dark/80">{m.patientName ?? '—'} <span className="text-dark/45">· {m.patientGender}</span></span>
-                      <span className="block text-[12px] text-dark/55">{m.treatmentName ?? ''}</span>
-                      <span className="block text-[12px] font-semibold text-dark/75">
-                        {fmtMY(m.appointmentDatetime ?? m.requestedDatetime, { dateStyle: 'medium', timeStyle: 'short' })}
-                      </span>
-                    </span>
-                    <span className="flex-none font-heading text-[10px] uppercase tracking-[0.1em] text-dark/55">{STATUS_LABEL[m.status]}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Contextual CTA */}
-          <div className="mt-7">
-            {searchParams.payerror && b.status === 'awaiting_payment' && (
-              <p className="mb-3 rounded-xl border border-red-300 bg-red-50 px-4 py-3 font-body text-[13.5px] text-red-800">
-                The payment couldn&apos;t be started just now. Please try again below — if it keeps happening, message us on WhatsApp and we&apos;ll send you a payment link directly.
-              </p>
-            )}
-            {b.status === 'pending' && (
-              <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13.5px] text-dark/70">
-                Thanks! We&apos;ll review and confirm shortly.{' '}
-                {b.bookingKind === 'treatment' && 'Once approved, we’ll email you a payment link to secure your slot — you can also pay right here on this page.'}
-                {' '}Bookmark this page and check back — if our email doesn&apos;t reach you (please check Spam/Junk too), you can still see your status and pay right here.
-              </p>
-            )}
-            {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && wasStaffApproved && (
-              <p className="mb-3 font-body text-[12.5px] italic text-dark/55">
-                Good news — this has been approved! If our approval email didn&apos;t reach you (do check Spam/Junk), you can pay right here.
-              </p>
-            )}
-            {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && b.paymentExpiresAt && (
-              <HoldCountdown expiresAt={b.paymentExpiresAt} />
-            )}
-            {b.status === 'awaiting_payment' &&
-              (isGroup && !groupAllAwaiting ? (
-                <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13.5px] text-dark/70">
-                  Some guests are still being approved. You&apos;ll be able to pay for the group once every guest is approved.
-                </p>
-              ) : (
-                <Link
-                  href={`/book/request/${b.id}/checkout${tokenQuery}`}
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
-                >
-                  Continue to payment — {amount}
-                </Link>
-              ))}
-            {['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) && when && (
-              <div className="space-y-3">
-                {/* The Vaidya cleared this consultation — close the loop by letting
-                    the customer book the actual treatment right from here. */}
-                {b.bookingKind === 'consultation' && b.treatmentUnlocked && (
-                  <div className="rounded-xl border border-accent/40 bg-cream px-4 py-4">
-                    <p className="font-body text-[13.5px] text-dark/80">
-                      Good news — our Vaidya has cleared you for treatment. You can now book and pay for your therapy.
-                    </p>
-                    <Link
-                      href={`/book/treatment?from=${b.id}&ct=${token ?? ''}${b.treatmentId ? `&id=${b.treatmentId}` : ''}`}
-                      className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-xl bg-accent px-6 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent/90"
-                    >
-                      Book your treatment →
-                    </Link>
+                {isGroup && (
+                  <div className="mt-5 border-t border-accent/15 pt-5">
+                    <div className="mb-3 font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-accent">Group guests — each has their own time</div>
+                    <ul className="space-y-3">
+                      {members.map((m) => (
+                        <li key={m.id} className="flex items-start justify-between gap-2 font-body text-[13px]">
+                          <span className="min-w-0">
+                            <span className="text-dark/80">{m.patientName ?? '—'} <span className="text-dark/45">· {m.patientGender}</span></span>
+                            <span className="block text-[12px] text-dark/55">{m.treatmentName ?? ''}</span>
+                            <span className="block text-[12px] font-semibold text-dark/75">
+                              {fmtMY(m.appointmentDatetime ?? m.requestedDatetime, { dateStyle: 'medium', timeStyle: 'short' })}
+                            </span>
+                          </span>
+                          <span className="flex-none font-heading text-[10px] uppercase tracking-[0.1em] text-dark/55">{STATUS_LABEL[m.status]}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )}
-                <p className="rounded-xl border border-green-500/30 bg-green-50 px-4 py-3 font-body text-[13.5px] text-green-800">
-                  {isGroup
-                    ? <>Your group booking is confirmed — each guest&apos;s time is listed above. Same-gender therapists as requested.</>
-                    : <>You&apos;re confirmed for <strong>{whenText}</strong>. Same-gender therapist as requested.</>}
-                </p>
-                {b.bookingKind === 'treatment' && !b.assignedTherapistName && (
-                  <p className="rounded-xl bg-cream px-4 py-3 font-body text-[13px] text-dark/70">Your slot is confirmed. Our team will assign the best-matched therapist before your visit.</p>
+
+                {amount && (
+                  <div className="mt-5 flex items-center justify-between border-t border-accent/15 pt-5">
+                    <span className="font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-dark/50">
+                      {isGroup ? 'Total' : 'Price'}
+                    </span>
+                    <span className="font-display text-[26px] font-bold text-accent">{amount}</span>
+                  </div>
                 )}
-                <a
-                  href={whatsappRescheduleLink(b.patientName ?? 'there', when)}
-                  className="inline-flex w-full items-center justify-center rounded-xl border border-primary/40 px-6 py-3 font-heading text-[10.5px] font-bold uppercase tracking-[0.2em] text-primary hover:bg-primary/5"
-                >
-                  Reschedule via WhatsApp
-                </a>
-                <p className="text-center font-body text-[11.5px] italic text-dark/55">
-                  Cancellations within 12 hours of your appointment are non-refundable.
-                </p>
               </div>
-            )}
-            {b.status === 'cancelled' && (
-              <div className="space-y-3">
-                <p className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 font-body text-[13.5px] text-red-800">
-                  This booking was cancelled.{b.cancellationReason ? ` Reason: ${b.cancellationReason}` : ''}
+            </div>
+          </div>
+
+          {/* Right — status timeline + contextual action, given the most visual weight. */}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
+              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent">Status</span>
+            </div>
+
+            {/* Status timeline */}
+            <ol className="mt-4 space-y-4">
+              {labels.map((label) => {
+                const icon = label === 'Payment' ? CreditCard : label === 'Clinic approval' ? Clock : label === 'Cancelled' ? XCircle : label === 'Slot selected' ? CheckCircle2 : CalendarCheck
+                const done = label === 'Slot selected' || label === 'Cancelled' || (label === 'Clinic approval' && b.status !== 'pending') || ((label === 'Confirmed' || label === 'Confirmation' || label === 'Payment') && complete)
+                const sub = label === 'Slot selected' ? whenText : label === 'Payment' ? (b.status === 'awaiting_payment' ? 'Pay to secure your slot.' : complete && amount ? `${amount} paid` : '') : label === 'Clinic approval' ? (b.status === 'pending' ? 'Our team is reviewing this historical request.' : 'Approved by our clinic.') : label === 'Cancelled' ? (b.cancellationReason || 'This booking was cancelled.') : complete ? (isGroup ? 'Each guest’s time is listed below.' : whenText) : 'Instant confirmation follows payment.'
+                return <Step key={label} done={done} icon={icon} label={label} sub={sub} tone={label === 'Cancelled' ? 'danger' : undefined} />
+              })}
+            </ol>
+
+            {/* Contextual CTA */}
+            <div className="mt-8 border-t border-accent/15 pt-7">
+              {searchParams.payerror && b.status === 'awaiting_payment' && (
+                <p className="mb-3 rounded-xl border border-red-300 bg-red-50 px-4 py-3 font-body text-[13.5px] text-red-800">
+                  The payment couldn&apos;t be started just now. Please try again below — if it keeps happening, message us on WhatsApp and we&apos;ll send you a payment link directly.
                 </p>
-                <Link
-                  href="/book"
-                  className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
-                >
-                  Book again
-                </Link>
+              )}
+              {b.status === 'pending' && (
+                <p className="rounded-xl bg-white px-5 py-4 font-body text-[13.5px] text-dark/70 ring-1 ring-accent/10">
+                  Thanks! We&apos;ll review and confirm shortly.{' '}
+                  {b.bookingKind === 'treatment' && 'Once approved, we’ll email you a payment link to secure your slot — you can also pay right here on this page.'}
+                  {' '}Bookmark this page and check back — if our email doesn&apos;t reach you (please check Spam/Junk too), you can still see your status and pay right here.
+                </p>
+              )}
+              {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && wasStaffApproved && (
+                <p className="mb-3 font-body text-[12.5px] italic text-dark/55">
+                  Good news — this has been approved! If our approval email didn&apos;t reach you (do check Spam/Junk), you can pay right here.
+                </p>
+              )}
+              {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && b.paymentExpiresAt && (
+                <div className="mb-4 rounded-2xl bg-primary/[0.04] px-5 py-3.5 ring-1 ring-primary/10">
+                  <HoldCountdown expiresAt={b.paymentExpiresAt} />
+                </div>
+              )}
+              {b.status === 'awaiting_payment' &&
+                (isGroup && !groupAllAwaiting ? (
+                  <p className="rounded-xl bg-white px-5 py-4 font-body text-[13.5px] text-dark/70 ring-1 ring-accent/10">
+                    Some guests are still being approved. You&apos;ll be able to pay for the group once every guest is approved.
+                  </p>
+                ) : (
+                  <Link
+                    href={`/book/request/${b.id}/checkout${tokenQuery}`}
+                    className="group relative flex h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-accent px-7 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-white shadow-gold-glow transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+                  >
+                    Continue to payment — {amount}
+                  </Link>
+                ))}
+              {['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status) && when && (
+                <div className="space-y-3">
+                  {/* The Vaidya cleared this consultation — close the loop by letting
+                      the customer book the actual treatment right from here. */}
+                  {b.bookingKind === 'consultation' && b.treatmentUnlocked && (
+                    <div className="rounded-2xl bg-white px-5 py-5 ring-1 ring-accent/20">
+                      <p className="font-body text-[13.5px] text-dark/80">
+                        Good news — our Vaidya has cleared you for treatment. You can now book and pay for your therapy.
+                      </p>
+                      <Link
+                        href={`/book/treatment?from=${b.id}&ct=${token ?? ''}${b.treatmentId ? `&id=${b.treatmentId}` : ''}`}
+                        className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-xl bg-accent px-6 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent/90"
+                      >
+                        Book your treatment →
+                      </Link>
+                    </div>
+                  )}
+                  <p className="rounded-xl border border-green-500/30 bg-green-50 px-4 py-3 font-body text-[13.5px] text-green-800">
+                    {isGroup
+                      ? <>Your group booking is confirmed — each guest&apos;s time is listed above. Same-gender therapists as requested.</>
+                      : <>You&apos;re confirmed for <strong>{whenText}</strong>. Same-gender therapist as requested.</>}
+                  </p>
+                  {b.bookingKind === 'treatment' && !b.assignedTherapistName && (
+                    <p className="rounded-xl bg-white px-4 py-3 font-body text-[13px] text-dark/70 ring-1 ring-accent/10">Your slot is confirmed. Our team will assign the best-matched therapist before your visit.</p>
+                  )}
+                  <a
+                    href={whatsappRescheduleLink(b.patientName ?? 'there', when)}
+                    className="inline-flex w-full items-center justify-center rounded-xl border border-primary/40 px-6 py-3 font-heading text-[10.5px] font-bold uppercase tracking-[0.2em] text-primary hover:bg-primary/5"
+                  >
+                    Reschedule via WhatsApp
+                  </a>
+                  <p className="text-center font-body text-[11.5px] italic text-dark/55">
+                    Cancellations within 12 hours of your appointment are non-refundable.
+                  </p>
+                </div>
+              )}
+              {b.status === 'cancelled' && (
+                <div className="space-y-3">
+                  <p className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 font-body text-[13.5px] text-red-800">
+                    This booking was cancelled.{b.cancellationReason ? ` Reason: ${b.cancellationReason}` : ''}
+                  </p>
+                  <Link
+                    href="/book"
+                    className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-accent px-7 font-heading text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent/90"
+                  >
+                    Book again
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {['pending', 'awaiting_payment', 'confirmed'].includes(b.status) && (
+              <div className="mt-6 border-t border-accent/15 pt-5">
+                <CancelBookingButton id={b.id} token={token} />
               </div>
             )}
           </div>
-
-          {['pending', 'awaiting_payment', 'confirmed'].includes(b.status) && (
-            <div className="mt-4 border-t border-accent/15 pt-4">
-              <CancelBookingButton id={b.id} token={token} />
-            </div>
-          )}
         </div>
       </div>
     </section>
