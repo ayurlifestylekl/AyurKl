@@ -43,6 +43,7 @@ export default function BookingTreatmentOrchestrator({
         bookingLeadTimeHours: selected.bookingLeadTimeHours,
       }
     : null
+  const selectedImageUrl = selected?.imageUrl || '/authentic-ayurveda.jpg'
 
   // Directly-bookable therapies a group guest can pick from (excludes
   // enquiry-only and consultation-first treatments).
@@ -67,9 +68,9 @@ export default function BookingTreatmentOrchestrator({
         {selected && (
           <div className="hidden lg:flex flex-col overflow-hidden rounded-2xl bg-white shadow-xl shadow-accent/5 ring-1 ring-accent/10">
             {/* Premium authentic image */}
-            <div 
-              className="h-64 w-full bg-cover bg-center" 
-              style={{ backgroundImage: "url('/authentic-ayurveda.jpg')" }}
+            <div
+              className="h-64 w-full bg-cover bg-center"
+              style={{ backgroundImage: `url('${selectedImageUrl}')` }}
             />
             <div className="flex flex-col items-center p-8 text-center">
               <span className="mb-2 font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Selected</span>

@@ -257,6 +257,7 @@ export async function getTreatmentsFlat(sb: SB): Promise<Treatment[]> {
     categoryId: r.category_id,
     categoryTitle: r.treatment_categories?.title ?? '',
     categoryOrder: r.treatment_categories?.sort_order ?? null,
+    imageUrl: r.hero_image_url ?? null,
     ...pricing(r),
   }))
 }

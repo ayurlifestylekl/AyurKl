@@ -110,4 +110,6 @@ export interface Treatment extends TreatmentPricing {
   categoryId: string
   categoryTitle: string
   categoryOrder: number | null
+  /** Hero photo for this specific treatment (Supabase Storage URL). */
+  imageUrl?: string | null
 }
