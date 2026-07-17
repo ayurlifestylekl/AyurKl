@@ -10,6 +10,7 @@ create table if not exists public.booking_resource_members (
   member_key text not null,
   active boolean not null default true,
   primary key (resource_type, resource_key, member_key),
+  unique (member_key),
   check (
     (resource_type = 'gender' and resource_key in ('men_only', 'ladies_only'))
     or (resource_type = 'consultation' and resource_key = 'vaidya')
@@ -234,11 +235,11 @@ begin
             b.all_day
             or (
               v_new_start < ((
-                  v_candidate_day::timestamp
+                  v_candidate_day
                   + (b.end_at at time zone 'Asia/Kuala_Lumpur')::time
                 ) at time zone 'Asia/Kuala_Lumpur')
               and ((
-                  v_candidate_day::timestamp
+                  v_candidate_day
                   + (b.start_at at time zone 'Asia/Kuala_Lumpur')::time
                 ) at time zone 'Asia/Kuala_Lumpur')
                 < v_new_start + (v_duration_mins * interval '1 minute')

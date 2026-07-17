@@ -305,6 +305,11 @@ describe('atomic reschedule migration', () => {
     expect(sql).toContain('revoke all on public.booking_resource_members from anon, authenticated')
   })
 
+  it('keeps every canonical member in exactly one capacity bucket', () => {
+    const sql = readFileSync(migrationPath, 'utf8')
+    expect(sql).toMatch(/unique\s*\(\s*member_key\s*\)/i)
+  })
+
   it('serializes schedule-block writers before taking database time and recounting', () => {
     const sql = readFileSync(migrationPath, 'utf8')
     const advisoryLock = sql.lastIndexOf('pg_advisory_xact_lock')
@@ -328,6 +333,12 @@ describe('atomic reschedule migration', () => {
     expect(sql).toContain('b.all_day')
     expect(sql).toContain('b.therapist_code is null')
     expect(sql).toContain("at time zone 'Asia/Kuala_Lumpur'")
+  })
+
+  it('constructs recurring timed block instants with PostgreSQL date-plus-time operators', () => {
+    const sql = readFileSync(migrationPath, 'utf8')
+    expect(sql).not.toMatch(/v_candidate_day::timestamp\s*\+/i)
+    expect(sql.match(/v_candidate_day\s*\+\s*\(b\.(?:start|end)_at at time zone 'Asia\/Kuala_Lumpur'\)::time/gi)).toHaveLength(2)
   })
 
   it('uses only post-lock database time inside the function body', () => {
