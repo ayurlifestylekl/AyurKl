@@ -36,18 +36,19 @@ export interface NotifyBase {
   treatmentName?: string | null
 }
 
-export async function notifyGuestManagementOtp({ to, code }: { to: string; code: string }): Promise<void> {
+export async function notifyGuestManagementOtp({ to, code }: { to: string; code: string }): Promise<boolean> {
   const { html, text } = shell('Your booking access code', [
     `Use this six-digit code to recover access to your bookings: <strong>${esc(code)}</strong>.`,
     'This code expires in 10 minutes. If you did not request it, you can ignore this email.',
   ])
-  await sendEmail({
+  const result = await sendEmail({
     to,
     category: 'transactional',
     subject: 'Your booking access code — Kerala Ayurvedic Lifestyle',
     html,
     text,
   })
+  return result.sent
 }
 
 /** One guest in a group booking, as shown in group emails. */

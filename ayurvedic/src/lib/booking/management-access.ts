@@ -12,17 +12,21 @@ function admin() {
   )
 }
 
-async function grantContains(appointmentId: string, token: string | null | undefined): Promise<boolean> {
+async function activeGrant(token: string | null | undefined, appointmentId?: string): Promise<boolean> {
   if (!token) return false
-  const { data, error } = await admin()
+  let query = admin()
     .from('booking_management_grants')
     .select('id')
     .eq('token_hash', hashManagementValue(token))
     .is('revoked_at', null)
     .gt('expires_at', new Date().toISOString())
-    .contains('appointment_ids', [appointmentId])
-    .maybeSingle()
+  if (appointmentId) query = query.contains('appointment_ids', [appointmentId])
+  const { data, error } = await query.maybeSingle()
   return !error && !!data
+}
+
+export async function hasActiveManagementGrant(token: string | null | undefined): Promise<boolean> {
+  return activeGrant(token)
 }
 
 async function signedInUserId(): Promise<string | null> {
@@ -39,7 +43,7 @@ export async function canManageBooking(
   token: string | null | undefined,
 ): Promise<boolean> {
   if (verifyBookingToken(id, token)) return true
-  if (await grantContains(id, token)) return true
+  if (await activeGrant(token, id)) return true
   if (!customerId) return false
   return (await signedInUserId()) === customerId
 }
@@ -50,7 +54,7 @@ export async function canManageBookingTarget(
   token: string | null | undefined,
 ): Promise<boolean> {
   if (anchorId === targetId && verifyBookingToken(anchorId, token)) return true
-  if (await grantContains(targetId, token)) return true
+  if (await activeGrant(token, targetId)) return true
 
   const sb = admin()
   const { data: rows, error } = await sb

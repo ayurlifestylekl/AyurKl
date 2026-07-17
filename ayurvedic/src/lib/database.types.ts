@@ -1305,6 +1305,23 @@ export type Database = {
           commission_type: 'affiliate' | 'reseller'
         }
       }
+      reserve_booking_management_otp: {
+        Args: {
+          p_email_hash: string
+          p_code_hash: string
+          p_request_ip_hash: string
+        }
+        Returns: string | null
+      }
+      verify_booking_management_otp: {
+        Args: {
+          p_email_hash: string
+          p_code_hash: string
+          p_normalized_email: string
+          p_token_hash: string
+        }
+        Returns: 'granted' | 'unauthorized'
+      }
     }
     Enums: {
       commission_type_enum: 'affiliate' | 'reseller'

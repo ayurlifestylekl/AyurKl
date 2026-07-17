@@ -52,8 +52,8 @@ export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean;
       text: input.text,
     })
     return { sent: true }
-  } catch (err) {
-    console.error('[email/send] failed:', err)
+  } catch {
+    console.error('[email/send] delivery failed')
     return { sent: false, reason: 'send_failed' }
   }
 }
