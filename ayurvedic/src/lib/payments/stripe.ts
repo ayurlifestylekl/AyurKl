@@ -1,5 +1,9 @@
 import Stripe from 'stripe'
-import { ProviderRefundError, isSafeProviderRefundId } from './provider'
+import {
+  ProviderRefundError,
+  isSafeProviderRefundId,
+  isSafeRefundIdempotencyKey,
+} from './provider'
 import type {
   CallbackResult,
   CreateBillArgs,
@@ -60,7 +64,9 @@ function stripeFailure(error: unknown): ProviderRefundError {
   const statusCode = typeof error === 'object' && error !== null && 'statusCode' in error
     ? Number((error as { statusCode?: unknown }).statusCode)
     : null
-  const definitive = statusCode !== null
+  const transient = statusCode !== null
+    && ([408, 409, 425, 429].includes(statusCode) || statusCode >= 500)
+  const definitive = !transient && statusCode !== null
     && Number.isInteger(statusCode)
     && statusCode >= 400
     && statusCode < 500
@@ -175,7 +181,7 @@ export const stripeProvider: PaymentProvider = {
       providerRefundId: refund.id,
       status: stripeRefundStatus(refund.status),
       provider: 'stripe',
-      ...(typeof idempotencyKey === 'string' && idempotencyKey.length <= 255
+      ...(isSafeRefundIdempotencyKey(idempotencyKey)
         ? { idempotencyKey }
         : {}),
     }

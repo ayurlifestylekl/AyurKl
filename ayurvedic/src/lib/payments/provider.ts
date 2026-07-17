@@ -81,9 +81,29 @@ export function isSafeProviderRefundId(provider: string, value: unknown): value 
   if (provider === 'stub') return /^stub_refund_[A-Za-z0-9:_-]+$/.test(value)
   if (provider !== 'billplz') return false
 
-  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-  const safeToken = /^(?=.*[A-Za-z])[A-Za-z0-9][A-Za-z0-9_-]*$/
-  return uuid.test(value) || safeToken.test(value)
+  const safeToken = /^[A-Za-z0-9][A-Za-z0-9_-]*$/
+  const hasSeparator = /[_-]/.test(value)
+  const hasLetterAndDigit = /[A-Za-z]/.test(value) && /\d/.test(value)
+  return UUID_PATTERN.test(value) || (safeToken.test(value) && (hasSeparator || hasLetterAndDigit))
+}
+
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+export function isSafeRefundIdempotencyKey(value: unknown): value is string {
+  if (typeof value !== 'string') return false
+  const match = /^booking-refund:([^:]+):full$/.exec(value)
+  return match !== null && UUID_PATTERN.test(match[1])
+}
+
+export function providerIdMatchesSensitiveValue(
+  providerRefundId: string,
+  ...sensitiveValues: Array<string | null | undefined>
+): boolean {
+  const normalizedId = providerRefundId.toLowerCase().replace(/[^a-z0-9]/g, '')
+  return normalizedId.length > 0 && sensitiveValues.some((value) => (
+    typeof value === 'string'
+    && value.toLowerCase().replace(/[^a-z0-9]/g, '') === normalizedId
+  ))
 }
 
 export interface PaymentProvider {

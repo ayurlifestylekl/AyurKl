@@ -4,6 +4,8 @@ import { getProviderByName } from './index'
 import {
   ProviderRefundError,
   isSafeProviderRefundId,
+  isSafeRefundIdempotencyKey,
+  providerIdMatchesSensitiveValue,
   type PaymentProvider,
   type ProviderRefundResult,
   type RefundArgs,
@@ -187,10 +189,15 @@ function safeResult(
   provider: RefundRecord['provider'],
   result: ProviderRefundResult,
   rawAccountNumber?: string,
+  rawAccountHolderName?: string,
 ): ProviderRefundResult {
   if (
     !isSafeProviderRefundId(provider, result.providerRefundId)
-    || result.providerRefundId === rawAccountNumber
+    || providerIdMatchesSensitiveValue(
+      result.providerRefundId,
+      rawAccountNumber,
+      rawAccountHolderName,
+    )
     || !['pending', 'confirmed'].includes(result.status)
   ) {
     throw new ProviderRefundError('ambiguous')
@@ -267,7 +274,7 @@ export async function requestProviderRefund(
       idempotencyKey: existing.idempotencyKey,
       customerEmail: args.customerEmail,
       bank: args.bank,
-    }), args.bank?.accountNumber)
+    }), args.bank?.accountNumber, args.bank?.accountHolderName)
   } catch (error) {
     const providerError = error instanceof ProviderRefundError
       ? error
@@ -345,7 +352,7 @@ export async function applyRefundCallback(
   if (!safeForAnyProvider) return null
 
   let row = await dependencies.store.findByProviderRefundId(callback.providerRefundId)
-  if (!row && callback.idempotencyKey && /^booking-refund:[A-Za-z0-9-]+:full$/.test(callback.idempotencyKey)) {
+  if (!row && isSafeRefundIdempotencyKey(callback.idempotencyKey)) {
     row = await dependencies.store.findByIdempotencyKey(callback.idempotencyKey)
   }
   if (row && callback.provider && row.provider !== callback.provider) return row

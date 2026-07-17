@@ -30,16 +30,19 @@ import { stripeProvider } from '../stripe'
 import { stubProvider } from '../stub'
 import {
   ProviderRefundError,
+  isSafeProviderRefundId,
+  isSafeRefundIdempotencyKey,
   type PaymentProvider,
   type RefundCallbackResult,
 } from '../provider'
 
 const RAW_ACCOUNT = '1234567890'
 const NOW_MS = Date.parse('2026-07-18T01:00:00.000Z')
+const APPOINTMENT_ID = '11111111-1111-4111-8111-111111111111'
 const REFUND_ARGS = {
   billId: 'bill_123',
   amountRm: 20,
-  idempotencyKey: 'booking-refund:appointment-a:full',
+  idempotencyKey: `booking-refund:${APPOINTMENT_ID}:full`,
   customerEmail: 'asha@example.com',
 }
 
@@ -163,6 +166,18 @@ describe('refund provider contracts', () => {
     expect(maskBankAccount(RAW_ACCOUNT)).toBe('******7890')
     expect(maskBankAccount('1234')).toBe('****')
   })
+
+  it('accepts only exact UUID refund keys and non-name-like Billplz provider IDs', () => {
+    expect(isSafeRefundIdempotencyKey(REFUND_ARGS.idempotencyKey)).toBe(true)
+    expect(isSafeRefundIdempotencyKey('booking-refund:appointment-a:full')).toBe(false)
+    expect(isSafeRefundIdempotencyKey(`booking-refund:${APPOINTMENT_ID}:partial`)).toBe(false)
+
+    expect(isSafeProviderRefundId('billplz', 'po_123')).toBe(true)
+    expect(isSafeProviderRefundId('billplz', '1234-5678')).toBe(true)
+    expect(isSafeProviderRefundId('billplz', '12345678')).toBe(false)
+    expect(isSafeProviderRefundId('billplz', 'Asha')).toBe(false)
+    expect(isSafeProviderRefundId('billplz', 'AshaNair')).toBe(false)
+  })
 })
 
 describe('Stripe refunds', () => {
@@ -181,7 +196,7 @@ describe('Stripe refunds', () => {
         amount: 2000,
         metadata: { booking_refund_idempotency_key: REFUND_ARGS.idempotencyKey },
       },
-      { idempotencyKey: 'booking-refund:appointment-a:full' },
+      { idempotencyKey: REFUND_ARGS.idempotencyKey },
     )
   })
 
@@ -201,9 +216,9 @@ describe('Stripe refunds', () => {
     expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
   })
 
-  it('classifies a Stripe timeout or 5xx as ambiguous without exposing the SDK error', async () => {
+  it.each([408, 425, 429, 503])('classifies Stripe HTTP %i as ambiguous without exposing the SDK error', async (statusCode) => {
     stripeMocks.retrieveSession.mockResolvedValue({ payment_intent: 'pi_123' })
-    stripeMocks.createRefund.mockRejectedValue({ statusCode: 503, message: RAW_ACCOUNT })
+    stripeMocks.createRefund.mockRejectedValue({ statusCode, message: RAW_ACCOUNT })
     const error = await stripeProvider.createRefund!(REFUND_ARGS).catch((value) => value)
     expect(error).toMatchObject({ category: 'ambiguous' })
     expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
@@ -235,6 +250,22 @@ describe('Stripe refunds', () => {
     expect(stripeMocks.constructEvent).toHaveBeenCalledWith(
       'raw signed payload', 'signed', 'whsec_not_real',
     )
+  })
+
+  it('omits malformed Stripe refund metadata from the verified callback result', async () => {
+    stripeMocks.constructEvent.mockReturnValue({
+      type: 'refund.updated',
+      data: { object: {
+        id: 're_123',
+        status: 'pending',
+        metadata: { booking_refund_idempotency_key: 'booking-refund:not-a-uuid:full' },
+      } },
+    })
+    const result = await stripeProvider.verifyRefundCallback!(new Request(
+      'https://example.test/api/payments/stripe-webhook',
+      { method: 'POST', headers: { 'stripe-signature': 'signed' }, body: 'raw' },
+    ))
+    expect(result).toEqual({ providerRefundId: 're_123', status: 'pending', provider: 'stripe' })
   })
 })
 
@@ -286,6 +317,20 @@ describe('Billplz Payment Order refunds', () => {
     expect(JSON.stringify(error)).not.toContain('Asha Nair')
   })
 
+  it.each([408, 425, 429, 500])('keeps Billplz HTTP %i ambiguous and redacted', async (status) => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(
+      `failure for ${RAW_ACCOUNT} Asha Nair`,
+      { status },
+    )))
+    const error = await billplzProvider.createRefund!({
+      ...REFUND_ARGS,
+      bank: { bankCode: 'MBBEMYKL', accountNumber: RAW_ACCOUNT, accountHolderName: 'Asha Nair' },
+    }).catch((value) => value)
+    expect(error).toMatchObject({ category: 'ambiguous' })
+    expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
+    expect(JSON.stringify(error)).not.toContain('Asha Nair')
+  })
+
   it('rejects a Payment Order ID equal to the raw bank account as ambiguous', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(responseJson({
       id: RAW_ACCOUNT,
@@ -297,6 +342,16 @@ describe('Billplz Payment Order refunds', () => {
     }).catch((value) => value)
     expect(error).toMatchObject({ category: 'ambiguous' })
     expect(JSON.stringify(error)).not.toContain(RAW_ACCOUNT)
+  })
+
+  it.each(['Asha Nair', 'AshaNair', 'asha-nair'])('rejects Payment Order ID derived from holder name %j', async (id) => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(responseJson({ id, status: 'processing' })))
+    const error = await billplzProvider.createRefund!({
+      ...REFUND_ARGS,
+      bank: { bankCode: 'MBBEMYKL', accountNumber: RAW_ACCOUNT, accountHolderName: 'Asha Nair' },
+    }).catch((value) => value)
+    expect(error).toMatchObject({ category: 'ambiguous' })
+    expect(JSON.stringify(error)).not.toContain('Asha Nair')
   })
 
   it('verifies the callback checksum before returning a redacted status', async () => {
@@ -325,6 +380,18 @@ describe('Billplz Payment Order refunds', () => {
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body,
     }))).resolves.toBeNull()
+  })
+
+  it('omits an invalid signed Billplz reference from the callback result', async () => {
+    const verified = await billplzProvider.verifyRefundCallback!(billplzCallback({
+      id: 'po_123',
+      bank_account_number: RAW_ACCOUNT,
+      status: 'processing',
+      total: '2000',
+      reference_id: 'booking-refund:not-a-uuid:full',
+      epoch: '123',
+    }))
+    expect(verified).toEqual({ providerRefundId: 'po_123', status: 'pending', provider: 'billplz' })
   })
 
   it.each([
@@ -502,6 +569,23 @@ describe('shared refund persistence', () => {
       { store: memory.store, providerForName: () => provider, now: () => NOW_MS },
     )).rejects.toMatchObject({ category: 'ambiguous' })
     expect(JSON.stringify(memory.current())).not.toContain(providerRefundId)
+    expect(memory.current()).toMatchObject({ status: 'pending', providerRefundId: null })
+  })
+
+  it.each(['Asha Nair', 'AshaNair', 'asha-nair'])('rejects holder-name-derived ID %j on a Billplz refund row', async (providerRefundId) => {
+    const memory = memoryStore({ ...claimed, provider: 'billplz' })
+    const provider = refundProvider({
+      name: 'billplz',
+      createRefund: vi.fn().mockResolvedValue({ providerRefundId, status: 'pending' }),
+    })
+    await expect(requestProviderRefund(
+      {
+        refundId: claimed.id,
+        ...REFUND_ARGS,
+        bank: { bankCode: 'MBBEMYKL', accountNumber: RAW_ACCOUNT, accountHolderName: 'Asha Nair' },
+      },
+      { store: memory.store, providerForName: () => provider, now: () => NOW_MS },
+    )).rejects.toMatchObject({ category: 'ambiguous' })
     expect(memory.current()).toMatchObject({ status: 'pending', providerRefundId: null })
   })
 

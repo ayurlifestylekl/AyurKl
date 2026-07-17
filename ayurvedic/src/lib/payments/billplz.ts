@@ -1,5 +1,10 @@
 import { createHmac, timingSafeEqual } from 'crypto'
-import { ProviderRefundError, isSafeProviderRefundId } from './provider'
+import {
+  ProviderRefundError,
+  isSafeProviderRefundId,
+  isSafeRefundIdempotencyKey,
+  providerIdMatchesSensitiveValue,
+} from './provider'
 import type {
   CallbackResult,
   CreateBillArgs,
@@ -162,7 +167,7 @@ export const billplzProvider: PaymentProvider = {
       throw new ProviderRefundError('ambiguous')
     }
     if (!res.ok) {
-      const ambiguous = res.status >= 500 || res.status === 409 || res.status === 422
+      const ambiguous = res.status >= 500 || [408, 409, 422, 425, 429].includes(res.status)
       throw new ProviderRefundError(ambiguous ? 'ambiguous' : 'definitive')
     }
 
@@ -174,7 +179,7 @@ export const billplzProvider: PaymentProvider = {
     }
     if (
       !isSafeProviderRefundId('billplz', json.id)
-      || json.id === bank.accountNumber
+      || providerIdMatchesSensitiveValue(json.id, bank.accountNumber, bank.accountHolderName)
       || typeof json.status !== 'string'
     ) {
       throw new ProviderRefundError('ambiguous')
@@ -233,14 +238,19 @@ export const billplzProvider: PaymentProvider = {
     if (
       !safeChecksumEqual(expected, supplied)
       || !isSafeProviderRefundId('billplz', providerRefundId)
-      || providerRefundId === accountNumber
+      || providerIdMatchesSensitiveValue(
+        providerRefundId,
+        accountNumber,
+        value('name'),
+        value('display_name'),
+      )
     ) return null
     const idempotencyKey = value('reference_id')
     return {
       providerRefundId,
       status: paymentOrderStatus(status),
       provider: 'billplz',
-      ...(idempotencyKey && idempotencyKey.length <= 255 ? { idempotencyKey } : {}),
+      ...(isSafeRefundIdempotencyKey(idempotencyKey) ? { idempotencyKey } : {}),
     }
   },
 
