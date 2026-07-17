@@ -43,6 +43,20 @@ export async function getBookingForPayment(id: string): Promise<StaffAppointment
   return data ? mapAppointmentRow(data) : null
 }
 
+/** A single treatment's hero photo, for the checkout reservation panel. */
+export async function getTreatmentImageUrl(treatmentId: string): Promise<string | null> {
+  const { data, error } = await admin()
+    .from('treatments')
+    .select('hero_image_url')
+    .eq('id', treatmentId)
+    .maybeSingle()
+  if (error) {
+    console.error('[storefront/booking] getTreatmentImageUrl:', error.message)
+    return null
+  }
+  return data?.hero_image_url ?? null
+}
+
 /** All guests in a group booking (service role). Returns [] for non-groups. */
 export async function getGroupMembers(groupId: string): Promise<StaffAppointment[]> {
   const { data, error } = await admin()
