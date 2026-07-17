@@ -35,12 +35,13 @@ interface BookingRequestFormProps {
   treatmentOptions?: GroupTreatmentOption[]
   account?: { email: string | null; signedIn: boolean } | null
   parentConsultationId?: string | null
-  accepted: boolean
-  setAccepted: (v: boolean) => void
-  health: HealthIntake
-  setHealth: (v: HealthIntake) => void
-  gender: Gender | ''
-  setGender: (v: Gender | '') => void
+  parentConsultationToken?: string | null
+  accepted?: boolean
+  setAccepted?: (v: boolean) => void
+  health?: HealthIntake
+  setHealth?: (v: HealthIntake) => void
+  gender?: Gender | ''
+  setGender?: (v: Gender | '') => void
 }
 
 type GuestRow = {
@@ -61,13 +62,14 @@ export default function BookingRequestForm({
   treatment,
   treatmentOptions,
   account,
+  parentConsultationId,
   parentConsultationToken,
-  accepted,
-  setAccepted,
-  health,
-  setHealth,
-  gender,
-  setGender,
+  accepted: controlledAccepted,
+  setAccepted: setControlledAccepted,
+  health: controlledHealth,
+  setHealth: setControlledHealth,
+  gender: controlledGender,
+  setGender: setControlledGender,
 }: BookingRequestFormProps) {
   const router = useRouter()
   const signedIn = account?.signedIn ?? false
@@ -87,12 +89,21 @@ export default function BookingRequestForm({
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState(account?.email ?? '')
-  const emptyGuest = (tid: string): GuestRow => ({ name: '', gender: '', therapyId: tid, health: {} })
   const [guests, setGuests] = useState<GuestRow[]>([emptyGuest(defaultTreatmentId), emptyGuest(defaultTreatmentId)])
   const [preferredAt, setPreferredAt] = useState('')
   const [bookAsGuest, setBookAsGuest] = useState(!signedIn)
+  const [internalAccepted, setInternalAccepted] = useState(false)
+  const [internalHealth, setInternalHealth] = useState<HealthIntake>({})
+  const [internalGender, setInternalGender] = useState<Gender | ''>('')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+
+  const accepted = controlledAccepted ?? internalAccepted
+  const setAccepted = setControlledAccepted ?? setInternalAccepted
+  const health = controlledHealth ?? internalHealth
+  const setHealth = setControlledHealth ?? setInternalHealth
+  const gender = controlledGender ?? internalGender
+  const setGender = setControlledGender ?? setInternalGender
 
   const isGroup = canGroup && partySize > 1
 

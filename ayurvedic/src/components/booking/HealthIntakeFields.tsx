@@ -65,8 +65,8 @@ export default function HealthIntakeFields({ value, onChange, gender, embedded =
                 <input
                   type="radio"
                   name={radioGroup}
-                  checked={value?.onPeriod === true}
-                  onChange={() => onChange?.({ ...value, onPeriod: true })}
+                  checked={value.onPeriod === 'yes'}
+                  onChange={() => set({ onPeriod: 'yes' })}
                   className="h-4 w-4 accent-[#1e5b4b]"
                 />
                 <span className="font-body text-[13px] text-dark/80">{embedded ? 'On period' : 'I am on my period'}</span>
@@ -75,8 +75,8 @@ export default function HealthIntakeFields({ value, onChange, gender, embedded =
                 <input
                   type="radio"
                   name={radioGroup}
-                  checked={value?.onPeriod === false}
-                  onChange={() => onChange?.({ ...value, onPeriod: false })}
+                  checked={value.onPeriod === 'no'}
+                  onChange={() => set({ onPeriod: 'no' })}
                   className="h-4 w-4 accent-[#1e5b4b]"
                 />
                 <span className="font-body text-[13px] text-dark/80">{embedded ? 'Not on period' : 'I am not on my period'}</span>
