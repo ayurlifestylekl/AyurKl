@@ -33,7 +33,7 @@ export default function CancelBookingButton({ id, token }: { id: string; token?:
   return (
     <div className="rounded-xl border border-red-300 bg-red-50 p-4">
       <p className="font-body text-[13px] text-red-800">
-        Cancel this booking? Cancellations within 12 hours of the appointment are non-refundable.
+        Cancel this booking? Your held slot will be released — no payment has been made, so there is nothing to refund.
       </p>
       {error && <p className="mt-2 font-body text-[12.5px] text-red-700">{error}</p>}
       <div className="mt-3 flex gap-2">

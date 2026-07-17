@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/email/send'
 import { fmtMY } from '@/lib/datetime'
+import { createBookingToken } from '@/lib/booking/token'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
 
@@ -55,6 +56,12 @@ export async function POST(req: Request) {
       continue
     }
 
+    // Guests have no session, so the reminder link must carry a signed access
+    // token — the same one used everywhere else a guest reaches their booking
+    // (confirmation emails, checkout, status page). Signed-in customers accept
+    // it too, since canManageBooking checks ownership as a fallback.
+    const manageUrl = `${SITE}/book/request/${a.id}?t=${createBookingToken(a.id)}`
+
     const html = `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#163F33">
   <h1 style="font-family:'Helvetica Neue',sans-serif;font-size:22px;font-weight:700;margin:0 0 16px">Upcoming Appointment</h1>
   <p style="line-height:1.65">Hi ${a.patient_name ?? 'there'},</p>
@@ -63,11 +70,11 @@ export async function POST(req: Request) {
     <p style="margin:0;font-weight:700;font-size:16px">${a.treatment_name ?? 'Treatment'}</p>
     <p style="margin:6px 0 0;color:#163F33">${fmtMY(a.appointment_date_time, { dateStyle: 'full', timeStyle: 'short' })}</p>
   </div>
-  <p><a href="${SITE}/book/request/${a.group_id ?? a.id}" style="display:inline-block;background:#1E5B4B;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Manage booking</a></p>
+  <p><a href="${manageUrl}" style="display:inline-block;background:#1E5B4B;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Manage booking</a></p>
   <p style="margin-top:32px;color:#666">With warmth,<br/>Kerala Ayurvedic Lifestyle</p>
 </div>`
 
-    const text = `Hi ${a.patient_name ?? 'there'},\n\nThis is a reminder for your upcoming appointment.\n\n${a.treatment_name ?? 'Treatment'}\n${fmtMY(a.appointment_date_time, { dateStyle: 'full', timeStyle: 'short' })}\n\nManage booking: ${SITE}/book/request/${a.group_id ?? a.id}`
+    const text = `Hi ${a.patient_name ?? 'there'},\n\nThis is a reminder for your upcoming appointment.\n\n${a.treatment_name ?? 'Treatment'}\n${fmtMY(a.appointment_date_time, { dateStyle: 'full', timeStyle: 'short' })}\n\nManage booking: ${manageUrl}`
 
     const res = await sendEmail({
       to: a.patient_email,
