@@ -68,12 +68,6 @@ export default async function TicketThreadPage({
         >
           {ticket.subject}
         </h1>
-        {(ticket.topic === 'billing' || ticket.topic === 'order') && (
-          <p className="mt-2 font-body text-[11.5px] italic text-[#1F1F1F]/55">
-            48 hours&apos; notice required to cancel. Advance payments are
-            non-refundable per our practice policy.
-          </p>
-        )}
       </header>
 
       {/* Message thread */}

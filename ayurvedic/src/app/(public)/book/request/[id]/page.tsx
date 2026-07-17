@@ -13,7 +13,7 @@ import { fmtMY } from '@/lib/datetime'
 import HoldCountdown from '@/components/booking/HoldCountdown'
 
 export const metadata: Metadata = {
-  title: 'Your booking request — Kerala Ayurvedic Lifestyle',
+  title: 'Manage your booking — Kerala Ayurvedic Lifestyle',
   robots: { index: false, follow: false },
 }
 
@@ -178,9 +178,7 @@ export default async function BookingRequestPage({
               )}
               {b.status === 'pending' && (
                 <p className="rounded-xl bg-white px-5 py-4 font-body text-[13.5px] text-dark/70 ring-1 ring-accent/10">
-                  Thanks! We&apos;ll review and confirm shortly.{' '}
-                  {b.bookingKind === 'treatment' && 'Once approved, we’ll email you a payment link to secure your slot — you can also pay right here on this page.'}
-                  {' '}Bookmark this page and check back — if our email doesn&apos;t reach you (please check Spam/Junk too), you can still see your status and pay right here.
+                  This is a historical booking request that still needs clinic review. We&apos;ll email you when its status changes. You can also bookmark this page and check back here.
                 </p>
               )}
               {b.status === 'awaiting_payment' && (!isGroup || groupAllAwaiting) && wasStaffApproved && (
@@ -196,7 +194,7 @@ export default async function BookingRequestPage({
               {b.status === 'awaiting_payment' &&
                 (isGroup && !groupAllAwaiting ? (
                   <p className="rounded-xl bg-white px-5 py-4 font-body text-[13.5px] text-dark/70 ring-1 ring-accent/10">
-                    Some guests are still being approved. You&apos;ll be able to pay for the group once every guest is approved.
+                    This historical group request still has guests awaiting clinic review. Group payment becomes available after every guest has been reviewed.
                   </p>
                 ) : (
                   <Link

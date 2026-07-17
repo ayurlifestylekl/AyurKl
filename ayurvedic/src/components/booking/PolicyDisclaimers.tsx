@@ -1,6 +1,6 @@
 'use client'
 
-import { Users, Clock, MessageCircle, Timer } from 'lucide-react'
+import { Users, Clock, CalendarClock, Timer } from 'lucide-react'
 
 interface PolicyDisclaimersProps {
   accepted: boolean
@@ -16,12 +16,12 @@ const POLICIES = [
   {
     icon: Clock,
     title: 'Cancellation',
-    body: 'Cancellations must be made at least 12 hours before your appointment. Later cancellations are non-refundable.',
+    body: 'Paid bookings receive a full automatic refund when cancelled within one hour of booking or at least 48 hours before the appointment.',
   },
   {
-    icon: MessageCircle,
+    icon: CalendarClock,
     title: 'Rescheduling',
-    body: 'To change your appointment time, message us on WhatsApp at least 12–24 hours beforehand.',
+    body: 'Use Manage booking to choose another available time until 24 hours before the appointment. Online changes close after that.',
   },
   {
     icon: Timer,

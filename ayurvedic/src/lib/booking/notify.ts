@@ -293,7 +293,7 @@ export async function notifyCancelled(p: NotifyBase & { refundable: boolean; rea
     lines.push(
       p.refundable
         ? 'As this was cancelled in good time, any payment is eligible for a refund — our team will be in touch.'
-        : 'As this was cancelled within 12 hours of the appointment, it is non-refundable per our policy.',
+        : 'No automatic refund was issued for this cancellation.',
     )
   }
   const { html, text } = shell('Your appointment was cancelled', lines, { label: 'Book again', url: `${SITE}/book` })

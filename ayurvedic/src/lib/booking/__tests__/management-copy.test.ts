@@ -7,13 +7,23 @@ const source = (sub: string) => readFileSync(join(root, sub), 'utf8')
 
 describe('Task 9: Management Copy and Queries', () => {
   it('includes Manage booking link in customer emails', () => {
+    const statusPage = source('app/(public)/book/request/[id]/page.tsx')
     const active = [
       source('lib/booking/notify.ts'),
       source('lib/email/templates/appointmentConfirmation.ts'),
+      statusPage,
+      source('app/account/appointments/page.tsx'),
+      source('app/account/messages/[ticketId]/page.tsx'),
+      source('components/booking/PolicyDisclaimers.tsx'),
+      source('lib/booking/policy.ts'),
     ].join('\n')
-    
+
     expect(active).toContain('Manage booking')
+    expect(active).toContain('Manage your booking')
     expect(active).not.toMatch(/WhatsApp.*reschedul|Cal\.com|Once approved|Some guests are still being approved|Cancellations within 12 hours|48 hours' notice required to cancel/i)
+    expect(active).not.toMatch(/12 hours|12–24|48 hours.{0,40}notice required to cancel|message us on WhatsApp.{0,40}(?:reschedul|appointment time)/i)
+    expect(active).not.toContain('whatsappRescheduleLink')
+    expect(statusPage).not.toContain('Your booking request')
   })
 
   it('exposes pending/exception refunds in staff query', () => {
