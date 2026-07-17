@@ -153,27 +153,21 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
     return { error: 'This booking can no longer be cancelled.' }
   }
 
-  const within12h = a.appointment_date_time
-    ? !canCancel(a.appointment_date_time, new Date())
-    : false
-  const wasPaid = a.payment_status === 'paid'
-  const refundable = wasPaid && !within12h
+  if (a.payment_status === 'paid') {
+    return { error: 'Paid bookings must be cancelled through the management page.' }
+  }
 
   const cancelPatch = {
     status: 'cancelled' as const,
     cancelled_at: new Date().toISOString(),
     cancellation_reason: 'Cancelled by customer',
-    internal_notes: wasPaid
-      ? refundable
-        ? 'Customer cancelled >12h before — refund eligible.'
-        : 'Customer cancelled within 12h — non-refundable.'
-      : null,
+    internal_notes: null,
   }
   // Collect any open bills BEFORE cancelling so they can be voided after —
   // an open bill on a cancelled booking could still be paid.
   const bills = new Map<string, string | null>()
-  if (!wasPaid && a.payment_bill_id) bills.set(a.payment_bill_id, a.payment_provider)
-  if (a.group_id && !wasPaid) {
+  if (a.payment_bill_id) bills.set(a.payment_bill_id, a.payment_provider)
+  if (a.group_id) {
     const { data: members } = await sb
       .from('appointments')
       .select('payment_bill_id, payment_status, payment_provider')
@@ -192,8 +186,8 @@ export async function cancelBooking(id: string, token?: string | null): Promise<
     : await q.eq('id', id)
   if (error) return { error: error.message }
   for (const [billId, providerName] of Array.from(bills)) await voidBill(billId, providerName)
-  await notifyCancelled({ to: a.patient_email, name: a.patient_name, treatmentName: a.treatment_name, refundable })
-  return { ok: true, refundable }
+  await notifyCancelled({ to: a.patient_email, name: a.patient_name, treatmentName: a.treatment_name, refundable: false })
+  return { ok: true, refundable: false }
 }
 
 export type SlotInfo = { time: string; iso: string; available: boolean }
