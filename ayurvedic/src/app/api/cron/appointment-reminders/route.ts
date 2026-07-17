@@ -6,7 +6,8 @@ import { createBookingToken } from '@/lib/booking/token'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
 
-export async function POST(req: Request) {
+// Vercel Cron sends GET; UptimeRobot-style manual triggers may use POST — accept both.
+async function handle(req: Request) {
   const auth = req.headers.get('authorization')
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
@@ -91,3 +92,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ ok: true, sent, skipped })
 }
+
+export const dynamic = 'force-dynamic'
+export const GET = handle
+export const POST = handle
