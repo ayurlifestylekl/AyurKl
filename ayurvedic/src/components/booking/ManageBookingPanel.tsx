@@ -6,9 +6,11 @@ import {
   getRescheduleFormBookings,
   rescheduleBooking,
 } from '@/lib/booking/reschedule'
+import { cancelManagedBooking } from '@/lib/booking/cancellation'
 import { fmtMY } from '@/lib/datetime'
 import GroupManagementPanel from './GroupManagementPanel'
 import RescheduleBookingForm from './RescheduleBookingForm'
+import CancelBookingDialog from './CancelBookingDialog'
 
 const paymentLabels: Record<BookingManagementModel['payment']['display'], string> = {
   free: 'No payment required',
@@ -117,6 +119,19 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
             action={rescheduleBooking}
           />
         ) : null}
+
+        {model.canCancel && (
+          <CancelBookingDialog
+            anchorId={model.id}
+            appointmentIds={isActiveGroup
+              ? model.groupMembers.map((m) => m.id)
+              : [model.id]}
+            wholeGroup={isActiveGroup}
+            refundEligibility={model.refundEligibility}
+            provider={model.payment.provider}
+            action={cancelManagedBooking}
+          />
+        )}
 
         <div className="mt-4 rounded-2xl bg-white p-5 ring-1 ring-accent/15">
           <div className="flex items-start gap-3">

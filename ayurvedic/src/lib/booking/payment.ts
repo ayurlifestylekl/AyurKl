@@ -11,6 +11,7 @@ import {
   paymentProblemAlertInput,
   type PaymentHandlingResult,
 } from './payment-result'
+import { groupBillTotals } from './group-management'
 
 function admin() {
   return createSb(
@@ -88,23 +89,25 @@ export async function startPaymentForAppointment(
   if (groupId) {
     const { data: members, error: membersError } = await sb
       .from('appointments')
-      .select('status, payable_amount_rm, payment_bill_id')
+      .select('status, payable_amount_rm, payment_bill_id, group_management_active')
       .eq('group_id', groupId)
+      .eq('group_management_active', true)
     const list = members ?? []
     if (membersError || list.length === 0) {
       console.error('[payment] group lookup failed before bill creation for', a.id, membersError)
       return { error: 'The payment could not be started — please try again shortly, or WhatsApp us and we will send you a payment link.' }
     }
     if (list.some((m) => m.status !== 'awaiting_payment')) {
-      return { error: 'This group can’t be paid right now — one of the guests is no longer awaiting payment. Please check the booking status page.' }
+      return { error: 'This group can\'t be paid right now — one of the guests is no longer awaiting payment. Please check the booking status page.' }
     }
     if (list.some((m) => (m.payment_bill_id ?? null) !== (a.payment_bill_id ?? null))) {
       console.error('[payment] group has inconsistent existing bill associations for', a.id)
       return { error: 'The payment could not be started — please try again shortly, or WhatsApp us and we will send you a payment link.' }
     }
-    expectedAssociationCount = list.length
-    amountRm = list.reduce((sum, m) => sum + Number(m.payable_amount_rm ?? 0), 0)
-    description = `${a.treatment_name ?? 'Treatment'} — group of ${list.length}`
+    const totals = groupBillTotals(list)
+    expectedAssociationCount = totals.count
+    amountRm = totals.amountRm
+    description = `${a.treatment_name ?? 'Treatment'} — group of ${totals.count}`
   }
 
   const base = siteUrl()
@@ -139,7 +142,7 @@ export async function startPaymentForAppointment(
     expectedCount: expectedAssociationCount,
     associate: async () => {
       let query = groupId
-        ? sb.from('appointments').update(billPatch, { count: 'exact' }).eq('group_id', groupId)
+        ? sb.from('appointments').update(billPatch, { count: 'exact' }).eq('group_id', groupId).eq('group_management_active', true)
         : sb.from('appointments').update(billPatch, { count: 'exact' }).eq('id', a.id)
       query = query.eq('status', 'awaiting_payment')
       query = a.payment_bill_id

@@ -3,6 +3,20 @@ export interface GroupManagementRow {
   group_management_active?: boolean | null
 }
 
+export interface GroupBillMember {
+  payable_amount_rm?: number | null
+  group_management_active?: boolean | null
+}
+
+/** Sum amount and count from active group members only (excludes detached rows). */
+export function groupBillTotals(members: GroupBillMember[]): { count: number; amountRm: number } {
+  const active = members.filter((m) => m.group_management_active !== false)
+  return {
+    count: active.length,
+    amountRm: active.reduce((sum, m) => sum + Number(m.payable_amount_rm ?? 0), 0),
+  }
+}
+
 export interface GroupRescheduleChange {
   appointmentId: string
   newStart: string

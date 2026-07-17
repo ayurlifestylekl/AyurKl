@@ -25,6 +25,7 @@ export interface BookingManagementRow {
   requested_datetime?: string | null
   status: string
   payment_status: string
+  payment_provider?: string | null
   booking_kind?: string | null
   treatment_name?: string | null
   patient_name?: string | null
@@ -54,6 +55,7 @@ export interface BookingPaymentDisplay {
   status: string
   display: PaymentDisplay
   amountRm: number | null
+  provider: string | null
 }
 
 export interface BookingRefundDisplay {
@@ -125,6 +127,7 @@ function paymentDisplay(
     status: row.payment_status,
     display,
     amountRm: amount(row.payable_amount_rm),
+    provider: row.payment_provider ?? null,
   }
 }
 
@@ -186,7 +189,7 @@ export function buildManagementModel(row: BookingManagementRow, nowMs: number): 
 
 const MANAGEMENT_COLUMNS = `
   id, customer_id, created_at, appointment_date_time, requested_datetime,
-  status, payment_status, booking_kind, treatment_name, patient_name,
+  status, payment_status, payment_provider, booking_kind, treatment_name, patient_name,
   assigned_therapist_name, payable_amount_rm, group_id, group_management_active,
   booking_refunds(status, amount_rm, created_at)
 `

@@ -1341,6 +1341,14 @@ export type Database = {
         }
         Returns: Json
       }
+      claim_booking_cancellation: {
+        Args: {
+          p_appointment_ids: string[]
+          p_now: string
+          p_actor_type: string
+        }
+        Returns: Json
+      }
       verify_booking_management_otp: {
         Args: {
           p_email_hash: string

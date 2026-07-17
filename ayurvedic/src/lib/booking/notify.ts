@@ -300,4 +300,42 @@ export async function notifyCancelled(p: NotifyBase & { refundable: boolean; rea
   await sendCustomerEmail({ to: p.to, subject: 'Appointment cancelled — Kerala Ayurvedic Lifestyle', html, text, context: 'cancellation notice', name: p.name })
 }
 
+export async function notifyManagedCancellation(p: NotifyBase & {
+  refundRequired: boolean
+  refundResults?: { appointmentId: string; refundStatus: string }[]
+}) {
+  const hasRefund = p.refundRequired && (p.refundResults?.length ?? 0) > 0
+  const allConfirmed = hasRefund && p.refundResults!.every((r) => r.refundStatus === 'confirmed')
+  const anyException = hasRefund && p.refundResults!.some((r) => r.refundStatus === 'exception')
+
+  const refundSummary = !hasRefund
+    ? 'No refund required (unpaid booking).'
+    : allConfirmed
+      ? 'Refund confirmed by provider.'
+      : anyException
+        ? 'Refund needs staff review.'
+        : 'Refund request submitted — pending provider confirmation.'
+
+  await sendTelegram(
+    `❌ <b>Managed cancellation</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(refundSummary)}`,
+  )
+  await sendStaffEmail('Managed booking cancellation', [
+    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+    esc(refundSummary),
+  ])
+  if (!p.to) return
+  const lines = [
+    `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been cancelled.`,
+    !hasRefund
+      ? 'As this booking was not yet paid, no refund is required.'
+      : allConfirmed
+        ? 'Your refund has been confirmed and will be returned through the original payment method.'
+        : anyException
+          ? 'Our team is reviewing your refund and will be in touch shortly.'
+          : 'Your refund request is being processed. You will receive a confirmation once it is complete.',
+  ]
+  const { html, text } = shell('Your appointment has been cancelled', lines, { label: 'Book again', url: `${SITE}/book` })
+  await sendCustomerEmail({ to: p.to, subject: 'Appointment cancelled — Kerala Ayurvedic Lifestyle', html, text, context: 'managed cancellation', name: p.name })
+}
+
 export { SITE as BOOKING_SITE_URL }
