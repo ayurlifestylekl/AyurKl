@@ -7,6 +7,10 @@ import {
 } from './blocks'
 import { managementEligibility, RESCHEDULE_CUTOFF_MS } from './management-policy'
 import type { ManagementActionResult } from './management-actions'
+import {
+  buildGroupRescheduleChanges,
+  type GroupRescheduleChange,
+} from './group-management'
 import { countOverlapping, type Slot } from './scheduling'
 import { CONSULTATION_MINS, validateSubmittedSlot } from './slots'
 import { mytDayKey } from '@/lib/datetime'
@@ -34,11 +38,10 @@ export function validateRescheduleScope(input: {
   if (new Set(input.appointmentIds).size !== input.appointmentIds.length) {
     return { error: 'Duplicate appointments cannot be rescheduled.' }
   }
-  if (!input.appointmentIds.includes(input.anchorId)) {
+  if (input.wholeGroup && !input.appointmentIds.includes(input.anchorId)) {
     return { error: 'The managed booking must be included in the move.' }
   }
-  if (!input.wholeGroup
-    && (input.appointmentIds.length !== 1 || input.appointmentIds[0] !== input.anchorId)) {
+  if (!input.wholeGroup && input.appointmentIds.length !== 1) {
     return { error: 'Choose either this appointment or the whole active group.' }
   }
   return { ok: true, appointmentIds: [...input.appointmentIds] }
@@ -226,8 +229,8 @@ export async function rescheduleBooking(
     }
   }
 
-  const anchor = rows.find((row) => row.id === input.anchorId)!
   if (input.wholeGroup) {
+    const anchor = rows.find((row) => row.id === input.anchorId)!
     if (!anchor.group_id) {
       if (appointmentIds.length !== 1) {
         return publicFailure('INVALID_INPUT', 'This booking is not part of a managed group.')
@@ -244,6 +247,18 @@ export async function rescheduleBooking(
       }
     }
   }
+
+  let managementChanges: GroupRescheduleChange[]
+  try {
+    managementChanges = buildGroupRescheduleChanges(rows, input.selections, {
+      wholeGroup: input.wholeGroup,
+    })
+  } catch {
+    return publicFailure('INVALID_INPUT', 'Choose a new time for every selected booking.')
+  }
+  const managementChangeById = new Map(
+    managementChanges.map((change) => [change.appointmentId, change]),
+  )
 
   const nowMs = Date.now()
   const nowISO = new Date(nowMs).toISOString()
@@ -292,7 +307,7 @@ export async function rescheduleBooking(
       old_start: row.appointment_date_time,
       new_start: prepared.newStart,
       duration_mins: claim.durationMins,
-      detach_from_group: !input.wholeGroup && !!row.group_id && row.group_management_active !== false,
+      detach_from_group: !!row.group_id && managementChangeById.get(row.id)?.detachFromGroup === true,
     })
   }
 

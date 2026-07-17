@@ -57,12 +57,13 @@ export async function getTreatmentImageUrl(treatmentId: string): Promise<string 
   return data?.hero_image_url ?? null
 }
 
-/** All guests in a group booking (service role). Returns [] for non-groups. */
+/** Active guests in a managed group (service role). Returns [] for non-groups. */
 export async function getGroupMembers(groupId: string): Promise<StaffAppointment[]> {
   const { data, error } = await admin()
     .from('appointments')
     .select(APPOINTMENT_COLUMNS)
     .eq('group_id', groupId)
+    .eq('group_management_active', true)
     .order('updated_at', { ascending: true })
   if (error) {
     console.error('[storefront/booking] getGroupMembers:', error.message)

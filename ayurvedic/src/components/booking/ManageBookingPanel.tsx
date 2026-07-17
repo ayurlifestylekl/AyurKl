@@ -1,4 +1,4 @@
-import { CalendarClock, CreditCard, RotateCw, Users, XCircle } from 'lucide-react'
+import { CalendarClock, CreditCard, RotateCw, XCircle } from 'lucide-react'
 
 import { STATUS_LABEL } from '@/lib/booking/status'
 import type { BookingManagementModel } from '@/lib/booking/management'
@@ -7,6 +7,7 @@ import {
   rescheduleBooking,
 } from '@/lib/booking/reschedule'
 import { fmtMY } from '@/lib/datetime'
+import GroupManagementPanel from './GroupManagementPanel'
 import RescheduleBookingForm from './RescheduleBookingForm'
 
 const paymentLabels: Record<BookingManagementModel['payment']['display'], string> = {
@@ -31,11 +32,15 @@ function refundCopy(model: BookingManagementModel): string {
 
 export default async function ManageBookingPanel({ model }: { model: BookingManagementModel }) {
   const amount = model.payment.amountRm == null ? null : `RM${model.payment.amountRm.toFixed(2)}`
-  const rescheduleIds = Array.from(new Set([
-    model.id,
-    ...(model.groupMembers.length > 1 ? model.groupMembers.map((member) => member.id) : []),
-  ]))
-  const rescheduleBookings = model.canReschedule
+  const isActiveGroup = model.groupMembers.length > 1
+    && model.groupMembers.some((member) => member.id === model.id)
+  const rescheduleIds = isActiveGroup
+    ? model.groupMembers.map((member) => member.id)
+    : [model.id]
+  const canRescheduleAny = isActiveGroup
+    ? model.groupMembers.some((member) => member.canReschedule)
+    : model.canReschedule
+  const rescheduleBookings = canRescheduleAny
     ? await getRescheduleFormBookings(rescheduleIds)
     : []
 
@@ -83,10 +88,12 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
           <OptionCard
             icon={RotateCw}
             title="Reschedule"
-            available={model.canReschedule}
-            body={model.canReschedule
-              ? `Available until ${fmtMY(model.changeDeadline, { dateStyle: 'medium', timeStyle: 'short' })}.`
-              : 'The online rescheduling window is closed for this booking.'}
+            available={canRescheduleAny}
+            body={isActiveGroup
+              ? 'Availability is shown separately for every active guest below.'
+              : model.canReschedule
+                ? `Available until ${fmtMY(model.changeDeadline, { dateStyle: 'medium', timeStyle: 'short' })}.`
+                : 'The online rescheduling window is closed for this booking.'}
           />
           <OptionCard
             icon={XCircle}
@@ -96,13 +103,20 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
           />
         </div>
 
-        {model.canReschedule && rescheduleBookings.length > 0 && (
+        {isActiveGroup && rescheduleBookings.length > 0 ? (
+          <GroupManagementPanel
+            anchorId={model.id}
+            bookings={rescheduleBookings}
+            members={model.groupMembers}
+            action={rescheduleBooking}
+          />
+        ) : model.canReschedule && rescheduleBookings.length > 0 ? (
           <RescheduleBookingForm
             anchorId={model.id}
             bookings={rescheduleBookings}
             action={rescheduleBooking}
           />
-        )}
+        ) : null}
 
         <div className="mt-4 rounded-2xl bg-white p-5 ring-1 ring-accent/15">
           <div className="flex items-start gap-3">
@@ -119,27 +133,6 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
           </div>
         </div>
 
-        {model.groupMembers.length > 1 && (
-          <section className="mt-6 rounded-2xl bg-white p-5 ring-1 ring-accent/15">
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-accent" />
-              <h3 className="font-heading text-[13px] font-bold text-primary">Group guests</h3>
-            </div>
-            <ul className="mt-4 divide-y divide-accent/10">
-              {model.groupMembers.map((member) => (
-                <li key={member.id} className="flex items-start justify-between gap-4 py-3 first:pt-0 last:pb-0">
-                  <div>
-                    <p className="font-heading text-[12.5px] font-semibold text-primary">{member.patientName}</p>
-                    <p className="font-body text-[12px] text-dark/55">{member.treatmentName} · {member.therapist}</p>
-                  </div>
-                  <span className="flex-none font-body text-[11.5px] text-dark/55">
-                    {fmtMY(member.selectedTime, { dateStyle: 'medium', timeStyle: 'short' })}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
       </div>
     </div>
   )
