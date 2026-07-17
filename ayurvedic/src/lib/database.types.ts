@@ -581,6 +581,9 @@ export type Database = {
           created_by_admin_id: string | null
           updated_at: string
           gender_requirement: 'any' | 'men_only' | 'ladies_only'
+          group_management_active: boolean
+          group_detached_at: string | null
+          management_reminder_sent_at: string | null
         }
         Insert: {
           id?: string
@@ -609,6 +612,9 @@ export type Database = {
           created_by_admin_id?: string | null
           updated_at?: string
           gender_requirement?: 'any' | 'men_only' | 'ladies_only'
+          group_management_active?: boolean
+          group_detached_at?: string | null
+          management_reminder_sent_at?: string | null
         }
         Update: {
           id?: string
@@ -637,6 +643,152 @@ export type Database = {
           created_by_admin_id?: string | null
           updated_at?: string
           gender_requirement?: 'any' | 'men_only' | 'ladies_only'
+          group_management_active?: boolean
+          group_detached_at?: string | null
+          management_reminder_sent_at?: string | null
+        }
+      }
+      booking_management_otps: {
+        Row: {
+          id: string
+          email_hash: string
+          code_hash: string
+          expires_at: string
+          attempts: number
+          send_count: number
+          request_ip_hash: string | null
+          consumed_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          email_hash: string
+          code_hash: string
+          expires_at: string
+          attempts?: number
+          send_count?: number
+          request_ip_hash?: string | null
+          consumed_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          email_hash?: string
+          code_hash?: string
+          expires_at?: string
+          attempts?: number
+          send_count?: number
+          request_ip_hash?: string | null
+          consumed_at?: string | null
+          created_at?: string
+        }
+      }
+      booking_management_grants: {
+        Row: {
+          id: string
+          token_hash: string
+          email_hash: string
+          appointment_ids: string[]
+          expires_at: string
+          revoked_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          token_hash: string
+          email_hash: string
+          appointment_ids: string[]
+          expires_at: string
+          revoked_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          token_hash?: string
+          email_hash?: string
+          appointment_ids?: string[]
+          expires_at?: string
+          revoked_at?: string | null
+          created_at?: string
+        }
+      }
+      booking_events: {
+        Row: {
+          id: string
+          appointment_id: string
+          event_type: 'rescheduled' | 'cancelled' | 'group_detached' | 'refund_requested' | 'refund_confirmed' | 'refund_failed' | 'management_link_recovered'
+          actor_type: 'customer' | 'guest' | 'staff' | 'system' | 'provider'
+          old_data: Json
+          new_data: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          appointment_id: string
+          event_type: 'rescheduled' | 'cancelled' | 'group_detached' | 'refund_requested' | 'refund_confirmed' | 'refund_failed' | 'management_link_recovered'
+          actor_type: 'customer' | 'guest' | 'staff' | 'system' | 'provider'
+          old_data?: Json
+          new_data?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          appointment_id?: string
+          event_type?: 'rescheduled' | 'cancelled' | 'group_detached' | 'refund_requested' | 'refund_confirmed' | 'refund_failed' | 'management_link_recovered'
+          actor_type?: 'customer' | 'guest' | 'staff' | 'system' | 'provider'
+          old_data?: Json
+          new_data?: Json
+          created_at?: string
+        }
+      }
+      booking_refunds: {
+        Row: {
+          id: string
+          appointment_id: string
+          provider: 'stripe' | 'billplz' | 'stub'
+          provider_refund_id: string | null
+          amount_rm: number
+          status: 'claimed' | 'pending' | 'confirmed' | 'failed' | 'exception'
+          eligibility_reason: 'mistake_window' | 'advance_window'
+          idempotency_key: string
+          bank_code: string | null
+          bank_account_last4: string | null
+          failure_reason: string | null
+          requested_at: string | null
+          confirmed_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          appointment_id: string
+          provider: 'stripe' | 'billplz' | 'stub'
+          provider_refund_id?: string | null
+          amount_rm: number
+          status: 'claimed' | 'pending' | 'confirmed' | 'failed' | 'exception'
+          eligibility_reason: 'mistake_window' | 'advance_window'
+          idempotency_key: string
+          bank_code?: string | null
+          bank_account_last4?: string | null
+          failure_reason?: string | null
+          requested_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          appointment_id?: string
+          provider?: 'stripe' | 'billplz' | 'stub'
+          provider_refund_id?: string | null
+          amount_rm?: number
+          status?: 'claimed' | 'pending' | 'confirmed' | 'failed' | 'exception'
+          eligibility_reason?: 'mistake_window' | 'advance_window'
+          idempotency_key?: string
+          bank_code?: string | null
+          bank_account_last4?: string | null
+          failure_reason?: string | null
+          requested_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
         }
       }
       sales_agents: {

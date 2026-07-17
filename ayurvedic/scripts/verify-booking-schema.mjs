@@ -11,8 +11,12 @@ const sb = createClient(url, key, { auth: { persistSession: false, autoRefreshTo
 const checks = [
   ['instant claim RPC', () => sb.rpc('claim_instant_slots', { p_claims: [] })],
   ['payment confirm RPC', () => sb.rpc('confirm_appointment_payment', { p_bill_id: '__schema_probe__' })],
-  ['appointment columns', () => sb.from('appointments').select('id,created_at,payment_expires_at,group_id,assigned_therapist_code,treatment_unlocked').limit(1)],
+  ['appointment columns', () => sb.from('appointments').select('id,created_at,payment_expires_at,group_id,assigned_therapist_code,treatment_unlocked,group_management_active,group_detached_at,management_reminder_sent_at').limit(1)],
   ['schedule blocks', () => sb.from('schedule_blocks').select('id').limit(1)],
+  ['booking management OTPs', () => sb.from('booking_management_otps').select('id').limit(1)],
+  ['booking management grants', () => sb.from('booking_management_grants').select('id').limit(1)],
+  ['booking events', () => sb.from('booking_events').select('id').limit(1)],
+  ['booking refunds', () => sb.from('booking_refunds').select('id').limit(1)],
 ]
 
 let failed = false
