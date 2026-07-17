@@ -10,7 +10,6 @@ import type { HealthIntake, Gender } from '@/types/booking'
 import BookingRequestForm from './BookingRequestForm'
 import ConsultationRequiredNotice from './ConsultationRequiredNotice'
 import TreatmentPicker from './TreatmentPicker'
-import PolicyDisclaimers from './PolicyDisclaimers'
 import HealthIntakeFields from './HealthIntakeFields'
 
 interface BookingTreatmentOrchestratorProps {
