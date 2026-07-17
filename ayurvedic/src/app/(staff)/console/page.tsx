@@ -179,6 +179,9 @@ async function TabView({ db, tab }: { db: any; tab: { key: string; status?: Book
               </div>
               <p className="font-body text-[13px] text-dark/60">
                 RM{r.amountRm} via {r.provider}. Requested {new Date(r.createdAt).toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', day: 'numeric', month: 'short' })}
+                {r.bankCode && r.bankAccountLast4 && (
+                  <> — refund recipient <strong>{r.bankCode} •••• {r.bankAccountLast4}</strong></>
+                )}
               </p>
             </Link>
           ))

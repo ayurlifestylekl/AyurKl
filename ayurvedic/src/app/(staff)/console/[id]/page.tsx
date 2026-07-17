@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requireStaff } from '@/lib/staff/guard'
-import { getAppointmentDetail, getGroupAppointments, getBookingEvents } from '@/lib/staff/appointments'
+import { getAppointmentDetail, getGroupAppointments, getBookingEvents, getRefundsForAppointment } from '@/lib/staff/appointments'
 import StatusBadge from '@/components/staff/StatusBadge'
 import PatientHealthPanel from '@/components/staff/PatientHealthPanel'
 import AppointmentActions from '@/components/staff/AppointmentActions'
@@ -24,6 +24,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
   const isGroup = groupMembers.length > 1
 
   const events = await getBookingEvents(db, a.id)
+  const refunds = await getRefundsForAppointment(db, a.id)
 
   return (
     <div>
@@ -53,6 +54,35 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
               <Row label="Payment" value={a.paymentStatus} />
             </div>
           </div>
+          {refunds.length > 0 && (
+            <div className="rounded-xl border border-accent/30 bg-white p-5">
+              <h3 className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-accent">Refunds</h3>
+              <div className="space-y-3">
+                {refunds.map((r) => (
+                  <div key={r.id} className="flex flex-col gap-1 rounded-lg border border-dark/10 bg-cream/40 p-3 font-body text-[13px]">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-dark/85">RM{r.amountRm} via {r.provider}</span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-wider ${
+                          r.status === 'confirmed'
+                            ? 'bg-green-100 text-green-800'
+                            : r.status === 'exception' || r.status === 'failed'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-amber-100 text-amber-800'
+                        }`}
+                      >
+                        {r.status}
+                      </span>
+                    </div>
+                    {r.bankCode && r.bankAccountLast4 && (
+                      <span className="text-dark/60">Refund recipient: <strong>{r.bankCode} •••• {r.bankAccountLast4}</strong></span>
+                    )}
+                    {r.failureReason && <span className="text-red-700">{r.failureReason}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <PatientHealthPanel p={a} />
           <BookingEventHistory events={events} />
         </div>

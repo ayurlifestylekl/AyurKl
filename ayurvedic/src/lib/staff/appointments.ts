@@ -366,13 +366,16 @@ export interface RefundExceptionRow {
   amountRm: number
   provider: string
   createdAt: string
+  /** Masked FPX recipient, e.g. "MBB •••• 1234" — never the full account number. */
+  bankCode: string | null
+  bankAccountLast4: string | null
 }
 
 /** Active or stuck refunds that require staff attention. */
 export async function getRefundExceptions(db: ServiceDb): Promise<RefundExceptionRow[]> {
   const { data, error } = await db
     .from('booking_refunds')
-    .select('id, appointment_id, status, amount_rm, provider, created_at, appointments(patient_name, treatment_name)')
+    .select('id, appointment_id, status, amount_rm, provider, created_at, bank_code, bank_account_last4, appointments(patient_name, treatment_name)')
     .in('status', ['pending', 'exception'])
     .order('created_at', { ascending: false })
   if (error) {
@@ -389,6 +392,45 @@ export async function getRefundExceptions(db: ServiceDb): Promise<RefundExceptio
     amountRm: r.amount_rm,
     provider: r.provider,
     createdAt: r.created_at,
+    bankCode: r.bank_code ?? null,
+    bankAccountLast4: r.bank_account_last4 ?? null,
+  }))
+}
+
+export interface AppointmentRefundRow {
+  id: string
+  status: 'claimed' | 'pending' | 'confirmed' | 'failed' | 'exception'
+  amountRm: number
+  provider: string
+  failureReason: string | null
+  bankCode: string | null
+  bankAccountLast4: string | null
+  createdAt: string
+  confirmedAt: string | null
+}
+
+/** Every refund ever claimed for one appointment, newest first. */
+export async function getRefundsForAppointment(db: ServiceDb, appointmentId: string): Promise<AppointmentRefundRow[]> {
+  const { data, error } = await db
+    .from('booking_refunds')
+    .select('id, status, amount_rm, provider, failure_reason, bank_code, bank_account_last4, created_at, confirmed_at')
+    .eq('appointment_id', appointmentId)
+    .order('created_at', { ascending: false })
+  if (error) {
+    console.error('[staff/appointments] refundsForAppointment:', error.message)
+    return []
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (data ?? []).map((r: any) => ({
+    id: r.id,
+    status: r.status,
+    amountRm: r.amount_rm,
+    provider: r.provider,
+    failureReason: r.failure_reason ?? null,
+    bankCode: r.bank_code ?? null,
+    bankAccountLast4: r.bank_account_last4 ?? null,
+    createdAt: r.created_at,
+    confirmedAt: r.confirmed_at ?? null,
   }))
 }
 
