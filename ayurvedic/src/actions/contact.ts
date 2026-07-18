@@ -126,7 +126,7 @@ export async function submitContactMessage(raw: unknown): Promise<Result> {
         to,
         category: 'transactional',
         subject: `New contact message (${intent}) — ${name}`,
-        html: `<p><strong>${name}</strong> — ${phone} — ${email}</p><p>${message.replace(/\n/g, '<br/>')}</p>`,
+        html: `<p><strong>${esc(name)}</strong> — ${esc(phone)} — ${esc(email)}</p><p>${esc(message).replace(/\n/g, '<br/>')}</p>`,
         text: `${name} — ${phone} — ${email}\n\n${message}`,
       })
     }

@@ -125,12 +125,12 @@ export async function notifyRequestReceived(p: NotifyBase & { kind: string; when
   if (!p.to) return
   const lines = isGroup
     ? [
-        `Hi ${p.name ?? 'there'}, thank you for your group booking request for <strong>${p.guests!.length} guests</strong>:`,
+        `Hi ${esc(p.name ?? 'there')}, thank you for your group booking request for <strong>${p.guests!.length} guests</strong>:`,
         ...guestListLines(p.guests!),
         'Our team will review it shortly and confirm each slot.',
       ]
     : [
-        `Hi ${p.name ?? 'there'}, thank you for your ${p.kind} request for <strong>${p.treatmentName ?? 'your appointment'}</strong>.`,
+        `Hi ${esc(p.name ?? 'there')}, thank you for your ${esc(p.kind)} request for <strong>${esc(p.treatmentName ?? 'your appointment')}</strong>.`,
         `Preferred time: <strong>${when(p.whenISO)}</strong>.`,
         'Our team will review it shortly and confirm your slot.',
       ]
@@ -146,10 +146,10 @@ export async function notifyApproved(
   const isGroup = (p.guests?.length ?? 0) > 1
   const intro = isGroup
     ? [
-        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> has been approved:`,
+        `Hi ${esc(p.name ?? 'there')}, your group booking for <strong>${p.guests!.length} guests</strong> has been approved:`,
         ...guestListLines(p.guests!),
       ]
-    : [`Hi ${p.name ?? 'there'}, your ${p.kind} for <strong>${p.treatmentName ?? ''}</strong> on <strong>${when(p.whenISO)}</strong> has been approved.`]
+    : [`Hi ${esc(p.name ?? 'there')}, your ${esc(p.kind)} for <strong>${esc(p.treatmentName ?? '')}</strong> on <strong>${when(p.whenISO)}</strong> has been approved.`]
   const { html, text } = shell(
     isTreatment ? 'Approved — please complete payment' : 'Your consultation is confirmed',
     [
@@ -193,10 +193,10 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
   if (!p.to) return
   const intro = isGroup
     ? [
-        `Hi ${p.name ?? 'there'}, your group booking for <strong>${p.guests!.length} guests</strong> is confirmed:`,
+        `Hi ${esc(p.name ?? 'there')}, your group booking for <strong>${p.guests!.length} guests</strong> is confirmed:`,
         ...guestListLines(p.guests!),
       ]
-    : [`Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`]
+    : [`Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`]
   const { html, text } = shell(
     copy.customerHeading,
     [
@@ -264,7 +264,7 @@ export async function notifyPaymentReminder(p: NotifyBase & { payUrl: string; ex
   const { html, text } = shell(
     'Reminder — complete your payment',
     [
-      `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> is approved but not yet paid.`,
+      `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> is approved but not yet paid.`,
       p.expiresISO
         ? `Please pay by <strong>${when(p.expiresISO)}</strong> to keep your slot — after that it will be released for others.`
         : 'Please complete payment soon to keep your slot.',
@@ -284,10 +284,10 @@ export async function notifyCancelled(p: NotifyBase & { refundable: boolean; rea
   ])
   if (!p.to) return
   const lines = [
-    `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been cancelled.`,
+    `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> has been cancelled.`,
   ]
   if (p.reason) {
-    lines.push(`Reason: <strong>${p.reason}</strong>`)
+    lines.push(`Reason: <strong>${esc(p.reason)}</strong>`)
     lines.push('You’re welcome to choose another time and book again on our website.')
   } else {
     lines.push(
@@ -325,7 +325,7 @@ export async function notifyManagedCancellation(p: NotifyBase & {
   ])
   if (!p.to) return
   const lines = [
-    `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been cancelled.`,
+    `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> has been cancelled.`,
     !hasRefund
       ? 'As this booking was not yet paid, no refund is required.'
       : allConfirmed
@@ -357,7 +357,7 @@ export async function notifyManagedReschedule(p: NotifyBase & {
   ])
   if (!p.to) return
   const lines = [
-    `Hi ${p.name ?? 'there'}, your appointment for <strong>${p.treatmentName ?? ''}</strong> has been rescheduled.`,
+    `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> has been rescheduled.`,
     `New time: <strong>${when(p.newISO)}</strong> (previously ${when(p.oldISO)}).`,
     p.bookingKind === 'consultation'
       ? 'Your consultation remains free and confirmed.'
