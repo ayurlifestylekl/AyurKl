@@ -1,6 +1,7 @@
 'use client'
 
 import type { Gender, HealthIntake } from '@/types/booking'
+import { whatsappLink } from '@/lib/clinic'
 
 interface HealthIntakeFieldsProps {
   value: HealthIntake
@@ -10,11 +11,26 @@ interface HealthIntakeFieldsProps {
   embedded?: boolean
   /** Unique radio-group name when several intakes render on one page (one per guest). */
   radioGroup?: string
+  /** Treatment-level flags that control which extra tick boxes appear. */
+  requiresScalpDisclaimer?: boolean
+  requiresHealthIntake?: boolean
+  specialTags?: string[]
 }
 
 /** Brief pre-visit health intake. Always shown so the Vaidya always has context. */
-export default function HealthIntakeFields({ value, onChange, gender, embedded = false, radioGroup = 'onPeriod' }: HealthIntakeFieldsProps) {
+export default function HealthIntakeFields({
+  value,
+  onChange,
+  gender,
+  embedded = false,
+  radioGroup = 'onPeriod',
+  requiresScalpDisclaimer = false,
+  requiresHealthIntake = false,
+  specialTags = [],
+}: HealthIntakeFieldsProps) {
   const set = (patch: Partial<HealthIntake>) => onChange({ ...value, ...patch })
+  const isOldAge = specialTags.includes('oldage')
+  const isKids = specialTags.includes('kids')
 
   const fields = (
     <div className="grid gap-3">
@@ -43,6 +59,33 @@ export default function HealthIntakeFields({ value, onChange, gender, embedded =
           className={inputCls}
         />
       </Field>
+
+      {/* Treatment-specific safety disclaimers */}
+      {requiresScalpDisclaimer && (
+        <Disclaimer
+          label="I confirm I do not have dandruff or scalp issues"
+          checked={value.noDandruffScalpIssues ?? false}
+          onChange={(checked) => set({ noDandruffScalpIssues: checked })}
+          warnText="If you have dandruff or scalp issues, please WhatsApp us before booking this therapy."
+        />
+      )}
+      {requiresHealthIntake && isOldAge && (
+        <Disclaimer
+          label="I confirm I have no recent surgery, open wounds or skin lesions"
+          checked={value.noSurgeryWoundSkinLesions ?? false}
+          onChange={(checked) => set({ noSurgeryWoundSkinLesions: checked })}
+          warnText="If you have any of these, please WhatsApp us so a Vaidya can advise the safest option."
+        />
+      )}
+      {requiresHealthIntake && isKids && (
+        <Disclaimer
+          label="I confirm the child does not have fever, cold or flu"
+          checked={value.noFeverColdFlu ?? false}
+          onChange={(checked) => set({ noFeverColdFlu: checked })}
+          warnText="If the child has fever, cold or flu, please WhatsApp us before booking."
+        />
+      )}
+
       {gender === 'female' && (
         <>
           <label className="flex cursor-pointer items-center gap-2.5">
@@ -123,5 +166,43 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       </span>
       {children}
     </label>
+  )
+}
+
+function Disclaimer({
+  label,
+  checked,
+  onChange,
+  warnText,
+}: {
+  label: string
+  checked: boolean
+  onChange: (checked: boolean) => void
+  warnText: string
+}) {
+  return (
+    <div className="grid gap-1">
+      <label className="flex cursor-pointer items-start gap-2.5">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          className="mt-0.5 h-4 w-4 accent-[#1e5b4b]"
+        />
+        <span className="font-body text-[13px] text-dark/80">{label}</span>
+      </label>
+      <p className="pl-6 font-body text-[12px] text-dark/55">
+        {warnText}{' '}
+        <a
+          href={whatsappLink(`Hi, I'd like to check if a therapy is safe for my current condition.` )}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-accent underline-offset-2 hover:underline"
+        >
+          WhatsApp us
+        </a>
+        .
+      </p>
+    </div>
   )
 }

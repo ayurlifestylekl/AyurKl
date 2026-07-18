@@ -92,7 +92,7 @@ export async function createInstantTreatmentBooking(input: BookingRequestInput):
   const sb = admin()
   const { data: t, error: tErr } = await sb
     .from('treatments')
-    .select('id, title, price_rm, booking_type, category_id, duration, requires_consultation, booking_lead_time_hours')
+    .select('id, title, price_rm, booking_type, category_id, duration, requires_consultation, booking_lead_time_hours, requires_scalp_disclaimer, requires_health_intake, minimum_age, special_tags')
     .eq('id', input.treatmentId)
     .maybeSingle()
   if (tErr) {
@@ -102,6 +102,23 @@ export async function createInstantTreatmentBooking(input: BookingRequestInput):
   if (!t) return { error: 'Treatment not found.' }
   if (t.booking_type === 'enquiry') {
     return { error: 'This therapy is enquiry-only — please WhatsApp us to arrange it.' }
+  }
+
+  if (t.minimum_age != null && (input.age == null || input.age < t.minimum_age)) {
+    return { error: `This therapy is only bookable for ages ${t.minimum_age} and above. Please WhatsApp us to discuss options for younger guests.` }
+  }
+  const health = input.healthIntake ?? {}
+  if (t.requires_scalp_disclaimer && !health.noDandruffScalpIssues) {
+    return { error: 'Please confirm you do not have dandruff or scalp issues, or WhatsApp us to discuss a suitable therapy.' }
+  }
+  if (t.requires_health_intake) {
+    const tags = Array.isArray(t.special_tags) ? t.special_tags : []
+    if (tags.includes('oldage') && !health.noSurgeryWoundSkinLesions) {
+      return { error: 'Please confirm no recent surgery, open wounds or skin lesions, or WhatsApp us before booking.' }
+    }
+    if (tags.includes('kids') && !health.noFeverColdFlu) {
+      return { error: 'Please confirm the child does not have fever, cold or flu, or WhatsApp us before booking.' }
+    }
   }
 
   // A treatment gated behind a consultation must have a genuinely cleared
@@ -197,6 +214,7 @@ export async function createInstantTreatmentBooking(input: BookingRequestInput):
       patient_email: input.patientEmail?.trim() || null,
       patient_gender: input.patientGender,
       gender_requirement: genderRequirementValue(input.patientGender),
+      guest_age: input.age ?? null,
       pre_visit_form: input.healthIntake ?? {},
       payable_amount_rm: t.price_rm ?? null,
       payment_status: 'unpaid',
@@ -239,7 +257,7 @@ export async function createInstantGroupBooking(input: {
   const uniqueIds = Array.from(new Set(guestTreatmentIds))
   const { data: treatmentRows, error: tErr } = await sb
     .from('treatments')
-    .select('id, title, price_rm, booking_type, category_id, duration, requires_consultation, booking_lead_time_hours')
+    .select('id, title, price_rm, booking_type, category_id, duration, requires_consultation, booking_lead_time_hours, requires_scalp_disclaimer, requires_health_intake, minimum_age, special_tags')
     .in('id', uniqueIds)
   if (tErr) {
     console.error('[instant-booking] group treatment lookup failed:', tErr)
@@ -251,6 +269,27 @@ export async function createInstantGroupBooking(input: {
     if (!t) return { error: 'One of the chosen treatments could not be found.' }
     if (t.booking_type === 'enquiry') return { error: `"${t.title}" is enquiry-only — please WhatsApp us to arrange it.` }
     if (t.requires_consultation) return { error: `"${t.title}" requires a consultation first and can't be booked as part of a group.` }
+  }
+
+  for (let i = 0; i < guests.length; i++) {
+    const g = guests[i]
+    const t = byId.get(guestTreatmentIds[i])!
+    if (t.minimum_age != null && (g.age == null || g.age < t.minimum_age)) {
+      return { error: `${g.name.trim() || `Guest ${i + 1}`}: This therapy is only bookable for ages ${t.minimum_age} and above.` }
+    }
+    const health = g.healthIntake ?? {}
+    if (t.requires_scalp_disclaimer && !health.noDandruffScalpIssues) {
+      return { error: `${g.name.trim() || `Guest ${i + 1}`}: Please confirm you do not have dandruff or scalp issues, or WhatsApp us to discuss.` }
+    }
+    if (t.requires_health_intake) {
+      const tags = Array.isArray(t.special_tags) ? t.special_tags : []
+      if (tags.includes('oldage') && !health.noSurgeryWoundSkinLesions) {
+        return { error: `${g.name.trim() || `Guest ${i + 1}`}: Please confirm no recent surgery, open wounds or skin lesions, or WhatsApp us before booking.` }
+      }
+      if (tags.includes('kids') && !health.noFeverColdFlu) {
+        return { error: `${g.name.trim() || `Guest ${i + 1}`}: Please confirm the child does not have fever, cold or flu, or WhatsApp us before booking.` }
+      }
+    }
   }
 
   let userId: string | null = null

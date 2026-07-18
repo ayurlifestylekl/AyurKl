@@ -29,6 +29,14 @@ export interface TreatmentPricing {
   bookingType?: BookingType | null
   /** Minimum advance notice in hours (24, 48, …). */
   bookingLeadTimeHours?: number | null
+  /** True when the customer must confirm they have no dandruff or scalp issues. */
+  requiresScalpDisclaimer?: boolean
+  /** True when the expanded health-intake section is mandatory. */
+  requiresHealthIntake?: boolean
+  /** Minimum patient age (years) for direct online booking. NULL means no gate. */
+  minimumAge?: number | null
+  /** Internal tags used to group therapies (e.g. oldage, kids, shirodhara). */
+  specialTags?: string[]
 }
 
 export interface TreatmentCategory {

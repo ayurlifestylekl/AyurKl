@@ -4,14 +4,14 @@ export const therapies: Therapy[] = [
   {
     slug: 'consultation',
     name: 'Consultation',
-    tagline: 'Personal Vaidya Session',
+    tagline: 'Personal therapist session',
     durationMin: 45,
     priceRm: 150,
     image:
       'https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=900&q=80',
     bullets: [
       'Full pulse + tongue diagnosis (Nadi Pareeksha)',
-      'Personalised dosha plan from our Vaidyas',
+      'Personalised dosha plan from our therapists',
       'Take-home routine + product script',
     ],
     doshas: ['vata', 'pitta', 'kapha'],
@@ -131,7 +131,7 @@ export const therapies: Therapy[] = [
       'Avoid alcohol and caffeine for 48 hours before',
       'Plan a clear schedule — Panchakarma is energy-intensive',
       'Bring loose clothing and a journal',
-      'Confirm any prescriptions with Vaidya in advance',
+      'Confirm any prescriptions with your therapist in advance',
     ],
   },
   {

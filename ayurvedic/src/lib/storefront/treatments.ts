@@ -22,6 +22,7 @@ type SB = SupabaseClient<any, 'public', any>
 const TREATMENT_COLUMNS =
   `id, category_id, title, slug, duration, description, price_rm, price_label,
    booking_type, booking_lead_time_hours, requires_consultation,
+   requires_scalp_disclaimer, requires_health_intake, minimum_age, special_tags,
    sessions_recommended, sanskrit_name, origin, benefits, procedure_steps,
    contraindications, body, hero_image_url, gallery, sort_order, is_active`
 
@@ -36,6 +37,10 @@ function pricing(r: any) {
     priceLabel: r.price_label ?? null,
     bookingType: (r.booking_type ?? 'direct') as BookingType,
     bookingLeadTimeHours: r.booking_lead_time_hours ?? null,
+    requiresScalpDisclaimer: r.requires_scalp_disclaimer ?? false,
+    requiresHealthIntake: r.requires_health_intake ?? false,
+    minimumAge: r.minimum_age ?? null,
+    specialTags: Array.isArray(r.special_tags) ? r.special_tags : [],
   }
 }
 

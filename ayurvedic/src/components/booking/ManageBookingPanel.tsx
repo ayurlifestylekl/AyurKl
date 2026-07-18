@@ -2,6 +2,7 @@ import { CalendarClock, CreditCard, RotateCw, XCircle } from 'lucide-react'
 
 import { STATUS_LABEL } from '@/lib/booking/status'
 import type { BookingManagementModel } from '@/lib/booking/management'
+import { getTreatmentImageUrl } from '@/lib/storefront/booking'
 import {
   getRescheduleFormBookings,
   rescheduleBooking,
@@ -45,6 +46,7 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
   const rescheduleBookings = canRescheduleAny
     ? await getRescheduleFormBookings(rescheduleIds)
     : []
+  const imageUrl = !isActiveGroup && model.treatmentId ? await getTreatmentImageUrl(model.treatmentId) : null
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_1fr] lg:gap-12">
@@ -52,7 +54,7 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
         <div className="overflow-hidden rounded-[26px] bg-white shadow-luxe ring-1 ring-accent/10">
           <div
             className="h-52 bg-cover bg-center"
-            style={{ backgroundImage: "url('/authentic-ayurveda.jpg')" }}
+            style={{ backgroundImage: `url('${imageUrl || '/authentic-ayurveda.jpg'}')` }}
           />
           <div className="p-7">
             <span className="font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent">

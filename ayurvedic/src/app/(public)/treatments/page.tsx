@@ -10,12 +10,12 @@ import type { TreatmentCategory } from '@/types/treatments'
 export const metadata: Metadata = {
   title: 'Treatments — Authentic Kerala Ayurveda Therapies',
   description:
-    'Browse the full library of authentic Kerala Ayurveda therapies offered at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur — face care, massage, stress relief, joint care, rehabilitation, kids, and more. Free consultation with our Vaidyas.',
+    'Browse the full library of authentic Kerala Ayurveda therapies offered at Kerala Ayurvedic Lifestyle in Brickfields, Kuala Lumpur — face care, massage, stress relief, joint care, rehabilitation, kids, and more. Free consultation with our therapists.',
   alternates: { canonical: '/treatments' },
   openGraph: {
     title: 'Treatments — Kerala Ayurvedic Lifestyle',
     description:
-      'Authentic Ayurveda therapies across the Centre catalogue. Personal protocols designed by a KKM-registered Kerala Vaidya in Brickfields, KL.',
+      'Authentic Ayurveda therapies across the Centre catalogue. Personal protocols designed by KKM-registered Kerala therapists in Brickfields, KL.',
     url: 'https://keralaayurvediclifestyle.com.my/treatments',
     type: 'website',
   },

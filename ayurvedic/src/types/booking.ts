@@ -8,6 +8,11 @@ export type Gender = 'male' | 'female'
 
 export type BookingKind = 'treatment' | 'consultation'
 
+/** Manual front-desk schedule colour palette (client-requested). */
+export type StaffColorTag =
+  | 'red' | 'blue_light' | 'blue_dark' | 'green_light' | 'green_dark'
+  | 'purple' | 'pink' | 'black'
+
 export type BookingStatus =
   | 'pending' // requested, awaiting staff approval
   | 'scheduled'
@@ -31,6 +36,12 @@ export interface HealthIntake {
   /** Female guests only — 'yes' on period, 'no' not on period. */
   onPeriod?: 'yes' | 'no'
   notes?: string
+  /** Shirodhara / stress-sleep therapies: customer confirms no dandruff or scalp issues. */
+  noDandruffScalpIssues?: boolean
+  /** Old-age care therapies: customer confirms no recent surgery, open wounds or skin lesions. */
+  noSurgeryWoundSkinLesions?: boolean
+  /** Kids therapies: customer confirms no fever, cold or flu. */
+  noFeverColdFlu?: boolean
 }
 
 /** What the customer submits to request a booking or consultation. */
@@ -50,6 +61,8 @@ export interface BookingRequestInput {
   healthIntake: HealthIntake
   /** Gender-matching + cancellation + reschedule policies acknowledged. */
   acceptedPolicies: boolean
+  /** Patient age (years). Required for age-gated treatments such as Kids Ayurveda Care. */
+  age?: number | null
   /** Set when a treatment booking follows a cleared consultation. */
   parentConsultationId?: string | null
   /** Signed access token for a cleared guest consultation. */
@@ -88,6 +101,10 @@ export interface StaffAppointment {
   groupId: string | null
   /** Last activity on this row (bumped by the DB touch trigger on every update) — used to sort the "All" list by most recent action, NOT the original submission time. */
   createdAt: string | null
+  /** Staff/admin id if the booking was created from the console; null for public web bookings. */
+  createdByAdminId: string | null
+  /** Manual front-desk schedule colour tag, or null to use the automatic status colour. */
+  staffColorTag: StaffColorTag | null
   /** When the customer's web booking actually reached us (immutable, set once on insert). */
   requestReceivedAt: string | null
   /** When staff approved the request (null until approved — also null for

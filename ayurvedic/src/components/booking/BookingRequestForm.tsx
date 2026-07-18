@@ -19,6 +19,10 @@ export interface GroupTreatmentOption {
   id: string
   title: string
   price?: number | null
+  requiresScalpDisclaimer?: boolean
+  requiresHealthIntake?: boolean
+  minimumAge?: number | null
+  specialTags?: string[]
 }
 
 interface BookingRequestFormProps {
@@ -30,6 +34,10 @@ interface BookingRequestFormProps {
     price?: number | null
     priceLabel?: string | null
     bookingLeadTimeHours?: number | null
+    requiresScalpDisclaimer?: boolean
+    requiresHealthIntake?: boolean
+    minimumAge?: number | null
+    specialTags?: string[]
   } | null
   /** Bookable treatments a group guest can pick from (per-guest therapy choice). */
   treatmentOptions?: GroupTreatmentOption[]
@@ -81,9 +89,40 @@ export default function BookingRequestForm({
     treatmentOptions && treatmentOptions.length > 0
       ? treatmentOptions
       : treatment
-        ? [{ id: treatment.id, title: treatment.title, price: treatment.price }]
+        ? [{
+            id: treatment.id,
+            title: treatment.title,
+            price: treatment.price,
+            requiresScalpDisclaimer: treatment.requiresScalpDisclaimer,
+            requiresHealthIntake: treatment.requiresHealthIntake,
+            minimumAge: treatment.minimumAge,
+            specialTags: treatment.specialTags,
+          }]
         : []
   const priceById = new Map(options.map((o) => [o.id, typeof o.price === 'number' ? o.price : null]))
+  const flagsById = new Map(options.map((o) => [o.id, o]))
+
+  const validateAge = (raw: string, minimumAge?: number | null): string | null => {
+    if (typeof minimumAge !== 'number') return null
+    const n = Number(raw)
+    if (!raw || !Number.isFinite(n) || n < minimumAge) {
+      return `This therapy is for ages ${minimumAge} and above.`
+    }
+    return null
+  }
+  const validateHealth = (h: HealthIntake, flags?: GroupTreatmentOption | null): string | null => {
+    if (!flags) return null
+    if (flags.requiresScalpDisclaimer && !h.noDandruffScalpIssues) {
+      return 'Please confirm you do not have dandruff or scalp issues, or contact us on WhatsApp to discuss.'
+    }
+    if (flags.requiresHealthIntake && flags.specialTags?.includes('oldage') && !h.noSurgeryWoundSkinLesions) {
+      return 'Please confirm you have no recent surgery, open wounds or skin lesions, or contact us on WhatsApp to discuss.'
+    }
+    if (flags.requiresHealthIntake && flags.specialTags?.includes('kids') && !h.noFeverColdFlu) {
+      return 'Please confirm the child does not have fever, cold or flu, or contact us on WhatsApp to discuss.'
+    }
+    return null
+  }
 
   const [partySize, setPartySize] = useState(1)
   const [name, setName] = useState('')
@@ -91,6 +130,7 @@ export default function BookingRequestForm({
   const [email, setEmail] = useState(account?.email ?? '')
   const [guests, setGuests] = useState<GuestRow[]>([emptyGuest(defaultTreatmentId), emptyGuest(defaultTreatmentId)])
   const [preferredAt, setPreferredAt] = useState('')
+  const [age, setAge] = useState('')
   const [bookAsGuest, setBookAsGuest] = useState(!signedIn)
   const [internalAccepted, setInternalAccepted] = useState(false)
   const [internalHealth, setInternalHealth] = useState<HealthIntake>({})
@@ -146,6 +186,13 @@ export default function BookingRequestForm({
     if (!isGroup && !preferredAt) return setError('Please choose a preferred date and time.')
     if (!accepted) return setError('Please accept the booking policies to continue.')
 
+    if (!isGroup && bookingKind === 'treatment') {
+      const ageError = validateAge(age, treatment?.minimumAge)
+      if (ageError) return setError(ageError)
+      const healthError = validateHealth(health, treatment)
+      if (healthError) return setError(healthError)
+    }
+
     startTransition(async () => {
       let res
       if (isGroup) {
@@ -161,6 +208,19 @@ export default function BookingRequestForm({
         if (cleaned.some((g) => !g.preferredAt)) {
           setError('Please choose a date and time for every guest.')
           return
+        }
+        for (const g of cleaned) {
+          const flags = flagsById.get(g.treatmentId || defaultTreatmentId)
+          const ageError = validateAge(g.age, flags?.minimumAge)
+          if (ageError) {
+            setError(`${g.name.trim() || 'A guest'}: ${ageError}`)
+            return
+          }
+          const healthError = validateHealth(g.health, flags)
+          if (healthError) {
+            setError(`${g.name.trim() || 'A guest'}: ${healthError}`)
+            return
+          }
         }
         res = await createInstantGroupBooking({
           treatmentId: treatment?.id ?? '',
@@ -190,6 +250,7 @@ export default function BookingRequestForm({
           isGuest: bookAsGuest || !signedIn,
           healthIntake: health,
           acceptedPolicies: accepted,
+          age: age ? Number(age) : null,
           parentConsultationId: parentConsultationId ?? null,
           parentConsultationToken: parentConsultationToken ?? null,
         }
@@ -260,7 +321,7 @@ export default function BookingRequestForm({
 
         {/* Single guest details */}
         {!isGroup && (
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-3">
             <Field label="Full name" required>
               <input value={name} onChange={(e) => setName(e.target.value)} required={!isGroup} className={inputCls} placeholder="Your name" />
             </Field>
@@ -271,6 +332,18 @@ export default function BookingRequestForm({
                 <option value="male">Male</option>
               </select>
             </Field>
+            {bookingKind === 'treatment' && typeof treatment?.minimumAge === 'number' && (
+              <Field label={`Age (must be ${treatment.minimumAge}+)`} required>
+                <input
+                  value={age}
+                  onChange={(e) => setAge(e.target.value.replace(/\D/g, ''))}
+                  required
+                  className={inputCls}
+                  placeholder="Age"
+                  inputMode="numeric"
+                />
+              </Field>
+            )}
           </div>
         )}
 
@@ -349,13 +422,21 @@ export default function BookingRequestForm({
                       Health details for {g.name.trim() || `guest ${i + 1}`} (optional)
                     </summary>
                     <div className="pt-4">
-                      <HealthIntakeFields
-                        embedded
-                        radioGroup={`onPeriod-guest-${i}`}
-                        value={g.health}
-                        onChange={(v) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, health: v } : x)))}
-                        gender={g.gender}
-                      />
+                      {(() => {
+                        const guestFlags = flagsById.get(g.treatmentId || defaultTreatmentId)
+                        return (
+                          <HealthIntakeFields
+                            embedded
+                            radioGroup={`onPeriod-guest-${i}`}
+                            value={g.health}
+                            onChange={(v) => setGuests((p) => p.map((x, j) => (j === i ? { ...x, health: v } : x)))}
+                            gender={g.gender}
+                            requiresScalpDisclaimer={guestFlags?.requiresScalpDisclaimer}
+                            requiresHealthIntake={guestFlags?.requiresHealthIntake}
+                            specialTags={guestFlags?.specialTags}
+                          />
+                        )
+                      })()}
                     </div>
                   </details>
                 </div>
@@ -382,7 +463,14 @@ export default function BookingRequestForm({
             <span className="text-[#D4A373]">03.</span> Health Intake
           </h3>
           <p className="font-body text-[14px] text-dark/60 -mt-3">So our Vaidya can tailor and safely plan your therapy. Leave blank if not applicable.</p>
-          <HealthIntakeFields value={health} onChange={setHealth} gender={gender} />
+          <HealthIntakeFields
+            value={health}
+            onChange={setHealth}
+            gender={gender}
+            requiresScalpDisclaimer={bookingKind === 'treatment' ? treatment?.requiresScalpDisclaimer : false}
+            requiresHealthIntake={bookingKind === 'treatment' ? treatment?.requiresHealthIntake : false}
+            specialTags={bookingKind === 'treatment' ? treatment?.specialTags : []}
+          />
         </div>
       )}
 

@@ -41,6 +41,10 @@ export default function BookingTreatmentOrchestrator({
         price: selected.price,
         priceLabel: selected.priceLabel,
         bookingLeadTimeHours: selected.bookingLeadTimeHours,
+        requiresScalpDisclaimer: selected.requiresScalpDisclaimer,
+        requiresHealthIntake: selected.requiresHealthIntake,
+        minimumAge: selected.minimumAge,
+        specialTags: selected.specialTags,
       }
     : null
   const selectedImageUrl = selected?.imageUrl || '/authentic-ayurveda.jpg'
@@ -49,7 +53,15 @@ export default function BookingTreatmentOrchestrator({
   // enquiry-only and consultation-first treatments).
   const treatmentOptions = treatments
     .filter((t) => t.bookingType !== 'enquiry' && !t.requiresConsultation)
-    .map((t) => ({ id: t._id, title: t.title, price: t.price }))
+    .map((t) => ({
+      id: t._id,
+      title: t.title,
+      price: t.price,
+      requiresScalpDisclaimer: t.requiresScalpDisclaimer,
+      requiresHealthIntake: t.requiresHealthIntake,
+      minimumAge: t.minimumAge,
+      specialTags: t.specialTags,
+    }))
 
   const isEnquiry = selected?.bookingType === 'enquiry'
   // A consultation is required first UNLESS this booking follows a cleared one.
@@ -87,9 +99,16 @@ export default function BookingTreatmentOrchestrator({
           </div>
         )}
 
-        {selected && !isEnquiry && (
+        {selected && !isEnquiry && !needsConsult && (
           <div className="hidden lg:flex flex-col gap-3 mt-2">
-            <HealthIntakeFields value={healthIntake} onChange={setHealthIntake} gender={gender} />
+            <HealthIntakeFields
+              value={healthIntake}
+              onChange={setHealthIntake}
+              gender={gender}
+              requiresScalpDisclaimer={selected?.requiresScalpDisclaimer}
+              requiresHealthIntake={selected?.requiresHealthIntake}
+              specialTags={selected?.specialTags}
+            />
           </div>
         )}
       </div>

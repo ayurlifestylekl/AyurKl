@@ -27,6 +27,7 @@ export interface BookingManagementRow {
   payment_status: string
   payment_provider?: string | null
   booking_kind?: string | null
+  treatment_id?: string | null
   treatment_name?: string | null
   patient_name?: string | null
   assigned_therapist_name?: string | null
@@ -67,6 +68,7 @@ export interface BookingManagementModel {
   id: string
   customerId: string | null
   bookingKind: BookingKind
+  treatmentId: string | null
   treatmentName: string
   patientName: string
   selectedTime: string
@@ -169,6 +171,7 @@ export function buildManagementModel(row: BookingManagementRow, nowMs: number): 
     id: row.id,
     customerId: row.customer_id ?? null,
     bookingKind: kind,
+    treatmentId: row.treatment_id ?? null,
     treatmentName: row.treatment_name ?? (kind === 'consultation' ? 'Free Consultation' : 'Treatment'),
     patientName: row.patient_name ?? 'Guest',
     selectedTime: row.appointment_date_time || row.requested_datetime || '',
@@ -189,7 +192,7 @@ export function buildManagementModel(row: BookingManagementRow, nowMs: number): 
 
 const MANAGEMENT_COLUMNS = `
   id, customer_id, created_at, appointment_date_time, requested_datetime,
-  status, payment_status, payment_provider, booking_kind, treatment_name, patient_name,
+  status, payment_status, payment_provider, booking_kind, treatment_id, treatment_name, patient_name,
   assigned_therapist_name, payable_amount_rm, group_id, group_management_active,
   booking_refunds(status, amount_rm, created_at)
 `

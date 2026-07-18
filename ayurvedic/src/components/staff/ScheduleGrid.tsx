@@ -1,13 +1,27 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { GridAppt, GridBlock } from '@/lib/staff/appointments'
 import type { Therapist } from '@/lib/staff/therapists'
-import { createBlock, deleteBlock, updateBlockReason } from '@/lib/staff/actions'
+import { createBlock, deleteBlock, updateBlockReason, createBookingFromGrid, setAppointmentColorTag } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
+import type { Gender, StaffColorTag } from '@/types/booking'
+import ConsoleRescheduleDialog from './ConsoleRescheduleDialog'
+
+/** Client-requested manual palette for front desk's own slot bookkeeping. */
+const STAFF_COLOR_SWATCHES: { value: StaffColorTag; label: string; swatch: string; classes: string }[] = [
+  { value: 'red', label: 'Red', swatch: 'bg-red-500', classes: 'bg-red-100 border-red-400 text-red-900' },
+  { value: 'blue_light', label: 'Light blue', swatch: 'bg-sky-400', classes: 'bg-sky-100 border-sky-400 text-sky-900' },
+  { value: 'blue_dark', label: 'Dark blue', swatch: 'bg-blue-700', classes: 'bg-blue-100 border-blue-500 text-blue-900' },
+  { value: 'green_light', label: 'Light green', swatch: 'bg-green-400', classes: 'bg-green-100 border-green-400 text-green-900' },
+  { value: 'green_dark', label: 'Dark green', swatch: 'bg-green-800', classes: 'bg-green-200 border-green-600 text-green-950' },
+  { value: 'purple', label: 'Purple', swatch: 'bg-purple-500', classes: 'bg-purple-100 border-purple-400 text-purple-900' },
+  { value: 'pink', label: 'Pink', swatch: 'bg-fuchsia-500', classes: 'bg-fuchsia-100 border-fuchsia-400 text-fuchsia-900' },
+  { value: 'black', label: 'Black', swatch: 'bg-neutral-900', classes: 'bg-neutral-200 border-neutral-600 text-neutral-950' },
+]
 
 const OPEN = 9 * 60 + 30   // 09:30
 const CLOSE = 20 * 60 + 30 // 20:30
@@ -17,13 +31,12 @@ const HEADER_PX = 40
 const COL_W = 150
 const totalPx = ((CLOSE - OPEN) / ROW) * ROW_PX
 
-const STATUS_BG: Record<string, string> = {
-  scheduled: 'bg-blue-100 border-blue-300 text-blue-900',
-  awaiting_payment: 'bg-amber-100 border-amber-300 text-amber-900',
-  confirmed: 'bg-green-100 border-green-300 text-green-900',
-  checked_in: 'bg-teal-100 border-teal-300 text-teal-900',
-  in_progress: 'bg-indigo-100 border-indigo-300 text-indigo-900',
-  completed: 'bg-gray-100 border-gray-300 text-gray-500',
+interface TreatmentOption {
+  id: string
+  title: string
+  duration: string | null
+  price: number | null
+  bookingType?: string | null
 }
 
 function shiftDay(ymd: string, days: number): string {
@@ -44,14 +57,41 @@ interface Props {
   blocks: GridBlock[]
   /** Front desk / admin can add & remove blocks straight from the grid. */
   editable?: boolean
+  treatments?: TreatmentOption[]
+}
+
+/**
+ * Colour priority: a manually-set staff tag always wins (that's the whole
+ * point of letting front desk set one). Otherwise a web-origin booking
+ * renders fully in the client's requested "usual yellow." Failing both,
+ * fall back to the automatic status colour.
+ */
+function apptClasses(a: GridAppt): string {
+  if (a.staffColorTag) {
+    return STAFF_COLOR_SWATCHES.find((s) => s.value === a.staffColorTag)?.classes ?? 'bg-white border-accent/30 text-dark'
+  }
+  const isWeb = a.createdByAdminId == null
+  if (isWeb) return 'bg-yellow-100 border-yellow-400 text-yellow-900'
+  const base: Record<string, string> = {
+    pending: 'bg-rose-100 border-rose-300 text-rose-900',
+    scheduled: 'bg-sky-100 border-sky-300 text-sky-900',
+    awaiting_payment: 'bg-amber-100 border-amber-300 text-amber-900',
+    confirmed: 'bg-emerald-100 border-emerald-300 text-emerald-900',
+    checked_in: 'bg-pink-100 border-pink-300 text-pink-900',
+    in_progress: 'bg-violet-100 border-violet-300 text-violet-900',
+    completed: 'bg-slate-100 border-slate-300 text-slate-500',
+  }
+  return base[a.status] ?? 'bg-white border-accent/30 text-dark'
 }
 
 const SLOTS: number[] = []
 for (let m = OPEN; m < CLOSE; m += ROW) SLOTS.push(m)
 
-export default function ScheduleGrid({ basePath, detailBase, date, therapists, appts, unassigned, blocks, editable = false }: Props) {
+export default function ScheduleGrid({ basePath, detailBase, date, therapists, appts, unassigned, blocks, editable = false, treatments = [] }: Props) {
   const router = useRouter()
   const go = (d: string) => router.push(`${basePath}?date=${d}`)
+
+  const [mode, setMode] = useState<'book' | 'block'>('book')
 
   // Quick-block draft: a therapist column + a slot RANGE. Tapping more free
   // slots in the same column extends the range, so several slots block together.
@@ -62,6 +102,38 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const [editReason, setEditReason] = useState('')
   const [err, setErr] = useState<string | null>(null)
   const [pending, start] = useTransition()
+
+  // Booking draft from the grid.
+  const [bookDraft, setBookDraft] = useState<{ code: string; startMin: number } | null>(null)
+  const [bookName, setBookName] = useState('')
+  const [bookPhone, setBookPhone] = useState('')
+  const [bookEmail, setBookEmail] = useState('')
+  const [bookGender, setBookGender] = useState<Gender | ''>('')
+  const [bookTreatmentId, setBookTreatmentId] = useState('')
+  const [bookRoom, setBookRoom] = useState('')
+
+  // Reschedule dialog.
+  const [rescheduleAppt, setRescheduleAppt] = useState<GridAppt | null>(null)
+
+  // Manual colour-tag picker — which appointment's swatch row is open.
+  const [colorPickerFor, setColorPickerFor] = useState<string | null>(null)
+  const setColorTag = (appointmentId: string, tag: StaffColorTag | null) => {
+    setColorPickerFor(null)
+    start(async () => {
+      await setAppointmentColorTag(appointmentId, tag)
+      router.refresh()
+    })
+  }
+
+  const allAppts = useMemo(() => [...appts, ...unassigned], [appts, unassigned])
+  const groupCounts = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const a of allAppts) {
+      if (!a.groupId) continue
+      counts.set(a.groupId, (counts.get(a.groupId) ?? 0) + 1)
+    }
+    return counts
+  }, [allAppts])
 
   const isoAt = (min: number) => {
     const hh = String(Math.floor(min / 60)).padStart(2, '0')
@@ -74,6 +146,10 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const tapSlot = (code: string, m: number) => {
     setErr(null)
     setBlockSel(null)
+    if (mode === 'book') {
+      setBookDraft({ code, startMin: m })
+      return
+    }
     setDraft((prev) => {
       if (!prev || prev.code !== code) return { code, startMin: m, endMin: m + ROW }
       if (m + ROW > prev.endMin) return { ...prev, endMin: m + ROW }
@@ -121,6 +197,39 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     })
   }
 
+  const resetBookDraft = () => {
+    setBookDraft(null)
+    setBookName('')
+    setBookPhone('')
+    setBookEmail('')
+    setBookGender('')
+    setBookTreatmentId('')
+    setBookRoom('')
+  }
+
+  const addBooking = () => {
+    if (!bookDraft) return
+    if (!bookName.trim()) { setErr('Enter the patient name.'); return }
+    if (!bookPhone.trim()) { setErr('Enter a contact number.'); return }
+    if (!bookGender) { setErr('Select a gender.'); return }
+    if (!bookTreatmentId) { setErr('Choose a treatment.'); return }
+    setErr(null)
+    start(async () => {
+      const res = await createBookingFromGrid({
+        treatmentId: bookTreatmentId,
+        therapistCode: bookDraft.code,
+        startAt: isoAt(bookDraft.startMin),
+        patientName: bookName.trim(),
+        patientPhone: bookPhone.trim(),
+        patientEmail: bookEmail.trim() || null,
+        patientGender: bookGender,
+        room: bookRoom.trim() || null,
+      })
+      if ('error' in res) setErr(res.error)
+      else { resetBookDraft(); router.refresh() }
+    })
+  }
+
   const therapistName = (code: string) => therapists.find((t) => t.code === code)?.name ?? code
 
   const hourLabels: number[] = []
@@ -158,8 +267,72 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
       </div>
 
       {editable && (
-        <div className="mb-3">
-          {draft ? (
+        <div className="mb-3 space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Mode:</span>
+            {(['book', 'block'] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => { setMode(m); setDraft(null); resetBookDraft(); setBlockSel(null); setErr(null) }}
+                className={`rounded-full border px-3 py-1 font-heading text-[10.5px] font-bold uppercase tracking-[0.12em] ${
+                  mode === m ? 'border-accent bg-accent text-white' : 'border-accent/30 bg-white text-dark/70 hover:bg-cream'
+                }`}
+              >
+                {m === 'book' ? 'Book appointment' : 'Block slots'}
+              </button>
+            ))}
+            <span className="ml-auto font-body text-[11.5px] italic text-dark/50">
+              {mode === 'book'
+                ? 'Tap a free slot to book it · tap an appointment to reschedule it.'
+                : 'Tap a free slot to start a block. Tap more slots to extend it · tap a block to edit or remove it.'}
+            </span>
+          </div>
+
+          {mode === 'book' && bookDraft ? (
+            <div className="rounded-xl border border-accent/40 bg-cream/60 p-3">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-primary">
+                  Book {therapistName(bookDraft.code)} · {minLabel(bookDraft.startMin)}
+                </span>
+                <button onClick={resetBookDraft} className="rounded-lg border border-accent/30 p-1.5 text-dark/50 hover:text-primary" aria-label="Cancel">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field label="Patient name" required>
+                  <input value={bookName} onChange={(e) => setBookName(e.target.value)} className={bookInput} required />
+                </Field>
+                <Field label="Contact number" required>
+                  <input value={bookPhone} onChange={(e) => setBookPhone(e.target.value)} className={bookInput} required />
+                </Field>
+                <Field label="Email (optional)">
+                  <input value={bookEmail} onChange={(e) => setBookEmail(e.target.value)} type="email" className={bookInput} />
+                </Field>
+                <Field label="Gender" required>
+                  <select value={bookGender} onChange={(e) => setBookGender(e.target.value as Gender)} className={bookInput} required>
+                    <option value="">Select…</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                  </select>
+                </Field>
+                <Field label="Treatment" required>
+                  <select value={bookTreatmentId} onChange={(e) => setBookTreatmentId(e.target.value)} className={bookInput} required>
+                    <option value="">Select…</option>
+                    {treatments.filter((t) => t.bookingType !== 'enquiry').map((t) => (
+                      <option key={t.id} value={t.id}>{t.title}</option>
+                    ))}
+                  </select>
+                </Field>
+                <Field label="Room (optional)">
+                  <input value={bookRoom} onChange={(e) => setBookRoom(e.target.value)} className={bookInput} placeholder="e.g. Room 2" />
+                </Field>
+              </div>
+              <button onClick={addBooking} disabled={pending} className="mt-3 rounded-xl bg-accent px-5 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white hover:bg-accent/90 disabled:opacity-60">
+                {pending ? 'Booking…' : 'Confirm booking'}
+              </button>
+            </div>
+          ) : mode === 'block' && draft ? (
             <div className="flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-cream/60 p-3">
               <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-primary">
                 Block {therapistName(draft.code)} · {minLabel(draft.startMin)} –
@@ -218,12 +391,22 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 <X className="h-4 w-4" />
               </button>
             </div>
-          ) : (
-            <p className="font-body text-[11.5px] italic text-dark/50">
-              Tap a free slot to start a block — tap more slots to extend it · tap a block to edit or remove it.
-            </p>
-          )}
-          {err && <p className="mt-1.5 rounded-lg border border-red-300 bg-red-50 px-3 py-1.5 font-body text-[12px] text-red-700">{err}</p>}
+          ) : null}
+          {err && <p className="rounded-lg border border-red-300 bg-red-50 px-3 py-1.5 font-body text-[12px] text-red-700">{err}</p>}
+        </div>
+      )}
+
+      {editable && (
+        <div className="mb-3 flex flex-wrap items-center gap-2 font-body text-[11px] text-dark/70">
+          <span className="font-heading text-[10px] font-bold uppercase tracking-[0.12em] text-dark/55">Legend:</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-rose-100 border border-rose-300" /> Pending</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-sky-100 border border-sky-300" /> Scheduled</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-amber-100 border border-amber-300" /> Awaiting payment</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-emerald-100 border border-emerald-300" /> Confirmed</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-pink-100 border border-pink-300" /> Checked in</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-violet-100 border border-violet-300" /> In progress</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-slate-100 border border-slate-300" /> Completed</span>
+          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded-full bg-yellow-400" /> Web booking</span>
         </div>
       )}
 
@@ -262,17 +445,19 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent ${ROW_PX - 1}px, rgba(110,16,35,0.06) ${ROW_PX - 1}px, rgba(110,16,35,0.06) ${ROW_PX}px)`,
                 }}
               >
-                {/* Click-to-block overlay (front desk / admin, therapist columns only) */}
+                {/* Click-to-book / click-to-block overlay (front desk / admin, therapist columns only) */}
                 {editable && col.code && SLOTS.map((m) => (
                   <button
                     key={`s${m}`}
                     type="button"
                     onClick={() => tapSlot(col.code as string, m)}
-                    title={`Block ${minLabel(m)}`}
+                    title={`${mode === 'book' ? 'Book' : 'Block'} ${minLabel(m)}`}
                     className="group absolute inset-x-0 z-0 hover:bg-accent/10"
                     style={{ top: topFor(m), height: ROW_PX }}
                   >
-                    <span className="pointer-events-none absolute inset-0 hidden items-center justify-center text-[9px] font-bold uppercase tracking-wide text-accent group-hover:flex">+ Block</span>
+                    <span className="pointer-events-none absolute inset-0 hidden items-center justify-center text-[9px] font-bold uppercase tracking-wide text-accent group-hover:flex">
+                      {mode === 'book' ? '+ Book' : '+ Block'}
+                    </span>
                   </button>
                 ))}
 
@@ -281,6 +466,21 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   <div
                     className="pointer-events-none absolute inset-x-0.5 z-[1] rounded-md border-2 border-dashed border-accent/70 bg-accent/10"
                     style={{ top: topFor(draft.startMin), height: ((draft.endMin - draft.startMin) / ROW) * ROW_PX }}
+                  />
+                )}
+
+                {/* Booking draft preview — sized by selected treatment duration */}
+                {editable && mode === 'book' && bookDraft && bookDraft.code === col.code && (
+                  <div
+                    className="pointer-events-none absolute inset-x-0.5 z-[1] rounded-md border-2 border-dashed border-emerald-500/70 bg-emerald-500/10"
+                    style={{
+                      top: topFor(bookDraft.startMin),
+                      height: ((() => {
+                        const t = treatments.find((x) => x.id === bookTreatmentId)
+                        const dmins = t?.duration ? parseInt(t.duration, 10) || 60 : 60
+                        return (dmins / ROW) * ROW_PX
+                      })()),
+                    }}
                   />
                 )}
 
@@ -334,25 +534,104 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   )
                 })}
                 {/* Appointments */}
-                {apptsFor(col.code).map((a) => (
-                  <Link
-                    key={a.id}
-                    href={`${detailBase}/${a.id}`}
-                    className={`absolute inset-x-1 z-[2] overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${STATUS_BG[a.status] ?? 'bg-white border-accent/30'}`}
-                    style={{ top: topFor(clamp(a.startMin)) + 1, height: Math.max(ROW_PX - 2, (a.durationMins / ROW) * ROW_PX) - 2 }}
-                  >
-                    <div className="truncate font-bold">{a.patientName ?? '—'}</div>
-                    <div className="truncate opacity-80">{a.treatmentName ?? ''}</div>
-                    <div className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wide opacity-60">
-                      {fmtMY(`${date}T${String(Math.floor(a.startMin / 60)).padStart(2, '0')}:${String(a.startMin % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })}
+                {apptsFor(col.code).map((a) => {
+                  const groupSize = a.groupId ? groupCounts.get(a.groupId) ?? 1 : 1
+                  const groupBadge = groupSize > 1 ? `+${groupSize - 1}` : null
+                  return (
+                    <div
+                      key={a.id}
+                      className={`absolute inset-x-1 z-[2] overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${apptClasses(a)}`}
+                      style={{ top: topFor(clamp(a.startMin)) + 1, height: Math.max(ROW_PX - 2, (a.durationMins / ROW) * ROW_PX) - 2 }}
+                    >
+                      <Link href={`${detailBase}/${a.id}`} className="block">
+                        <div className="flex items-start justify-between gap-1">
+                          <div className="truncate font-bold">{a.patientName ?? '—'}</div>
+                          <div className="flex flex-none gap-1">
+                            {a.createdByAdminId == null && (
+                              <span className="inline-block h-2 w-2 rounded-full bg-yellow-400" title="Web booking" />
+                            )}
+                            {groupBadge && (
+                              <span className="rounded-full bg-primary px-1 py-0 text-[8px] font-bold text-white">{groupBadge}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="truncate opacity-80">{a.treatmentName ?? ''}</div>
+                        <div className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wide opacity-60">
+                          {fmtMY(`${date}T${String(Math.floor(a.startMin / 60)).padStart(2, '0')}:${String(a.startMin % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })}
+                        </div>
+                      </Link>
+                      {editable && (
+                        <div className="mt-1 flex gap-1">
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); setRescheduleAppt(a) }}
+                            className="flex-1 rounded border border-current/20 bg-white/60 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide hover:bg-white"
+                          >
+                            Reschedule
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); setColorPickerFor(colorPickerFor === a.id ? null : a.id) }}
+                            title="Set colour tag"
+                            className="flex-none rounded border border-current/20 bg-white/60 px-1.5 py-0.5 hover:bg-white"
+                          >
+                            🎨
+                          </button>
+                        </div>
+                      )}
+                      {editable && colorPickerFor === a.id && (
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          className="absolute inset-x-1 top-full z-[3] mt-1 flex flex-wrap gap-1 rounded-md border border-accent/30 bg-white p-1.5 shadow-lg"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setColorTag(a.id, null)}
+                            title="Clear (use automatic colour)"
+                            className="h-5 w-5 flex-none rounded-full border-2 border-dashed border-dark/30 bg-white"
+                          />
+                          {STAFF_COLOR_SWATCHES.map((s) => (
+                            <button
+                              key={s.value}
+                              type="button"
+                              onClick={() => setColorTag(a.id, s.value)}
+                              title={s.label}
+                              className={`h-5 w-5 flex-none rounded-full ${s.swatch} ${a.staffColorTag === s.value ? 'ring-2 ring-offset-1 ring-primary' : ''}`}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  </Link>
-                ))}
+                  )
+                })}
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {rescheduleAppt && (
+        <ConsoleRescheduleDialog
+          appt={rescheduleAppt}
+          date={date}
+          therapists={therapists}
+          onClose={() => setRescheduleAppt(null)}
+          onSuccess={() => { setRescheduleAppt(null); router.refresh() }}
+        />
+      )}
     </div>
+  )
+}
+
+const bookInput = 'w-full rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40'
+
+function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-1 block font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">
+        {label}{required && <span className="text-red-600"> *</span>}
+      </span>
+      {children}
+    </label>
   )
 }

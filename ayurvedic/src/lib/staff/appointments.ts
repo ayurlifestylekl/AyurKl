@@ -1,5 +1,5 @@
 import 'server-only'
-import type { BookingKind, BookingStatus, DoctorPatientView, HealthIntake, StaffAppointment } from '@/types/booking'
+import type { BookingKind, BookingStatus, DoctorPatientView, HealthIntake, StaffAppointment, StaffColorTag } from '@/types/booking'
 import { APPOINTMENT_COLUMNS, mapAppointmentRow } from '@/lib/booking/map'
 import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/booking/consultation-rules'
 import { THERAPISTS, type Therapist } from './therapists'
@@ -225,6 +225,10 @@ export interface GridAppt {
   treatmentName: string | null
   status: BookingStatus
   room: string | null
+  /** null / undefined = created by a customer on the web; non-null = staff-created. */
+  createdByAdminId: string | null
+  groupId: string | null
+  staffColorTag: StaffColorTag | null
 }
 export interface GridBlock {
   id: string | null
@@ -249,7 +253,7 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
 
   const { data, error } = await db
     .from('appointments')
-    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status')
+    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag')
     .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'])
     .gte('appointment_date_time', start)
     .lt('appointment_date_time', end)
@@ -266,6 +270,9 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
     treatmentName: a.treatmentName,
     status: a.status,
     room: a.room,
+    createdByAdminId: a.createdByAdminId ?? null,
+    groupId: a.groupId ?? null,
+    staffColorTag: a.staffColorTag ?? null,
   })
   const grid = all.map(toGrid)
 

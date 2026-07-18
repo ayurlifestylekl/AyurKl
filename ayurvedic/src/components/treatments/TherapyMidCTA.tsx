@@ -19,7 +19,7 @@ export default function TherapyMidCTA({
       <h3 className="mt-3 font-heading text-[24px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[30px]">
         Book {treatmentTitle}
         <br />
-        with a Kerala Vaidya
+        with a Kerala therapist
       </h3>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Link

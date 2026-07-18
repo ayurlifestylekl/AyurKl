@@ -37,7 +37,14 @@ function client(): Stripe {
   if (cached) return cached
   const key = process.env.STRIPE_SECRET_KEY
   if (!key) throw new Error('STRIPE_SECRET_KEY is not configured.')
-  cached = new Stripe(key)
+  // The SDK does NOT auto-retry by default (maxNetworkRetries is 0 unless
+  // set) — a momentary network blip or transient 5xx from Stripe used to
+  // fail the whole checkout attempt outright, forcing the customer to
+  // press "pay" again themselves. Stripe's own retry logic only retries
+  // genuinely safe conditions (network errors, timeouts, 429, 5xx) and
+  // reuses the same idempotency key across attempts, so this can't create
+  // a duplicate charge/session.
+  cached = new Stripe(key, { maxNetworkRetries: 2 })
   return cached
 }
 

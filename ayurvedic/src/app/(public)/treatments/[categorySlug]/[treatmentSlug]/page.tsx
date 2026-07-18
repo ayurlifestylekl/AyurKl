@@ -34,7 +34,7 @@ import type {
 // which is incompatible with static/ISR rendering and 500s in production.
 export const dynamic = 'force-dynamic'
 
-const PRACTITIONER = 'our Vaidyas'
+const PRACTITIONER = 'our therapists'
 
 async function loadDetail(
   categorySlug: string,

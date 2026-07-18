@@ -24,8 +24,8 @@ import {
 } from '../group-management'
 import { rescheduleBooking, validateRescheduleScope } from '../reschedule'
 
-const slotA = '2026-07-25T10:00:00+08:00'
-const slotB = '2026-07-25T11:30:00+08:00'
+const slotA = '2026-07-25T11:30:00+08:00'
+const slotB = '2026-07-25T14:30:00+08:00'
 
 const rows = [
   { id: 'guestA', group_management_active: true },

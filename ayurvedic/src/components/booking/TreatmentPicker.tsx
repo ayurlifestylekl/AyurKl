@@ -212,10 +212,18 @@ export default function TreatmentPicker({
       {/* ── Panel ─────────────────────────────────────── */}
       {open && (
         <>
-          {/* Mobile backdrop */}
+          {/*
+            Dimming backdrop — always rendered, not just on mobile. The
+            parent orchestrator only goes two-column once a treatment is
+            selected; before that (the very first screen most customers
+            see) it's single-column at any width, so the picker's dropdown
+            can sit directly over other translucent content below it
+            (e.g. the "Pick a treatment to start" placeholder) with no
+            backdrop to prevent visual bleed-through.
+          */}
           <div
             aria-hidden
-            className="fixed inset-0 z-40 bg-primary/30 backdrop-blur-sm sm:hidden"
+            className="fixed inset-0 z-40 bg-primary/30 backdrop-blur-sm"
           />
           <div
             role="listbox"

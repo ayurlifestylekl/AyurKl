@@ -1,6 +1,13 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { sendEmail } from '@/lib/email/send'
+import { sendTelegram } from '@/lib/integrations/telegram'
+
+/** Escape user-supplied text for Telegram HTML parse mode. */
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
 
 export type ContactIntent = 'treatment' | 'product' | 'corporate' | 'other'
 
@@ -100,6 +107,31 @@ export async function submitContactMessage(raw: unknown): Promise<Result> {
       error:
         'Something went wrong on our side. Please try WhatsApp instead — we reply fastest there.',
     }
+  }
+
+  // Best-effort staff alert — the message is already safely stored above, so a
+  // notification failure here must never fail the customer's submission.
+  const { intent, name, phone, email, message } = validation.data
+  try {
+    await sendTelegram(
+      `✉️ <b>New contact message</b> (${esc(intent)})\n${esc(name)} — ${esc(phone)} — ${esc(email)}\n${esc(message)}`,
+    )
+  } catch (e) {
+    console.error('[contact] telegram alert failed:', e)
+  }
+  try {
+    const to = process.env.STAFF_NOTIFY_EMAIL
+    if (to) {
+      await sendEmail({
+        to,
+        category: 'transactional',
+        subject: `New contact message (${intent}) — ${name}`,
+        html: `<p><strong>${name}</strong> — ${phone} — ${email}</p><p>${message.replace(/\n/g, '<br/>')}</p>`,
+        text: `${name} — ${phone} — ${email}\n\n${message}`,
+      })
+    }
+  } catch (e) {
+    console.error('[contact] staff email alert failed:', e)
   }
 
   return { ok: true }

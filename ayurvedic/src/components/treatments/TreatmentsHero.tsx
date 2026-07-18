@@ -214,11 +214,11 @@ export default function TreatmentsHero({
                 className="font-body italic text-white/80"
                 style={{ fontSize: '17px', lineHeight: '1.65' }}
               >
-                Protocols refined across generations of Kerala Vaidyas.
+                Protocols refined across generations of Kerala therapists.
                 Each one calibrated to your body.
               </p>
               <p className="mt-3 font-body text-[13px] italic text-accent/85">
-                — our Vaidyas
+                — our therapists
               </p>
             </motion.div>
 
@@ -386,10 +386,10 @@ export default function TreatmentsHero({
                 <div className="min-w-0 flex-1">
                   <p className="font-body text-[11px] italic text-dark/55">Attended by</p>
                   <p className="font-heading text-[14px] font-bold leading-tight text-primary">
-                    our Vaidyas
+                    our therapists
                   </p>
                   <p className="mt-0.5 font-heading text-[9px] font-semibold uppercase tracking-[0.2em] text-accent">
-                    B.A.M.S · 14 Yrs
+                    Certified · 14 Yrs
                   </p>
                 </div>
               </motion.div>

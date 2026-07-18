@@ -1,17 +1,20 @@
 'use server'
 
 import { revalidatePath, revalidateTag } from 'next/cache'
-import type { BookingKind, BookingStatus } from '@/types/booking'
+import type { BookingKind, BookingStatus, StaffColorTag } from '@/types/booking'
 import { canTransition } from '@/lib/booking/status'
 import { mapOperationalTransitionWriteFailure, validateOperationalTransition } from '@/lib/booking/operations'
 import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/booking/consultation-rules'
-import { therapistMatchesRequirement } from '@/lib/booking/policy'
+import { genderRequirementValue, therapistMatchesRequirement } from '@/lib/booking/policy'
+import { parseDurationMins } from '@/lib/booking/duration'
 import { createBookingToken } from '@/lib/booking/token'
 import { notifyApproved, notifyCancelled, BOOKING_SITE_URL } from '@/lib/booking/notify'
 import { voidBill } from '@/lib/booking/payment'
 import { findClash, freeAtLabel, type Slot } from '@/lib/booking/scheduling'
+import { CONSULTATION_MINS } from '@/lib/booking/slots'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from '@/lib/booking/blocks'
 import { mytDayKey } from '@/lib/datetime'
+import type { Gender } from '@/types/booking'
 import { therapistByCode, VAIDYA_BLOCK_CODE } from './therapists'
 import { requireStaff } from './guard'
 
@@ -585,6 +588,218 @@ export async function deleteBooking(id: string): Promise<Ok | Err> {
   return { ok: true }
 }
 
+/** Quick internal booking made directly from the staff schedule grid. */
+export async function createBookingFromGrid(input: {
+  treatmentId: string
+  therapistCode: string
+  startAt: string
+  patientName: string
+  patientPhone: string
+  patientEmail?: string | null
+  patientGender: Gender
+  room?: string | null
+}): Promise<Ok | Err> {
+  const { userId, db } = await requireStaff(['admin', 'front_desk'])
+  if (!input.patientName?.trim()) return { error: 'Enter the patient name.' }
+  if (!input.patientPhone?.trim()) return { error: 'Enter a contact number.' }
+  if (!input.treatmentId) return { error: 'Choose a treatment.' }
+  if (!input.therapistCode) return { error: 'Choose a therapist.' }
+
+  const therapist = therapistByCode(input.therapistCode)
+  if (!therapist) return { error: 'Therapist not found.' }
+  if (therapist.gender !== input.patientGender) {
+    return { error: 'Patient and therapist genders do not match for this booking.' }
+  }
+
+  const { data: t, error: tErr } = await db
+    .from('treatments')
+    .select('id, title, price_rm, category_id, duration, booking_type')
+    .eq('id', input.treatmentId)
+    .maybeSingle()
+  if (tErr) return { error: tErr.message }
+  if (!t) return { error: 'Treatment not found.' }
+  if (t.booking_type === 'enquiry') return { error: 'This therapy is enquiry-only.' }
+
+  const durationMins = parseDurationMins(t.duration)
+
+  const dateYMD = mytDayKey(input.startAt)
+  const { data: others } = await db
+    .from('appointments')
+    .select('appointment_date_time, duration_mins, status, payment_expires_at')
+    .eq('assigned_therapist_code', therapist.code)
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+  const nowMs = Date.now()
+  const busy: Slot[] = (others ?? [])
+    .filter((o) => o.appointment_date_time)
+    .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
+    .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
+  const clash = findClash({ startISO: input.startAt, durationMins }, busy)
+  if (clash) {
+    return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another time.` }
+  }
+
+  const blocks = await fetchBlocksOnOrAfter(db, dateYMD)
+  const intervals = blockedIntervalsForDate(blocks, dateYMD)
+  if (isBlocked(intervals, therapist.code, input.startAt, durationMins)) {
+    return { error: `${therapist.name} (${therapist.code}) is blocked at that time.` }
+  }
+
+  const { error } = await db.from('appointments').insert({
+    customer_id: null,
+    is_guest: true,
+    booking_kind: 'treatment',
+    treatment_id: t.id,
+    treatment_category_id: t.category_id ?? null,
+    treatment_name: t.title,
+    duration_mins: durationMins,
+    status: 'confirmed',
+    requested_datetime: input.startAt,
+    requested_datetime_alt: null,
+    appointment_date_time: input.startAt,
+    patient_name: input.patientName.trim(),
+    patient_phone: input.patientPhone.trim(),
+    patient_email: input.patientEmail?.trim() || null,
+    patient_gender: input.patientGender,
+    gender_requirement: genderRequirementValue(input.patientGender),
+    assigned_therapist_code: therapist.code,
+    assigned_therapist_name: therapist.name,
+    assigned_therapist_gender: therapist.gender,
+    room: input.room?.trim() || null,
+    payable_amount_rm: t.price_rm ?? null,
+    payment_status: 'unpaid',
+    created_by_admin_id: userId,
+  })
+  if (error) return { error: error.message }
+
+  revalidatePath('/console/schedule')
+  revalidatePath('/console')
+  return { ok: true }
+}
+
+/** Reschedule an existing appointment from the staff schedule grid. */
+export async function rescheduleFromGrid(input: {
+  appointmentId: string
+  newStartAt: string
+  newTherapistCode?: string | null
+  room?: string | null
+}): Promise<Ok | Err> {
+  const { db } = await requireStaff(['admin', 'front_desk'])
+  if (!input.appointmentId) return { error: 'Missing appointment.' }
+  if (!input.newStartAt) return { error: 'Choose a new time.' }
+
+  const { data: appt, error: apptErr } = await db
+    .from('appointments')
+    .select('id, status, booking_kind, assigned_therapist_code, patient_gender, gender_requirement, duration_mins, group_id, patient_name, patient_email, treatment_name')
+    .eq('id', input.appointmentId)
+    .maybeSingle()
+  if (apptErr) return { error: apptErr.message }
+  if (!appt) return { error: 'Appointment not found.' }
+  if (['cancelled', 'completed', 'no_show'].includes(appt.status as string)) {
+    return { error: 'This appointment cannot be rescheduled.' }
+  }
+
+  const isGroup = !!appt.group_id
+  const isConsultation = appt.booking_kind === 'consultation'
+  const durationMins = isConsultation ? CONSULTATION_MINS : (appt.duration_mins ?? 60)
+  const dateYMD = mytDayKey(input.newStartAt)
+
+  const therapistCode = (input.newTherapistCode?.trim() || appt.assigned_therapist_code || '')
+  if (isConsultation) {
+    const { data: consults } = await db
+      .from('appointments')
+      .select('appointment_date_time, duration_mins')
+      .eq('booking_kind', 'consultation')
+      .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+      .neq('id', input.appointmentId)
+    const busy: Slot[] = (consults ?? [])
+      .filter((o) => o.appointment_date_time)
+      .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? CONSULTATION_MINS }))
+    const clash = findClash({ startISO: input.newStartAt, durationMins }, busy)
+    if (clash) {
+      return { error: `The Vaidya is busy until ${freeAtLabel(clash)} — pick another time.` }
+    }
+    const blocks = await fetchBlocksOnOrAfter(db, dateYMD)
+    const intervals = blockedIntervalsForDate(blocks, dateYMD)
+    if (isBlocked(intervals, VAIDYA_BLOCK_CODE, input.newStartAt, durationMins)) {
+      return { error: 'The Vaidya or centre is unavailable at that time.' }
+    }
+  } else {
+    const therapist = therapistByCode(therapistCode)
+    if (!therapist) return { error: 'Therapist not found.' }
+    if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement as string | null)) {
+      const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
+      return { error: `Same-gender policy: this patient must be assigned a ${need} therapist.` }
+    }
+
+    const { data: others } = await db
+      .from('appointments')
+      .select('appointment_date_time, duration_mins, status, payment_expires_at')
+      .eq('assigned_therapist_code', therapist.code)
+      .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+      .neq('id', input.appointmentId)
+    const nowMs = Date.now()
+    const busy: Slot[] = (others ?? [])
+      .filter((o) => o.appointment_date_time)
+      .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
+      .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
+    const clash = findClash({ startISO: input.newStartAt, durationMins }, busy)
+    if (clash) {
+      return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another time.` }
+    }
+
+    const blocks = await fetchBlocksOnOrAfter(db, dateYMD)
+    const intervals = blockedIntervalsForDate(blocks, dateYMD)
+    if (isBlocked(intervals, therapist.code, input.newStartAt, durationMins)) {
+      return { error: `${therapist.name} (${therapist.code}) is blocked at that time.` }
+    }
+  }
+
+  const patch: Record<string, unknown> = {
+    appointment_date_time: input.newStartAt,
+    requested_datetime: input.newStartAt,
+    updated_at: new Date().toISOString(),
+    room: input.room?.trim() || null,
+  }
+  if (!isConsultation && input.newTherapistCode) {
+    const therapist = therapistByCode(input.newTherapistCode)
+    if (therapist) {
+      patch.assigned_therapist_code = therapist.code
+      patch.assigned_therapist_name = therapist.name
+      patch.assigned_therapist_gender = therapist.gender
+    }
+  }
+
+  const { error } = await db.from('appointments').update(patch).eq('id', input.appointmentId)
+  if (error) return { error: error.message }
+
+  revalidatePath('/console/schedule')
+  revalidatePath(`/console/${input.appointmentId}`)
+  revalidatePath('/console')
+  revalidatePath('/doctor')
+  if (isGroup) {
+    // Notify the group lead if possible, but do not block on it.
+    const { data: groupRows } = await db.from('appointments').select('id, patient_email').eq('group_id', appt.group_id)
+    if (groupRows && groupRows.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const lead = (groupRows as any[]).find((r: any) => r.patient_email) || groupRows[0]
+      await import('@/lib/booking/notify')
+        .then((mod) =>
+          mod.notifyManagedReschedule({
+            to: lead.patient_email ?? null,
+            name: appt.patient_name ?? 'Guest',
+            treatmentName: appt.treatment_name ?? 'Treatment',
+            oldISO: '',
+            newISO: input.newStartAt,
+            bookingKind: 'treatment',
+            statusUrl: `${BOOKING_SITE_URL}/book/request/${input.appointmentId}?t=${createBookingToken(input.appointmentId)}`,
+          }),
+        )
+        .catch((e) => console.error('[staff/actions] reschedule notify failed:', e))
+    }
+  }
+  return { ok: true }
+}
+
 /** Doctor/admin saves clinical notes (vaidya-only field). */
 export async function saveClinicalNotes(id: string, notes: string): Promise<Ok | Err> {
   const { db } = await requireStaff(['admin', 'doctor'])
@@ -793,5 +1008,32 @@ export async function deleteAnnouncement(id: string): Promise<Ok | Err> {
   if (a?.block_id) await db.from('schedule_blocks').delete().eq('id', a.block_id)
   revalidatePath('/console/announcements')
   revalidateTag('announcements')
+  return { ok: true }
+}
+
+const STAFF_COLOR_TAGS: readonly StaffColorTag[] = [
+  'red', 'blue_light', 'blue_dark', 'green_light', 'green_dark', 'purple', 'pink', 'black',
+]
+
+/**
+ * Manual schedule colour tag front desk can set on a booking for their own
+ * bookkeeping (temporary booking, needs attention, booking between 2
+ * centres, etc.) — independent of the automatic status colouring. `null`
+ * clears the tag back to the automatic colour.
+ */
+export async function setAppointmentColorTag(
+  appointmentId: string,
+  colorTag: StaffColorTag | null,
+): Promise<Ok | Err> {
+  const { db } = await requireStaff(['admin', 'front_desk'])
+  if (colorTag !== null && !STAFF_COLOR_TAGS.includes(colorTag)) {
+    return { error: 'Invalid colour tag.' }
+  }
+  const { error } = await db
+    .from('appointments')
+    .update({ staff_color_tag: colorTag })
+    .eq('id', appointmentId)
+  if (error) return { error: error.message }
+  revalidatePath('/console/schedule')
   return { ok: true }
 }

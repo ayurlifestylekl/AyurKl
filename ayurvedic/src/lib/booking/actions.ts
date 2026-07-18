@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createClient as createSb } from '@supabase/supabase-js'
 import type { BookingRequestInput, Gender, HealthIntake } from '@/types/booking'
@@ -457,6 +458,7 @@ export async function createGroupBooking(input: {
   acceptedPolicies: boolean
   guests: GroupGuest[]
 }): Promise<CreateBookingResult> {
+  const { userId, db: sb } = await requireStaff(['admin', 'front_desk'])
   if (!input.acceptedPolicies) return { error: 'Please accept the booking policies to continue.' }
   if (!input.patientPhone?.trim()) return { error: 'Please enter a contact number.' }
   if (!input.patientEmail?.trim()) return { error: 'Please enter an email so we can send booking updates.' }
@@ -471,8 +473,6 @@ export async function createGroupBooking(input: {
   if (guests.some((g) => !g.preferredAt || Number.isNaN(new Date(g.preferredAt).getTime()))) {
     return { error: 'Please choose a date and time for every guest.' }
   }
-
-  const sb = admin()
 
   // Resolve every treatment the group picked (each guest falls back to the
   // booking's default treatment) in a single lookup.
@@ -492,20 +492,13 @@ export async function createGroupBooking(input: {
     }
   }
 
-  let userId: string | null = null
-  if (!input.isGuest) {
-    const ssr = await createServerClient()
-    const { data: auth } = await ssr.auth.getUser()
-    userId = auth.user?.id ?? null
-  }
-
   const groupId = crypto.randomUUID()
 
   const rows = guests.map((g, i) => {
     const t = byId.get(guestTreatmentIds[i])!
     return {
-      customer_id: userId,
-      is_guest: input.isGuest || !userId,
+      customer_id: null,
+      is_guest: true,
       booking_kind: 'treatment',
       treatment_id: t.id,
       treatment_category_id: t.category_id ?? null,
@@ -525,6 +518,7 @@ export async function createGroupBooking(input: {
       pre_visit_form: g.healthIntake ?? {},
       payable_amount_rm: t.price_rm ?? null,
       payment_status: 'unpaid',
+      created_by_admin_id: userId,
     }
   })
 
@@ -540,6 +534,8 @@ export async function createGroupBooking(input: {
     : `Group of ${guests.length} · mixed therapies`
 
   const leadId = data[0].id as string
+  revalidatePath('/console')
+  revalidatePath('/console/schedule')
   await notifyRequestReceived({
     to: input.patientEmail,
     name: guests[0].name,

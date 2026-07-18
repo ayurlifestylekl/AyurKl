@@ -17,11 +17,11 @@ const PREP_TIPS = [
   'Arrive 10 minutes early to settle in',
   'Avoid heavy meals right before your session',
   'Stay well hydrated through the day',
-  "Follow your Vaidya's post-care advice",
+  "Follow your therapist's post-care advice",
 ]
 
 const ASSURANCES = [
-  'KKM-registered T&CM Ayurveda Vaidya (B.A.M.S)',
+  'KKM-registered T&CM Ayurveda therapists',
   'Authentic Kerala protocols & medicated oils',
   'Brickfields, Kuala Lumpur',
 ]
@@ -103,7 +103,7 @@ export default function BookingSidebar({
             ))}
           </ul>
           <p className="mt-3 font-body text-[11.5px] italic leading-snug text-dark/55">
-            Every therapy is tailored after a free consultation with our Vaidya.
+            Every therapy is tailored after a free consultation with our therapist.
           </p>
         </Panel>
       </div>
