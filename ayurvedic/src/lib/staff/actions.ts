@@ -15,7 +15,7 @@ import { CONSULTATION_MINS } from '@/lib/booking/slots'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from '@/lib/booking/blocks'
 import { mytDayKey } from '@/lib/datetime'
 import type { Gender } from '@/types/booking'
-import { therapistByCode, VAIDYA_BLOCK_CODE } from './therapists'
+import { therapistByCode, vaidyaByCode, VAIDYA_BLOCK_CODE } from './therapists'
 import { requireStaff } from './guard'
 
 type Ok = { ok: true }
@@ -588,21 +588,24 @@ export async function deleteBooking(id: string): Promise<Ok | Err> {
   return { ok: true }
 }
 
-/** Quick internal booking made directly from the staff schedule grid. */
+/** Quick internal booking made directly from the staff schedule grid.
+ *  Supports both real treatment bookings (treatmentId provided) and
+ *  generic duration-only bookings (durationMins/treatmentName provided)
+ *  for front-desk time blocking. Phone and a real treatment are optional. */
 export async function createBookingFromGrid(input: {
-  treatmentId: string
   therapistCode: string
   startAt: string
   patientName: string
-  patientPhone: string
-  patientEmail?: string | null
   patientGender: Gender
-  room?: string | null
+  treatmentId?: string | null
+  durationMins?: number
+  treatmentName?: string | null
+  patientPhone?: string | null
+  patientEmail?: string | null
+  remark?: string | null
 }): Promise<Ok | Err> {
   const { userId, db } = await requireStaff(['admin', 'front_desk'])
   if (!input.patientName?.trim()) return { error: 'Enter the patient name.' }
-  if (!input.patientPhone?.trim()) return { error: 'Enter a contact number.' }
-  if (!input.treatmentId) return { error: 'Choose a treatment.' }
   if (!input.therapistCode) return { error: 'Choose a therapist.' }
 
   const therapist = therapistByCode(input.therapistCode)
@@ -611,16 +614,30 @@ export async function createBookingFromGrid(input: {
     return { error: 'Patient and therapist genders do not match for this booking.' }
   }
 
-  const { data: t, error: tErr } = await db
-    .from('treatments')
-    .select('id, title, price_rm, category_id, duration, booking_type')
-    .eq('id', input.treatmentId)
-    .maybeSingle()
-  if (tErr) return { error: tErr.message }
-  if (!t) return { error: 'Treatment not found.' }
-  if (t.booking_type === 'enquiry') return { error: 'This therapy is enquiry-only.' }
+  let durationMins = 60
+  let treatmentId: string | null = null
+  let treatmentCategoryId: string | null = null
+  let treatmentName: string | null = null
+  let priceRm: number | null = null
 
-  const durationMins = parseDurationMins(t.duration)
+  if (input.treatmentId) {
+    const { data: t, error: tErr } = await db
+      .from('treatments')
+      .select('id, title, price_rm, category_id, duration, booking_type')
+      .eq('id', input.treatmentId)
+      .maybeSingle()
+    if (tErr) return { error: tErr.message }
+    if (!t) return { error: 'Treatment not found.' }
+    if (t.booking_type === 'enquiry') return { error: 'This therapy is enquiry-only.' }
+    durationMins = parseDurationMins(t.duration)
+    treatmentId = t.id
+    treatmentCategoryId = t.category_id ?? null
+    treatmentName = t.title
+    priceRm = t.price_rm ?? null
+  } else if (input.durationMins && input.durationMins > 0) {
+    durationMins = input.durationMins
+    treatmentName = input.treatmentName?.trim() || null
+  }
 
   const dateYMD = mytDayKey(input.startAt)
   const { data: others } = await db
@@ -648,30 +665,101 @@ export async function createBookingFromGrid(input: {
     customer_id: null,
     is_guest: true,
     booking_kind: 'treatment',
-    treatment_id: t.id,
-    treatment_category_id: t.category_id ?? null,
-    treatment_name: t.title,
+    treatment_id: treatmentId,
+    treatment_category_id: treatmentCategoryId,
+    treatment_name: treatmentName,
     duration_mins: durationMins,
     status: 'confirmed',
     requested_datetime: input.startAt,
     requested_datetime_alt: null,
     appointment_date_time: input.startAt,
     patient_name: input.patientName.trim(),
-    patient_phone: input.patientPhone.trim(),
+    patient_phone: input.patientPhone?.trim() || null,
     patient_email: input.patientEmail?.trim() || null,
     patient_gender: input.patientGender,
     gender_requirement: genderRequirementValue(input.patientGender),
     assigned_therapist_code: therapist.code,
     assigned_therapist_name: therapist.name,
     assigned_therapist_gender: therapist.gender,
-    room: input.room?.trim() || null,
-    payable_amount_rm: t.price_rm ?? null,
+    room: input.remark?.trim() || null,
+    payable_amount_rm: priceRm,
     payment_status: 'unpaid',
     created_by_admin_id: userId,
   })
   if (error) return { error: error.message }
 
   revalidatePath('/console/schedule')
+  revalidatePath('/console')
+  return { ok: true }
+}
+
+/** Quick internal consultation booking made from the Vaidya schedule grid. */
+export async function createConsultationFromGrid(input: {
+  vaidyaCode: string
+  startAt: string
+  patientName: string
+  patientPhone?: string | null
+  patientEmail?: string | null
+  reason?: string | null
+}): Promise<Ok | Err> {
+  const { userId, db } = await requireStaff(['admin', 'front_desk'])
+  if (!input.patientName?.trim()) return { error: 'Enter the patient name.' }
+  if (!input.vaidyaCode) return { error: 'Choose a Vaidya.' }
+
+  const vaidya = vaidyaByCode(input.vaidyaCode)
+  if (!vaidya) return { error: 'Vaidya not found.' }
+
+  const dateYMD = mytDayKey(input.startAt)
+
+  // Other consultations on the Vaidya's day — block overlapping starts.
+  const { data: busyRows } = await db
+    .from('appointments')
+    .select('appointment_date_time, duration_mins, status, payment_expires_at')
+    .eq('booking_kind', 'consultation')
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+  const nowMs = Date.now()
+  const busy: Slot[] = (busyRows ?? [])
+    .filter((o) => o.appointment_date_time)
+    .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
+    .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? CONSULTATION_MINS }))
+  const clash = findClash({ startISO: input.startAt, durationMins: CONSULTATION_MINS }, busy)
+  if (clash) return { error: `The Vaidya is busy until ${freeAtLabel(clash)} — pick another time.` }
+
+  // Centre-wide closures and Vaidya-specific leave both apply.
+  const blocks = await fetchBlocksOnOrAfter(db, dateYMD)
+  const intervals = blockedIntervalsForDate(blocks, dateYMD)
+  if (isBlocked(intervals, vaidya.code, input.startAt, CONSULTATION_MINS)) {
+    return { error: `${vaidya.name} is blocked at that time.` }
+  }
+
+  const { error } = await db.from('appointments').insert({
+    customer_id: null,
+    is_guest: true,
+    booking_kind: 'consultation',
+    treatment_id: null,
+    treatment_category_id: null,
+    treatment_name: null,
+    duration_mins: CONSULTATION_MINS,
+    status: 'confirmed',
+    requested_datetime: input.startAt,
+    requested_datetime_alt: null,
+    appointment_date_time: input.startAt,
+    patient_name: input.patientName.trim(),
+    patient_phone: input.patientPhone?.trim() || null,
+    patient_email: input.patientEmail?.trim() || null,
+    patient_gender: null,
+    gender_requirement: null,
+    assigned_therapist_code: vaidya.code,
+    assigned_therapist_name: vaidya.name,
+    assigned_therapist_gender: null,
+    room: input.reason?.trim() || null,
+    payable_amount_rm: null,
+    payment_status: 'unpaid',
+    created_by_admin_id: userId,
+  })
+  if (error) return { error: error.message }
+
+  revalidatePath('/console/doctors')
   revalidatePath('/console')
   return { ok: true }
 }

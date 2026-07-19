@@ -5,7 +5,7 @@ export function confirmationCopy(kind: BookingKind) {
     staffHeading: 'Free consultation confirmed',
     telegramHeading: '🩺 <b>Free consultation confirmed</b>',
     customerHeading: 'Your free consultation is confirmed',
-    customerLines: ['Your appointment is with our Vaidya. Please arrive 10 minutes early.'],
+    customerLines: ['Hi {name}, your consultation appointment <strong>to discuss</strong> {treatment} is confirmed for {when}. Please arrive 10 minutes early for your session with our Vaidya.'],
     needsAssignment: false,
   }
   return {

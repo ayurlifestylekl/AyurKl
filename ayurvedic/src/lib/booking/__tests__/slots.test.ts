@@ -29,17 +29,17 @@ describe('validateSubmittedSlot', () => {
 
   it('allows only generated 30-minute consultation slots', () => {
     expect(validateSubmittedSlot({
-      iso: slotIso('2026-07-17', '10:00'), durationMins: 30,
+      iso: slotIso('2026-07-17', '10:30'), durationMins: 30,
       nowMs: now, leadTimeHours: 0, kind: 'consultation',
     })).toEqual({ ok: true })
   })
 
-  it('uses the same consultation generator for the 10:00 opening boundary', () => {
+  it('uses the same consultation generator for the 10:30 opening boundary', () => {
     expect(CONSULTATION_MINS).toBe(30)
-    expect(consultationSlots()[0]).toBe('10:00')
+    expect(consultationSlots()[0]).toBe('10:30')
     expect(consultationSlots()).not.toContain('09:30')
     expect(validateSubmittedSlot({
-      iso: slotIso('2026-07-17', '09:30'), durationMins: 30,
+      iso: slotIso('2026-07-17', '10:00'), durationMins: 30,
       nowMs: now, leadTimeHours: 0, kind: 'consultation',
     })).toHaveProperty('error')
   })

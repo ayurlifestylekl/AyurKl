@@ -191,17 +191,27 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
         ],
   )
   if (!p.to) return
-  const intro = isGroup
-    ? [
-        `Hi ${esc(p.name ?? 'there')}, your group booking for <strong>${p.guests!.length} guests</strong> is confirmed:`,
-        ...guestListLines(p.guests!),
-      ]
-    : [`Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`]
+  let lines: string[]
+  if (p.bookingKind === 'consultation') {
+    lines = copy.customerLines.map((line) =>
+      line
+        .replaceAll('{name}', esc(p.name ?? 'there'))
+        .replaceAll('{treatment}', esc(p.treatmentName ?? 'your appointment'))
+        .replaceAll('{when}', when(p.whenISO))
+    )
+  } else {
+    const intro = isGroup
+      ? [
+          `Hi ${esc(p.name ?? 'there')}, your group booking for <strong>${p.guests!.length} guests</strong> is confirmed:`,
+          ...guestListLines(p.guests!),
+        ]
+      : [`Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> is confirmed for <strong>${when(p.whenISO)}</strong>.`]
+    lines = [...intro, ...copy.customerLines]
+  }
   const { html, text } = shell(
     copy.customerHeading,
     [
-      ...intro,
-      ...copy.customerLines,
+      ...lines,
       p.bookingKind === 'consultation'
         ? 'You can manage or reschedule your booking online up to 24 hours beforehand.'
         : 'You can manage or reschedule your booking online. Late cancellations are non-refundable.',

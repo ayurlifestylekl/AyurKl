@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
-import { THERAPISTS, VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
+import { THERAPISTS, VAIDYAS, vaidyaByCode } from '@/lib/staff/therapists'
 import { createBlock, deleteBlock } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
 import type { ScheduleBlock } from '@/lib/booking/blocks'
@@ -59,7 +59,8 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
 
   const therapistName = (code: string | null) => {
     if (!code) return 'All therapists'
-    if (code === VAIDYA_BLOCK_CODE) return 'Vaidya (consultations)'
+    const v = vaidyaByCode(code)
+    if (v) return `${v.name} (consultations only)`
     return THERAPISTS.find((t) => t.code === code)?.name ?? code
   }
 
@@ -92,7 +93,9 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
             {THERAPISTS.map((t) => (
               <option key={t.code} value={t.code}>{t.name} · {t.code}</option>
             ))}
-            <option value={VAIDYA_BLOCK_CODE}>Vaidya (consultations only)</option>
+            {VAIDYAS.map((v) => (
+              <option key={v.code} value={v.code}>{v.name} (consultations only)</option>
+            ))}
           </select>
         </Field>
 

@@ -67,7 +67,7 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
               <Row label="Guest" value={model.patientName} />
               <Row label="Selected time" value={fmtMY(model.selectedTime, { dateStyle: 'full', timeStyle: 'short' })} />
               <Row label="Status" value={STATUS_LABEL[model.status as keyof typeof STATUS_LABEL] ?? model.status} />
-              <Row label="Therapist" value={model.therapist} />
+              <Row label={model.bookingKind === 'consultation' ? 'Vaidya' : 'Therapist'} value={model.therapist} />
               <Row label="Payment" value={`${paymentLabels[model.payment.display]}${amount ? ` · ${amount}` : ''}`} />
             </dl>
           </div>

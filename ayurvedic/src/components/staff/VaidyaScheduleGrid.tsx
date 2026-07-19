@@ -1,35 +1,15 @@
 'use client'
 
-import { useMemo, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { GridAppt, GridBlock } from '@/lib/staff/appointments'
-import type { Therapist } from '@/lib/staff/therapists'
-import { createBlock, deleteBlock, updateBlockReason, createBookingFromGrid, setAppointmentColorTag } from '@/lib/staff/actions'
+import type { Vaidya } from '@/lib/staff/therapists'
+import { createBlock, deleteBlock, updateBlockReason, createConsultationFromGrid, setAppointmentColorTag } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
-import type { Gender, StaffColorTag } from '@/types/booking'
-import ConsoleRescheduleDialog from './ConsoleRescheduleDialog'
-
-/** Client-requested manual palette for front desk's own slot bookkeeping. */
-export const STAFF_COLOR_SWATCHES: { value: StaffColorTag; label: string; swatch: string; classes: string }[] = [
-  { value: 'red', label: 'Red', swatch: 'bg-red-500', classes: 'bg-red-100 border-red-400 text-red-900' },
-  { value: 'blue_light', label: 'Light blue', swatch: 'bg-sky-400', classes: 'bg-sky-100 border-sky-400 text-sky-900' },
-  { value: 'blue_dark', label: 'Dark blue', swatch: 'bg-blue-700', classes: 'bg-blue-100 border-blue-500 text-blue-900' },
-  { value: 'green_light', label: 'Light green', swatch: 'bg-green-400', classes: 'bg-green-100 border-green-400 text-green-900' },
-  { value: 'green_dark', label: 'Dark green', swatch: 'bg-green-800', classes: 'bg-green-200 border-green-600 text-green-950' },
-  { value: 'purple', label: 'Purple', swatch: 'bg-purple-500', classes: 'bg-purple-100 border-purple-400 text-purple-900' },
-  { value: 'pink', label: 'Pink', swatch: 'bg-fuchsia-500', classes: 'bg-fuchsia-100 border-fuchsia-400 text-fuchsia-900' },
-  { value: 'black', label: 'Black', swatch: 'bg-neutral-900', classes: 'bg-neutral-200 border-neutral-600 text-neutral-950' },
-]
-
-const GENERIC_DURATIONS = [
-  { value: 30, label: 'Treatment 1 — 30 min' },
-  { value: 45, label: 'Treatment 2 — 45 min' },
-  { value: 60, label: 'Treatment 3 — 1 hr' },
-  { value: 90, label: 'Treatment 4 — 1 hr 30 min' },
-  { value: 120, label: 'Treatment 5 — 2 hrs' },
-]
+import type { StaffColorTag } from '@/types/booking'
+import { STAFF_COLOR_SWATCHES, apptClasses } from './ScheduleGrid'
 
 const OPEN = 9 * 60 + 30   // 09:30
 const CLOSE = 20 * 60 + 30 // 20:30
@@ -39,64 +19,44 @@ const HEADER_PX = 40
 const COL_W = 150
 const totalPx = ((CLOSE - OPEN) / ROW) * ROW_PX
 
+const SLOTS: number[] = []
+for (let m = OPEN; m < CLOSE; m += ROW) SLOTS.push(m)
+
 function shiftDay(ymd: string, days: number): string {
   const d = new Date(`${ymd}T00:00:00+08:00`)
   d.setDate(d.getDate() + days)
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kuala_Lumpur', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d)
 }
+
 const topFor = (min: number) => ((min - OPEN) / ROW) * ROW_PX
 const clamp = (min: number) => Math.max(OPEN, Math.min(CLOSE, min))
 
 interface Props {
-  basePath: string // e.g. '/console/schedule' or '/doctor/calendar'
-  detailBase: string // e.g. '/console' or '/doctor'
   date: string
-  therapists: Therapist[]
+  vaidyas: Vaidya[]
   appts: GridAppt[]
-  unassigned: GridAppt[]
   blocks: GridBlock[]
-  /** Front desk / admin can add & remove blocks straight from the grid. */
+  detailBase?: string
   editable?: boolean
 }
 
-/**
- * Colour priority: a manually-set staff tag always wins (that's the whole
- * point of letting front desk set one). Otherwise a web-origin booking
- * renders fully in the client's requested "usual yellow." Failing both,
- * fall back to the automatic status colour.
- */
-export function apptClasses(a: GridAppt): string {
-  if (a.staffColorTag) {
-    return STAFF_COLOR_SWATCHES.find((s) => s.value === a.staffColorTag)?.classes ?? 'bg-white border-accent/30 text-dark'
-  }
-  const isWeb = a.createdByAdminId == null
-  if (isWeb) return 'bg-yellow-100 border-yellow-400 text-yellow-900'
-  const base: Record<string, string> = {
-    pending: 'bg-rose-100 border-rose-300 text-rose-900',
-    scheduled: 'bg-sky-100 border-sky-300 text-sky-900',
-    awaiting_payment: 'bg-amber-100 border-amber-300 text-amber-900',
-    confirmed: 'bg-emerald-100 border-emerald-300 text-emerald-900',
-    checked_in: 'bg-pink-100 border-pink-300 text-pink-900',
-    in_progress: 'bg-violet-100 border-violet-300 text-violet-900',
-    completed: 'bg-slate-100 border-slate-300 text-slate-500',
-  }
-  return base[a.status] ?? 'bg-white border-accent/30 text-dark'
-}
-
-const SLOTS: number[] = []
-for (let m = OPEN; m < CLOSE; m += ROW) SLOTS.push(m)
-
-export default function ScheduleGrid({ basePath, detailBase, date, therapists, appts, unassigned, blocks, editable = false }: Props) {
+export default function VaidyaScheduleGrid({
+  date,
+  vaidyas,
+  appts,
+  blocks,
+  detailBase = '/console',
+  editable = false,
+}: Props) {
   const router = useRouter()
-  const go = (d: string) => router.push(`${basePath}?date=${d}`)
+  const go = (d: string) => router.push(`/console/doctors?date=${d}`)
 
   const [mode, setMode] = useState<'book' | 'block'>('book')
 
-  // Quick-block draft: a therapist column + a slot RANGE. Tapping more free
-  // slots in the same column extends the range, so several slots block together.
+  // Quick-block draft: a Vaidya column + a slot range.
   const [draft, setDraft] = useState<{ code: string; startMin: number; endMin: number } | null>(null)
   const [reason, setReason] = useState('')
-  // An existing block the user tapped — offers Remove / Edit-reason.
+  // An existing block the user tapped.
   const [blockSel, setBlockSel] = useState<{ id: string | null; name: string; startMin: number; endMin: number } | null>(null)
   const [editReason, setEditReason] = useState('')
   const [err, setErr] = useState<string | null>(null)
@@ -107,14 +67,9 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const [bookName, setBookName] = useState('')
   const [bookPhone, setBookPhone] = useState('')
   const [bookEmail, setBookEmail] = useState('')
-  const [bookGender, setBookGender] = useState<Gender | ''>('')
-  const [bookDuration, setBookDuration] = useState<number | ''>('')
-  const [bookRemark, setBookRemark] = useState('')
+  const [bookReason, setBookReason] = useState('')
 
-  // Reschedule dialog.
-  const [rescheduleAppt, setRescheduleAppt] = useState<GridAppt | null>(null)
-
-  // Manual colour-tag picker — which appointment's swatch row is open.
+  // Manual colour-tag picker.
   const [colorPickerFor, setColorPickerFor] = useState<string | null>(null)
   const setColorTag = (appointmentId: string, tag: StaffColorTag | null) => {
     setColorPickerFor(null)
@@ -124,21 +79,12 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     })
   }
 
-  const allAppts = useMemo(() => [...appts, ...unassigned], [appts, unassigned])
-  const groupCounts = useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const a of allAppts) {
-      if (!a.groupId) continue
-      counts.set(a.groupId, (counts.get(a.groupId) ?? 0) + 1)
-    }
-    return counts
-  }, [allAppts])
-
   const isoAt = (min: number) => {
     const hh = String(Math.floor(min / 60)).padStart(2, '0')
     const mm = String(min % 60).padStart(2, '0')
     return new Date(`${date}T${hh}:${mm}:00+08:00`).toISOString()
   }
+
   const minLabel = (min: number) =>
     fmtMY(`${date}T${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })
 
@@ -153,7 +99,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
       if (!prev || prev.code !== code) return { code, startMin: m, endMin: m + ROW }
       if (m + ROW > prev.endMin) return { ...prev, endMin: m + ROW }
       if (m < prev.startMin) return { ...prev, startMin: m }
-      return { code, startMin: m, endMin: m + ROW } // tap inside the range → restart there
+      return { code, startMin: m, endMin: m + ROW }
     })
   }
 
@@ -201,53 +147,41 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     setBookName('')
     setBookPhone('')
     setBookEmail('')
-    setBookGender('')
-    setBookDuration('')
-    setBookRemark('')
+    setBookReason('')
   }
 
   const addBooking = () => {
     if (!bookDraft) return
     if (!bookName.trim()) { setErr('Enter the patient name.'); return }
-    if (!bookGender) { setErr('Select a gender.'); return }
     setErr(null)
     start(async () => {
-      const selectedDuration = bookDuration ? Number(bookDuration) : 60
-      const res = await createBookingFromGrid({
-        therapistCode: bookDraft.code,
+      const res = await createConsultationFromGrid({
+        vaidyaCode: bookDraft.code,
         startAt: isoAt(bookDraft.startMin),
         patientName: bookName.trim(),
-        patientGender: bookGender,
         patientPhone: bookPhone.trim() || null,
         patientEmail: bookEmail.trim() || null,
-        durationMins: selectedDuration,
-        treatmentName: bookDuration ? GENERIC_DURATIONS.find((d) => d.value === Number(bookDuration))?.label ?? null : null,
-        remark: bookRemark.trim() || null,
+        reason: bookReason.trim() || null,
       })
       if ('error' in res) setErr(res.error)
       else { resetBookDraft(); router.refresh() }
     })
   }
 
-  const therapistName = (code: string) => therapists.find((t) => t.code === code)?.name ?? code
+  const vaidyaName = (code: string) => vaidyas.find((v) => v.code === code)?.name ?? code
 
   const hourLabels: number[] = []
   for (let m = Math.ceil(OPEN / 60) * 60; m <= CLOSE; m += 60) hourLabels.push(m)
 
-  const columns: { code: string | null; name: string }[] = [
-    ...(unassigned.length ? [{ code: null as string | null, name: 'Unassigned' }] : []),
-    ...therapists.map((t) => ({ code: t.code as string | null, name: t.name })),
-  ]
-  const apptsFor = (code: string | null) =>
-    code === null ? unassigned : appts.filter((a) => a.therapistCode === code)
-  const blocksFor = (code: string | null) =>
-    blocks.filter((b) => b.therapistCode === null || b.therapistCode === code)
+  const columns = vaidyas.map((v) => ({ code: v.code, name: v.name }))
+  const apptsFor = (code: string) => appts.filter((a) => a.therapistCode === code)
+  const blocksFor = (code: string) => blocks.filter((b) => b.therapistCode === null || b.therapistCode === code)
 
   return (
     <div>
       {/* Date nav */}
       <div className="mb-4 flex items-center gap-3">
-        <Link href={`${basePath}?date=${shiftDay(date, -1)}`} className="rounded-lg border border-accent/30 p-1.5 text-dark/60 hover:text-primary">
+        <Link href={`/console/doctors?date=${shiftDay(date, -1)}`} className="rounded-lg border border-accent/30 p-1.5 text-dark/60 hover:text-primary">
           <ChevronLeft className="h-4 w-4" />
         </Link>
         <input
@@ -256,12 +190,12 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
           onChange={(e) => e.target.value && go(e.target.value)}
           className="rounded-lg border border-accent/30 bg-white px-3 py-1.5 font-body text-[13px] text-dark focus:border-accent focus:outline-none"
         />
-        <Link href={`${basePath}?date=${shiftDay(date, 1)}`} className="rounded-lg border border-accent/30 p-1.5 text-dark/60 hover:text-primary">
+        <Link href={`/console/doctors?date=${shiftDay(date, 1)}`} className="rounded-lg border border-accent/30 p-1.5 text-dark/60 hover:text-primary">
           <ChevronRight className="h-4 w-4" />
         </Link>
         <span className="font-heading text-[12px] font-bold uppercase tracking-[0.14em] text-dark/55">
           {fmtMY(`${date}T12:00:00+08:00`, { weekday: 'long', day: 'numeric', month: 'long' })}
-          <span className="ml-2 text-accent">{appts.length + unassigned.length} appts</span>
+          <span className="ml-2 text-accent">{appts.length} consultations</span>
         </span>
       </div>
 
@@ -278,12 +212,12 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   mode === m ? 'border-accent bg-accent text-white' : 'border-accent/30 bg-white text-dark/70 hover:bg-cream'
                 }`}
               >
-                {m === 'book' ? 'Book appointment' : 'Block slots'}
+                {m === 'book' ? 'Book consultation' : 'Block slots'}
               </button>
             ))}
             <span className="ml-auto font-body text-[11.5px] italic text-dark/50">
               {mode === 'book'
-                ? 'Tap a free slot to book it · tap an appointment to reschedule it.'
+                ? 'Tap a free slot to book a 30-minute consultation.'
                 : 'Tap a free slot to start a block. Tap more slots to extend it · tap a block to edit or remove it.'}
             </span>
           </div>
@@ -292,7 +226,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
             <div className="rounded-xl border border-accent/40 bg-cream/60 p-3">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-primary">
-                  Book {therapistName(bookDraft.code)} · {minLabel(bookDraft.startMin)}
+                  Book {vaidyaName(bookDraft.code)} · {minLabel(bookDraft.startMin)}
                 </span>
                 <button onClick={resetBookDraft} className="rounded-lg border border-accent/30 p-1.5 text-dark/50 hover:text-primary" aria-label="Cancel">
                   <X className="h-4 w-4" />
@@ -308,23 +242,8 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 <Field label="Email (optional)">
                   <input value={bookEmail} onChange={(e) => setBookEmail(e.target.value)} type="email" className={bookInput} />
                 </Field>
-                <Field label="Gender" required>
-                  <select value={bookGender} onChange={(e) => setBookGender(e.target.value as Gender)} className={bookInput} required>
-                    <option value="">Select…</option>
-                    <option value="female">Female</option>
-                    <option value="male">Male</option>
-                  </select>
-                </Field>
-                <Field label="Duration (optional)">
-                  <select value={bookDuration} onChange={(e) => setBookDuration(e.target.value ? Number(e.target.value) : '')} className={bookInput}>
-                    <option value="">Select…</option>
-                    {GENERIC_DURATIONS.map((d) => (
-                      <option key={d.value} value={d.value}>{d.label}</option>
-                    ))}
-                  </select>
-                </Field>
                 <Field label="Remark (optional)">
-                  <input value={bookRemark} onChange={(e) => setBookRemark(e.target.value)} className={bookInput} placeholder="e.g. Room 2" />
+                  <input value={bookReason} onChange={(e) => setBookReason(e.target.value)} className={bookInput} placeholder="e.g. Room 2" />
                 </Field>
               </div>
               <button onClick={addBooking} disabled={pending} className="mt-3 rounded-xl bg-accent px-5 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white hover:bg-accent/90 disabled:opacity-60">
@@ -334,7 +253,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
           ) : mode === 'block' && draft ? (
             <div className="flex flex-wrap items-center gap-2 rounded-xl border border-accent/40 bg-cream/60 p-3">
               <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-primary">
-                Block {therapistName(draft.code)} · {minLabel(draft.startMin)} –
+                Block {vaidyaName(draft.code)} · {minLabel(draft.startMin)} –
               </span>
               <select
                 value={draft.endMin}
@@ -423,18 +342,13 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
             </div>
           </div>
 
-          {/* Columns */}
+          {/* Vaidya columns */}
           {columns.map((col) => (
-            <div key={col.code ?? 'wait'} className="flex-1 border-l border-accent/15" style={{ minWidth: COL_W }}>
-              {/* The Unassigned column is the backstop for paid bookings nobody
-                  has picked a therapist for yet — it must read as an alert. */}
+            <div key={col.code} className="flex-1 border-l border-accent/15" style={{ minWidth: COL_W }}>
               <div
                 style={{ height: HEADER_PX }}
-                className={`flex items-center justify-center border-b border-accent/20 px-2 text-center font-heading text-[11px] font-bold uppercase tracking-[0.1em] ${
-                  col.code === null ? 'bg-red-100 text-red-800' : 'bg-cream/60 text-primary'
-                }`}
+                className="flex items-center justify-center border-b border-accent/20 px-2 text-center font-heading text-[11px] font-bold uppercase tracking-[0.1em] bg-cream/60 text-primary"
               >
-                {col.code === null && <span aria-hidden className="mr-1.5 inline-block h-2 w-2 flex-none animate-pulse rounded-full bg-red-500" />}
                 {col.name}
               </div>
               <div
@@ -444,12 +358,12 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent ${ROW_PX - 1}px, rgba(110,16,35,0.06) ${ROW_PX - 1}px, rgba(110,16,35,0.06) ${ROW_PX}px)`,
                 }}
               >
-                {/* Click-to-book / click-to-block overlay (front desk / admin, therapist columns only) */}
-                {editable && col.code && SLOTS.map((m) => (
+                {/* Click-to-book / click-to-block overlay */}
+                {editable && SLOTS.map((m) => (
                   <button
                     key={`s${m}`}
                     type="button"
-                    onClick={() => tapSlot(col.code as string, m)}
+                    onClick={() => tapSlot(col.code, m)}
                     title={`${mode === 'book' ? 'Book' : 'Block'} ${minLabel(m)}`}
                     className="group absolute inset-x-0 z-0 hover:bg-accent/10"
                     style={{ top: topFor(m), height: ROW_PX }}
@@ -460,7 +374,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   </button>
                 ))}
 
-                {/* Draft range preview — shows exactly what will be blocked */}
+                {/* Draft range preview */}
                 {editable && draft && draft.code === col.code && (
                   <div
                     className="pointer-events-none absolute inset-x-0.5 z-[1] rounded-md border-2 border-dashed border-accent/70 bg-accent/10"
@@ -468,21 +382,15 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   />
                 )}
 
-                {/* Booking draft preview — sized by selected duration */}
+                {/* Booking draft preview — always 30 min */}
                 {editable && mode === 'book' && bookDraft && bookDraft.code === col.code && (
                   <div
                     className="pointer-events-none absolute inset-x-0.5 z-[1] rounded-md border-2 border-dashed border-emerald-500/70 bg-emerald-500/10"
-                    style={{
-                      top: topFor(bookDraft.startMin),
-                      height: ((() => {
-                        const dmins = bookDuration ? Number(bookDuration) : 60
-                        return (dmins / ROW) * ROW_PX
-                      })()),
-                    }}
+                    style={{ top: topFor(bookDraft.startMin), height: ROW_PX }}
                   />
                 )}
 
-                {/* Blocked / leave shading — removable when editable */}
+                {/* Blocked / leave shading */}
                 {blocksFor(col.code).map((b, i) => {
                   const isDayOff = b.endMin - b.startMin >= 1440
                   const content = (
@@ -510,7 +418,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                         setErr(null)
                         setDraft(null)
                         setReason('')
-                        setBlockSel({ id: b.id, name: col.code ? therapistName(col.code) : 'Centre', startMin: clamp(b.startMin), endMin: clamp(b.endMin) })
+                        setBlockSel({ id: b.id, name: vaidyaName(col.code), startMin: clamp(b.startMin), endMin: clamp(b.endMin) })
                         setEditReason(b.reason ?? '')
                       }}
                       disabled={pending}
@@ -531,92 +439,67 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                     </div>
                   )
                 })}
-                {/* Appointments */}
-                {apptsFor(col.code).map((a) => {
-                  const groupSize = a.groupId ? groupCounts.get(a.groupId) ?? 1 : 1
-                  const groupBadge = groupSize > 1 ? `+${groupSize - 1}` : null
-                  return (
-                    <div
-                      key={a.id}
-                      className={`absolute inset-x-1 z-[2] overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${apptClasses(a)}`}
-                      style={{ top: topFor(clamp(a.startMin)) + 1, height: Math.max(ROW_PX - 2, (a.durationMins / ROW) * ROW_PX) - 2 }}
-                    >
-                      <Link href={`${detailBase}/${a.id}`} className="block">
-                        <div className="flex items-start justify-between gap-1">
-                          <div className="truncate font-bold">{a.patientName ?? '—'}</div>
-                          <div className="flex flex-none gap-1">
-                            {a.createdByAdminId == null && (
-                              <span className="inline-block h-2 w-2 rounded-full bg-yellow-400" title="Web booking" />
-                            )}
-                            {groupBadge && (
-                              <span className="rounded-full bg-primary px-1 py-0 text-[8px] font-bold text-white">{groupBadge}</span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="truncate opacity-80">{a.treatmentName ?? ''}</div>
-                        <div className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wide opacity-60">
-                          {fmtMY(`${date}T${String(Math.floor(a.startMin / 60)).padStart(2, '0')}:${String(a.startMin % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })}
-                        </div>
-                      </Link>
-                      {editable && (
-                        <div className="mt-1 flex gap-1">
-                          <button
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); setRescheduleAppt(a) }}
-                            className="flex-1 rounded border border-current/20 bg-white/60 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide hover:bg-white"
-                          >
-                            Reschedule
-                          </button>
-                          <button
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); setColorPickerFor(colorPickerFor === a.id ? null : a.id) }}
-                            title="Set colour tag"
-                            className="flex-none rounded border border-current/20 bg-white/60 px-1.5 py-0.5 hover:bg-white"
-                          >
-                            🎨
-                          </button>
-                        </div>
-                      )}
-                      {editable && colorPickerFor === a.id && (
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          className="absolute inset-x-1 top-full z-[3] mt-1 flex flex-wrap gap-1 rounded-md border border-accent/30 bg-white p-1.5 shadow-lg"
+
+                {/* Consultations */}
+                {apptsFor(col.code).map((a) => (
+                  <div
+                    key={a.id}
+                    className={`absolute inset-x-1 z-[2] overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${apptClasses(a)}`}
+                    style={{ top: topFor(clamp(a.startMin)) + 1, height: Math.max(ROW_PX - 2, (a.durationMins / ROW) * ROW_PX) - 2 }}
+                  >
+                    <Link href={`${detailBase}/${a.id}`} className="block">
+                      <div className="flex items-start justify-between gap-1">
+                        <div className="truncate font-bold">{a.patientName ?? '—'}</div>
+                        {a.createdByAdminId == null && (
+                          <span className="inline-block h-2 w-2 flex-none rounded-full bg-yellow-400" title="Web booking" />
+                        )}
+                      </div>
+                      <div className="truncate opacity-80">{a.treatmentName ?? 'Consultation'}</div>
+                      <div className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wide opacity-60">
+                        {fmtMY(`${date}T${String(Math.floor(a.startMin / 60)).padStart(2, '0')}:${String(a.startMin % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })}
+                      </div>
+                    </Link>
+                    {editable && (
+                      <div className="mt-1 flex gap-1">
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setColorPickerFor(colorPickerFor === a.id ? null : a.id) }}
+                          title="Set colour tag"
+                          className="flex-1 rounded border border-current/20 bg-white/60 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide hover:bg-white"
                         >
+                          🎨 Tag
+                        </button>
+                      </div>
+                    )}
+                    {editable && colorPickerFor === a.id && (
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute inset-x-1 top-full z-[3] mt-1 flex flex-wrap gap-1 rounded-md border border-accent/30 bg-white p-1.5 shadow-lg"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setColorTag(a.id, null)}
+                          title="Clear (use automatic colour)"
+                          className="h-5 w-5 flex-none rounded-full border-2 border-dashed border-dark/30 bg-white"
+                        />
+                        {STAFF_COLOR_SWATCHES.map((s) => (
                           <button
+                            key={s.value}
                             type="button"
-                            onClick={() => setColorTag(a.id, null)}
-                            title="Clear (use automatic colour)"
-                            className="h-5 w-5 flex-none rounded-full border-2 border-dashed border-dark/30 bg-white"
+                            onClick={() => setColorTag(a.id, s.value)}
+                            title={s.label}
+                            className={`h-5 w-5 flex-none rounded-full ${s.swatch} ${a.staffColorTag === s.value ? 'ring-2 ring-offset-1 ring-primary' : ''}`}
                           />
-                          {STAFF_COLOR_SWATCHES.map((s) => (
-                            <button
-                              key={s.value}
-                              type="button"
-                              onClick={() => setColorTag(a.id, s.value)}
-                              title={s.label}
-                              className={`h-5 w-5 flex-none rounded-full ${s.swatch} ${a.staffColorTag === s.value ? 'ring-2 ring-offset-1 ring-primary' : ''}`}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {rescheduleAppt && (
-        <ConsoleRescheduleDialog
-          appt={rescheduleAppt}
-          date={date}
-          therapists={therapists}
-          onClose={() => setRescheduleAppt(null)}
-          onSuccess={() => { setRescheduleAppt(null); router.refresh() }}
-        />
-      )}
     </div>
   )
 }

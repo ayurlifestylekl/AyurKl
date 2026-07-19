@@ -3,14 +3,12 @@ import { requireStaff } from '@/lib/staff/guard'
 import {
   listAppointments,
   getTodayAppointments,
-  getTherapistBoard,
   getRefundExceptions,
 } from '@/lib/staff/appointments'
 import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 import type { BookingStatus } from '@/types/booking'
 import BookingQueue from '@/components/staff/BookingQueue'
 import TodayBoard from '@/components/staff/TodayBoard'
-import TherapistBoard from '@/components/staff/TherapistBoard'
 import StatCard from '@/components/staff/StatCard'
 import StatusBadge from '@/components/staff/StatusBadge'
 import AutoRefresh from '@/components/staff/AutoRefresh'
@@ -24,7 +22,6 @@ const TABS: { key: string; label: string; status?: BookingStatus | BookingStatus
   { key: 'awaiting', label: 'Awaiting payment', status: 'awaiting_payment' },
   { key: 'confirmed', label: 'Confirmed', status: ['confirmed', 'checked_in', 'in_progress'] },
   { key: 'refunds', label: 'Refunds' },
-  { key: 'therapists', label: 'Therapists' },
   { key: 'all', label: 'All' },
 ]
 
@@ -80,15 +77,14 @@ export default async function ConsolePage({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function Overview({ db }: { db: any }) {
-  const [awaiting, confirmed, unassigned, today, board, refunds] = await Promise.all([
+  const [awaiting, confirmed, unassigned, today, refunds] = await Promise.all([
     listAppointments(db, { status: 'awaiting_payment' }),
     listAppointments(db, { status: ['confirmed', 'checked_in', 'in_progress'] }),
     listAppointments(db, { status: ['confirmed', 'checked_in', 'in_progress'], unassignedOnly: true }),
     getTodayAppointments(db),
-    getTherapistBoard(db),
     getRefundExceptions(db),
   ])
-  const freeNow = board.filter((t) => !t.busy).length
+  const consultationsToday = today.filter((a) => a.bookingKind === 'consultation').length
 
   return (
     <div>
@@ -102,7 +98,7 @@ async function Overview({ db }: { db: any }) {
         <StatCard label="Today" value={today.length} href="/console?tab=today" hint="Appointments today" />
         <StatCard label="Confirmed" value={confirmed.length} href="/console?tab=confirmed" hint="Paid and on the books" />
         <StatCard label="Awaiting payment" value={awaiting.length} href="/console?tab=awaiting" hint="Customer mid-checkout" />
-        <StatCard label="Therapists free" value={`${freeNow}/${board.length}`} href="/console?tab=therapists" tone={freeNow > 0 ? 'good' : 'default'} hint="Available now" />
+        <StatCard label="Consultations today" value={consultationsToday} href="/console/doctors" tone={consultationsToday > 0 ? 'good' : 'default'} hint="View Vaidya schedule" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -157,10 +153,6 @@ async function TabView({ db, tab }: { db: any; tab: { key: string; status?: Book
   if (tab.key === 'today') {
     const today = await getTodayAppointments(db)
     return <TodayBoard appointments={today} />
-  }
-  if (tab.key === 'therapists') {
-    const board = await getTherapistBoard(db)
-    return <TherapistBoard board={board} />
   }
   if (tab.key === 'refunds') {
     const exceptions = await getRefundExceptions(db)

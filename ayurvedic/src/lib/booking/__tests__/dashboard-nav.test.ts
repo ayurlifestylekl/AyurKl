@@ -15,9 +15,9 @@ describe('operational dashboard navigation', () => {
     expect(item?.href).toBe('/console?tab=needs-therapist')
   })
 
-  it('keeps the therapist availability board reachable as its own distinctly-labeled entry', () => {
-    const item = consoleNav.find((x) => x.href === '/console?tab=therapists')
-    expect(item?.label).toBe('Therapists')
+  it('keeps the Vaidya schedule reachable as its own distinctly-labeled entry', () => {
+    const item = consoleNav.find((x) => x.href === '/console/doctors')
+    expect(item?.label).toBe('Doctors')
     expect(item?.label).not.toBe('Needs therapist')
   })
 })

@@ -44,3 +44,26 @@ export function therapistsForGender(gender: Gender | null): Therapist[] {
 export function therapistLabel(t: Pick<Therapist, 'code' | 'name'>): string {
   return `${t.name} · ${t.code}`
 }
+
+export interface Vaidya {
+  code: string
+  name: string
+}
+
+/** Vaidya roster. Add a second entry here when the second Vaidya is named. */
+export const VAIDYAS: Vaidya[] = [
+  { code: VAIDYA_BLOCK_CODE, name: 'Vaidya Akhil' },
+]
+
+export function vaidyaByCode(code: string | null | undefined): Vaidya | undefined {
+  if (!code) return undefined
+  return VAIDYAS.find((v) => v.code === code)
+}
+
+export function vaidyaName(code: string | null | undefined): string {
+  return vaidyaByCode(code)?.name ?? code ?? ''
+}
+
+export function vaidyaLabel(v: Pick<Vaidya, 'code' | 'name'>): string {
+  return `${v.name} · ${v.code}`
+}

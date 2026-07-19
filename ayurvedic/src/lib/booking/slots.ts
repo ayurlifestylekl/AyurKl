@@ -33,10 +33,10 @@ export function slotsForDuration(durationMins: number): string[] {
   return out
 }
 
-/** Canonical Vaidya consultation starts (the consultation day begins at 10:00). */
+/** Canonical Vaidya consultation starts (the consultation day begins at 10:30). */
 export function consultationSlots(): string[] {
   const out: string[] = []
-  for (let m = 10 * 60; m + CONSULTATION_MINS <= CLOSE_END_MIN; m += 30) {
+  for (let m = 10 * 60 + 30; m + CONSULTATION_MINS <= CLOSE_END_MIN; m += 30) {
     out.push(hhmm(m))
   }
   return out

@@ -2,8 +2,9 @@ import 'server-only'
 import type { BookingKind, BookingStatus, DoctorPatientView, HealthIntake, StaffAppointment, StaffColorTag } from '@/types/booking'
 import { APPOINTMENT_COLUMNS, mapAppointmentRow } from '@/lib/booking/map'
 import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/booking/consultation-rules'
-import { THERAPISTS, type Therapist } from './therapists'
+import { THERAPISTS, VAIDYAS, type Therapist } from './therapists'
 import { THERAPIST_BUFFER_MINS } from '@/lib/booking/scheduling'
+import { CONSULTATION_MINS } from '@/lib/booking/slots'
 import { mytTodayRange, mytTimeOfDay } from '@/lib/datetime'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate } from '@/lib/booking/blocks'
 import type { ServiceDb } from './guard'
@@ -290,6 +291,55 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
     unassigned: grid.filter((g) => !g.therapistCode),
     blocks,
   }
+}
+
+/** All consultation appointments for the day — public bookings have no
+ *  assigned_therapist_code, so every consultation is mapped to a Vaidya column. */
+export async function getVaidyaSchedule(db: ServiceDb, dateYMD: string): Promise<DaySchedule> {
+  const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
+  const start = new Date(dayStartMs).toISOString()
+  const end = new Date(dayStartMs + 86_400_000).toISOString()
+  const vaidyaCodes = new Set(VAIDYAS.map((v) => v.code))
+  const defaultVaidyaCode = VAIDYAS[0]?.code ?? 'VAIDYA'
+
+  const { data, error } = await db
+    .from('appointments')
+    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag, booking_kind')
+    .eq('booking_kind', 'consultation')
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'])
+    .gte('appointment_date_time', start)
+    .lt('appointment_date_time', end)
+    .order('appointment_date_time', { ascending: true })
+  if (error) console.error('[staff/appointments] vaidyaSchedule:', error.message)
+
+  const all = (data ?? []).map(mapAppointmentRow)
+  const toGrid = (a: StaffAppointment): GridAppt => ({
+    id: a.id,
+    therapistCode: a.assignedTherapistCode ?? defaultVaidyaCode,
+    startMin: a.appointmentDatetime ? hhmmToMin(mytTimeOfDay(a.appointmentDatetime)) : 0,
+    durationMins: a.durationMins ?? CONSULTATION_MINS,
+    patientName: a.patientName,
+    treatmentName: a.treatmentName,
+    status: a.status,
+    room: a.room,
+    createdByAdminId: a.createdByAdminId ?? null,
+    groupId: a.groupId ?? null,
+    staffColorTag: a.staffColorTag ?? null,
+  })
+  const grid = all.map(toGrid)
+
+  const blocksRaw = await fetchBlocksOnOrAfter(db, dateYMD)
+  const blocks: GridBlock[] = blockedIntervalsForDate(blocksRaw, dateYMD)
+    .filter((iv) => iv.therapistCode === null || vaidyaCodes.has(iv.therapistCode))
+    .map((iv) => ({
+      id: iv.id,
+      therapistCode: iv.therapistCode,
+      startMin: Math.max(0, Math.round((iv.startMs - dayStartMs) / 60_000)),
+      endMin: Math.min(1440, Math.round((iv.endMs - dayStartMs) / 60_000)),
+      reason: iv.reason,
+    }))
+
+  return { appts: grid, unassigned: [], blocks }
 }
 
 /** Consultations still awaiting the doctor's clearance before treatment. */

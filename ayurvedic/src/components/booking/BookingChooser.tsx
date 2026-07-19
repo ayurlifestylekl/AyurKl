@@ -210,15 +210,6 @@ export default function BookingChooser() {
 
               <div className="relative flex flex-1 flex-col gap-5">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.04] px-3 py-1.5">
-                    <Calendar
-                      className="h-3 w-3 text-primary"
-                      strokeWidth={2.2}
-                    />
-                    <span className="font-heading text-[9px] font-bold uppercase tracking-[0.18em] text-primary/80">
-                      60+ min · Pay at Centre
-                    </span>
-                  </span>
                   <ArrowUpRight
                     className="h-5 w-5 text-primary/40 transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-accent"
                     strokeWidth={2}

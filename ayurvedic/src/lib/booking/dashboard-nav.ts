@@ -12,7 +12,7 @@ export const consoleNav: DashboardNavItem[] = [
   { href: '/console?tab=awaiting', label: 'Awaiting payment' },
   { href: '/console?tab=confirmed', label: 'Confirmed' },
   { href: '/console?tab=refunds', label: 'Refunds' },
-  { href: '/console?tab=therapists', label: 'Therapists' },
+  { href: '/console/doctors', label: 'Doctors' },
   { href: '/console?tab=all', label: 'All' },
   { href: '/console/schedule', label: 'Schedule' },
   { href: '/console/blocks', label: 'Availability' },
