@@ -223,7 +223,7 @@ export default function TreatmentPicker({
           */}
           <div
             aria-hidden
-            className="fixed inset-0 z-40 bg-primary/30 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-primary/40"
           />
           <div
             role="listbox"
@@ -275,7 +275,7 @@ export default function TreatmentPicker({
                 <ul className="flex flex-col divide-y divide-primary/6">
                   {filteredGroups.map((g) => (
                     <li key={g.category._id}>
-                      <div className="sticky top-0 z-10 flex items-center gap-3 bg-white/95 px-5 py-2 backdrop-blur">
+                      <div className="sticky top-0 z-10 flex items-center gap-3 bg-white px-5 py-2">
                         <span
                           aria-hidden
                           className="h-px w-4 bg-accent/60"
