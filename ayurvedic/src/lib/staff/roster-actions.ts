@@ -12,7 +12,7 @@ export async function createTherapist(input: {
   name: string
   gender: 'male' | 'female'
 }): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin'])
+  const { db } = await requireStaff(['admin', 'front_desk'])
   
   const code = input.code.trim().toUpperCase()
   const name = input.name.trim()
@@ -45,7 +45,7 @@ export async function createTherapist(input: {
 
 /** Update a therapist's name. */
 export async function updateTherapistName(code: string, name: string): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin'])
+  const { db } = await requireStaff(['admin', 'front_desk'])
   
   const trimmed = name.trim()
   if (!trimmed) return { error: 'Name is required.' }
@@ -61,7 +61,7 @@ export async function updateTherapistName(code: string, name: string): Promise<O
 
 /** Toggle a therapist's active status. */
 export async function toggleTherapistActive(code: string, active: boolean): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin'])
+  const { db } = await requireStaff(['admin', 'front_desk'])
   
   const { error } = await db.from('therapists').update({ active, updated_at: new Date().toISOString() }).eq('code', code)
   if (error) return { error: error.message }
@@ -78,7 +78,7 @@ export async function createVaidya(input: {
   name: string
   publicFacing: boolean
 }): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin'])
+  const { db } = await requireStaff(['admin', 'front_desk'])
   
   const code = input.code.trim().toUpperCase()
   const name = input.name.trim()
@@ -108,7 +108,7 @@ export async function createVaidya(input: {
 
 /** Update a Vaidya's name. */
 export async function updateVaidyaName(code: string, name: string): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin'])
+  const { db } = await requireStaff(['admin', 'front_desk'])
   
   const trimmed = name.trim()
   if (!trimmed) return { error: 'Name is required.' }
@@ -124,7 +124,7 @@ export async function updateVaidyaName(code: string, name: string): Promise<Ok |
 
 /** Toggle a Vaidya's active status. */
 export async function toggleVaidyaActive(code: string, active: boolean): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin'])
+  const { db } = await requireStaff(['admin', 'front_desk'])
   
   const { error } = await db.from('vaidyas').update({ active, updated_at: new Date().toISOString() }).eq('code', code)
   if (error) return { error: error.message }
@@ -137,7 +137,7 @@ export async function toggleVaidyaActive(code: string, active: boolean): Promise
 
 /** Toggle a Vaidya's public_facing flag. */
 export async function toggleVaidyaPublicFacing(code: string, publicFacing: boolean): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin'])
+  const { db } = await requireStaff(['admin', 'front_desk'])
   
   const { error } = await db.from('vaidyas').update({ public_facing: publicFacing, updated_at: new Date().toISOString() }).eq('code', code)
   if (error) return { error: error.message }

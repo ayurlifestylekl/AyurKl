@@ -21,7 +21,7 @@ export const consoleNav: DashboardNavItem[] = [
   { href: '/console/schedule', label: 'Schedule' },
   { href: '/console/blocks', label: 'Availability' },
   { href: '/console/announcements', label: 'Announcements' },
-  { href: '/console/roster', label: 'Staff Roster', roles: ['admin'] },
+  { href: '/console/roster', label: 'Staff Roster' },
 ]
 
 export const doctorNav: DashboardNavItem[] = [
