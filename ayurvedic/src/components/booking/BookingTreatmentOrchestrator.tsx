@@ -54,6 +54,7 @@ export default function BookingTreatmentOrchestrator({
     if (!editName.trim()) { setEditError('Please enter the patient name.'); return }
     if (!editPhone.trim()) { setEditError('Please enter a contact number.'); return }
     if (!editEmail.trim()) { setEditError('Please enter an email address.'); return }
+    if (!gender) { setEditError('Please select a gender.'); return }
     if (!editPreferredAt) { setEditError('Please choose a preferred date and time.'); return }
     setEditError(null)
     startEdit(async () => {
@@ -64,6 +65,7 @@ export default function BookingTreatmentOrchestrator({
         patientName: editName,
         patientPhone: editPhone,
         patientEmail: editEmail,
+        patientGender: gender,
         preferredAt: editPreferredAt,
       })
       if ('error' in res) setEditError(res.error)
@@ -226,7 +228,7 @@ export default function BookingTreatmentOrchestrator({
                   required
                 />
               </label>
-              <label className="block sm:col-span-2">
+              <label className="block">
                 <span className="mb-1 block font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">Email</span>
                 <input
                   type="email"
@@ -235,6 +237,19 @@ export default function BookingTreatmentOrchestrator({
                   className="w-full rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
                   required
                 />
+              </label>
+              <label className="block">
+                <span className="mb-1 block font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">Gender (for therapist matching)</span>
+                <select
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value as Gender)}
+                  className="w-full rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
+                  required
+                >
+                  <option value="">Select…</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                </select>
               </label>
             </div>
 

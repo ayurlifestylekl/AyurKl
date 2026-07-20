@@ -599,11 +599,11 @@ export async function getBookingForEdit(
 }
 
 /**
- * Update treatment, time, and/or contact details on a booking that is still
- * in a mutable state (pending or awaiting_payment). Used from the checkout
- * "Edit booking details" flow. Gender is intentionally not editable here —
- * it drives same-gender therapist matching and changing it would require
- * re-deriving gender_requirement, which this lightweight edit path doesn't do.
+ * Update treatment, time, and/or contact details (including gender) on a
+ * booking that is still in a mutable state (pending or awaiting_payment).
+ * Used from the checkout "Edit booking details" flow. Changing gender
+ * re-derives gender_requirement so same-gender therapist matching stays
+ * correct for the new value.
  */
 export async function updateBookingDetails(input: {
   appointmentId: string
@@ -612,6 +612,7 @@ export async function updateBookingDetails(input: {
   patientName: string
   patientPhone: string
   patientEmail: string
+  patientGender: Gender
   preferredAt: string
 }): Promise<{ error: string } | { ok: true }> {
   const sb = admin()
@@ -620,6 +621,9 @@ export async function updateBookingDetails(input: {
   if (!input.patientPhone.trim()) return { error: 'Please enter a contact number.' }
   if (!input.patientEmail.trim()) return { error: 'Please enter an email so we can send booking updates.' }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.patientEmail.trim())) return { error: 'Please enter a valid email address.' }
+  if (input.patientGender !== 'male' && input.patientGender !== 'female') {
+    return { error: 'Please select a gender for therapist matching.' }
+  }
   if (!input.preferredAt) return { error: 'Please choose a preferred date and time.' }
 
   const { data: appt, error: fetchErr } = await sb
@@ -670,6 +674,8 @@ export async function updateBookingDetails(input: {
       patient_name: input.patientName.trim(),
       patient_phone: input.patientPhone.trim(),
       patient_email: input.patientEmail.trim(),
+      patient_gender: input.patientGender,
+      gender_requirement: genderRequirementValue(input.patientGender),
       requested_datetime: input.preferredAt,
       appointment_date_time: input.preferredAt,
       updated_at: new Date().toISOString(),

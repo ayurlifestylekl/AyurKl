@@ -148,7 +148,7 @@ export default async function CheckoutPage({
                 </div>
                 <div className="mt-4 flex flex-col gap-2">
                   <Link
-                    href={`/book/treatment?edit=${b.id}${token ? `&t=${encodeURIComponent(token)}` : ''}`}
+                    href={`/book/treatment?edit=${b.id}${b.treatmentId ? `&id=${b.treatmentId}` : ''}${token ? `&t=${encodeURIComponent(token)}` : ''}`}
                     className="flex items-center justify-center gap-1.5 rounded-lg border border-accent/20 bg-cream/40 px-4 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-primary transition-all hover:border-accent/40 hover:bg-cream/60"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" />
