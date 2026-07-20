@@ -10,7 +10,7 @@ import { canAccessBooking } from './access'
 import { notifyRequestReceived, notifyCancelled } from './notify'
 import { voidBill } from './payment'
 import { parseDurationMins } from './duration'
-import { CONSULTATION_MINS, consultationSlots, slotsForDuration, slotIso } from './slots'
+import { CONSULTATION_MINS, consultationSlots, slotsForDuration, slotIso, validateSubmittedSlot } from './slots'
 import { findClash, countOverlapping, hasCapacity, type Slot } from './scheduling'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from './blocks'
 import { therapistsForGender, VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
@@ -559,22 +559,73 @@ export async function createGroupBooking(input: {
   return { id: leadId, token: createBookingToken(leadId) }
 }
 
+export interface EditableBooking {
+  treatmentId: string | null
+  patientName: string
+  patientPhone: string
+  patientEmail: string
+  patientGender: Gender | null
+  preferredAt: string | null
+}
+
 /**
- * Change the treatment on an existing booking that is still in a mutable state
- * (pending or awaiting_payment). Preserves all other customer-entered details.
- * Used from the checkout "Change treatment" link.
+ * Fetch a booking's editable fields for the checkout "Edit booking details"
+ * flow. Only returns data for a booking still in a mutable state (pending or
+ * awaiting_payment) and only when the token/customer check passes — same
+ * access rule as updateBookingDetails below, so a stale/wrong link never
+ * leaks another customer's contact details.
  */
-export async function changeBookingTreatment(
+export async function getBookingForEdit(
   appointmentId: string,
-  newTreatmentId: string,
   token: string | null | undefined,
-): Promise<{ error: string } | { ok: true }> {
+): Promise<EditableBooking | null> {
   const sb = admin()
+  const { data, error } = await sb
+    .from('appointments')
+    .select('id, customer_id, status, treatment_id, patient_name, patient_phone, patient_email, patient_gender, requested_datetime')
+    .eq('id', appointmentId)
+    .maybeSingle()
+  if (error || !data) return null
+  if (!['pending', 'awaiting_payment'].includes(data.status as string)) return null
+  if (!(await canAccessBooking(data.id, data.customer_id ?? null, token))) return null
+  return {
+    treatmentId: data.treatment_id,
+    patientName: data.patient_name ?? '',
+    patientPhone: data.patient_phone ?? '',
+    patientEmail: data.patient_email ?? '',
+    patientGender: (data.patient_gender as Gender | null) ?? null,
+    preferredAt: data.requested_datetime,
+  }
+}
+
+/**
+ * Update treatment, time, and/or contact details on a booking that is still
+ * in a mutable state (pending or awaiting_payment). Used from the checkout
+ * "Edit booking details" flow. Gender is intentionally not editable here —
+ * it drives same-gender therapist matching and changing it would require
+ * re-deriving gender_requirement, which this lightweight edit path doesn't do.
+ */
+export async function updateBookingDetails(input: {
+  appointmentId: string
+  token: string | null | undefined
+  treatmentId: string
+  patientName: string
+  patientPhone: string
+  patientEmail: string
+  preferredAt: string
+}): Promise<{ error: string } | { ok: true }> {
+  const sb = admin()
+
+  if (!input.patientName.trim()) return { error: 'Please enter the patient name.' }
+  if (!input.patientPhone.trim()) return { error: 'Please enter a contact number.' }
+  if (!input.patientEmail.trim()) return { error: 'Please enter an email so we can send booking updates.' }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.patientEmail.trim())) return { error: 'Please enter a valid email address.' }
+  if (!input.preferredAt) return { error: 'Please choose a preferred date and time.' }
 
   const { data: appt, error: fetchErr } = await sb
     .from('appointments')
     .select('id, customer_id, status, treatment_id')
-    .eq('id', appointmentId)
+    .eq('id', input.appointmentId)
     .maybeSingle()
   if (fetchErr) return { error: fetchErr.message }
   if (!appt) return { error: 'Booking not found.' }
@@ -583,14 +634,14 @@ export async function changeBookingTreatment(
     return { error: 'This booking can no longer be changed.' }
   }
 
-  if (!(await canAccessBooking(appt.id, appt.customer_id ?? null, token))) {
+  if (!(await canAccessBooking(appt.id, appt.customer_id ?? null, input.token))) {
     return { error: 'You do not have access to change this booking.' }
   }
 
   const { data: t, error: tErr } = await sb
     .from('treatments')
-    .select('id, title, price_rm, duration, booking_type, category_id')
-    .eq('id', newTreatmentId)
+    .select('id, title, price_rm, duration, booking_type, category_id, booking_lead_time_hours')
+    .eq('id', input.treatmentId)
     .maybeSingle()
   if (tErr) return { error: tErr.message }
   if (!t) return { error: 'Treatment not found.' }
@@ -598,24 +649,39 @@ export async function changeBookingTreatment(
     return { error: 'This therapy is enquiry-only — please WhatsApp us to arrange it.' }
   }
 
+  const durationMins = parseDurationMins(t.duration)
+  const slotCheck = validateSubmittedSlot({
+    iso: input.preferredAt,
+    durationMins,
+    nowMs: Date.now(),
+    leadTimeHours: Number(t.booking_lead_time_hours ?? 0),
+    kind: 'treatment',
+  })
+  if ('error' in slotCheck) return { error: slotCheck.error }
+
   const { error } = await sb
     .from('appointments')
     .update({
       treatment_id: t.id,
       treatment_category_id: t.category_id ?? null,
       treatment_name: t.title,
-      duration_mins: parseDurationMins(t.duration),
+      duration_mins: durationMins,
       payable_amount_rm: t.price_rm ?? null,
+      patient_name: input.patientName.trim(),
+      patient_phone: input.patientPhone.trim(),
+      patient_email: input.patientEmail.trim(),
+      requested_datetime: input.preferredAt,
+      appointment_date_time: input.preferredAt,
       updated_at: new Date().toISOString(),
     })
-    .eq('id', appointmentId)
+    .eq('id', input.appointmentId)
   if (error) return { error: error.message }
 
-  revalidatePath(`/book/request/${appointmentId}`)
-  revalidatePath(`/book/request/${appointmentId}/checkout`)
+  revalidatePath(`/book/request/${input.appointmentId}`)
+  revalidatePath(`/book/request/${input.appointmentId}/checkout`)
 
   const { redirect } = await import('next/navigation')
-  const tokenQuery = token ? `?t=${encodeURIComponent(token)}` : ''
-  redirect(`/book/request/${appointmentId}/checkout${tokenQuery}`)
+  const tokenQuery = input.token ? `?t=${encodeURIComponent(input.token)}` : ''
+  redirect(`/book/request/${input.appointmentId}/checkout${tokenQuery}`)
   return { ok: true }
 }

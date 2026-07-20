@@ -11,6 +11,7 @@ import {
   getTreatmentCategoriesIndex,
   getTreatmentsFlat,
 } from '@/lib/storefront/treatments'
+import { getBookingForEdit } from '@/lib/booking/actions'
 import type { Treatment, TreatmentCategory } from '@/types/treatments'
 
 export const metadata: Metadata = {
@@ -57,6 +58,7 @@ export default async function BookTreatmentPage({
   const account = user ? { email: user.email, signedIn: true } : null
   const editBookingId = searchParams.edit ?? null
   const editToken = searchParams.t ?? null
+  const editBooking = editBookingId ? await getBookingForEdit(editBookingId, editToken) : null
 
   return (
     <>
@@ -128,6 +130,7 @@ export default async function BookTreatmentPage({
                 account={account}
                 editBookingId={editBookingId}
                 editToken={editToken}
+                editBooking={editBooking}
               />
             </Suspense>
           </div>

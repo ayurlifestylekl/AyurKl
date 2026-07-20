@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { GridAppt, GridBlock } from '@/lib/staff/appointments'
 import type { Therapist } from '@/lib/staff/therapist-format'
-import { createBlock, deleteBlock, updateBlockReason, createBookingFromGrid, setAppointmentColorTag } from '@/lib/staff/actions'
+import { createBlock, deleteBlock, updateBlockReason, createBookingFromGrid, createConsultationFromGrid, setAppointmentColorTag } from '@/lib/staff/actions'
 import { createGroupBooking, type GroupGuest } from '@/lib/booking/actions'
 import { fmtMY } from '@/lib/datetime'
 import type { Gender, StaffColorTag } from '@/types/booking'
@@ -233,9 +233,22 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const addBooking = () => {
     if (!bookDraft) return
     if (!bookName.trim()) { setErr('Enter the patient name.'); return }
-    if (!bookGender) { setErr('Select a gender.'); return }
     setErr(null)
     start(async () => {
+      if (vaidyaCodes.has(bookDraft.code)) {
+        const res = await createConsultationFromGrid({
+          vaidyaCode: bookDraft.code,
+          startAt: isoAt(bookDraft.startMin),
+          patientName: bookName.trim(),
+          patientPhone: bookPhone.trim() || null,
+          patientEmail: bookEmail.trim() || null,
+          reason: bookRemark.trim() || null,
+        })
+        if ('error' in res) setErr(res.error)
+        else { resetBookDraft(); router.refresh() }
+        return
+      }
+      if (!bookGender) { setErr('Select a gender.'); return }
       if (bookPartySize > 1) {
         if (!bookTreatmentId) { setErr('Choose a treatment for the group.'); return }
         if (!bookPhone.trim()) { setErr('Enter a contact number for the group.'); return }
@@ -358,55 +371,59 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 <Field label="Patient name" required>
                   <input value={bookName} onChange={(e) => setBookName(e.target.value)} className={bookInput} required />
                 </Field>
-                <Field label={bookPartySize === 1 ? 'Contact number (optional)' : 'Contact number'}>
+                <Field label={vaidyaCodes.has(bookDraft.code) || bookPartySize === 1 ? 'Contact number (optional)' : 'Contact number'}>
                   <input value={bookPhone} onChange={(e) => setBookPhone(e.target.value)} className={bookInput} />
                 </Field>
-                <Field label={bookPartySize === 1 ? 'Email (optional)' : 'Email'}>
+                <Field label={vaidyaCodes.has(bookDraft.code) || bookPartySize === 1 ? 'Email (optional)' : 'Email'}>
                   <input value={bookEmail} onChange={(e) => setBookEmail(e.target.value)} type="email" className={bookInput} />
                 </Field>
-                <Field label="Gender" required>
-                  <select value={bookGender} onChange={(e) => setBookGender(e.target.value as Gender)} className={bookInput} required>
-                    <option value="">Select…</option>
-                    <option value="female">Female</option>
-                    <option value="male">Male</option>
-                  </select>
-                </Field>
-                <Field label="Party size">
-                  <select
-                    value={bookPartySize}
-                    onChange={(e) => {
-                      const n = Number(e.target.value)
-                      setBookPartySize(n)
-                      setBookExtraGuests(Array.from({ length: Math.max(0, n - 1) }, () => ({ name: '', gender: '' as Gender | '', therapistCode: '' })))
-                    }}
-                    className={bookInput}
-                  >
-                    {[1,2,3,4,5,6].map((n) => <option key={n} value={n}>{n} {n === 1 ? 'guest' : 'guests'}</option>)}
-                  </select>
-                </Field>
-                {bookPartySize === 1 ? (
-                  <Field label="Duration (optional)">
-                    <select value={bookDuration} onChange={(e) => setBookDuration(e.target.value ? Number(e.target.value) : '')} className={bookInput}>
-                      <option value="">Select…</option>
-                      {GENERIC_DURATIONS.map((d) => (
-                        <option key={d.value} value={d.value}>{d.label}</option>
-                      ))}
-                    </select>
-                  </Field>
-                ) : (
-                  <Field label="Treatment">
-                    <select value={bookTreatmentId} onChange={(e) => setBookTreatmentId(e.target.value)} className={bookInput}>
-                      <option value="">Select…</option>
-                      {bookableTreatments.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
-                    </select>
-                  </Field>
+                {!vaidyaCodes.has(bookDraft.code) && (
+                  <>
+                    <Field label="Gender" required>
+                      <select value={bookGender} onChange={(e) => setBookGender(e.target.value as Gender)} className={bookInput} required>
+                        <option value="">Select…</option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                      </select>
+                    </Field>
+                    <Field label="Party size">
+                      <select
+                        value={bookPartySize}
+                        onChange={(e) => {
+                          const n = Number(e.target.value)
+                          setBookPartySize(n)
+                          setBookExtraGuests(Array.from({ length: Math.max(0, n - 1) }, () => ({ name: '', gender: '' as Gender | '', therapistCode: '' })))
+                        }}
+                        className={bookInput}
+                      >
+                        {[1,2,3,4,5,6].map((n) => <option key={n} value={n}>{n} {n === 1 ? 'guest' : 'guests'}</option>)}
+                      </select>
+                    </Field>
+                    {bookPartySize === 1 ? (
+                      <Field label="Duration (optional)">
+                        <select value={bookDuration} onChange={(e) => setBookDuration(e.target.value ? Number(e.target.value) : '')} className={bookInput}>
+                          <option value="">Select…</option>
+                          {GENERIC_DURATIONS.map((d) => (
+                            <option key={d.value} value={d.value}>{d.label}</option>
+                          ))}
+                        </select>
+                      </Field>
+                    ) : (
+                      <Field label="Treatment">
+                        <select value={bookTreatmentId} onChange={(e) => setBookTreatmentId(e.target.value)} className={bookInput}>
+                          <option value="">Select…</option>
+                          {bookableTreatments.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
+                        </select>
+                      </Field>
+                    )}
+                  </>
                 )}
                 <Field label="Remark (optional)">
                   <input value={bookRemark} onChange={(e) => setBookRemark(e.target.value)} className={bookInput} placeholder="e.g. Room 2" />
                 </Field>
               </div>
 
-              {bookPartySize > 1 && (
+              {!vaidyaCodes.has(bookDraft.code) && bookPartySize > 1 && (
                 <div className="mt-3 space-y-3 rounded-lg border border-accent/20 bg-cream/40 p-3">
                   <p className="font-heading text-[10px] font-bold uppercase tracking-[0.12em] text-dark/60">Additional guests</p>
                   {bookExtraGuests.map((g, i) => (
@@ -548,7 +565,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 }}
               >
                 {/* Click-to-book / click-to-block overlay (front desk / admin, therapist columns only) */}
-                {editable && col.code && !vaidyaCodes.has(col.code) && SLOTS.map((m) => (
+                {editable && col.code && SLOTS.map((m) => (
                   <button
                     key={`s${m}`}
                     type="button"
@@ -644,7 +661,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                   return (
                     <div
                       key={a.id}
-                      className={`absolute inset-x-1 z-[2] overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${apptClasses(a)}`}
+                      className={`absolute inset-x-1 z-[2] rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${apptClasses(a)}`}
                       style={{ top: topFor(clamp(a.startMin)) + 1, height: Math.max(ROW_PX - 2, (a.durationMins / ROW) * ROW_PX) - 2 }}
                     >
                       <Link href={`${detailBase}/${a.id}`} className="block">

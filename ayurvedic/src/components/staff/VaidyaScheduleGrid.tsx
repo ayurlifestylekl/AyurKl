@@ -447,7 +447,7 @@ export default function VaidyaScheduleGrid({
                 {apptsFor(col.code).map((a) => (
                   <div
                     key={a.id}
-                    className={`absolute inset-x-1 z-[2] overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${apptClasses(a)}`}
+                    className={`absolute inset-x-1 z-[2] rounded-md border px-1.5 py-1 text-[10.5px] leading-tight ${apptClasses(a)}`}
                     style={{ top: topFor(clamp(a.startMin)) + 1, height: Math.max(ROW_PX - 2, (a.durationMins / ROW) * ROW_PX) - 2 }}
                   >
                     <Link href={`${detailBase}/${a.id}`} className="block">

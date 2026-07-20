@@ -11,8 +11,9 @@ import BookingRequestForm from './BookingRequestForm'
 import ConsultationRequiredNotice from './ConsultationRequiredNotice'
 import TreatmentPicker from './TreatmentPicker'
 import HealthIntakeFields from './HealthIntakeFields'
+import SlotPicker from './SlotPicker'
 import { parseDurationMins } from '@/lib/booking/duration'
-import { changeBookingTreatment } from '@/lib/booking/actions'
+import { updateBookingDetails, type EditableBooking } from '@/lib/booking/actions'
 
 interface BookingTreatmentOrchestratorProps {
   categories: TreatmentCategory[]
@@ -20,6 +21,7 @@ interface BookingTreatmentOrchestratorProps {
   account?: { email: string | null; signedIn: boolean } | null
   editBookingId?: string | null
   editToken?: string | null
+  editBooking?: EditableBooking | null
 }
 
 export default function BookingTreatmentOrchestrator({
@@ -28,6 +30,7 @@ export default function BookingTreatmentOrchestrator({
   account,
   editBookingId,
   editToken,
+  editBooking,
 }: BookingTreatmentOrchestratorProps) {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
@@ -37,16 +40,32 @@ export default function BookingTreatmentOrchestrator({
 
   const [acceptedPolicies, setAcceptedPolicies] = useState(false)
   const [healthIntake, setHealthIntake] = useState<HealthIntake>({})
-  const [gender, setGender] = useState<Gender | ''>('')
+  const [gender, setGender] = useState<Gender | ''>(editBooking?.patientGender ?? '')
+  const [editName, setEditName] = useState(editBooking?.patientName ?? '')
+  const [editPhone, setEditPhone] = useState(editBooking?.patientPhone ?? '')
+  const [editEmail, setEditEmail] = useState(editBooking?.patientEmail ?? '')
+  const [editPreferredAt, setEditPreferredAt] = useState(editBooking?.preferredAt ?? '')
   const [editError, setEditError] = useState<string | null>(null)
   const [editPending, startEdit] = useTransition()
   const isEdit = !!editBookingId
 
-  const handleChangeTreatment = () => {
+  const handleSaveEdit = () => {
     if (!selected || !editBookingId) return
+    if (!editName.trim()) { setEditError('Please enter the patient name.'); return }
+    if (!editPhone.trim()) { setEditError('Please enter a contact number.'); return }
+    if (!editEmail.trim()) { setEditError('Please enter an email address.'); return }
+    if (!editPreferredAt) { setEditError('Please choose a preferred date and time.'); return }
     setEditError(null)
     startEdit(async () => {
-      const res = await changeBookingTreatment(editBookingId, selected._id, editToken)
+      const res = await updateBookingDetails({
+        appointmentId: editBookingId,
+        token: editToken,
+        treatmentId: selected._id,
+        patientName: editName,
+        patientPhone: editPhone,
+        patientEmail: editEmail,
+        preferredAt: editPreferredAt,
+      })
       if ('error' in res) setEditError(res.error)
     })
   }
@@ -179,28 +198,74 @@ export default function BookingTreatmentOrchestrator({
         )}
 
         {selected && !isEnquiry && !needsConsult && isEdit && (
-          <div className="rounded-2xl border border-accent/30 bg-white/70 p-8 text-center">
-            <span className="mb-2 block font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Change treatment</span>
-            <h2 className="font-heading text-[20px] font-extrabold text-primary">
-              Switch to {selected.title}?
+          <div className="rounded-2xl border border-accent/30 bg-white/70 p-8">
+            <span className="mb-2 block text-center font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Edit booking</span>
+            <h2 className="text-center font-heading text-[20px] font-extrabold text-primary">
+              {selected.title}
             </h2>
-            <p className="mx-auto mt-2 max-w-md font-body text-[14px] leading-relaxed text-dark/65">
-              Your date, time and contact details will stay the same — only the treatment and price will update.
+            <p className="mx-auto mt-2 max-w-md text-center font-body text-[14px] leading-relaxed text-dark/65">
+              Update the treatment, time, or your contact details below.
             </p>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <label className="block">
+                <span className="mb-1 block font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">Patient name</span>
+                <input
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
+                  required
+                />
+              </label>
+              <label className="block">
+                <span className="mb-1 block font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">Contact number</span>
+                <input
+                  value={editPhone}
+                  onChange={(e) => setEditPhone(e.target.value)}
+                  className="w-full rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
+                  required
+                />
+              </label>
+              <label className="block sm:col-span-2">
+                <span className="mb-1 block font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">Email</span>
+                <input
+                  type="email"
+                  value={editEmail}
+                  onChange={(e) => setEditEmail(e.target.value)}
+                  className="w-full rounded-lg border border-accent/30 bg-white px-3 py-2 font-body text-[14px] text-dark focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
+                  required
+                />
+              </label>
+            </div>
+
+            <div className="mt-4">
+              <SlotPicker
+                treatmentId={selected._id}
+                gender={gender}
+                mode="treatment"
+                value={editPreferredAt}
+                onChange={setEditPreferredAt}
+                label="Preferred date & time"
+                required
+              />
+            </div>
+
             {editError && (
               <p className="mt-4 rounded-lg border border-red-300 bg-red-50 px-3 py-2 font-body text-[13px] text-red-700">
                 {editError}
               </p>
             )}
-            <button
-              type="button"
-              onClick={handleChangeTreatment}
-              disabled={editPending}
-              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent/90 disabled:opacity-60"
-            >
-              {editPending ? 'Updating…' : 'Confirm change'}
-              <ArrowRight className="h-4 w-4" />
-            </button>
+            <div className="mt-5 flex justify-center">
+              <button
+                type="button"
+                onClick={handleSaveEdit}
+                disabled={editPending}
+                className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent/90 disabled:opacity-60"
+              >
+                {editPending ? 'Saving…' : 'Save changes'}
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         )}
       </div>
