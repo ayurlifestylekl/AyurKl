@@ -74,7 +74,7 @@ export default function BookingTreatmentOrchestrator({
     <div className={selected ? "grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10 lg:gap-16 items-start" : "flex flex-col gap-10"}>
       
       {/* Left Column (or Top on mobile) */}
-      <div className="flex flex-col gap-6 lg:sticky lg:top-10">
+      <div className="relative z-20 flex flex-col gap-6 lg:sticky lg:top-10">
         <TreatmentPicker categories={categories} treatments={treatments} selected={selected} />
         
         {selected && (
