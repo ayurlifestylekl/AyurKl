@@ -22,7 +22,7 @@ function minLabel(min: number) {
   const hh = String(Math.floor(min / 60)).padStart(2, '0')
   const mm = String(min % 60).padStart(2, '0')
   const d = new Date(`1970-01-01T${hh}:${mm}:00+08:00`)
-  return d.toLocaleTimeString('en-MY', { hour: 'numeric', minute: '2-digit', hour12: true })
+  return d.toLocaleTimeString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', hour: 'numeric', minute: '2-digit', hour12: true })
 }
 
 const SLOTS: number[] = []

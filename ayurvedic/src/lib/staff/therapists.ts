@@ -1,3 +1,6 @@
+import 'server-only'
+import { cache } from 'react'
+import { createClient as createSb } from '@supabase/supabase-js'
 import type { Gender } from '@/types/booking'
 
 export interface Therapist {
@@ -7,19 +10,14 @@ export interface Therapist {
   active?: boolean
 }
 
-/**
- * Therapist roster. Edit here to add/remove therapists or change codes.
- * Genders drive the same-gender matching — keep them accurate.
- * Genders confirmed by the clinic (2026-06-23).
- */
-export const THERAPISTS: Therapist[] = [
-  { code: 'NT02', name: 'Nithin', gender: 'male' },
-  { code: 'DP03', name: 'Deepak', gender: 'male' },
-  { code: 'BN08', name: 'Bintu', gender: 'male' },
-  { code: 'SM05', name: 'Sreeja Mol', gender: 'female' },
-  { code: 'CR08', name: 'Seeta', gender: 'female' },
-  { code: 'AS12', name: 'Asha', gender: 'female' },
-]
+/** Service-role client for reading roster tables. */
+function db() {
+  return createSb(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  )
+}
 
 /**
  * Not a massage therapist — a synthetic code so the Vaidya's consultation
@@ -30,15 +28,26 @@ export const THERAPISTS: Therapist[] = [
  */
 export const VAIDYA_BLOCK_CODE = 'VAIDYA'
 
-export function therapistByCode(code: string | null | undefined): Therapist | undefined {
+/** Fetch a therapist by code. Request-level cached. */
+export const therapistByCode = cache(async (code: string | null | undefined): Promise<Therapist | undefined> => {
   if (!code) return undefined
-  return THERAPISTS.find((t) => t.code === code)
-}
+  const { data } = await db().from('therapists').select('code, name, gender, active').eq('code', code).maybeSingle()
+  return data ? { code: data.code, name: data.name, gender: data.gender as Gender, active: data.active } : undefined
+})
 
-/** Active therapists of a given gender (or all if no requirement). */
-export function therapistsForGender(gender: Gender | null): Therapist[] {
-  return THERAPISTS.filter((t) => t.active !== false && (!gender || t.gender === gender))
-}
+/** Active therapists of a given gender (or all if no requirement). Request-level cached. */
+export const therapistsForGender = cache(async (gender: Gender | null): Promise<Therapist[]> => {
+  let q = db().from('therapists').select('code, name, gender, active').eq('active', true)
+  if (gender) q = q.eq('gender', gender)
+  const { data } = await q.order('code')
+  return (data ?? []).map((t) => ({ code: t.code, name: t.name, gender: t.gender as Gender, active: t.active }))
+})
+
+/** All therapists (active + inactive) for admin roster UI. Request-level cached. */
+export const getAllTherapists = cache(async (): Promise<Therapist[]> => {
+  const { data } = await db().from('therapists').select('code, name, gender, active').order('code')
+  return (data ?? []).map((t) => ({ code: t.code, name: t.name, gender: t.gender as Gender, active: t.active }))
+})
 
 /** "Asha · AS12" display label. */
 export function therapistLabel(t: Pick<Therapist, 'code' | 'name'>): string {
@@ -50,21 +59,26 @@ export interface Vaidya {
   name: string
   /** If false, this Vaidya is selectable by staff internally but never shown in customer-facing consultation booking. */
   publicFacing?: boolean
+  active?: boolean
 }
 
-/** Vaidya roster. Set publicFacing: false to keep a Vaidya internal-only. */
-export const VAIDYAS: Vaidya[] = [
-  { code: VAIDYA_BLOCK_CODE, name: 'Vaidya Akhil', publicFacing: true },
-  { code: 'LYMAT', name: 'Vaidya LYMAT', publicFacing: false },
-]
-
-export function vaidyaByCode(code: string | null | undefined): Vaidya | undefined {
+/** Fetch a Vaidya by code. Request-level cached. */
+export const vaidyaByCode = cache(async (code: string | null | undefined): Promise<Vaidya | undefined> => {
   if (!code) return undefined
-  return VAIDYAS.find((v) => v.code === code)
-}
+  const { data } = await db().from('vaidyas').select('code, name, public_facing, active').eq('code', code).maybeSingle()
+  return data ? { code: data.code, name: data.name, publicFacing: data.public_facing, active: data.active } : undefined
+})
 
-export function vaidyaName(code: string | null | undefined): string {
-  return vaidyaByCode(code)?.name ?? code ?? ''
+/** All Vaidyas (active + inactive) for admin roster UI. Request-level cached. */
+export const getAllVaidyas = cache(async (): Promise<Vaidya[]> => {
+  const { data } = await db().from('vaidyas').select('code, name, public_facing, active').order('code')
+  return (data ?? []).map((v) => ({ code: v.code, name: v.name, publicFacing: v.public_facing, active: v.active }))
+})
+
+/** Resolve Vaidya name from code. */
+export async function vaidyaName(code: string | null | undefined): Promise<string> {
+  const v = await vaidyaByCode(code)
+  return v?.name ?? code ?? ''
 }
 
 export function vaidyaLabel(v: Pick<Vaidya, 'code' | 'name'>): string {

@@ -46,7 +46,7 @@ export async function approveAndAssign(
 
   // Therapist assignment applies to TREATMENTS only. A consultation is conducted
   // by the Vaidya — no therapist, no same-gender matching, no therapist roster.
-  let therapist: ReturnType<typeof therapistByCode>
+  let therapist: Awaited<ReturnType<typeof therapistByCode>> | undefined
   if (isConsultation) {
     // Vaidya double-booking guard: no two consultations may overlap (one Vaidya).
     const { data: others } = await db
@@ -70,7 +70,7 @@ export async function approveAndAssign(
       return { error: 'The Vaidya is on leave or the centre is closed at that time — pick another slot.' }
     }
   } else {
-    therapist = therapistByCode(p.therapistCode)
+    therapist = await therapistByCode(p.therapistCode)
     if (!therapist) return { error: 'Select a therapist.' }
 
     if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement)) {
@@ -187,7 +187,7 @@ export async function assignTherapist(id: string, p: { therapistCode: string; ro
   }
   if (!appt.appointment_date_time) return { error: 'This booking has no confirmed time yet.' }
 
-  const therapist = therapistByCode(p.therapistCode)
+  const therapist = await therapistByCode(p.therapistCode)
   if (!therapist) return { error: 'Select a therapist.' }
   if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement)) {
     const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
@@ -287,7 +287,7 @@ export async function approveGroup(
     for (let i = 0; i < sessions.length; i++) {
       const clash = findClash(sessions[i].slot, sessions.filter((_, j) => j !== i).map((s) => s.slot))
       if (clash) {
-        const t = therapistByCode(code)
+        const t = await therapistByCode(code)
         return { error: `${t ? t.name : code} is assigned to two guests whose sessions overlap — stagger the times (30-min gap between sessions) or pick another therapist.` }
       }
     }
@@ -300,7 +300,7 @@ export async function approveGroup(
   // Validate every assignment before writing anything.
   for (const m of pending) {
     const a = byId.get(m.id)!
-    const therapist = therapistByCode(a.therapistCode)
+    const therapist = await therapistByCode(a.therapistCode)
     if (!therapist) return { error: 'Unknown therapist selected.' }
     if (!therapistMatchesRequirement(therapist.gender, m.gender_requirement)) {
       const need = m.gender_requirement === 'men_only' ? 'male' : 'female'
@@ -337,7 +337,7 @@ export async function approveGroup(
   const doneIds: string[] = []
   for (const m of pending) {
     const a = byId.get(m.id)!
-    const therapist = therapistByCode(a.therapistCode)!
+    const therapist = (await therapistByCode(a.therapistCode))!
     const { error } = await db
       .from('appointments')
       .update({
@@ -631,7 +631,7 @@ export async function createBookingFromGrid(input: {
   if (!input.patientName?.trim()) return { error: 'Enter the patient name.' }
   if (!input.therapistCode) return { error: 'Choose a therapist.' }
 
-  const therapist = therapistByCode(input.therapistCode)
+  const therapist = await therapistByCode(input.therapistCode)
   if (!therapist) return { error: 'Therapist not found.' }
   if (therapist.gender !== input.patientGender) {
     return { error: 'Patient and therapist genders do not match for this booking.' }
@@ -729,7 +729,7 @@ export async function createConsultationFromGrid(input: {
   if (!input.patientName?.trim()) return { error: 'Enter the patient name.' }
   if (!input.vaidyaCode) return { error: 'Choose a Vaidya.' }
 
-  const vaidya = vaidyaByCode(input.vaidyaCode)
+  const vaidya = await vaidyaByCode(input.vaidyaCode)
   if (!vaidya) return { error: 'Vaidya not found.' }
 
   const dateYMD = mytDayKey(input.startAt)
@@ -835,7 +835,7 @@ export async function rescheduleFromGrid(input: {
       return { error: 'The Vaidya or centre is unavailable at that time.' }
     }
   } else {
-    const therapist = therapistByCode(therapistCode)
+    const therapist = await therapistByCode(therapistCode)
     if (!therapist) return { error: 'Therapist not found.' }
     if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement as string | null)) {
       const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
@@ -872,7 +872,7 @@ export async function rescheduleFromGrid(input: {
     room: input.room?.trim() || null,
   }
   if (!isConsultation && input.newTherapistCode) {
-    const therapist = therapistByCode(input.newTherapistCode)
+    const therapist = await therapistByCode(input.newTherapistCode)
     if (therapist) {
       patch.assigned_therapist_code = therapist.code
       patch.assigned_therapist_name = therapist.name
@@ -1007,7 +1007,7 @@ export async function createBlock(input: BlockInput): Promise<Ok | Err> {
         (input.therapistCode ? iv.therapistCode === null || iv.therapistCode === input.therapistCode : iv.therapistCode === null),
     )
     if (clash) {
-      const t = clash.therapistCode ? therapistByCode(clash.therapistCode) : null
+      const t = clash.therapistCode ? await therapistByCode(clash.therapistCode) : null
       const who = clash.therapistCode === null ? 'the whole centre' : t?.name ?? clash.therapistCode
       return {
         error: `That time is already blocked for ${who}${clash.reason ? ` (${clash.reason})` : ''} — tap the existing block to edit or remove it.`,

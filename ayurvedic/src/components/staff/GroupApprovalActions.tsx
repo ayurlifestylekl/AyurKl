@@ -4,7 +4,8 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Gender } from '@/types/booking'
 import { approveGroup, assignTherapist, rejectGroup, deleteBooking } from '@/lib/staff/actions'
-import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
+import type { Therapist } from '@/lib/staff/therapists'
+import { therapistLabel } from '@/lib/staff/therapists'
 import { fmtMY } from '@/lib/datetime'
 
 export interface GroupGuestRow {
@@ -31,6 +32,8 @@ interface Props {
   members: GroupGuestRow[]
   backHref?: string
   canDelete?: boolean
+  /** Active therapists for assignment dropdowns. */
+  therapists: Therapist[]
 }
 
 /** UTC ISO → 'YYYY-MM-DDTHH:mm' in Malaysia time (UTC+8) for a datetime-local input. */
@@ -49,6 +52,7 @@ export default function GroupApprovalActions({
   members,
   backHref = '/console',
   canDelete = false,
+  therapists,
 }: Props) {
   const router = useRouter()
   const pendingMembers = members.filter((m) => m.status === 'pending' || m.status === 'scheduled')
@@ -163,7 +167,7 @@ export default function GroupApprovalActions({
                   />
                   <select value={assign[m.id] ?? ''} onChange={(e) => setTherapist(m.id, e.target.value)} className={inp}>
                     <option value="">Select therapist…</option>
-                    {therapistsForGender(m.genderRequirement).map((t) => (
+                    {therapists.filter((t) => !m.genderRequirement || t.gender === m.genderRequirement).map((t) => (
                       <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
                     ))}
                   </select>
@@ -217,7 +221,7 @@ export default function GroupApprovalActions({
                         className={inp}
                       >
                         <option value="">{m.assignedTherapistCode ? 'Reassign to…' : 'Select therapist…'}</option>
-                        {therapistsForGender(m.genderRequirement).map((t) => (
+                        {therapists.filter((t) => !m.genderRequirement || t.gender === m.genderRequirement).map((t) => (
                           <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
                         ))}
                       </select>

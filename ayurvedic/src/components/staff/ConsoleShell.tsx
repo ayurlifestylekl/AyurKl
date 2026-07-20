@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
-  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, UserPlus, LayoutList, CalendarOff, CalendarRange, Megaphone, Banknote, Stethoscope,
+  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, UserPlus, LayoutList, CalendarOff, CalendarRange, Megaphone, Banknote, Stethoscope, Users,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
@@ -25,6 +25,7 @@ const ICON_BY_LABEL: Record<string, LucideIcon> = {
   Schedule: CalendarRange,
   Availability: CalendarOff,
   Announcements: Megaphone,
+  'Staff Roster': Users,
 }
 
 /** True when `href` (a consoleNav entry) is the currently active page/tab. */
@@ -37,13 +38,13 @@ function isActiveHref(href: string, pathname: string, params: URLSearchParams): 
 }
 
 /** Nav list — isolates useSearchParams() so it can sit under a Suspense boundary. */
-function NavLinks({ onNavigate }: { onNavigate: () => void }) {
+function NavLinks({ onNavigate, role }: { onNavigate: () => void; role: string }) {
   const pathname = usePathname()
   const params = useSearchParams()
 
   return (
     <ul className="space-y-1">
-      {consoleNav.map((item) => {
+      {consoleNav.filter((item) => !item.roles || item.roles.includes(role)).map((item) => {
         const active = isActiveHref(item.href, pathname, params)
         const Icon = ICON_BY_LABEL[item.label] ?? LayoutList
         return (
@@ -123,7 +124,7 @@ export default function ConsoleShell({
           </Link>
 
           <Suspense fallback={<div className="px-3 py-2 font-body text-[12px] text-white/40">Loading…</div>}>
-            <NavLinks onNavigate={close} />
+            <NavLinks onNavigate={close} role={role} />
           </Suspense>
         </nav>
 

@@ -1,4 +1,8 @@
-export interface DashboardNavItem { href: string; label: string }
+export interface DashboardNavItem {
+  href: string
+  label: string
+  roles?: string[] // Optional: if specified, only show to these roles
+}
 
 // Single source of truth for the front-desk console sidebar — both the
 // tab-based views (rendered by src/app/(staff)/console/page.tsx's TABS) and
@@ -17,6 +21,7 @@ export const consoleNav: DashboardNavItem[] = [
   { href: '/console/schedule', label: 'Schedule' },
   { href: '/console/blocks', label: 'Availability' },
   { href: '/console/announcements', label: 'Announcements' },
+  { href: '/console/roster', label: 'Staff Roster', roles: ['admin'] },
 ]
 
 export const doctorNav: DashboardNavItem[] = [

@@ -2,7 +2,7 @@ import 'server-only'
 import type { BookingKind, BookingStatus, DoctorPatientView, HealthIntake, StaffAppointment, StaffColorTag } from '@/types/booking'
 import { APPOINTMENT_COLUMNS, mapAppointmentRow } from '@/lib/booking/map'
 import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/booking/consultation-rules'
-import { THERAPISTS, VAIDYAS, type Therapist } from './therapists'
+import type { Therapist } from './therapists'
 import { THERAPIST_BUFFER_MINS } from '@/lib/booking/scheduling'
 import { CONSULTATION_MINS } from '@/lib/booking/slots'
 import { mytTodayRange, mytTimeOfDay } from '@/lib/datetime'
@@ -187,11 +187,12 @@ export interface TherapistStatus {
  * (session + buffer) and when each frees up, based on today's assignments.
  */
 export async function getTherapistBoard(db: ServiceDb): Promise<TherapistStatus[]> {
-  const today = await getTodayAppointments(db)
+  const { getAllTherapists } = await import('./therapists')
+  const [today, therapists] = await Promise.all([getTodayAppointments(db), getAllTherapists()])
   const now = Date.now()
   const bufferMs = THERAPIST_BUFFER_MINS * 60 * 1000
 
-  return THERAPISTS.map((therapist) => {
+  return therapists.filter((t) => t.active !== false).map((therapist) => {
     const mine = today.filter((a) => a.assignedTherapistCode === therapist.code && a.appointmentDatetime)
     let busy = false
     let freeAt = 0
@@ -254,7 +255,7 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
   const start = new Date(dayStartMs).toISOString()
   const end = new Date(dayStartMs + 86_400_000).toISOString()
 
-  const defaultVaidyaCode = VAIDYAS[0]?.code ?? 'VAIDYA'
+  const defaultVaidyaCode = 'VAIDYA'
 
   const { data, error } = await db
     .from('appointments')
@@ -306,8 +307,8 @@ export async function getVaidyaSchedule(db: ServiceDb, dateYMD: string): Promise
   const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
   const start = new Date(dayStartMs).toISOString()
   const end = new Date(dayStartMs + 86_400_000).toISOString()
-  const vaidyaCodes = new Set(VAIDYAS.map((v) => v.code))
-  const defaultVaidyaCode = VAIDYAS[0]?.code ?? 'VAIDYA'
+  const vaidyaCodes = new Set(['VAIDYA', 'LYMAT'])
+  const defaultVaidyaCode = 'VAIDYA'
 
   const { data, error } = await db
     .from('appointments')

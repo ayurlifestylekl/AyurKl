@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
 import { getOperationalActionState } from '@/lib/booking/operations'
 import { approveAndAssign, assignTherapist, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
-import { therapistsForGender, therapistLabel } from '@/lib/staff/therapists'
+import type { Therapist } from '@/lib/staff/therapists'
+import { therapistLabel } from '@/lib/staff/therapists'
 import { fmtMY } from '@/lib/datetime'
 
 interface Props {
@@ -25,11 +26,14 @@ interface Props {
   /** Current therapist assignment, if any — a confirmed instant booking has none until front desk names one. */
   assignedTherapistCode?: string | null
   assignedTherapistName?: string | null
+  /** Active therapists for assignment dropdowns. */
+  therapists: Therapist[]
 }
 
 export default function AppointmentActions({
   id, status, bookingKind, genderRequirement, requestedAt, requestedAtAlt = null,
   backHref = '/console', canDelete = false, assignedTherapistCode = null, assignedTherapistName = null,
+  therapists,
 }: Props) {
   const router = useRouter()
   const [therapistCode, setTherapistCode] = useState('')
@@ -118,7 +122,7 @@ export default function AppointmentActions({
               <Field label="Assign therapist">
                 <select value={therapistCode} onChange={(e) => setTherapistCode(e.target.value)} className={inp}>
                   <option value="">Select therapist…</option>
-                  {therapistsForGender(genderRequirement).map((t) => (
+                  {therapists.filter((t) => !genderRequirement || t.gender === genderRequirement).map((t) => (
                     <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
                   ))}
                 </select>
@@ -176,7 +180,7 @@ export default function AppointmentActions({
           <div className="flex flex-wrap items-end gap-2">
             <select value={postTherapistCode} onChange={(e) => setPostTherapistCode(e.target.value)} className={inp}>
               <option value="">{assignedTherapistCode ? 'Reassign to…' : 'Select therapist…'}</option>
-              {therapistsForGender(genderRequirement).map((t) => (
+              {therapists.filter((t) => !genderRequirement || t.gender === genderRequirement).map((t) => (
                 <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
               ))}
             </select>

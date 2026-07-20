@@ -266,8 +266,8 @@ async function computeMixedSlots(dateYMD: string, members: PartyMemberResolved[]
   if (male.length + female.length === 0) return []
   const sb = admin()
 
-  const maleTh = male.length > 0 ? therapistsForGender('male') : []
-  const femaleTh = female.length > 0 ? therapistsForGender('female') : []
+  const maleTh = male.length > 0 ? await therapistsForGender('male') : []
+  const femaleTh = female.length > 0 ? await therapistsForGender('female') : []
 
   // The last bookable slot must respect the LONGEST treatment in the party, so
   // the longest therapy still fits before closing.
@@ -368,7 +368,7 @@ async function computeMixedSlots(dateYMD: string, members: PartyMemberResolved[]
 export async function effectiveGenderCapacity(gender: Gender, iso: string, durationMins: number): Promise<number> {
   const sb = admin()
   const dateYMD = mytDayKey(iso)
-  const roster = therapistsForGender(gender)
+  const roster = await therapistsForGender(gender)
   const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
   const intervals = blockedIntervalsForDate(blocks, dateYMD)
   return roster.filter((t) => !isBlocked(intervals, t.code, iso, durationMins)).length

@@ -3,14 +3,20 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
-import { THERAPISTS, VAIDYAS, vaidyaByCode } from '@/lib/staff/therapists'
+import type { Therapist, Vaidya } from '@/lib/staff/therapists'
 import { createBlock, deleteBlock } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
 import type { ScheduleBlock } from '@/lib/booking/blocks'
 
 const RECUR_LABEL = { none: 'One-off', weekly: 'Weekly', monthly: 'Monthly' } as const
 
-export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
+interface Props {
+  blocks: ScheduleBlock[]
+  therapists: Therapist[]
+  vaidyas: Vaidya[]
+}
+
+export default function BlockManager({ blocks, therapists, vaidyas }: Props) {
   const router = useRouter()
   const [therapistCode, setTherapistCode] = useState('')
   const [allDay, setAllDay] = useState(true)
@@ -59,9 +65,9 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
 
   const therapistName = (code: string | null) => {
     if (!code) return 'All therapists'
-    const v = vaidyaByCode(code)
+    const v = vaidyas.find((v) => v.code === code)
     if (v) return `${v.name} (consultations only)`
-    return THERAPISTS.find((t) => t.code === code)?.name ?? code
+    return therapists.find((t) => t.code === code)?.name ?? code
   }
 
   // Searchable across therapist, date, time and reason so staff can pinpoint the
@@ -90,10 +96,10 @@ export default function BlockManager({ blocks }: { blocks: ScheduleBlock[] }) {
         <Field label="Therapist">
           <select value={therapistCode} onChange={(e) => setTherapistCode(e.target.value)} className={inp}>
             <option value="">All therapists (centre closed)</option>
-            {THERAPISTS.map((t) => (
+            {therapists.map((t) => (
               <option key={t.code} value={t.code}>{t.name} · {t.code}</option>
             ))}
-            {VAIDYAS.map((v) => (
+            {vaidyas.map((v) => (
               <option key={v.code} value={v.code}>{v.name} (consultations only)</option>
             ))}
           </select>

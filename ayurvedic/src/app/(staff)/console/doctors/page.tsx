@@ -1,6 +1,6 @@
 import { requireStaff } from '@/lib/staff/guard'
 import { getVaidyaSchedule } from '@/lib/staff/appointments'
-import { VAIDYAS } from '@/lib/staff/therapists'
+import { getAllVaidyas } from '@/lib/staff/therapists'
 import { mytDayKey } from '@/lib/datetime'
 import VaidyaScheduleGrid from '@/components/staff/VaidyaScheduleGrid'
 import AutoRefresh from '@/components/staff/AutoRefresh'
@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 export default async function ConsoleDoctorsPage({ searchParams }: { searchParams: { date?: string } }) {
   const { db } = await requireStaff(['admin', 'front_desk'])
   const date = searchParams.date && /^\d{4}-\d{2}-\d{2}$/.test(searchParams.date) ? searchParams.date : mytDayKey(new Date())
-  const day = await getVaidyaSchedule(db, date)
+  const [day, vaidyas] = await Promise.all([getVaidyaSchedule(db, date), getAllVaidyas()])
 
   return (
     <div>
@@ -22,7 +22,7 @@ export default async function ConsoleDoctorsPage({ searchParams }: { searchParam
       </p>
       <VaidyaScheduleGrid
         date={date}
-        vaidyas={VAIDYAS}
+        vaidyas={vaidyas.filter((v) => v.active !== false)}
         appts={day.appts}
         blocks={day.blocks}
         editable

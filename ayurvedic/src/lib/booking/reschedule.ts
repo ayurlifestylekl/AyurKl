@@ -329,7 +329,7 @@ export async function rescheduleBooking(
     if (change.resource_type === 'gender') {
       const gender = genderForRequirement(change.resource_key)
       if (!gender) return publicFailure('INVALID_INPUT', 'This booking has an invalid therapist requirement.')
-      change.capacity = therapistsForGender(gender)
+      change.capacity = (await therapistsForGender(gender))
         .filter((therapist) => !isBlocked(
           intervals,
           therapist.code,

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requireStaff } from '@/lib/staff/guard'
 import { getAppointmentDetail, getGroupAppointments } from '@/lib/staff/appointments'
+import { therapistsForGender } from '@/lib/staff/therapists'
 import StatusBadge from '@/components/staff/StatusBadge'
 import PatientHealthPanel from '@/components/staff/PatientHealthPanel'
 import ClinicalNotes from '@/components/staff/ClinicalNotes'
@@ -19,7 +20,7 @@ function fmt(dt: string | null) {
 
 export default async function DoctorPatientPage({ params }: { params: { id: string } }) {
   const { db, role } = await requireStaff(['admin', 'doctor'])
-  const a = await getAppointmentDetail(db, params.id)
+  const [a, therapists] = await Promise.all([getAppointmentDetail(db, params.id), therapistsForGender(null)])
   if (!a) notFound()
 
   const groupMembers = a.groupId ? await getGroupAppointments(db, a.groupId) : []
@@ -59,6 +60,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
           {isGroup ? (
             <GroupApprovalActions
               groupId={a.groupId as string}
+              therapists={therapists}
               members={groupMembers.map((m) => ({
                 id: m.id,
                 patientName: m.patientName,
@@ -80,6 +82,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
               id={a.id}
               status={a.status}
               bookingKind={a.bookingKind}
+              therapists={therapists}
               genderRequirement={a.genderRequirement}
               requestedAt={a.requestedDatetime}
               requestedAtAlt={a.requestedDatetimeAlt}
