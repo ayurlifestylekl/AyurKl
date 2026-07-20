@@ -78,9 +78,13 @@ export default function TreatmentPicker({
     }
   }, [open])
 
-  // Lock body scroll while the mobile sheet is open
+  // Lock body scroll while the mobile sheet is open. Desktop's panel is an
+  // inline dropdown, not a full-screen sheet, so it should never freeze the
+  // page — checked at open-time via matchMedia rather than a fixed width so
+  // it tracks the sm: breakpoint used throughout this component.
   useEffect(() => {
     if (!open) return
+    if (window.matchMedia('(min-width: 640px)').matches) return
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
