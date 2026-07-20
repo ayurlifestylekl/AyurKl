@@ -223,6 +223,7 @@ export default function TreatmentPicker({
           */}
           <div
             aria-hidden
+            onClick={() => setOpen(false)}
             className="fixed inset-0 z-40 bg-primary/40"
           />
           <div
