@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, Gender } from '@/types/booking'
-import type { Therapist } from '@/lib/staff/therapists'
+import type { Therapist } from '@/lib/staff/therapist-format'
 import { createBookingRequest, createGroupBooking, type GroupGuest } from '@/lib/booking/actions'
 
 interface TreatmentOption {

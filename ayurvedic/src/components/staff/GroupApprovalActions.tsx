@@ -4,8 +4,8 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Gender } from '@/types/booking'
 import { approveGroup, assignTherapist, rejectGroup, deleteBooking } from '@/lib/staff/actions'
-import type { Therapist } from '@/lib/staff/therapists'
-import { therapistLabel } from '@/lib/staff/therapists'
+import type { Therapist } from '@/lib/staff/therapist-format'
+import { therapistLabel } from '@/lib/staff/therapist-format'
 import { fmtMY } from '@/lib/datetime'
 
 export interface GroupGuestRow {

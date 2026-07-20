@@ -3,10 +3,10 @@
 import { useEffect, useMemo, useState, useTransition } from 'react'
 import { X } from 'lucide-react'
 import type { GridAppt } from '@/lib/staff/appointments'
-import type { Therapist } from '@/lib/staff/therapists'
+import type { Therapist } from '@/lib/staff/therapist-format'
 import { rescheduleFromGrid, deleteBooking } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
-import { therapistLabel } from '@/lib/staff/therapists'
+import { therapistLabel } from '@/lib/staff/therapist-format'
 
 const OPEN = 9 * 60 + 30
 const CLOSE = 20 * 60 + 30

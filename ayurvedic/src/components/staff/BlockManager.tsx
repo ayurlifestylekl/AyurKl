@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
-import type { Therapist, Vaidya } from '@/lib/staff/therapists'
+import type { Therapist, Vaidya } from '@/lib/staff/therapist-format'
 import { createBlock, deleteBlock } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
 import type { ScheduleBlock } from '@/lib/booking/blocks'

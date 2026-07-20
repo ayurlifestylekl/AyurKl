@@ -9,6 +9,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { PortableTextBlock } from '@portabletext/types'
 import type {
   BookingType,
+  GalleryImageRef,
   Treatment,
   TreatmentCategory,
   TreatmentDetail,
@@ -199,7 +200,7 @@ export async function getTreatmentBySlug(
     heroImage: null,
     heroImageUrl: r.hero_image_url ?? null,
     gallery: Array.isArray(r.gallery)
-      ? r.gallery.filter((img: any) => img?.url !== r.hero_image_url)
+      ? (r.gallery as GalleryImageRef[]).filter((img) => img?.url !== r.hero_image_url)
       : null,
     order: r.sort_order ?? null,
     ...pricing(r),

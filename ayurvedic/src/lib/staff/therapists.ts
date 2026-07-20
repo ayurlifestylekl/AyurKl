@@ -2,13 +2,10 @@ import 'server-only'
 import { cache } from 'react'
 import { createClient as createSb } from '@supabase/supabase-js'
 import type { Gender } from '@/types/booking'
+import type { Therapist, Vaidya } from './therapist-format'
 
-export interface Therapist {
-  code: string
-  name: string
-  gender: Gender
-  active?: boolean
-}
+export type { Therapist, Vaidya } from './therapist-format'
+export { therapistLabel, vaidyaLabel } from './therapist-format'
 
 /** Service-role client for reading roster tables. */
 function db() {
@@ -49,19 +46,6 @@ export const getAllTherapists = cache(async (): Promise<Therapist[]> => {
   return (data ?? []).map((t) => ({ code: t.code, name: t.name, gender: t.gender as Gender, active: t.active }))
 })
 
-/** "Asha · AS12" display label. */
-export function therapistLabel(t: Pick<Therapist, 'code' | 'name'>): string {
-  return `${t.name} · ${t.code}`
-}
-
-export interface Vaidya {
-  code: string
-  name: string
-  /** If false, this Vaidya is selectable by staff internally but never shown in customer-facing consultation booking. */
-  publicFacing?: boolean
-  active?: boolean
-}
-
 /** Fetch a Vaidya by code. Request-level cached. */
 export const vaidyaByCode = cache(async (code: string | null | undefined): Promise<Vaidya | undefined> => {
   if (!code) return undefined
@@ -79,8 +63,4 @@ export const getAllVaidyas = cache(async (): Promise<Vaidya[]> => {
 export async function vaidyaName(code: string | null | undefined): Promise<string> {
   const v = await vaidyaByCode(code)
   return v?.name ?? code ?? ''
-}
-
-export function vaidyaLabel(v: Pick<Vaidya, 'code' | 'name'>): string {
-  return `${v.name} · ${v.code}`
 }

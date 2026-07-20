@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
 import { getOperationalActionState } from '@/lib/booking/operations'
 import { approveAndAssign, assignTherapist, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
-import type { Therapist } from '@/lib/staff/therapists'
-import { therapistLabel } from '@/lib/staff/therapists'
+import type { Therapist } from '@/lib/staff/therapist-format'
+import { therapistLabel } from '@/lib/staff/therapist-format'
 import { fmtMY } from '@/lib/datetime'
 
 interface Props {
