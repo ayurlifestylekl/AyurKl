@@ -368,6 +368,9 @@ export default function VaidyaScheduleGrid({
                     className="group absolute inset-x-0 z-0 hover:bg-accent/10"
                     style={{ top: topFor(m), height: ROW_PX }}
                   >
+                    <span className="pointer-events-none absolute left-1 top-0.5 text-[8px] font-semibold tabular-nums text-dark/25 group-hover:text-accent">
+                      {minLabel(m)}
+                    </span>
                     <span className="pointer-events-none absolute inset-0 hidden items-center justify-center text-[9px] font-bold uppercase tracking-wide text-accent group-hover:flex">
                       {mode === 'book' ? '+ Book' : '+ Block'}
                     </span>
@@ -458,6 +461,16 @@ export default function VaidyaScheduleGrid({
                       <div className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wide opacity-60">
                         {fmtMY(`${date}T${String(Math.floor(a.startMin / 60)).padStart(2, '0')}:${String(a.startMin % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })}
                       </div>
+                      {a.room && (
+                        <div className="mt-0.5 truncate text-[9px] opacity-70" title={a.room}>
+                          {a.room}
+                        </div>
+                      )}
+                      {a.internalNotes && (
+                        <div className="mt-0.5 truncate text-[9px] italic opacity-70" title={a.internalNotes}>
+                          📝 {a.internalNotes}
+                        </div>
+                      )}
                     </Link>
                     {editable && (
                       <div className="mt-1 flex gap-1">

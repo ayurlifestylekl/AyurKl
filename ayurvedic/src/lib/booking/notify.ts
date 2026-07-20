@@ -222,6 +222,15 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
     [
       ...(refLine(p.bookingId) ? [refLine(p.bookingId)!] : []),
       ...lines,
+      ...(p.bookingId
+        ? [
+            '<div style="margin:16px 0;padding:16px;background:#f7f2e8;border:2px solid #d4af37;border-radius:12px;text-align:center">',
+            '<p style="margin:0 0 8px;font-size:13px;color:#5b0f1c;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Your Booking Reference</p>',
+            `<p style="margin:0;font-size:28px;font-weight:700;color:#1e5b4b;letter-spacing:1px">#${bookingRef(p.bookingId)}</p>`,
+            '<p style="margin:8px 0 0;font-size:13px;color:#666">Please show this reference with your IC/passport at reception to confirm your booking.</p>',
+            '</div>',
+          ]
+        : []),
       p.bookingKind === 'consultation'
         ? 'You can manage or reschedule your booking online up to 24 hours beforehand.'
         : 'You can manage or reschedule your booking online. Late cancellations are non-refundable.',

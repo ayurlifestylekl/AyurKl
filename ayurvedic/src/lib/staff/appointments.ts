@@ -229,6 +229,8 @@ export interface GridAppt {
   treatmentName: string | null
   status: BookingStatus
   room: string | null
+  /** Staff remarks/notes for internal use (e.g., "VIP guest", "Bring extra towels"). */
+  internalNotes: string | null
   /** null / undefined = created by a customer on the web; non-null = staff-created. */
   createdByAdminId: string | null
   groupId: string | null
@@ -259,31 +261,31 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
 
   const { data, error } = await db
     .from('appointments')
-    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag, booking_kind')
+    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag, booking_kind, room, internal_notes')
     .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'])
     .gte('appointment_date_time', start)
     .lt('appointment_date_time', end)
     .order('appointment_date_time', { ascending: true })
   if (error) console.error('[staff/appointments] daySchedule:', error.message)
 
-  const all = (data ?? []).map(mapAppointmentRow)
-  const toGrid = (a: StaffAppointment): GridAppt => ({
-    id: a.id,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const grid: GridAppt[] = (data ?? []).map((r: any) => ({
+    id: r.id,
     // Consultations are shown under their Vaidya column (or the default Vaidya
     // if no specific Vaidya has been assigned yet). This lets the front-desk
     // schedule grid display doctor bookings alongside therapist bookings.
-    therapistCode: a.bookingKind === 'consultation' ? (a.assignedTherapistCode ?? defaultVaidyaCode) : a.assignedTherapistCode,
-    startMin: a.appointmentDatetime ? hhmmToMin(mytTimeOfDay(a.appointmentDatetime)) : 0,
-    durationMins: a.durationMins ?? 60,
-    patientName: a.patientName,
-    treatmentName: a.bookingKind === 'consultation' ? 'Consultation' : a.treatmentName,
-    status: a.status,
-    room: a.room,
-    createdByAdminId: a.createdByAdminId ?? null,
-    groupId: a.groupId ?? null,
-    staffColorTag: a.staffColorTag ?? null,
-  })
-  const grid = all.map(toGrid)
+    therapistCode: r.booking_kind === 'consultation' ? (r.assigned_therapist_code ?? defaultVaidyaCode) : r.assigned_therapist_code,
+    startMin: r.appointment_date_time ? hhmmToMin(mytTimeOfDay(r.appointment_date_time)) : 0,
+    durationMins: r.duration_mins ?? 60,
+    patientName: r.patient_name,
+    treatmentName: r.booking_kind === 'consultation' ? 'Consultation' : r.treatment_name,
+    status: r.status,
+    room: r.room,
+    internalNotes: r.internal_notes ?? null,
+    createdByAdminId: r.created_by_admin_id ?? null,
+    groupId: r.group_id ?? null,
+    staffColorTag: r.staff_color_tag ?? null,
+  }))
 
   const blocksRaw = await fetchBlocksOnOrAfter(db, dateYMD)
   const blocks: GridBlock[] = blockedIntervalsForDate(blocksRaw, dateYMD).map((iv) => ({
@@ -312,7 +314,7 @@ export async function getVaidyaSchedule(db: ServiceDb, dateYMD: string): Promise
 
   const { data, error } = await db
     .from('appointments')
-    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag, booking_kind')
+    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag, booking_kind, room, internal_notes')
     .eq('booking_kind', 'consultation')
     .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'])
     .gte('appointment_date_time', start)
@@ -320,21 +322,21 @@ export async function getVaidyaSchedule(db: ServiceDb, dateYMD: string): Promise
     .order('appointment_date_time', { ascending: true })
   if (error) console.error('[staff/appointments] vaidyaSchedule:', error.message)
 
-  const all = (data ?? []).map(mapAppointmentRow)
-  const toGrid = (a: StaffAppointment): GridAppt => ({
-    id: a.id,
-    therapistCode: a.assignedTherapistCode ?? defaultVaidyaCode,
-    startMin: a.appointmentDatetime ? hhmmToMin(mytTimeOfDay(a.appointmentDatetime)) : 0,
-    durationMins: a.durationMins ?? CONSULTATION_MINS,
-    patientName: a.patientName,
-    treatmentName: a.treatmentName,
-    status: a.status,
-    room: a.room,
-    createdByAdminId: a.createdByAdminId ?? null,
-    groupId: a.groupId ?? null,
-    staffColorTag: a.staffColorTag ?? null,
-  })
-  const grid = all.map(toGrid)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const grid: GridAppt[] = (data ?? []).map((r: any) => ({
+    id: r.id,
+    therapistCode: r.assigned_therapist_code ?? defaultVaidyaCode,
+    startMin: r.appointment_date_time ? hhmmToMin(mytTimeOfDay(r.appointment_date_time)) : 0,
+    durationMins: r.duration_mins ?? CONSULTATION_MINS,
+    patientName: r.patient_name,
+    treatmentName: r.treatment_name,
+    status: r.status,
+    room: r.room,
+    internalNotes: r.internal_notes ?? null,
+    createdByAdminId: r.created_by_admin_id ?? null,
+    groupId: r.group_id ?? null,
+    staffColorTag: r.staff_color_tag ?? null,
+  }))
 
   const blocksRaw = await fetchBlocksOnOrAfter(db, dateYMD)
   const blocks: GridBlock[] = blockedIntervalsForDate(blocksRaw, dateYMD)

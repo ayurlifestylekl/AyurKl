@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { Landmark, CreditCard, ArrowLeft, ShieldCheck, ArrowUpRight } from 'lucide-react'
+import { Landmark, CreditCard, ArrowLeft, ShieldCheck } from 'lucide-react'
 
 import { getBookingForPayment, getGroupMembers, getTreatmentImageUrl } from '@/lib/storefront/booking'
 import { reconcileAppointment } from '@/lib/booking/payment'
@@ -59,9 +59,7 @@ export default async function CheckoutPage({
 
   const amount = isGroup ? groupTotal : b.payableAmountRm
 
-  // Clinic logo is the primary anchor; treatment thumbnails are shown as a
-  // best-effort secondary row for what was actually booked.
-  const LOGO_URL = '/logo.png'
+  // Fetch treatment images to display the actual therapy photo
   const treatmentImageUrls: Map<string, string | null> = new Map()
   if (!isGroup && b.treatmentId) {
     treatmentImageUrls.set(b.treatmentId, await getTreatmentImageUrl(b.treatmentId))
@@ -69,6 +67,9 @@ export default async function CheckoutPage({
     const uniqueIds = Array.from(new Set(members.map((m) => m.treatmentId).filter((id): id is string => !!id)))
     await Promise.all(uniqueIds.map(async (id) => treatmentImageUrls.set(id, await getTreatmentImageUrl(id))))
   }
+  
+  // Use the first treatment image, or fallback to logo if no image available
+  const primaryImage = Array.from(treatmentImageUrls.values()).find((url): url is string => !!url) ?? '/logo.png'
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-cream">
@@ -95,21 +96,12 @@ export default async function CheckoutPage({
           {/* Left — the reservation itself, anchored by a real photo. */}
           <div className="lg:sticky lg:top-10">
             <div className="overflow-hidden rounded-[26px] bg-white shadow-luxe ring-1 ring-accent/10">
-              <div className="flex flex-col items-center justify-center gap-4 bg-cream/50 px-7 py-8">
-                <img src={LOGO_URL} alt="Kerala Ayurvedic Lifestyle" className="h-14 w-auto object-contain" />
-                <div className="flex -space-x-2 overflow-hidden">
-                  {Array.from(treatmentImageUrls.values())
-                    .filter((url): url is string => !!url)
-                    .slice(0, 4)
-                    .map((url, i) => (
-                      <div
-                        key={i}
-                        className="relative inline-block h-10 w-10 flex-none rounded-full border-2 border-white bg-cover bg-center shadow-sm"
-                        style={{ backgroundImage: `url('${url}')` }}
-                        aria-hidden
-                      />
-                    ))}
-                </div>
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream/50">
+                <img 
+                  src={primaryImage} 
+                  alt={b.treatmentName ?? 'Treatment'} 
+                  className="h-full w-full object-cover"
+                />
               </div>
               <div className="p-7">
                 <div className="flex items-center gap-2">
@@ -154,12 +146,18 @@ export default async function CheckoutPage({
                   </span>
                   <span className="font-display text-[26px] font-bold text-accent">RM{amount}</span>
                 </div>
-                <Link
-                  href={`/book/treatment?edit=${b.id}${token ? `&t=${encodeURIComponent(token)}` : ''}`}
-                  className="mt-4 flex items-center justify-center gap-1.5 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-primary/70 transition-colors hover:text-primary"
-                >
-                  Change treatment <ArrowUpRight className="h-3.5 w-3.5" />
-                </Link>
+                <div className="mt-4 flex flex-col gap-2">
+                  <Link
+                    href={`/book/treatment?edit=${b.id}${token ? `&t=${encodeURIComponent(token)}` : ''}`}
+                    className="flex items-center justify-center gap-1.5 rounded-lg border border-accent/20 bg-cream/40 px-4 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-primary transition-all hover:border-accent/40 hover:bg-cream/60"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    Edit booking details
+                  </Link>
+                  <p className="text-center font-body text-[10.5px] text-dark/50">
+                    Change treatment, time, or personal information
+                  </p>
+                </div>
               </div>
             </div>
 
