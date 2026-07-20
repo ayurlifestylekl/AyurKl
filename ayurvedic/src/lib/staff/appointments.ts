@@ -47,8 +47,10 @@ export async function listAppointments(
     q = q.is('assigned_therapist_code', null).eq('booking_kind', 'treatment')
   }
   if (filters.search) {
-    const s = `%${filters.search}%`
-    q = q.or(`patient_name.ilike.${s},patient_phone.ilike.${s},treatment_name.ilike.${s}`)
+    const raw = filters.search.trim().replace(/^#/, '')
+    const like = `%${raw}%`
+    const prefix = `${raw}%`
+    q = q.or(`id::text.ilike.${prefix},patient_name.ilike.${like},patient_phone.ilike.${like},treatment_name.ilike.${like}`)
   }
 
   const { data, error } =
@@ -252,9 +254,11 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
   const start = new Date(dayStartMs).toISOString()
   const end = new Date(dayStartMs + 86_400_000).toISOString()
 
+  const defaultVaidyaCode = VAIDYAS[0]?.code ?? 'VAIDYA'
+
   const { data, error } = await db
     .from('appointments')
-    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag')
+    .select('id, assigned_therapist_code, appointment_date_time, duration_mins, patient_name, treatment_name, status, created_by_admin_id, group_id, staff_color_tag, booking_kind')
     .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress', 'completed'])
     .gte('appointment_date_time', start)
     .lt('appointment_date_time', end)
@@ -264,11 +268,14 @@ export async function getDaySchedule(db: ServiceDb, dateYMD: string): Promise<Da
   const all = (data ?? []).map(mapAppointmentRow)
   const toGrid = (a: StaffAppointment): GridAppt => ({
     id: a.id,
-    therapistCode: a.assignedTherapistCode,
+    // Consultations are shown under their Vaidya column (or the default Vaidya
+    // if no specific Vaidya has been assigned yet). This lets the front-desk
+    // schedule grid display doctor bookings alongside therapist bookings.
+    therapistCode: a.bookingKind === 'consultation' ? (a.assignedTherapistCode ?? defaultVaidyaCode) : a.assignedTherapistCode,
     startMin: a.appointmentDatetime ? hhmmToMin(mytTimeOfDay(a.appointmentDatetime)) : 0,
     durationMins: a.durationMins ?? 60,
     patientName: a.patientName,
-    treatmentName: a.treatmentName,
+    treatmentName: a.bookingKind === 'consultation' ? 'Consultation' : a.treatmentName,
     status: a.status,
     room: a.room,
     createdByAdminId: a.createdByAdminId ?? null,

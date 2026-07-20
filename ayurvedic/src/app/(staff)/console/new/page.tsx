@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { requireStaff } from '@/lib/staff/guard'
 import { getTreatmentsFlat } from '@/lib/storefront/treatments'
+import { THERAPISTS } from '@/lib/staff/therapists'
 import StaffNewBooking from '@/components/staff/StaffNewBooking'
 
 export const dynamic = 'force-dynamic'
@@ -17,7 +18,7 @@ export default async function NewBookingPage() {
       </Link>
       <h1 className="mt-3 font-heading text-[22px] font-extrabold text-primary">New booking</h1>
       <p className="mb-5 font-body text-[13px] text-dark/55">Log a walk-in or phone booking on the customer&apos;s behalf. You&apos;ll approve &amp; assign on the next screen.</p>
-      <StaffNewBooking treatments={options} />
+      <StaffNewBooking treatments={options} therapists={THERAPISTS} />
     </div>
   )
 }

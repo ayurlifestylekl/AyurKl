@@ -4,6 +4,7 @@ import { sendTelegram } from '@/lib/integrations/telegram'
 import { fmtMY } from '@/lib/datetime'
 import type { BookingKind } from '@/types/booking'
 import { confirmationCopy } from './confirmation-copy'
+import { bookingRef } from './ref'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
 
@@ -34,6 +35,11 @@ export interface NotifyBase {
   to: string | null | undefined
   name?: string | null
   treatmentName?: string | null
+  bookingId?: string | null
+}
+
+function refLine(id: string | null | undefined): string | null {
+  return id ? `Booking ref: <strong>#${bookingRef(id)}</strong>` : null
 }
 
 export async function notifyGuestManagementOtp({ to, code }: { to: string; code: string }): Promise<boolean> {
@@ -126,11 +132,13 @@ export async function notifyRequestReceived(p: NotifyBase & { kind: string; when
   const lines = isGroup
     ? [
         `Hi ${esc(p.name ?? 'there')}, thank you for your group booking request for <strong>${p.guests!.length} guests</strong>:`,
+        ...(refLine(p.bookingId) ? [refLine(p.bookingId)!] : []),
         ...guestListLines(p.guests!),
         'Our team will review it shortly and confirm each slot.',
       ]
     : [
         `Hi ${esc(p.name ?? 'there')}, thank you for your ${esc(p.kind)} request for <strong>${esc(p.treatmentName ?? 'your appointment')}</strong>.`,
+        ...(refLine(p.bookingId) ? [refLine(p.bookingId)!] : []),
         `Preferred time: <strong>${when(p.whenISO)}</strong>.`,
         'Our team will review it shortly and confirm your slot.',
       ]
@@ -153,6 +161,7 @@ export async function notifyApproved(
   const { html, text } = shell(
     isTreatment ? 'Approved — please complete payment' : 'Your consultation is confirmed',
     [
+      ...(refLine(p.bookingId) ? [refLine(p.bookingId)!] : []),
       ...intro,
       isTreatment && p.amountRm != null
         ? `Please pay <strong>RM${p.amountRm}</strong>${isGroup ? ' (total for the group)' : ''} to secure your appointment.`
@@ -211,6 +220,7 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
   const { html, text } = shell(
     copy.customerHeading,
     [
+      ...(refLine(p.bookingId) ? [refLine(p.bookingId)!] : []),
       ...lines,
       p.bookingKind === 'consultation'
         ? 'You can manage or reschedule your booking online up to 24 hours beforehand.'

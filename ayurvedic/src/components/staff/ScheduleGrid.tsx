@@ -7,8 +7,10 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { GridAppt, GridBlock } from '@/lib/staff/appointments'
 import type { Therapist } from '@/lib/staff/therapists'
 import { createBlock, deleteBlock, updateBlockReason, createBookingFromGrid, setAppointmentColorTag } from '@/lib/staff/actions'
+import { createGroupBooking, type GroupGuest } from '@/lib/booking/actions'
 import { fmtMY } from '@/lib/datetime'
 import type { Gender, StaffColorTag } from '@/types/booking'
+import type { Vaidya } from '@/lib/staff/therapists'
 import ConsoleRescheduleDialog from './ConsoleRescheduleDialog'
 
 /** Client-requested manual palette for front desk's own slot bookkeeping. */
@@ -47,6 +49,12 @@ function shiftDay(ymd: string, days: number): string {
 const topFor = (min: number) => ((min - OPEN) / ROW) * ROW_PX
 const clamp = (min: number) => Math.max(OPEN, Math.min(CLOSE, min))
 
+interface TreatmentOption {
+  id: string
+  title: string
+  bookingType?: string | null
+}
+
 interface Props {
   basePath: string // e.g. '/console/schedule' or '/doctor/calendar'
   detailBase: string // e.g. '/console' or '/doctor'
@@ -55,6 +63,10 @@ interface Props {
   appts: GridAppt[]
   unassigned: GridAppt[]
   blocks: GridBlock[]
+  /** Vaidya columns for displaying doctor consultations in the same grid. */
+  vaidyas?: Vaidya[]
+  /** Available treatments for front-desk quick group booking. */
+  treatments?: TreatmentOption[]
   /** Front desk / admin can add & remove blocks straight from the grid. */
   editable?: boolean
 }
@@ -86,7 +98,7 @@ export function apptClasses(a: GridAppt): string {
 const SLOTS: number[] = []
 for (let m = OPEN; m < CLOSE; m += ROW) SLOTS.push(m)
 
-export default function ScheduleGrid({ basePath, detailBase, date, therapists, appts, unassigned, blocks, editable = false }: Props) {
+export default function ScheduleGrid({ basePath, detailBase, date, therapists, appts, unassigned, blocks, vaidyas = [], treatments = [], editable = false }: Props) {
   const router = useRouter()
   const go = (d: string) => router.push(`${basePath}?date=${d}`)
 
@@ -110,6 +122,10 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const [bookGender, setBookGender] = useState<Gender | ''>('')
   const [bookDuration, setBookDuration] = useState<number | ''>('')
   const [bookRemark, setBookRemark] = useState('')
+  const [bookPartySize, setBookPartySize] = useState(1)
+  const [bookTreatmentId, setBookTreatmentId] = useState('')
+  const [bookExtraGuests, setBookExtraGuests] = useState<{ name: string; gender: Gender | ''; therapistCode: string }[]>([])
+  const bookableTreatments = treatments.filter((t) => t.bookingType !== 'enquiry')
 
   // Reschedule dialog.
   const [rescheduleAppt, setRescheduleAppt] = useState<GridAppt | null>(null)
@@ -119,7 +135,12 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const setColorTag = (appointmentId: string, tag: StaffColorTag | null) => {
     setColorPickerFor(null)
     start(async () => {
-      await setAppointmentColorTag(appointmentId, tag)
+      const res = await setAppointmentColorTag(appointmentId, tag)
+      if ('error' in res) {
+        setErr(res.error)
+      } else {
+        setErr(null)
+      }
       router.refresh()
     })
   }
@@ -204,6 +225,9 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     setBookGender('')
     setBookDuration('')
     setBookRemark('')
+    setBookPartySize(1)
+    setBookTreatmentId('')
+    setBookExtraGuests([])
   }
 
   const addBooking = () => {
@@ -212,6 +236,30 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     if (!bookGender) { setErr('Select a gender.'); return }
     setErr(null)
     start(async () => {
+      if (bookPartySize > 1) {
+        if (!bookTreatmentId) { setErr('Choose a treatment for the group.'); return }
+        if (!bookPhone.trim()) { setErr('Enter a contact number for the group.'); return }
+        if (!bookEmail.trim()) { setErr('Enter an email for the group.'); return }
+        const extras = bookExtraGuests.filter((g) => g.name.trim() && g.gender)
+        if (extras.length !== bookPartySize - 1) { setErr('Enter name and gender for every additional guest.'); return }
+        const when = isoAt(bookDraft.startMin)
+        const healthIntake = bookRemark.trim() ? { notes: bookRemark.trim() } : {}
+        const guests: GroupGuest[] = [
+          { name: bookName.trim(), gender: bookGender as Gender, preferredAt: when, treatmentId: bookTreatmentId, assignedTherapistCode: bookDraft.code, healthIntake },
+          ...extras.map((g) => ({ name: g.name.trim(), gender: g.gender as Gender, preferredAt: when, treatmentId: bookTreatmentId, assignedTherapistCode: g.therapistCode.trim() || null, healthIntake: {} })),
+        ]
+        const res = await createGroupBooking({
+          treatmentId: bookTreatmentId,
+          patientPhone: bookPhone.trim(),
+          patientEmail: bookEmail.trim(),
+          isGuest: true,
+          acceptedPolicies: true,
+          guests,
+        })
+        if ('error' in res) setErr(res.error)
+        else { resetBookDraft(); router.refresh() }
+        return
+      }
       const selectedDuration = bookDuration ? Number(bookDuration) : 60
       const res = await createBookingFromGrid({
         therapistCode: bookDraft.code,
@@ -229,7 +277,14 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     })
   }
 
-  const therapistName = (code: string) => therapists.find((t) => t.code === code)?.name ?? code
+  const therapistName = (code: string) => {
+    const therapist = therapists.find((t) => t.code === code)
+    if (therapist) return therapist.name
+    const vaidya = vaidyas.find((v) => v.code === code)
+    return vaidya?.name ?? code
+  }
+
+  const vaidyaCodes = useMemo(() => new Set(vaidyas.map((v) => v.code)), [vaidyas])
 
   const hourLabels: number[] = []
   for (let m = Math.ceil(OPEN / 60) * 60; m <= CLOSE; m += 60) hourLabels.push(m)
@@ -237,6 +292,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const columns: { code: string | null; name: string }[] = [
     ...(unassigned.length ? [{ code: null as string | null, name: 'Unassigned' }] : []),
     ...therapists.map((t) => ({ code: t.code as string | null, name: t.name })),
+    ...vaidyas.map((v) => ({ code: v.code as string | null, name: v.name })),
   ]
   const apptsFor = (code: string | null) =>
     code === null ? unassigned : appts.filter((a) => a.therapistCode === code)
@@ -302,10 +358,10 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 <Field label="Patient name" required>
                   <input value={bookName} onChange={(e) => setBookName(e.target.value)} className={bookInput} required />
                 </Field>
-                <Field label="Contact number (optional)">
+                <Field label={bookPartySize === 1 ? 'Contact number (optional)' : 'Contact number'}>
                   <input value={bookPhone} onChange={(e) => setBookPhone(e.target.value)} className={bookInput} />
                 </Field>
-                <Field label="Email (optional)">
+                <Field label={bookPartySize === 1 ? 'Email (optional)' : 'Email'}>
                   <input value={bookEmail} onChange={(e) => setBookEmail(e.target.value)} type="email" className={bookInput} />
                 </Field>
                 <Field label="Gender" required>
@@ -315,18 +371,65 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                     <option value="male">Male</option>
                   </select>
                 </Field>
-                <Field label="Duration (optional)">
-                  <select value={bookDuration} onChange={(e) => setBookDuration(e.target.value ? Number(e.target.value) : '')} className={bookInput}>
-                    <option value="">Select…</option>
-                    {GENERIC_DURATIONS.map((d) => (
-                      <option key={d.value} value={d.value}>{d.label}</option>
-                    ))}
+                <Field label="Party size">
+                  <select
+                    value={bookPartySize}
+                    onChange={(e) => {
+                      const n = Number(e.target.value)
+                      setBookPartySize(n)
+                      setBookExtraGuests(Array.from({ length: Math.max(0, n - 1) }, () => ({ name: '', gender: '' as Gender | '', therapistCode: '' })))
+                    }}
+                    className={bookInput}
+                  >
+                    {[1,2,3,4,5,6].map((n) => <option key={n} value={n}>{n} {n === 1 ? 'guest' : 'guests'}</option>)}
                   </select>
                 </Field>
+                {bookPartySize === 1 ? (
+                  <Field label="Duration (optional)">
+                    <select value={bookDuration} onChange={(e) => setBookDuration(e.target.value ? Number(e.target.value) : '')} className={bookInput}>
+                      <option value="">Select…</option>
+                      {GENERIC_DURATIONS.map((d) => (
+                        <option key={d.value} value={d.value}>{d.label}</option>
+                      ))}
+                    </select>
+                  </Field>
+                ) : (
+                  <Field label="Treatment">
+                    <select value={bookTreatmentId} onChange={(e) => setBookTreatmentId(e.target.value)} className={bookInput}>
+                      <option value="">Select…</option>
+                      {bookableTreatments.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
+                    </select>
+                  </Field>
+                )}
                 <Field label="Remark (optional)">
                   <input value={bookRemark} onChange={(e) => setBookRemark(e.target.value)} className={bookInput} placeholder="e.g. Room 2" />
                 </Field>
               </div>
+
+              {bookPartySize > 1 && (
+                <div className="mt-3 space-y-3 rounded-lg border border-accent/20 bg-cream/40 p-3">
+                  <p className="font-heading text-[10px] font-bold uppercase tracking-[0.12em] text-dark/60">Additional guests</p>
+                  {bookExtraGuests.map((g, i) => (
+                    <div key={i} className="grid gap-3 sm:grid-cols-3">
+                      <Field label={`Guest ${i + 2} name`}><input value={g.name} onChange={(e) => setBookExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, name: e.target.value } : x))} className={bookInput} /></Field>
+                      <Field label={`Guest ${i + 2} gender`}>
+                        <select value={g.gender} onChange={(e) => setBookExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, gender: e.target.value as Gender } : x))} className={bookInput}>
+                          <option value="">Select…</option>
+                          <option value="female">Female</option>
+                          <option value="male">Male</option>
+                        </select>
+                      </Field>
+                      <Field label={`Guest ${i + 2} therapist`}>
+                        <select value={g.therapistCode} onChange={(e) => setBookExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, therapistCode: e.target.value } : x))} className={bookInput}>
+                          <option value="">Auto / later</option>
+                          {therapists.map((t) => <option key={t.code} value={t.code}>{t.name}</option>)}
+                        </select>
+                      </Field>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <button onClick={addBooking} disabled={pending} className="mt-3 rounded-xl bg-accent px-5 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white hover:bg-accent/90 disabled:opacity-60">
                 {pending ? 'Booking…' : 'Confirm booking'}
               </button>
@@ -445,7 +548,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 }}
               >
                 {/* Click-to-book / click-to-block overlay (front desk / admin, therapist columns only) */}
-                {editable && col.code && SLOTS.map((m) => (
+                {editable && col.code && !vaidyaCodes.has(col.code) && SLOTS.map((m) => (
                   <button
                     key={`s${m}`}
                     type="button"
@@ -557,6 +660,11 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                         <div className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wide opacity-60">
                           {fmtMY(`${date}T${String(Math.floor(a.startMin / 60)).padStart(2, '0')}:${String(a.startMin % 60).padStart(2, '0')}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })}
                         </div>
+                        {a.room && (
+                          <div className="mt-0.5 truncate text-[9px] opacity-70" title={a.room}>
+                            {a.room}
+                          </div>
+                        )}
                       </Link>
                       {editable && (
                         <div className="mt-1 flex gap-1">

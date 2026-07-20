@@ -152,6 +152,7 @@ export async function approveAndAssign(
     whenISO: p.confirmedAt,
     amountRm: appt.payable_amount_rm != null ? Number(appt.payable_amount_rm) : null,
     payUrl,
+    bookingId: id,
   })
 
   revalidatePath('/console')
@@ -396,6 +397,7 @@ export async function approveGroup(
     whenISO: byId.get(lead.id)!.confirmedAt,
     amountRm: totalRm || null,
     payUrl,
+    bookingId: lead.id,
     guests: pending.map((m) => ({
       name: m.patient_name,
       age: m.guest_age != null ? Number(m.guest_age) : null,
@@ -578,9 +580,30 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
 /**
  * Permanently delete an appointment record. Destructive — for spam / test /
  * duplicate entries. Admin or front desk only.
+ *
+ * Paid or confirmed bookings cannot be deleted (they must be cancelled/refunded
+ * through the proper flow). Unpaid open bills are voided first so the row
+ * deletion never leaves an orphaned Billplz bill.
  */
 export async function deleteBooking(id: string): Promise<Ok | Err> {
   const { db } = await requireStaff(['admin', 'front_desk'])
+
+  const { data: appt, error: fetchErr } = await db
+    .from('appointments')
+    .select('id, status, payment_bill_id, payment_status, payment_provider')
+    .eq('id', id)
+    .maybeSingle()
+  if (fetchErr) return { error: fetchErr.message }
+  if (!appt) return { error: 'Appointment not found.' }
+
+  if (appt.payment_status === 'paid' || ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(appt.status as string)) {
+    return { error: 'Paid or confirmed bookings cannot be deleted. Please cancel instead.' }
+  }
+
+  if (appt.payment_bill_id && appt.payment_status !== 'paid') {
+    await voidBill(appt.payment_bill_id, appt.payment_provider)
+  }
+
   const { error } = await db.from('appointments').delete().eq('id', id)
   if (error) return { error: error.message }
   revalidatePath('/console')

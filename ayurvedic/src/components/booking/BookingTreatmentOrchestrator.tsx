@@ -1,8 +1,8 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Sparkles, MessageCircle } from 'lucide-react'
-import { useState } from 'react'
+import { Sparkles, MessageCircle, ArrowRight } from 'lucide-react'
+import { useState, useTransition } from 'react'
 
 import type { Treatment, TreatmentCategory } from '@/types/treatments'
 import type { HealthIntake, Gender } from '@/types/booking'
@@ -11,17 +11,23 @@ import BookingRequestForm from './BookingRequestForm'
 import ConsultationRequiredNotice from './ConsultationRequiredNotice'
 import TreatmentPicker from './TreatmentPicker'
 import HealthIntakeFields from './HealthIntakeFields'
+import { parseDurationMins } from '@/lib/booking/duration'
+import { changeBookingTreatment } from '@/lib/booking/actions'
 
 interface BookingTreatmentOrchestratorProps {
   categories: TreatmentCategory[]
   treatments: Treatment[]
   account?: { email: string | null; signedIn: boolean } | null
+  editBookingId?: string | null
+  editToken?: string | null
 }
 
 export default function BookingTreatmentOrchestrator({
   categories,
   treatments,
   account,
+  editBookingId,
+  editToken,
 }: BookingTreatmentOrchestratorProps) {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
@@ -32,6 +38,18 @@ export default function BookingTreatmentOrchestrator({
   const [acceptedPolicies, setAcceptedPolicies] = useState(false)
   const [healthIntake, setHealthIntake] = useState<HealthIntake>({})
   const [gender, setGender] = useState<Gender | ''>('')
+  const [editError, setEditError] = useState<string | null>(null)
+  const [editPending, startEdit] = useTransition()
+  const isEdit = !!editBookingId
+
+  const handleChangeTreatment = () => {
+    if (!selected || !editBookingId) return
+    setEditError(null)
+    startEdit(async () => {
+      const res = await changeBookingTreatment(editBookingId, selected._id, editToken)
+      if ('error' in res) setEditError(res.error)
+    })
+  }
 
   const formTreatment = selected
     ? {
@@ -49,10 +67,16 @@ export default function BookingTreatmentOrchestrator({
     : null
   const selectedImageUrl = selected?.imageUrl || '/authentic-ayurveda.jpg'
 
+  const selectedDurationMins = selected ? parseDurationMins(selected.duration) : 0
+  const isShortTherapy = selectedDurationMins === 30 || selectedDurationMins === 45
+
   // Directly-bookable therapies a group guest can pick from (excludes
-  // enquiry-only and consultation-first treatments).
+  // enquiry-only, consultation-first, and short 30/45min therapies).
   const treatmentOptions = treatments
-    .filter((t) => t.bookingType !== 'enquiry' && !t.requiresConsultation)
+    .filter((t) => {
+      const mins = parseDurationMins(t.duration)
+      return t.bookingType !== 'enquiry' && !t.requiresConsultation && mins !== 30 && mins !== 45
+    })
     .map((t) => ({
       id: t._id,
       title: t.title,
@@ -63,7 +87,7 @@ export default function BookingTreatmentOrchestrator({
       specialTags: t.specialTags,
     }))
 
-  const isEnquiry = selected?.bookingType === 'enquiry'
+  const isEnquiry = selected?.bookingType === 'enquiry' || isShortTherapy
   // A consultation is required first UNLESS this booking follows a cleared one.
   const needsConsult =
     !!selected &&
@@ -136,7 +160,7 @@ export default function BookingTreatmentOrchestrator({
           </div>
         )}
 
-        {selected && !isEnquiry && !needsConsult && (
+        {selected && !isEnquiry && !needsConsult && !isEdit && (
           <BookingRequestForm
             key={selected._id}
             bookingKind="treatment"
@@ -152,6 +176,32 @@ export default function BookingTreatmentOrchestrator({
             gender={gender}
             setGender={setGender}
           />
+        )}
+
+        {selected && !isEnquiry && !needsConsult && isEdit && (
+          <div className="rounded-2xl border border-accent/30 bg-white/70 p-8 text-center">
+            <span className="mb-2 block font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Change treatment</span>
+            <h2 className="font-heading text-[20px] font-extrabold text-primary">
+              Switch to {selected.title}?
+            </h2>
+            <p className="mx-auto mt-2 max-w-md font-body text-[14px] leading-relaxed text-dark/65">
+              Your date, time and contact details will stay the same — only the treatment and price will update.
+            </p>
+            {editError && (
+              <p className="mt-4 rounded-lg border border-red-300 bg-red-50 px-3 py-2 font-body text-[13px] text-red-700">
+                {editError}
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={handleChangeTreatment}
+              disabled={editPending}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent/90 disabled:opacity-60"
+            >
+              {editPending ? 'Updating…' : 'Confirm change'}
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
         )}
       </div>
     </div>

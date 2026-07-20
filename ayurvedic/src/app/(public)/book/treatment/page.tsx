@@ -47,10 +47,16 @@ async function loadCatalogue(): Promise<{
   }
 }
 
-export default async function BookTreatmentPage() {
+export default async function BookTreatmentPage({
+  searchParams,
+}: {
+  searchParams: { edit?: string; t?: string }
+}) {
   const { categories, treatments } = await loadCatalogue()
   const user = await getCurrentUser()
   const account = user ? { email: user.email, signedIn: true } : null
+  const editBookingId = searchParams.edit ?? null
+  const editToken = searchParams.t ?? null
 
   return (
     <>
@@ -120,6 +126,8 @@ export default async function BookTreatmentPage() {
                 categories={categories}
                 treatments={treatments}
                 account={account}
+                editBookingId={editBookingId}
+                editToken={editToken}
               />
             </Suspense>
           </div>

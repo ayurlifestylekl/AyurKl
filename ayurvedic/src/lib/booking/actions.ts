@@ -71,7 +71,7 @@ export async function createBookingRequest(
       .maybeSingle()
     if (tErr) return { error: tErr.message }
     if (!data) return { error: 'Treatment not found.' }
-    if (data.booking_type === 'enquiry') {
+    if (data.booking_type === 'enquiry' || [30, 45].includes(parseDurationMins(data.duration))) {
       return { error: 'This therapy is enquiry-only — please WhatsApp us to arrange it.' }
     }
     t = data
@@ -128,6 +128,7 @@ export async function createBookingRequest(
     treatmentName,
     kind: input.bookingKind,
     whenISO: input.preferredAt,
+    bookingId: id,
   })
   return { id, token: createBookingToken(id) }
 }
@@ -347,10 +348,11 @@ async function computeMixedSlots(dateYMD: string, members: PartyMemberResolved[]
     return hasCapacity(ceiling, already, list.length)
   }
 
+  const LEAD_TIME_MS = 24 * 3600_000
   return allSlots.map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
-      new Date(iso).getTime() > now &&
+      new Date(iso).getTime() > now + LEAD_TIME_MS &&
       genderOk(male, maleTh, iso) &&
       genderOk(female, femaleTh, iso)
     return { time, iso, available }
@@ -414,7 +416,7 @@ export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]>
   return allSlots.map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
-      new Date(iso).getTime() > now &&
+      new Date(iso).getTime() > now + 24 * 3600_000 &&
       findClash({ startISO: iso, durationMins: CONSULTATION_MINS }, busy) === null &&
       !isBlocked(intervals, VAIDYA_BLOCK_CODE, iso, CONSULTATION_MINS)
     return { time, iso, available }
@@ -441,6 +443,8 @@ export interface GroupGuest {
   preferredAt: string
   /** This guest's own health intake. */
   healthIntake?: HealthIntake | null
+  /** Optional therapist the front desk wants to assign at creation time. */
+  assignedTherapistCode?: string | null
 }
 
 /**
@@ -487,7 +491,7 @@ export async function createGroupBooking(input: {
   for (const id of uniqueIds) {
     const t = byId.get(id)
     if (!t) return { error: 'One of the chosen treatments could not be found.' }
-    if (t.booking_type === 'enquiry') {
+    if (t.booking_type === 'enquiry' || [30, 45].includes(parseDurationMins(t.duration))) {
       return { error: `"${t.title}" is enquiry-only — please WhatsApp us to arrange it.` }
     }
   }
@@ -496,6 +500,7 @@ export async function createGroupBooking(input: {
 
   const rows = guests.map((g, i) => {
     const t = byId.get(guestTreatmentIds[i])!
+    const assigned = g.assignedTherapistCode?.trim() || null
     return {
       customer_id: null,
       is_guest: true,
@@ -504,7 +509,7 @@ export async function createGroupBooking(input: {
       treatment_category_id: t.category_id ?? null,
       treatment_name: t.title,
       duration_mins: parseDurationMins(t.duration),
-      status: 'pending',
+      status: assigned ? 'scheduled' : 'pending',
       requested_datetime: g.preferredAt,
       requested_datetime_alt: null,
       appointment_date_time: g.preferredAt,
@@ -519,6 +524,7 @@ export async function createGroupBooking(input: {
       payable_amount_rm: t.price_rm ?? null,
       payment_status: 'unpaid',
       created_by_admin_id: userId,
+      assigned_therapist_code: assigned,
     }
   })
 
@@ -542,6 +548,7 @@ export async function createGroupBooking(input: {
     treatmentName: summary,
     kind: 'treatment',
     whenISO: guests[0].preferredAt,
+    bookingId: leadId,
     guests: guests.map((g, i) => ({
       name: g.name,
       age: g.age ?? null,
@@ -550,4 +557,65 @@ export async function createGroupBooking(input: {
     })),
   })
   return { id: leadId, token: createBookingToken(leadId) }
+}
+
+/**
+ * Change the treatment on an existing booking that is still in a mutable state
+ * (pending or awaiting_payment). Preserves all other customer-entered details.
+ * Used from the checkout "Change treatment" link.
+ */
+export async function changeBookingTreatment(
+  appointmentId: string,
+  newTreatmentId: string,
+  token: string | null | undefined,
+): Promise<{ error: string } | { ok: true }> {
+  const sb = admin()
+
+  const { data: appt, error: fetchErr } = await sb
+    .from('appointments')
+    .select('id, customer_id, status, treatment_id')
+    .eq('id', appointmentId)
+    .maybeSingle()
+  if (fetchErr) return { error: fetchErr.message }
+  if (!appt) return { error: 'Booking not found.' }
+
+  if (!['pending', 'awaiting_payment'].includes(appt.status as string)) {
+    return { error: 'This booking can no longer be changed.' }
+  }
+
+  if (!(await canAccessBooking(appt.id, appt.customer_id ?? null, token))) {
+    return { error: 'You do not have access to change this booking.' }
+  }
+
+  const { data: t, error: tErr } = await sb
+    .from('treatments')
+    .select('id, title, price_rm, duration, booking_type, category_id')
+    .eq('id', newTreatmentId)
+    .maybeSingle()
+  if (tErr) return { error: tErr.message }
+  if (!t) return { error: 'Treatment not found.' }
+  if (t.booking_type === 'enquiry' || [30, 45].includes(parseDurationMins(t.duration))) {
+    return { error: 'This therapy is enquiry-only — please WhatsApp us to arrange it.' }
+  }
+
+  const { error } = await sb
+    .from('appointments')
+    .update({
+      treatment_id: t.id,
+      treatment_category_id: t.category_id ?? null,
+      treatment_name: t.title,
+      duration_mins: parseDurationMins(t.duration),
+      payable_amount_rm: t.price_rm ?? null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', appointmentId)
+  if (error) return { error: error.message }
+
+  revalidatePath(`/book/request/${appointmentId}`)
+  revalidatePath(`/book/request/${appointmentId}/checkout`)
+
+  const { redirect } = await import('next/navigation')
+  const tokenQuery = token ? `?t=${encodeURIComponent(token)}` : ''
+  redirect(`/book/request/${appointmentId}/checkout${tokenQuery}`)
+  return { ok: true }
 }

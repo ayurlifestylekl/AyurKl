@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, Gender } from '@/types/booking'
+import type { Therapist } from '@/lib/staff/therapists'
 import { createBookingRequest, createGroupBooking, type GroupGuest } from '@/lib/booking/actions'
 
 interface TreatmentOption {
@@ -11,7 +12,12 @@ interface TreatmentOption {
   bookingType?: string | null
 }
 
-export default function StaffNewBooking({ treatments }: { treatments: TreatmentOption[] }) {
+interface Props {
+  treatments: TreatmentOption[]
+  therapists: Therapist[]
+}
+
+export default function StaffNewBooking({ treatments, therapists }: Props) {
   const router = useRouter()
   const [kind, setKind] = useState<BookingKind>('treatment')
   const [treatmentId, setTreatmentId] = useState('')
@@ -22,7 +28,8 @@ export default function StaffNewBooking({ treatments }: { treatments: TreatmentO
   const [preferredAt, setPreferredAt] = useState('')
   const [notes, setNotes] = useState('')
   const [partySize, setPartySize] = useState(1)
-  const [extraGuests, setExtraGuests] = useState<{ name: string; gender: Gender | '' }[]>([])
+  const [extraGuests, setExtraGuests] = useState<{ name: string; gender: Gender | ''; therapistCode: string }[]>([])
+  const [assignedTherapist, setAssignedTherapist] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
@@ -42,11 +49,11 @@ export default function StaffNewBooking({ treatments }: { treatments: TreatmentO
 
       const allGuests: GroupGuest[] = []
       if (name.trim() && gender) {
-        allGuests.push({ name: name.trim(), gender, preferredAt: iso, treatmentId, healthIntake })
+        allGuests.push({ name: name.trim(), gender, preferredAt: iso, treatmentId, healthIntake, assignedTherapistCode: assignedTherapist.trim() || null })
       }
       for (const g of extraGuests) {
         if (g.name.trim() && g.gender) {
-          allGuests.push({ name: g.name.trim(), gender: g.gender, preferredAt: iso, treatmentId, healthIntake })
+          allGuests.push({ name: g.name.trim(), gender: g.gender, preferredAt: iso, treatmentId, healthIntake, assignedTherapistCode: g.therapistCode.trim() || null })
         }
       }
 
@@ -115,9 +122,15 @@ export default function StaffNewBooking({ treatments }: { treatments: TreatmentO
             <option value="male">Male</option>
           </select>
         </Field>
+        <Field label="Therapist">
+          <select value={assignedTherapist} onChange={(e) => setAssignedTherapist(e.target.value)} className={inp}>
+            <option value="">Auto / later</option>
+            {therapists.map((t) => <option key={t.code} value={t.code}>{t.name}</option>)}
+          </select>
+        </Field>
         <Field label="Preferred date & time"><input type="datetime-local" value={preferredAt} onChange={(e) => setPreferredAt(e.target.value)} className={inp} /></Field>
         <Field label="Party size">
-          <select value={partySize} onChange={(e) => { const n = Number(e.target.value); setPartySize(n); setExtraGuests(Array.from({ length: Math.max(0, n - 1) }, () => ({ name: '', gender: '' as Gender | '' }))) }} className={inp}>
+          <select value={partySize} onChange={(e) => { const n = Number(e.target.value); setPartySize(n); setExtraGuests(Array.from({ length: Math.max(0, n - 1) }, () => ({ name: '', gender: '' as Gender | '', therapistCode: '' }))) }} className={inp}>
             {[1,2,3,4,5,6].map((n) => <option key={n} value={n}>{n} {n === 1 ? 'guest' : 'guests'}</option>)}
           </select>
         </Field>
@@ -127,13 +140,19 @@ export default function StaffNewBooking({ treatments }: { treatments: TreatmentO
         <div className="space-y-3 rounded-xl border border-accent/20 bg-cream/40 p-4">
           <p className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Additional guests</p>
           {extraGuests.map((g, i) => (
-            <div key={i} className="grid gap-3 sm:grid-cols-2">
+            <div key={i} className="grid gap-3 sm:grid-cols-3">
               <Field label={`Guest ${i + 2} name`}><input value={g.name} onChange={(e) => setExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, name: e.target.value } : x))} className={inp} /></Field>
               <Field label={`Guest ${i + 2} gender`}>
                 <select value={g.gender} onChange={(e) => setExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, gender: e.target.value as Gender } : x))} className={inp}>
                   <option value="">Select…</option>
                   <option value="female">Female</option>
                   <option value="male">Male</option>
+                </select>
+              </Field>
+              <Field label={`Guest ${i + 2} therapist`}>
+                <select value={g.therapistCode} onChange={(e) => setExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, therapistCode: e.target.value } : x))} className={inp}>
+                  <option value="">Auto / later</option>
+                  {therapists.map((t) => <option key={t.code} value={t.code}>{t.name}</option>)}
                 </select>
               </Field>
             </div>

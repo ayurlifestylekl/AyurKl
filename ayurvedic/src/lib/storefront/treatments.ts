@@ -198,7 +198,9 @@ export async function getTreatmentBySlug(
     requiresConsultation: r.requires_consultation ?? false,
     heroImage: null,
     heroImageUrl: r.hero_image_url ?? null,
-    gallery: Array.isArray(r.gallery) ? r.gallery : null,
+    gallery: Array.isArray(r.gallery)
+      ? r.gallery.filter((img: any) => img?.url !== r.hero_image_url)
+      : null,
     order: r.sort_order ?? null,
     ...pricing(r),
     category: {

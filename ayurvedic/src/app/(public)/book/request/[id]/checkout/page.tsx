@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { Landmark, CreditCard, ArrowLeft, ShieldCheck } from 'lucide-react'
+import { Landmark, CreditCard, ArrowLeft, ShieldCheck, ArrowUpRight } from 'lucide-react'
 
 import { getBookingForPayment, getGroupMembers, getTreatmentImageUrl } from '@/lib/storefront/booking'
 import { reconcileAppointment } from '@/lib/booking/payment'
@@ -9,6 +9,7 @@ import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
 import { isCardPaymentEnabled } from '@/lib/payments'
 import { canAccessBooking } from '@/lib/booking/access'
 import { fmtMY } from '@/lib/datetime'
+import { bookingRef } from '@/lib/booking/ref'
 import CancelBookingButton from '@/components/booking/CancelBookingButton'
 import HoldCountdown from '@/components/booking/HoldCountdown'
 
@@ -57,7 +58,17 @@ export default async function CheckoutPage({
   }
 
   const amount = isGroup ? groupTotal : b.payableAmountRm
-  const imageUrl = !isGroup && b.treatmentId ? await getTreatmentImageUrl(b.treatmentId) : null
+
+  // Clinic logo is the primary anchor; treatment thumbnails are shown as a
+  // best-effort secondary row for what was actually booked.
+  const LOGO_URL = '/logo.png'
+  const treatmentImageUrls: Map<string, string | null> = new Map()
+  if (!isGroup && b.treatmentId) {
+    treatmentImageUrls.set(b.treatmentId, await getTreatmentImageUrl(b.treatmentId))
+  } else if (isGroup) {
+    const uniqueIds = Array.from(new Set(members.map((m) => m.treatmentId).filter((id): id is string => !!id)))
+    await Promise.all(uniqueIds.map(async (id) => treatmentImageUrls.set(id, await getTreatmentImageUrl(id))))
+  }
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-cream">
@@ -84,15 +95,30 @@ export default async function CheckoutPage({
           {/* Left — the reservation itself, anchored by a real photo. */}
           <div className="lg:sticky lg:top-10">
             <div className="overflow-hidden rounded-[26px] bg-white shadow-luxe ring-1 ring-accent/10">
-              <div
-                className="h-56 w-full bg-cover bg-center"
-                style={{ backgroundImage: `url('${imageUrl || '/authentic-ayurveda.jpg'}')` }}
-              />
+              <div className="flex flex-col items-center justify-center gap-4 bg-cream/50 px-7 py-8">
+                <img src={LOGO_URL} alt="Kerala Ayurvedic Lifestyle" className="h-14 w-auto object-contain" />
+                <div className="flex -space-x-2 overflow-hidden">
+                  {Array.from(treatmentImageUrls.values())
+                    .filter((url): url is string => !!url)
+                    .slice(0, 4)
+                    .map((url, i) => (
+                      <div
+                        key={i}
+                        className="relative inline-block h-10 w-10 flex-none rounded-full border-2 border-white bg-cover bg-center shadow-sm"
+                        style={{ backgroundImage: `url('${url}')` }}
+                        aria-hidden
+                      />
+                    ))}
+                </div>
+              </div>
               <div className="p-7">
                 <div className="flex items-center gap-2">
                   <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
                   <span className="font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent">
                     Your reservation
+                  </span>
+                  <span className="ml-auto font-heading text-[10px] font-bold uppercase tracking-[0.14em] text-dark/50">
+                    Ref #{bookingRef(b.id)}
                   </span>
                 </div>
                 <h1 className="mt-2 font-display text-[26px] font-bold leading-[1.15] tracking-[-0.01em] text-primary">
@@ -128,6 +154,12 @@ export default async function CheckoutPage({
                   </span>
                   <span className="font-display text-[26px] font-bold text-accent">RM{amount}</span>
                 </div>
+                <Link
+                  href={`/book/treatment?edit=${b.id}${token ? `&t=${encodeURIComponent(token)}` : ''}`}
+                  className="mt-4 flex items-center justify-center gap-1.5 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-primary/70 transition-colors hover:text-primary"
+                >
+                  Change treatment <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
             </div>
 

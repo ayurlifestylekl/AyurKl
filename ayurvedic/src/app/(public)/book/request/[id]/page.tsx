@@ -10,6 +10,7 @@ import { STATUS_LABEL } from '@/lib/booking/status'
 import { canAccessBooking } from '@/lib/booking/access'
 import { flowLabels } from '@/lib/booking/flow-copy'
 import { fmtMY } from '@/lib/datetime'
+import { bookingRef } from '@/lib/booking/ref'
 import HoldCountdown from '@/components/booking/HoldCountdown'
 
 export const metadata: Metadata = {
@@ -69,7 +70,15 @@ export default async function BookingRequestPage({
       : null
   const labels = flowLabels(b.bookingKind, b.status, b.approvedAt)
   const complete = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)
-  const imageUrl = !isGroup && b.treatmentId ? await getTreatmentImageUrl(b.treatmentId) : null
+
+  const LOGO_URL = '/logo.png'
+  const treatmentImageUrls: Map<string, string | null> = new Map()
+  if (!isGroup && b.treatmentId) {
+    treatmentImageUrls.set(b.treatmentId, await getTreatmentImageUrl(b.treatmentId))
+  } else if (isGroup) {
+    const uniqueIds = Array.from(new Set(members.map((m) => m.treatmentId).filter((id): id is string => !!id)))
+    await Promise.all(uniqueIds.map(async (id) => treatmentImageUrls.set(id, await getTreatmentImageUrl(id))))
+  }
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-cream">
@@ -96,10 +105,22 @@ export default async function BookingRequestPage({
           {/* Left — the reservation itself, anchored by a real photo. */}
           <div className="lg:sticky lg:top-10">
             <div className="overflow-hidden rounded-[26px] bg-white shadow-luxe ring-1 ring-accent/10">
-              <div
-                className="h-56 w-full bg-cover bg-center"
-                style={{ backgroundImage: `url('${imageUrl || '/authentic-ayurveda.jpg'}')` }}
-              />
+              <div className="flex flex-col items-center justify-center gap-4 bg-cream/50 px-7 py-8">
+                <img src={LOGO_URL} alt="Kerala Ayurvedic Lifestyle" className="h-14 w-auto object-contain" />
+                <div className="flex -space-x-2 overflow-hidden">
+                  {Array.from(treatmentImageUrls.values())
+                    .filter((url): url is string => !!url)
+                    .slice(0, 4)
+                    .map((url, i) => (
+                      <div
+                        key={i}
+                        className="relative inline-block h-10 w-10 flex-none rounded-full border-2 border-white bg-cover bg-center shadow-sm"
+                        style={{ backgroundImage: `url('${url}')` }}
+                        aria-hidden
+                      />
+                    ))}
+                </div>
+              </div>
               <div className="p-7">
                 <div className="flex items-center gap-2">
                   <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
@@ -113,6 +134,7 @@ export default async function BookingRequestPage({
 
                 {/* Details */}
                 <dl className="mt-5 space-y-2.5 border-t border-accent/15 pt-5 font-body text-[13.5px]">
+                  <Row label="Booking ref" value={`#${bookingRef(b.id)}`} />
                   {!isGroup && <Row label="Selected time" value={fmtMY(b.requestedDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
                   {!isGroup && isConfirmed && b.appointmentDatetime && <Row label="Confirmed time" value={fmtMY(b.appointmentDatetime, { dateStyle: 'full', timeStyle: 'short' })} />}
                   {isGroup ? <Row label="Guests" value={`${members.length} guests`} /> : <Row label="Guest" value={b.patientName ?? '—'} />}

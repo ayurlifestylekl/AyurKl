@@ -98,12 +98,13 @@ export default async function TreatmentDetailPage({
   )
   if (!treatment) notFound()
 
-  // A hero-split pair: gallery holds exactly [hero photo again, second photo].
-  // Distinct from an ordinary editorial gallery (3–6 unrelated shots), which
-  // must keep rendering a normal single-photo hero and its own Gallery section.
+  // A hero-split pair: the gallery contains only 1–2 extra photos (already
+  // deduped of the hero in the data layer). Use the first/second as the
+  // secondary hero image and skip the separate Gallery section. If there are
+  // 3+ images, treat it as an ordinary editorial gallery instead.
   const heroSplitImage =
-    treatment.gallery?.length === 2 && treatment.gallery[0]?.url === treatment.heroImageUrl
-      ? treatment.gallery[1]
+    treatment.gallery && treatment.gallery.length > 0 && treatment.gallery.length <= 2
+      ? (treatment.gallery[1] ?? treatment.gallery[0])
       : null
 
   const { prev, next } = findPrevNext(siblings, treatment.slug)

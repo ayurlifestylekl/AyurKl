@@ -289,6 +289,7 @@ export async function markBillPaid(billId: string): Promise<PaymentHandlingResul
     treatmentName: lead.treatment_name,
     whenISO: lead.appointment_date_time ?? null,
     bookingKind: 'treatment',
+    bookingId: lead.id,
     statusUrl: `${BOOKING_SITE_URL}/book/request/${lead.id}?t=${createBookingToken(lead.id)}`,
     guests: result.groupId
       ? result.rows.map((row) => ({

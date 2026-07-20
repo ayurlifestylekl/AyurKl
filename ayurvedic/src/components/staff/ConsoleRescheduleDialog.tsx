@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from 'react'
 import { X } from 'lucide-react'
 import type { GridAppt } from '@/lib/staff/appointments'
 import type { Therapist } from '@/lib/staff/therapists'
-import { rescheduleFromGrid } from '@/lib/staff/actions'
+import { rescheduleFromGrid, deleteBooking } from '@/lib/staff/actions'
 import { fmtMY } from '@/lib/datetime'
 import { therapistLabel } from '@/lib/staff/therapists'
 
@@ -44,6 +44,15 @@ export default function ConsoleRescheduleDialog({ appt, date, therapists, onClos
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
+  // Ensure the current appointment time is always a selectable option, even
+  // if it was created off the 30-minute grid. Without this the controlled
+  // <select> has no matching <option> and silently falls back to the first
+  // grid slot while state still holds the original (off-grid) value.
+  const timeOptions = useMemo(() => {
+    if (SLOTS.includes(appt.startMin)) return SLOTS
+    return [...SLOTS, appt.startMin].sort((a, b) => a - b)
+  }, [appt.startMin])
+
   // Lock body scroll while the dialog is open.
   useEffect(() => {
     const original = document.body.style.overflow
@@ -75,7 +84,19 @@ export default function ConsoleRescheduleDialog({ appt, date, therapists, onClos
     })
   }
 
-  const timeOptions = SLOTS.filter((m) => m >= appt.startMin || m < appt.startMin)
+  const handleDelete = () => {
+    if (pending) return
+    if (!confirm('Delete this appointment permanently? This cannot be undone.')) return
+    setError(null)
+    start(async () => {
+      const res = await deleteBooking(appt.id)
+      if ('error' in res) {
+        setError(res.error)
+      } else {
+        onSuccess()
+      }
+    })
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -133,6 +154,9 @@ export default function ConsoleRescheduleDialog({ appt, date, therapists, onClos
 
         <div className="mt-5 flex flex-wrap gap-2">
           <button onClick={onClose} className="rounded-xl border border-accent/30 px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/70 hover:bg-cream">Cancel</button>
+          <button onClick={handleDelete} disabled={pending} className="rounded-xl border border-red-300 px-4 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-red-700 hover:bg-red-50 disabled:opacity-60">
+            {pending ? 'Deleting…' : 'Delete'}
+          </button>
           <button onClick={submit} disabled={pending} className="rounded-xl bg-accent px-5 py-2 font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-white hover:bg-accent/90 disabled:opacity-60">
             {pending ? 'Rescheduling…' : 'Reschedule'}
           </button>

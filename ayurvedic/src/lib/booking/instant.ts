@@ -471,6 +471,7 @@ export async function createInstantConsultation(input: BookingRequestInput): Pro
     treatmentName,
     whenISO: input.preferredAt,
     bookingKind: 'consultation',
+    bookingId: id,
     statusUrl: `${BOOKING_SITE_URL}/book/request/${id}?t=${bookingToken}`,
   })
 

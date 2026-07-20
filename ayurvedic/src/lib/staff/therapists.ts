@@ -48,11 +48,14 @@ export function therapistLabel(t: Pick<Therapist, 'code' | 'name'>): string {
 export interface Vaidya {
   code: string
   name: string
+  /** If false, this Vaidya is selectable by staff internally but never shown in customer-facing consultation booking. */
+  publicFacing?: boolean
 }
 
-/** Vaidya roster. Add a second entry here when the second Vaidya is named. */
+/** Vaidya roster. Set publicFacing: false to keep a Vaidya internal-only. */
 export const VAIDYAS: Vaidya[] = [
-  { code: VAIDYA_BLOCK_CODE, name: 'Vaidya Akhil' },
+  { code: VAIDYA_BLOCK_CODE, name: 'Vaidya Akhil', publicFacing: true },
+  { code: 'LYMAT', name: 'Vaidya LYMAT', publicFacing: false },
 ]
 
 export function vaidyaByCode(code: string | null | undefined): Vaidya | undefined {
