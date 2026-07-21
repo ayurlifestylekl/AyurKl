@@ -71,7 +71,7 @@ export default async function BookingRequestPage({
   const labels = flowLabels(b.bookingKind, b.status, b.approvedAt)
   const complete = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(b.status)
 
-  const LOGO_URL = '/logo.png'
+  const LOGO_URL = '/kerala-logo.png'
   const treatmentImageUrls: Map<string, string | null> = new Map()
   if (!isGroup && b.treatmentId) {
     treatmentImageUrls.set(b.treatmentId, await getTreatmentImageUrl(b.treatmentId))

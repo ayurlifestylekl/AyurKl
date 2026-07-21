@@ -9,6 +9,7 @@ import AppointmentActions from '@/components/staff/AppointmentActions'
 import GroupApprovalActions from '@/components/staff/GroupApprovalActions'
 import MarkContactedButton from '@/components/staff/MarkContactedButton'
 import BookingEventHistory from '@/components/staff/BookingEventHistory'
+import { bookingRef } from '@/lib/booking/ref'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,6 +45,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
           <div className="rounded-xl border border-accent/30 bg-white p-5">
             <h3 className="mb-3 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-accent">Appointment</h3>
             <div className="space-y-1.5 font-body text-[13.5px]">
+              <Row label="Booking ref" value={`#${bookingRef(a.id)}`} />
               <Row label="Web request received" value={fmt(a.requestReceivedAt)} />
               <Row label="Preferred" value={fmt(a.requestedDatetime)} />
               {a.requestedDatetimeAlt && <Row label="Alternate" value={fmt(a.requestedDatetimeAlt)} />}
@@ -51,7 +53,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
               {a.approvedAt && <Row label="Approved at" value={fmt(a.approvedAt)} />}
               <Row label="Therapist" value={a.assignedTherapistName ? `${a.assignedTherapistName} · ${a.assignedTherapistCode} (${a.assignedTherapistGender})` : '—'} />
               <Row label="Room" value={a.room} />
-              <Row label="Price" value={a.payableAmountRm != null ? `RM${a.payableAmountRm}` : 'Free'} />
+              <Row label="Price" value={a.payableAmountRm != null ? `RM${a.payableAmountRm}` : a.bookingKind === 'consultation' ? 'Free' : '—'} />
               <Row label="Payment" value={a.paymentStatus} />
             </div>
           </div>

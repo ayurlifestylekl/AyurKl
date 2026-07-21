@@ -702,7 +702,11 @@ export async function createBookingFromGrid(input: {
     treatment_category_id: treatmentCategoryId,
     treatment_name: treatmentName,
     duration_mins: durationMins,
-    status: 'confirmed',
+    // Front-desk-made bookings start as 'scheduled' (booked), not 'confirmed'
+    // — front desk applies their own colour tag to distinguish confirmed vs
+    // reserved, rather than the system asserting a confirmation front desk
+    // hasn't actually made yet.
+    status: 'scheduled',
     requested_datetime: input.startAt,
     requested_datetime_alt: null,
     appointment_date_time: input.startAt,
@@ -773,7 +777,7 @@ export async function createConsultationFromGrid(input: {
     treatment_category_id: null,
     treatment_name: null,
     duration_mins: CONSULTATION_MINS,
-    status: 'confirmed',
+    status: 'scheduled',
     requested_datetime: input.startAt,
     requested_datetime_alt: null,
     appointment_date_time: input.startAt,
@@ -781,7 +785,7 @@ export async function createConsultationFromGrid(input: {
     patient_phone: input.patientPhone?.trim() || null,
     patient_email: input.patientEmail?.trim() || null,
     patient_gender: null,
-    gender_requirement: null,
+    gender_requirement: 'any',
     assigned_therapist_code: vaidya.code,
     assigned_therapist_name: vaidya.name,
     assigned_therapist_gender: null,

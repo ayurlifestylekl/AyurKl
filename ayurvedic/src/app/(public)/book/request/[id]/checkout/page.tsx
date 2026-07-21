@@ -69,7 +69,7 @@ export default async function CheckoutPage({
   }
   
   // Use the first treatment image, or fallback to logo if no image available
-  const primaryImage = Array.from(treatmentImageUrls.values()).find((url): url is string => !!url) ?? '/logo.png'
+  const primaryImage = Array.from(treatmentImageUrls.values()).find((url): url is string => !!url) ?? '/kerala-logo.png'
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-cream">

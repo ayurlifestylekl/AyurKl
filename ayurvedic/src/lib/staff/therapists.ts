@@ -36,13 +36,13 @@ export const therapistByCode = cache(async (code: string | null | undefined): Pr
 export const therapistsForGender = cache(async (gender: Gender | null): Promise<Therapist[]> => {
   let q = db().from('therapists').select('code, name, gender, active').eq('active', true)
   if (gender) q = q.eq('gender', gender)
-  const { data } = await q.order('code')
+  const { data } = await q.order('sort_order')
   return (data ?? []).map((t) => ({ code: t.code, name: t.name, gender: t.gender as Gender, active: t.active }))
 })
 
 /** All therapists (active + inactive) for admin roster UI. Request-level cached. */
 export const getAllTherapists = cache(async (): Promise<Therapist[]> => {
-  const { data } = await db().from('therapists').select('code, name, gender, active').order('code')
+  const { data } = await db().from('therapists').select('code, name, gender, active').order('sort_order')
   return (data ?? []).map((t) => ({ code: t.code, name: t.name, gender: t.gender as Gender, active: t.active }))
 })
 

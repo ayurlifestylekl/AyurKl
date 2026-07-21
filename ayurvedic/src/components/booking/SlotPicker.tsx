@@ -123,6 +123,18 @@ export default function SlotPicker({ treatmentId, gender, mode = 'treatment', me
                   })}
                 </div>
               )}
+              <p className="mt-3 font-body text-[11.5px] italic text-dark/50">
+                For earlier appointments you may contact us directly —{' '}
+                <a
+                  href="https://wa.me/601165043436"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="not-italic font-semibold text-accent underline decoration-accent/40 underline-offset-2 hover:text-accent/80"
+                >
+                  WhatsApp us
+                </a>
+                .
+              </p>
             </div>
           )}
 
