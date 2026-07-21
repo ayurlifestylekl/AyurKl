@@ -20,11 +20,14 @@ function shiftDay(ymd: string, days: number): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kuala_Lumpur', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d)
 }
 
-function minLabel(min: number) {
+// Formats against a real, modern date rather than a fixed dummy date — pre-1982
+// Peninsular Malaysia used UTC+7:30, not +8, so a placeholder date like
+// 1970-01-01 gets converted by the browser's historical timezone rules and
+// silently renders 30 minutes behind the actual value it's labeling.
+function minLabel(dateStr: string, min: number) {
   const hh = String(Math.floor(min / 60)).padStart(2, '0')
   const mm = String(min % 60).padStart(2, '0')
-  const d = new Date(`1970-01-01T${hh}:${mm}:00+08:00`)
-  return d.toLocaleTimeString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', hour: 'numeric', minute: '2-digit', hour12: true })
+  return fmtMY(`${dateStr}T${hh}:${mm}:00+08:00`, { hour: 'numeric', minute: '2-digit', hour12: true })
 }
 
 const SLOTS: number[] = []
@@ -170,7 +173,7 @@ export default function ConsoleRescheduleDialog({ appt, date, therapists, onClos
             <Field label="New time">
               <select value={newTimeMin} onChange={(e) => { userEdited.current = true; setNewTimeMin(Number(e.target.value)) }} className={inp}>
                 {timeOptions.map((m) => (
-                  <option key={m} value={m}>{minLabel(m)}</option>
+                  <option key={m} value={m}>{minLabel(newDate, m)}</option>
                 ))}
               </select>
             </Field>
