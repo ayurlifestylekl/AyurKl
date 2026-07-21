@@ -854,6 +854,7 @@ export async function rescheduleFromGrid(input: {
       .from('appointments')
       .select('appointment_date_time, duration_mins')
       .eq('booking_kind', 'consultation')
+      .eq('assigned_therapist_code', appt.assigned_therapist_code)
       .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
       .neq('id', input.appointmentId)
     const busy: Slot[] = (consults ?? [])
@@ -865,7 +866,7 @@ export async function rescheduleFromGrid(input: {
     }
     const blocks = await fetchBlocksOnOrAfter(db, dateYMD)
     const intervals = blockedIntervalsForDate(blocks, dateYMD)
-    if (isBlocked(intervals, VAIDYA_BLOCK_CODE, input.newStartAt, durationMins)) {
+    if (isBlocked(intervals, appt.assigned_therapist_code ?? VAIDYA_BLOCK_CODE, input.newStartAt, durationMins)) {
       return { error: 'The Vaidya or centre is unavailable at that time.' }
     }
   } else {
