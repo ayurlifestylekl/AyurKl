@@ -1,12 +1,14 @@
 'use client'
 
-import { useEffect, useMemo, useState, useTransition } from 'react'
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { X } from 'lucide-react'
 import type { GridAppt } from '@/lib/staff/appointments'
 import type { Therapist } from '@/lib/staff/therapist-format'
-import { rescheduleFromGrid, deleteBooking } from '@/lib/staff/actions'
-import { fmtMY } from '@/lib/datetime'
+import { rescheduleFromGrid, deleteBooking, getAppointmentTiming } from '@/lib/staff/actions'
+import { fmtMY, mytDayKey, mytTimeOfDay } from '@/lib/datetime'
 import { therapistLabel } from '@/lib/staff/therapist-format'
+
+const DURATION_OPTIONS = [30, 45, 60, 90, 120]
 
 const OPEN = 9 * 60 + 30
 const CLOSE = 20 * 60 + 30
@@ -39,19 +41,51 @@ interface Props {
 export default function ConsoleRescheduleDialog({ appt, date, therapists, onClose, onSuccess }: Props) {
   const [newDate, setNewDate] = useState(date)
   const [newTimeMin, setNewTimeMin] = useState<number>(appt.startMin)
+  const [patientName, setPatientName] = useState(appt.patientName ?? '')
+  const [durationMins, setDurationMins] = useState(appt.durationMins)
   const [therapistCode, setTherapistCode] = useState<string>(appt.therapistCode ?? '')
   const [room, setRoom] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
+  const [refreshedStartMin, setRefreshedStartMin] = useState<number | null>(null)
+  // True once the user has touched date/time/name/duration themselves — after
+  // that, the background fresh-fetch below must never overwrite their choice.
+  const userEdited = useRef(false)
+
+  // The grid this dialog opened from is a client-side snapshot that can go
+  // stale — the grid only re-polls every 20s, and a customer's own
+  // self-service edit can land in that gap. Fetch this appointment's actual
+  // current time/name/duration fresh the moment the dialog opens, so the
+  // subtitle and the "New date/time" defaults never disagree with the DB.
+  // Guarded by userEdited so a slow fetch can never clobber a selection the
+  // user already made while it was in flight.
+  useEffect(() => {
+    let cancelled = false
+    getAppointmentTiming(appt.id).then((fresh) => {
+      if (cancelled || !fresh) return
+      const freshDate = mytDayKey(fresh.startISO)
+      const [hh, mm] = mytTimeOfDay(fresh.startISO).split(':').map(Number)
+      const freshMin = hh * 60 + mm
+      setRefreshedStartMin(freshMin)
+      if (userEdited.current) return
+      setNewDate(freshDate)
+      setNewTimeMin(freshMin)
+      setDurationMins(fresh.durationMins)
+      if (fresh.patientName) setPatientName(fresh.patientName)
+    })
+    return () => { cancelled = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appt.id])
 
   // Ensure the current appointment time is always a selectable option, even
   // if it was created off the 30-minute grid. Without this the controlled
   // <select> has no matching <option> and silently falls back to the first
   // grid slot while state still holds the original (off-grid) value.
   const timeOptions = useMemo(() => {
-    if (SLOTS.includes(appt.startMin)) return SLOTS
-    return [...SLOTS, appt.startMin].sort((a, b) => a - b)
-  }, [appt.startMin])
+    const current = refreshedStartMin ?? appt.startMin
+    if (SLOTS.includes(current)) return SLOTS
+    return [...SLOTS, current].sort((a, b) => a - b)
+  }, [appt.startMin, refreshedStartMin])
 
   // Lock body scroll while the dialog is open.
   useEffect(() => {
@@ -74,6 +108,8 @@ export default function ConsoleRescheduleDialog({ appt, date, therapists, onClos
         appointmentId: appt.id,
         newStartAt: startAt,
         newTherapistCode: therapistCode || null,
+        newPatientName: patientName || null,
+        newDurationMins: durationMins || null,
         room: room || null,
       })
       if ('error' in res) {
@@ -109,26 +145,30 @@ export default function ConsoleRescheduleDialog({ appt, date, therapists, onClos
         </div>
 
         <p className="mb-4 font-body text-[13px] text-dark/70">
-          <strong>{appt.patientName ?? '—'}</strong> · {appt.treatmentName ?? 'Treatment'}
+          {appt.treatmentName ?? 'Treatment'}
           <br />
           <span className="text-dark/55">
-            {fmtMY(`${date}T${String(Math.floor(appt.startMin / 60)).padStart(2, '0')}:${String(appt.startMin % 60).padStart(2, '0')}:00+08:00`, { dateStyle: 'medium', timeStyle: 'short' })}
+            {fmtMY(`${newDate}T${String(Math.floor(newTimeMin / 60)).padStart(2, '0')}:${String(newTimeMin % 60).padStart(2, '0')}:00+08:00`, { dateStyle: 'medium', timeStyle: 'short' })}
           </span>
         </p>
 
         <div className="space-y-3">
+          <Field label="Patient name">
+            <input value={patientName} onChange={(e) => { userEdited.current = true; setPatientName(e.target.value) }} className={inp} />
+          </Field>
+
           <div className="grid grid-cols-2 gap-3">
             <Field label="New date">
               <input
                 type="date"
                 value={newDate}
                 min={shiftDay(new Date().toISOString().slice(0, 10), 0)}
-                onChange={(e) => e.target.value && setNewDate(e.target.value)}
+                onChange={(e) => { if (e.target.value) { userEdited.current = true; setNewDate(e.target.value) } }}
                 className={inp}
               />
             </Field>
             <Field label="New time">
-              <select value={newTimeMin} onChange={(e) => setNewTimeMin(Number(e.target.value))} className={inp}>
+              <select value={newTimeMin} onChange={(e) => { userEdited.current = true; setNewTimeMin(Number(e.target.value)) }} className={inp}>
                 {timeOptions.map((m) => (
                   <option key={m} value={m}>{minLabel(m)}</option>
                 ))}
@@ -136,16 +176,25 @@ export default function ConsoleRescheduleDialog({ appt, date, therapists, onClos
             </Field>
           </div>
 
-          <Field label="Therapist">
-            <select value={therapistCode} onChange={(e) => setTherapistCode(e.target.value)} className={inp}>
-              <option value={appt.therapistCode ?? ''}>Keep current</option>
-              {therapists.map((t) => (
-                <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
-              ))}
-            </select>
-          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Therapist">
+              <select value={therapistCode} onChange={(e) => setTherapistCode(e.target.value)} className={inp}>
+                <option value={appt.therapistCode ?? ''}>Keep current</option>
+                {therapists.map((t) => (
+                  <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Duration">
+              <select value={durationMins} onChange={(e) => { userEdited.current = true; setDurationMins(Number(e.target.value)) }} className={inp}>
+                {(DURATION_OPTIONS.includes(durationMins) ? DURATION_OPTIONS : [...DURATION_OPTIONS, durationMins].sort((a, b) => a - b)).map((d) => (
+                  <option key={d} value={d}>{d} min</option>
+                ))}
+              </select>
+            </Field>
+          </div>
 
-          <Field label="Room (optional)">
+          <Field label="Remark (optional)">
             <input value={room} onChange={(e) => setRoom(e.target.value)} className={inp} placeholder="e.g. Room 2" />
           </Field>
         </div>

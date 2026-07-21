@@ -798,10 +798,30 @@ export async function createConsultationFromGrid(input: {
 }
 
 /** Reschedule an existing appointment from the staff schedule grid. */
+/**
+ * The reschedule dialog opens off a client-side grid snapshot that may be
+ * stale by the time staff actually click "Reschedule" (grid auto-refreshes
+ * every 20s, and a customer's own self-service edit can land in between).
+ * The dialog fetches this fresh right when it opens so its default date/time
+ * always reflects what's actually in the database, not a cached render.
+ */
+export async function getAppointmentTiming(id: string): Promise<{ startISO: string; durationMins: number; patientName: string | null } | null> {
+  const { db } = await requireStaff(['admin', 'front_desk', 'doctor'])
+  const { data } = await db
+    .from('appointments')
+    .select('appointment_date_time, duration_mins, patient_name')
+    .eq('id', id)
+    .maybeSingle()
+  if (!data || !data.appointment_date_time) return null
+  return { startISO: data.appointment_date_time, durationMins: data.duration_mins ?? 60, patientName: data.patient_name ?? null }
+}
+
 export async function rescheduleFromGrid(input: {
   appointmentId: string
   newStartAt: string
   newTherapistCode?: string | null
+  newPatientName?: string | null
+  newDurationMins?: number | null
   room?: string | null
 }): Promise<Ok | Err> {
   const { db } = await requireStaff(['admin', 'front_desk'])
@@ -821,7 +841,7 @@ export async function rescheduleFromGrid(input: {
 
   const isGroup = !!appt.group_id
   const isConsultation = appt.booking_kind === 'consultation'
-  const durationMins = isConsultation ? CONSULTATION_MINS : (appt.duration_mins ?? 60)
+  const durationMins = isConsultation ? CONSULTATION_MINS : (input.newDurationMins ?? appt.duration_mins ?? 60)
   const dateYMD = mytDayKey(input.newStartAt)
 
   const therapistCode = (input.newTherapistCode?.trim() || appt.assigned_therapist_code || '')
@@ -880,6 +900,12 @@ export async function rescheduleFromGrid(input: {
     requested_datetime: input.newStartAt,
     updated_at: new Date().toISOString(),
     room: input.room?.trim() || null,
+  }
+  if (input.newPatientName?.trim()) {
+    patch.patient_name = input.newPatientName.trim()
+  }
+  if (!isConsultation && input.newDurationMins) {
+    patch.duration_mins = durationMins
   }
   if (!isConsultation && input.newTherapistCode) {
     const therapist = await therapistByCode(input.newTherapistCode)
