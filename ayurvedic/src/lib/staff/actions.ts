@@ -590,14 +590,24 @@ export async function deleteBooking(id: string): Promise<Ok | Err> {
 
   const { data: appt, error: fetchErr } = await db
     .from('appointments')
-    .select('id, status, payment_bill_id, payment_status, payment_provider')
+    .select('id, status, payment_bill_id, payment_status, payment_provider, created_by_admin_id')
     .eq('id', id)
     .maybeSingle()
   if (fetchErr) return { error: fetchErr.message }
   if (!appt) return { error: 'Appointment not found.' }
 
-  if (appt.payment_status === 'paid' || ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(appt.status as string)) {
-    return { error: 'Paid or confirmed bookings cannot be deleted. Please cancel instead.' }
+  // A paid booking is never deletable, regardless of who created it — deleting
+  // it would orphan a real payment/bill with nothing left to reconcile against.
+  if (appt.payment_status === 'paid') {
+    return { error: 'Paid bookings cannot be deleted. Please cancel instead.' }
+  }
+  // A confirmed/checked-in/etc. status only blocks deletion for bookings a
+  // customer made directly on the website (created_by_admin_id is null).
+  // Front-desk-made bookings can carry 'confirmed' status without ever being
+  // paid (e.g. phone/walk-in bookings marked confirmed on the spot), and
+  // front desk should be able to remove their own mistakes freely.
+  if (appt.created_by_admin_id == null && ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(appt.status as string)) {
+    return { error: 'Confirmed customer bookings cannot be deleted. Please cancel instead.' }
   }
 
   if (appt.payment_bill_id && appt.payment_status !== 'paid') {
