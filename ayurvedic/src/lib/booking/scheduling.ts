@@ -66,7 +66,7 @@ export function hasCapacity(ceiling: number, alreadyOccupied: number, partySize:
 
 /** When a clashing therapist next becomes free (treatment end + buffer). */
 export function freeAtLabel(clash: Slot, buffer: number = THERAPIST_BUFFER_MINS): string {
-  return new Date(occupiedEnd(clash, buffer)).toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short' })
+  return new Date(occupiedEnd(clash, buffer)).toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kuala_Lumpur' })
 }
 
 /**
