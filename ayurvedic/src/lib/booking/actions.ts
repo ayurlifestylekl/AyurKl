@@ -11,12 +11,13 @@ import { notifyRequestReceived, notifyCancelled } from './notify'
 import { voidBill } from './payment'
 import { parseDurationMins } from './duration'
 import { CONSULTATION_MINS, consultationSlots, slotsForDuration, slotIso, validateSubmittedSlot } from './slots'
-import { findClash, countOverlapping, hasCapacity, type Slot } from './scheduling'
+import { countOverlapping, hasCapacity, type Slot } from './scheduling'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from './blocks'
-import { therapistsForGender, VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
+import { therapistsForGender, getAllVaidyas, VAIDYA_BLOCK_CODE, type Vaidya } from '@/lib/staff/therapists'
 import { requireStaff } from '@/lib/staff/guard'
 import { mytDayKey } from '@/lib/datetime'
 import { validateLegacyParentConsultationLink } from './consultation-rules'
+import { freeVaidyaIn, type ConsultationAvailabilityContext } from './consultation-availability'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -122,6 +123,8 @@ export async function createBookingRequest(
 
   if (error) return { error: error.message }
   const id = data.id as string
+  // This action is staff-only (requireStaff above) — front desk just made
+  // this booking themselves, so skip the "new request" staff-inbox email.
   await notifyRequestReceived({
     to: input.patientEmail,
     name: input.patientName,
@@ -129,6 +132,7 @@ export async function createBookingRequest(
     kind: input.bookingKind,
     whenISO: input.preferredAt,
     bookingId: id,
+    notifyStaff: false,
   })
   return { id, token: createBookingToken(id) }
 }
@@ -380,45 +384,71 @@ export async function getAvailableSlots(dateYMD: string, treatmentId: string | n
   return computeSlots(dateYMD, treatmentId, { male: gender === 'male' ? 1 : 0, female: gender === 'female' ? 1 : 0 })
 }
 
+/** Public-facing, active Vaidyas eligible for auto-assignment. VAIDYA (the
+ * primary doctor) is preferred first when both are free — getAllVaidyas()
+ * orders by code, which would otherwise favour LYMAT alphabetically. */
+async function bookableVaidyas(): Promise<Vaidya[]> {
+  const candidates = (await getAllVaidyas()).filter((v) => v.active && v.publicFacing)
+  return candidates.sort((a, b) =>
+    a.code === VAIDYA_BLOCK_CODE ? -1 : b.code === VAIDYA_BLOCK_CODE ? 1 : a.code.localeCompare(b.code))
+}
+
+/** Per-Vaidya busy Slot[] for a day's consultations. A legacy/unassigned row
+ * (assigned_therapist_code IS NULL) buckets under VAIDYA_BLOCK_CODE — same
+ * fallback convention as getDaySchedule/getVaidyaSchedule in
+ * src/lib/staff/appointments.ts and rescheduleFromGrid in staff/actions.ts. */
+async function consultationBusyByVaidya(sb: ReturnType<typeof admin>, dateYMD: string): Promise<Map<string, Slot[]>> {
+  const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
+  const { data: rows } = await sb
+    .from('appointments')
+    .select('appointment_date_time, duration_mins, assigned_therapist_code')
+    .eq('booking_kind', 'consultation')
+    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+    .gte('appointment_date_time', new Date(dayStartMs).toISOString())
+    .lt('appointment_date_time', new Date(dayStartMs + 86_400_000).toISOString())
+  const byVaidya = new Map<string, Slot[]>()
+  for (const r of rows ?? []) {
+    if (!r.appointment_date_time) continue
+    const code = r.assigned_therapist_code ?? VAIDYA_BLOCK_CODE
+    const arr = byVaidya.get(code) ?? []
+    arr.push({ startISO: r.appointment_date_time, durationMins: r.duration_mins ?? CONSULTATION_MINS })
+    byVaidya.set(code, arr)
+  }
+  return byVaidya
+}
+
+async function loadConsultationAvailability(dateYMD: string): Promise<ConsultationAvailabilityContext> {
+  const sb = admin()
+  const [vaidyas, busyByVaidya, blocks] = await Promise.all([
+    bookableVaidyas(),
+    consultationBusyByVaidya(sb, dateYMD),
+    fetchBlocksOnOrAfter(sb, dateYMD),
+  ])
+  return { vaidyas, busyByVaidya, intervals: blockedIntervalsForDate(blocks, dateYMD) }
+}
+
+/** First free public-facing Vaidya at a given time — the write-time helper
+ * used right before a consultation is actually claimed (see instant.ts). */
+export async function findFreeVaidya(iso: string, durationMins: number): Promise<string | null> {
+  return freeVaidyaIn(await loadConsultationAvailability(mytDayKey(iso)), iso, durationMins)
+}
+
 /**
- * Slots for a free consultation. Consultations are conducted by the Vaidya, not
- * a therapist, so availability does NOT depend on the therapist roster or gender
- * — only on the Vaidya not already being in another consultation at that time.
+ * Slots for a free consultation. Consultations are conducted by a Vaidya, not
+ * a therapist, so availability does NOT depend on the therapist roster or
+ * gender — a slot is available if ANY public-facing Vaidya is free at that time.
  */
 export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]> {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateYMD)) return []
-  const sb = admin()
   const allSlots = consultationSlots()
   const now = Date.now()
-
-  const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
-  const dayStart = new Date(dayStartMs).toISOString()
-  const dayEnd = new Date(dayStartMs + 86_400_000).toISOString()
-  const occupiedStatuses = ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress']
-
-  // Other consultations already on the Vaidya's day — block overlapping starts.
-  const { data: busyRows } = await sb
-    .from('appointments')
-    .select('appointment_date_time, duration_mins')
-    .eq('booking_kind', 'consultation')
-    .in('status', occupiedStatuses)
-    .gte('appointment_date_time', dayStart)
-    .lt('appointment_date_time', dayEnd)
-  const busy: Slot[] = (busyRows ?? [])
-    .filter((r) => r.appointment_date_time)
-    .map((r) => ({ startISO: r.appointment_date_time as string, durationMins: r.duration_mins ?? CONSULTATION_MINS }))
-
-  // Centre-wide closures (blocks with therapist_code = null) AND the Vaidya's
-  // own leave (VAIDYA_BLOCK_CODE) both apply to consultations.
-  const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
-  const intervals = blockedIntervalsForDate(blocks, dateYMD)
+  const ctx = await loadConsultationAvailability(dateYMD)
 
   return allSlots.map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
       new Date(iso).getTime() > now + 24 * 3600_000 &&
-      findClash({ startISO: iso, durationMins: CONSULTATION_MINS }, busy) === null &&
-      !isBlocked(intervals, VAIDYA_BLOCK_CODE, iso, CONSULTATION_MINS)
+      freeVaidyaIn(ctx, iso, CONSULTATION_MINS) !== null
     return { time, iso, available }
   })
 }
@@ -439,6 +469,10 @@ export interface GroupGuest {
   age?: number | null
   /** Treatment this guest chose. Falls back to the booking's default treatment. */
   treatmentId?: string | null
+  /** Generic duration (mins) for this guest — falls back to the booking's default duration. */
+  durationMins?: number | null
+  /** Label for this guest's generic-duration treatment — falls back to the booking's default label. */
+  treatmentName?: string | null
   /** This guest's own preferred slot (ISO datetime) — guests may pick different times. */
   preferredAt: string
   /** This guest's own health intake. */
@@ -454,9 +488,13 @@ export interface GroupGuest {
  * Treatments only (groups are payable).
  */
 export async function createGroupBooking(input: {
-  /** Default treatment for guests who didn't pick their own. */
-  treatmentId: string
-  patientPhone: string
+  /** Default treatment for guests who didn't pick their own. Omit to use a generic duration instead (front-desk quick book). */
+  treatmentId?: string | null
+  /** Generic duration in minutes — used when treatmentId is omitted, mirroring the single-guest quick-book flow. */
+  durationMins?: number | null
+  /** Label stored on each appointment when using a generic duration (e.g. "Treatment 3 — 1 hr"). */
+  treatmentName?: string | null
+  patientPhone?: string | null
   patientEmail?: string | null
   isGuest: boolean
   acceptedPolicies: boolean
@@ -464,10 +502,10 @@ export async function createGroupBooking(input: {
 }): Promise<CreateBookingResult> {
   const { userId, db: sb } = await requireStaff(['admin', 'front_desk'])
   if (!input.acceptedPolicies) return { error: 'Please accept the booking policies to continue.' }
-  if (!input.patientPhone?.trim()) return { error: 'Please enter a contact number.' }
-  if (!input.patientEmail?.trim()) return { error: 'Please enter an email so we can send booking updates.' }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.patientEmail.trim())) return { error: 'Please enter a valid email address.' }
-  if (!input.treatmentId) return { error: 'Please choose a treatment.' }
+  if (input.patientEmail?.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.patientEmail.trim())) {
+    return { error: 'Please enter a valid email address.' }
+  }
+  if (!input.treatmentId && !(input.durationMins && input.durationMins > 0)) return { error: 'Please choose a treatment.' }
 
   const guests = (input.guests ?? []).filter(
     (g) => g.name?.trim() && (g.gender === 'male' || g.gender === 'female'),
@@ -479,49 +517,58 @@ export async function createGroupBooking(input: {
   }
 
   // Resolve every treatment the group picked (each guest falls back to the
-  // booking's default treatment) in a single lookup.
-  const guestTreatmentIds = guests.map((g) => g.treatmentId?.trim() || input.treatmentId)
-  const uniqueIds = Array.from(new Set(guestTreatmentIds))
-  const { data: treatmentRows, error: tErr } = await sb
-    .from('treatments')
-    .select('id, title, price_rm, booking_type, category_id, duration')
-    .in('id', uniqueIds)
-  if (tErr) return { error: tErr.message }
-  const byId = new Map((treatmentRows ?? []).map((t) => [t.id, t]))
-  for (const id of uniqueIds) {
-    const t = byId.get(id)
-    if (!t) return { error: 'One of the chosen treatments could not be found.' }
-    if (t.booking_type === 'enquiry' || [30, 45].includes(parseDurationMins(t.duration))) {
-      return { error: `"${t.title}" is enquiry-only — please WhatsApp us to arrange it.` }
+  // booking's default treatment) in a single lookup — skipped when the front
+  // desk used a generic duration instead of a catalog treatment.
+  const byId = new Map<string, { id: string; title: string; price_rm: number | null; booking_type: string | null; category_id: string | null; duration: string | null }>()
+  if (input.treatmentId) {
+    const guestTreatmentIds = guests.map((g) => g.treatmentId?.trim() || input.treatmentId!)
+    const uniqueIds = Array.from(new Set(guestTreatmentIds))
+    const { data: treatmentRows, error: tErr } = await sb
+      .from('treatments')
+      .select('id, title, price_rm, booking_type, category_id, duration')
+      .in('id', uniqueIds)
+    if (tErr) return { error: tErr.message }
+    for (const [id, t] of (treatmentRows ?? []).map((t) => [t.id, t] as const)) byId.set(id, t)
+    for (const id of uniqueIds) {
+      const t = byId.get(id)
+      if (!t) return { error: 'One of the chosen treatments could not be found.' }
+      if (t.booking_type === 'enquiry' || [30, 45].includes(parseDurationMins(t.duration))) {
+        return { error: `"${t.title}" is enquiry-only — please WhatsApp us to arrange it.` }
+      }
     }
   }
 
+  const genericDurationMins = input.durationMins && input.durationMins > 0 ? input.durationMins : 60
+  const genericTreatmentName = input.treatmentName?.trim() || null
+
   const groupId = crypto.randomUUID()
 
-  const rows = guests.map((g, i) => {
-    const t = byId.get(guestTreatmentIds[i])!
+  const rows = guests.map((g) => {
     const assigned = g.assignedTherapistCode?.trim() || null
+    const t = input.treatmentId ? byId.get(g.treatmentId?.trim() || input.treatmentId) : undefined
+    const guestDurationMins = g.durationMins && g.durationMins > 0 ? g.durationMins : genericDurationMins
+    const guestTreatmentName = g.treatmentName?.trim() || genericTreatmentName
     return {
       customer_id: null,
       is_guest: true,
       booking_kind: 'treatment',
-      treatment_id: t.id,
-      treatment_category_id: t.category_id ?? null,
-      treatment_name: t.title,
-      duration_mins: parseDurationMins(t.duration),
+      treatment_id: t?.id ?? null,
+      treatment_category_id: t?.category_id ?? null,
+      treatment_name: t?.title ?? guestTreatmentName,
+      duration_mins: t ? parseDurationMins(t.duration) : guestDurationMins,
       status: assigned ? 'scheduled' : 'pending',
       requested_datetime: g.preferredAt,
       requested_datetime_alt: null,
       appointment_date_time: g.preferredAt,
       patient_name: g.name.trim(),
-      patient_phone: input.patientPhone.trim(),
+      patient_phone: input.patientPhone?.trim() || null,
       patient_email: input.patientEmail?.trim() || null,
       patient_gender: g.gender,
       gender_requirement: genderRequirementValue(g.gender),
       guest_age: g.age ?? null,
       group_id: groupId,
       pre_visit_form: g.healthIntake ?? {},
-      payable_amount_rm: t.price_rm ?? null,
+      payable_amount_rm: t?.price_rm ?? null,
       payment_status: 'unpaid',
       created_by_admin_id: userId,
       assigned_therapist_code: assigned,
@@ -534,14 +581,17 @@ export async function createGroupBooking(input: {
 
   // Summarise the therapies for the confirmation email: a single title when the
   // whole group shares one, otherwise "mixed therapies".
-  const allSame = uniqueIds.length === 1
+  const rowTreatmentNames = rows.map((r) => r.treatment_name ?? 'Treatment')
+  const allSame = new Set(rowTreatmentNames).size === 1
   const summary = allSame
-    ? `${byId.get(uniqueIds[0])!.title} (group of ${guests.length})`
+    ? `${rowTreatmentNames[0]} (group of ${guests.length})`
     : `Group of ${guests.length} · mixed therapies`
 
   const leadId = data[0].id as string
   revalidatePath('/console')
   revalidatePath('/console/schedule')
+  // This action is staff-only (requireStaff above) — front desk just made
+  // this group booking themselves, so skip the "new request" staff-inbox email.
   await notifyRequestReceived({
     to: input.patientEmail,
     name: guests[0].name,
@@ -549,10 +599,11 @@ export async function createGroupBooking(input: {
     kind: 'treatment',
     whenISO: guests[0].preferredAt,
     bookingId: leadId,
+    notifyStaff: false,
     guests: guests.map((g, i) => ({
       name: g.name,
       age: g.age ?? null,
-      treatmentName: byId.get(guestTreatmentIds[i])!.title,
+      treatmentName: rowTreatmentNames[i],
       whenISO: g.preferredAt,
     })),
   })

@@ -7,6 +7,7 @@ import { mytDayKey, mytTimeOfDay } from '@/lib/datetime'
  * All times are Malaysia time (UTC+8).
  */
 const CLOSE_END_MIN = 20 * 60 + 30 // 20:30 — a therapy must end by here
+const CONSULTATION_LAST_START_MIN = 19 * 60 + 30 // 19:30 — last bookable consultation slot
 
 /** Public start times (minutes from midnight). */
 const PUBLIC_START_MINS = [
@@ -33,10 +34,10 @@ export function slotsForDuration(durationMins: number): string[] {
   return out
 }
 
-/** Canonical Vaidya consultation starts (the consultation day begins at 10:30). */
+/** Canonical Vaidya consultation starts (the consultation day begins at 10:30, last start 19:30). */
 export function consultationSlots(): string[] {
   const out: string[] = []
-  for (let m = 10 * 60 + 30; m + CONSULTATION_MINS <= CLOSE_END_MIN; m += 30) {
+  for (let m = 10 * 60 + 30; m <= CONSULTATION_LAST_START_MIN; m += 30) {
     out.push(hhmm(m))
   }
   return out

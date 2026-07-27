@@ -36,6 +36,13 @@ export interface NotifyBase {
   name?: string | null
   treatmentName?: string | null
   bookingId?: string | null
+  /**
+   * Set false to skip the internal staff-email alert — for actions staff
+   * already know about because they performed them themselves (front-desk
+   * bookings, reschedules, declines). Telegram and the customer email are
+   * unaffected; only the redundant "you did this" inbox mail is silenced.
+   */
+  notifyStaff?: boolean
 }
 
 function refLine(id: string | null | undefined): string | null {
@@ -122,12 +129,14 @@ export async function notifyRequestReceived(p: NotifyBase & { kind: string; when
           .join('\n')}`
       : `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
   )
-  await sendStaffEmail(
-    isGroup ? `New group request — ${p.guests!.length} guests` : `New ${p.kind} request`,
-    isGroup
-      ? guestListLines(p.guests!)
-      : [`<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`, `Preferred: <strong>${when(p.whenISO)}</strong>`],
-  )
+  if (p.notifyStaff !== false) {
+    await sendStaffEmail(
+      isGroup ? `New group request — ${p.guests!.length} guests` : `New ${p.kind} request`,
+      isGroup
+        ? guestListLines(p.guests!)
+        : [`<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`, `Preferred: <strong>${when(p.whenISO)}</strong>`],
+    )
+  }
   if (!p.to) return
   const lines = isGroup
     ? [
@@ -185,7 +194,7 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
   await sendTelegram(
     `${copy.telegramHeading}\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}${copy.needsAssignment ? '\n👉 Assign a therapist in the console.' : ''}`,
   )
-  await sendStaffEmail(
+  if (p.notifyStaff !== false) await sendStaffEmail(
     copy.staffHeading,
     isGroup
       ? [
@@ -307,10 +316,12 @@ export async function notifyCancelled(p: NotifyBase & { refundable: boolean; rea
   await sendTelegram(
     `❌ <b>Cancelled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${p.reason ? `\nReason: ${esc(p.reason)}` : ''}`,
   )
-  await sendStaffEmail('Booking cancelled', [
-    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
-    ...(p.reason ? [`Reason: ${esc(p.reason)}`] : []),
-  ])
+  if (p.notifyStaff !== false) {
+    await sendStaffEmail('Booking cancelled', [
+      `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+      ...(p.reason ? [`Reason: ${esc(p.reason)}`] : []),
+    ])
+  }
   if (!p.to) return
   const lines = [
     `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> has been cancelled.`,
@@ -348,10 +359,12 @@ export async function notifyManagedCancellation(p: NotifyBase & {
   await sendTelegram(
     `❌ <b>Managed cancellation</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(refundSummary)}`,
   )
-  await sendStaffEmail('Managed booking cancellation', [
-    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
-    esc(refundSummary),
-  ])
+  if (p.notifyStaff !== false) {
+    await sendStaffEmail('Managed booking cancellation', [
+      `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+      esc(refundSummary),
+    ])
+  }
   if (!p.to) return
   const lines = [
     `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> has been cancelled.`,
@@ -379,11 +392,13 @@ export async function notifyManagedReschedule(p: NotifyBase & {
     `🔁 <b>Rescheduled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(when(p.oldISO))} → ${esc(when(p.newISO))}` +
       (clearedAssignment ? '\nTherapist assignment cleared — back in Needs therapist.' : ''),
   )
-  await sendStaffEmail('Managed booking reschedule', [
-    `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
-    `${esc(when(p.oldISO))} → ${esc(when(p.newISO))}`,
-    ...(clearedAssignment ? ['Therapist assignment cleared — booking returned to Needs therapist.'] : []),
-  ])
+  if (p.notifyStaff !== false) {
+    await sendStaffEmail('Managed booking reschedule', [
+      `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+      `${esc(when(p.oldISO))} → ${esc(when(p.newISO))}`,
+      ...(clearedAssignment ? ['Therapist assignment cleared — booking returned to Needs therapist.'] : []),
+    ])
+  }
   if (!p.to) return
   const lines = [
     `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> has been rescheduled.`,

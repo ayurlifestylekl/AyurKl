@@ -22,12 +22,8 @@ import { genderRequirementValue } from './policy'
 import { createBookingToken } from './token'
 import { notifyConfirmed, BOOKING_SITE_URL } from './notify'
 import { parseDurationMins } from './duration'
-import { findClash, type Slot } from './scheduling'
-import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from './blocks'
-import { effectiveGenderCapacity } from './actions'
+import { effectiveGenderCapacity, findFreeVaidya } from './actions'
 import type { GroupGuest } from './actions'
-import { mytDayKey } from '@/lib/datetime'
-import { VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
 import { CONSULTATION_MINS, validateSubmittedSlot } from './slots'
 import { canAccessBooking } from './access'
 import {
@@ -409,33 +405,19 @@ export async function createInstantConsultation(input: BookingRequestInput): Pro
   })
   if ('error' in slotCheck) return slotCheck
 
-  // Live re-check against the Vaidya's own schedule + centre closures, same
+  // Live re-check against each Vaidya's own schedule + centre closures, same
   // check approveAndAssign used to run at approval time — just moved earlier,
   // to the instant of booking, since there's no approval step left to run it.
-  const dateYMD = mytDayKey(input.preferredAt)
-  const dayStartMs = new Date(`${dateYMD}T00:00:00+08:00`).getTime()
-  const { data: others } = await sb
-    .from('appointments')
-    .select('appointment_date_time, duration_mins')
-    .eq('booking_kind', 'consultation')
-    .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
-    .gte('appointment_date_time', new Date(dayStartMs).toISOString())
-    .lt('appointment_date_time', new Date(dayStartMs + 86_400_000).toISOString())
-  const busy: Slot[] = (others ?? [])
-    .filter((o) => o.appointment_date_time)
-    .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? CONSULTATION_MINS }))
-  if (findClash({ startISO: input.preferredAt, durationMins }, busy)) {
+  // Picks whichever public-facing Vaidya is free — the customer never sees or
+  // chooses a doctor by name, same as therapist auto-assignment on treatments.
+  const assignedVaidyaCode = await findFreeVaidya(input.preferredAt, durationMins)
+  if (!assignedVaidyaCode) {
     return { error: 'That consultation slot was just taken — please pick another time.' }
-  }
-  const blocks = await fetchBlocksOnOrAfter(sb, dateYMD)
-  const intervals = blockedIntervalsForDate(blocks, dateYMD)
-  if (isBlocked(intervals, VAIDYA_BLOCK_CODE, input.preferredAt, durationMins)) {
-    return { error: 'The centre is closed at that time — please pick another slot.' }
   }
 
   const claim: Claim = {
     resourceType: 'consultation',
-    resourceKey: 'vaidya',
+    resourceKey: assignedVaidyaCode,
     capacity: 1,
     row: {
       customer_id: userId,
@@ -457,6 +439,7 @@ export async function createInstantConsultation(input: BookingRequestInput): Pro
       pre_visit_form: input.healthIntake ?? {},
       payable_amount_rm: null,
       payment_status: 'unpaid',
+      assigned_therapist_code: assignedVaidyaCode,
     },
   }
 

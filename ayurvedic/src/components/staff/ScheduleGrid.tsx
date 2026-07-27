@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useTransition } from 'react'
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
@@ -33,6 +33,9 @@ const GENERIC_DURATIONS = [
   { value: 120, label: 'Treatment 5 — 2 hrs' },
 ]
 
+/** ConsoleShell's own sticky top bar is h-16 (64px) — our sticky header stacks below it. */
+const SHELL_HEADER_PX = 64
+
 const OPEN = 9 * 60 + 30   // 09:30
 const CLOSE = 20 * 60 + 30 // 20:30
 const ROW = 30
@@ -49,11 +52,8 @@ function shiftDay(ymd: string, days: number): string {
 const topFor = (min: number) => ((min - OPEN) / ROW) * ROW_PX
 const clamp = (min: number) => Math.max(OPEN, Math.min(CLOSE, min))
 
-interface TreatmentOption {
-  id: string
-  title: string
-  bookingType?: string | null
-}
+/** An additional guest in a front-desk group booking — each can pick their own treatment & remark, falling back to the primary guest's when left blank. */
+type ExtraGuest = { name: string; gender: Gender | ''; therapistCode: string; duration: number | ''; remark: string }
 
 interface Props {
   basePath: string // e.g. '/console/schedule' or '/doctor/calendar'
@@ -65,8 +65,6 @@ interface Props {
   blocks: GridBlock[]
   /** Vaidya columns for displaying doctor consultations in the same grid. */
   vaidyas?: Vaidya[]
-  /** Available treatments for front-desk quick group booking. */
-  treatments?: TreatmentOption[]
   /** Front desk / admin can add & remove blocks straight from the grid. */
   editable?: boolean
 }
@@ -98,11 +96,35 @@ export function apptClasses(a: GridAppt): string {
 const SLOTS: number[] = []
 for (let m = OPEN; m < CLOSE; m += ROW) SLOTS.push(m)
 
-export default function ScheduleGrid({ basePath, detailBase, date, therapists, appts, unassigned, blocks, vaidyas = [], treatments = [], editable = false }: Props) {
+export default function ScheduleGrid({ basePath, detailBase, date, therapists, appts, unassigned, blocks, vaidyas = [], editable = false }: Props) {
   const router = useRouter()
   const go = (d: string) => router.push(`${basePath}?date=${d}`)
 
   const [mode, setMode] = useState<'book' | 'block'>('book')
+
+  // Height of the sticky mode/legend bar, measured live so the grid's frozen
+  // header row (therapist names) can sit flush beneath it however tall it
+  // renders (legend wraps to 2 lines on narrow screens, hint text varies, etc).
+  const [stickyBarH, setStickyBarH] = useState(0)
+  const stickyBarRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = stickyBarRef.current
+    if (!editable || !el) { setStickyBarH(0); return }
+    const ro = new ResizeObserver(([entry]) => setStickyBarH(entry.contentRect.height))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [editable])
+
+  // The frozen header row lives in its own overflow-hidden strip (sticky
+  // doesn't engage inside the body's overflow-x-auto — see below), so its
+  // horizontal scroll is driven programmatically from the body's real scroll.
+  const headerScrollRef = useRef<HTMLDivElement>(null)
+  const bodyScrollRef = useRef<HTMLDivElement>(null)
+  const syncHeaderScroll = () => {
+    if (headerScrollRef.current && bodyScrollRef.current) {
+      headerScrollRef.current.scrollLeft = bodyScrollRef.current.scrollLeft
+    }
+  }
 
   // Quick-block draft: a therapist column + a slot RANGE. Tapping more free
   // slots in the same column extends the range, so several slots block together.
@@ -123,9 +145,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
   const [bookDuration, setBookDuration] = useState<number | ''>('')
   const [bookRemark, setBookRemark] = useState('')
   const [bookPartySize, setBookPartySize] = useState(1)
-  const [bookTreatmentId, setBookTreatmentId] = useState('')
-  const [bookExtraGuests, setBookExtraGuests] = useState<{ name: string; gender: Gender | ''; therapistCode: string }[]>([])
-  const bookableTreatments = treatments.filter((t) => t.bookingType !== 'enquiry')
+  const [bookExtraGuests, setBookExtraGuests] = useState<ExtraGuest[]>([])
 
   // Reschedule dialog.
   const [rescheduleAppt, setRescheduleAppt] = useState<GridAppt | null>(null)
@@ -226,7 +246,6 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
     setBookDuration('')
     setBookRemark('')
     setBookPartySize(1)
-    setBookTreatmentId('')
     setBookExtraGuests([])
   }
 
@@ -250,21 +269,27 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
       }
       if (!bookGender) { setErr('Select a gender.'); return }
       if (bookPartySize > 1) {
-        if (!bookTreatmentId) { setErr('Choose a treatment for the group.'); return }
-        if (!bookPhone.trim()) { setErr('Enter a contact number for the group.'); return }
-        if (!bookEmail.trim()) { setErr('Enter an email for the group.'); return }
         const extras = bookExtraGuests.filter((g) => g.name.trim() && g.gender)
         if (extras.length !== bookPartySize - 1) { setErr('Enter name and gender for every additional guest.'); return }
         const when = isoAt(bookDraft.startMin)
         const healthIntake = bookRemark.trim() ? { notes: bookRemark.trim() } : {}
         const guests: GroupGuest[] = [
-          { name: bookName.trim(), gender: bookGender as Gender, preferredAt: when, treatmentId: bookTreatmentId, assignedTherapistCode: bookDraft.code, healthIntake },
-          ...extras.map((g) => ({ name: g.name.trim(), gender: g.gender as Gender, preferredAt: when, treatmentId: bookTreatmentId, assignedTherapistCode: g.therapistCode.trim() || null, healthIntake: {} })),
+          { name: bookName.trim(), gender: bookGender as Gender, preferredAt: when, assignedTherapistCode: bookDraft.code, healthIntake },
+          ...extras.map((g) => ({
+            name: g.name.trim(),
+            gender: g.gender as Gender,
+            preferredAt: when,
+            assignedTherapistCode: g.therapistCode.trim() || null,
+            durationMins: g.duration ? Number(g.duration) : null,
+            treatmentName: g.duration ? GENERIC_DURATIONS.find((d) => d.value === Number(g.duration))?.label ?? null : null,
+            healthIntake: g.remark.trim() ? { notes: g.remark.trim() } : {},
+          })),
         ]
         const res = await createGroupBooking({
-          treatmentId: bookTreatmentId,
-          patientPhone: bookPhone.trim(),
-          patientEmail: bookEmail.trim(),
+          durationMins: bookDuration ? Number(bookDuration) : 60,
+          treatmentName: bookDuration ? GENERIC_DURATIONS.find((d) => d.value === Number(bookDuration))?.label ?? null : null,
+          patientPhone: bookPhone.trim() || null,
+          patientEmail: bookEmail.trim() || null,
           isGuest: true,
           acceptedPolicies: true,
           guests,
@@ -335,7 +360,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
       </div>
 
       {editable && (
-        <div className="mb-3 space-y-3">
+        <div ref={stickyBarRef} className="sticky z-30 mb-3 space-y-2 border-b border-accent/15 bg-cream pb-3 pt-1" style={{ top: SHELL_HEADER_PX }}>
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Mode:</span>
             {(['book', 'block'] as const).map((m) => (
@@ -357,6 +382,22 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
             </span>
           </div>
 
+          <div className="flex flex-wrap items-center gap-2 font-body text-[11px] text-dark/70">
+            <span className="font-heading text-[10px] font-bold uppercase tracking-[0.12em] text-dark/55">Legend:</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-rose-100 border border-rose-300" /> Pending</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-sky-100 border border-sky-300" /> Scheduled</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-amber-100 border border-amber-300" /> Awaiting payment</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-emerald-100 border border-emerald-300" /> Confirmed</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-pink-100 border border-pink-300" /> Checked in</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-violet-100 border border-violet-300" /> In progress</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-slate-100 border border-slate-300" /> Completed</span>
+            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded-full bg-yellow-400" /> Web booking</span>
+          </div>
+        </div>
+      )}
+
+      {editable && (
+        <div className="mb-3 space-y-3">
           {mode === 'book' && bookDraft ? (
             <div className="rounded-xl border border-accent/40 bg-cream/60 p-3">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -371,10 +412,10 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                 <Field label="Patient name" required>
                   <input value={bookName} onChange={(e) => setBookName(e.target.value)} className={bookInput} required />
                 </Field>
-                <Field label={vaidyaCodes.has(bookDraft.code) || bookPartySize === 1 ? 'Contact number (optional)' : 'Contact number'}>
+                <Field label="Contact number (optional)">
                   <input value={bookPhone} onChange={(e) => setBookPhone(e.target.value)} className={bookInput} />
                 </Field>
-                <Field label={vaidyaCodes.has(bookDraft.code) || bookPartySize === 1 ? 'Email (optional)' : 'Email'}>
+                <Field label="Email (optional)">
                   <input value={bookEmail} onChange={(e) => setBookEmail(e.target.value)} type="email" className={bookInput} />
                 </Field>
                 {!vaidyaCodes.has(bookDraft.code) && (
@@ -392,30 +433,21 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                         onChange={(e) => {
                           const n = Number(e.target.value)
                           setBookPartySize(n)
-                          setBookExtraGuests(Array.from({ length: Math.max(0, n - 1) }, () => ({ name: '', gender: '' as Gender | '', therapistCode: '' })))
+                          setBookExtraGuests(Array.from({ length: Math.max(0, n - 1) }, () => ({ name: '', gender: '' as Gender | '', therapistCode: '', duration: '' as number | '', remark: '' })))
                         }}
                         className={bookInput}
                       >
                         {[1,2,3,4,5,6].map((n) => <option key={n} value={n}>{n} {n === 1 ? 'guest' : 'guests'}</option>)}
                       </select>
                     </Field>
-                    {bookPartySize === 1 ? (
-                      <Field label="Duration (optional)">
-                        <select value={bookDuration} onChange={(e) => setBookDuration(e.target.value ? Number(e.target.value) : '')} className={bookInput}>
-                          <option value="">Select…</option>
-                          {GENERIC_DURATIONS.map((d) => (
-                            <option key={d.value} value={d.value}>{d.label}</option>
-                          ))}
-                        </select>
-                      </Field>
-                    ) : (
-                      <Field label="Treatment">
-                        <select value={bookTreatmentId} onChange={(e) => setBookTreatmentId(e.target.value)} className={bookInput}>
-                          <option value="">Select…</option>
-                          {bookableTreatments.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
-                        </select>
-                      </Field>
-                    )}
+                    <Field label={bookPartySize === 1 ? 'Duration (optional)' : 'Treatment'}>
+                      <select value={bookDuration} onChange={(e) => setBookDuration(e.target.value ? Number(e.target.value) : '')} className={bookInput}>
+                        <option value="">Select…</option>
+                        {GENERIC_DURATIONS.map((d) => (
+                          <option key={d.value} value={d.value}>{d.label}</option>
+                        ))}
+                      </select>
+                    </Field>
                   </>
                 )}
                 <Field label="Remark (optional)">
@@ -441,6 +473,17 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
                           <option value="">Auto / later</option>
                           {therapists.map((t) => <option key={t.code} value={t.code}>{t.name}</option>)}
                         </select>
+                      </Field>
+                      <Field label={`Guest ${i + 2} treatment (optional)`}>
+                        <select value={g.duration} onChange={(e) => setBookExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, duration: e.target.value ? Number(e.target.value) : '' } : x))} className={bookInput}>
+                          <option value="">Same as guest 1</option>
+                          {GENERIC_DURATIONS.map((d) => (
+                            <option key={d.value} value={d.value}>{d.label}</option>
+                          ))}
+                        </select>
+                      </Field>
+                      <Field label={`Guest ${i + 2} remark (optional)`}>
+                        <input value={g.remark} onChange={(e) => setBookExtraGuests((prev) => prev.map((x, j) => j === i ? { ...x, remark: e.target.value } : x))} className={bookInput} placeholder="e.g. Room 3" />
                       </Field>
                     </div>
                   ))}
@@ -515,25 +558,40 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
         </div>
       )}
 
-      {editable && (
-        <div className="mb-3 flex flex-wrap items-center gap-2 font-body text-[11px] text-dark/70">
-          <span className="font-heading text-[10px] font-bold uppercase tracking-[0.12em] text-dark/55">Legend:</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-rose-100 border border-rose-300" /> Pending</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-sky-100 border border-sky-300" /> Scheduled</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-amber-100 border border-amber-300" /> Awaiting payment</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-emerald-100 border border-emerald-300" /> Confirmed</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-pink-100 border border-pink-300" /> Checked in</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-violet-100 border border-violet-300" /> In progress</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded bg-slate-100 border border-slate-300" /> Completed</span>
-          <span className="flex items-center gap-1"><span className="h-3 w-3 rounded-full bg-yellow-400" /> Web booking</span>
+      {/* Frozen header row (therapist names). `position: sticky` cannot be used
+          on descendants of the overflow-x-auto body below — a horizontally
+          scrollable ancestor's overflow-y also computes to 'auto', so a sticky
+          child binds to THAT box's own (permanently zero) scrollTop instead of
+          the page's, and never actually sticks. This row lives outside that
+          ancestor and is kept horizontally in sync with the body via scrollLeft. */}
+      <div
+        ref={headerScrollRef}
+        className="sticky z-20 overflow-hidden rounded-t-xl border border-b-0 border-accent/20 bg-white"
+        style={{ top: SHELL_HEADER_PX + stickyBarH }}
+      >
+        <div className="flex min-w-full">
+          <div className="sticky left-0 z-10 flex-none border-b border-accent/20 bg-white" style={{ width: 64, height: HEADER_PX }} />
+          {columns.map((col) => (
+            // The Unassigned column is the backstop for paid bookings nobody
+            // has picked a therapist for yet — it must read as an alert.
+            <div
+              key={col.code ?? 'wait'}
+              style={{ width: COL_W, height: HEADER_PX }}
+              className={`flex flex-none items-center justify-center border-b border-l border-accent/20 px-2 text-center font-heading text-[11px] font-bold uppercase tracking-[0.1em] ${
+                col.code === null ? 'bg-red-100 text-red-800' : 'bg-cream text-primary'
+              }`}
+            >
+              {col.code === null && <span aria-hidden className="mr-1.5 inline-block h-2 w-2 flex-none animate-pulse rounded-full bg-red-500" />}
+              {col.name}
+            </div>
+          ))}
         </div>
-      )}
+      </div>
 
-      <div className="overflow-x-auto rounded-xl border border-accent/20 bg-white">
+      <div ref={bodyScrollRef} onScroll={syncHeaderScroll} className="overflow-x-auto rounded-b-xl border border-accent/20 bg-white">
         <div className="flex min-w-full">
           {/* Time gutter */}
           <div className="sticky left-0 z-10 flex-none bg-white" style={{ width: 64 }}>
-            <div style={{ height: HEADER_PX }} className="border-b border-accent/20" />
             <div className="relative" style={{ height: totalPx }}>
               {hourLabels.map((m) => (
                 <div key={m} className="absolute right-2 -translate-y-1/2 whitespace-nowrap font-heading text-[10.5px] font-semibold tabular-nums text-dark/55" style={{ top: topFor(m) }}>
@@ -545,18 +603,7 @@ export default function ScheduleGrid({ basePath, detailBase, date, therapists, a
 
           {/* Columns */}
           {columns.map((col) => (
-            <div key={col.code ?? 'wait'} className="flex-1 border-l border-accent/15" style={{ minWidth: COL_W }}>
-              {/* The Unassigned column is the backstop for paid bookings nobody
-                  has picked a therapist for yet — it must read as an alert. */}
-              <div
-                style={{ height: HEADER_PX }}
-                className={`flex items-center justify-center border-b border-accent/20 px-2 text-center font-heading text-[11px] font-bold uppercase tracking-[0.1em] ${
-                  col.code === null ? 'bg-red-100 text-red-800' : 'bg-cream/60 text-primary'
-                }`}
-              >
-                {col.code === null && <span aria-hidden className="mr-1.5 inline-block h-2 w-2 flex-none animate-pulse rounded-full bg-red-500" />}
-                {col.name}
-              </div>
+            <div key={col.code ?? 'wait'} className="flex-none border-l border-accent/15" style={{ width: COL_W }}>
               <div
                 className="relative"
                 style={{

@@ -450,6 +450,7 @@ export async function rejectGroup(groupId: string, reason?: string): Promise<Ok 
     treatmentName: `${lead.treatment_name ?? 'Treatment'} (group)`,
     refundable: false,
     reason: finalReason,
+    notifyStaff: false,
   })
 
   revalidatePath('/console')
@@ -569,6 +570,7 @@ export async function rejectBooking(id: string, reason?: string): Promise<Ok | E
     treatmentName: appt.treatment_name,
     refundable: false,
     reason: finalReason,
+    notifyStaff: false,
   })
 
   revalidatePath('/console')
@@ -944,6 +946,7 @@ export async function rescheduleFromGrid(input: {
             newISO: input.newStartAt,
             bookingKind: 'treatment',
             statusUrl: `${BOOKING_SITE_URL}/book/request/${input.appointmentId}?t=${createBookingToken(input.appointmentId)}`,
+            notifyStaff: false,
           }),
         )
         .catch((e) => console.error('[staff/actions] reschedule notify failed:', e))
