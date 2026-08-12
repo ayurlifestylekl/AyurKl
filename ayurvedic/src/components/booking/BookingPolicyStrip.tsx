@@ -3,7 +3,7 @@ import { Clock3, ShieldAlert, Users2 } from 'lucide-react'
 const items = [
   {
     icon: Clock3,
-    label: '48-hour cancellation notice',
+    label: 'Reschedule, cancel & refunds via WhatsApp only',
   },
   {
     icon: ShieldAlert,

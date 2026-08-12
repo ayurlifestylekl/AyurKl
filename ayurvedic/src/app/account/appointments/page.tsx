@@ -196,11 +196,8 @@ export default async function AppointmentsPage({
 
       {/* ── POLICY + SUPPORT ─────────────────────────────────────── */}
       <div className="flex flex-col gap-2 pt-1 text-center">
-        <p className="font-body text-[11px] italic text-[#1F1F1F]/55">
-          Full automatic refunds are available within one hour of booking or at least 48 hours before the appointment. Rescheduling is available until 24 hours before.
-        </p>
         <p className="font-body text-[12px] text-[#1F1F1F]/55">
-          Use <strong>Manage booking</strong> on an upcoming appointment to reschedule or cancel online within the eligible window.
+          To reschedule, cancel, or ask about a refund, message us on WhatsApp and our team will assist you directly.
         </p>
         {/* Quick links to book again */}
         {!isEmptyOverall && (
