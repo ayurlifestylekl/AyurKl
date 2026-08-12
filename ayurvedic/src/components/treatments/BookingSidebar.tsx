@@ -54,7 +54,7 @@ export default function BookingSidebar({
 
           <dl className="divide-y divide-accent/20">
             <Row label="Duration" value={duration ?? 'See practitioner'} />
-            <Row label="Sessions" value={sessionsRecommended ?? 'Per consultation'} />
+            <Row label="Sessions" value={sessionsRecommended ?? 'Per session'} />
             <Row label="Price" value={priceText} valueClass="text-accent" />
           </dl>
 

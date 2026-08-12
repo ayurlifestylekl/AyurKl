@@ -2358,7 +2358,7 @@
     },
     {
       "title": "Jaanu Vasti (Knee Care)",
-      "duration": "45 min",
+      "duration": "1 hour (3, 5, 7, 10 or more days)",
       "priceLabel": "Enquiry only",
       "bookingType": "enquiry",
       "sanskritName": "जानु वस्ति · Jaanu Vasti",
@@ -2401,7 +2401,7 @@
     },
     {
       "title": "Kati Vasti (Lower Back Care)",
-      "duration": "45 min",
+      "duration": "1 hour (3, 5, 7, 10 or more days)",
       "priceLabel": "Enquiry only",
       "bookingType": "enquiry",
       "sanskritName": "कटि वस्ति · Kati Vasti",
@@ -2445,7 +2445,7 @@
     },
     {
       "title": "Greeva Vasti (Neck Care)",
-      "duration": "45 min",
+      "duration": "1 hour (3, 5, 7, 10 or more days)",
       "priceLabel": "Enquiry only",
       "bookingType": "enquiry",
       "sanskritName": "ग्रीव वस्ति · Greeva Vasti",
@@ -2488,7 +2488,7 @@
     },
     {
       "title": "Uro Vasti (Chest Care)",
-      "duration": "45 min",
+      "duration": "1 hour (3, 5, 7, 10 or more days)",
       "priceLabel": "Enquiry only",
       "bookingType": "enquiry",
       "sanskritName": "उरो वस्ति · Uro Vasti (Hridaya Vasti)",
@@ -2531,7 +2531,7 @@
     },
     {
       "title": "Netra Tarpanam (Eye Rejuvenation)",
-      "duration": "1 Hour (3, 5, 7 or 10 days)",
+      "duration": "1 hour (3, 5, 7, 10 or more days)",
       "priceLabel": "Enquiry only",
       "bookingType": "enquiry",
       "sanskritName": "नेत्र तर्पणम् · Netra Tarpanam",
@@ -2704,28 +2704,35 @@
     },
     {
       "title": "Post-Delivery Care Package (Sutika Paricharya)",
-      "duration": "Personalised (up to ~45 days)",
+      "duration": "Up to 45 days",
       "priceLabel": "Enquiry only",
       "bookingType": "enquiry",
       "sanskritName": "सूतिका परिचर्या · Sutika Paricharya",
-      "description": "A fully personalised postpartum recovery programme combining Abhyangam, Kizhi, Kashaya Dhaara, Mukha Lepam, Sirodhara and Udara Veshtanam (abdominal wrapping). Tailored to your delivery type and breastfeeding needs after a free pre-package consultation. Enquiry only.",
+      "description": "A fully personalised postpartum recovery programme (Sutika Paricharya) combining Abhyangam, Kizhi, Kashaya Dhaara, Mukha Lepam, Sirodhara and Udara Veshtanam (abdominal wrapping). Tailored to your delivery type and breastfeeding needs after a free pre-package consultation. Enquiry only.",
       "categoryRef": "cat-postnatal",
       "requiresConsultation": true,
       "body": [
         "The Post-Delivery Care Package, traditionally known as Sutika Paricharya, is a fully personalised postpartum recovery programme spanning roughly the forty-five-day postpartum period. It is designed to nurture and restore the mother after childbirth, combining several core therapies that are tailored to her delivery type and breastfeeding needs.",
-        "Following a free pre-package consultation with the Ayurvedic doctor, the programme draws on customised core therapies including Abhyangam (oil massage), Kizhi (herbal poultice), Kashaya Dhaara (herbal pouring), Mukha Lepam (herbal face pack), Sirodhara (head pouring) and Udara Veshtanam (abdominal wrapping)."
+        "During childbirth, a sudden emptiness in the pelvic cavity disturbs Vata Dosha, the digestive fire (Agni) weakens, and the body's tissues (Dhatus) are depleted. Left unmanaged, this imbalance can lead to chronic back pain, joint weakness, digestive issues, fatigue and postpartum anxiety — this care helps you heal correctly from the start.",
+        "Following a free pre-package consultation with the Ayurvedic doctor, the programme draws on customised core therapies including Abhyangam (oil massage), Kizhi (herbal poultice), Kashaya Dhaara (herbal decoction pouring), Mukha Lepam (herbal face pack), Sirodhara (head pouring) and Udara Veshtanam (abdominal wrapping). These are not all given on the same day; they are sequenced and tailored to support your recovery.",
+        "No two births are identical. A natural delivery has different immediate needs to a Cesarean section, where deep abdominal massage must wait until the incision heals. Your constitution (Prakriti), current imbalances (Vikriti), digestive strength and lactation needs are unique, so the oils, herbs, therapy durations and dietary guidance are customised to you.",
+        "Before starting, you'll have a free Pre-Package Consultation with our Ayurvedic Vaidya, which assesses your delivery type and any complications, your current vitals and healing progress, and your digestive capacity — ensuring every therapy is safely timed for you and your nursing infant."
       ],
       "benefits": [
-        "Helps the uterus shrink and tones the abdominal muscles",
-        "Relieves lower backache, joint stiffness and breastfeeding shoulder pain",
-        "Calms the nervous system and reduces stress for better sleep",
-        "Boosts digestion",
-        "Improves breast-milk quality and supply"
+        "Aids uterine involution and tones the abdominal muscles",
+        "Relieves lower backache, shoulder tension and joint pain",
+        "Calms the nervous system, eases exhaustion and promotes deep, restorative sleep",
+        "Boosts digestive fire and supports healthy weight management",
+        "Enhances breast-milk quality and quantity while boosting immunity for mother and child"
       ],
       "procedureSteps": [
         {
           "title": "Free pre-package consultation",
           "description": "A free consultation with the Ayurvedic doctor assesses the mother's health, delivery type and breastfeeding needs to tailor the programme."
+        },
+        {
+          "title": "Personalised therapy plan",
+          "description": "Based on your delivery type, healing progress and digestive strength, we tailor which therapies you receive and in what order — not all therapies are given on the same day."
         },
         {
           "title": "Abhyangam and Kizhi",

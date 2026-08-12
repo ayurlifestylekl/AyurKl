@@ -293,9 +293,9 @@ function EnquiryNotice({ title }: { title: string }) {
   return (
     <div className="rounded-2xl border border-accent/30 bg-white/70 px-8 py-10 text-center">
       <MessageCircle className="mx-auto h-6 w-6 text-accent" strokeWidth={2} aria-hidden />
-      <h2 className="mt-3 font-heading text-[20px] font-extrabold text-primary">{title} is enquiry-only</h2>
+      <h2 className="mt-3 font-heading text-[20px] font-extrabold text-primary">{title} is enquiry only</h2>
       <p className="mx-auto mt-2 max-w-md font-body text-[14px] leading-relaxed text-dark/65">
-        This therapy is arranged after a consultation with our Vaidya. Message us on WhatsApp and we&apos;ll guide you through it.
+        Contact us for bookings and enquiry.
       </p>
       <a
         href={href}
