@@ -10,7 +10,6 @@ import {
   createVaidya,
   updateVaidyaName,
   toggleVaidyaActive,
-  toggleVaidyaPublicFacing,
 } from '@/lib/staff/roster-actions'
 
 interface Props {
@@ -36,7 +35,6 @@ export default function RosterManager({ therapists, vaidyas }: Props) {
   // Vaidya form state
   const [vaidyaCode, setVaidyaCode] = useState('')
   const [vaidyaName, setVaidyaName] = useState('')
-  const [vaidyaPublicFacing, setVaidyaPublicFacing] = useState(true)
 
   const resetTherapistForm = () => {
     setTherapistCode('')
@@ -50,7 +48,6 @@ export default function RosterManager({ therapists, vaidyas }: Props) {
   const resetVaidyaForm = () => {
     setVaidyaCode('')
     setVaidyaName('')
-    setVaidyaPublicFacing(true)
     setShowAddVaidya(false)
     setEditingVaidya(null)
     setError(null)
@@ -90,7 +87,7 @@ export default function RosterManager({ therapists, vaidyas }: Props) {
   const handleCreateVaidya = () => {
     setError(null)
     start(async () => {
-      const res = await createVaidya({ code: vaidyaCode, name: vaidyaName, publicFacing: vaidyaPublicFacing })
+      const res = await createVaidya({ code: vaidyaCode, name: vaidyaName })
       if ('error' in res) setError(res.error)
       else {
         resetVaidyaForm()
@@ -114,13 +111,6 @@ export default function RosterManager({ therapists, vaidyas }: Props) {
   const handleToggleVaidyaActive = (code: string, active: boolean) => {
     start(async () => {
       await toggleVaidyaActive(code, active)
-      router.refresh()
-    })
-  }
-
-  const handleToggleVaidyaPublicFacing = (code: string, publicFacing: boolean) => {
-    start(async () => {
-      await toggleVaidyaPublicFacing(code, publicFacing)
       router.refresh()
     })
   }
@@ -313,16 +303,6 @@ export default function RosterManager({ therapists, vaidyas }: Props) {
                   />
                 </div>
               </div>
-              <label className="mt-3 flex cursor-pointer items-center gap-2.5">
-                <input
-                  type="checkbox"
-                  checked={vaidyaPublicFacing}
-                  onChange={(e) => setVaidyaPublicFacing(e.target.checked)}
-                  className="h-4 w-4 accent-[#6E1023]"
-                  disabled={pending}
-                />
-                <span className="font-body text-[13px] text-dark/80">Public-facing (shown in customer consultation booking)</span>
-              </label>
               <div className="mt-3 flex gap-2">
                 <button onClick={handleCreateVaidya} className={btnPrimary} disabled={pending}>
                   Create
@@ -340,7 +320,6 @@ export default function RosterManager({ therapists, vaidyas }: Props) {
                 <tr className="border-b border-accent/20 bg-cream/40">
                   <th className="px-4 py-3 text-left font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Code</th>
                   <th className="px-4 py-3 text-left font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Name</th>
-                  <th className="px-4 py-3 text-left font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Public</th>
                   <th className="px-4 py-3 text-left font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Status</th>
                   <th className="px-4 py-3 text-left font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-dark/60">Actions</th>
                 </tr>
@@ -371,15 +350,6 @@ export default function RosterManager({ therapists, vaidyas }: Props) {
                           {v.name}
                         </button>
                       )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <button
-                        onClick={() => handleToggleVaidyaPublicFacing(v.code, v.publicFacing !== true)}
-                        className="font-body text-[12px] text-accent hover:underline"
-                        disabled={pending}
-                      >
-                        {v.publicFacing !== false ? 'Yes' : 'No'}
-                      </button>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-block rounded-full px-2 py-1 font-body text-[11px] font-semibold ${

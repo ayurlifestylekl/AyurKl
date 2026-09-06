@@ -9,12 +9,15 @@ import {
 } from '@/lib/booking/management-policy'
 import type { BookingKind } from '@/types/booking'
 
-type RefundStatus = 'claimed' | 'pending' | 'confirmed' | 'failed' | 'exception'
-type PaymentDisplay = 'free' | 'unpaid' | 'pending' | 'paid' | 'refund_pending' | 'refunded' | 'refund_needs_review'
+type RefundStatus = 'claimed' | 'pending' | 'confirmed' | 'failed' | 'exception' | 'requested' | 'rejected'
+type PaymentDisplay = 'free' | 'unpaid' | 'pending' | 'paid' | 'refund_pending' | 'refunded' | 'refund_needs_review' | 'refund_rejected'
 
 interface BookingRefundRow {
+  id: string
   status: RefundStatus
   amount_rm: number | string
+  customer_reason?: string | null
+  staff_reason?: string | null
 }
 
 export interface BookingManagementRow {
@@ -23,6 +26,8 @@ export interface BookingManagementRow {
   created_at: string
   appointment_date_time: string
   requested_datetime?: string | null
+  requested_datetime_alt?: string | null
+  reschedule_requested_at?: string | null
   status: string
   payment_status: string
   payment_provider?: string | null
@@ -60,8 +65,11 @@ export interface BookingPaymentDisplay {
 }
 
 export interface BookingRefundDisplay {
+  id: string
   status: RefundStatus
   amountRm: number
+  customerReason: string | null
+  staffReason: string | null
 }
 
 export interface BookingManagementModel {
@@ -82,6 +90,9 @@ export interface BookingManagementModel {
   changeDeadline: string
   refundDeadline: string
   policyReason: ManagementEligibility['reason']
+  rescheduleRequested: boolean
+  rescheduleRequestedAt: string | null
+  requestedDatetimeAlt: string | null
   groupId: string | null
   groupMembers: BookingManagementMember[]
 }
@@ -108,7 +119,13 @@ function latestRefund(row: BookingManagementRow): BookingRefundDisplay | null {
   const refunds = row.booking_refunds
   const refund = Array.isArray(refunds) ? refunds[0] : refunds
   if (!refund) return null
-  return { status: refund.status, amountRm: Number(refund.amount_rm) }
+  return {
+    id: refund.id,
+    status: refund.status,
+    amountRm: Number(refund.amount_rm),
+    customerReason: refund.customer_reason ?? null,
+    staffReason: refund.staff_reason ?? null,
+  }
 }
 
 function paymentDisplay(
@@ -118,8 +135,9 @@ function paymentDisplay(
 ): BookingPaymentDisplay {
   let display: PaymentDisplay
   if (refund?.status === 'confirmed' || row.payment_status === 'refunded') display = 'refunded'
-  else if (refund && ['claimed', 'pending'].includes(refund.status)) display = 'refund_pending'
+  else if (refund && ['requested', 'claimed', 'pending'].includes(refund.status)) display = 'refund_pending'
   else if (refund && ['failed', 'exception'].includes(refund.status)) display = 'refund_needs_review'
+  else if (refund && refund.status === 'rejected') display = 'refund_rejected'
   else if (kind === 'consultation') display = 'free'
   else if (row.payment_status === 'paid') display = 'paid'
   else if (row.payment_status === 'pending') display = 'pending'
@@ -185,6 +203,9 @@ export function buildManagementModel(row: BookingManagementRow, nowMs: number): 
     changeDeadline: policy.changeDeadlineISO,
     refundDeadline: policy.refundDeadlineISO,
     policyReason: policy.reason,
+    rescheduleRequested: !!row.reschedule_requested_at,
+    rescheduleRequestedAt: row.reschedule_requested_at ?? null,
+    requestedDatetimeAlt: row.requested_datetime_alt ?? null,
     groupId: row.group_id ?? null,
     groupMembers: (row.group_members ?? []).map((member) => buildMember(member, nowMs)),
   }
@@ -192,9 +213,10 @@ export function buildManagementModel(row: BookingManagementRow, nowMs: number): 
 
 const MANAGEMENT_COLUMNS = `
   id, customer_id, created_at, appointment_date_time, requested_datetime,
+  requested_datetime_alt, reschedule_requested_at,
   status, payment_status, payment_provider, booking_kind, treatment_id, treatment_name, patient_name,
   assigned_therapist_name, payable_amount_rm, group_id, group_management_active,
-  booking_refunds(status, amount_rm, created_at)
+  booking_refunds(id, status, amount_rm, customer_reason, staff_reason, created_at)
 `
 
 export async function getBookingManagementModel(

@@ -34,6 +34,12 @@ describe('freeVaidyaIn', () => {
     expect(freeVaidyaIn(c, iso, 30)).toBeNull()
   })
 
+  it('allows a 30-minute consultation to start immediately after another ends', () => {
+    const c = ctx({ VAIDYA: [{ startISO: iso, durationMins: 30 }] })
+    const nextSlot = '2026-08-10T14:30:00+08:00'
+    expect(freeVaidyaIn(c, nextSlot, 30)).toBe('VAIDYA')
+  })
+
   it('a busy VAIDYA does not block LYMAT (the whole point of this feature)', () => {
     const c = ctx({ VAIDYA: [{ startISO: iso, durationMins: 30 }] })
     expect(freeVaidyaIn(c, iso, 30)).not.toBeNull()

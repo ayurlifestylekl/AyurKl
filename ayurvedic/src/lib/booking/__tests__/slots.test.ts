@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CONSULTATION_MINS, consultationSlots, minBookableDate, slotIso, slotsForDuration, validateSubmittedSlot } from '../slots'
+import { CONSULTATION_MINS, CONSULTATION_LEAD_HOURS, consultationSlots, minBookableDate, minBookableDateForConsultation, slotIso, slotsForDuration, validateSubmittedSlot } from '../slots'
 
 const now = new Date('2026-07-16T01:00:00.000Z').getTime() // 09:00 MYT
 
@@ -32,6 +32,22 @@ describe('validateSubmittedSlot', () => {
       iso: slotIso('2026-07-17', '10:30'), durationMins: 30,
       nowMs: now, leadTimeHours: 0, kind: 'consultation',
     })).toEqual({ ok: true })
+  })
+
+  it('accepts a same-day consultation slot more than 2 hours from now', () => {
+    // now = 09:00 MYT, slot at 11:30 MYT same day = 2.5h away, should pass
+    expect(validateSubmittedSlot({
+      iso: slotIso('2026-07-16', '11:30'), durationMins: 30,
+      nowMs: now, leadTimeHours: 0, kind: 'consultation',
+    })).toEqual({ ok: true })
+  })
+
+  it('rejects a consultation slot less than 2 hours from now', () => {
+    // now = 09:00 MYT, slot at 10:30 MYT same day = 1.5h away
+    expect(validateSubmittedSlot({
+      iso: slotIso('2026-07-16', '10:30'), durationMins: 30,
+      nowMs: now, leadTimeHours: 0, kind: 'consultation',
+    })).toHaveProperty('error')
   })
 
   it('uses the same consultation generator for the 10:30 opening boundary', () => {
@@ -83,5 +99,17 @@ describe('minBookableDate — 24h public lead time', () => {
       (t) => Date.parse(slotIso(result, t)) >= afternoonNow + 24 * 3_600_000,
     ) ?? slotsForDuration(30)[0]))
     expect(earliestAllowedMs).toBeGreaterThanOrEqual(afternoonNow + 24 * 3_600_000)
+  })
+})
+
+describe('minBookableDateForConsultation — 2h consultation lead time', () => {
+  it('returns today when a consultation slot is still 2+ hours away', () => {
+    // 09:00 MYT — first consultation slot 10:30 is 1.5h away (too soon),
+    // but 11:00 is 2h away → today is bookable.
+    expect(minBookableDateForConsultation(new Date(now))).toBe('2026-07-16')
+  })
+
+  it('has a shorter lead time constant than treatments', () => {
+    expect(CONSULTATION_LEAD_HOURS).toBe(2)
   })
 })

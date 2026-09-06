@@ -41,21 +41,32 @@ export default function AddToBagButton({ productId, disabled }: AddToBagButtonPr
         type="button"
         disabled={disabled}
         onClick={() => setExpanded(true)}
-        className="inline-flex items-center gap-2 rounded-full border border-accent bg-transparent px-6 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-primary transition-colors duration-300 hover:bg-accent hover:text-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+        className="group relative flex w-full min-h-[52px] items-center justify-center gap-2 overflow-hidden rounded-[2px] bg-[linear-gradient(135deg,#F6DD8E_0%,#E7C457_30%,#D4AF37_52%,#B8860B_100%)] font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-[#3A1208] shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_16px_34px_-16px_rgba(212,175,55,0.85)] transition-transform duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
       >
-        <ShoppingBag className="h-4 w-4" strokeWidth={2} />
-        {disabled ? 'Out of Stock' : '+ Bag'}
+        {!disabled && (
+          <span
+            aria-hidden
+            className="shimmer-sweep pointer-events-none absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%)',
+              width: '60%',
+            }}
+          />
+        )}
+        <ShoppingBag className="relative z-10 h-4 w-4" strokeWidth={2} />
+        <span className="relative z-10">{disabled ? 'Out of Stock' : 'Add to Bag'}</span>
       </button>
     )
   }
 
   return (
-    <div className="inline-flex items-stretch gap-2 rounded-full border border-accent bg-white/70 p-1 backdrop-blur">
+    <div className="flex w-full items-stretch gap-2 rounded-[2px] border border-accent/50 bg-white/70 p-1 backdrop-blur">
       <button
         type="button"
         aria-label="Decrease quantity"
         onClick={() => setQty((q) => Math.max(1, q - 1))}
-        className="flex h-9 w-9 items-center justify-center rounded-full text-primary transition-colors duration-200 hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[2px] text-primary transition-colors duration-200 hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <Minus className="h-3.5 w-3.5" strokeWidth={2} />
       </button>
@@ -66,14 +77,14 @@ export default function AddToBagButton({ productId, disabled }: AddToBagButtonPr
         type="button"
         aria-label="Increase quantity"
         onClick={() => setQty((q) => q + 1)}
-        className="flex h-9 w-9 items-center justify-center rounded-full text-primary transition-colors duration-200 hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[2px] text-primary transition-colors duration-200 hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <Plus className="h-3.5 w-3.5" strokeWidth={2} />
       </button>
       <button
         type="button"
         onClick={handleAdd}
-        className="ml-1 rounded-full bg-accent px-5 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-dark transition-transform duration-200 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        className="ml-1 flex-1 rounded-[2px] bg-[linear-gradient(135deg,#F6DD8E_0%,#E7C457_30%,#D4AF37_52%,#B8860B_100%)] font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-[#3A1208] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] transition-transform duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       >
         Add
       </button>

@@ -1,18 +1,15 @@
 import {
   Sparkles,
-  Flower2,
   Bone,
-  Shield,
-  Salad,
-  HeartPulse,
   Moon,
   Droplets,
 } from 'lucide-react'
 import type { Category } from '@/types/content'
 
 /**
- * The 8 "Standard Ayurvedic" shop concerns shown as circular tiles.
- * Images point to Unsplash (configured in next.config.mjs).
+ * Shop categories — kept in sync with the categories the live product
+ * catalogue actually uses (Product Management → Catalog). Add one here
+ * only once a product in that group has shipped.
  */
 export const categories: Category[] = [
   {
@@ -24,14 +21,6 @@ export const categories: Category[] = [
     href: '/products?category=hair-care',
   },
   {
-    slug: 'skin-care',
-    label: 'Skin Care',
-    icon: Flower2,
-    image:
-      'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=400&q=80',
-    href: '/products?category=skin-care',
-  },
-  {
     slug: 'pain-relief',
     label: 'Pain Relief',
     icon: Bone,
@@ -40,28 +29,12 @@ export const categories: Category[] = [
     href: '/products?category=pain-relief',
   },
   {
-    slug: 'immunity',
-    label: 'Immunity',
-    icon: Shield,
+    slug: 'skin-care',
+    label: 'Skincare',
+    icon: Droplets,
     image:
-      'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=400&q=80',
-    href: '/products?category=immunity',
-  },
-  {
-    slug: 'digestion',
-    label: 'Digestion',
-    icon: Salad,
-    image:
-      'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=400&q=80',
-    href: '/products?category=digestion',
-  },
-  {
-    slug: 'womens-wellness',
-    label: "Women's Wellness",
-    icon: HeartPulse,
-    image:
-      'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=400&q=80',
-    href: '/products?category=womens-wellness',
+      'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=400&q=80',
+    href: '/products?category=skin-care',
   },
   {
     slug: 'stress-relief',
@@ -70,13 +43,5 @@ export const categories: Category[] = [
     image:
       'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=400&q=80',
     href: '/products?category=stress-relief',
-  },
-  {
-    slug: 'detox-cleanse',
-    label: 'Detox & Cleanse',
-    icon: Droplets,
-    image:
-      'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80',
-    href: '/products?category=detox-cleanse',
   },
 ]

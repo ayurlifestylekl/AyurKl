@@ -3,7 +3,7 @@ import { Clock3, ShieldAlert, Users2 } from 'lucide-react'
 const items = [
   {
     icon: Clock3,
-    label: 'Reschedule, cancel & refunds via WhatsApp only',
+    label: 'Manage, cancel & request refunds online anytime',
   },
   {
     icon: ShieldAlert,

@@ -6,6 +6,7 @@ import {
   getRefundExceptions,
 } from '@/lib/staff/appointments'
 import { sweepExpiredBookingsSafe } from '@/lib/booking/expiry'
+import { reconcilePendingRefundsSafe, bookingRefundDependencies } from '@/lib/payments/refund'
 import type { BookingStatus } from '@/types/booking'
 import BookingQueue from '@/components/staff/BookingQueue'
 import TodayBoard from '@/components/staff/TodayBoard'
@@ -38,6 +39,9 @@ export default async function ConsolePage({
   // Expire overdue payment holds before rendering, so the console never shows a
   // stale "awaiting payment" — the page auto-refreshes, keeping this current.
   await sweepExpiredBookingsSafe()
+  // Resolve any refund HitPay reported as still 'pending', so the Refunds
+  // tab reflects reality without waiting for the reconciliation cron.
+  await reconcilePendingRefundsSafe(bookingRefundDependencies())
   const q = (searchParams.q ?? '').trim()
   const hasTab = !!searchParams.tab
   const tab = TABS.find((t) => t.key === searchParams.tab)
@@ -47,13 +51,14 @@ export default async function ConsolePage({
   return (
     <div>
       <AutoRefresh />
-      <div className="mb-5">
-        <h1 className="font-heading text-[22px] font-extrabold text-primary">{heading}</h1>
-        <p className="font-body text-[13px] text-dark/55">Assign therapists to paid bookings, check guests in, and manage the day.</p>
-      </div>
+      <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="font-heading text-[22px] font-extrabold text-primary">{heading}</h1>
+          <p className="max-w-xl font-body text-[13px] text-dark/55">Assign therapists to paid bookings, check guests in, and manage the day.</p>
+        </div>
 
-      {/* Search — always available, overrides the view when present. */}
-      <form method="get" className="mb-5 flex gap-2">
+        {/* Search — always available, overrides the view when present. */}
+        <form method="get" className="flex shrink-0 gap-2 sm:w-auto sm:max-w-sm">
         <input
           name="q"
           defaultValue={q}
@@ -69,6 +74,7 @@ export default async function ConsolePage({
           </Link>
         )}
       </form>
+      </div>
 
       {q ? <SearchResults db={db} q={q} /> : hasTab && tab ? <TabView db={db} tab={tab} /> : <Overview db={db} />}
     </div>

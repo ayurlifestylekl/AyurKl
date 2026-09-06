@@ -1,10 +1,15 @@
-import { CreditCard, MessageCircle } from 'lucide-react'
+import { CreditCard } from 'lucide-react'
 
 import { STATUS_LABEL } from '@/lib/booking/status'
 import type { BookingManagementModel } from '@/lib/booking/management'
+import { getRescheduleFormBookings, requestReschedule } from '@/lib/booking/reschedule'
+import { cancelManagedBooking } from '@/lib/booking/cancellation'
+import { requestBookingRefund } from '@/lib/booking/refund-request'
+import RescheduleBookingForm from './RescheduleBookingForm'
+import CancelBookingDialog from './CancelBookingDialog'
+import RefundRequestDialog from './RefundRequestDialog'
 import { getTreatmentImageUrl } from '@/lib/storefront/booking'
 import { fmtMY } from '@/lib/datetime'
-import { whatsappLink } from '@/lib/clinic'
 
 const paymentLabels: Record<BookingManagementModel['payment']['display'], string> = {
   free: 'No payment required',
@@ -14,13 +19,18 @@ const paymentLabels: Record<BookingManagementModel['payment']['display'], string
   refund_pending: 'Refund pending',
   refunded: 'Refunded',
   refund_needs_review: 'Refund needs review',
+  refund_rejected: 'Refund declined',
 }
 
-export default async function ManageBookingPanel({ model }: { model: BookingManagementModel }) {
+export default async function ManageBookingPanel({ model, token }: { model: BookingManagementModel; token?: string | null }) {
   const amount = model.payment.amountRm == null ? null : `RM${model.payment.amountRm.toFixed(2)}`
   const isActiveGroup = model.groupMembers.length > 1
     && model.groupMembers.some((member) => member.id === model.id)
   const imageUrl = !isActiveGroup && model.treatmentId ? await getTreatmentImageUrl(model.treatmentId) : null
+  const rescheduleIds = Array.from(new Set([model.id, ...model.groupMembers.map((m) => m.id)]))
+  const rescheduleBookings = model.canReschedule && !model.rescheduleRequested
+    ? await getRescheduleFormBookings(rescheduleIds)
+    : []
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_1fr] lg:gap-12">
@@ -59,30 +69,47 @@ export default async function ManageBookingPanel({ model }: { model: BookingMana
           Need to make a change?
         </h2>
         <p className="mt-3 max-w-xl font-body text-[14px] leading-6 text-dark/65">
-          Rescheduling, cancellations, and refund requests are handled directly via WhatsApp — message us and our team will take care of it.
+          Cancellations, refund requests, and reschedules can all be managed below.
         </p>
 
-        <div className="mt-7 rounded-2xl bg-white p-6 ring-1 ring-accent/15">
-          <div className="flex items-start gap-3">
-            <MessageCircle className="mt-0.5 h-5 w-5 flex-none text-accent" />
-            <div>
-              <h3 className="font-heading text-[14px] font-bold text-primary">
-                Need to reschedule, cancel, or ask about a refund?
-              </h3>
-              <p className="mt-1 font-body text-[13px] leading-5 text-dark/65">
-                Message us on WhatsApp and our team will take care of it directly.
-              </p>
-            </div>
+        {model.rescheduleRequested ? (
+          <div className="mt-7 rounded-2xl bg-cream/50 p-6 ring-1 ring-accent/15">
+            <h3 className="font-heading text-[14px] font-bold text-primary">Reschedule request pending</h3>
+            <p className="mt-1 font-body text-[13px] leading-5 text-dark/65">
+              You requested to move this appointment to{' '}
+              <strong>{fmtMY(model.requestedDatetimeAlt ?? '', { dateStyle: 'medium', timeStyle: 'short' })}</strong>.
+              Our team will review it and get back to you shortly.
+            </p>
           </div>
-          <a
-            href={whatsappLink(`Hi, I'd like to manage my booking (${model.treatmentName}).`)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-heading text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent/90"
-          >
-            Message us on WhatsApp
-          </a>
-        </div>
+        ) : model.canReschedule ? (
+          <div className="mt-7">
+            <RescheduleBookingForm
+              anchorId={model.id}
+              bookings={rescheduleBookings}
+              action={requestReschedule}
+            />
+          </div>
+        ) : null}
+
+        {model.status !== 'cancelled' && model.canCancel && (
+          <CancelBookingDialog
+            anchorId={model.id}
+            appointmentIds={rescheduleIds}
+            wholeGroup={isActiveGroup}
+            action={cancelManagedBooking}
+          />
+        )}
+
+        {model.status === 'cancelled' && model.payment.status === 'paid' && model.payment.display !== 'refunded' && (
+          <RefundRequestDialog
+            appointmentId={model.id}
+            amountRm={model.payment.amountRm ?? 0}
+            provider={model.payment.provider}
+            existingRefund={model.refund}
+            token={token}
+            action={requestBookingRefund}
+          />
+        )}
 
         <div className="mt-4 rounded-2xl bg-white p-5 ring-1 ring-accent/15">
           <div className="flex items-start gap-3">

@@ -19,6 +19,8 @@ const PUBLIC_START_MINS = [
 ]
 
 export const CONSULTATION_MINS = 30
+/** Consultations require only 2 hours advance notice (treatments need 24). */
+export const CONSULTATION_LEAD_HOURS = 2
 
 function hhmm(min: number): string {
   return `${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`
@@ -52,9 +54,16 @@ export function validateSubmittedSlot(input: {
 }): { ok: true } | { error: string } {
   const at = new Date(input.iso).getTime()
   if (!Number.isFinite(at)) return { error: 'Please choose a valid appointment time.' }
-  // Global 24-hour lead time. Per-treatment booking_lead_time_hours may be stricter.
-  const minLeadHours = Math.max(input.leadTimeHours, 24)
-  if (at <= input.nowMs + minLeadHours * 3_600_000) return { error: 'That time is too soon — we need at least 24 hours notice.' }
+  // Treatments enforce a global 24-hour lead time (per-treatment may be stricter).
+  // Consultations only need 2 hours — Vaidyas manage their own schedule and
+  // the public picker should show today's remaining free slots.
+  const floor = input.kind === 'consultation' ? CONSULTATION_LEAD_HOURS : 24
+  const minLeadHours = Math.max(input.leadTimeHours, floor)
+  if (at <= input.nowMs + minLeadHours * 3_600_000) {
+    return input.kind === 'consultation'
+      ? { error: 'That time is too soon — we need at least 2 hours notice for consultations.' }
+      : { error: 'That time is too soon — we need at least 24 hours notice.' }
+  }
   const hhmm = mytTimeOfDay(input.iso)
   const generated = input.kind === 'consultation'
     ? consultationSlots()
@@ -67,6 +76,23 @@ export function validateSubmittedSlot(input: {
 /** Combine a YYYY-MM-DD date + HH:MM (Malaysia time) into a UTC ISO string. */
 export function slotIso(dateYMD: string, time: string): string {
   return new Date(`${dateYMD}T${time}:00+08:00`).toISOString()
+}
+
+/** Earliest bookable date for a consultation (2-hour lead time). */
+export function minBookableDateForConsultation(now: Date = new Date()): string {
+  const minInstant = now.getTime() + CONSULTATION_LEAD_HOURS * 3_600_000
+  let day = new Date(minInstant)
+  for (let i = 0; i < 14; i++) {
+    const dateKey = mytDayKey(day)
+    for (const time of consultationSlots()) {
+      const iso = slotIso(dateKey, time)
+      if (new Date(iso).getTime() >= minInstant) {
+        return dateKey
+      }
+    }
+    day = new Date(day.getTime() + 24 * 3_600_000)
+  }
+  return mytDayKey(day)
 }
 
 /** Earliest bookable date (at least 24 hours from now) as YYYY-MM-DD. */

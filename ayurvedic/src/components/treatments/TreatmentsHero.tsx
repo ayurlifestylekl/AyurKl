@@ -177,8 +177,8 @@ export default function TreatmentsHero({
 
               {/* "Library." — oversized serif italic, breaks the grid */}
               <motion.span
-                initial={{ clipPath: 'inset(0 0 0 100%)', opacity: 0, rotate: -0.6 }}
-                animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1, rotate: 0 }}
+                initial={{ clipPath: 'inset(0 0 -20% 100%)', opacity: 0, rotate: -0.6 }}
+                animate={{ clipPath: 'inset(0 0 -20% 0)', opacity: 1, rotate: 0 }}
                 transition={{ duration: 1.0, delay: 0.9, ease: EASE_OUT_PREMIUM }}
                 className="relative -mt-2 block font-body font-normal italic text-accent"
                 style={{
@@ -214,11 +214,11 @@ export default function TreatmentsHero({
                 className="font-body italic text-white/80"
                 style={{ fontSize: '17px', lineHeight: '1.65' }}
               >
-                Protocols refined across generations of Kerala therapists.
+                Protocols refined across generations of Keraleeya Vaidyas.
                 Each one calibrated to your body.
               </p>
               <p className="mt-3 font-body text-[13px] italic text-accent/85">
-                — our therapists
+                — Our Vaidya
               </p>
             </motion.div>
 
@@ -317,8 +317,8 @@ export default function TreatmentsHero({
                 }}
               >
                 <Image
-                  src="/ayurvedic-lifestyle_1022134-20273.jpg.avif"
-                  alt="Ayurvedic flat-lay with herbs, brass vessels and warm amber oils arranged on a dark surface"
+                  src="/authentic-ayurveda.jpg"
+                  alt="A guest receiving a traditional Shirodhara oil treatment from a Vaidya, candlelit therapy room"
                   fill
                   priority
                   sizes="(max-width: 1024px) 85vw, 440px"
@@ -386,7 +386,7 @@ export default function TreatmentsHero({
                 <div className="min-w-0 flex-1">
                   <p className="font-body text-[11px] italic text-dark/55">Attended by</p>
                   <p className="font-heading text-[14px] font-bold leading-tight text-primary">
-                    our therapists
+                    Our Vaidya
                   </p>
                   <p className="mt-0.5 font-heading text-[9px] font-semibold uppercase tracking-[0.2em] text-accent">
                     Certified · 14 Yrs

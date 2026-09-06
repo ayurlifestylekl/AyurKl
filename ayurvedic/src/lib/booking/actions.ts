@@ -10,14 +10,14 @@ import { canAccessBooking } from './access'
 import { notifyRequestReceived, notifyCancelled } from './notify'
 import { voidBill } from './payment'
 import { parseDurationMins } from './duration'
-import { CONSULTATION_MINS, consultationSlots, slotsForDuration, slotIso, validateSubmittedSlot } from './slots'
+import { CONSULTATION_MINS, CONSULTATION_LEAD_HOURS, consultationSlots, slotsForDuration, slotIso, validateSubmittedSlot } from './slots'
 import { countOverlapping, hasCapacity, type Slot } from './scheduling'
 import { fetchBlocksOnOrAfter, blockedIntervalsForDate, isBlocked } from './blocks'
 import { therapistsForGender, getAllVaidyas, VAIDYA_BLOCK_CODE, type Vaidya } from '@/lib/staff/therapists'
 import { requireStaff } from '@/lib/staff/guard'
 import { mytDayKey } from '@/lib/datetime'
 import { validateLegacyParentConsultationLink } from './consultation-rules'
-import { freeVaidyaIn, type ConsultationAvailabilityContext } from './consultation-availability'
+import { freeVaidyaIn, selectBookableVaidyas, type ConsultationAvailabilityContext } from './consultation-availability'
 
 /** Service-role client — bypasses RLS for guest bookings + server writes. */
 function admin() {
@@ -39,7 +39,7 @@ export type CreateBookingResult = { id: string; token: string } | { error: strin
 export async function createBookingRequest(
   input: BookingRequestInput,
 ): Promise<CreateBookingResult> {
-  const { db: sb } = await requireStaff()
+  const { db: sb, userId: staffUserId } = await requireStaff()
   const parentLink = validateLegacyParentConsultationLink(input.parentConsultationId)
   if ('error' in parentLink) return parentLink
 
@@ -117,6 +117,7 @@ export async function createBookingRequest(
       pre_visit_form: input.healthIntake ?? {},
       payable_amount_rm: payable,
       payment_status: 'unpaid',
+      created_by_admin_id: staffUserId,
     })
     .select('id')
     .single()
@@ -384,13 +385,8 @@ export async function getAvailableSlots(dateYMD: string, treatmentId: string | n
   return computeSlots(dateYMD, treatmentId, { male: gender === 'male' ? 1 : 0, female: gender === 'female' ? 1 : 0 })
 }
 
-/** Public-facing, active Vaidyas eligible for auto-assignment. VAIDYA (the
- * primary doctor) is preferred first when both are free — getAllVaidyas()
- * orders by code, which would otherwise favour LYMAT alphabetically. */
 async function bookableVaidyas(): Promise<Vaidya[]> {
-  const candidates = (await getAllVaidyas()).filter((v) => v.active && v.publicFacing)
-  return candidates.sort((a, b) =>
-    a.code === VAIDYA_BLOCK_CODE ? -1 : b.code === VAIDYA_BLOCK_CODE ? 1 : a.code.localeCompare(b.code))
+  return selectBookableVaidyas(await getAllVaidyas())
 }
 
 /** Per-Vaidya busy Slot[] for a day's consultations. A legacy/unassigned row
@@ -447,7 +443,7 @@ export async function getConsultationSlots(dateYMD: string): Promise<SlotInfo[]>
   return allSlots.map((time) => {
     const iso = slotIso(dateYMD, time)
     const available =
-      new Date(iso).getTime() > now + 24 * 3600_000 &&
+      new Date(iso).getTime() > now + CONSULTATION_LEAD_HOURS * 3_600_000 &&
       freeVaidyaIn(ctx, iso, CONSULTATION_MINS) !== null
     return { time, iso, available }
   })

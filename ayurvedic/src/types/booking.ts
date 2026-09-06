@@ -86,6 +86,7 @@ export interface StaffAppointment {
   genderRequirement: Gender | null
   requestedDatetime: string | null
   requestedDatetimeAlt: string | null
+  rescheduleRequestedAt: string | null
   appointmentDatetime: string | null
   assignedTherapistCode: string | null
   assignedTherapistName: string | null

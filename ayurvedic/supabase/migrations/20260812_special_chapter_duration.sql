@@ -14,8 +14,8 @@ WHERE title IN (
   'Netra Tarpanam (Eye Rejuvenation)'
 );
 
--- Simplify the Post-Delivery Care Package duration label (drop the
--- redundant "Personalised" prefix and the "~" tilde).
+-- Set the Post-Delivery Care Package duration to the requested
+-- personalised multi-day programme label.
 UPDATE public.treatments
-SET duration = 'Up to 45 days'
+SET duration = 'Personalised(7, 10, 14 DAYS)'
 WHERE title = 'Post-Delivery Care Package (Sutika Paricharya)';

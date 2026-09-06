@@ -6,6 +6,17 @@ import { ArrowUpRight } from 'lucide-react'
 import { BotanicalMandala } from '@/components/ui/Decorations'
 import type { Author } from '@/types/blog'
 
+function displayAuthorName(name: string | null | undefined): string | null | undefined {
+  if (!name) return name
+  const cleaned = name
+    .replace(/^Dr\.?\s*/i, '')
+    .trim()
+    .replace(/\s*(?:@|vb)[\w.]*\s*$/i, '')
+    .trim()
+  if (!cleaned) return name
+  return /^Vaidya\b/i.test(cleaned) ? cleaned : `Vaidya ${cleaned}`
+}
+
 interface AuthorBioCardProps {
   author: Author
 }
@@ -63,7 +74,7 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-white/5 font-heading text-3xl font-extrabold text-accent">
-                  {author.name
+                  {(displayAuthorName(author.name) ?? author.name)
                     .split(' ')
                     .map((s) => s[0])
                     .filter(Boolean)
@@ -89,7 +100,7 @@ export default function AuthorBioCard({ author }: AuthorBioCardProps) {
               id="author-card-heading"
               className="mt-3 font-heading text-[28px] font-extrabold leading-[1.05] tracking-[-0.02em] text-white sm:text-[34px] md:text-[38px]"
             >
-              {author.name}
+              {displayAuthorName(author.name)}
             </h3>
 
             {author.role && (

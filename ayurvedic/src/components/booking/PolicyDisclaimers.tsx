@@ -1,6 +1,6 @@
 'use client'
 
-import { Users, MessageCircle, Timer } from 'lucide-react'
+import { Users, CalendarClock, Timer } from 'lucide-react'
 
 interface PolicyDisclaimersProps {
   accepted: boolean
@@ -14,9 +14,9 @@ const POLICIES = [
     body: 'For your comfort and in line with our practice, male therapists treat male guests and female therapists treat female guests. There are no mixed-gender arrangements.',
   },
   {
-    icon: MessageCircle,
+    icon: CalendarClock,
     title: 'Rescheduling, cancellation & refunds',
-    body: 'All rescheduling, cancellations, and refund requests are handled directly via WhatsApp — message us and our team will assist you.',
+    body: 'Use Manage booking to reschedule or cancel online. If your booking was paid, you can request a refund with a reason — our team will review and approve or decline it.',
   },
   {
     icon: Timer,
@@ -50,7 +50,7 @@ export default function PolicyDisclaimers({ accepted, onAcceptedChange }: Policy
           className="mt-0.5 h-4 w-4 flex-none accent-[#1e5b4b]"
         />
         <span className="font-body text-[13px] leading-snug text-dark/80">
-          I understand and accept the gender-matching policy, and that rescheduling, cancellation, and refunds are handled via WhatsApp.
+          I understand and accept the gender-matching policy, and the rescheduling, cancellation, and refund terms above.
         </span>
       </label>
     </div>

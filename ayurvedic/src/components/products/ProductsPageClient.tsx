@@ -47,18 +47,14 @@ export default function ProductsPageClient({
     category !== 'all' || search.trim().length > 0 || priceTier !== 'all'
 
   const activeCategoryLabel = useMemo(() => {
-    if (category === 'all')    return 'All'
-    if (category === 'combos') return 'Combos'
-    if (category === 'herbal') return 'Herbal'
+    if (category === 'all') return 'All'
     return categories.find((c) => c.slug === category)?.label ?? category
   }, [category])
 
   const filtered = useMemo(() => {
     let result = [...products]
 
-    if (category === 'combos')       result = result.filter((p) => p.isBundle)
-    else if (category === 'herbal')  result = result.filter((p) => !p.isBundle)
-    else if (category !== 'all')     result = result.filter((p) => p.category === category)
+    if (category !== 'all') result = result.filter((p) => p.category === category)
 
     result = filterByPriceTier(result, priceTier)
 
@@ -92,7 +88,7 @@ export default function ProductsPageClient({
 
   return (
     <section id="products" className="relative bg-cream">
-      <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 md:py-16 lg:px-12">
+      <div className="mx-auto max-w-7xl px-6 pb-12 sm:px-8 md:pb-16 lg:px-12">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_1fr] lg:gap-12">
           {/* Sidebar — desktop only */}
           <div className="hidden lg:sticky lg:top-[108px] lg:block lg:max-h-[calc(100vh-140px)] lg:self-start lg:overflow-y-auto lg:pr-2">

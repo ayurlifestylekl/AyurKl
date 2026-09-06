@@ -42,6 +42,15 @@ you if the site ever goes down during the client trial.
 
 (Even without this, the two daily crons already keep Supabase active.)
 
+- [ ] Add a second monitor → type **HTTP(s)** → URL
+      `https://<domain>/api/cron/reconcile-refunds?key=<CRON_SECRET>`
+- [ ] Interval: 30 minutes
+- [ ] Confirm the monitor shows "Up"
+
+(This is what resolves a HitPay refund that comes back `pending` — e.g. a
+bank-transfer refund that settles over hours — into `confirmed` in a timely
+way. The `vercel.json` cron for the same route only runs once a day.)
+
 ## 5. Security
 
 - [ ] Revoke the GitHub personal-access token that was shared in chat

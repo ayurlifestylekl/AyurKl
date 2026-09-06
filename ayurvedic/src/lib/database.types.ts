@@ -16,7 +16,7 @@ export type Database = {
           email: string | null
           phone_number: string | null
           gender: 'male' | 'female' | null
-          role: 'admin' | 'customer' | 'sales_agent'
+          role: 'admin' | 'customer' | 'sales_agent' | 'doctor' | 'front_desk' | 'product_manager'
           created_at: string
           date_of_birth: string | null
           language: 'en' | 'ms'
@@ -44,7 +44,7 @@ export type Database = {
           email?: string | null
           phone_number?: string | null
           gender?: 'male' | 'female' | null
-          role?: 'admin' | 'customer' | 'sales_agent'
+          role?: 'admin' | 'customer' | 'sales_agent' | 'doctor' | 'front_desk' | 'product_manager'
           created_at?: string
           date_of_birth?: string | null
           language?: 'en' | 'ms'
@@ -72,7 +72,7 @@ export type Database = {
           email?: string | null
           phone_number?: string | null
           gender?: 'male' | 'female' | null
-          role?: 'admin' | 'customer' | 'sales_agent'
+          role?: 'admin' | 'customer' | 'sales_agent' | 'doctor' | 'front_desk' | 'product_manager'
           created_at?: string
           date_of_birth?: string | null
           language?: 'en' | 'ms'

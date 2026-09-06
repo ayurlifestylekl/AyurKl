@@ -364,7 +364,7 @@ export async function cancelOrderAdmin(orderId: string, reason: string): Promise
 // Refund
 // ---------------------------------------------------------------------------
 
-const PaymentMethodSchema = z.enum(['billplz', 'cod', 'bank_transfer', 'fpx', 'cash', 'card'])
+const PaymentMethodSchema = z.enum(['cod', 'bank_transfer', 'cash'])
 
 export async function recordRefund(input: {
   orderId: string

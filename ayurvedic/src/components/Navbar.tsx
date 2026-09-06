@@ -8,9 +8,7 @@ import { COMMERCE_ENABLED } from '@/lib/admin/features'
 import { CLINIC_EMAIL, mailtoLink } from '@/lib/clinic'
 
 const productsDropdown = [
-  { label: 'All Products',     href: '/products'                 },
-  { label: 'Treatment Combos', href: '/products?category=combos' },
-  { label: 'Herbal Remedies',  href: '/products?category=herbal' },
+  { label: 'All Products', href: '/products' },
 ]
 
 export default function Navbar() {

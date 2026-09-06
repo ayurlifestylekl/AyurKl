@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 import type { Product } from '@/types/content'
 import AddToBagButton from './AddToBagButton'
+import ProductDetailsAccordion from './ProductDetailsAccordion'
 
 interface ProductMetaProps {
   product: Product
@@ -74,42 +75,39 @@ export default function ProductMeta({ product, categoryLabel }: ProductMetaProps
         )}
       </motion.div>
 
+      {/* Good for */}
+      {product.useCases && product.useCases.length > 0 && (
+        <motion.div variants={fadeUp(0)} className="flex flex-wrap gap-1.5">
+          {product.useCases.map((tag) => (
+            <span
+              key={tag}
+              className="inline-flex items-center rounded-full border border-accent/35 bg-accent/10 px-3 py-1 font-heading text-[9px] font-semibold uppercase tracking-[0.16em] text-primary/80"
+            >
+              {tag.replace(/-/g, ' ')}
+            </span>
+          ))}
+        </motion.div>
+      )}
+
       {/* Description */}
-      <motion.p
-        variants={fadeUp(0)}
-        className="font-body text-[15px] leading-[1.75] text-dark/75"
-      >
-        <span className="float-left mr-2 mt-0.5 font-display text-[44px] italic leading-[0.9] text-accent">
-          {product.description.charAt(0)}
-        </span>
-        {product.description.slice(1)}
-      </motion.p>
-
-      {/* Prepared with */}
-      {product.ingredients && product.ingredients.length > 0 && (
-        <motion.div variants={fadeUp(0)}>
-          <p className="mb-2 inline-flex items-center gap-2 font-heading text-[9px] font-bold uppercase tracking-[0.3em] text-accent">
-            <span aria-hidden className="inline-block h-px w-3 bg-accent" />
-            Prepared with
-          </p>
-          <p className="font-display italic text-[15px] text-dark/75">
-            {product.ingredients.join(' · ')}
-          </p>
-        </motion.div>
-      )}
-
-      {/* Dose */}
-      {product.dose && (
-        <motion.div variants={fadeUp(0)}>
-          <p className="mb-2 inline-flex items-center gap-2 font-heading text-[9px] font-bold uppercase tracking-[0.3em] text-accent">
-            <span aria-hidden className="inline-block h-px w-3 bg-accent" />
-            Dose / Use
-          </p>
-          <p className="font-body italic text-[14px] leading-[1.7] text-dark/70">
-            {product.dose}
-          </p>
-        </motion.div>
-      )}
+      <motion.div variants={fadeUp(0)} className="product-description">
+        <style>{`
+          .product-description p::first-letter {
+            font-family: var(--font-playfair), Georgia, serif;
+            font-style: italic;
+            color: #D4AF37;
+            float: left;
+            font-size: 2.6em;
+            line-height: 0.85;
+            padding-right: 0.1em;
+            padding-top: 0.05em;
+            margin-bottom: -0.12em;
+          }
+        `}</style>
+        <p className="font-body text-[16px] leading-[1.8] text-dark/85">
+          {product.description}
+        </p>
+      </motion.div>
 
       {/* CTA */}
       <motion.div variants={fadeUp(0)} className="mt-2">
@@ -126,6 +124,21 @@ export default function ProductMeta({ product, categoryLabel }: ProductMetaProps
         <span>Ships within 48h</span>
         <span aria-hidden className="h-1 w-1 rounded-full bg-accent/60" />
         <span>Free over RM 150</span>
+      </motion.div>
+
+      {/* Ingredients / How to Use / Good to Know */}
+      <motion.div variants={fadeUp(0)}>
+        <ProductDetailsAccordion
+          rows={[
+            ...(product.ingredients && product.ingredients.length > 0
+              ? [{ label: 'Ingredients', content: product.ingredients.join(', ') }]
+              : []),
+            ...(product.dose ? [{ label: 'How to Use', content: product.dose }] : []),
+            ...(product.contraindications
+              ? [{ label: 'Good to Know', content: product.contraindications }]
+              : []),
+          ]}
+        />
       </motion.div>
 
       {/* Vaidya note */}

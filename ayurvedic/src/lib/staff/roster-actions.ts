@@ -76,7 +76,6 @@ export async function toggleTherapistActive(code: string, active: boolean): Prom
 export async function createVaidya(input: {
   code: string
   name: string
-  publicFacing: boolean
 }): Promise<Ok | Err> {
   const { db } = await requireStaff(['admin', 'front_desk'])
   
@@ -91,7 +90,7 @@ export async function createVaidya(input: {
   const { error } = await db.from('vaidyas').insert({
     code,
     name,
-    public_facing: input.publicFacing,
+    public_facing: true,
     active: true,
   })
   
@@ -135,15 +134,3 @@ export async function toggleVaidyaActive(code: string, active: boolean): Promise
   return { ok: true }
 }
 
-/** Toggle a Vaidya's public_facing flag. */
-export async function toggleVaidyaPublicFacing(code: string, publicFacing: boolean): Promise<Ok | Err> {
-  const { db } = await requireStaff(['admin', 'front_desk'])
-  
-  const { error } = await db.from('vaidyas').update({ public_facing: publicFacing, updated_at: new Date().toISOString() }).eq('code', code)
-  if (error) return { error: error.message }
-  
-  revalidatePath('/console/roster')
-  revalidatePath('/console/schedule')
-  revalidatePath('/console')
-  return { ok: true }
-}

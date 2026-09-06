@@ -1,12 +1,14 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star } from 'lucide-react'
+import { Star, ArrowUpRight } from 'lucide-react'
 import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 import { featuredProducts } from '@/data/featuredProducts'
 import type { FeaturedProduct, ProductBadge } from '@/types/content'
 import { LotusMark } from '@/components/ui/Ornament'
+import NocturneFrame from '@/components/products/atmosphere/NocturneFrame'
 
 /* ── Palette (section-local; matches hero language) ── */
 const EMERALD       = '#6E3420'
@@ -23,18 +25,23 @@ const badgeStyles: Record<ProductBadge, { bg: string; color: string }> = {
   COMBO:      { bg: 'rgba(110,52,32,0.85)',         color: SAFFRON   },
 }
 
-export default function FeaturedProducts() {
+interface FeaturedProductsProps {
+  initialProducts?: FeaturedProduct[]
+}
+
+export default function FeaturedProducts({ initialProducts }: FeaturedProductsProps) {
+  const products = initialProducts && initialProducts.length > 0 ? initialProducts : featuredProducts
   const [activeCategory, setActiveCategory] = useState<string>('All')
 
   const categories = useMemo(() => {
-    const cats = Array.from(new Set(featuredProducts.map(p => p.category)))
+    const cats = Array.from(new Set(products.map(p => p.category)))
     return ['All', ...cats]
-  }, [])
+  }, [products])
 
   const filteredProducts = useMemo(() => {
-    if (activeCategory === 'All') return featuredProducts
-    return featuredProducts.filter(p => p.category === activeCategory)
-  }, [activeCategory])
+    if (activeCategory === 'All') return products
+    return products.filter(p => p.category === activeCategory)
+  }, [activeCategory, products])
 
   return (
     <section
@@ -200,28 +207,37 @@ export default function FeaturedProducts() {
         </motion.div>
 
         {/* ── PRODUCT GRID ── */}
-        <motion.div
-          variants={staggerParent(0.1, 0.05)}
-          initial="initial"
-          whileInView="animate"
-          viewport={inViewOnce}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-8"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProducts.map((p) => (
-              <motion.div
-                key={p.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <ProductCard product={p} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {filteredProducts.length === 0 ? (
+          <p
+            className="py-16 text-center font-display italic"
+            style={{ color: 'rgba(247, 242, 232,0.55)', fontSize: 'clamp(16px, 2vw, 20px)' }}
+          >
+            New formulations are on their way — check back soon.
+          </p>
+        ) : (
+          <motion.div
+            variants={staggerParent(0.1, 0.05)}
+            initial="initial"
+            whileInView="animate"
+            viewport={inViewOnce}
+            className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-6"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredProducts.map((p) => (
+                <motion.div
+                  key={p.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
       </div>
     </section>
   )
@@ -231,103 +247,112 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
   const reviewScore = (4.5 + (product.id.length % 5) * 0.1).toFixed(1)
   const reviewCount = 120 + product.id.length * 14
   const badge = product.badge ? badgeStyles[product.badge] : null
+  const hasDiscount = !!product.oldPriceRm && product.oldPriceRm > product.priceRm
 
   return (
-    <article
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#D4AF37]/25 bg-[#F3E2CE] transition-all duration-500 hover:-translate-y-1.5 hover:border-[#D4AF37]/55"
+    <Link
+      href={`/products/${product.id}`}
+      aria-label={`${product.name} — ${product.tagline}`}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#D4AF37]/25 bg-[#F3E2CE] transition-all duration-500 hover:-translate-y-1.5 hover:border-[#D4AF37]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] focus-visible:ring-offset-2"
       style={{
         boxShadow: '0 10px 38px -18px rgba(53,7,16,0.30), 0 2px 8px rgba(53,7,16,0.08)',
       }}
     >
-      {/* ── Text-forward header (no image) ── */}
-      <div className="flex items-center justify-between border-b px-6 pb-4 pt-6" style={{ borderColor: 'rgba(212,175,55,0.25)' }}>
-        {badge && product.badge ? (
+      {/* ── Image ── */}
+      <NocturneFrame
+        src={product.image}
+        alt={`${product.name} — ${product.tagline}`}
+        aspectRatio="1 / 1"
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+        imageClassName="transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+        className="relative shrink-0"
+      >
+        <div className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between">
+          {badge && product.badge ? (
+            <span
+              className="rounded-full px-3 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.22em]"
+              style={{ backgroundColor: badge.bg, color: badge.color }}
+            >
+              {product.badge}
+            </span>
+          ) : (
+            <span />
+          )}
           <span
-            className="rounded-full px-3 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.22em]"
-            style={{ backgroundColor: badge.bg, color: badge.color }}
+            className="flex h-7 w-7 items-center justify-center rounded-full"
+            style={{ backgroundColor: 'rgba(247,242,232,0.9)' }}
           >
-            {product.badge}
+            <LotusMark className="h-4 w-4" />
           </span>
-        ) : (
+        </div>
+      </NocturneFrame>
+
+      {/* ── INFO ── */}
+      <div className="flex flex-grow flex-col justify-between px-5 pb-5 pt-4">
+        <div className="flex flex-col">
           <span
-            className="font-heading text-[10px] font-bold uppercase tracking-[0.24em]"
+            className="font-heading text-[9px] font-bold uppercase tracking-[0.24em]"
             style={{ color: 'rgba(110,16,35,0.5)' }}
           >
             {product.category}
           </span>
-        )}
-        <LotusMark className="h-5 w-5" />
-      </div>
-
-      {/* ── INFO ── */}
-      <div className="flex flex-grow flex-col justify-between px-6 pb-6 pt-5">
-
-        <div className="flex flex-col">
           <h3
-            className="font-heading text-[18px] font-extrabold leading-tight transition-colors duration-300"
+            className="mt-1.5 font-heading text-[16px] font-extrabold leading-tight transition-colors duration-300"
             style={{ color: CARD_INK, letterSpacing: '-0.005em' }}
           >
             {product.name}
           </h3>
           <p
-            className="mt-1.5 font-display italic line-clamp-1"
+            className="mt-1 font-display italic line-clamp-1"
             style={{
               color: 'rgba(110,16,35,0.62)',
-              fontSize: '14px',
+              fontSize: '13px',
             }}
           >
             {product.tagline}
           </p>
 
           {/* Star rating — saffron */}
-          <div className="mt-3 flex items-center gap-1.5">
+          <div className="mt-2.5 flex items-center gap-1.5">
             <div className="flex" style={{ color: SAFFRON }}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star key={star} className="h-3 w-3 fill-current" />
               ))}
             </div>
-            <span className="font-body text-[11px] font-medium" style={{ color: 'rgba(110,16,35,0.55)' }}>
-              {reviewScore} · {reviewCount} reviews
-            </span>
-          </div>
-
-          {/* Pricing — Coming Soon */}
-          <div className="mt-5">
-            <span
-              className="inline-block rounded-full px-3.5 py-1.5 font-heading text-[11px] font-bold uppercase tracking-[0.18em]"
-              style={{ backgroundColor: 'rgba(110,16,35,0.07)', color: CARD_INK, border: `1px solid ${CARD_INK}24` }}
-            >
-              Coming Soon
+            <span className="font-body text-[10.5px] font-medium" style={{ color: 'rgba(110,16,35,0.55)' }}>
+              {reviewScore} · {reviewCount}
             </span>
           </div>
         </div>
 
-        {/* Add to Bag */}
-        <button
-          type="button"
-          aria-label={`Notify me when ${product.name} is available`}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 font-heading text-[10px] font-bold uppercase tracking-[0.22em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-          style={{
-            backgroundColor: 'rgba(110,16,35,0.07)',
-            color: CARD_INK,
-            border: `1px solid ${CARD_INK}24`,
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = CARD_INK
-            e.currentTarget.style.color = '#F7F2E8'
-            e.currentTarget.style.boxShadow = `0 14px 32px -16px ${CARD_INK}99`
-            e.currentTarget.style.borderColor = CARD_INK
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(110,16,35,0.07)'
-            e.currentTarget.style.color = CARD_INK
-            e.currentTarget.style.boxShadow = 'none'
-            e.currentTarget.style.borderColor = `${CARD_INK}24`
-          }}
-        >
-          Notify Me
-        </button>
+        {/* Price + Shop Now */}
+        <div className="mt-4 flex items-center justify-between gap-2">
+          <div className="flex items-baseline gap-1.5">
+            <span className="font-heading text-[16px] font-bold" style={{ color: CARD_INK }}>
+              RM{product.priceRm}
+            </span>
+            {hasDiscount && (
+              <span
+                className="font-body text-[11px] line-through"
+                style={{ color: 'rgba(110,16,35,0.4)' }}
+              >
+                RM{product.oldPriceRm}
+              </span>
+            )}
+          </div>
+          <span
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-105"
+            style={{
+              backgroundColor: CARD_INK,
+              color: '#F7F2E8',
+              boxShadow: '0 10px 22px -10px rgba(110,16,35,0.6)',
+            }}
+            aria-hidden
+          >
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </div>
       </div>
-    </article>
+    </Link>
   )
 }

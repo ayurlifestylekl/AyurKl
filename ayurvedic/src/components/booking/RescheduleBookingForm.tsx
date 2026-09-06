@@ -5,14 +5,14 @@ import { useMemo, useState, useTransition } from 'react'
 
 import SlotPicker from './SlotPicker'
 import type {
-  RescheduleBookingInput,
+  RequestRescheduleInput,
   RescheduleFormBooking,
 } from '@/lib/booking/reschedule'
 import type { ManagementActionResult } from '@/lib/booking/management-actions'
 import { fmtMY } from '@/lib/datetime'
 
-type RescheduleAction = (
-  input: RescheduleBookingInput,
+type RequestRescheduleAction = (
+  input: RequestRescheduleInput,
 ) => Promise<ManagementActionResult<{ appointmentIds: string[] }>>
 
 const REJECTED_ACTION_FAILURE = {
@@ -21,8 +21,8 @@ const REJECTED_ACTION_FAILURE = {
 }
 
 export async function runRescheduleAction(
-  action: RescheduleAction,
-  input: RescheduleBookingInput,
+  action: RequestRescheduleAction,
+  input: RequestRescheduleInput,
 ): Promise<ManagementActionResult<{ appointmentIds: string[] }>> {
   try {
     return await action(input)
@@ -38,7 +38,7 @@ export default function RescheduleBookingForm({
 }: {
   anchorId: string
   bookings: RescheduleFormBooking[]
-  action: RescheduleAction
+  action: RequestRescheduleAction
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -174,7 +174,7 @@ export default function RescheduleBookingForm({
       {error && <p role="alert" className="mt-3 font-body text-[12.5px] text-red-700">{error}</p>}
       {success && (
         <p role="status" className="mt-3 font-body text-[12.5px] text-green-700">
-          Your appointment has been rescheduled.
+          Your reschedule request has been sent. We will contact you once the team reviews it.
         </p>
       )}
 
@@ -184,7 +184,7 @@ export default function RescheduleBookingForm({
         disabled={!ready || pending}
         className="mt-4 rounded-full bg-primary px-5 py-2.5 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
       >
-        {pending ? 'Checking availability…' : 'Confirm new time'}
+        {pending ? 'Sending request…' : 'Request new time'}
       </button>
     </section>
   )

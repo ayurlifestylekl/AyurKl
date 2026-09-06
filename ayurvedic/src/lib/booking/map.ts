@@ -4,7 +4,7 @@ import type { BookingKind, BookingStatus, Gender, PaymentStatus, StaffAppointmen
 export const APPOINTMENT_COLUMNS =
   `id, booking_kind, status, payment_status, treatment_name, treatment_id,
    patient_name, patient_phone, patient_gender, gender_requirement, guest_age,
-   requested_datetime, requested_datetime_alt, appointment_date_time,
+   requested_datetime, requested_datetime_alt, reschedule_requested_at, appointment_date_time,
    assigned_therapist_code, assigned_therapist_name, assigned_therapist_gender, duration_mins, payable_amount_rm,
    room, is_guest, customer_id, parent_consultation_id, treatment_unlocked, cancellation_reason, group_id, updated_at,
    approved_at, contacted_at, created_at, created_by_admin_id, payment_expires_at, staff_color_tag`
@@ -30,6 +30,7 @@ export function mapAppointmentRow(r: any): StaffAppointment {
           : null,
     requestedDatetime: r.requested_datetime ?? null,
     requestedDatetimeAlt: r.requested_datetime_alt ?? null,
+    rescheduleRequestedAt: r.reschedule_requested_at ?? null,
     appointmentDatetime: r.appointment_date_time ?? null,
     assignedTherapistCode: r.assigned_therapist_code ?? null,
     assignedTherapistName: r.assigned_therapist_name ?? null,

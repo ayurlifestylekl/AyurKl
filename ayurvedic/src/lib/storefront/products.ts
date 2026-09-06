@@ -44,6 +44,7 @@ function rowToProduct(r: any): Product {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     doshas: dosha as any,
     useCases: Array.isArray(r.tags) ? r.tags : undefined,
+    contraindications: r.contraindications ?? undefined,
   }
 }
 
@@ -53,7 +54,7 @@ export async function getStorefrontProducts(supabase: SB): Promise<Product[]> {
     .select(
       `id, slug, name, description, short_description, price_rm, sale_price_rm,
        sku, stock_qty, category, is_bundle, image_url, created_at,
-       dosha_indication, ingredients, dosage_instructions, tags, featured, status`,
+       dosha_indication, ingredients, dosage_instructions, contraindications, tags, featured, status`,
     )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
@@ -79,7 +80,7 @@ export async function getStorefrontProductBySlug(
     .select(
       `id, slug, name, description, short_description, price_rm, sale_price_rm,
        sku, stock_qty, category, is_bundle, image_url, created_at,
-       dosha_indication, ingredients, dosage_instructions, tags, featured, status`,
+       dosha_indication, ingredients, dosage_instructions, contraindications, tags, featured, status`,
     )
     .eq('slug', slug)
     .eq('status', 'active')

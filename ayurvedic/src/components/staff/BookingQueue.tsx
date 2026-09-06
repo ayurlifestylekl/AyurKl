@@ -55,16 +55,16 @@ export default function BookingQueue({
   }
   return (
     <div className="overflow-x-auto rounded-xl border border-accent/20 bg-white">
-      <table className="w-full text-left text-[13px]">
+      <table className="w-full table-fixed text-left text-[13px]">
         <thead className="border-b border-accent/20 font-heading text-[10px] uppercase tracking-[0.12em] text-dark/45">
           <tr>
-            <th className="px-4 py-3">Guest</th>
-            <th className="px-4 py-3">Treatment</th>
-            <th className="px-4 py-3">Requested</th>
-            <th className="px-4 py-3">Gender</th>
-            <th className="px-4 py-3">Status</th>
-            <th className="px-4 py-3 text-right">Price</th>
-            <th className="px-4 py-3" />
+            <th className="px-3 py-2.5 w-[26%]">Guest</th>
+            <th className="px-3 py-2.5 w-[21%]">Treatment</th>
+            <th className="px-3 py-2.5 w-[18%]">Requested</th>
+            <th className="px-3 py-2.5 w-[9%]">Gender</th>
+            <th className="px-3 py-2.5 w-[13%]">Status</th>
+            <th className="px-3 py-2.5 w-[10%] text-right">Price</th>
+            <th className="px-3 py-2.5 w-[3%]" />
           </tr>
         </thead>
         <tbody className="divide-y divide-accent/10">
@@ -84,9 +84,9 @@ export default function BookingQueue({
 function SingleRow({ a, linkBase }: { a: StaffAppointment; linkBase: string }) {
   return (
     <tr className="hover:bg-cream/60">
-      <td className="px-4 py-3">
+      <td className="px-3 py-2.5 break-words">
         <div className="font-semibold text-primary">{a.patientName ?? '—'}</div>
-        <div className="flex items-center gap-2 text-[12px] text-dark/55">
+        <div className="flex flex-wrap items-center gap-2 text-[12px] text-dark/55">
           <span>{a.patientPhone ?? ''}{a.isGuest ? ' · guest' : ''}</span>
           {customerWaLink(a.patientPhone) && (
             <a href={customerWaLink(a.patientPhone) as string} target="_blank" rel="noopener noreferrer" className="font-semibold text-green-600 hover:text-green-700">
@@ -95,15 +95,15 @@ function SingleRow({ a, linkBase }: { a: StaffAppointment; linkBase: string }) {
           )}
         </div>
       </td>
-      <td className="px-4 py-3">
+      <td className="px-3 py-2.5">
         <div className="text-dark/85">{a.treatmentName ?? '—'}</div>
         <div className="text-[11px] uppercase tracking-wide text-dark/40">{a.bookingKind}</div>
       </td>
-      <td className="px-4 py-3 text-dark/70">{fmt(a.requestedDatetime)}</td>
-      <td className="px-4 py-3 text-dark/70">{a.genderRequirement ?? 'any'}</td>
-      <td className="px-4 py-3"><StatusCell a={a} /></td>
-      <td className="px-4 py-3 text-right font-semibold text-dark">{a.payableAmountRm != null ? `RM${a.payableAmountRm}` : '—'}</td>
-      <td className="px-4 py-3 text-right">
+      <td className="px-3 py-2.5 text-dark/70">{fmt(a.requestedDatetime)}</td>
+      <td className="px-3 py-2.5 text-dark/70">{a.genderRequirement ?? 'any'}</td>
+      <td className="px-3 py-2.5"><StatusCell a={a} /></td>
+      <td className="px-3 py-2.5 text-right font-semibold text-dark">{a.payableAmountRm != null ? `RM${a.payableAmountRm}` : '—'}</td>
+      <td className="px-3 py-2.5 text-right">
         <Link href={`${linkBase}/${a.id}`} className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-accent hover:text-primary">
           View →
         </Link>
@@ -134,13 +134,13 @@ function GroupRow({ members, linkBase }: { members: StaffAppointment[]; linkBase
   const names = members.map((m) => m.patientName).filter(Boolean).join(', ')
   return (
     <tr className="bg-accent/[0.03] hover:bg-cream/60">
-      <td className="px-4 py-3">
+      <td className="px-3 py-2.5 break-words">
         <div className="flex items-center gap-2 font-semibold text-primary">
           <span>{lead.patientName ?? 'Group'}</span>
           <span className="rounded bg-accent/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-accent">Group of {members.length}</span>
         </div>
         <div className="truncate text-[12px] text-dark/55" title={names}>{names}</div>
-        <div className="flex items-center gap-2 text-[12px] text-dark/55">
+        <div className="flex flex-wrap items-center gap-2 text-[12px] text-dark/55">
           <span>{lead.patientPhone ?? ''}{lead.isGuest ? ' · guest' : ''}</span>
           {customerWaLink(lead.patientPhone) && (
             <a href={customerWaLink(lead.patientPhone) as string} target="_blank" rel="noopener noreferrer" className="font-semibold text-green-600 hover:text-green-700">
@@ -149,15 +149,15 @@ function GroupRow({ members, linkBase }: { members: StaffAppointment[]; linkBase
           )}
         </div>
       </td>
-      <td className="px-4 py-3">
+      <td className="px-3 py-2.5">
         <div className="text-dark/85">{lead.treatmentName ?? '—'}</div>
         <div className="text-[11px] uppercase tracking-wide text-dark/40">{lead.bookingKind}</div>
       </td>
-      <td className="px-4 py-3 text-dark/70">{fmt(lead.requestedDatetime)}</td>
-      <td className="px-4 py-3 text-dark/70">{genderSummary(members)}</td>
-      <td className="px-4 py-3"><StatusCell a={lead} /></td>
-      <td className="px-4 py-3 text-right font-semibold text-dark">{sumPrice(members) != null ? `RM${sumPrice(members)}` : '—'}</td>
-      <td className="px-4 py-3 text-right">
+      <td className="px-3 py-2.5 text-dark/70">{fmt(lead.requestedDatetime)}</td>
+      <td className="px-3 py-2.5 text-dark/70">{genderSummary(members)}</td>
+      <td className="px-3 py-2.5"><StatusCell a={lead} /></td>
+      <td className="px-3 py-2.5 text-right font-semibold text-dark">{sumPrice(members) != null ? `RM${sumPrice(members)}` : '—'}</td>
+      <td className="px-3 py-2.5 text-right">
         <Link href={`${linkBase}/${lead.id}`} className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-accent hover:text-primary">
           View →
         </Link>

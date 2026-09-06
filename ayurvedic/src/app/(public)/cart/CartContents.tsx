@@ -8,7 +8,7 @@ import { useCart } from '@/lib/cart/CartProvider'
 import { createClient } from '@/lib/supabase/client'
 
 interface ProductInfo {
-  id: string
+  slug: string
   name: string
   price_rm: number
   image_url: string | null
@@ -33,14 +33,14 @@ export default function CartContents() {
     const supabase = createClient()
     supabase
       .from('products')
-      .select('id, name, price_rm, image_url, stock_qty')
-      .in('id', missing)
+      .select('slug, name, price_rm, image_url, stock_qty')
+      .in('slug', missing)
       .then(({ data, error }) => {
         if (!error && data) {
           setProducts((prev) => {
             const next = { ...prev }
             for (const p of data as ProductInfo[]) {
-              next[p.id] = p
+              next[p.slug] = p
             }
             return next
           })
@@ -223,15 +223,14 @@ export default function CartContents() {
               <p className="mt-3 font-body text-[11.5px] italic text-[#1F1F1F]/55" style={{ lineHeight: 1.55 }}>
                 Shipping calculated at checkout. Cart saved on this device.
               </p>
-              <button
-                type="button"
-                disabled
-                className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#163F33]/15 px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#163F33]/60"
+              <Link
+                href="/checkout"
+                className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#163F33] px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white hover:bg-[#163F33]/90"
               >
-                Checkout — coming with Billplz
-              </button>
+                Proceed to checkout
+              </Link>
               <p className="mt-2 text-center font-body text-[11px] text-[#1F1F1F]/45">
-                For now,{' '}
+                Questions?{' '}
                 <a
                   href="https://wa.me/601165043436?text=Hi%2C%20I%27d%20like%20to%20place%20an%20order%20from%20my%20cart."
                   target="_blank"
@@ -239,8 +238,7 @@ export default function CartContents() {
                   className="font-semibold text-[#D4AF37] underline-offset-4 hover:underline"
                 >
                   WhatsApp us
-                </a>{' '}
-                to place the order.
+                </a>
               </p>
             </div>
           </div>

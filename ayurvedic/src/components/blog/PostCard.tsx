@@ -10,6 +10,17 @@ import { format } from 'date-fns'
 import { fadeUp } from '@/lib/motion'
 import type { PostListItem } from '@/types/blog'
 
+function displayAuthorName(name: string | null | undefined): string | null | undefined {
+  if (!name) return name
+  const cleaned = name
+    .replace(/^Dr\.?\s*/i, '')
+    .trim()
+    .replace(/\s*(?:@|vb)[\w.]*\s*$/i, '')
+    .trim()
+  if (!cleaned) return name
+  return /^Vaidya\b/i.test(cleaned) ? cleaned : `Vaidya ${cleaned}`
+}
+
 interface PostCardProps {
   post: PostListItem
   /** Optional 1-based card index used for the eyebrow numbering */
@@ -171,7 +182,7 @@ export default function PostCard({
 
           {post.authorName && (
             <p className="font-heading text-[10.5px] font-bold uppercase tracking-[0.22em] text-dark/55">
-              By <span className="text-primary/80">{post.authorName}</span>
+              By <span className="text-primary/80">{displayAuthorName(post.authorName)}</span>
             </p>
           )}
 
@@ -361,7 +372,7 @@ export default function PostCard({
           <div className="flex items-center gap-2.5 border-t border-primary/10 pt-5 font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-dark/55">
             <span aria-hidden className="h-1 w-1 rounded-full bg-accent" />
             <span>
-              By <span className="text-primary/80">{post.authorName}</span>
+              By <span className="text-primary/80">{displayAuthorName(post.authorName)}</span>
             </span>
           </div>
         )}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { recordRefund } from '@/lib/admin/orders/actions'
 
-type RefundMethod = 'cash' | 'bank_transfer' | 'billplz' | 'fpx' | 'card' | 'cod'
+type RefundMethod = 'cash' | 'bank_transfer' | 'cod'
 
 export default function RefundDialog({
   orderId,
@@ -52,7 +52,7 @@ export default function RefundDialog({
             </h2>
             <p className="mt-1 text-[11px] text-[#1F1F1F]/55">
               Order total: RM {totalRm.toFixed(2)}. The actual money movement
-              must be processed in Billplz / bank separately.
+              must be processed via HitPay / bank separately.
             </p>
 
             <label className="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-[#6E1023]/70">
@@ -87,9 +87,6 @@ export default function RefundDialog({
             >
               <option value="bank_transfer">Bank transfer</option>
               <option value="cash">Cash</option>
-              <option value="billplz">Billplz</option>
-              <option value="fpx">FPX</option>
-              <option value="card">Card</option>
               <option value="cod">COD</option>
             </select>
 
@@ -99,7 +96,7 @@ export default function RefundDialog({
             <input
               value={ref}
               onChange={(e) => setRef(e.target.value)}
-              placeholder="Billplz refund ID or bank ref"
+              placeholder="HitPay refund ID or bank ref"
               className="mt-1 w-full rounded-lg border border-[#6E1023]/15 px-3 py-2 text-[13px]"
             />
 

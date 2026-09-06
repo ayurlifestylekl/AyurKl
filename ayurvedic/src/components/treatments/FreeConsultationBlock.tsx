@@ -80,7 +80,7 @@ export default function FreeConsultationBlock({
           >
             A free consultation
             <br />
-            with our <span className="font-body italic text-accent">Kerala Ayurveda therapist.</span>
+            with our <span className="font-body italic text-accent">KKM REGISTERED AYURVEDA PRACTITIONER.</span>
           </motion.h2>
 
           <motion.p variants={fadeUp(0)} className="max-w-md font-body text-[16px] leading-[1.75] text-white/50">
@@ -89,7 +89,7 @@ export default function FreeConsultationBlock({
           </motion.p>
 
           <motion.div variants={fadeUp(0)} className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            {['KKM-Registered', 'B.A.M.S Kerala', 'our therapists'].map((cred, i, arr) => (
+            {['KKM-Registered', 'B.A.M.S Kerala', 'Ayurveda Practitioner'].map((cred, i, arr) => (
               <React.Fragment key={cred}>
                 <span className="font-heading text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
                   {cred}

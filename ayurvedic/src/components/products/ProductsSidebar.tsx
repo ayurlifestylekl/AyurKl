@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { categories } from '@/data/categories'
+import { Flourish } from '@/components/ui/Ornament'
 import type { Product } from '@/types/content'
 
 export type PriceTier = 'all' | 'under-75' | '75-150' | '150-300' | 'over-300'
@@ -36,16 +37,9 @@ export function filterByPriceTier(products: Product[], tier: PriceTier): Product
 }
 
 function countForCategory(slug: string, products: Product[]): number {
-  if (slug === 'all')     return products.length
-  if (slug === 'combos')  return products.filter((p) => p.isBundle).length
-  if (slug === 'herbal')  return products.filter((p) => !p.isBundle).length
+  if (slug === 'all') return products.length
   return products.filter((p) => p.category === slug).length
 }
-
-const TYPE_FILTERS = [
-  { slug: 'combos', label: 'Combos' },
-  { slug: 'herbal', label: 'Herbal' },
-]
 
 /**
  * Classical contents-page style filter column. Same cream atmosphere as
@@ -84,15 +78,15 @@ export default function ProductsSidebar({
       <div className="relative">
         <Search
           aria-hidden
-          className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/35"
+          className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-accent"
           strokeWidth={2}
         />
         <input
           type="search"
           value={localSearch}
           onChange={(e) => setLocalSearch(e.target.value)}
-          placeholder="Search formulae…"
-          className="w-full rounded-full border border-primary/12 bg-white/80 py-2.5 pl-10 pr-9 font-display italic text-[13px] text-dark placeholder:text-dark/35 transition-colors duration-300 focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-1"
+          placeholder="Search the Apothecary…"
+          className="w-full rounded-full border border-accent/40 bg-white/80 py-2.5 pl-10 pr-9 font-display italic text-[13px] text-dark shadow-[inset_0_1px_3px_rgba(110,16,35,0.05)] placeholder:text-dark/40 transition-colors duration-300 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-1"
         />
         {localSearch && (
           <button
@@ -105,6 +99,8 @@ export default function ProductsSidebar({
           </button>
         )}
       </div>
+
+      <Flourish width="w-6" />
 
       {/* Category group */}
       <SidebarGroup label="Category">
@@ -121,19 +117,6 @@ export default function ProductsSidebar({
             active={activeCategory === cat.slug}
             count={countForCategory(cat.slug, products)}
             onClick={() => onCategoryChange(cat.slug)}
-          />
-        ))}
-      </SidebarGroup>
-
-      {/* Type group */}
-      <SidebarGroup label="Type">
-        {TYPE_FILTERS.map((t) => (
-          <SidebarOption
-            key={t.slug}
-            label={t.label}
-            active={activeCategory === t.slug}
-            count={countForCategory(t.slug, products)}
-            onClick={() => onCategoryChange(t.slug)}
           />
         ))}
       </SidebarGroup>
@@ -165,7 +148,7 @@ export default function ProductsSidebar({
                 <span
                   aria-hidden
                   className={`inline-block h-[7px] w-[7px] rounded-full border transition-[background-color,border-color] duration-200 ${
-                    active ? 'border-accent bg-accent' : 'border-primary/30 bg-transparent'
+                    active ? 'border-accent bg-accent' : 'border-accent/45 bg-transparent'
                   }`}
                 />
                 {tier.label}
@@ -174,6 +157,24 @@ export default function ProductsSidebar({
           })}
         </div>
       </fieldset>
+
+      {/* Curator's note */}
+      <div className="relative rounded-sm bg-blush px-4 py-5">
+        <span
+          aria-hidden
+          className="absolute inset-x-4 top-0 h-px"
+          style={{ background: 'linear-gradient(to right, transparent, rgba(212,175,55,0.7), transparent)' }}
+        />
+        <span aria-hidden className="absolute left-3.5 top-0.5 font-display text-[38px] leading-none text-accent/50">
+          &ldquo;
+        </span>
+        <p className="relative z-[1] font-display text-[14px] italic leading-[1.6] text-primary">
+          Prescribed from classical Kerala texts — never perfumed, never rushed.
+        </p>
+        <span className="mt-2.5 block font-heading text-[9px] font-bold uppercase tracking-[0.22em] text-primary/50">
+          — Our Vaidyas
+        </span>
+      </div>
 
       {hasActiveFilters && (
         <button
@@ -211,12 +212,20 @@ function SidebarOption({
     <button
       type="button"
       onClick={onClick}
-      className={`flex items-baseline justify-between gap-2 py-1.5 text-left font-display text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:text-primary ${
-        active ? 'italic text-accent' : 'text-dark/65 hover:text-primary'
+      className={`-ml-3.5 flex items-baseline justify-between gap-2 rounded-r border-l-2 py-1.5 pl-3 pr-2.5 text-left font-display text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:text-primary ${
+        active
+          ? 'border-accent bg-accent/8 italic text-primary'
+          : 'border-transparent text-dark/65 hover:text-primary'
       }`}
     >
       <span>{label}</span>
-      <span className="font-heading text-[10px] tracking-[0.15em] text-dark/35">{count}</span>
+      <span
+        className={`font-heading text-[10px] tracking-[0.15em] ${
+          active ? 'font-bold text-accent' : 'text-dark/35'
+        }`}
+      >
+        {count}
+      </span>
     </button>
   )
 }

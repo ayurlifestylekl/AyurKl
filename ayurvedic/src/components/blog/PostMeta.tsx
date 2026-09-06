@@ -3,6 +3,17 @@ import Image from 'next/image'
 import { Clock } from 'lucide-react'
 import { format } from 'date-fns'
 
+function displayAuthorName(name: string | null | undefined): string | null | undefined {
+  if (!name) return name
+  const cleaned = name
+    .replace(/^Dr\.?\s*/i, '')
+    .trim()
+    .replace(/\s*(?:@|vb)[\w.]*\s*$/i, '')
+    .trim()
+  if (!cleaned) return name
+  return /^Vaidya\b/i.test(cleaned) ? cleaned : `Vaidya ${cleaned}`
+}
+
 interface PostMetaProps {
   authorName: string
   authorRole: string | null
@@ -58,7 +69,7 @@ export default function PostMeta({
             aria-hidden
             className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 font-heading text-[13px] font-bold text-primary"
           >
-            {authorName
+            {(displayAuthorName(authorName) ?? authorName)
               .split(' ')
               .map((s) => s[0])
               .filter(Boolean)
@@ -68,7 +79,7 @@ export default function PostMeta({
         )}
         <div className="flex flex-col">
           <span className={`font-heading text-[13px] font-bold uppercase tracking-[0.14em] ${nameClass}`}>
-            {authorName}
+            {displayAuthorName(authorName)}
           </span>
           {authorRole && (
             <span className={`font-body text-[12px] italic ${roleClass}`}>

@@ -72,10 +72,12 @@ export interface Product {
   createdAt: string
   /** Optional — shown in "Prepared with" section on the detail page. */
   ingredients?: string[]
-  /** Optional — shown as a small italic paragraph in "Dose / use". */
+  /** Optional — shown in the "Dose / use" section on the detail page. */
   dose?: string
   /** Doshas this product balances. Used by the quiz recommendation engine. */
   doshas?: Dosha[]
-  /** Free-form use cases for symptom-driven matching. */
+  /** Free-form use cases for symptom-driven matching — shown as "Good for" tags. */
   useCases?: string[]
+  /** Optional safety/usage warning text shown in a callout on the detail page. */
+  contraindications?: string
 }

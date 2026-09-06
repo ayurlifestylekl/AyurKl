@@ -8,10 +8,13 @@ import VideoTestimonials from '@/components/sections/VideoTestimonials'
 import Reviews from '@/components/sections/Reviews'
 import FAQs from '@/components/sections/FAQs'
 import FinalBookingCTA from '@/components/sections/FinalBookingCTA'
-import { COMMERCE_ENABLED } from '@/lib/admin/features'
 import { CLINIC_EMAIL } from '@/lib/clinic'
 import { faqs as homeFaqsFallback } from '@/data/faqs'
 import { fetchFaqs } from '@/sanity/fetchFaqs'
+import { createClient } from '@/lib/supabase/server'
+import { getStorefrontProducts } from '@/lib/storefront/products'
+import { categories } from '@/data/categories'
+import type { FeaturedProduct } from '@/types/content'
 
 // Short window so FAQ edits published in Sanity Studio show up within ~30s.
 export const revalidate = 30
@@ -64,6 +67,22 @@ const reviewJsonLd = {
 
 export default async function Home() {
   const homeFaqs = await fetchFaqs('home', homeFaqsFallback)
+  const supabase = await createClient()
+  const storefrontProducts = await getStorefrontProducts(supabase)
+
+  const featuredFromDb: FeaturedProduct[] = storefrontProducts.map((p) => ({
+    id: p.id,
+    name: p.name,
+    tagline: p.tagline,
+    category:
+      categories.find((c) => c.slug === p.category)?.label ??
+      p.category.replace('-', ' '),
+    priceRm: p.priceRm,
+    oldPriceRm: p.oldPriceRm,
+    badge: p.badge,
+    image: p.image,
+    description: p.description,
+  }))
 
   const faqJsonLd = {
     '@context': 'https://schema.org',
@@ -100,12 +119,8 @@ export default async function Home() {
       <EmpathyBridge />
       <ClinicTherapies />
       {/* Shop sections — archived until the product catalogue launches (Phase 2). */}
-      {COMMERCE_ENABLED && (
-        <>
-          <PromoBanners />
-          <FeaturedProducts />
-        </>
-      )}
+      <PromoBanners />
+      <FeaturedProducts initialProducts={featuredFromDb} />
       <VideoTestimonials />
       <Reviews />
       <FAQs items={homeFaqs} />

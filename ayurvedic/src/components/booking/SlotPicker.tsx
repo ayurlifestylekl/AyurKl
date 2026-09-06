@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from 'react'
 import type { Gender } from '@/types/booking'
 import { getAvailableSlots, getAvailableSlotsForMixedParty, getConsultationSlots, type SlotInfo } from '@/lib/booking/actions'
-import { minBookableDate } from '@/lib/booking/slots'
+import { minBookableDate, minBookableDateForConsultation } from '@/lib/booking/slots'
 import { fmtMY } from '@/lib/datetime'
 
 interface SlotPickerProps {
@@ -31,9 +31,8 @@ export default function SlotPicker({ treatmentId, gender, mode = 'treatment', me
   const [date, setDate] = useState('')
   const [slots, setSlots] = useState<SlotInfo[]>([])
   const [loading, start] = useTransition()
-  const minDate = minBookableDate()
-
   const isConsultation = mode === 'consultation'
+  const minDate = isConsultation ? minBookableDateForConsultation() : minBookableDate()
   const isGroup = !!members
   // Every guest must have a gender AND a chosen treatment before we can look up times.
   const groupReady =

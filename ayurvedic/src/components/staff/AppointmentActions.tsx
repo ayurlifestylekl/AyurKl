@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
 import { getOperationalActionState } from '@/lib/booking/operations'
-import { approveAndAssign, assignTherapist, setStatus, rejectBooking, deleteBooking } from '@/lib/staff/actions'
+import { approveAndAssign, assignTherapist, setStatus, rejectBooking, deleteBooking, approveReschedule, declineReschedule } from '@/lib/staff/actions'
 import type { Therapist } from '@/lib/staff/therapist-format'
 import { therapistLabel } from '@/lib/staff/therapist-format'
 import { fmtMY } from '@/lib/datetime'
@@ -19,6 +19,8 @@ interface Props {
   requestedAt: string | null
   /** The guest's alternate time, if they gave one. */
   requestedAtAlt?: string | null
+  /** When the guest requested a reschedule — non-null means a pending reschedule request exists. */
+  rescheduleRequestedAt?: string | null
   /** Where to send the user after a delete (the list this came from). */
   backHref?: string
   /** Whether to show the destructive Delete button (front desk / admin only). */
@@ -31,7 +33,7 @@ interface Props {
 }
 
 export default function AppointmentActions({
-  id, status, bookingKind, genderRequirement, requestedAt, requestedAtAlt = null,
+  id, status, bookingKind, genderRequirement, requestedAt, requestedAtAlt = null, rescheduleRequestedAt = null,
   backHref = '/console', canDelete = false, assignedTherapistCode = null, assignedTherapistName = null,
   therapists,
 }: Props) {
@@ -39,6 +41,8 @@ export default function AppointmentActions({
   const [therapistCode, setTherapistCode] = useState('')
   const [postTherapistCode, setPostTherapistCode] = useState('')
   const [postRoom, setPostRoom] = useState('')
+  const [rescheduleTherapistCode, setRescheduleTherapistCode] = useState(assignedTherapistCode ?? '')
+  const [rescheduleRoom, setRescheduleRoom] = useState('')
   const [assignError, setAssignError] = useState<string | null>(null)
   const [assignPending, startAssign] = useTransition()
   // Guest can only be confirmed at a time THEY offered — not a free-typed time.
@@ -89,6 +93,14 @@ export default function AppointmentActions({
       if ('error' in res) setError(res.error)
       else router.push(backHref)
     })
+  }
+
+  const onApproveReschedule = () => {
+    run(() => approveReschedule(id, { therapistCode: rescheduleTherapistCode, room: rescheduleRoom }))
+  }
+
+  const onDeclineReschedule = () => {
+    run(() => declineReschedule(id))
   }
 
   const isConsultation = bookingKind === 'consultation'
@@ -160,6 +172,34 @@ export default function AppointmentActions({
           <button disabled={pending} onClick={onApprove} className={btnPrimary}>
             {pending ? 'Saving…' : bookingKind === 'consultation' ? 'Approve & confirm consultation' : 'Approve & assign'}
           </button>
+        </div>
+      )}
+
+      {rescheduleRequestedAt && requestedAtAlt && (
+        <div className="mb-4 space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+          <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.14em] text-dark/55">
+            Reschedule requested
+          </p>
+          <p className="font-body text-[13px] text-dark/80">
+            Customer wants to move to <strong>{fmtMY(requestedAtAlt, { dateStyle: 'medium', timeStyle: 'short' })}</strong>.
+          </p>
+          {!isConsultation && (
+            <Field label="Assign therapist for the new time">
+              <select value={rescheduleTherapistCode} onChange={(e) => setRescheduleTherapistCode(e.target.value)} className={inp}>
+                <option value="">Select therapist…</option>
+                {therapists.filter((t) => !genderRequirement || t.gender === genderRequirement).map((t) => (
+                  <option key={t.code} value={t.code}>{therapistLabel(t)}</option>
+                ))}
+              </select>
+            </Field>
+          )}
+          <Field label="Room (optional)">
+            <input value={rescheduleRoom} onChange={(e) => setRescheduleRoom(e.target.value)} className={inp} placeholder="e.g. Room 2" />
+          </Field>
+          <div className="flex flex-wrap gap-2">
+            <Btn onClick={onApproveReschedule} disabled={pending || (!isConsultation && !rescheduleTherapistCode)}>Approve</Btn>
+            <Btn danger onClick={onDeclineReschedule} disabled={pending}>Decline</Btn>
+          </div>
         </div>
       )}
 

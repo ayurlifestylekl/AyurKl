@@ -14,7 +14,7 @@ import {
 import { countOverlapping, type Slot } from './scheduling'
 import { CONSULTATION_MINS, validateSubmittedSlot } from './slots'
 import { createBookingToken } from './token'
-import { notifyManagedReschedule, BOOKING_SITE_URL } from './notify'
+import { notifyManagedReschedule, notifyRescheduleRequest, BOOKING_SITE_URL } from './notify'
 import { mytDayKey } from '@/lib/datetime'
 import { therapistsForGender, VAIDYA_BLOCK_CODE } from '@/lib/staff/therapists'
 import type { Gender } from '@/types/booking'
@@ -410,6 +410,145 @@ export async function rescheduleBooking(
       statusUrl: `${BOOKING_SITE_URL}/book/request/${row.id}?t=${createBookingToken(row.id)}`,
     }).catch((e) => {
       console.error('[booking-reschedule] notifyManagedReschedule failed for', row.id, e)
+    })
+  }
+
+  return { ok: true, data: { appointmentIds } }
+}
+
+export interface RequestRescheduleInput {
+  anchorId: string
+  appointmentIds: string[]
+  token?: string | null
+  selections: Record<string, string>
+  wholeGroup: boolean
+}
+
+/**
+ * Customer-facing reschedule request. Stores the new preferred time and alerts staff.
+ * The actual move is performed by a staff member in the console after checking availability.
+ */
+export async function requestReschedule(
+  input: RequestRescheduleInput,
+): Promise<ManagementActionResult<{ appointmentIds: string[] }>> {
+  'use server'
+
+  if (!input || !UUID_RE.test(input.anchorId) || !Array.isArray(input.appointmentIds)
+    || typeof input.wholeGroup !== 'boolean') {
+    return publicFailure('INVALID_INPUT', 'Choose a valid booking to reschedule.')
+  }
+  if (input.token != null && typeof input.token !== 'string') {
+    return publicFailure('INVALID_INPUT', 'The booking access token is invalid.')
+  }
+  if (input.appointmentIds.some((id) => typeof id !== 'string' || !UUID_RE.test(id))) {
+    return publicFailure('INVALID_INPUT', 'Choose at least one valid booking to reschedule.')
+  }
+  const scope = validateRescheduleScope(input)
+  if ('error' in scope) return publicFailure('INVALID_INPUT', scope.error)
+  const appointmentIds = scope.appointmentIds
+  if (!input.selections || typeof input.selections !== 'object' || Array.isArray(input.selections)
+    || !exactIdSet(Object.keys(input.selections), appointmentIds)
+    || Object.values(input.selections).some((selection) => typeof selection !== 'string')) {
+    return publicFailure('INVALID_INPUT', 'Choose a new time for every selected booking.')
+  }
+
+  const { canManageBookingTarget } = await import('./management-access')
+  if (!(await canManageBookingTarget(input.anchorId, input.anchorId, input.token))) {
+    return publicFailure('UNAUTHORIZED', 'You are not authorised to reschedule this booking.')
+  }
+
+  const sb = admin()
+  const { data, error } = await sb
+    .from('appointments')
+    .select('id, customer_id, created_at, appointment_date_time, status, payment_status, booking_kind, treatment_id, duration_mins, patient_gender, patient_name, patient_email, treatment_name, gender_requirement, group_id, group_management_active')
+    .in('id', appointmentIds)
+  if (error) return publicFailure('PROVIDER_ERROR', 'We could not check this booking right now. Please try again.')
+  const rows = (data ?? []) as AppointmentRow[]
+  if (rows.length !== appointmentIds.length) {
+    return publicFailure('INVALID_INPUT', 'One of the selected bookings no longer exists.')
+  }
+
+  for (const id of appointmentIds) {
+    if (!(await canManageBookingTarget(input.anchorId, id, input.token))) {
+      return publicFailure('UNAUTHORIZED', 'You are not authorised to reschedule one of these bookings.')
+    }
+  }
+
+  if (input.wholeGroup) {
+    const anchor = rows.find((row) => row.id === input.anchorId)!
+    if (!anchor.group_id) {
+      if (appointmentIds.length !== 1) {
+        return publicFailure('INVALID_INPUT', 'This booking is not part of a managed group.')
+      }
+    } else {
+      const { data: groupRows, error: groupError } = await sb
+        .from('appointments')
+        .select('id')
+        .eq('group_id', anchor.group_id)
+        .eq('group_management_active', true)
+      if (groupError) return publicFailure('PROVIDER_ERROR', 'We could not check the booking group right now.')
+      if (!exactIdSet((groupRows ?? []).map((row) => row.id), appointmentIds)) {
+        return publicFailure('INVALID_INPUT', 'Select every active group member to move the whole group.')
+      }
+    }
+  }
+
+  const nowMs = Date.now()
+  const nowISO = new Date(nowMs).toISOString()
+  const updates: { id: string; requested_datetime_alt: string; reschedule_requested_at: string }[] = []
+  for (const row of rows.sort((a, b) => a.id.localeCompare(b.id))) {
+    const policy = managementEligibility({
+      createdAt: row.created_at,
+      appointmentAt: row.appointment_date_time,
+      status: row.status,
+      paymentStatus: row.payment_status,
+      nowMs,
+    })
+    if (!policy.canReschedule) return publicFailure('POLICY_CLOSED', CLOSED_MESSAGE)
+
+    const prepared = await prepareReschedule({
+      appointmentAt: row.appointment_date_time,
+      newStart: input.selections[row.id],
+      nowMs,
+    })
+    if ('error' in prepared) {
+      return publicFailure(
+        prepared.error === CLOSED_MESSAGE ? 'POLICY_CLOSED' : 'INVALID_INPUT',
+        prepared.error,
+      )
+    }
+
+    updates.push({
+      id: row.id,
+      requested_datetime_alt: prepared.newStart,
+      reschedule_requested_at: nowISO,
+    })
+  }
+
+  for (const u of updates) {
+    const { error: updateError } = await sb
+      .from('appointments')
+      .update({
+        requested_datetime_alt: u.requested_datetime_alt,
+        reschedule_requested_at: u.reschedule_requested_at,
+      })
+      .eq('id', u.id)
+    if (updateError) return publicFailure('PROVIDER_ERROR', 'We could not save your reschedule request. Please try again.')
+  }
+
+  for (const u of updates) {
+    const row = rows.find((r) => r.id === u.id)
+    if (!row) continue
+    await notifyRescheduleRequest({
+      to: row.patient_email,
+      name: row.patient_name,
+      treatmentName: row.treatment_name,
+      oldISO: row.appointment_date_time,
+      newISO: u.requested_datetime_alt,
+      bookingKind: row.booking_kind === 'consultation' ? 'consultation' : 'treatment',
+      statusUrl: `${BOOKING_SITE_URL}/book/request/${row.id}?t=${createBookingToken(row.id)}`,
+    }).catch((e) => {
+      console.error('[booking-reschedule] notifyRescheduleRequest failed for', row.id, e)
     })
   }
 

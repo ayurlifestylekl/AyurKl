@@ -8,7 +8,7 @@ import { canClearConsultation, CLEARABLE_CONSULTATION_STATUSES } from '@/lib/boo
 import { genderRequirementValue, therapistMatchesRequirement } from '@/lib/booking/policy'
 import { parseDurationMins } from '@/lib/booking/duration'
 import { createBookingToken } from '@/lib/booking/token'
-import { notifyApproved, notifyCancelled, BOOKING_SITE_URL } from '@/lib/booking/notify'
+import { notifyApproved, notifyCancelled, notifyManagedReschedule, BOOKING_SITE_URL } from '@/lib/booking/notify'
 import { voidBill } from '@/lib/booking/payment'
 import { findClash, freeAtLabel, type Slot } from '@/lib/booking/scheduling'
 import { CONSULTATION_MINS } from '@/lib/booking/slots'
@@ -1190,5 +1190,147 @@ export async function setAppointmentColorTag(
     .eq('id', appointmentId)
   if (error) return { error: error.message }
   revalidatePath('/console/schedule')
+  return { ok: true }
+}
+
+/**
+ * Approve a customer's reschedule request. Moves the appointment to the requested
+ * time, validates the chosen therapist is free, and clears the request fields.
+ */
+export async function approveReschedule(
+  id: string,
+  p: { therapistCode: string; room?: string },
+): Promise<Ok | Err> {
+  const { userId, db } = await requireStaff()
+  const { data: appt } = await db
+    .from('appointments')
+    .select('status, booking_kind, gender_requirement, duration_mins, patient_email, patient_name, treatment_name, assigned_therapist_code, assigned_therapist_name, requested_datetime_alt, reschedule_requested_at, appointment_date_time, payable_amount_rm')
+    .eq('id', id)
+    .maybeSingle()
+  if (!appt) return { error: 'Appointment not found.' }
+  if (!appt.requested_datetime_alt || !appt.reschedule_requested_at) {
+    return { error: 'No reschedule request to approve.' }
+  }
+  if (['cancelled', 'completed', 'no_show'].includes(appt.status as string)) {
+    return { error: `Cannot approve reschedule for a ${appt.status} booking.` }
+  }
+
+  const isConsultation = appt.booking_kind === 'consultation'
+  const durationMins = appt.duration_mins ?? (isConsultation ? 30 : 60)
+  const newStart = appt.requested_datetime_alt
+
+  let therapist: Awaited<ReturnType<typeof therapistByCode>> | undefined
+  if (isConsultation) {
+    const { data: others } = await db
+      .from('appointments')
+      .select('appointment_date_time, duration_mins')
+      .eq('booking_kind', 'consultation')
+      .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+      .neq('id', id)
+    const busy: Slot[] = (others ?? [])
+      .filter((o) => o.appointment_date_time)
+      .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 30 }))
+    const clash = findClash({ startISO: newStart, durationMins }, busy)
+    if (clash) {
+      return { error: `The Vaidya already has a consultation until ${freeAtLabel(clash)} — pick another time.` }
+    }
+
+    const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(newStart))
+    const intervals = blockedIntervalsForDate(blocks, mytDayKey(newStart))
+    if (isBlocked(intervals, VAIDYA_BLOCK_CODE, newStart, durationMins)) {
+      return { error: 'The Vaidya is on leave or the centre is closed at that time.' }
+    }
+  } else {
+    therapist = await therapistByCode(p.therapistCode)
+    if (!therapist) return { error: 'Select a therapist.' }
+
+    if (!therapistMatchesRequirement(therapist.gender, appt.gender_requirement)) {
+      const need = appt.gender_requirement === 'men_only' ? 'male' : 'female'
+      return { error: `Same-gender policy: this patient must be assigned a ${need} therapist.` }
+    }
+
+    const { data: others } = await db
+      .from('appointments')
+      .select('appointment_date_time, duration_mins, status, payment_expires_at')
+      .eq('assigned_therapist_code', therapist.code)
+      .in('status', ['scheduled', 'awaiting_payment', 'confirmed', 'checked_in', 'in_progress'])
+      .neq('id', id)
+    const nowMs = Date.now()
+    const busy: Slot[] = (others ?? [])
+      .filter((o) => o.appointment_date_time)
+      .filter((o) => !(o.status === 'awaiting_payment' && o.payment_expires_at && new Date(o.payment_expires_at).getTime() <= nowMs))
+      .map((o) => ({ startISO: o.appointment_date_time as string, durationMins: o.duration_mins ?? 60 }))
+    const clash = findClash({ startISO: newStart, durationMins }, busy)
+    if (clash) {
+      return { error: `${therapist.name} (${therapist.code}) is busy until ${freeAtLabel(clash)} — pick another therapist or time.` }
+    }
+
+    const blocks = await fetchBlocksOnOrAfter(db, mytDayKey(newStart))
+    const intervals = blockedIntervalsForDate(blocks, mytDayKey(newStart))
+    if (isBlocked(intervals, therapist.code, newStart, durationMins)) {
+      return { error: `${therapist.name} (${therapist.code}) is on leave / blocked at that time — pick another therapist or time.` }
+    }
+  }
+
+  const { error } = await db
+    .from('appointments')
+    .update({
+      appointment_date_time: newStart,
+      assigned_therapist_code: therapist?.code ?? null,
+      assigned_therapist_name: therapist?.name ?? null,
+      assigned_therapist_gender: therapist?.gender ?? null,
+      room: p.room?.trim() || null,
+      requested_datetime_alt: null,
+      reschedule_requested_at: null,
+      approved_by: userId,
+      approved_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+  if (error) {
+    if (error.code === '23P01') {
+      return { error: 'That therapist was just booked for this time — pick another therapist or time.' }
+    }
+    return { error: error.message }
+  }
+
+  await notifyManagedReschedule({
+    to: appt.patient_email,
+    name: appt.patient_name,
+    treatmentName: appt.treatment_name,
+    oldISO: appt.appointment_date_time,
+    newISO: newStart,
+    bookingKind: appt.booking_kind === 'consultation' ? 'consultation' : 'treatment',
+    statusUrl: `${BOOKING_SITE_URL}/book/request/${id}?t=${createBookingToken(id)}`,
+    notifyStaff: false,
+  })
+
+  revalidatePath('/console')
+  revalidatePath(`/console/${id}`)
+  revalidatePath('/doctor')
+  revalidatePath(`/doctor/${id}`)
+  return { ok: true }
+}
+
+/** Decline a reschedule request and clear the requested fields. */
+export async function declineReschedule(id: string): Promise<Ok | Err> {
+  const { db } = await requireStaff()
+  const { data: appt } = await db
+    .from('appointments')
+    .select('requested_datetime_alt, reschedule_requested_at')
+    .eq('id', id)
+    .maybeSingle()
+  if (!appt) return { error: 'Appointment not found.' }
+  if (!appt.requested_datetime_alt || !appt.reschedule_requested_at) {
+    return { error: 'No reschedule request to decline.' }
+  }
+  const { error } = await db
+    .from('appointments')
+    .update({ requested_datetime_alt: null, reschedule_requested_at: null })
+    .eq('id', id)
+  if (error) return { error: error.message }
+  revalidatePath('/console')
+  revalidatePath(`/console/${id}`)
+  revalidatePath('/doctor')
+  revalidatePath(`/doctor/${id}`)
   return { ok: true }
 }

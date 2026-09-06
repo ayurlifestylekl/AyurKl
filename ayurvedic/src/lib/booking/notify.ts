@@ -37,10 +37,10 @@ export interface NotifyBase {
   treatmentName?: string | null
   bookingId?: string | null
   /**
-   * Set false to skip the internal staff-email alert — for actions staff
-   * already know about because they performed them themselves (front-desk
-   * bookings, reschedules, declines). Telegram and the customer email are
-   * unaffected; only the redundant "you did this" inbox mail is silenced.
+   * Set false to skip all staff alerts (Telegram + staff email) — for actions
+   * staff already know about because they performed them themselves (front-desk
+   * bookings, reschedules, declines). The customer email is still sent when a
+   * recipient is provided.
    */
   notifyStaff?: boolean
 }
@@ -122,14 +122,14 @@ async function sendCustomerEmail(args: {
 
 export async function notifyRequestReceived(p: NotifyBase & { kind: string; whenISO: string | null; guests?: GuestLine[] }) {
   const isGroup = (p.guests?.length ?? 0) > 1
-  await sendTelegram(
-    isGroup
-      ? `🆕 <b>New group request — ${p.guests!.length} guests</b>\n${p.guests!
-          .map((g) => `${esc(g.name ?? 'Guest')} — ${esc(g.treatmentName ?? '')} — ${esc(fmtMY(g.whenISO ?? null, { dateStyle: 'medium', timeStyle: 'short' }))}`)
-          .join('\n')}`
-      : `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
-  )
   if (p.notifyStaff !== false) {
+    await sendTelegram(
+      isGroup
+        ? `🆕 <b>New group request — ${p.guests!.length} guests</b>\n${p.guests!
+            .map((g) => `${esc(g.name ?? 'Guest')} — ${esc(g.treatmentName ?? '')} — ${esc(fmtMY(g.whenISO ?? null, { dateStyle: 'medium', timeStyle: 'short' }))}`)
+            .join('\n')}`
+        : `🆕 <b>New ${esc(p.kind)} request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nPreferred: ${esc(when(p.whenISO))}`,
+    )
     await sendStaffEmail(
       isGroup ? `New group request — ${p.guests!.length} guests` : `New ${p.kind} request`,
       isGroup
@@ -191,10 +191,11 @@ export async function notifyApproved(
 export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; guests?: GuestLine[]; bookingKind: BookingKind; statusUrl?: string | null }) {
   const isGroup = (p.guests?.length ?? 0) > 1
   const copy = confirmationCopy(p.bookingKind)
-  await sendTelegram(
-    `${copy.telegramHeading}\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}${copy.needsAssignment ? '\n👉 Assign a therapist in the console.' : ''}`,
-  )
-  if (p.notifyStaff !== false) await sendStaffEmail(
+  if (p.notifyStaff !== false) {
+    await sendTelegram(
+      `${copy.telegramHeading}\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${isGroup ? ` (group of ${p.guests!.length})` : ''}\n${esc(when(p.whenISO))}${copy.needsAssignment ? '\n👉 Assign a therapist in the console.' : ''}`,
+    )
+    await sendStaffEmail(
     copy.staffHeading,
     isGroup
       ? [
@@ -207,7 +208,8 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
           `Appointment: <strong>${when(p.whenISO)}</strong>`,
           ...(copy.needsAssignment ? ['No therapist is assigned yet — please assign one in the console.'] : []),
         ],
-  )
+    )
+  }
   if (!p.to) return
   let lines: string[]
   if (p.bookingKind === 'consultation') {
@@ -313,10 +315,10 @@ export async function notifyPaymentReminder(p: NotifyBase & { payUrl: string; ex
 }
 
 export async function notifyCancelled(p: NotifyBase & { refundable: boolean; reason?: string }) {
-  await sendTelegram(
-    `❌ <b>Cancelled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${p.reason ? `\nReason: ${esc(p.reason)}` : ''}`,
-  )
   if (p.notifyStaff !== false) {
+    await sendTelegram(
+      `❌ <b>Cancelled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${p.reason ? `\nReason: ${esc(p.reason)}` : ''}`,
+    )
     await sendStaffEmail('Booking cancelled', [
       `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
       ...(p.reason ? [`Reason: ${esc(p.reason)}`] : []),
@@ -341,42 +343,32 @@ export async function notifyCancelled(p: NotifyBase & { refundable: boolean; rea
 }
 
 export async function notifyManagedCancellation(p: NotifyBase & {
-  refundRequired: boolean
-  refundResults?: { appointmentId: string; refundStatus: string }[]
+  reason: string
+  refundable: boolean
+  statusUrl?: string | null
 }) {
-  const hasRefund = p.refundRequired && (p.refundResults?.length ?? 0) > 0
-  const allConfirmed = hasRefund && p.refundResults!.every((r) => r.refundStatus === 'confirmed')
-  const anyException = hasRefund && p.refundResults!.some((r) => r.refundStatus === 'exception')
-
-  const refundSummary = !hasRefund
-    ? 'No refund required (unpaid booking).'
-    : allConfirmed
-      ? 'Refund confirmed by provider.'
-      : anyException
-        ? 'Refund needs staff review.'
-        : 'Refund request submitted — pending provider confirmation.'
-
-  await sendTelegram(
-    `❌ <b>Managed cancellation</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(refundSummary)}`,
-  )
   if (p.notifyStaff !== false) {
+    await sendTelegram(
+      `❌ <b>Managed cancellation</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}${p.reason ? `\nReason: ${esc(p.reason)}` : ''}`,
+    )
     await sendStaffEmail('Managed booking cancellation', [
       `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
-      esc(refundSummary),
+      ...(p.reason ? [`Reason: ${esc(p.reason)}`] : []),
     ])
   }
   if (!p.to) return
   const lines = [
     `Hi ${esc(p.name ?? 'there')}, your appointment for <strong>${esc(p.treatmentName ?? '')}</strong> has been cancelled.`,
-    !hasRefund
-      ? 'As this booking was not yet paid, no refund is required.'
-      : allConfirmed
-        ? 'Your refund has been confirmed and will be returned through the original payment method.'
-        : anyException
-          ? 'Our team is reviewing your refund and will be in touch shortly.'
-          : 'Your refund request is being processed. You will receive a confirmation once it is complete.',
+    ...(p.reason ? [`Reason: <strong>${esc(p.reason)}</strong>`] : []),
+    p.refundable
+      ? 'A payment was made for this booking. If you are eligible, you can submit a refund request from the booking manage page.'
+      : 'No payment was made, so no refund is required.',
   ]
-  const { html, text } = shell('Your appointment has been cancelled', lines, { label: 'Book again', url: `${SITE}/book` })
+  const { html, text } = shell(
+    'Your appointment has been cancelled',
+    lines,
+    p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined,
+  )
   await sendCustomerEmail({ to: p.to, subject: 'Appointment cancelled — Kerala Ayurvedic Lifestyle', html, text, context: 'managed cancellation', name: p.name })
 }
 
@@ -388,11 +380,11 @@ export async function notifyManagedReschedule(p: NotifyBase & {
 }) {
   const clearedAssignment = p.bookingKind === 'treatment'
 
-  await sendTelegram(
-    `🔁 <b>Rescheduled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(when(p.oldISO))} → ${esc(when(p.newISO))}` +
-      (clearedAssignment ? '\nTherapist assignment cleared — back in Needs therapist.' : ''),
-  )
   if (p.notifyStaff !== false) {
+    await sendTelegram(
+      `🔁 <b>Rescheduled</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(when(p.oldISO))} → ${esc(when(p.newISO))}` +
+        (clearedAssignment ? '\nTherapist assignment cleared — back in Needs therapist.' : ''),
+    )
     await sendStaffEmail('Managed booking reschedule', [
       `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
       `${esc(when(p.oldISO))} → ${esc(when(p.newISO))}`,
@@ -413,6 +405,95 @@ export async function notifyManagedReschedule(p: NotifyBase & {
     p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined,
   )
   await sendCustomerEmail({ to: p.to, subject: 'Appointment rescheduled — Kerala Ayurvedic Lifestyle', html, text, context: 'managed reschedule', name: p.name })
+}
+
+export async function notifyRefundRequested(p: NotifyBase & {
+  amountRm: number
+  reason: string
+  statusUrl?: string | null
+}) {
+  if (p.notifyStaff !== false) {
+    await sendTelegram(
+      `💰 <b>Refund request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nAmount: RM${p.amountRm.toFixed(2)}${p.reason ? `\nReason: ${esc(p.reason)}` : ''}`,
+    )
+    await sendStaffEmail('Refund request received', [
+      `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+      `Amount: <strong>RM${p.amountRm.toFixed(2)}</strong>`,
+      ...(p.reason ? [`Reason: ${esc(p.reason)}`] : []),
+    ])
+  }
+  if (!p.to) return
+  const lines = [
+    `Hi ${esc(p.name ?? 'there')}, we received your refund request for <strong>${esc(p.treatmentName ?? '')}</strong>.`,
+    `Amount: <strong>RM${p.amountRm.toFixed(2)}</strong>`,
+    ...(p.reason ? [`Reason: <strong>${esc(p.reason)}</strong>`] : []),
+    'Our team will review it and you will be notified once a decision is made.',
+  ]
+  const { html, text } = shell('Refund request received', lines, p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined)
+  await sendCustomerEmail({ to: p.to, subject: 'Refund request received — Kerala Ayurvedic Lifestyle', html, text, context: 'refund request', name: p.name })
+}
+
+export async function notifyRefundApproved(p: NotifyBase & {
+  amountRm: number
+  statusUrl?: string | null
+}) {
+  await sendTelegram(
+    `✅ <b>Refund approved</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nAmount: RM${p.amountRm.toFixed(2)}`,
+  )
+  if (!p.to) return
+  const lines = [
+    `Hi ${esc(p.name ?? 'there')}, your refund request for <strong>${esc(p.treatmentName ?? '')}</strong> has been approved.`,
+    `Amount: <strong>RM${p.amountRm.toFixed(2)}</strong>`,
+    'The refund is being processed and will be returned through the original payment method. You will receive another confirmation once the provider completes it.',
+  ]
+  const { html, text } = shell('Refund request approved', lines, p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined)
+  await sendCustomerEmail({ to: p.to, subject: 'Refund request approved — Kerala Ayurvedic Lifestyle', html, text, context: 'refund approved', name: p.name })
+}
+
+export async function notifyRefundRejected(p: NotifyBase & {
+  amountRm: number
+  staffReason: string
+  statusUrl?: string | null
+}) {
+  await sendTelegram(
+    `❌ <b>Refund declined</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\nAmount: RM${p.amountRm.toFixed(2)}${p.staffReason ? `\nReason: ${esc(p.staffReason)}` : ''}`,
+  )
+  if (!p.to) return
+  const lines = [
+    `Hi ${esc(p.name ?? 'there')}, your refund request for <strong>${esc(p.treatmentName ?? '')}</strong> was declined.`,
+    `Amount: <strong>RM${p.amountRm.toFixed(2)}</strong>`,
+    ...(p.staffReason ? [`Reason: <strong>${esc(p.staffReason)}</strong>`] : []),
+    'If you have questions, please reply to this email or contact our team.',
+  ]
+  const { html, text } = shell('Refund request declined', lines, p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined)
+  await sendCustomerEmail({ to: p.to, subject: 'Refund request declined — Kerala Ayurvedic Lifestyle', html, text, context: 'refund declined', name: p.name })
+}
+
+export async function notifyRescheduleRequest(p: NotifyBase & {
+  oldISO: string | null
+  newISO: string | null
+  bookingKind: BookingKind
+  statusUrl?: string | null
+}) {
+  if (p.notifyStaff !== false) {
+    await sendTelegram(
+      `🔁 <b>Reschedule request</b>\n${esc(p.name ?? 'Guest')} — ${esc(p.treatmentName ?? '')}\n${esc(when(p.oldISO))} → ${esc(when(p.newISO))}`
+    )
+    await sendStaffEmail('Reschedule request received', [
+      `<strong>${esc(p.name ?? 'Guest')}</strong> — ${esc(p.treatmentName ?? '')}`,
+      `Current: <strong>${when(p.oldISO)}</strong>`,
+      `Requested: <strong>${when(p.newISO)}</strong>`,
+    ])
+  }
+  if (!p.to) return
+  const lines = [
+    `Hi ${esc(p.name ?? 'there')}, we received your reschedule request for <strong>${esc(p.treatmentName ?? 'your appointment')}</strong>.`,
+    `Current time: <strong>${when(p.oldISO)}</strong>`,
+    `Requested time: <strong>${when(p.newISO)}</strong>.`,
+    'Our team will review it shortly and confirm the change.',
+  ]
+  const { html, text } = shell('Reschedule request received', lines, p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined)
+  await sendCustomerEmail({ to: p.to, subject: 'Reschedule request received — Kerala Ayurvedic Lifestyle', html, text, context: 'reschedule request', name: p.name })
 }
 
 export { SITE as BOOKING_SITE_URL }
