@@ -354,7 +354,7 @@ export interface InFlightProductRefund {
 }
 
 /**
- * Refunds that have been approved and sent to HitPay but haven't resolved
+ * Refunds that have been approved and sent to Billplz but haven't resolved
  * yet — either still 'pending' (settling) or 'exception' (needs manual
  * follow-up). Approved cancellations otherwise disappear from view once
  * they leave listPendingCancellations(), so this is the only place staff

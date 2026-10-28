@@ -55,7 +55,7 @@ export interface RefundStatusResult {
 export interface RefundCallbackResult extends RefundStatusResult {
   providerRefundId: string
   idempotencyKey?: string
-  provider?: 'hitpay' | 'stub'
+  provider?: 'stripe' | 'billplz' | 'stub'
 }
 
 export type ProviderRefundErrorCategory = 'definitive' | 'ambiguous'
@@ -77,8 +77,9 @@ export function isSafeProviderRefundId(provider: string, value: unknown): value 
   if (typeof value !== 'string' || value.length === 0 || value.length > 255 || value.trim() !== value) {
     return false
   }
+  if (provider === 'stripe') return /^re_[A-Za-z0-9]+$/.test(value)
   if (provider === 'stub') return /^stub_refund_[A-Za-z0-9:_-]+$/.test(value)
-  if (provider !== 'hitpay') return false
+  if (provider !== 'billplz') return false
 
   const safeToken = /^[A-Za-z0-9][A-Za-z0-9_-]*$/
   const hasSeparator = /[_-]/.test(value)

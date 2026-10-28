@@ -6,7 +6,7 @@ export const metadata = { title: 'Cancellations & Refunds · Product Management'
 export const dynamic = 'force-dynamic'
 
 export default async function ProductManagementCancellationsPage() {
-  // Resolve any refund HitPay reported as still 'pending' before rendering,
+  // Resolve any refund Billplz reported as still 'pending' before rendering,
   // so this page reflects reality without waiting for the reconciliation cron.
   await reconcilePendingRefundsSafe(productRefundDependencies())
   const [requests, inFlightRefunds] = await Promise.all([

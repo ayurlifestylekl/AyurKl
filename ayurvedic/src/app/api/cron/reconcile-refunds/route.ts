@@ -4,7 +4,7 @@ import { reconcilePendingRefunds, bookingRefundDependencies, productRefundDepend
 export const dynamic = 'force-dynamic'
 
 /**
- * Polls HitPay for any refund still 'pending' (bank-transfer refunds aren't
+ * Polls Billplz for any refund still 'pending' (bank-transfer refunds aren't
  * instant) and resolves it to confirmed/exception. Covers both booking_refunds
  * and product_refund_requests via the shared refund engine. Same auth pattern
  * as expire-bookings: Vercel Cron daily (baseline) + UptimeRobot every ~30 min

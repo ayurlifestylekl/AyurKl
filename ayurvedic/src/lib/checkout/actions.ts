@@ -211,7 +211,7 @@ export async function createProductOrder(
         phone: shipping.phone,
         status: 'awaiting_payment',
         payment_status: 'pending',
-        payment_method: provider.name === 'hitpay' ? 'hitpay' : 'billplz',
+        payment_method: provider.name,
         payment_provider: provider.name,
         subtotal_rm: subtotal,
         shipping_rm: shippingRm,
@@ -255,7 +255,7 @@ export async function createProductOrder(
     })
 
     // Persist bill reference
-    const collectionId = process.env.HITPAY_COLLECTION_ID ?? null
+    const collectionId = process.env.BILLPLZ_COLLECTION_ID ?? null
     const { error: updateError } = await sb
       .from('product_orders')
       .update({

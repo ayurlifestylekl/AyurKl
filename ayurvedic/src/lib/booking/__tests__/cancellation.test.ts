@@ -132,15 +132,15 @@ beforeEach(() => {
 })
 
 describe('cancellation pure helpers', () => {
-  it('does not require bank details for HitPay refunds', () => {
-    expect(validateCancellationInput({ provider: 'hitpay', paid: true, refundEligible: true, bank: undefined }))
+  it('does not require bank details for Billplz refunds', () => {
+    expect(validateCancellationInput({ provider: 'billplz', paid: true, refundEligible: true, bank: undefined }))
       .toEqual({ ok: true })
   })
 
   it('does not require bank details for an unpaid or ineligible cancellation', () => {
-    expect(validateCancellationInput({ provider: 'hitpay', paid: false, refundEligible: false, bank: undefined }))
+    expect(validateCancellationInput({ provider: 'billplz', paid: false, refundEligible: false, bank: undefined }))
       .toEqual({ ok: true })
-    expect(validateCancellationInput({ provider: 'hitpay', paid: true, refundEligible: false, bank: undefined }))
+    expect(validateCancellationInput({ provider: 'billplz', paid: true, refundEligible: false, bank: undefined }))
       .toEqual({ ok: true })
   })
 

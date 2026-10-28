@@ -45,7 +45,7 @@ function fakeDb(state: FakeState) {
         data: {
           id: REFUND_ID,
           appointment_id: APPOINTMENT_ID,
-          provider: 'hitpay',
+          provider: 'billplz',
           amount_rm: 150,
           status: state.refundStatus,
           idempotency_key: `booking-refund:${APPOINTMENT_ID}:full`,

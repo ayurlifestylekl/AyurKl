@@ -28,7 +28,7 @@ export default async function ConsoleDetailPage({ params }: { params: { id: stri
   const isGroup = groupMembers.length > 1
 
   const events = await getBookingEvents(db, a.id)
-  // Resolve any refund HitPay reported as still 'pending' before rendering,
+  // Resolve any refund Billplz reported as still 'pending' before rendering,
   // so staff see current status without waiting for the reconciliation cron.
   await reconcilePendingRefundsSafe(bookingRefundDependencies())
   const refunds = await getRefundsForAppointment(db, a.id)

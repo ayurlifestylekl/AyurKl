@@ -39,7 +39,7 @@ export default async function ConsolePage({
   // Expire overdue payment holds before rendering, so the console never shows a
   // stale "awaiting payment" — the page auto-refreshes, keeping this current.
   await sweepExpiredBookingsSafe()
-  // Resolve any refund HitPay reported as still 'pending', so the Refunds
+  // Resolve any refund Billplz reported as still 'pending', so the Refunds
   // tab reflects reality without waiting for the reconciliation cron.
   await reconcilePendingRefundsSafe(bookingRefundDependencies())
   const q = (searchParams.q ?? '').trim()

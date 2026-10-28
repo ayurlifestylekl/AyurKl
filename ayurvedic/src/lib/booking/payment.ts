@@ -1,6 +1,6 @@
 import 'server-only'
 import { createClient as createSb } from '@supabase/supabase-js'
-import { getPaymentProvider, getProviderByName } from '@/lib/payments'
+import { getPaymentProvider, getProviderForMethod, getProviderByName, type PaymentMethod } from '@/lib/payments'
 import { canAccessBooking } from './access'
 import { createBookingToken } from './token'
 import { notifyConfirmed, notifyPaymentAssociationProblem, notifyPaymentProblem, BOOKING_SITE_URL } from './notify'
@@ -38,6 +38,7 @@ function siteUrl(): string {
 export async function startPaymentForAppointment(
   id: string,
   token?: string | null,
+  method: PaymentMethod = 'fpx',
 ): Promise<{ url: string } | { error: string }> {
   const sb = admin()
   const { data: a } = await sb
@@ -59,14 +60,15 @@ export async function startPaymentForAppointment(
 
   let provider
   try {
-    provider = getPaymentProvider()
+    provider = getProviderForMethod(method)
   } catch (e) {
-    console.error('[payment] provider unavailable', e)
-    return { error: 'That payment method is not available right now — please try again, or WhatsApp us.' }
+    console.error('[payment] provider unavailable for method', method, e)
+    return { error: 'That payment method is not available right now — please try Online Banking (FPX), or WhatsApp us.' }
   }
 
-  // Re-use the bill from an earlier "Pay" click while it's still open —
-  // minting a new bill per click leaves multiple payable bills (double-charge risk).
+  // Re-use the bill from an earlier "Pay" click on the SAME method while it's
+  // still open — minting a new bill per click leaves multiple payable bills
+  // (double-charge risk). Switching method (e.g. FPX → Card) mints a fresh one.
   if (a.payment_bill_id && a.payment_url && a.payment_provider === provider.name && provider.fetchBillStatus) {
     const existing = await provider.fetchBillStatus(a.payment_bill_id).catch(() => null)
     if (existing && !existing.paid) return { url: a.payment_url }

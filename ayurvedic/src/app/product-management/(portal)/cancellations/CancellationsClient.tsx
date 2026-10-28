@@ -106,7 +106,7 @@ export default function CancellationsClient({
         <div>
           <h2 className="font-heading text-[14px] font-bold text-[#6E1023]">Refunds in progress</h2>
           <p className="mt-1 font-body text-[12px] text-[#1F1F1F]/60">
-            Approved refunds still settling with HitPay, or ones that need manual follow-up. Resolves
+            Approved refunds still settling with Billplz, or ones that need manual follow-up. Resolves
             automatically — no action needed unless marked &ldquo;Needs attention&rdquo;.
           </p>
           <div className="mt-3 overflow-hidden rounded-2xl border border-[#6E1023]/10 bg-white">
@@ -133,7 +133,7 @@ export default function CancellationsClient({
                         </span>
                       ) : (
                         <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
-                          Pending with HitPay
+                          Pending with Billplz
                         </span>
                       )}
                     </td>
@@ -193,7 +193,7 @@ function CancellationRow({
         ) : mode === 'approve' ? (
           <div className="flex flex-col gap-2">
             <p className="text-[12px] text-[#1F1F1F]/70">
-              Refund will be sent back to the original HitPay payment method.
+              Refund will be sent back to the original Billplz payment method.
             </p>
             <div className="flex gap-2">
               <button

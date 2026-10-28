@@ -27,7 +27,7 @@ export default async function DoctorPatientPage({ params }: { params: { id: stri
 
   const groupMembers = a.groupId ? await getGroupAppointments(db, a.groupId) : []
   const isGroup = groupMembers.length > 1
-  // Resolve any refund HitPay reported as still 'pending' before rendering,
+  // Resolve any refund Billplz reported as still 'pending' before rendering,
   // so staff see current status without waiting for the reconciliation cron.
   await reconcilePendingRefundsSafe(bookingRefundDependencies())
   const refunds = await getRefundsForAppointment(db, a.id)

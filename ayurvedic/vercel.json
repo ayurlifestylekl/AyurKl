@@ -15,6 +15,10 @@
     {
       "path": "/api/cron/reconcile-refunds",
       "schedule": "0 19 * * *"
+    },
+    {
+      "path": "/api/cron/product-order-expiry",
+      "schedule": "0 * * * *"
     }
   ]
 }

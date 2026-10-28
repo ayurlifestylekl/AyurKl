@@ -49,7 +49,7 @@ function fakeSupabase(state: FakeState, orderOverrides: Record<string, unknown> 
     total_rm: 150,
     email: 'guest@example.com',
     provider_bill_id: 'bill_123',
-    payment_provider: 'hitpay',
+    payment_provider: 'billplz',
     ...orderOverrides,
   }
 
@@ -203,7 +203,7 @@ describe('approveProductCancellation — refund failure must not be reported as 
   it('keeps payment_status as paid (not refunded) and flags the result when the provider call throws', async () => {
     const state: FakeState = { cancellationStatus: 'requested', refundRow: null, restoreStockCalls: 0, orderUpdate: null }
     mocks.createClient.mockReturnValue(fakeSupabase(state))
-    mocks.requestProviderRefund.mockRejectedValue(new Error('HitPay unreachable'))
+    mocks.requestProviderRefund.mockRejectedValue(new Error('Billplz unreachable'))
 
     const result = await approveProductCancellation({ cancellationId: CANCELLATION_ID })
     expect(result.ok).toBe(true)

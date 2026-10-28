@@ -96,7 +96,7 @@ export async function approveProductCancellation(
   // Guard A — atomically claim the cancellation before any side effect. This
   // is what makes a double-click (or two staff approving at once) safe: only
   // one caller can win this update, so only one caller ever reaches the stock
-  // RPCs and the HitPay refund call below. `restore_stock_for_product_order`
+  // RPCs and the Billplz refund call below. `restore_stock_for_product_order`
   // in particular is NOT idempotent — it re-derives from stock_movements and
   // inserts a fresh 'returned' row every time it's called.
   if (cancellation.status !== 'requested') {
@@ -193,7 +193,7 @@ export async function approveProductCancellation(
 
     if (!order.provider_bill_id || !order.payment_provider) {
       // Nothing to call automatically — e.g. an order manually marked "paid"
-      // for an offline/COD sale, with no HitPay bill behind it. Mark the
+      // for an offline/COD sale, with no Billplz bill behind it. Mark the
       // refund row as needing a human instead of leaving it silently
       // 'claimed' forever with no path to resolve and no staff visibility.
       await sb.from('product_refund_requests').update({

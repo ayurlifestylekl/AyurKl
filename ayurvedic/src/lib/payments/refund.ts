@@ -19,7 +19,7 @@ export type RefundLifecycleStatus = 'claimed' | 'pending' | 'confirmed' | 'faile
 
 export interface RefundRecord {
   id: string
-  provider: 'hitpay' | 'stub'
+  provider: 'stripe' | 'billplz' | 'stub'
   providerRefundId: string | null
   status: RefundLifecycleStatus
   amountRm: number
@@ -410,7 +410,7 @@ export interface ReconcileTally {
 
 /**
  * Polls every refund still sitting at 'pending' through the provider's
- * authoritative status lookup and resolves it. HitPay doesn't always
+ * authoritative status lookup and resolves it. Billplz doesn't always
  * confirm a refund instantly (e.g. bank-transfer refunds settle over
  * hours) — without this, an 'approve refund' click that comes back
  * 'pending' would never automatically complete.
@@ -452,7 +452,8 @@ export async function applyRefundCallback(
 ): Promise<RefundRecord | null> {
   const safeForAnyProvider = callback.provider
     ? isSafeProviderRefundId(callback.provider, callback.providerRefundId)
-    : isSafeProviderRefundId('hitpay', callback.providerRefundId)
+    : isSafeProviderRefundId('stripe', callback.providerRefundId)
+      || isSafeProviderRefundId('billplz', callback.providerRefundId)
       || isSafeProviderRefundId('stub', callback.providerRefundId)
   if (!safeForAnyProvider) return null
 

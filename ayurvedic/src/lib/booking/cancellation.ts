@@ -27,7 +27,7 @@ export function validateCancellationInput(input: {
   refundEligible: boolean
   bank: { bankCode: string; accountNumber: string; accountHolderName: string } | undefined
 }): { ok: true } | { error: string } {
-  // HitPay refunds go back to the original payment method, so bank details are optional.
+  // Billplz refunds go back to the original payment method, so bank details are optional.
   void input
   return { ok: true }
 }
