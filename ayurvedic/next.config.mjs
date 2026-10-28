@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Vercel Hobby's image-optimization quota ran out (402
+    // OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED), blanking every uncached photo
+    // site-wide. Serve originals directly — Storage photos are pre-resized at
+    // upload (max 2400px JPEG). Remove this once on a plan with image quota.
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'cdn.sanity.io' },
