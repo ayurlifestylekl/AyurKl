@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { X, Sparkles } from 'lucide-react'
 import LeadCaptureForm from './LeadCaptureForm'
+import { isPromoFlyerOpen, PROMO_CLOSED_EVENT } from './PromoFlyerPopup'
 
 const SEEN = 'kal-welcome-seen'
 const CAPTURED = 'kal-lead-captured'
@@ -18,10 +19,27 @@ export default function WelcomeLeadPopup() {
   const [done, setDone] = useState(false)
 
   useEffect(() => {
-    try {
-      if (localStorage.getItem(SEEN) !== '1') setShow(true)
-    } catch {
-      setShow(true)
+    const maybeShow = () => {
+      try {
+        if (localStorage.getItem(SEEN) !== '1') setShow(true)
+      } catch {
+        setShow(true)
+      }
+    }
+    // Deferred a tick so the promo flyer's own mount effect has run; if the
+    // flyer is up, wait for it to close rather than stacking two modals.
+    let waiting = false
+    const t = setTimeout(() => {
+      if (isPromoFlyerOpen()) {
+        waiting = true
+        window.addEventListener(PROMO_CLOSED_EVENT, maybeShow, { once: true })
+      } else {
+        maybeShow()
+      }
+    }, 0)
+    return () => {
+      clearTimeout(t)
+      if (waiting) window.removeEventListener(PROMO_CLOSED_EVENT, maybeShow)
     }
   }, [])
 
