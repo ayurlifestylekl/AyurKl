@@ -13,6 +13,8 @@ export interface Announcement {
   endDate: string | null
   /** The centre-closure block a closure created (so removal reopens bookings). */
   blockId: string | null
+  /** Optional — makes the banner clickable (e.g. a promo page). Message-only. */
+  linkUrl: string | null
   createdAt: string
 }
 
@@ -25,6 +27,7 @@ export function mapAnnouncementRow(r: any): Announcement {
     startDate: r.start_date ?? null,
     endDate: r.end_date ?? null,
     blockId: r.block_id ?? null,
+    linkUrl: r.link_url ?? null,
     createdAt: r.created_at ?? '',
   }
 }

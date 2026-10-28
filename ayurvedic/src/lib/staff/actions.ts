@@ -1103,6 +1103,8 @@ export interface AnnouncementInput {
   /** Required for closures. 'YYYY-MM-DD'. */
   startDate: string | null
   endDate: string | null
+  /** Makes a 'message' banner clickable (e.g. a promo page). Ignored for closures. */
+  linkUrl?: string | null
 }
 
 /**
@@ -1146,6 +1148,7 @@ export async function createAnnouncement(input: AnnouncementInput): Promise<Ok |
     start_date: input.startDate || null,
     end_date: input.endDate || null,
     block_id: blockId,
+    link_url: input.kind === 'message' ? input.linkUrl?.trim() || null : null,
     created_by: userId,
   })
   if (error) return { error: error.message }

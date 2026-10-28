@@ -13,6 +13,7 @@ export default function AnnouncementManager({ announcements }: { announcements: 
   const [message, setMessage] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, start] = useTransition()
 
@@ -22,9 +23,15 @@ export default function AnnouncementManager({ announcements }: { announcements: 
     e.preventDefault()
     setError(null)
     start(async () => {
-      const res = await createAnnouncement({ kind, message, startDate: startDate || null, endDate: endDate || null })
+      const res = await createAnnouncement({
+        kind,
+        message,
+        startDate: startDate || null,
+        endDate: endDate || null,
+        linkUrl: linkUrl || null,
+      })
       if ('error' in res) setError(res.error)
-      else { setMessage(''); setStartDate(''); setEndDate(''); router.refresh() }
+      else { setMessage(''); setStartDate(''); setEndDate(''); setLinkUrl(''); router.refresh() }
     })
   }
 
@@ -80,6 +87,12 @@ export default function AnnouncementManager({ announcements }: { announcements: 
           </p>
         )}
 
+        {!isClosure && (
+          <Field label="Link (optional — e.g. /packages)">
+            <input value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} className={inp} placeholder="/packages" />
+          </Field>
+        )}
+
         {error && <p className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 font-body text-[12.5px] text-red-700">{error}</p>}
 
         <button type="submit" disabled={pending} className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-accent px-5 font-heading text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-accent/90 disabled:opacity-60">
@@ -105,6 +118,9 @@ export default function AnnouncementManager({ announcements }: { announcements: 
                       <span className="ml-2 font-heading text-[10px] uppercase tracking-[0.1em] text-dark/45">{dateText(a)}</span>
                     </div>
                     <div className="text-[12.5px] text-dark/65">{a.message}</div>
+                    {a.linkUrl && (
+                      <div className="text-[11px] text-accent">Links to {a.linkUrl}</div>
+                    )}
                   </div>
                   <button onClick={() => remove(a.id, a.kind === 'closure')} disabled={pending} className="rounded-lg border border-red-200 p-2 text-red-600 hover:bg-red-50 disabled:opacity-50" aria-label="Remove announcement">
                     <Trash2 className="h-4 w-4" />

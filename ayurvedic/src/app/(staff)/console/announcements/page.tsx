@@ -8,7 +8,7 @@ export default async function AnnouncementsPage() {
   const { db } = await requireStaff(['admin', 'front_desk'])
   const { data } = await db
     .from('announcements')
-    .select('id, kind, message, start_date, end_date, block_id, created_at')
+    .select('id, kind, message, start_date, end_date, block_id, link_url, created_at')
     .order('created_at', { ascending: false })
     .limit(100)
 

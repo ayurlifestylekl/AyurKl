@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { getPaymentProvider } from '@/lib/payments'
 import { markBillPaid, reconcileByBill } from '@/lib/booking/payment'
 import { markProductBillPaid, reconcileProductOrderByBill } from '@/lib/checkout/payment'
+import { markPackageBillPaid, reconcilePackagePurchaseByBill } from '@/lib/packages/payment'
 import { paymentCallbackResponse } from '@/lib/booking/payment-result'
 
 export const dynamic = 'force-dynamic'
@@ -32,7 +33,29 @@ async function handle(req: NextRequest) {
         }
         return NextResponse.json({ ok: true })
       }
-      // No product order matched — this is a booking payment.
+
+      // Not a product order — try a package purchase next.
+      const packageResult = result.paid
+        ? await markPackageBillPaid(result.billId)
+        : await reconcilePackagePurchaseByBill(result.billId)
+      if (packageResult.ok && (packageResult.state === 'confirmed' || packageResult.state === 'already_confirmed')) {
+        if (result.redirectTo) {
+          return NextResponse.redirect(new URL(result.redirectTo, req.url))
+        }
+        return NextResponse.json({ ok: true })
+      }
+      if (!packageResult.ok) {
+        console.error('[payment callback] package purchase confirmation failed', result.billId, packageResult)
+        return NextResponse.json({ ok: false }, { status: 503 })
+      }
+      if (packageResult.state !== 'not_found') {
+        if (result.redirectTo) {
+          return NextResponse.redirect(new URL(result.redirectTo, req.url))
+        }
+        return NextResponse.json({ ok: true })
+      }
+
+      // No product order or package purchase matched — this is a booking payment.
       if (result.paid) {
         const confirmation = await markBillPaid(result.billId)
         const response = paymentCallbackResponse(confirmation)

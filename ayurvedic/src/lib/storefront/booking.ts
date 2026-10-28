@@ -89,7 +89,7 @@ export async function getActiveAnnouncement(): Promise<Announcement | null> {
   )
   const { data, error } = await cached
     .from('announcements')
-    .select('id, kind, message, start_date, end_date, block_id, created_at')
+    .select('id, kind, message, start_date, end_date, block_id, link_url, created_at')
     .order('created_at', { ascending: false })
     .limit(50)
   if (error) {

@@ -5,6 +5,7 @@ import { fmtMY } from '@/lib/datetime'
 import type { BookingKind } from '@/types/booking'
 import { confirmationCopy } from './confirmation-copy'
 import { bookingRef } from './ref'
+import { packageReceiptNo } from '@/lib/packages/receipt'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
 
@@ -494,6 +495,62 @@ export async function notifyRescheduleRequest(p: NotifyBase & {
   ]
   const { html, text } = shell('Reschedule request received', lines, p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined)
   await sendCustomerEmail({ to: p.to, subject: 'Reschedule request received — Kerala Ayurvedic Lifestyle', html, text, context: 'reschedule request', name: p.name })
+}
+
+/**
+ * A package was bought (online, once payment confirms) or logged by front desk.
+ * Staff get Telegram + inbox alerts for online sales only; the customer gets an
+ * email receipt with a link to the printable receipt page whenever we have an email.
+ */
+export async function notifyPackagePurchased(p: {
+  to: string | null | undefined
+  name: string
+  phone: string
+  packageName: string
+  priceRm: number
+  sessions: number
+  expiresISO: string | null
+  purchaseId: string
+  notifyStaff?: boolean
+}) {
+  const price = `RM${Number(p.priceRm).toFixed(2)}`
+  const validUntil = fmtMY(p.expiresISO, { dateStyle: 'long' })
+  const receiptUrl = `${SITE}/packages/purchase/success?id=${p.purchaseId}`
+
+  if (p.notifyStaff !== false) {
+    await sendTelegram(
+      `🎁 <b>New package sale — paid online</b>\n${esc(p.name)} — ${esc(p.phone)}${p.to ? ` — ${esc(p.to)}` : ''}\n${esc(p.packageName)} — ${price} (${p.sessions} sessions)\nValid until ${esc(validUntil)}`,
+    )
+    await sendStaffEmail('New package sale (paid online)', [
+      `<strong>${esc(p.name)}</strong> — ${esc(p.phone)}${p.to ? ` — ${esc(p.to)}` : ''}`,
+      `${esc(p.packageName)} — <strong>${price}</strong> (${p.sessions} sessions)`,
+      `Valid until <strong>${esc(validUntil)}</strong>`,
+      'Find it under Packages in the console to redeem sessions.',
+    ])
+  }
+
+  if (p.to) {
+    const { html, text } = shell(
+      'Your package receipt',
+      [
+        `Hi ${esc(p.name)}, thank you for purchasing the <strong>${esc(p.packageName)}</strong>.`,
+        `Amount paid: <strong>${price}</strong>`,
+        `Sessions: <strong>${p.sessions}</strong>`,
+        `Valid until: <strong>${esc(validUntil)}</strong>`,
+        `Receipt no.: <strong>${esc(packageReceiptNo(p.purchaseId))}</strong>`,
+        'This package is sharable with friends and family, but the package owner must make the booking. WhatsApp us on +60 11-6504 3436 to book your first session.',
+      ],
+      { label: 'View / print receipt', url: receiptUrl },
+    )
+    await sendCustomerEmail({
+      to: p.to,
+      subject: `Your ${p.packageName} receipt — Kerala Ayurvedic Lifestyle`,
+      html,
+      text,
+      context: 'package purchase receipt',
+      name: p.name,
+    })
+  }
 }
 
 export { SITE as BOOKING_SITE_URL }

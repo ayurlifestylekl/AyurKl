@@ -8,6 +8,7 @@ const mk = (over: Partial<Announcement>): Announcement => ({
   startDate: over.startDate ?? null,
   endDate: over.endDate ?? null,
   blockId: null,
+  linkUrl: over.linkUrl ?? null,
   createdAt: over.createdAt ?? '2026-07-01',
 })
 

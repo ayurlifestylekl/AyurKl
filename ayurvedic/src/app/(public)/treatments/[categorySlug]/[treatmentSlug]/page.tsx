@@ -17,6 +17,7 @@ import TherapyPager from '@/components/treatments/TherapyPager'
 import TherapyProcedure from '@/components/treatments/TherapyProcedure'
 import TherapyStickyBar from '@/components/treatments/TherapyStickyBar'
 import TherapySwitcher from '@/components/treatments/TherapySwitcher'
+import TreatmentPackagePromo from '@/components/treatments/TreatmentPackagePromo'
 import { portableTextComponents } from '@/components/blog/PortableTextComponents'
 import { urlForImage } from '@/sanity/image'
 import { createClient } from '@/lib/supabase/server'
@@ -24,6 +25,7 @@ import {
   getTreatmentBySlug,
   getTreatmentSiblings,
 } from '@/lib/storefront/treatments'
+import { getActivePackageForTreatment, type PublicPackage } from '@/lib/packages/queries'
 import { findPrevNext } from '@/lib/treatments/pager'
 import type {
   TreatmentDetail,
@@ -98,6 +100,14 @@ export default async function TreatmentDetailPage({
   )
   if (!treatment) notFound()
 
+  let dealPackage: PublicPackage | null = null
+  try {
+    const supabase = await createClient()
+    dealPackage = await getActivePackageForTreatment(supabase, treatment._id)
+  } catch (err) {
+    console.error(`[treatments/${params.categorySlug}/${params.treatmentSlug}] package lookup failed:`, err)
+  }
+
   // A hero-split pair: the gallery contains only 1–2 extra photos (already
   // deduped of the hero in the data layer). Use the first/second as the
   // secondary hero image and skip the separate Gallery section. If there are
@@ -164,6 +174,8 @@ export default async function TreatmentDetailPage({
         treatmentOrder={treatment.category.order}
         treatmentTitle={treatment.title}
       />
+
+      {dealPackage && <TreatmentPackagePromo pkg={dealPackage} />}
 
       <section className="relative bg-cream pb-20">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-12 sm:px-8 lg:grid-cols-[220px_minmax(0,720px)_minmax(0,260px)] lg:gap-12 lg:px-12 lg:py-16">

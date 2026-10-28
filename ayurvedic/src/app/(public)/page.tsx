@@ -3,6 +3,7 @@ import TrustStrip from '@/components/sections/TrustStrip'
 import EmpathyBridge from '@/components/sections/EmpathyBridge'
 import ClinicTherapies from '@/components/sections/ClinicTherapies'
 import PromoBanners from '@/components/sections/PromoBanners'
+import DeepawaliPackagesSection from '@/components/sections/DeepawaliPackagesSection'
 import FeaturedProducts from '@/components/sections/FeaturedProducts'
 import VideoTestimonials from '@/components/sections/VideoTestimonials'
 import Reviews from '@/components/sections/Reviews'
@@ -13,6 +14,7 @@ import { faqs as homeFaqsFallback } from '@/data/faqs'
 import { fetchFaqs } from '@/sanity/fetchFaqs'
 import { createClient } from '@/lib/supabase/server'
 import { getStorefrontProducts } from '@/lib/storefront/products'
+import { getActivePackages } from '@/lib/packages/queries'
 import { categories } from '@/data/categories'
 import type { FeaturedProduct } from '@/types/content'
 
@@ -69,6 +71,7 @@ export default async function Home() {
   const homeFaqs = await fetchFaqs('home', homeFaqsFallback)
   const supabase = await createClient()
   const storefrontProducts = await getStorefrontProducts(supabase)
+  const deepawaliPackages = await getActivePackages(supabase)
 
   const featuredFromDb: FeaturedProduct[] = storefrontProducts.map((p) => ({
     id: p.id,
@@ -115,6 +118,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewJsonLd) }}
       />
       <HeroSection />
+      <DeepawaliPackagesSection packages={deepawaliPackages} />
       <TrustStrip />
       <EmpathyBridge />
       <ClinicTherapies />

@@ -20,5 +20,5 @@ export default async function AnnouncementBanner() {
     text = a.message
   }
 
-  return <AnnouncementNotice id={a.id} text={text} variant={a.kind} />
+  return <AnnouncementNotice id={a.id} text={text} variant={a.kind} linkUrl={a.linkUrl} />
 }
