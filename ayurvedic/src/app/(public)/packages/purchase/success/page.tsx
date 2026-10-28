@@ -30,12 +30,18 @@ function admin() {
 // Printing shows the receipt alone on an A4 page — the site's navbar, footer,
 // banner, WhatsApp button and popups are hidden without touching those components.
 const PRINT_CSS = `
-@page { size: A4; margin: 12mm; }
+@page { size: A4; margin: 10mm; }
 @media print {
-  body * { visibility: hidden !important; }
-  #package-receipt, #package-receipt * { visibility: visible !important; }
-  #package-receipt { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border: none !important; }
-  #package-receipt { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* Drop everything that isn't the receipt or one of its ancestors, so hidden
+     site chrome can't push the receipt onto a second page. */
+  body *:not(:has(#package-receipt)):not(#package-receipt):not(#package-receipt *) { display: none !important; }
+  body *:has(#package-receipt) { padding: 0 !important; margin: 0 !important; min-height: 0 !important; max-width: none !important; background: #fff !important; box-shadow: none !important; }
+  body { background: #fff !important; }
+  #package-receipt { border: none !important; box-shadow: none !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* Tighter vertical rhythm on paper so the whole receipt fits one A4 sheet. */
+  #package-receipt .receipt-body { padding: 18px 22px !important; }
+  #package-receipt .mt-8 { margin-top: 16px !important; }
+  #package-receipt .pt-6 { padding-top: 14px !important; }
 }
 `
 
@@ -115,7 +121,7 @@ export default async function PackageReceiptPage({ searchParams }: PageProps) {
           <div className="h-2 bg-primary" />
           <div className="h-[3px] bg-accent" />
 
-          <div className="px-7 py-8 sm:px-10">
+          <div className="receipt-body px-7 py-8 sm:px-10">
             {/* Header */}
             <header className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
               <div>

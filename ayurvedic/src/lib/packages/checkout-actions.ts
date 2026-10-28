@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { createClient as createSb } from '@supabase/supabase-js'
 import { getProviderForMethod, isCardPaymentEnabled, type PaymentMethod } from '@/lib/payments'
 import { PACKAGE_TERMS_VERSION } from '@/lib/packages/terms'
+import { onSaleNowFilter } from '@/lib/packages/queries'
 
 function admin() {
   return createSb(
@@ -25,10 +26,10 @@ export type ActionResult<T = void> =
   | { ok: false; error: string }
 
 const PurchaseInputSchema = z.object({
-  packageSlug: z.string().min(1),
-  ownerName: z.string().min(1, 'Full name is required.'),
-  ownerPhone: z.string().min(1, 'Phone number is required.'),
-  ownerEmail: z.string().email('A valid email is required.'),
+  packageSlug: z.string().min(1).max(80),
+  ownerName: z.string().trim().min(1, 'Full name is required.').max(120, 'Name is too long.'),
+  ownerPhone: z.string().trim().min(7, 'Enter a valid phone number.').max(30, 'Phone number is too long.'),
+  ownerEmail: z.string().trim().email('A valid email is required.').max(254),
   agreedToTerms: z.literal(true, { errorMap: () => ({ message: 'You must agree to the terms and conditions.' }) }),
   method: z.enum(['fpx', 'card']).default('fpx'),
   idempotencyKey: z.string().uuid(),
@@ -88,6 +89,7 @@ export async function createPackageOrder(raw: unknown): Promise<ActionResult<Pac
     .select('id, name, price_rm, session_count, treatment_id, validity_days')
     .eq('slug', packageSlug)
     .eq('is_active', true)
+    .or(onSaleNowFilter())
     .maybeSingle()
   if (pkgErr || !pkg) return { ok: false, error: 'This package is no longer available.' }
 

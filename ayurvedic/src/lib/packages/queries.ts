@@ -38,6 +38,20 @@ function rowToPublicPackage(r: any): PublicPackage {
   }
 }
 
+/**
+ * PostgREST filter: no end date, or the end date hasn't passed yet. "Now" is
+ * rounded down to the minute so cached reads (the flyer gate) share a key.
+ */
+export function onSaleNowFilter(): string {
+  const now = new Date(Math.floor(Date.now() / 60_000) * 60_000).toISOString()
+  return `available_until.is.null,available_until.gt.${now}`
+}
+
+/** Is a package sellable right now? Active and before its optional end date. */
+export function isOnSale(isActive: boolean, availableUntil: string | null): boolean {
+  return isActive && (!availableUntil || new Date(availableUntil).getTime() > Date.now())
+}
+
 /** Active packages for the public /packages page, ordered by sort_order. */
 export async function getActivePackages(sb: SB): Promise<PublicPackage[]> {
   const { data, error } = await sb
@@ -46,6 +60,7 @@ export async function getActivePackages(sb: SB): Promise<PublicPackage[]> {
       'id, slug, name, price_rm, session_count, description, validity_days, sort_order, treatment:treatments(slug, title, hero_image_url, category:treatment_categories(slug))',
     )
     .eq('is_active', true)
+    .or(onSaleNowFilter())
     .order('sort_order', { ascending: true })
   if (error) {
     console.error('[packages/queries] getActivePackages:', error.message)
@@ -63,6 +78,7 @@ export async function getPackageBySlug(sb: SB, slug: string): Promise<PublicPack
     )
     .eq('slug', slug)
     .eq('is_active', true)
+    .or(onSaleNowFilter())
     .maybeSingle()
   if (error) {
     console.error('[packages/queries] getPackageBySlug:', error.message)
@@ -79,6 +95,7 @@ export async function getActivePackageForTreatment(sb: SB, treatmentId: string):
       'id, slug, name, price_rm, session_count, description, validity_days, sort_order, treatment:treatments(slug, title, hero_image_url, category:treatment_categories(slug))',
     )
     .eq('is_active', true)
+    .or(onSaleNowFilter())
     .eq('treatment_id', treatmentId)
     .order('sort_order', { ascending: true })
     .limit(1)
@@ -136,7 +153,8 @@ const PURCHASE_COLUMNS =
 
 /** Staff search: by owner name, phone, or email (console/packages). */
 export async function searchPackagePurchases(sb: SB, query: string): Promise<PackagePurchaseRow[]> {
-  const q = query.trim()
+  // Commas, parentheses, quotes and backslashes would otherwise rewrite the or() filter.
+  const q = query.replace(/[,()"\\]/g, ' ').trim().slice(0, 80)
   if (!q) return []
   const { data, error } = await sb
     .from('package_purchases')
@@ -178,7 +196,7 @@ export interface PackageCatalogRow {
 export async function getAllPackagesForStaff(sb: SB): Promise<PackageCatalogRow[]> {
   const { data, error } = await sb
     .from('packages')
-    .select('id, slug, name, price_rm, session_count, is_active')
+    .select('id, slug, name, price_rm, session_count, is_active, available_until')
     .order('sort_order', { ascending: true })
   if (error) {
     console.error('[packages/queries] getAllPackagesForStaff:', error.message)
@@ -190,6 +208,6 @@ export async function getAllPackagesForStaff(sb: SB): Promise<PackageCatalogRow[
     name: r.name,
     priceRm: Number(r.price_rm),
     sessionCount: r.session_count,
-    isActive: r.is_active,
+    isActive: isOnSale(r.is_active, r.available_until ?? null),
   }))
 }

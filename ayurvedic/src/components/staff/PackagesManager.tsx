@@ -24,7 +24,7 @@ export default function PackagesManager({
   const [error, setError] = useState<string | null>(null)
 
   // Log a sale
-  const [packageId, setPackageId] = useState(catalog[0]?.id ?? '')
+  const [packageId, setPackageId] = useState(catalog.find((c) => c.isActive)?.id ?? '')
   const [ownerName, setOwnerName] = useState('')
   const [ownerPhone, setOwnerPhone] = useState('')
   const [ownerEmail, setOwnerEmail] = useState('')
@@ -96,7 +96,7 @@ export default function PackagesManager({
           <select value={packageId} onChange={(e) => setPackageId(e.target.value)} className={inp}>
             {catalog.map((p) => (
               <option key={p.id} value={p.id} disabled={!p.isActive}>
-                {p.name} — RM{p.priceRm} — {p.sessionCount} sessions{!p.isActive ? ' (inactive)' : ''}
+                {p.name} — RM{p.priceRm} — {p.sessionCount} sessions{!p.isActive ? ' (not on sale)' : ''}
               </option>
             ))}
           </select>

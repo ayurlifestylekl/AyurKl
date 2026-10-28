@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { requireStaff } from '@/lib/staff/guard'
 import { notifyPackagePurchased } from '@/lib/booking/notify'
-import { searchPackagePurchases, type PackagePurchaseRow } from '@/lib/packages/queries'
+import { isOnSale, searchPackagePurchases, type PackagePurchaseRow } from '@/lib/packages/queries'
 
 type Ok = { ok: true }
 type Err = { error: string }
@@ -37,11 +37,14 @@ export async function createManualPackagePurchase(input: LogPackageSaleInput): P
 
   const { data: pkg, error: pkgErr } = await db
     .from('packages')
-    .select('id, name, price_rm, session_count, treatment_id, validity_days')
+    .select('id, name, price_rm, session_count, treatment_id, validity_days, is_active, available_until')
     .eq('id', input.packageId)
     .maybeSingle()
   if (pkgErr) return { error: pkgErr.message }
   if (!pkg) return { error: 'Package not found.' }
+  if (!isOnSale(pkg.is_active, pkg.available_until ?? null)) {
+    return { error: 'This package is no longer on sale.' }
+  }
 
   const purchasedAt = new Date()
   const expiresAt = new Date(purchasedAt.getTime() + pkg.validity_days * 24 * 60 * 60 * 1000)

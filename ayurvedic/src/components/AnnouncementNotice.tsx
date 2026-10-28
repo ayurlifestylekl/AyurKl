@@ -45,7 +45,7 @@ export default function AnnouncementNotice({
   return (
     <div className={`relative px-9 py-2 text-center font-body text-[12.5px] text-white sm:text-[13.5px] ${variant === 'closure' ? 'bg-primary' : 'bg-[#B8860B]'}`}>
       <Icon className="mr-1.5 inline-block h-4 w-4 -translate-y-0.5" aria-hidden />
-      {linkUrl ? (
+      {linkUrl && (/^\/(?!\/)/.test(linkUrl) || /^https:\/\//i.test(linkUrl)) ? (
         <Link href={linkUrl} className="underline-offset-2 hover:underline">
           {text}
         </Link>

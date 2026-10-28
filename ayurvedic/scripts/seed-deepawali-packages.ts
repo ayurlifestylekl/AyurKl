@@ -75,6 +75,8 @@ async function main() {
         description: p.description,
         treatment_id: p.treatment_id,
         validity_days: 365,
+        // "Package available till November 30th 2026" — end of day, Malaysia time.
+        available_until: '2026-11-30T23:59:59+08:00',
         sort_order: p.sort_order,
         is_active: true,
       },

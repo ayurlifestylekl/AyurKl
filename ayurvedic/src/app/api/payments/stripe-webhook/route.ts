@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { stripeProvider } from '@/lib/payments/stripe'
 import { markBillPaid, reconcileByBill } from '@/lib/booking/payment'
+import { markPackageBillPaid } from '@/lib/packages/payment'
 import { paymentCallbackResponse } from '@/lib/booking/payment-result'
 import { applyRefundCallback } from '@/lib/payments/refund'
 
@@ -28,6 +29,11 @@ async function handle(req: NextRequest) {
 
     const result = await stripeProvider.verifyCallback(req)
     if (result.paid && result.billId) {
+      // Package purchases paid by card share this webhook with bookings.
+      const pkg = await markPackageBillPaid(result.billId)
+      if (!pkg.ok) return NextResponse.json({ ok: false }, { status: 503 })
+      if (pkg.state !== 'not_found') return NextResponse.json({ ok: true })
+
       const response = paymentCallbackResponse(await markBillPaid(result.billId))
       return NextResponse.json(response, { status: response.status })
     } else if (result.billId) {

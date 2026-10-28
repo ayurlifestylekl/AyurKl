@@ -1107,6 +1107,15 @@ export interface AnnouncementInput {
   linkUrl?: string | null
 }
 
+/** A banner link must be a site path ("/packages") or an https URL — never javascript: etc. */
+function safeBannerLink(raw: string | null | undefined): string | null {
+  const v = raw?.trim()
+  if (!v) return null
+  if (/^\/(?!\/)/.test(v)) return v
+  if (/^https:\/\/[^\s]+$/i.test(v)) return v
+  return null
+}
+
 /**
  * Publish an announcement. A 'closure' also creates a linked centre-closed
  * all-day block so customers can't book those dates; a 'message' is banner-only.
@@ -1148,7 +1157,7 @@ export async function createAnnouncement(input: AnnouncementInput): Promise<Ok |
     start_date: input.startDate || null,
     end_date: input.endDate || null,
     block_id: blockId,
-    link_url: input.kind === 'message' ? input.linkUrl?.trim() || null : null,
+    link_url: input.kind === 'message' ? safeBannerLink(input.linkUrl) : null,
     created_by: userId,
   })
   if (error) return { error: error.message }
