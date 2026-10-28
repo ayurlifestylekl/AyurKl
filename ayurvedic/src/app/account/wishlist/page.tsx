@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { createClient } from '@/lib/supabase/server'
 import { listWishlist } from '@/lib/wishlist/queries'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 export const metadata = { title: 'My Wishlist' }
 
@@ -47,7 +48,7 @@ export default async function WishlistPage() {
                     {it.product.category ?? 'Product'}
                   </p>
                   <h3 className="mt-1 font-heading text-[15px] font-bold text-[#6E1023]">{it.product.name}</h3>
-                  <p className="mt-1 font-heading text-[14px] font-semibold text-[#6E1023]">RM {Number(it.product.price_rm).toFixed(2)}</p>
+                  <p className="mt-1 font-heading text-[14px] font-semibold text-[#6E1023]">{SHOP_OPEN ? `RM ${Number(it.product.price_rm).toFixed(2)}` : 'Coming Soon'}</p>
                 </div>
               </Link>
             </li>

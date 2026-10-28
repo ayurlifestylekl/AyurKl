@@ -7,6 +7,8 @@ import { fadeUp, staggerParent, inViewOnce } from '@/lib/motion'
 import type { Product } from '@/types/content'
 import AddToBagButton from './AddToBagButton'
 import ProductDetailsAccordion from './ProductDetailsAccordion'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
+import { whatsappLink } from '@/lib/clinic'
 
 interface ProductMetaProps {
   product: Product
@@ -66,9 +68,9 @@ export default function ProductMeta({ product, categoryLabel }: ProductMetaProps
       {/* Price */}
       <motion.div variants={fadeUp(0)} className="flex items-baseline gap-3">
         <span className="font-heading text-[28px] font-extrabold text-accent">
-          RM{product.priceRm}
+          {SHOP_OPEN ? `RM${product.priceRm}` : 'Coming Soon'}
         </span>
-        {hasDiscount && (
+        {SHOP_OPEN && hasDiscount && (
           <span className="font-body text-[15px] text-dark/35 line-through">
             RM{product.oldPriceRm}
           </span>
@@ -111,7 +113,23 @@ export default function ProductMeta({ product, categoryLabel }: ProductMetaProps
 
       {/* CTA */}
       <motion.div variants={fadeUp(0)} className="mt-2">
-        <AddToBagButton productId={product.id} disabled={outOfStock} />
+        {SHOP_OPEN ? (
+          <AddToBagButton productId={product.id} disabled={outOfStock} />
+        ) : (
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <span className="inline-flex h-12 flex-1 cursor-not-allowed items-center justify-center rounded-full border border-accent/40 bg-accent/10 px-6 font-heading text-[12px] font-bold uppercase tracking-[0.18em] text-primary/70">
+              Coming Soon
+            </span>
+            <a
+              href={whatsappLink(`Hi, I'd like to know more about ${product.name}.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-[#25D366] px-6 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-[#128C4A] hover:bg-[#25D366]/10"
+            >
+              Ask on WhatsApp
+            </a>
+          </div>
+        )}
       </motion.div>
 
       {/* Trust row */}
@@ -120,10 +138,14 @@ export default function ProductMeta({ product, categoryLabel }: ProductMetaProps
         className="flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-[10px] font-semibold uppercase tracking-[0.2em] text-dark/50"
       >
         <span>Hand-blended · Kerala</span>
-        <span aria-hidden className="h-1 w-1 rounded-full bg-accent/60" />
-        <span>Ships within 48h</span>
-        <span aria-hidden className="h-1 w-1 rounded-full bg-accent/60" />
-        <span>Free over RM 150</span>
+        {SHOP_OPEN && (
+          <>
+            <span aria-hidden className="h-1 w-1 rounded-full bg-accent/60" />
+            <span>Ships within 48h</span>
+            <span aria-hidden className="h-1 w-1 rounded-full bg-accent/60" />
+            <span>Free over RM 150</span>
+          </>
+        )}
       </motion.div>
 
       {/* Ingredients / How to Use / Good to Know */}

@@ -3,6 +3,8 @@ import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { createClient } from '@/lib/supabase/server'
 import { getStorefrontProducts } from '@/lib/storefront/products'
 import CheckoutContents from './CheckoutContents'
+import ShopComingSoon from '@/components/products/ShopComingSoon'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 export const metadata: Metadata = {
   title: 'Checkout | Kerala Ayurvedic Lifestyle',
@@ -13,6 +15,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'
 
 export default async function CheckoutPage() {
+  if (!SHOP_OPEN) return <ShopComingSoon />
   const me = await getCurrentUser()
   const supabase = await createClient()
   const products = await getStorefrontProducts(supabase)

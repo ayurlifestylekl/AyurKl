@@ -14,6 +14,7 @@ import { therapies } from '@/data/therapies'
 import { scorePercentages } from '@/lib/quizzes/scorer'
 import type { Dosha, QuizResultRow } from '@/types/quiz'
 import type { Product } from '@/types/content'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 interface PrakritiResultsProps {
   result: QuizResultRow
@@ -328,7 +329,7 @@ export default function PrakritiResults({
                   </p>
                   <div className="mt-auto flex items-center justify-between pt-3">
                     <span className="font-heading text-[14px] font-bold text-[#163F33]">
-                      RM {p.priceRm}
+                      {SHOP_OPEN ? `RM ${p.priceRm}` : 'Coming Soon'}
                     </span>
                     <span className="inline-flex items-center gap-1 font-heading text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[#163F33]/45 transition-colors group-hover:text-[#D4AF37]">
                       View

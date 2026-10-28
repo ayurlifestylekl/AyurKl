@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import CartContents from './CartContents'
+import ShopComingSoon from '@/components/products/ShopComingSoon'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 export const metadata: Metadata = {
   title: 'Your Cart',
@@ -10,5 +12,6 @@ export const metadata: Metadata = {
 }
 
 export default function CartPage() {
+  if (!SHOP_OPEN) return <ShopComingSoon />
   return <CartContents />
 }

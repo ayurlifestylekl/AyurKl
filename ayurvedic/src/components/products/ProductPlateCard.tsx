@@ -7,6 +7,7 @@ import { fadeUp } from '@/lib/motion'
 import type { Product, ProductBadge } from '@/types/content'
 import NocturneFrame from './atmosphere/NocturneFrame'
 import WishlistButton from '@/components/account/WishlistButton'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 const badgeAccent: Record<ProductBadge, string> = {
   NEW:        'text-secondary',
@@ -64,10 +65,14 @@ export default function ProductPlateCard({ product, initialSaved = false }: { pr
               </span>
             ) : (
               <span
-                className="font-heading text-[12px] font-semibold tracking-[0.03em] text-accent sm:text-[13px]"
+                className={
+                  SHOP_OPEN
+                    ? 'font-heading text-[12px] font-semibold tracking-[0.03em] text-accent sm:text-[13px]'
+                    : 'shrink-0 whitespace-nowrap font-heading text-[9.5px] font-bold uppercase tracking-[0.14em] text-accent sm:text-[10.5px]'
+                }
                 style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
               >
-                RM{product.priceRm}
+                {SHOP_OPEN ? `RM${product.priceRm}` : 'Coming Soon'}
               </span>
             )}
           </div>

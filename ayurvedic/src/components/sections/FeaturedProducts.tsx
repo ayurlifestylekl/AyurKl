@@ -9,6 +9,7 @@ import { featuredProducts } from '@/data/featuredProducts'
 import type { FeaturedProduct, ProductBadge } from '@/types/content'
 import { LotusMark } from '@/components/ui/Ornament'
 import NocturneFrame from '@/components/products/atmosphere/NocturneFrame'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 /* ── Palette (section-local; matches hero language) ── */
 const EMERALD       = '#6E3420'
@@ -328,10 +329,16 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
         {/* Price + Shop Now */}
         <div className="mt-4 flex items-center justify-between gap-2">
           <div className="flex items-baseline gap-1.5">
-            <span className="font-heading text-[16px] font-bold" style={{ color: CARD_INK }}>
-              RM{product.priceRm}
-            </span>
-            {hasDiscount && (
+            {!SHOP_OPEN ? (
+              <span className="font-heading text-[12px] font-bold uppercase tracking-[0.16em]" style={{ color: CARD_INK }}>
+                Coming Soon
+              </span>
+            ) : (
+              <span className="font-heading text-[16px] font-bold" style={{ color: CARD_INK }}>
+                RM{product.priceRm}
+              </span>
+            )}
+            {SHOP_OPEN && hasDiscount && (
               <span
                 className="font-body text-[11px] line-through"
                 style={{ color: 'rgba(110,16,35,0.4)' }}

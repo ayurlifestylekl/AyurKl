@@ -5,6 +5,7 @@ import { Search, X } from 'lucide-react'
 import { categories } from '@/data/categories'
 import { Flourish } from '@/components/ui/Ornament'
 import type { Product } from '@/types/content'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 export type PriceTier = 'all' | 'under-75' | '75-150' | '150-300' | 'over-300'
 
@@ -122,6 +123,7 @@ export default function ProductsSidebar({
       </SidebarGroup>
 
       {/* Price group */}
+      {SHOP_OPEN && (
       <fieldset className="m-0 border-0 p-0">
         <legend className="mb-3 inline-flex items-center gap-2 font-heading text-[9px] font-bold uppercase tracking-[0.32em] text-accent">
           <span aria-hidden className="inline-block h-px w-3 bg-accent" />
@@ -157,6 +159,7 @@ export default function ProductsSidebar({
           })}
         </div>
       </fieldset>
+      )}
 
       {/* Curator's note */}
       <div className="relative rounded-sm bg-blush px-4 py-5">

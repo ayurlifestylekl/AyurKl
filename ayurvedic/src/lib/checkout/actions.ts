@@ -5,6 +5,7 @@ import { createClient as createSb } from '@supabase/supabase-js'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { getPaymentProvider } from '@/lib/payments'
 import { calculateShipping, getShippingZone } from '@/lib/shipping/zones'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 export type ActionResult<T = void> =
   | { ok: true; data?: T }
@@ -65,6 +66,7 @@ export interface CheckoutResult {
 export async function createProductOrder(
   raw: unknown,
 ): Promise<ActionResult<CheckoutResult>> {
+  if (!SHOP_OPEN) return { ok: false, error: 'Our online shop is coming soon. Please WhatsApp us to order.' }
   const parsed = CheckoutInputSchema.safeParse(raw)
   if (!parsed.success) {
     return { ok: false, error: parsed.error.errors[0]?.message ?? 'Invalid input.' }

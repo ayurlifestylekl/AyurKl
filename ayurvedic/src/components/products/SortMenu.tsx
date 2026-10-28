@@ -2,14 +2,16 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 
 export type SortOption = 'newest' | 'price-asc' | 'price-desc'
 
-const OPTIONS: Array<{ value: SortOption; label: string }> = [
+const ALL_OPTIONS: Array<{ value: SortOption; label: string }> = [
   { value: 'newest',     label: 'Newest' },
   { value: 'price-asc',  label: 'Price · Low → High' },
   { value: 'price-desc', label: 'Price · High → Low' },
 ]
+const OPTIONS = SHOP_OPEN ? ALL_OPTIONS : ALL_OPTIONS.filter((o) => !o.value.startsWith('price'))
 
 interface SortMenuProps {
   value: SortOption

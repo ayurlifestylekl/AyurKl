@@ -15,6 +15,7 @@ import { fetchFaqs } from '@/sanity/fetchFaqs'
 import { createClient } from '@/lib/supabase/server'
 import { getStorefrontProducts } from '@/lib/storefront/products'
 import { getActivePackages } from '@/lib/packages/queries'
+import { SHOP_OPEN } from '@/lib/storefront/shop'
 import { categories } from '@/data/categories'
 import type { FeaturedProduct } from '@/types/content'
 
@@ -123,7 +124,7 @@ export default async function Home() {
       <EmpathyBridge />
       <ClinicTherapies />
       {/* Shop sections — archived until the product catalogue launches (Phase 2). */}
-      <PromoBanners />
+      {SHOP_OPEN && <PromoBanners />}
       <FeaturedProducts initialProducts={featuredFromDb} />
       <VideoTestimonials />
       <Reviews />
