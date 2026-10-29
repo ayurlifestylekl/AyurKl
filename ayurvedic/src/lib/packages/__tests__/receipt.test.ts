@@ -6,7 +6,7 @@ describe('receiptTherapyName', () => {
     expect(receiptTherapyName('Abhyangam (Full Body Oil Massage)')).toBe('Abhyangam')
     expect(receiptTherapyName('Sirodhaara — Head, Neck & Foot Massage')).toBe('Sirodhaara')
     expect(receiptTherapyName('Abhyangam with Kizhi')).toBe('Abhyangam with Kizhi')
-    expect(receiptTherapyName('Udwarthanam + Steam Bath')).toBe('Udwarthanam + Steam Bath')
+    expect(receiptTherapyName('Udwarthanam + Steam Bath')).toBe('Udwarthanam')
   })
 })
 

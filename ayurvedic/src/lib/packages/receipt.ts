@@ -33,10 +33,11 @@ export function paymentMethodLabel(method: string | null, source: string | null)
 /**
  * The therapy's Ayurvedic name only, as the clinic wants it printed —
  * "Abhyangam (Full Body Oil Massage)" → "Abhyangam",
- * "Sirodhaara — Head, Neck & Foot Massage" → "Sirodhaara".
+ * "Sirodhaara — Head, Neck & Foot Massage" → "Sirodhaara",
+ * "Udwarthanam + Steam Bath" → "Udwarthanam".
  */
 export function receiptTherapyName(title: string): string {
-  return title.replace(/\s*\(.*?\)\s*/g, ' ').split(/\s+[—–-]\s+/)[0].trim()
+  return title.replace(/\s*\(.*?\)\s*/g, ' ').split(/\s+[—–+-]\s+/)[0].trim()
 }
 
 /** Published legal identity — matches the site footer (src/components/Footer.tsx) and the centre's till receipt. */
