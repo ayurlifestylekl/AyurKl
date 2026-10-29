@@ -281,7 +281,7 @@ export default function Bureau() {
                   Kerala Ayurvedic Lifestyle
                 </p>
                 <p className="mt-2 font-body text-[14px] italic leading-[1.55] text-accent/90">
-                  No. 37, Jalan Thamby Abdullah-1 · 50470
+                  No. 37, Jalan Thambi Abdullah-1 · 50470
                 </p>
                 <p className="mt-1 font-body text-[13.5px] italic leading-[1.55] text-white/55">
                   Brickfields, Kuala Lumpur, Malaysia

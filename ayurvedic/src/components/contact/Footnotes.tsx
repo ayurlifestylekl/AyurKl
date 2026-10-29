@@ -302,7 +302,7 @@ export default function Footnotes({ items = contactFaqsFallback }: FootnotesProp
               </p>
               <p className="mt-1 max-w-[42ch] font-body text-[10px] italic leading-[1.5] text-dark/40">
                 Ayurvedic Lifestyle (KL) Sdn Bhd · Reg. 847466-D · No. 37, Jalan
-                Thamby Abdullah-1, Brickfields 50470 KL
+                Thambi Abdullah-1, Brickfields 50470 KL
               </p>
             </div>
           </motion.div>

@@ -123,13 +123,13 @@ export default function Footer() {
               <li>
                 <span className="mb-1.5 block text-xs uppercase tracking-wider text-white/40">Location</span>
                 <a
-                  href="https://maps.google.com/?q=Kerala+Ayurvedic+Lifestyle+No.37+Jalan+Thamby+Abdullah+1+Brickfields+Kuala+Lumpur+Malaysia"
+                  href="https://maps.google.com/?q=Kerala+Ayurvedic+Lifestyle+No.37+Jalan+Thambi+Abdullah+1+Brickfields+Kuala+Lumpur+Malaysia"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block leading-relaxed transition-colors hover:text-accent"
                 >
                   Kerala Ayurvedic Lifestyle<br />
-                  No. 37, Jalan Thamby Abdullah 1<br />
+                  No. 37, Jalan Thambi Abdullah 1<br />
                   Brickfields, Kuala Lumpur, Malaysia
                 </a>
               </li>

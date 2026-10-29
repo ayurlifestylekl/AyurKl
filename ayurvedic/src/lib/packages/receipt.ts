@@ -44,6 +44,6 @@ export const RECEIPT_ISSUER = {
   tradingName: 'Kerala Ayurvedic Lifestyle',
   legalName: 'Ayurvedic Lifestyle (KL) Sdn Bhd',
   regNo: '847466D',
-  addressLines: ['No. 37, Jalan Thamby Abdullah 1', 'Brickfields, 50470 Kuala Lumpur, Malaysia'],
+  addressLines: ['No. 37, Jalan Thambi Abdullah 1', 'Brickfields, 50470 Kuala Lumpur, Malaysia'],
   website: 'keralaayurvediclifestyle.com.my',
 } as const

@@ -222,7 +222,7 @@ export default function Threshold() {
                     The Centre
                   </p>
                   <p className="mt-1 font-body text-[13px] italic leading-[1.45] text-dark/85">
-                    No. 37, Jalan Thamby Abdullah-1<br />
+                    No. 37, Jalan Thambi Abdullah-1<br />
                     Brickfields · 50470 · KL
                   </p>
                 </div>
