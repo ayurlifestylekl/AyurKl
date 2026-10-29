@@ -32,6 +32,9 @@ export async function markPackageBillPaid(billId: string): Promise<PaymentHandli
       'id, status, validity_days_snapshot, owner_name, owner_phone, owner_email, package_name_snapshot, price_rm_snapshot, session_count_snapshot',
     )
     .eq('payment_bill_id', billId)
+    // Counter sales keep a staff-typed reference in payment_bill_id; never let
+    // a provider callback match one of those.
+    .neq('source', 'whatsapp_manual')
     .maybeSingle()
 
   if (!purchase) return { ok: true, state: 'not_found' }

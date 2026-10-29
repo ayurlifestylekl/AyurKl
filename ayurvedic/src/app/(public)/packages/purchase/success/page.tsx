@@ -3,9 +3,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient as createSb } from '@supabase/supabase-js'
 import { fmtMY } from '@/lib/datetime'
-import { CLINIC_EMAIL, CLINIC_PHONE_PRIMARY } from '@/lib/clinic'
+import { CLINIC_EMAIL, CLINIC_PHONE_ALT_1, CLINIC_PHONE_ALT_2, CLINIC_PHONE_PRIMARY } from '@/lib/clinic'
 import { PACKAGE_TERMS } from '@/lib/packages/terms'
-import { RECEIPT_ISSUER, packageReceiptNo, paymentMethodLabel } from '@/lib/packages/receipt'
+import { RECEIPT_ISSUER, packageReceiptNo, paymentMethodLabel, receiptTherapyName } from '@/lib/packages/receipt'
 import { reconcilePackagePurchaseByBill } from '@/lib/packages/payment'
 import PrintButton from './PrintButton'
 
@@ -39,9 +39,14 @@ const PRINT_CSS = `
   body { background: #fff !important; }
   #package-receipt { border: none !important; box-shadow: none !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   /* Tighter vertical rhythm on paper so the whole receipt fits one A4 sheet. */
-  #package-receipt .receipt-body { padding: 18px 22px !important; }
-  #package-receipt .mt-8 { margin-top: 16px !important; }
-  #package-receipt .pt-6 { padding-top: 14px !important; }
+  #package-receipt .receipt-body { padding: 14px 22px !important; }
+  #package-receipt .mt-8 { margin-top: 12px !important; }
+  #package-receipt .pt-6 { padding-top: 10px !important; }
+  #package-receipt .py-3 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  #package-receipt .p-5 { padding: 12px 16px !important; }
+  #package-receipt footer { padding-top: 8px !important; }
+  #package-receipt .signature { margin-top: 10px !important; }
+  #package-receipt .signature .mt-8 { margin-top: 26px !important; }
 }
 `
 
@@ -60,7 +65,7 @@ export default async function PackageReceiptPage({ searchParams }: PageProps) {
     sb
       .from('package_purchases')
       .select(
-        'id, package_name_snapshot, price_rm_snapshot, session_count_snapshot, sessions_used, status, source, owner_name, owner_email, owner_phone, purchased_at, expires_at, created_at, payment_method, payment_bill_id, terms_accepted_at, terms_version, package:packages(description), treatment:treatments(title)',
+        'id, package_name_snapshot, price_rm_snapshot, session_count_snapshot, sessions_used, status, source, owner_name, owner_email, owner_phone, purchased_at, expires_at, created_at, payment_method, payment_bill_id, terms_accepted_at, terms_version, package:packages(description), treatment:treatments(title), staff:users!package_purchases_created_by_staff_id_fkey(full_name)',
       )
       .eq('id', id)
       .single()
@@ -83,6 +88,13 @@ export default async function PackageReceiptPage({ searchParams }: PageProps) {
   const pending = purchase.status === 'awaiting_payment'
   const pkg = purchase.package as unknown as { description: string | null } | null
   const treatment = purchase.treatment as unknown as { title: string } | null
+  const staff = purchase.staff as unknown as { full_name: string | null } | null
+  // Sold at the counter (walk-in / WhatsApp) rather than paid online.
+  const counterSale = purchase.source === 'whatsapp_manual'
+  // Session length as sold ("1-hour", "90-minute"), taken from the package text
+  // so the receipt carries no English therapy description — the clinic prints
+  // the Ayurvedic name only.
+  const sessionLength = pkg?.description?.match(/\b\d+-(?:hour|minute)\b/i)?.[0]
   const price = Number(purchase.price_rm_snapshot)
   const issuedOn = purchase.purchased_at ?? purchase.created_at
 
@@ -133,8 +145,9 @@ export default async function PackageReceiptPage({ searchParams }: PageProps) {
                     <div key={l}>{l}</div>
                   ))}
                   <div>
-                    {CLINIC_PHONE_PRIMARY} · {CLINIC_EMAIL}
+                    {CLINIC_PHONE_PRIMARY} · {CLINIC_PHONE_ALT_1} · {CLINIC_PHONE_ALT_2}
                   </div>
+                  <div>{CLINIC_EMAIL}</div>
                 </div>
               </div>
 
@@ -184,8 +197,12 @@ export default async function PackageReceiptPage({ searchParams }: PageProps) {
                 <tr className="border-b border-dark/10 align-top">
                   <td className="px-3 py-3">
                     <div className="font-semibold">{purchase.package_name_snapshot}</div>
-                    {pkg?.description && <div className="mt-0.5 text-[12px] text-dark/65">{pkg.description}</div>}
-                    {treatment?.title && <div className="mt-0.5 text-[12px] text-dark/65">Therapy: {treatment.title}</div>}
+                    {treatment?.title && <div className="mt-0.5 text-[12px] text-dark/65">Therapy: {receiptTherapyName(treatment.title)}</div>}
+                    {sessionLength && (
+                      <div className="mt-0.5 text-[12px] text-dark/65">
+                        {purchase.session_count_snapshot} × {sessionLength} sessions
+                      </div>
+                    )}
                     <div className="mt-0.5 text-[12px] text-dark/65">Deepawali Promo 2026</div>
                   </td>
                   <td className="px-3 py-3 text-center">{purchase.session_count_snapshot}</td>
@@ -214,6 +231,7 @@ export default async function PackageReceiptPage({ searchParams }: PageProps) {
                   ['Method', paymentMethodLabel(purchase.payment_method, purchase.source)],
                   ...(purchase.payment_bill_id ? ([['Reference', purchase.payment_bill_id]] as [string, string][]) : []),
                   ['Paid on', purchase.purchased_at ? fmtMY(purchase.purchased_at, { dateStyle: 'medium', timeStyle: 'short' }) : '—'],
+                  ...(counterSale && staff?.full_name ? ([['Served by', staff.full_name]] as [string, string][]) : []),
                 ]}
               />
               <Details
@@ -243,11 +261,33 @@ export default async function PackageReceiptPage({ searchParams }: PageProps) {
               )}
             </div>
 
+            {/* Counter sales: the customer never ticked the online T&C box, so they sign the centre's copy. */}
+            {counterSale && (
+              <div className="signature mt-6 grid items-end gap-6 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+                <div>
+                  <p className="font-body text-[10.5px] italic text-dark/60">
+                    I have read and agree to the Terms &amp; Conditions above.
+                  </p>
+                  <div className="mt-8 border-t border-dark/40 pt-1 font-heading text-[9.5px] font-bold uppercase tracking-[0.16em] text-dark/55">
+                    Customer signature
+                  </div>
+                </div>
+                <div>
+                  <div className="mt-8 border-t border-dark/40 pt-1 font-heading text-[9.5px] font-bold uppercase tracking-[0.16em] text-dark/55">
+                    Date
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Footer */}
             <footer className="mt-8 border-t border-dark/10 pt-4 text-center font-body text-[11px] leading-[1.6] text-dark/55">
               <div className="font-semibold text-primary">Thank you for choosing {RECEIPT_ISSUER.tradingName}.</div>
               <div>To book a session, WhatsApp us on {CLINIC_PHONE_PRIMARY}.</div>
-              <div>This is a computer-generated receipt — no signature is required. · {RECEIPT_ISSUER.website}</div>
+              <div>
+                {counterSale ? 'The centre keeps a copy signed by the customer.' : 'This is a computer-generated receipt — no signature is required.'} ·{' '}
+                {RECEIPT_ISSUER.website}
+              </div>
             </footer>
           </div>
         </article>

@@ -11,6 +11,7 @@ import {
 } from '@/lib/packages/actions'
 import type { PackageCatalogRow, PackagePurchaseRow } from '@/lib/packages/queries'
 import { fmtMY } from '@/lib/datetime'
+import { CENTRE_PAYMENT_METHODS, type CentrePaymentMethod } from '@/lib/packages/receipt'
 
 export default function PackagesManager({
   catalog,
@@ -28,6 +29,8 @@ export default function PackagesManager({
   const [ownerName, setOwnerName] = useState('')
   const [ownerPhone, setOwnerPhone] = useState('')
   const [ownerEmail, setOwnerEmail] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState<CentrePaymentMethod | ''>('')
+  const [paymentReference, setPaymentReference] = useState('')
   const [notes, setNotes] = useState('')
 
   // Search
@@ -38,11 +41,15 @@ export default function PackagesManager({
   const logSale = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    if (!paymentMethod) {
+      setError('Pick how the customer paid.')
+      return
+    }
     start(async () => {
-      const res = await createManualPackagePurchase({ packageId, ownerName, ownerPhone, ownerEmail, notes })
+      const res = await createManualPackagePurchase({ packageId, ownerName, ownerPhone, ownerEmail, paymentMethod, paymentReference, notes })
       if ('error' in res) setError(res.error)
       else {
-        setOwnerName(''); setOwnerPhone(''); setOwnerEmail(''); setNotes('')
+        setOwnerName(''); setOwnerPhone(''); setOwnerEmail(''); setPaymentMethod(''); setPaymentReference(''); setNotes('')
         router.refresh()
       }
     })
@@ -114,8 +121,21 @@ export default function PackagesManager({
           <input value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} className={inp} placeholder="customer@email.com" />
         </Field>
 
+        <Field label="Payment method">
+          <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value as CentrePaymentMethod)} className={inp}>
+            <option value="" disabled>Choose how they paid…</option>
+            {CENTRE_PAYMENT_METHODS.map((m) => (
+              <option key={m.value} value={m.value}>{m.label}</option>
+            ))}
+          </select>
+        </Field>
+
+        <Field label="Payment reference (optional)">
+          <input value={paymentReference} onChange={(e) => setPaymentReference(e.target.value)} maxLength={80} className={inp} placeholder="QR / transfer / card slip no." />
+        </Field>
+
         <Field label="Notes (optional)">
-          <textarea rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={inp} placeholder="e.g. Paid by bank transfer" />
+          <textarea rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={inp} placeholder="Internal note — not printed on the receipt" />
         </Field>
 
         {error && <p className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 font-body text-[12.5px] text-red-700">{error}</p>}

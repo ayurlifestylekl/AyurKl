@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { requireStaff } from '@/lib/staff/guard'
 import { notifyPackagePurchased } from '@/lib/booking/notify'
 import { isOnSale, searchPackagePurchases, type PackagePurchaseRow } from '@/lib/packages/queries'
+import { isCentrePaymentMethod, type CentrePaymentMethod } from '@/lib/packages/receipt'
 
 type Ok = { ok: true }
 type Err = { error: string }
@@ -18,6 +19,8 @@ export interface LogPackageSaleInput {
   ownerName: string
   ownerPhone: string
   ownerEmail?: string | null
+  paymentMethod: CentrePaymentMethod
+  paymentReference?: string | null
   notes?: string | null
 }
 
@@ -34,6 +37,8 @@ export async function createManualPackagePurchase(input: LogPackageSaleInput): P
   if (!ownerName) return { error: 'Enter the customer’s name.' }
   if (!ownerPhone) return { error: 'Enter the customer’s phone number.' }
   if (!input.packageId) return { error: 'Pick a package.' }
+  if (!isCentrePaymentMethod(input.paymentMethod)) return { error: 'Pick how the customer paid.' }
+  const paymentReference = input.paymentReference?.trim().slice(0, 80) || null
 
   const { data: pkg, error: pkgErr } = await db
     .from('packages')
@@ -64,6 +69,9 @@ export async function createManualPackagePurchase(input: LogPackageSaleInput): P
     expires_at: expiresAt.toISOString(),
     status: 'active',
     source: 'whatsapp_manual',
+    payment_method: input.paymentMethod,
+    // Printed as "Reference" on the receipt, same column an online bill id uses.
+    payment_bill_id: paymentReference,
     created_by_staff_id: userId,
     notes: input.notes?.trim() || null,
   }).select('id').single()
