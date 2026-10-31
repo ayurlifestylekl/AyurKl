@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
+import TrackedPromoLink from '@/components/TrackedPromoLink'
 import type { PublicPackage } from '@/lib/packages/queries'
 import { whatsappLink } from '@/lib/clinic'
 
@@ -15,20 +15,22 @@ export default function TreatmentPackagePromo({ pkg }: { pkg: PublicPackage }) {
           <span className="font-semibold">{pkg.name}</span> — RM{pkg.priceRm} for {pkg.sessionCount} sessions.
         </p>
         <div className="flex flex-none gap-2">
-          <Link
+          <TrackedPromoLink
             href={`/packages/${pkg.slug}/purchase`}
+            track={{ event: 'buy', placement: 'therapy', packageSlug: pkg.slug }}
             className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-lg bg-accent px-4 font-heading text-[10.5px] font-bold uppercase tracking-[0.12em] text-white hover:bg-accent/90"
           >
             Buy Now
-          </Link>
-          <a
+          </TrackedPromoLink>
+          <TrackedPromoLink
             href={whatsappLink(message)}
+            track={{ event: 'whatsapp', placement: 'therapy', packageSlug: pkg.slug }}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-[#25D366] px-4 font-heading text-[10.5px] font-bold uppercase tracking-[0.12em] text-[#128C4A] hover:bg-[#25D366]/10"
           >
             <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
-          </a>
+          </TrackedPromoLink>
         </div>
       </div>
     </div>

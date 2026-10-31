@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
+import TrackedPromoLink from '@/components/TrackedPromoLink'
 import type { PublicPackage } from '@/lib/packages/queries'
 import { whatsappLink } from '@/lib/clinic'
 
@@ -56,20 +56,22 @@ export default function DeepawaliPackagesSection({ packages }: { packages: Publi
                     <p className="mt-2 font-body text-[12.5px] leading-[1.5] text-dark/65">{pkg.description}</p>
                   )}
                   <div className="mt-auto pt-4">
-                    <Link
+                    <TrackedPromoLink
                       href={`/packages/${pkg.slug}/purchase`}
+                      track={{ event: 'buy', placement: 'homepage', packageSlug: pkg.slug }}
                       className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-accent px-4 font-heading text-[10.5px] font-bold uppercase tracking-[0.12em] text-white hover:bg-accent/90"
                     >
                       Buy Now
-                    </Link>
-                    <a
+                    </TrackedPromoLink>
+                    <TrackedPromoLink
                       href={whatsappLink(message)}
+                      track={{ event: 'whatsapp', placement: 'homepage', packageSlug: pkg.slug }}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-1.5 inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-[#25D366] px-4 font-heading text-[9.5px] font-bold uppercase tracking-[0.1em] text-[#128C4A] hover:bg-[#25D366]/10"
                     >
                       <MessageCircle className="h-3 w-3" /> WhatsApp
-                    </a>
+                    </TrackedPromoLink>
                   </div>
                 </div>
               </div>
@@ -78,12 +80,13 @@ export default function DeepawaliPackagesSection({ packages }: { packages: Publi
         </div>
 
         <div className="mt-8 text-center">
-          <Link
+          <TrackedPromoLink
             href="/packages"
+            track={{ event: 'open', placement: 'homepage' }}
             className="font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-primary underline-offset-4 hover:underline"
           >
             See full package details →
-          </Link>
+          </TrackedPromoLink>
         </div>
       </div>
     </section>

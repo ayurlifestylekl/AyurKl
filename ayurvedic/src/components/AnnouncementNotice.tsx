@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { X, Megaphone, CalendarX } from 'lucide-react'
+import { trackPromoEvent } from '@/lib/packages/track-promo'
 
 /**
  * Dismissible top strip for a customer announcement (a closure or a message).
@@ -46,7 +47,13 @@ export default function AnnouncementNotice({
     <div className={`relative px-9 py-2 text-center font-body text-[12.5px] text-white sm:text-[13.5px] ${variant === 'closure' ? 'bg-primary' : 'bg-[#B8860B]'}`}>
       <Icon className="mr-1.5 inline-block h-4 w-4 -translate-y-0.5" aria-hidden />
       {linkUrl && (/^\/(?!\/)/.test(linkUrl) || /^https:\/\//i.test(linkUrl)) ? (
-        <Link href={linkUrl} className="underline-offset-2 hover:underline">
+        <Link
+          href={linkUrl}
+          onClick={() => {
+            if (linkUrl.startsWith('/packages')) trackPromoEvent({ event: 'open', placement: 'banner' })
+          }}
+          className="underline-offset-2 hover:underline"
+        >
           {text}
         </Link>
       ) : (

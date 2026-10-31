@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getActivePackages } from '@/lib/packages/queries'
+import TrackedPromoLink, { PromoPageView } from '@/components/TrackedPromoLink'
 import { whatsappLink } from '@/lib/clinic'
 
 export const dynamic = 'force-dynamic'
@@ -20,6 +21,7 @@ export default async function PackagesPage() {
 
   return (
     <section className="bg-cream pb-20">
+      <PromoPageView track={{ event: 'view', placement: 'packages' }} />
       <div className="mx-auto max-w-5xl px-6 py-14 sm:px-8 lg:px-12">
         <div className="text-center">
           <div className="font-heading text-[10px] font-bold uppercase tracking-[0.28em] text-accent">
@@ -87,20 +89,22 @@ export default async function PackagesPage() {
                           About this therapy →
                         </Link>
                       )}
-                      <Link
+                      <TrackedPromoLink
                         href={`/packages/${pkg.slug}/purchase`}
+                        track={{ event: 'buy', placement: 'packages', packageSlug: pkg.slug }}
                         className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-accent px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white hover:bg-accent/90"
                       >
                         Buy Now
-                      </Link>
-                      <a
+                      </TrackedPromoLink>
+                      <TrackedPromoLink
                         href={whatsappLink(message)}
+                        track={{ event: 'whatsapp', placement: 'packages', packageSlug: pkg.slug }}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#25D366] px-5 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-[#128C4A] hover:bg-[#25D366]/10"
                       >
                         <MessageCircle className="h-4 w-4" /> Ask on WhatsApp
-                      </a>
+                      </TrackedPromoLink>
                     </div>
                   </div>
                 </div>

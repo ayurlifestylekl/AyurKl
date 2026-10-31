@@ -1,6 +1,8 @@
 import { requireStaff } from '@/lib/staff/guard'
 import { getAllPackagesForStaff, getRecentPackagePurchases } from '@/lib/packages/queries'
+import { getPromoStats } from '@/lib/packages/promo-stats'
 import PackagesManager from '@/components/staff/PackagesManager'
+import PromoClicksPanel from '@/components/staff/PromoClicksPanel'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,6 +12,7 @@ export default async function PackagesPage() {
     getAllPackagesForStaff(db),
     getRecentPackagePurchases(db),
   ])
+  const promoStats = await getPromoStats(db, catalog)
 
   return (
     <div>
@@ -18,6 +21,7 @@ export default async function PackagesPage() {
         Log a sale when a WhatsApp enquiry turns into a purchase, then mark a session used each time
         that customer comes in. Search by name, phone, or email to find a customer&rsquo;s remaining sessions.
       </p>
+      <PromoClicksPanel stats={promoStats} />
       <PackagesManager catalog={catalog} initialPurchases={purchases} />
     </div>
   )

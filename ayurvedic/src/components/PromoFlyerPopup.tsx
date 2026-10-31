@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { X } from 'lucide-react'
+import { trackPromoEvent } from '@/lib/packages/track-promo'
 
 const SEEN_KEY = 'kal-promo-deepawali-2026-seen'
 
@@ -35,6 +36,7 @@ export default function PromoFlyerPopup() {
     if (seen) return
     setPromoOpen(true)
     setShow(true)
+    trackPromoEvent({ event: 'view', placement: 'flyer' })
     // Runs once on first load only; navigating between pages doesn't re-open it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -65,6 +67,11 @@ export default function PromoFlyerPopup() {
     setPromoOpen(false)
   }
 
+  function openPackages() {
+    trackPromoEvent({ event: 'open', placement: 'flyer' })
+    close()
+  }
+
   if (!show) return null
 
   return (
@@ -85,7 +92,7 @@ export default function PromoFlyerPopup() {
           <X className="h-5 w-5" />
         </button>
 
-        <Link href="/packages" onClick={close} className="block overflow-hidden rounded-xl shadow-2xl">
+        <Link href="/packages" onClick={openPackages} className="block overflow-hidden rounded-xl shadow-2xl">
           <Image
             src="/promos/deepawali-2026-flyer.jpg"
             alt="Deepawali Promo: Abhyangam Package RM750, Complete Relaxing Package RM1000, Deepawali Special Udwarthanam Package RM1449, Sirodhaara Package RM1000 — 10 sessions each, available till 30 November 2026."
@@ -99,7 +106,7 @@ export default function PromoFlyerPopup() {
         <div className="mt-3 flex w-full max-w-sm gap-2">
           <Link
             href="/packages"
-            onClick={close}
+            onClick={openPackages}
             className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-accent px-5 font-heading text-[12px] font-bold uppercase tracking-[0.16em] text-white hover:bg-accent/90"
           >
             See Packages
