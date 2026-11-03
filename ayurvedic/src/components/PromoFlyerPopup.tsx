@@ -94,10 +94,10 @@ export default function PromoFlyerPopup() {
 
         <Link href="/packages" onClick={openPackages} className="block overflow-hidden rounded-xl shadow-2xl">
           <Image
-            src="/promos/deepawali-2026-flyer.jpg"
+            src="/promos/deepawali-2026-flyer-v2.jpg"
             alt="Deepawali Promo: Abhyangam Package RM750, Complete Relaxing Package RM1000, Deepawali Special Udwarthanam Package RM1449, Sirodhaara Package RM1000 — 10 sessions each, available till 30 November 2026."
-            width={919}
-            height={1300}
+            width={1122}
+            height={1402}
             priority
             className="h-auto max-h-[calc(100dvh-7.5rem)] w-auto max-w-full"
           />
