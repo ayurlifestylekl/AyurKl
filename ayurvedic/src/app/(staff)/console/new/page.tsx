@@ -4,20 +4,25 @@ import { getTreatmentsFlat } from '@/lib/storefront/treatments'
 import { therapistsForGender } from '@/lib/staff/therapists'
 import StaffNewBooking from '@/components/staff/StaffNewBooking'
 import { getAppointmentDetail } from '@/lib/staff/appointments'
+import { getPatientRecord } from '@/lib/staff/patients'
 
 export const dynamic = 'force-dynamic'
 
-export default async function NewBookingPage({ searchParams }: { searchParams: { client?: string } }) {
+export default async function NewBookingPage({ searchParams }: { searchParams: { client?: string; patient?: string } }) {
   const { db } = await requireStaff(['admin', 'front_desk'])
-  const [treatments, therapists, from] = await Promise.all([
+  const [treatments, therapists, from, record] = await Promise.all([
     getTreatmentsFlat(db),
     therapistsForGender(null),
-    // "New booking" from a patient's page pre-fills their details.
+    // "New booking" from a patient's page pre-fills their details — from their
+    // latest booking (?client=) or their saved record (?patient=).
     searchParams.client ? getAppointmentDetail(db, searchParams.client) : Promise.resolve(null),
+    searchParams.patient ? getPatientRecord(db, searchParams.patient) : Promise.resolve(null),
   ])
-  const initialClient = from
-    ? { name: from.patientName ?? '', phone: from.patientPhone ?? '', email: from.patientEmail ?? '', gender: from.patientGender ?? null }
-    : null
+  const initialClient = record
+    ? { name: record.fullName, phone: record.phone, email: record.email ?? '', gender: record.gender }
+    : from
+      ? { name: from.patientName ?? '', phone: from.patientPhone ?? '', email: from.patientEmail ?? '', gender: from.patientGender ?? null }
+      : null
   const options = treatments.map((t) => ({ id: t._id, title: t.title, bookingType: t.bookingType }))
 
   return (

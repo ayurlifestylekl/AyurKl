@@ -3,10 +3,10 @@ import type { BookingKind, BookingStatus, Gender } from '@/types/booking'
 import type { ServiceDb } from './guard'
 
 /**
- * Patients aren't a table of their own — every booking carries its own copy of
- * the name, phone, email and gender. These helpers recognise the same person
- * across bookings so front desk can reuse their details and staff can see
- * every visit together.
+ * Every booking carries its own copy of the name, phone, email and gender, and
+ * staff can also add a patient record by hand (public.patients). These helpers
+ * recognise the same person across bookings and records so front desk can reuse
+ * their details and staff can see every visit together.
  *
  * Identity, in order:
  *   1. phone + first name — the phone is normalised ("+60 12-345 6789" ==
@@ -46,6 +46,116 @@ export function patientKey(p: {
 /** PostgREST `or()` treats , ( ) as syntax and * % _ as wildcards. */
 function cleanTerm(q: string): string {
   return q.replace(/[,()"'\\%*_]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60)
+}
+
+export interface PatientRecord {
+  id: string
+  fullName: string
+  phone: string
+  email: string | null
+  gender: Gender
+  dateOfBirth: string | null
+  address: string | null
+  conditions: string | null
+  allergies: string | null
+  medications: string | null
+  notes: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+const RECORD_COLUMNS =
+  'id, full_name, phone, email, gender, date_of_birth, address, conditions, allergies, medications, notes, created_at, updated_at'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapRecord(r: any): PatientRecord {
+  return {
+    id: r.id,
+    fullName: r.full_name,
+    phone: r.phone,
+    email: r.email ?? null,
+    gender: r.gender as Gender,
+    dateOfBirth: r.date_of_birth ?? null,
+    address: r.address ?? null,
+    conditions: r.conditions ?? null,
+    allergies: r.allergies ?? null,
+    medications: r.medications ?? null,
+    notes: r.notes ?? null,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+  }
+}
+
+export function recordKey(r: Pick<PatientRecord, 'phone' | 'fullName'>): string | null {
+  return patientKey({ patientPhone: r.phone, customerId: null, patientName: r.fullName })
+}
+
+/**
+ * Until 20261116_patients.sql is applied the table doesn't exist; staff pages
+ * must keep working, so that case reads as "no records" instead of failing.
+ */
+function logRecordError(where: string, error: { message: string; code?: string }) {
+  const missing =
+    error.code === '42P01' ||
+    error.code === 'PGRST205' ||
+    (/patients/.test(error.message) && /(does not exist|Could not find)/.test(error.message))
+  if (!missing) console.error(`[staff/patients] ${where}:`, error.message)
+}
+
+export async function getPatientRecord(db: ServiceDb, id: string): Promise<PatientRecord | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null
+  const { data, error } = await db.from('patients').select(RECORD_COLUMNS).eq('id', id).maybeSingle()
+  if (error) {
+    logRecordError('record', error)
+    return null
+  }
+  return data ? mapRecord(data) : null
+}
+
+/** Records matching a name or phone fragment (same rules as booking search). */
+async function searchRecords(db: ServiceDb, term: string, digits: string): Promise<PatientRecord[]> {
+  const filters = [`full_name.ilike.*${term}*`]
+  if (digits.length >= 3) filters.push(`phone.ilike.*${digits.split('').join('*')}*`)
+  const { data, error } = await db.from('patients').select(RECORD_COLUMNS).or(filters.join(',')).limit(50)
+  if (error) {
+    logRecordError('record search', error)
+    return []
+  }
+  return (data ?? []).map(mapRecord)
+}
+
+/** The hand-added record for the same person as a booking, if there is one. */
+export async function findPatientRecordFor(
+  db: ServiceDb,
+  a: { patientPhone: string | null; customerId: string | null; patientName: string | null },
+): Promise<PatientRecord | null> {
+  const key = patientKey(a)
+  const phone = normalizePhone(a.patientPhone)
+  if (!key || !phone) return null
+  const { data, error } = await db
+    .from('patients')
+    .select(RECORD_COLUMNS)
+    .ilike('phone', `*${phone.slice(-7).split('').join('*')}*`)
+    .limit(20)
+  if (error) {
+    logRecordError('record lookup', error)
+    return null
+  }
+  return (data ?? []).map(mapRecord).find((r) => recordKey(r) === key) ?? null
+}
+
+async function getAllPatientRecords(db: ServiceDb): Promise<PatientRecord[]> {
+  const out: PatientRecord[] = []
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await db.from('patients').select(RECORD_COLUMNS).order('created_at', { ascending: false }).range(from, from + 999)
+    if (error) {
+      logRecordError('records', error)
+      break
+    }
+    out.push(...(data ?? []).map(mapRecord))
+    if (!data || data.length < 1000) break
+  }
+  return out
 }
 
 export interface ReturningClient {
@@ -113,6 +223,18 @@ export async function searchReturningClients(db: ServiceDb, query: string): Prom
         visits: counted ? 1 : 0,
         lastVisitISO: counted ? when : null,
       })
+    }
+  }
+  for (const rec of await searchRecords(db, term, digits)) {
+    const key = recordKey(rec)
+    if (!key) continue
+    const existing = byKey.get(key)
+    if (existing) {
+      // The record is what staff typed in on purpose — prefer its details.
+      existing.email = rec.email ?? existing.email
+      existing.gender = rec.gender
+    } else {
+      byKey.set(key, { key, name: rec.fullName, phone: rec.phone, email: rec.email, gender: rec.gender, visits: 0, lastVisitISO: null })
     }
   }
   return Array.from(byKey.values()).slice(0, 8)
@@ -186,8 +308,10 @@ const ATTENDED: BookingStatus[] = ['scheduled', 'confirmed', 'checked_in', 'in_p
 
 export interface PatientListEntry {
   key: string
-  /** Latest booking — the patient's page is opened through it. */
+  /** Latest booking, or the patient record when they have no bookings yet — the patient's page opens through it. */
   anchorId: string
+  /** Hand-added patient record, if any. */
+  recordId: string | null
   name: string
   phone: string | null
   gender: Gender | null
@@ -236,6 +360,7 @@ export async function getPatientList(db: ServiceDb): Promise<PatientListEntry[]>
       p = {
         key,
         anchorId: r.id,
+        recordId: null,
         name: r.patient_name,
         phone: r.patient_phone ?? null,
         gender: (r.patient_gender ?? null) as Gender | null,
@@ -257,9 +382,40 @@ export async function getPatientList(db: ServiceDb): Promise<PatientListEntry[]>
     }
     if (upcoming && (!p.nextVisitISO || when! < p.nextVisitISO)) p.nextVisitISO = when
   }
-  return Array.from(byKey.values()).sort((a, b) =>
+
+  // Hand-added records: attach to their bookings, or list them on their own
+  // (newest first, ahead of older patients) until their first booking.
+  const recordOnly: PatientListEntry[] = []
+  for (const rec of await getAllPatientRecords(db)) {
+    const key = recordKey(rec)
+    if (!key) continue
+    const existing = byKey.get(key)
+    if (existing) {
+      existing.recordId = rec.id
+      existing.name = rec.fullName
+      existing.phone = rec.phone
+      existing.gender = rec.gender
+    } else {
+      recordOnly.push({
+        key,
+        anchorId: rec.id,
+        recordId: rec.id,
+        name: rec.fullName,
+        phone: rec.phone,
+        gender: rec.gender,
+        isGuest: true,
+        visits: 0,
+        bookings: 0,
+        lastVisitISO: null,
+        nextVisitISO: null,
+      })
+    }
+  }
+
+  const sorted = Array.from(byKey.values()).sort((a, b) =>
     (b.nextVisitISO ?? b.lastVisitISO ?? '').localeCompare(a.nextVisitISO ?? a.lastVisitISO ?? ''),
   )
+  return [...recordOnly, ...sorted]
 }
 
 /** Name / phone search over the patient list (phone digits match however they were typed). */

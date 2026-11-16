@@ -34,7 +34,9 @@ export default function PatientVisitHistory({
         Visit history {visits.length > 0 && <span className="text-dark/40">· {visits.length} booking{visits.length === 1 ? '' : 's'}</span>}
       </h3>
       {others.length === 0 ? (
-        <p className="mt-2 font-body text-[13px] text-dark/55">First visit — no earlier bookings for this patient.</p>
+        <p className="mt-2 font-body text-[13px] text-dark/55">
+          {visits.length === 0 ? 'No bookings yet.' : 'First visit — no earlier bookings for this patient.'}
+        </p>
       ) : (
         <ol className="mt-3 divide-y divide-accent/10">
           {visits.map((v) => {
