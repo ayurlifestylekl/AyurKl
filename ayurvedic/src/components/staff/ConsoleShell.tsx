@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
-  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, UserPlus, LayoutList, CalendarOff, CalendarRange, Megaphone, Banknote, Stethoscope, Users, Gift,
+  Menu, X, LogOut, Plus, LayoutDashboard, CalendarDays, CreditCard, CheckCircle2, UserPlus, LayoutList, CalendarOff, CalendarRange, Megaphone, Banknote, Stethoscope, Users, Gift, BookUser,
   type LucideIcon,
 } from 'lucide-react'
 import { signOut } from '@/actions/auth/signOut'
@@ -27,6 +27,7 @@ const ICON_BY_LABEL: Record<string, LucideIcon> = {
   Announcements: Megaphone,
   'Staff Roster': Users,
   Packages: Gift,
+  Patients: BookUser,
 }
 
 /** True when `href` (a consoleNav entry) is the currently active page/tab. */

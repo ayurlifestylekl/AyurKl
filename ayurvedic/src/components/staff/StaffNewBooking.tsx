@@ -16,16 +16,18 @@ interface TreatmentOption {
 interface Props {
   treatments: TreatmentOption[]
   therapists: Therapist[]
+  /** Pre-filled when opened from a patient's page. */
+  initialClient?: { name: string; phone: string; email: string; gender: Gender | null } | null
 }
 
-export default function StaffNewBooking({ treatments, therapists }: Props) {
+export default function StaffNewBooking({ treatments, therapists, initialClient }: Props) {
   const router = useRouter()
   const [kind, setKind] = useState<BookingKind>('treatment')
   const [treatmentId, setTreatmentId] = useState('')
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
-  const [gender, setGender] = useState<Gender | ''>('')
+  const [name, setName] = useState(initialClient?.name ?? '')
+  const [phone, setPhone] = useState(initialClient?.phone ?? '')
+  const [email, setEmail] = useState(initialClient?.email ?? '')
+  const [gender, setGender] = useState<Gender | ''>(initialClient?.gender ?? '')
   const [preferredAt, setPreferredAt] = useState('')
   const [notes, setNotes] = useState('')
   const [partySize, setPartySize] = useState(1)

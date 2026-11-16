@@ -95,7 +95,7 @@ export async function searchReturningClients(db: ServiceDb, query: string): Prom
     const key = patientKey({ patientPhone: r.patient_phone, customerId: r.customer_id, patientName: r.patient_name })
     if (!key) continue
     const when = r.appointment_date_time ?? r.requested_datetime ?? r.created_at ?? null
-    const counted = ['confirmed', 'checked_in', 'in_progress', 'completed'].includes(r.status)
+    const counted = ['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed'].includes(r.status)
     const existing = byKey.get(key)
     if (existing) {
       if (counted) existing.visits += 1
@@ -176,4 +176,99 @@ export async function getPatientVisits(
       clinicalNotes: r.clinical_notes ?? null,
       consultationOutcome: r.consultation_outcome ?? null,
     }))
+}
+
+/**
+ * Bookings that count as a visit once their time has passed. 'scheduled' is
+ * included because walk-ins booked on the schedule grid stay in that status.
+ */
+const ATTENDED: BookingStatus[] = ['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed']
+
+export interface PatientListEntry {
+  key: string
+  /** Latest booking — the patient's page is opened through it. */
+  anchorId: string
+  name: string
+  phone: string | null
+  gender: Gender | null
+  isGuest: boolean
+  /** Attended or confirmed visits. */
+  visits: number
+  bookings: number
+  lastVisitISO: string | null
+  nextVisitISO: string | null
+}
+
+/**
+ * Everyone who has booked (cancelled-only patients left out), most recent
+ * first. Reads every booking in pages, since PostgREST caps a single read at
+ * 1,000 rows.
+ */
+export async function getPatientList(db: ServiceDb): Promise<PatientListEntry[]> {
+  const rows: Record<string, unknown>[] = []
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await db
+      .from('appointments')
+      .select('id, patient_name, patient_phone, patient_gender, customer_id, is_guest, status, appointment_date_time, requested_datetime, created_at')
+      .neq('status', 'cancelled')
+      .order('created_at', { ascending: false })
+      .range(from, from + 999)
+    if (error) {
+      console.error('[staff/patients] list:', error.message)
+      break
+    }
+    rows.push(...(data ?? []))
+    if (!data || data.length < 1000) break
+  }
+
+  const nowISO = new Date().toISOString()
+  const byKey = new Map<string, PatientListEntry>()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for (const r of rows as any[]) {
+    if (!r.patient_name) continue
+    const key = patientKey({ patientPhone: r.patient_phone, customerId: r.customer_id, patientName: r.patient_name })
+    if (!key) continue
+    const when: string | null = r.appointment_date_time ?? r.requested_datetime ?? null
+    const attended = ATTENDED.includes(r.status) && !!when && when <= nowISO
+    const upcoming = !!when && when > nowISO && ['confirmed', 'scheduled', 'awaiting_payment', 'pending'].includes(r.status)
+    let p = byKey.get(key)
+    if (!p) {
+      p = {
+        key,
+        anchorId: r.id,
+        name: r.patient_name,
+        phone: r.patient_phone ?? null,
+        gender: (r.patient_gender ?? null) as Gender | null,
+        isGuest: !r.customer_id,
+        visits: 0,
+        bookings: 0,
+        lastVisitISO: null,
+        nextVisitISO: null,
+      }
+      byKey.set(key, p)
+    }
+    p.bookings += 1
+    p.phone ??= r.patient_phone ?? null
+    p.gender ??= (r.patient_gender ?? null) as Gender | null
+    if (r.customer_id) p.isGuest = false
+    if (attended) {
+      p.visits += 1
+      if (!p.lastVisitISO || when! > p.lastVisitISO) p.lastVisitISO = when
+    }
+    if (upcoming && (!p.nextVisitISO || when! < p.nextVisitISO)) p.nextVisitISO = when
+  }
+  return Array.from(byKey.values()).sort((a, b) =>
+    (b.nextVisitISO ?? b.lastVisitISO ?? '').localeCompare(a.nextVisitISO ?? a.lastVisitISO ?? ''),
+  )
+}
+
+/** Name / phone search over the patient list (phone digits match however they were typed). */
+export function filterPatients(list: PatientListEntry[], q: string, allowPhone: boolean): PatientListEntry[] {
+  const term = q.trim().toLowerCase()
+  if (!term) return list
+  const digits = term.replace(/\D/g, '')
+  const wantPhone = allowPhone && digits.length >= 3 ? normalizePhone(digits) ?? digits : null
+  return list.filter(
+    (p) => p.name.toLowerCase().includes(term) || (!!wantPhone && (normalizePhone(p.phone) ?? '').includes(wantPhone)),
+  )
 }
