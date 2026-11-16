@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import type { BookingKind, Gender } from '@/types/booking'
 import type { Therapist } from '@/lib/staff/therapist-format'
 import { createBookingRequest, createGroupBooking, type GroupGuest } from '@/lib/booking/actions'
+import ClientLookup from './ClientLookup'
 
 interface TreatmentOption {
   id: string
@@ -110,6 +111,15 @@ export default function StaffNewBooking({ treatments, therapists }: Props) {
           </select>
         </Field>
       )}
+
+      <ClientLookup
+        onPick={(c) => {
+          setName(c.name)
+          setPhone(c.phone ?? '')
+          setEmail(c.email ?? '')
+          if (c.gender) setGender(c.gender)
+        }}
+      />
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label="Patient name"><input value={name} onChange={(e) => setName(e.target.value)} className={inp} required /></Field>

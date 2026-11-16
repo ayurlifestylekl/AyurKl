@@ -24,7 +24,7 @@ export default async function DoctorPatientsPage({ searchParams }: { searchParam
   return (
     <div>
       <h1 className="font-heading text-[22px] font-extrabold text-primary">Patients</h1>
-      <p className="mb-5 font-body text-[13px] text-dark/55">Everyone who has booked. Search by {hideContact ? 'name' : 'name or phone'}, then open the latest visit for full history.</p>
+      <p className="mb-5 font-body text-[13px] text-dark/55">Everyone who has booked. Search by {hideContact ? 'name' : 'name or phone'}, then open a patient to see every visit, notes and outcomes.</p>
 
       <form method="get" className="mb-5 flex gap-2">
         <input
@@ -71,7 +71,7 @@ export default async function DoctorPatientsPage({ searchParams }: { searchParam
                   <td className="px-4 py-3 text-dark/70">{fmtDate(p.lastVisitISO)}</td>
                   <td className="px-4 py-3 text-right">
                     <Link href={`/doctor/${p.latestAppointmentId}`} className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-accent hover:text-primary">
-                      View →
+                      History →
                     </Link>
                   </td>
                 </tr>
