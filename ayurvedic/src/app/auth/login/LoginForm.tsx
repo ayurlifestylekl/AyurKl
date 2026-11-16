@@ -43,12 +43,14 @@ const OTP_REQUIRED = process.env.NEXT_PUBLIC_REQUIRE_OTP !== 'false'
 interface LoginFormProps {
   initialTab: AuthTab
   resetSuccess?: boolean
+  blocked?: boolean
   nextPath?: string
 }
 
 export default function LoginForm({
   initialTab,
   resetSuccess,
+  blocked,
   nextPath,
 }: LoginFormProps) {
   const searchParams = useSearchParams()
@@ -72,6 +74,13 @@ export default function LoginForm({
           : 'Join the wellness program.'}
       </p>
 
+      {blocked && (
+        <div className="mt-5 rounded-xl border border-red-400/40 bg-red-400/10 px-3 py-2.5">
+          <p className="font-body text-[11.5px] leading-relaxed text-white/85">
+            This account has been suspended. Please contact the clinic if you think this is a mistake.
+          </p>
+        </div>
+      )}
       {resetSuccess && (
         <div className="mt-5 flex items-start gap-2.5 rounded-xl border border-green-400/40 bg-green-400/10 px-3 py-2.5">
           <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-300" />

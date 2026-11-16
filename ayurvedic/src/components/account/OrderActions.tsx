@@ -102,7 +102,7 @@ export default function OrderActions({
       </div>
 
       <p className="border-t border-[#6E1023]/6 px-5 py-3 font-body text-[11px] italic text-[#1F1F1F]/55 sm:px-6">
-        Cancellations require 48 hours&apos; notice. Advance payments are non-refundable per our practice policy.
+        Orders can be cancelled while payment is still pending. Once paid, contact us and we&apos;ll help.
       </p>
     </section>
   )

@@ -245,7 +245,7 @@ export async function notifyConfirmed(p: NotifyBase & { whenISO: string | null; 
         : []),
       p.bookingKind === 'consultation'
         ? 'You can manage or reschedule your booking online up to 24 hours beforehand.'
-        : 'You can manage or reschedule your booking online. Late cancellations are non-refundable.',
+        : 'You can manage or reschedule your booking online. Cancellations at least 48 hours before your appointment are fully refundable; later cancellations are not.',
     ],
     p.statusUrl ? { label: 'Manage booking', url: p.statusUrl } : undefined,
   )

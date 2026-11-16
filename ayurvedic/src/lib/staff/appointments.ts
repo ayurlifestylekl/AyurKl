@@ -430,7 +430,7 @@ export interface RefundExceptionRow {
   appointmentId: string
   patientName: string | null
   treatmentName: string | null
-  status: 'pending' | 'exception'
+  status: 'requested' | 'claimed' | 'pending' | 'exception'
   amountRm: number
   provider: string
   createdAt: string
@@ -439,19 +439,25 @@ export interface RefundExceptionRow {
   bankAccountLast4: string | null
 }
 
-/** Active or stuck refunds that require staff attention. */
+/**
+ * Refunds that need staff: new customer requests waiting for approve/decline
+ * (newest work first), approvals mid-flight, and active or stuck payouts.
+ */
 export async function getRefundExceptions(db: ServiceDb): Promise<RefundExceptionRow[]> {
   const { data, error } = await db
     .from('booking_refunds')
     .select('id, appointment_id, status, amount_rm, provider, created_at, bank_code, bank_account_last4, appointments(patient_name, treatment_name)')
-    .in('status', ['pending', 'exception'])
+    .in('status', ['requested', 'claimed', 'pending', 'exception'])
     .order('created_at', { ascending: false })
   if (error) {
     console.error('[staff/appointments] refundExceptions:', error.message)
     return []
   }
+  const rank: Record<string, number> = { requested: 0, exception: 1, claimed: 2, pending: 3 }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (data ?? []).map((r: any) => ({
+  const rows = [...(data ?? [])].sort((a: any, b: any) => (rank[a.status] ?? 9) - (rank[b.status] ?? 9))
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return rows.map((r: any) => ({
     id: r.id,
     appointmentId: r.appointment_id,
     patientName: Array.isArray(r.appointments) ? r.appointments[0]?.patient_name : r.appointments?.patient_name ?? null,

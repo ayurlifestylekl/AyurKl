@@ -26,15 +26,16 @@ describe('Task 9: Management Copy and Queries', () => {
     expect(statusPage).not.toContain('Your booking request')
   })
 
-  it('exposes pending/exception refunds in staff query', () => {
+  it('exposes new requests and pending/exception refunds in staff query', () => {
     const staffQuery = source('lib/staff/appointments.ts')
-    expect(staffQuery).toContain(".in('status', ['pending', 'exception'])")
+    expect(staffQuery).toContain(".in('status', ['requested', 'claimed', 'pending', 'exception'])")
   })
 
-  it('claims management_reminder_sent_at in the 72-73h window cron', () => {
+  it('claims management_reminder_sent_at across a full-day window for the daily cron', () => {
     const reminders = source('app/api/cron/appointment-reminders/route.ts')
     expect(reminders).toContain('management_reminder_sent_at')
     expect(reminders).toContain('72 * 60 * 60 * 1000')
-    expect(reminders).toContain('73 * 60 * 60 * 1000')
+    expect(reminders).toContain('24 * 60 * 60 * 1000')
+    expect(reminders).toContain('72 * 60 * 60 * 1000')
   })
 })

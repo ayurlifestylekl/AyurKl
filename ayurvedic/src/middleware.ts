@@ -113,12 +113,26 @@ export async function middleware(request: NextRequest) {
   if (user && (isProtectedRoute || isBouncableAuthPage)) {
     const { data: profileRaw } = await supabase
       .from('users')
-      .select('role')
+      .select('role, blocked_at')
       .eq('id', user.id)
       .single()
 
-    const profile = profileRaw as { role: UserRole } | null
+    const profile = profileRaw as { role: UserRole; blocked_at: string | null } | null
     const role = profile?.role ?? null
+
+    // A customer blocked from the admin portal is signed out the moment they
+    // reach their account or any sign-in page — every sign-in path (password,
+    // email code, Google) lands on one of those. Staff roles are never blocked.
+    if (role === 'customer' && profile?.blocked_at) {
+      await supabase.auth.signOut()
+      const login = request.nextUrl.clone()
+      login.pathname = '/auth/login'
+      login.search = '?blocked=1'
+      const res = NextResponse.redirect(login)
+      // Carry the cleared session cookies onto the redirect.
+      supabaseResponse.cookies.getAll().forEach((c) => res.cookies.set(c))
+      return res
+    }
 
     // Bounce already-signed-in users off the auth pages → their home
     if (isBouncableAuthPage) {

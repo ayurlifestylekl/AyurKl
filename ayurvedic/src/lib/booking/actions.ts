@@ -141,9 +141,9 @@ export async function createBookingRequest(
 export type CancelResult = { ok: true; refundable: boolean } | { error: string }
 
 /**
- * Customer-initiated cancellation. Enforces the 12-hour rule: cancellations
- * within 12h of the appointment are non-refundable. Refunds (when eligible)
- * are processed manually for now.
+ * Customer-initiated cancellation of an unpaid booking. Paid bookings go
+ * through the self-service flow instead (management-policy.ts: within 1 hour
+ * of booking, or 48 hours before), which then allows a refund request.
  */
 export async function cancelBooking(id: string, token?: string | null): Promise<CancelResult> {
   const sb = admin()

@@ -27,7 +27,7 @@ export const faqs: FAQ[] = [
     id: 'cancellation',
     question: 'What is your cancellation and refund policy?',
     answer:
-      'We require at least 48 hours notice for cancellations or rescheduling. Advance payments made to secure a treatment slot are non-refundable, but they can be transferred to another date or another guest with sufficient notice.',
+      'You can ask for a new time online up to 24 hours before your appointment. A paid booking can be cancelled online within 1 hour of booking, or at least 48 hours before the appointment, and the full amount can then be refunded. Later cancellations and no-shows are not refundable. Deepawali packages follow their own terms.',
   },
   {
     id: 'products-authentic',

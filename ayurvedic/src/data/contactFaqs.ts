@@ -28,7 +28,7 @@ export const contactFaqs: FAQ[] = [
     id: 'payment-methods',
     question: 'What payment methods do you accept?',
     answer:
-      'For treatments: FPX online banking, DuitNow QR, major credit and debit cards, and cash at the clinic. Online store: Billplz (FPX + cards). All pricing is in Malaysian Ringgit (RM). Advance deposits for treatment bookings are required to secure your slot and are non-refundable per our 48-hour cancellation policy.',
+      'For treatments: FPX online banking, DuitNow QR, major credit and debit cards, and cash at the clinic. Online store: Billplz (FPX + cards). All pricing is in Malaysian Ringgit (RM). Treatments booked online are paid in full when you book, and are fully refundable if cancelled at least 48 hours before the appointment (or within 1 hour of booking).',
   },
   {
     id: 'walk-in',

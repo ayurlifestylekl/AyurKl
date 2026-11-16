@@ -21,8 +21,12 @@ async function handle(req: Request) {
 
   const nowMs = Date.now()
   const nowISO = new Date(nowMs).toISOString()
-  const lowerBound = new Date(nowMs + 72 * 60 * 60 * 1000).toISOString()
-  const upperBound = new Date(nowMs + 73 * 60 * 60 * 1000).toISOString()
+  // The job runs once a day, so the window must cover a whole day of
+  // appointments or most bookings are never reminded. management_reminder_sent_at
+  // keeps it to one email each: every confirmed booking gets its reminder
+  // 1–3 days ahead.
+  const lowerBound = new Date(nowMs + 24 * 60 * 60 * 1000).toISOString()
+  const upperBound = new Date(nowMs + 72 * 60 * 60 * 1000).toISOString()
 
   const { data, error } = await sb
     .from('appointments')
@@ -63,15 +67,15 @@ async function handle(req: Request) {
     // it too, since canManageBooking checks ownership as a fallback.
     const manageUrl = `${SITE}/book/request/${a.id}?t=${createBookingToken(a.id)}`
 
-    const html = `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#163F33">
+    const html = `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#1F1F1F">
   <h1 style="font-family:'Helvetica Neue',sans-serif;font-size:22px;font-weight:700;margin:0 0 16px">Upcoming Appointment</h1>
   <p style="line-height:1.65">Hi ${a.patient_name ?? 'there'},</p>
   <p style="line-height:1.65">This is a reminder for your upcoming appointment in a few days.</p>
-  <div style="margin:24px 0;padding:18px 20px;border:1px solid rgba(22, 63, 51,0.1);border-radius:18px;background:#F7F2E8">
+  <div style="margin:24px 0;padding:18px 20px;border:1px solid rgba(110,16,35,0.12);border-radius:18px;background:#F7F2E8">
     <p style="margin:0;font-weight:700;font-size:16px">${a.treatment_name ?? 'Treatment'}</p>
-    <p style="margin:6px 0 0;color:#163F33">${fmtMY(a.appointment_date_time, { dateStyle: 'full', timeStyle: 'short' })}</p>
+    <p style="margin:6px 0 0;color:#1F1F1F">${fmtMY(a.appointment_date_time, { dateStyle: 'full', timeStyle: 'short' })}</p>
   </div>
-  <p><a href="${manageUrl}" style="display:inline-block;background:#1E5B4B;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Manage booking</a></p>
+  <p><a href="${manageUrl}" style="display:inline-block;background:#6E1023;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700">Manage booking</a></p>
   <p style="margin-top:32px;color:#666">With warmth,<br/>Kerala Ayurvedic Lifestyle</p>
 </div>`
 

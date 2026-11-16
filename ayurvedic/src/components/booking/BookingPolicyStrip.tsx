@@ -7,7 +7,7 @@ const items = [
   },
   {
     icon: ShieldAlert,
-    label: 'Advance payments are non-refundable',
+    label: 'Full refund if cancelled 48 hours ahead',
   },
   {
     icon: Users2,

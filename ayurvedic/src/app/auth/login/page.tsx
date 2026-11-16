@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: { tab?: string; reset?: string; next?: string }
+  searchParams: { tab?: string; reset?: string; next?: string; blocked?: string }
 }) {
   const tab = searchParams.tab === 'signup' ? 'signup' : 'signin'
   return (
@@ -20,6 +20,7 @@ export default function LoginPage({
       <LoginForm
         initialTab={tab}
         resetSuccess={searchParams.reset === 'success'}
+        blocked={searchParams.blocked === '1'}
         nextPath={searchParams.next}
       />
     </CustomerLoginSplit>

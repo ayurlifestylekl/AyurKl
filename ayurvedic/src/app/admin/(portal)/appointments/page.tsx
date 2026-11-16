@@ -62,7 +62,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
             Treatments
           </Link>
           <Link
-            href="/admin/appointments/new"
+            href="/console/new"
             className="inline-flex items-center gap-1.5 rounded-lg bg-[#6E1023] px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-[#6E1023]"
           >
             <Plus className="h-3.5 w-3.5" />

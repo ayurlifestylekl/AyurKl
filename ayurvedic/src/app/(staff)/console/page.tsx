@@ -154,6 +154,13 @@ function AttentionRow({ href, label, count }: { href: string; label: string; cou
   )
 }
 
+const REFUND_STATUS_LABEL: Record<string, string> = {
+  requested: 'New request — approve or decline',
+  claimed: 'Approving…',
+  pending: 'Sent to bank',
+  exception: 'Needs manual refund',
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function TabView({ db, tab }: { db: any; tab: { key: string; status?: BookingStatus | BookingStatus[]; unassignedOnly?: boolean } }) {
   if (tab.key === 'today') {
@@ -173,7 +180,13 @@ async function TabView({ db, tab }: { db: any; tab: { key: string; status?: Book
             <Link key={r.id} href={`/console/${r.appointmentId}`} className="flex flex-col gap-1 rounded-xl border border-accent/20 bg-white p-4 transition hover:bg-cream/50">
               <div className="flex items-center justify-between">
                 <span className="font-heading text-[14px] font-bold text-primary">{r.patientName ?? 'Guest'} — {r.treatmentName ?? 'Treatment'}</span>
-                <span className="rounded-full bg-amber-100 px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-wider text-amber-800">{r.status}</span>
+                <span
+                  className={`rounded-full px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-wider ${
+                    r.status === 'requested' ? 'bg-primary text-white' : r.status === 'exception' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-800'
+                  }`}
+                >
+                  {REFUND_STATUS_LABEL[r.status]}
+                </span>
               </div>
               <p className="font-body text-[13px] text-dark/60">
                 RM{r.amountRm} via {r.provider}. Requested {new Date(r.createdAt).toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', day: 'numeric', month: 'short' })}

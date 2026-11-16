@@ -8,7 +8,7 @@
  * otherwise the role-promotion step below fails with a constraint error.
  * Safe to re-run: if the auth user already exists, it just (re)promotes it.
  *
- * Run: node scripts/create-product-manager-account.mjs
+ * Run: PRODUCT_MANAGER_PASSWORD='…' node scripts/create-product-manager-account.mjs
  */
 import { config } from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
@@ -16,7 +16,11 @@ import { createClient } from '@supabase/supabase-js'
 config({ path: '.env.local', override: true })
 
 const EMAIL = 'product@keralaeverydaygymstore.com'
-const PASSWORD = process.env.PRODUCT_MANAGER_PASSWORD || '2gYu85n*5cRzmee@e#UF'
+const PASSWORD = process.env.PRODUCT_MANAGER_PASSWORD
+if (!PASSWORD || PASSWORD.length < 12) {
+  console.error('Set PRODUCT_MANAGER_PASSWORD (12+ characters) in the environment; it is never stored in this script.')
+  process.exit(1)
+}
 const FULL_NAME = 'Product Manager'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL
