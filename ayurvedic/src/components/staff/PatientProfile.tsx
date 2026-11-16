@@ -136,7 +136,7 @@ function RecordPanel({ record, hideContact }: { record: PatientRecord; hideConta
           ['Email', record.email],
           ['Address', record.address],
         ] as [string, string | null][])),
-    ['Date of birth', record.dateOfBirth ? new Date(`${record.dateOfBirth}T00:00:00+08:00`).toLocaleDateString('en-MY', { dateStyle: 'medium' }) : null],
+    ['Date of birth', record.dateOfBirth ? new Date(`${record.dateOfBirth}T00:00:00+08:00`).toLocaleDateString('en-MY', { dateStyle: 'medium', timeZone: 'Asia/Kuala_Lumpur' }) : null],
     ['Conditions', record.conditions],
     ['Allergies', record.allergies],
     ['Medications', record.medications],
