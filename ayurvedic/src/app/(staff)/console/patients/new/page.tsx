@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import { requireStaff } from '@/lib/staff/guard'
 import { getAppointmentDetail } from '@/lib/staff/appointments'
 import { getPatientRecord } from '@/lib/staff/patients'
-import PatientForm, { EMPTY_PATIENT, type PatientFormValues } from '@/components/staff/PatientForm'
+import PatientForm from '@/components/staff/PatientForm'
+import { EMPTY_PATIENT, type PatientFormValues } from '@/lib/staff/patient-form'
 
 export const dynamic = 'force-dynamic'
 
@@ -60,7 +61,7 @@ export default async function PatientFormPage({ searchParams }: { searchParams: 
       <p className="mb-5 font-body text-[13px] text-dark/55">
         {initial.id
           ? 'Update this patient’s details. Their bookings keep the details they were made with.'
-          : 'Save a patient’s details once. They’ll appear in Patients and in “Find existing client” when booking, and link to their bookings by phone number and first name.'}
+          : 'Save a patient’s details once. They’ll appear in Patients and in the “Returning client?” search when booking, and link to their bookings by phone number and first name.'}
       </p>
       <PatientForm initial={initial} cancelHref={back} />
     </div>

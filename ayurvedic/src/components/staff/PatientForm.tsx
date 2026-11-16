@@ -4,33 +4,9 @@ import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { savePatient } from '@/lib/staff/patient-actions'
+import type { PatientFormValues } from '@/lib/staff/patient-form'
 
-export interface PatientFormValues {
-  id?: string
-  fullName: string
-  phone: string
-  email: string
-  gender: '' | 'female' | 'male'
-  dateOfBirth: string
-  address: string
-  conditions: string
-  allergies: string
-  medications: string
-  notes: string
-}
-
-export const EMPTY_PATIENT: PatientFormValues = {
-  fullName: '',
-  phone: '',
-  email: '',
-  gender: '',
-  dateOfBirth: '',
-  address: '',
-  conditions: '',
-  allergies: '',
-  medications: '',
-  notes: '',
-}
+export type { PatientFormValues }
 
 /** Add or edit a patient record (front desk + admin). */
 export default function PatientForm({ initial, cancelHref }: { initial: PatientFormValues; cancelHref: string }) {
